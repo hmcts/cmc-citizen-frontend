@@ -14,11 +14,13 @@
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
-      <h2 class="heading-small">Your finances</h2>
-      <p>{{ t('Your total monthly income is {{ monthlyIncomeAmount }}',
-          { monthlyIncomeAmount: monthlyIncomeAmount | numeral }) }}</p>
-      <p>{{ t('Your total monthly expenses is {{ monthlyExpensesAmount }}',
-          { monthlyExpensesAmount: monthlyExpensesAmount | numeral }) }}</p>
+      {% if monthlyIncomeAmount and monthlyExpensesAmount %}
+        <h2 class="heading-small">Your finances</h2>
+        <p>{{ t('Your total monthly income is {{ monthlyIncomeAmount }}',
+            { monthlyIncomeAmount: monthlyIncomeAmount | numeral }) }}</p>
+        <p>{{ t('Your total monthly expenses is {{ monthlyExpensesAmount }}',
+            { monthlyExpensesAmount: monthlyExpensesAmount | numeral }) }}</p>
+      {% endif %}
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
 
