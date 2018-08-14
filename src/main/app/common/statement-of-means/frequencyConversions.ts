@@ -1,4 +1,4 @@
-import { Frequency } from 'common/statement-of-means/frequency'
+import { Frequency } from 'common/statement-of-means/models/frequency'
 
 export function convertAmountToMonthly(amount: number, frequency: Frequency): number {
   return amount * frequency.monthlyRatio
