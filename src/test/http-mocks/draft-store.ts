@@ -340,6 +340,14 @@ export const sampleClaimantResponseDraftObj = {
       option: 'yes'
     }
   },
+  alternatePaymentMethod: {
+    paymentOption: {
+      option: {
+        value: 'INSTALMENTS',
+        displayValue: 'By instalments'
+      }
+    }
+  },
   formaliseRepaymentPlan: {
     option: {
       value: 'signSettlementAgreement',
