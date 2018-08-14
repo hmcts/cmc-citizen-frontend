@@ -6,7 +6,7 @@ import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { MomentFactory } from 'shared/momentFactory'
 import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'

@@ -5,7 +5,7 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { OnTaxPayments } from 'response/form/models/statement-of-means/onTaxPayments'
 
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'

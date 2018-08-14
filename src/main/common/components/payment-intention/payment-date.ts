@@ -11,7 +11,7 @@ import { MomentFactory } from 'shared/momentFactory'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { User } from 'idam/user'
 
 import { DefendantPaymentType as PaymentType } from 'response/form/models/defendantPaymentOption'

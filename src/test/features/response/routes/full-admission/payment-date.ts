@@ -18,7 +18,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import * as moment from 'moment'
-import { ValidationErrors } from 'forms/models/payBySetDate'
+import { ValidationErrors } from 'shared/components/payment-intention/model/paymentDate'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')

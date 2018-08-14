@@ -3,7 +3,7 @@ import {
   DefendantPaymentOption as PaymentOption,
   DefendantPaymentType as PaymentType
 } from 'response/form/models/defendantPaymentOption'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
 
 export class PaymentIntention {
