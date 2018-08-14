@@ -67,11 +67,48 @@ describe('Testing Support: Create Claim Draft', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to check and send page when everything is fine', async () => {
+      it('should return 500 and render error page when cannot save user roles', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
+        claimStoreServiceMock.resolveRetrieveUserRoles()
+        claimStoreServiceMock.rejectAddRolesToUser('error adding user role')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should redirect to check and send page and new user role is added when everything else is fine', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+        claimStoreServiceMock.resolveRetrieveUserRoles()
         claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
 
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.redirect
+            .toLocation(draftSuccessful))
+      })
+
+      it('should redirect to check and send page when user role is already added and everything else is fine', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+        claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.redirect
+            .toLocation(draftSuccessful))
+      })
+
+      it('should redirect to check and send page and add new user role when required role is missing from list and everything else is fine', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+        claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
+        claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)

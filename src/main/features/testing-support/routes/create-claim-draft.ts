@@ -32,7 +32,11 @@ export default express.Router()
       draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email))
       await new DraftService().save(draft, user.bearerToken)
 
-      await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
+      const userRoles: string[] = await claimStoreClient.retrieveUserRoles(user)
+
+      if (userRoles.length === 0 || !userRoles.includes('cmc-new-features-consent-given')) {
+        await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
+      }
 
       res.redirect(ClaimPaths.checkAndSendPage.uri)
     })
