@@ -152,7 +152,7 @@ export class ResponseDraft extends DraftDocument {
   public isResponseFullyAdmittedWithInstalments (): boolean {
     return this.isResponseFullyAdmitted()
       && this.fullAdmission !== undefined
-      && this.fullAdmission.paymentIntention
+      && this.fullAdmission.paymentIntention !== undefined
       && this.fullAdmission.paymentIntention.paymentOption !== undefined
       && this.fullAdmission.paymentIntention.paymentOption.option === PaymentType.INSTALMENTS
   }
