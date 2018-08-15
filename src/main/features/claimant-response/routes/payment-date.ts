@@ -10,7 +10,7 @@ import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
-    return 'When do you want the defendant to pay?'
+    return 'What date do you want the defendant to pay by?'
   }
 
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaymentIntention> {
