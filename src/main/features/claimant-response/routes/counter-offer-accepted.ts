@@ -13,8 +13,8 @@ import { Claim } from 'claims/models/claim'
 export default express.Router()
   .get(
     Paths.counterOfferAcceptedPage.uri, (req: express.Request, res: express.Response) => {
-      const claimantResponseDraft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      const defendantResponsePaymentFrequency: Claim = res.locals.claim.response.paymentIntention
+      const claimantChosenPaymentSchedule: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+    const defendantResponsePaymentSchedule: Claim = res.locals.claim.response.paymentIntention
       console.log('res.defendantResponsePaymentFrequency------->', res.locals.claim.response.paymentIntention)
       console.log('claimantReponseDraft--------->',res.locals.claimantResponseDraft)
       res.render(Paths.counterOfferAcceptedPage.associatedView)
