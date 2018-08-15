@@ -1,7 +1,4 @@
 feature_fine_print = "true"
-feature_full_admission = "true"
-feature_partial_admission = "true"
-feature_statement_of_means = "true"
 feature_admissions = "true"
 external_host_name = "moneyclaims.saat.platform.hmcts.net"
 

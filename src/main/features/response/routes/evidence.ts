@@ -11,6 +11,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const page: RoutablePath = Paths.evidencePage
 
@@ -40,9 +41,10 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const claim: Claim = res.locals.claim
       let evidence
 
-      if (draft.document.isResponsePartiallyAdmitted()) {
+      if (ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()) {
         evidence = draft.document.partialAdmission.evidence
       } else {
         evidence = draft.document.evidence
@@ -66,7 +68,7 @@ export default express.Router()
 
         form.model.removeExcessRows()
 
-        if (draft.document.isResponsePartiallyAdmitted()) {
+        if (ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()) {
           draft.document.partialAdmission.evidence = form.model
           await new DraftService().save(draft, user.bearerToken)
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
