@@ -2,7 +2,6 @@ import { Validator } from 'class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
-import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 
 const validator = new Validator()
 
@@ -12,24 +11,21 @@ function isValid (input): boolean {
 
 export class StatementOfMeansTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    if (StatementOfMeansFeature.isApplicableFor(responseDraft)) {
-      const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
+    const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
 
-      return statementOfMeans !== undefined
-        && isValid(statementOfMeans.bankAccounts)
-        && isValid(statementOfMeans.residence)
-        && StatementOfMeansTask.isDependantsCompleted(statementOfMeans)
-        && isValid(statementOfMeans.maintenance)
-        && isValid(statementOfMeans.otherDependants)
-        && StatementOfMeansTask.isEmploymentCompleted(statementOfMeans)
-        && isValid(statementOfMeans.monthlyIncome)
-        && isValid(statementOfMeans.monthlyExpenses)
-        && isValid(statementOfMeans.debts)
-        && isValid(statementOfMeans.courtOrders)
-        && isValid(statementOfMeans.explanation)
-    }
+    return statementOfMeans !== undefined
+      && isValid(statementOfMeans.bankAccounts)
+      && isValid(statementOfMeans.residence)
+      && StatementOfMeansTask.isDependantsCompleted(statementOfMeans)
+      && isValid(statementOfMeans.maintenance)
+      && isValid(statementOfMeans.otherDependants)
+      && StatementOfMeansTask.isEmploymentCompleted(statementOfMeans)
+      && isValid(statementOfMeans.monthlyIncome)
+      && isValid(statementOfMeans.monthlyExpenses)
+      && isValid(statementOfMeans.debts)
+      && isValid(statementOfMeans.courtOrders)
+      && isValid(statementOfMeans.explanation)
 
-    return true
   }
 
   private static isDependantsCompleted (statementOfMeans: StatementOfMeans): boolean {

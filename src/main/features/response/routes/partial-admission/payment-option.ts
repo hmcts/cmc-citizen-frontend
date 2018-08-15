@@ -1,5 +1,4 @@
 import * as express from 'express'
-
 import { partialAdmissionPath } from 'response/paths'
 import { PaymentOptionPage } from 'response/components/payment-intention/payment-option'
 import { ResponseDraft } from 'response/draft/responseDraft'
