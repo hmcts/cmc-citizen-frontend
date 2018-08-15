@@ -187,7 +187,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponseRejected (): boolean {
-    if (!this.isResponsePopulated()) {
+    if (!this.response || !this.response.type) {
       return false
     }
 

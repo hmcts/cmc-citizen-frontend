@@ -6,7 +6,12 @@ const validator = new Validator()
 
 export class WhyDoYouDisagreeTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.partialAdmission.whyDoYouDisagree)
+    if (responseDraft.isResponsePartiallyAdmitted()) {
+      return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.partialAdmission.whyDoYouDisagree)
+    }
+    if (responseDraft.isResponseRejectedFullyBecausePaidInFull()) {
+      return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.rejectAllOfClaim.whyDoYouDisagree)
+    }
   }
 
   private static isWhyDoYouDisagreeValid (model: Defence): boolean {

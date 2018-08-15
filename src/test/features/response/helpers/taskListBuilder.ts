@@ -95,34 +95,6 @@ describe('Defendant response task list builder', () => {
       })
     })
 
-    describe('"When did you pay" task', () => {
-      let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
-      const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
-
-      beforeEach(() => {
-        isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(
-          ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid'
-        )
-      })
-
-      afterEach(() => {
-        isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
-      })
-
-      it('should be enabled when claim is fully rejected due to amount being paid and claimed', () => {
-        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('When did you pay?')
-      })
-
-      it('should be disabled in remaining cases', () => {
-        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('When did you pay?')
-      })
-    })
-
     describe('"Check and submit your response" task', () => {
       let isResponsePopulatedStub: sinon.SinonStub
       let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
@@ -152,7 +124,7 @@ describe('Defendant response task list builder', () => {
         isResponseRejectedFullyWithDisputePaidStub.returns(true)
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
@@ -161,7 +133,7 @@ describe('Defendant response task list builder', () => {
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
         isResponsePartiallyAdmittedStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
@@ -169,7 +141,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(true)
         isResponsePartiallyAdmittedStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
@@ -180,7 +152,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(false)
         isResponsePartiallyAdmittedStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
         expect(taskList).to.be.equal(undefined)
       })
     })

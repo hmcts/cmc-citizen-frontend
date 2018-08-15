@@ -29,7 +29,7 @@ function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
   })
 }
 
-
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     page.uri,

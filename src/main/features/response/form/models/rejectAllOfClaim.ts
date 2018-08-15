@@ -1,5 +1,6 @@
 import { IsDefined, IsIn, ValidateNested } from 'class-validator'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Please select a response'
@@ -34,9 +35,12 @@ export class RejectAllOfClaim {
   @ValidateNested()
   howMuchHaveYouPaid?: HowMuchHaveYouPaid
 
-  constructor (option?: string, howMuchHaveYouPaid?: HowMuchHaveYouPaid) {
+  whyDoYouDisagree?: WhyDoYouDisagree
+
+  constructor (option?: string, howMuchHaveYouPaid?: HowMuchHaveYouPaid, defence?: WhyDoYouDisagree) {
     this.option = option
     this.howMuchHaveYouPaid = howMuchHaveYouPaid
+    this.whyDoYouDisagree = defence
   }
 
   deserialize (input: any): RejectAllOfClaim {
@@ -46,6 +50,9 @@ export class RejectAllOfClaim {
       }
       if (input.howMuchHaveYouPaid) {
         this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
+      }
+      if (input.whyDoYouDisagree) {
+        this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
       }
     }
     return this

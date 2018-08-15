@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { PartAdmissionPaths, Paths } from 'response/paths'
+import { Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -11,11 +11,10 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
-import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
+// import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
-const page: RoutablePath = PartAdmissionPaths.whyDoYouDisagreePage
+const page: RoutablePath = Paths.whyDoYouDisagreePage
 
 function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
   res.render(page.associatedView, {
@@ -28,16 +27,12 @@ function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
-    PartialAdmissionGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.partialAdmission.whyDoYouDisagree), res)
+      renderView(new Form(draft.document.rejectAllOfClaim.whyDoYouDisagree), res)
     }))
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
-    PartialAdmissionGuard.requestHandler(),
     FormValidator.requestHandler(WhyDoYouDisagree, WhyDoYouDisagree.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<WhyDoYouDisagree> = req.body
@@ -48,12 +43,12 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.partialAdmission.whyDoYouDisagree = form.model
-        draft.document.fullAdmission = draft.document.rejectAllOfClaim = undefined
+        draft.document.rejectAllOfClaim.whyDoYouDisagree = form.model
+        draft.document.partialAdmission = draft.document.fullAdmission = undefined
 
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        res.redirect(Paths.timelinePage.evaluateUri({ externalId: externalId }))
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     }))
