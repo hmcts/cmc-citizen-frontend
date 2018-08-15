@@ -23,6 +23,8 @@ export class Paths {
   static readonly sendYourResponseByEmailPage = new RoutablePath(`${responsePath}/eligibility/send-your-response-by-email`)
   static readonly whenDidYouPay = new RoutablePath(`${responsePath}/when-did-you-pay`)
   static readonly defendantHowMuchPaidClaimant = new RoutablePath(`${responsePath}/eligibility/how-much-paid-claimant`)
+  static readonly howMuchHaveYouPaid = new RoutablePath(`${responsePath}/how-much-have-you-paid`)
+  static readonly youHavePaidLess = new RoutablePath(`${responsePath}/you-have-paid-less`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)

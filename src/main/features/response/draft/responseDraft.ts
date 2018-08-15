@@ -118,7 +118,7 @@ export class ResponseDraft extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
+      this.rejectAllOfClaim = new RejectAllOfClaim().deserialize(input.rejectAllOfClaim)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
       this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
@@ -192,6 +192,12 @@ export class ResponseDraft extends DraftDocument {
     }
 
     return this.response.type === ResponseType.DEFENCE
+  }
+
+  public isResponseRejectedFullyBecausePaidInFull (): boolean {
+    return this.isResponseRejected()
+      && this.rejectAllOfClaim !== undefined
+      && this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
   }
 
   public isResponseRejectedFullyWithAmountClaimedPaid (): boolean {

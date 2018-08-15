@@ -67,7 +67,7 @@ export default express.Router()
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
             break
           case RejectAllOfClaimOption.ALREADY_PAID:
-            res.redirect(Paths.defendantHowMuchPaidClaimant.evaluateUri({ externalId: externalId }))
+            res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             break
           case RejectAllOfClaimOption.DISPUTE:
             res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))

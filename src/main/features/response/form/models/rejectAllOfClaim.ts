@@ -1,4 +1,5 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn, ValidateNested } from 'class-validator'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Please select a response'
@@ -30,7 +31,23 @@ export class RejectAllOfClaim {
   @IsIn(RejectAllOfClaimOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
   option?: string
 
-  constructor (option?: string) {
+  @ValidateNested()
+  howMuchHaveYouPaid?: HowMuchHaveYouPaid
+
+  constructor (option?: string, howMuchHaveYouPaid?: HowMuchHaveYouPaid) {
     this.option = option
+    this.howMuchHaveYouPaid = howMuchHaveYouPaid
+  }
+
+  deserialize (input: any): RejectAllOfClaim {
+    if (input) {
+      if (input.option) {
+        this.option = input.option
+      }
+      if (input.howMuchHaveYouPaid) {
+        this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
+      }
+    }
+    return this
   }
 }
