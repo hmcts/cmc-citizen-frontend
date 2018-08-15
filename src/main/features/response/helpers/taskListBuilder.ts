@@ -10,7 +10,6 @@ import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
-// import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
@@ -71,16 +70,6 @@ export class TaskListBuilder {
         )
       )
     }
-
-    // if (draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
-    //   tasks.push(
-    //     new TaskListItem(
-    //       'When did you pay?',
-    //       Paths.whenDidYouPay.evaluateUri({ externalId: externalId }),
-    //       WhenDidYouPayTask.isCompleted(draft)
-    //     )
-    //   )
-    // }
 
     if (draft.isResponseRejectedFullyBecausePaidInFull()
       && claim.totalAmountTillToday > draft.rejectAllOfClaim.howMuchHaveYouPaid.amount) {

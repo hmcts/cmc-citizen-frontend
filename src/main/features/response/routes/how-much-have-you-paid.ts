@@ -12,10 +12,8 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
-// import { PartialAdmissionGuard } from 'response/guards/partialAdmissionGuard'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
-// import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = Paths.howMuchHaveYouPaid
 
@@ -33,16 +31,12 @@ function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
 export default express.Router()
   .get(
     page.uri,
-    // PartialAdmissionGuard.requestHandler(),
-    // OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.rejectAllOfClaim.howMuchHaveYouPaid), res)
     }))
   .post(
     page.uri,
-    // PartialAdmissionGuard.requestHandler(),
-    // OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FormValidator.requestHandler(HowMuchHaveYouPaid, HowMuchHaveYouPaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<HowMuchHaveYouPaid> = req.body

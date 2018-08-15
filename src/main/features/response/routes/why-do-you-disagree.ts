@@ -12,7 +12,6 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
-// import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = Paths.whyDoYouDisagreePage
 
