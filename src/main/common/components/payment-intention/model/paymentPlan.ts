@@ -10,7 +10,7 @@ export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
   static readonly FIRST_PAYMENT_DATE_INVALID: string = 'Enter a valid first payment date'
   static readonly FIRST_PAYMENT_DATE_NOT_IN_FUTURE: string = 'Enter a first payment date in the future'
-  static readonly SCHEDULE_REQUIRED: string = 'Select a payment frequency'
+  static readonly SCHEDULE_REQUIRED: string = 'Choose a payment frequency'
 }
 
 export class PaymentPlan {

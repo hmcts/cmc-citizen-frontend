@@ -53,7 +53,7 @@ export class PaymentType {
 }
 
 export class ValidationErrors {
-  static readonly OPTION_REQUIRED: string = 'Select an option'
+  static readonly OPTION_REQUIRED: string = 'Choose a payment option'
 }
 
 export class PaymentOption {
