@@ -22,10 +22,10 @@ import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
+import { FeatureTogglesService } from 'shared/clients/featureTogglesService'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
-const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
+const featureTogglesService: FeatureTogglesService = new FeatureTogglesService()
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -82,7 +82,7 @@ async function successHandler (res, next) {
 
   if (!claimIsAlreadyFullyPersisted) {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
-    if (roles.length > 0 && await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
+    if (roles.length > 0 && await featureTogglesService.isAdmissionsAllowed(user, roles)) {
       await claimStoreClient.saveClaim(draft, user, 'admissions')
     } else {
       await claimStoreClient.saveClaim(draft, user)

@@ -111,6 +111,13 @@
     request "^2.81.0"
     request-promise-native "^1.0.3"
 
+"@hmcts/feature-toggle-client@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/feature-toggle-client/-/feature-toggle-client-1.0.0.tgz#5b21cbff0b4229a61079a07c8a68fa6fe9647489"
+  dependencies:
+    request "^2.81.0"
+    request-promise-native "^1.0.3"
+
 "@hmcts/info-provider@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@hmcts/info-provider/-/info-provider-1.0.0.tgz#4d9c9d21a0510d0bfb85a6835745952b9744c159"
