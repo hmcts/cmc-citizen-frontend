@@ -20,6 +20,7 @@
           {{ paymentPlanTable(
             'paymentPlanTable',
             claim.response.paymentIntention.repaymentPlan.instalmentAmount,
+            claim.response.paymentIntention.repaymentPlan.paymentSchedule,
             claim.response.paymentIntention.repaymentPlan.firstPaymentDate,
             paymentPlan.getLastPaymentDate(),
             paymentPlan.getPaymentLength()
