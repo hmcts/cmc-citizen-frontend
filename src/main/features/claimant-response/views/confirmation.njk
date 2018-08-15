@@ -1,0 +1,47 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set headingVisible = false %}
+{% set heading = 'Confirmation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="govuk-box-highlight">
+        <h1 class="bold-large">
+          {% if repaymentPlanOrigin === 'DEFENDANT' %}
+            {{ t('You’ve accepted the repayment plan') }}
+          {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
+            {{ t('You’ve proposed an alternative repayment plan') }}
+          {% elseif repaymentPlanOrigin === 'COURT' %}
+            {{ t('You’ve signed a settlement agreement') }}
+          {% endif %}
+        </h1>
+        <p class="reference-number">
+          <span>{{ t('Claim number:') }}</span>
+          <span class="block bold-large">{{ claim.claimNumber }}</span>
+        </p>
+        <p>
+          <span class="bold">{{ confirmationDate | date }}</span>
+        </p>
+      </div>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+
+      {% if repaymentPlanOrigin === 'DEFENDANT' %}
+        {% include "./confirmation/accepted-payment-plan.njk" %}
+      {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
+        {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
+      {% elseif repaymentPlanOrigin === 'COURT' %}
+        {% include "./confirmation/court-suggested-payment-plan.njk" %}
+      {% endif %}
+
+      {% include "includes/service_survey_link.njk" %}
+
+      <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
+
+      {{ supportWidget() }}
+    </div>
+  </div>
+{% endblock %}

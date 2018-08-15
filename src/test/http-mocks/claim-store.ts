@@ -300,6 +300,18 @@ export function resolveRejectOffer (by: string = 'claimant') {
     .reply(HttpStatus.CREATED)
 }
 
+export function resolveSignSettlementAgreement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/.+/settlement`))
+    .reply(HttpStatus.CREATED)
+}
+
+export function rejectSignSettlementAgreement (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/.+/settlement`))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveCountersignOffer (by: string = 'defendant') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/.+/offers/${by}/countersign`))
