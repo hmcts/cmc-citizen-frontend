@@ -9,36 +9,41 @@ import { Claim } from 'claims/models/claim'
 import { DraftService } from 'services/draftService'
 
 import { ErrorHandling } from 'main/common/errorHandling'
+import { AbstractModelAccessor } from 'shared/components/model-accessor'
 
 /* tslint:disable:no-default-export */
-export abstract class AbstractPaidAmountPage<D> {
+export abstract class AbstractPaidAmountPage<Draft> {
 
-  abstract retrieveDraft: (res: express.Response) => Draft<D>
+  abstract getHeading (): string
+  abstract createModelAccessor (): AbstractModelAccessor<Draft, PaidAmount>
   abstract buildRedirectUri (req: express.Request, res: express.Response): string
+
+  getView (): string {
+    return 'components/ccj/views/paid-amount'
+  }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
       .get(
         path + Paths.paidAmountPage.uri,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-          const draft: Draft<D> = this.retrieveDraft(res)
-          this.renderView(new Form(draft.document.paidAmount), res)
+          this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document)), res)
+
         }))
       .post(
         path + Paths.paidAmountPage.uri,
         FormValidator.requestHandler(PaidAmount, PaidAmount.fromObject),
         ErrorHandling.apply(
-          async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+          async (req: express.Request, res: express.Response): Promise<void> => {
             const form: Form<PaidAmount> = req.body
 
             if (form.hasErrors()) {
               this.renderView(form, res)
             } else {
-              const draft: Draft<D> = this.retrieveDraft(res)
-              const user: User = res.locals.user
+              this.createModelAccessor().set(res.locals.draft.document, form.model)
 
-              draft.document.paidAmount = form.model
-              await new DraftService().save(draft, user.bearerToken)
+              const user: User = res.locals.user
+              await new DraftService().save(res.locals.draft, user.bearerToken)
 
               res.redirect(this.buildRedirectUri(req, res))
             }

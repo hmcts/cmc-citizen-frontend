@@ -47,7 +47,7 @@ export class DraftClaimantResponse extends DraftDocument {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
       }
       if (input.paidAmount) {
-        this.paidAmount = new PaidAmount(input.paidAmount.option)
+        this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       }
     }
     return this
