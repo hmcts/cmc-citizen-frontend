@@ -34,15 +34,6 @@ describe('HowMuchHaveYouPaidTask', () => {
 
   context('should not be completed when', () => {
 
-    it('response is not partial admission', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = {
-        type: ResponseType.FULL_ADMISSION
-      }
-
-      expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.false
-    })
-
     it('howMuchHaveYouPaid is undefined', () => {
       const draft: ResponseDraft = validResponseDraft()
       draft.partialAdmission.howMuchHaveYouPaid = undefined

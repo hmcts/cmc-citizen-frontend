@@ -346,7 +346,11 @@ export const sampleClaimantResponseDraftObj = {
   },
   settlementAgreement: {
     signed: true
+  },
+  rejectionReason: {
+    text: 'i reject repayment plan because ...'
   }
+
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {

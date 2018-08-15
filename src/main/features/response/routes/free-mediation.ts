@@ -11,12 +11,13 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 async function renderView (form: Form<FreeMediation>, res: express.Response, next: express.NextFunction) {
   try {
     const claim: Claim = res.locals.claim
     const draft: ResponseDraft = res.locals.responseDraft.document
-    const amount = draft.isResponsePartiallyAdmitted() ? draft.partialAdmission.howMuchDoYouOwe.amount : 0
+    const amount = ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.isResponsePartiallyAdmitted() ? draft.partialAdmission.howMuchDoYouOwe.amount : 0
 
     res.render(Paths.freeMediationPage.associatedView, {
       form: form,
