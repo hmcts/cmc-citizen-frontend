@@ -1,5 +1,4 @@
-import * as express from 'express'
-import { ccjPath, Paths } from 'ccj/paths'
+import { ccjPath } from 'ccj/paths'
 
 import { AbstractPaidAmountPage } from 'shared/components/ccj/routes/paid-amount'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'

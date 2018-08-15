@@ -1,5 +1,5 @@
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Paths } from 'claimant-response/paths'
+import { Paths, CCJPaths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
@@ -147,7 +147,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'Request a County Court Judgment',
-          Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+          CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId }),
           true
         )
       )
