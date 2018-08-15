@@ -62,8 +62,8 @@ describe('PaymentPlan', () => {
         const errors = validator.validateSync(new PaymentPlan(undefined))
         expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-        expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
-        expectValidationError(errors, ValidationErrors.INVALID_DATE)
+        expectValidationError(errors, ValidationErrors.SCHEDULE_REQUIRED)
+        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_DATE_INVALID)
       })
 
       it('instalment amount > remainingAmount', () => {
@@ -102,7 +102,7 @@ describe('PaymentPlan', () => {
         const errors = validator.validateSync(paymentPlan)
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.FUTURE_DATE)
+        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_DATE_NOT_IN_FUTURE)
       })
 
       it('unknown payment schedule', () => {
@@ -111,7 +111,7 @@ describe('PaymentPlan', () => {
         const errors = validator.validateSync(paymentPlan)
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
+        expectValidationError(errors, ValidationErrors.SCHEDULE_REQUIRED)
       })
     })
 

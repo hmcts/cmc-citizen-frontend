@@ -53,13 +53,13 @@ export class PaymentType {
 }
 
 export class ValidationErrors {
-  static readonly WHEN_WILL_YOU_PAY_OPTION_REQUIRED: string = 'Please select when you will pay'
+  static readonly OPTION_REQUIRED: string = 'Select an option'
 }
 
 export class PaymentOption {
 
-  @IsDefined({ message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
-  @IsIn(PaymentType.all(), { message: ValidationErrors.WHEN_WILL_YOU_PAY_OPTION_REQUIRED })
+  @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
+  @IsIn(PaymentType.all(), { message: ValidationErrors.OPTION_REQUIRED })
   option?: PaymentType
 
   constructor (option?: PaymentType) {

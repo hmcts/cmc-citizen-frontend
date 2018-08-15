@@ -12,9 +12,9 @@ import { MomentFormatter } from 'utils/momentFormatter'
 
 export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
-  static readonly INVALID_DATE: string = 'Enter a valid first payment date'
-  static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
-  static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often you wish to pay'
+  static readonly FIRST_PAYMENT_DATE_INVALID: string = 'Enter a valid first payment date'
+  static readonly FIRST_PAYMENT_DATE_NOT_IN_FUTURE: string = 'Enter a first payment date in the future'
+  static readonly SCHEDULE_REQUIRED: string = 'Select an option'
 }
 
 export class PaymentPlan {
@@ -27,9 +27,9 @@ export class PaymentPlan {
   instalmentAmount?: number
 
   @ValidateNested({ groups: ['default', 'claimant-suggestion'] })
-  @IsDefined({ message: ValidationErrors.INVALID_DATE, groups: ['default', 'claimant-suggestion'] })
-  @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE, groups: ['default', 'claimant-suggestion'] })
-  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE, groups: ['default'] })
+  @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID, groups: ['default', 'claimant-suggestion'] })
+  @IsValidLocalDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID, groups: ['default', 'claimant-suggestion'] })
+  @IsFutureDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_NOT_IN_FUTURE, groups: ['default'] })
   @IsFutureDateByNumberOfDays(30, { message: () => {
     const date: Moment = MomentFactory.currentDate().add(30, 'days')
 
@@ -39,7 +39,7 @@ export class PaymentPlan {
   }, groups: ['claimant-suggestion'] })
   firstPaymentDate?: LocalDate
 
-  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE, groups: ['default', 'claimant-suggestion'] })
+  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED, groups: ['default', 'claimant-suggestion'] })
   paymentSchedule?: PaymentSchedule
 
   constructor (totalAmount?: number,
