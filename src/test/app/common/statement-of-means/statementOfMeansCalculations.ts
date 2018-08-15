@@ -1,5 +1,14 @@
 import { expect } from 'chai'
-import { calculateTotalMonthlyDisposableIncome, calculateTotalMontlyExpense, calculateMonthlyDebts, calculateMonthlyCourtOrders, calculateTotalMontlyIncome, calculateMonthlySelfEmployedTurnover, calculateMonthlySavings, calculateMonthlyRegularIncome, calculateMonthlyRegularExpense } from 'common/statement-of-means/statementOfMeansCalculations'
+import { 
+  calculateTotalMonthlyDisposableIncome, 
+  calculateTotalMontlyExpense, 
+  calculateMonthlyDebts, 
+  calculateMonthlyCourtOrders, 
+  calculateTotalMontlyIncome, 
+  calculateMonthlySelfEmployedTurnover, 
+  calculateMonthlySavings, 
+  calculateMonthlyRegularIncome, 
+  calculateMonthlyRegularExpense } from 'common/statement-of-means/statementOfMeansCalculations'
 
 import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Debt } from 'claims/models/response/statement-of-means/debt'
