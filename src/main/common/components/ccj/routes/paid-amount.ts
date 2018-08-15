@@ -10,13 +10,13 @@ import { DraftService } from 'services/draftService'
 
 import { ErrorHandling } from 'main/common/errorHandling'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
+import { RoutablePath } from 'shared/router/routablePath'
 
 /* tslint:disable:no-default-export */
 export abstract class AbstractPaidAmountPage<Draft> {
 
   abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaidAmount>
-  abstract buildRedirectUri (req: express.Request, res: express.Response): string
 
   getView (): string {
     return 'components/ccj/views/paid-amount'
@@ -45,14 +45,15 @@ export abstract class AbstractPaidAmountPage<Draft> {
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)
 
-              res.redirect(this.buildRedirectUri(req, res))
+              const { externalId } = req.params
+              res.redirect(new RoutablePath(path + Paths.paidAmountSummaryPage.uri).evaluateUri({ externalId: externalId }))
             }
           }))
   }
 
   private renderView (form: Form<PaidAmount>, res: express.Response) {
     const claim: Claim = res.locals.claim
-    res.render('components/ccj/views/paid-amount', {
+    res.render(this.getView(), {
       form: form,
       totalAmount: claim.totalAmountTillToday
     })

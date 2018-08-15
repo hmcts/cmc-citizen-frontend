@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/routes/paid-amount-summary'
-import { claimantResponsePath, Paths } from 'features/claimant-response/paths'
+import { claimantResponseCCJPath, Paths } from 'features/claimant-response/paths'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
@@ -28,4 +28,4 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantR
 
 /* tslint:disable:no-default-export */
 export default new PaidAmountSummaryPage()
-  .buildRouter(claimantResponsePath)
+  .buildRouter(claimantResponseCCJPath)

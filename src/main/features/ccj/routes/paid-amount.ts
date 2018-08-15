@@ -8,21 +8,12 @@ import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/m
 
 class PaidAmountPage extends AbstractPaidAmountPage<DraftCCJ> {
 
-  getView (): string {
-    return 'components/ccj/views/paid-amount'
-  }
-
   getHeading (): string {
     return ''
   }
 
   createModelAccessor (): AbstractModelAccessor<DraftCCJ, PaidAmount> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
-  }
-
-  buildRedirectUri (req: express.Request, res: express.Response): string {
-    const { externalId } = req.params
-    return Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
   }
 }
 

@@ -16,10 +16,17 @@ export class Paths {
   static readonly notImplementedYetPage = new RoutablePath(`${claimantResponsePath}/not-implemented-yet`)
   static readonly chooseHowToProceedPage = new RoutablePath(`${claimantResponsePath}/choose-how-to-proceed`)
   static readonly signSettlementAgreementPage = new RoutablePath(`${claimantResponsePath}/sign-settlement-agreement`)
-  static readonly paidAmountSummaryPage = new RoutablePath(claimantResponsePath + CCJPaths.paidAmountSummaryPage.uri)
-  static readonly paidAmountPage = new RoutablePath(claimantResponsePath + CCJPaths.paidAmountPage.uri)
+  static readonly paidAmountSummaryPage = new RoutablePath(claimantResponsePath + '/ccj' + CCJPaths.paidAmountSummaryPage.uri)
+  static readonly paidAmountPage = new RoutablePath(claimantResponsePath + '/ccj' + CCJPaths.paidAmountPage.uri)
   static readonly freeMediationPage = new RoutablePath(claimantResponsePath + FreeMediationPaths.freeMediationPage.uri)
   static readonly alternateRepaymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentOptionPage.uri)
   static readonly paymentDatePage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentDatePage.uri)
   static readonly paymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentPlanPage.uri)
+}
+
+export const claimantResponseCCJPath = '/case/:externalId/claimant-response/ccj'
+
+export class CCJPaths {
+  static readonly paidAmountSummaryPage = new RoutablePath(claimantResponseCCJPath + CCJPaths.paidAmountSummaryPage.uri)
+  static readonly paidAmountPage = new RoutablePath(claimantResponseCCJPath + CCJPaths.paidAmountPage.uri)
 }
