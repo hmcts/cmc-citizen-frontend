@@ -4,6 +4,7 @@ import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPayment
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { FreeMediation } from 'response/form/models/freeMediation'
+import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -13,6 +14,7 @@ export class DraftClaimantResponse extends DraftDocument {
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
   settlementAgreement?: SettlementAgreement
   freeMediation?: FreeMediation
+  rejectionReason?: RejectionReason
 
   constructor () {
     super()
@@ -38,6 +40,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.freeMediation) {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
+      }
+      if (input.rejectionReason) {
+        this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
       }
     }
     return this

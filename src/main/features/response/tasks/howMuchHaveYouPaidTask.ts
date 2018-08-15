@@ -6,8 +6,7 @@ const validator = new Validator()
 
 export class HowMuchHaveYouPaidTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return responseDraft.isResponsePartiallyAdmitted()
-      && HowMuchHaveYouPaidTask.isHowMuchHaveYouPaidValid(responseDraft.partialAdmission.howMuchHaveYouPaid)
+    return HowMuchHaveYouPaidTask.isHowMuchHaveYouPaidValid(responseDraft.partialAdmission.howMuchHaveYouPaid)
   }
 
   private static isHowMuchHaveYouPaidValid (model: HowMuchHaveYouPaid): boolean {

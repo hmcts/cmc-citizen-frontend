@@ -39,7 +39,7 @@
        )
     }}
 
-    {% if draft.isResponsePartiallyAdmitted() %}
+    {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
       {{ row(
         label = 'Have you paid the claimant the amount you admit you owe?',
         value = t(draft.partialAdmission.alreadyPaid.option.option) | capitalize,
@@ -65,7 +65,7 @@
       {{ row(label = 'Why do you reject all of this claim?', value = rejectAllOption, changeLink = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
     {% endif %}
 
-    {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
 
       {{
         whenWillYouPayRow(
@@ -98,7 +98,7 @@
       {{ tableEnd() }}
     {% endif %}
 
-    {% if draft.isResponsePartiallyAdmitted() %}
+    {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
 
       {{ tableStart('responseDetails', 'Response details') }}
 
@@ -233,7 +233,7 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyWithDispute() %}
+    {% if (admissionsApplicable and draft.isResponsePartiallyAdmitted()) or draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(

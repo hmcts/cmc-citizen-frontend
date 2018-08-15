@@ -11,6 +11,10 @@ import { PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
 import { ResponseType } from 'response/form/models/responseType'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
+import { Claim } from 'claims/models/claim'
+
+const claim: Claim = new Claim()
+claim.features = ['admissions']
 
 describe('StatementOfMeansFeature', () => {
 
@@ -18,22 +22,22 @@ describe('StatementOfMeansFeature', () => {
     function itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants (responseDraft: ResponseDraft) {
       it('should be enabled for individual', () => {
         responseDraft.defendantDetails = new Defendant(new IndividualDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(responseDraft)).to.be.true
+        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.true
       })
 
       it('should be enabled for sole trader', () => {
         responseDraft.defendantDetails = new Defendant(new SoleTraderDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(responseDraft)).to.be.true
+        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.true
       })
 
       it('should be disabled for company', () => {
         responseDraft.defendantDetails = new Defendant(new CompanyDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(responseDraft)).to.be.false
+        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.false
       })
 
       it('should be disabled for organisation', () => {
         responseDraft.defendantDetails = new Defendant(new OrganisationDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(responseDraft)).to.be.false
+        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.false
       })
     }
 
@@ -41,13 +45,13 @@ describe('StatementOfMeansFeature', () => {
       it('should be disabled for all defendant types', () => {
         [IndividualDetails, SoleTraderDetails, CompanyDetails, OrganisationDetails].forEach((DefendantType) => {
           responseDraft.defendantDetails = new Defendant(new DefendantType())
-          expect(StatementOfMeansFeature.isApplicableFor(responseDraft)).to.be.false
+          expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.false
         })
       })
     }
 
     it('should throw an error if undefined is provided as input', () => {
-      expect(() => StatementOfMeansFeature.isApplicableFor(undefined)).to.throw(Error)
+      expect(() => StatementOfMeansFeature.isApplicableFor(claim, undefined)).to.throw(Error)
     })
 
     context('when response is full admission', () => {

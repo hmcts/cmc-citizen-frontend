@@ -349,6 +349,9 @@ export const sampleClaimantResponseDraftObj = {
   },
   freeMediation: {
     option: FreeMediationOption.NO
+  },
+  rejectionReason: {
+    text: 'i reject repayment plan because ...'
   }
 }
 
