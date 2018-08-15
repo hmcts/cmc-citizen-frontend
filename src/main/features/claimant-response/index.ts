@@ -16,6 +16,7 @@ import { FormaliseRepaymentPlanOptionFilter } from 'claimant-response/filters/re
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 
 import { BankAccountTypeViewFilter } from 'claimant-response/filters/bank-account-type-view-filter'
+import { PaymentScheduleViewFilter } from 'claimant-response/filters/payment-frequency-view-filter'
 import { ResidenceTypeViewFilter } from 'claimant-response/filters/residence-type-view-filter'
 import { PaymentScheduleTypeViewFilter } from 'claimant-response/filters/payment-schedule-type-view-filter'
 import { IncomeTypeViewFilter } from 'claimant-response/filters/income-type-view-filter'
@@ -46,6 +47,7 @@ export class ClaimantResponseFeature {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.filters) {
       app.settings.nunjucksEnv.filters.renderYesNo = YesNoViewFilter.render
       app.settings.nunjucksEnv.filters.renderBankAccountType = BankAccountTypeViewFilter.render
+      app.settings.nunjucksEnv.filters.renderPaymentScheduleType = PaymentScheduleViewFilter.render
       app.settings.nunjucksEnv.filters.renderResidenceType = ResidenceTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderAgeGroupType = AgeGroupTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderPaymentScheduleType = PaymentScheduleTypeViewFilter.render
@@ -61,7 +63,11 @@ export class ClaimantResponseFeature {
     app.all(/^\/case\/.+\/claimant-response\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claimantResponse', 100, (value: any): DraftClaimantResponse => {
         return new DraftClaimantResponse().deserialize(value)
-      }))
+      }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.claimantResponseDraft
+        next()
+      })
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

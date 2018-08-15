@@ -65,11 +65,11 @@
       {{ row(label = 'Why do you reject all of this claim?', value = rejectAllOption, changeLink = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
     {% endif %}
 
-    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
 
       {{
         whenWillYouPayRow(
-          value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize,
+          value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
           url = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
         )
       }}
@@ -77,13 +77,13 @@
 
     {{ tableEnd() }}
 
-    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
 
       {{
         notImmediatePayment(
-          type = draft.fullAdmission.paymentOption,
-          paymentDate = draft.fullAdmission.paymentDate,
-          paymentPlan = draft.fullAdmission.paymentPlan,
+          type = draft.fullAdmission.paymentIntention.paymentOption,
+          paymentDate = draft.fullAdmission.paymentIntention.paymentDate,
+          paymentPlan = draft.fullAdmission.paymentIntention.paymentPlan,
           explanation = draft.statementOfMeans.explanation.text,
           Paths = FullAdmissionPaths,
           externalId = claim.externalId
@@ -174,11 +174,11 @@
         }}
         {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
       {% else %}
-        {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+        {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
           {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
           {{
             whenWillYouPayRow(
-              value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize,
+              value = t(draft.partialAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
               url = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
             )
           }}
@@ -186,9 +186,9 @@
         {% else %}
           {{
             notImmediatePayment(
-              type = draft.partialAdmission.paymentOption,
-              paymentDate = draft.partialAdmission.paymentDate,
-              paymentPlan = draft.partialAdmission.paymentPlan,
+              type = draft.partialAdmission.paymentIntention.paymentOption,
+              paymentDate = draft.partialAdmission.paymentIntention.paymentDate,
+              paymentPlan = draft.partialAdmission.paymentIntention.paymentPlan,
               explanation = draft.statementOfMeans.explanation.text,
               Paths = PartAdmissionPaths,
               externalId = claim.externalId

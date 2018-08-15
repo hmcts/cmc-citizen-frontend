@@ -36,6 +36,7 @@
   {{ paymentPlanTable(
       id = 'payment-table',
       instalmentAmount = repaymentPlan.instalmentAmount,
+      paymentSchedule = repaymentPlan.paymentSchedule,
       firstPaymentDate = repaymentPlan.firstPaymentDate,
       lastPaymentOn = paymentPlan.getLastPaymentDate(),
       lengthOfPayment = paymentPlan.getPaymentLength()

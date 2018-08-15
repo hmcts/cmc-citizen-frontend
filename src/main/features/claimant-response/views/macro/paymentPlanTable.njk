@@ -1,9 +1,10 @@
-{% macro paymentPlanTable(id, instalmentAmount, firstPaymentDate, lastPaymentOn, lengthOfPayment) %}
+{% macro paymentPlanTable(id, instalmentAmount, paymentSchedule, firstPaymentDate, lastPaymentOn, lengthOfPayment) %}
   <fieldset id="{{ id }}" class="form-group">
     <legend>
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
-    {{ row('Monthly installment of', instalmentAmount | numeral) }}
+    {{ row('Regular payments of', instalmentAmount | numeral) }}
+    {{ row('Frequency of payments', paymentSchedule | renderPaymentScheduleType) }}
     {{ row('Make the first payment on', firstPaymentDate | date) }}
     {{ row('Last payment on', lastPaymentOn | date) }}
     {{ row('Length of repayment plan', lengthOfPayment) }}

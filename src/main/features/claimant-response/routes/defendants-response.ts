@@ -65,6 +65,7 @@ export default express.Router()
     stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
       const page: number = 0
+      console.log('paymentIntention------>',res.locals.claim.response.paymentIntention)
       renderView(res, page)
     }
   )

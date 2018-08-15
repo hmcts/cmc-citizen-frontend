@@ -20,7 +20,7 @@ import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
 import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
 import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
@@ -107,7 +107,7 @@ export class TaskListBuilder {
             new TaskListItem(
               'Your repayment plan',
               FullAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-              YourRepaymentPlanTask.isCompleted(draft.fullAdmission.paymentPlan)
+              YourRepaymentPlanTask.isCompleted(draft.fullAdmission.paymentIntention.paymentPlan)
             )
           )
         }
@@ -167,12 +167,12 @@ export class TaskListBuilder {
         }
 
         if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
-          && draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.INSTALMENTS)) {
+          && draft.partialAdmission.paymentIntention.paymentOption.isOfType(PaymentType.INSTALMENTS)) {
           tasks.push(
             new TaskListItem(
               'Your repayment plan',
               PartAdmissionPaths.paymentPlanPage.evaluateUri({ externalId: externalId }),
-              YourRepaymentPlanTask.isCompleted(draft.partialAdmission.paymentPlan)
+              YourRepaymentPlanTask.isCompleted(draft.partialAdmission.paymentIntention.paymentPlan)
             )
           )
         }
