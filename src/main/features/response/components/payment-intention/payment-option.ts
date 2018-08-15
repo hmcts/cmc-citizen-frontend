@@ -13,10 +13,11 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'main/app/claims/models/claim'
 import { RoutablePath } from 'shared/router/routablePath'
-import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 export class PaymentOptionPage {
-  constructor (private admissionType: string) {}
+  constructor (private admissionType: string) {
+  }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     return express.Router()
@@ -72,16 +73,18 @@ export class PaymentOptionPage {
   }
 
   private renderView (form: Form<DefendantPaymentOption>, res: express.Response) {
+    const claim: Claim = res.locals.claim
+
     function isApplicableFor (draft: ResponseDraft): boolean {
-      if (!FeatureToggles.isEnabled('statementOfMeans')) {
+      if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
         return false
       }
+
       return draft.isResponseFullyAdmitted()
         && !draft.defendantDetails.partyDetails.isBusiness()
     }
 
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
-    const claim: Claim = res.locals.claim
     res.render('response/components/payment-intention/payment-option', {
       form: form,
       claim: claim,
