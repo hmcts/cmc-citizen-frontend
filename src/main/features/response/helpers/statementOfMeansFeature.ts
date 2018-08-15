@@ -1,10 +1,10 @@
-import { FeatureToggles } from 'utils/featureToggles'
-
+import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 export class StatementOfMeansFeature {
-  static isApplicableFor (draft: ResponseDraft): boolean {
-    if (!FeatureToggles.isEnabled('statementOfMeans')) {
+  static isApplicableFor (claim: Claim, draft: ResponseDraft): boolean {
+    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
       return false
     }
     if (!draft) {
