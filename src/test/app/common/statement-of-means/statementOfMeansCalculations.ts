@@ -1,21 +1,20 @@
 import { expect } from 'chai'
-import { 
-  calculateTotalMonthlyDisposableIncome, 
-  calculateTotalMontlyExpense, 
-  calculateMonthlyDebts, 
-  calculateMonthlyCourtOrders, 
-  calculateTotalMontlyIncome, 
-  calculateMonthlySelfEmployedTurnover, 
-  calculateMonthlySavings, 
-  calculateMonthlyRegularIncome, 
+import {
+  calculateTotalMonthlyDisposableIncome,
+  calculateTotalMontlyExpense,
+  calculateMonthlyDebts,
+  calculateMonthlyCourtOrders,
+  calculateTotalMontlyIncome,
+  calculateMonthlySelfEmployedTurnover,
+  calculateMonthlySavings,
+  calculateMonthlyRegularIncome,
   calculateMonthlyRegularExpense } from 'common/statement-of-means/statementOfMeansCalculations'
 
 import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Debt } from 'claims/models/response/statement-of-means/debt'
 import { CourtOrder } from 'claims/models/response/statement-of-means/courtOrder'
 import { Employment } from 'claims/models/response/statement-of-means/employment'
-import { BankAccount } from 'claims/models/response/statement-of-means/bankAccount'
-import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
+import { BankAccount, BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
