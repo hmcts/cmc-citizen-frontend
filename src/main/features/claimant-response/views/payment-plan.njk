@@ -81,7 +81,7 @@
       <div class="form-group">
         <fieldset>
           <legend class="visually-hidden">{{ t('Date for first instalment') }}</legend>
-          {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
+          {{ dateInput('firstPaymentDate', form, hint = t('This must be no sooner than {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
         </fieldset>
       </div>
 
