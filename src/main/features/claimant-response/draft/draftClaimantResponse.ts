@@ -3,7 +3,9 @@ import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
 import { FreeMediation } from 'response/form/models/freeMediation'
+import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 
 export class DraftClaimantResponse extends DraftDocument {
@@ -13,7 +15,9 @@ export class DraftClaimantResponse extends DraftDocument {
   acceptPaymentMethod?: AcceptPaymentMethod
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
   settlementAgreement?: SettlementAgreement
+  alternatePaymentMethod?: PaymentIntention
   freeMediation?: FreeMediation
+  paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
 
   constructor () {
@@ -38,8 +42,14 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.settlementAgreement) {
         this.settlementAgreement = new SettlementAgreement().deserialize(input.settlementAgreement)
       }
+      if (input.alternatePaymentMethod) {
+        this.alternatePaymentMethod = PaymentIntention.deserialise(input.alternatePaymentMethod)
+      }
       if (input.freeMediation) {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
+      }
+      if (input.paidAmount) {
+        this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       }
       if (input.rejectionReason) {
         this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)

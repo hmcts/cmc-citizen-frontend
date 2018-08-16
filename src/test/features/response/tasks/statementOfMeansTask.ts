@@ -42,18 +42,20 @@ import { Explanation } from 'response/form/models/statement-of-means/explanation
 import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
   responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.fullAdmission = new FullAdmission()
-  responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
+  responseDraft.fullAdmission.paymentIntention = new PaymentIntention()
+  responseDraft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(paymentType)
   switch (paymentType) {
     case DefendantPaymentType.BY_SET_DATE:
-      responseDraft.fullAdmission.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
+      responseDraft.fullAdmission.paymentIntention.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
       break
     case DefendantPaymentType.INSTALMENTS:
-      responseDraft.fullAdmission.paymentPlan = new PaymentPlan(
+      responseDraft.fullAdmission.paymentIntention.paymentPlan = new PaymentPlan(
         1000,
         100,
         localDateFrom(MomentFactory.currentDate().add(1, 'day')),
