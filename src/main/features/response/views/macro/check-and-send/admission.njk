@@ -17,7 +17,7 @@
 
   {% if type.isOfType(DefendantPaymentType.BY_SET_DATE) %}
     {%
-      set whenWillYouPayLabel = t('{{ whenWillYouPayLabel }}: {{ date }}', {
+      set whenWillYouPayLabel = t('The full amount, no later than {{ date }}', {
       whenWillYouPayLabel: whenWillYouPayLabel, date: paymentDate.date.toMoment() | date})
     %}
   {% endif %}
