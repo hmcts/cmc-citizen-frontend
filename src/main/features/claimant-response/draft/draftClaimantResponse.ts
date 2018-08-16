@@ -10,6 +10,7 @@ import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
+  courtOfferedAmount: number
 
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
@@ -53,6 +54,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.freeMediation) {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
+      }
+      if (input.courtOfferedAmount) {
+        this.courtOfferedAmount = input.courtOfferedAmount
       }
     }
     return this

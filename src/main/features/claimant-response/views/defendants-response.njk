@@ -7,7 +7,7 @@
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set defendantName = claim.claimData.defendant.name %}
@@ -26,22 +26,6 @@
       {{ t('They’ve offered to pay you this in instalments.') }}
     {% endif %}
   {% endif %}
-{% endmacro %}
-
-{% macro repaymentPlanBlock(heading = 'How they want to pay', repaymentPlan, paymentPlan) %}
-  {% if heading %}
-    <h2 class="heading-medium">{{ t(heading) }}</h2>
-  {% endif %}
-  <p>{{ t('The defendant suggested this repayment plan:') }}</p>
-  {{ paymentPlanTable(
-      id = 'payment-table',
-      instalmentAmount = repaymentPlan.instalmentAmount,
-      paymentSchedule = repaymentPlan.paymentSchedule,
-      firstPaymentDate = repaymentPlan.firstPaymentDate,
-      lastPaymentOn = paymentPlan.getLastPaymentDate(),
-      lengthOfPayment = paymentPlan.getPaymentLength()
-    )
-  }}
 {% endmacro %}
 
 {% macro paymentDateExplanationBlock(reason) %}
@@ -92,6 +76,7 @@
         {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
           {{
             repaymentPlanBlock(
+              heading = 'How they want to pay',
               repaymentPlan = claim.response.paymentIntention.repaymentPlan,
               paymentPlan = paymentPlan
             )

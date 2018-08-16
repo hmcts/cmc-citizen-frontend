@@ -3,21 +3,30 @@ import * as express from 'express'
 import { Paths } from 'claimant-response/paths'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Claim } from 'claims/models/claim'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { PaymentSchedule as DefendantPaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
-// function isOverriddenByDefendantsPaymentFrequency(): boolean {
-//
-// }
+function isOverriddenByDefendantsPaymentFrequency (claimantPaymentSchedule: PaymentSchedule, defendantPaymentSchedule: PaymentSchedule): boolean {
+  return true
+}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.counterOfferAcceptedPage.uri, (req: express.Request, res: express.Response) => {
-      const claimantChosenPaymentSchedule: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-    const defendantResponsePaymentSchedule: Claim = res.locals.claim.response.paymentIntention
-      console.log('res.defendantResponsePaymentFrequency------->', res.locals.claim.response.paymentIntention)
-      console.log('claimantReponseDraft--------->',res.locals.claimantResponseDraft)
-      res.render(Paths.counterOfferAcceptedPage.associatedView)
+      const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+      const claimantPaymentSchedule: PaymentSchedule = res.locals.claim.response.paymentIntention.repaymentPlan.paymentSchedule
+      const defendantPaymentSchedule: DefendantPaymentSchedule = draft.document.alternatePaymentMethod.paymentPlan.paymentSchedule
+      const courtOfferedAmount: number = draft.document.courtOfferedAmount
+      const convertedCourtOfferedAmount: number = 100
+
+      res.render(Paths.counterOfferAcceptedPage.associatedView, {
+        isOverriddenByDefendantsPaymentFrequency : isOverriddenByDefendantsPaymentFrequency(claimantPaymentSchedule, defendantPaymentSchedule),
+        courtOfferedAmount: courtOfferedAmount,
+        claimantPaymentSchedule: claimantPaymentSchedule,
+        convertedCourtOfferedAmount: convertedCourtOfferedAmount,
+        defendantPaymentFrequency: defendantPaymentSchedule
+      })
     })
   .post(
     Paths.counterOfferAcceptedPage.uri, (req: express.Request, res: express.Response) => {

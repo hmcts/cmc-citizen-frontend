@@ -1,27 +1,11 @@
 {% extends "layout.njk" %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set heading = 'Your instalments are more than the defendant can afford' %}
 {% set defendantName = claim.claimData.defendant.name %}
-
-{% macro repaymentPlanBlock(heading = 'The court`s proposed repayment plan', repaymentPlan, paymentPlan) %}
-  {% if heading %}
-    <h2 class="heading-medium">{{ t(heading) }}</h2>
-  {% endif %}
-
-  {{ paymentPlanTable(
-    id = 'payment-table',
-    instalmentAmount = repaymentPlan.instalmentAmount,
-    paymentFrequency = repaymentPlan.paymentFrequency,
-    firstPaymentDate = repaymentPlan.firstPaymentDate,
-    lastPaymentOn = paymentPlan.getLastPaymentDate(),
-    lengthOfPayment = paymentPlan.getPaymentLength()
-  )
-  }}
-{% endmacro %}
 
 {% block content %}
   <div class="grid-row">
@@ -33,6 +17,7 @@
       {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
         {{
         repaymentPlanBlock(
+          heading = 'The court`s proposed repayment plan',
           repaymentPlan = claim.response.paymentIntention.repaymentPlan,
           paymentPlan = paymentPlan
         )
