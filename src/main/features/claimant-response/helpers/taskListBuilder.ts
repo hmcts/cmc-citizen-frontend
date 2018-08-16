@@ -13,6 +13,7 @@ import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendant
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
+import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -72,6 +73,18 @@ export class TaskListBuilder {
 
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
+
+      if (claim.response.freeMediation === YesNoOption.YES
+        && draft.settleAdmitted
+        && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
+        tasks.push(
+          new TaskListItem(
+            'Free mediation?',
+            Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
+            FreeMediationTask.isCompleted(draft.freeMediation)
+          )
+        )
+      }
     }
 
     if (claim.response.responseType === ResponseType.FULL_ADMISSION
