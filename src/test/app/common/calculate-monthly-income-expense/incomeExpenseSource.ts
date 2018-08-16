@@ -89,7 +89,7 @@ describe('IncomeExpenseSource', () => {
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
       const income = {
-        amountReceived: 200,
+        amount: 200,
         frequency: IncomeExpenseSchedule.WEEK.value,
         type: MonthlyExpenseType.COUNCIL_TAX.displayValue
       } as Income
@@ -110,7 +110,7 @@ describe('IncomeExpenseSource', () => {
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
       const expense = {
-        amountPaid: 200,
+        amount: 200,
         frequency: IncomeExpenseSchedule.MONTH.value,
         type: MonthlyExpenseType.MORTGAGE.displayValue
       } as Expense
