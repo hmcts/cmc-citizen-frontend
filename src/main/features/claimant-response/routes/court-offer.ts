@@ -9,11 +9,43 @@ import { Draft } from '@hmcts/draft-store-client'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
+import { ResponseType } from 'claims/models/response/responseType'
+import { generatePaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
+import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
+import { Expense } from 'claims/models/response/statement-of-means/expense'
+import { Income } from 'claims/models/response/statement-of-means/income'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { Claim } from 'claims/models/claim'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+
+function calculateTotalMonthlyIncome (incomes: Income[]): number {
+  if (incomes === undefined) {
+    return 0
+  }
+
+  const incomeSources = incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
+  return CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeSources)
+}
+
+function calculateTotalMonthlyExpense (expenses: Expense[]): number {
+  if (expenses === undefined) {
+    return 0
+  }
+
+  const expenseSources = expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
+  return CalculateMonthlyIncomeExpense.calculateTotalAmount(expenseSources)
+}
 
 function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
+  const claim: Claim = res.locals.claim
+  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
-    form: form
-    // add court proposed repayment plan here
+    form: form,
+    claim: claim,
+    totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
+    totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
+    paymentPlan: generatePaymentPlan(response.responseType === ResponseType.PART_ADMISSION ? response.amount : claim.totalAmountTillToday, response.paymentIntention.repaymentPlan)
   })
 }
 /* tslint:disable:no-default-export */

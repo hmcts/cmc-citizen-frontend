@@ -32,7 +32,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
   buildTaskListUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
-    return Paths.taskListPage.evaluateUri({ externalId: externalId })
+    return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
   }
 }
 
