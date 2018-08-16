@@ -25,6 +25,8 @@ import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 import { Defendant } from 'drafts/models/defendant'
+import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
@@ -68,6 +70,68 @@ describe('Defendant response task list builder', () => {
   })
 
   describe('"Respond to claim" section', () => {
+    describe('"How much have you paid?" task', () => {
+      let isResponseRejectedFullyBecausePaidInFullStub: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseRejectedFullyBecausePaidInFullStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidInFull')
+      })
+
+      afterEach(() => {
+        isResponseRejectedFullyBecausePaidInFullStub.restore()
+      })
+
+      it('should be enabled when claim is fully rejected because paid in full', () => {
+        isResponseRejectedFullyBecausePaidInFullStub.returns(true)
+        const draft = new ResponseDraft()
+        draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID, new HowMuchHaveYouPaid())
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
+      })
+
+      it('should be disabled otherwise', () => {
+        isResponseRejectedFullyBecausePaidInFullStub.returns(false)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid?')
+      })
+    })
+
+    describe('"Why do you disagree with the amount claimed?" task', () => {
+      let isResponseRejectedFullyBecausePaidInFullStub: sinon.SinonStub
+
+      beforeEach(() => {
+        isResponseRejectedFullyBecausePaidInFullStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidInFull')
+        isResponseRejectedFullyBecausePaidInFullStub.returns(true)
+      })
+
+      afterEach(() => {
+        isResponseRejectedFullyBecausePaidInFullStub.restore()
+      })
+
+      it('should be enabled when claim is fully rejected because paid in full but less than claim amount', () => {
+        const draft = new ResponseDraft()
+        draft.rejectAllOfClaim = new RejectAllOfClaim(
+          RejectAllOfClaimOption.ALREADY_PAID,
+          new HowMuchHaveYouPaid(claim.totalAmountTillToday - 1)
+        )
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
+      })
+
+      it('should be disabled otherwise', () => {
+        const draft = new ResponseDraft()
+        draft.rejectAllOfClaim = new RejectAllOfClaim(
+          RejectAllOfClaimOption.ALREADY_PAID,
+          new HowMuchHaveYouPaid(claim.totalAmountTillToday + 1)
+        )
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the amount claimed?')
+      })
+    })
+
     describe('"Why do you disagree with the claim?" task', () => {
       let stub: sinon.SinonStub
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
@@ -92,68 +156,6 @@ describe('Defendant response task list builder', () => {
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the claim?')
-      })
-    })
-
-    describe('"Check and submit your response" task', () => {
-      let isResponsePopulatedStub: sinon.SinonStub
-      let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
-      let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
-      let isResponseFullyAdmittedStub: sinon.SinonStub
-      let isResponsePartiallyAdmittedStub: sinon.SinonStub
-
-      beforeEach(() => {
-        isResponsePopulatedStub = sinon.stub(ResponseDraft.prototype, 'isResponsePopulated')
-        isResponsePartiallyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
-        isResponseRejectedFullyWithDisputePaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
-        isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(
-          ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid'
-        )
-        isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
-      })
-
-      afterEach(() => {
-        isResponsePopulatedStub.restore()
-        isResponseRejectedFullyWithDisputePaidStub.restore()
-        isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
-        isResponseFullyAdmittedStub.restore()
-        isResponsePartiallyAdmittedStub.restore()
-      })
-
-      it('should be enabled when claim is fully rejected with dispute', () => {
-        isResponseRejectedFullyWithDisputePaidStub.returns(true)
-        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
-      })
-
-      it('should be enabled when claim is fully rejected due to claimed amount being paid', () => {
-        isResponseRejectedFullyWithDisputePaidStub.returns(false)
-        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
-        isResponsePartiallyAdmittedStub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
-      })
-
-      it('should be enabled when claim is fully admitted', () => {
-        isResponseFullyAdmittedStub.returns(true)
-        isResponsePartiallyAdmittedStub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
-      })
-
-      it('should be disabled in remaining cases', () => {
-        isResponsePopulatedStub.returns(true)
-        isResponseRejectedFullyWithDisputePaidStub.returns(false)
-        isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
-        isResponseFullyAdmittedStub.returns(false)
-        isResponsePartiallyAdmittedStub.returns(false)
-
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
-        expect(taskList).to.be.equal(undefined)
       })
     })
 
@@ -393,4 +395,77 @@ describe('Defendant response task list builder', () => {
       })
     })
   })
+
+  describe('"Check and submit your response" task', () => {
+    let isResponsePopulatedStub: sinon.SinonStub
+    let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
+    let isResponseRejectedFullyWithAmountClaimedPaidStub: sinon.SinonStub
+    let isResponseFullyAdmittedStub: sinon.SinonStub
+    let isResponsePartiallyAdmittedStub: sinon.SinonStub
+    let isResponseRejectedFullyBecausePaidInFullStub: sinon.SinonStub
+
+    beforeEach(() => {
+      isResponsePopulatedStub = sinon.stub(ResponseDraft.prototype, 'isResponsePopulated')
+      isResponsePartiallyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
+      isResponseRejectedFullyWithDisputePaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+      isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
+      isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
+      isResponseRejectedFullyBecausePaidInFullStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidInFull')
+    })
+
+    afterEach(() => {
+      isResponsePopulatedStub.restore()
+      isResponseRejectedFullyWithDisputePaidStub.restore()
+      isResponseRejectedFullyWithAmountClaimedPaidStub.restore()
+      isResponseFullyAdmittedStub.restore()
+      isResponsePartiallyAdmittedStub.restore()
+      isResponseRejectedFullyBecausePaidInFullStub.restore()
+    })
+
+    it('should be enabled when claim is fully rejected with dispute', () => {
+      isResponseRejectedFullyWithDisputePaidStub.returns(true)
+      isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
+
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+    })
+
+    it('should be enabled when claim is fully rejected due to claimed amount being paid', () => {
+      isResponseRejectedFullyWithDisputePaidStub.returns(false)
+      isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
+      isResponsePartiallyAdmittedStub.returns(false)
+
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+    })
+
+    it('should be enabled when claim is fully admitted', () => {
+      isResponseFullyAdmittedStub.returns(true)
+      isResponsePartiallyAdmittedStub.returns(false)
+
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+    })
+
+    it('should be enabled when claim is fully rejected because paid in full gte claim amount', () => {
+      isResponseRejectedFullyBecausePaidInFullStub.returns(true)
+
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
+
+    })
+
+    it('should be disabled in remaining cases', () => {
+      isResponsePopulatedStub.returns(true)
+      isResponseRejectedFullyWithDisputePaidStub.returns(false)
+      isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
+      isResponseFullyAdmittedStub.returns(false)
+      isResponsePartiallyAdmittedStub.returns(false)
+      isResponseRejectedFullyBecausePaidInFullStub.returns(false)
+
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      expect(taskList).to.be.equal(undefined)
+    })
+  })
+
 })
