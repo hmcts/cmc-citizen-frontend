@@ -79,10 +79,7 @@
     "clusterMode": "FEATURE_CLUSTER_MODE",
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "newFeaturesConsent": "FEATURE_NEW_FEATURES_CONSENT",
-    "fullAdmission": "FEATURE_FULL_ADMISSION",
     "admissions": "FEATURE_ADMISSIONS",
-    "partialAdmission": "FEATURE_PARTIAL_ADMISSION",
-    "statementOfMeans": "FEATURE_STATEMENT_OF_MEANS",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY"
   },
