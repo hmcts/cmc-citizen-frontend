@@ -13,13 +13,14 @@ import { YesNoOption } from 'models/yesNoOption'
 function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form
-    //add court proposed repayment plan here
+    // add court proposed repayment plan here
   })
 }
+/* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     ClaimantsResponsePaths.courtOfferPage.uri,
-    ErrorHandling.apply(async(req: express.Request, res: express.Response) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       renderView(new Form(draft.document.acceptCourtOffer), res)
     }))

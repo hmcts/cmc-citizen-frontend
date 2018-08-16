@@ -41,7 +41,6 @@ export default new PaymentPlanPage()
   .buildRouter(claimantResponsePath, (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const claim: Claim = res.locals.claim
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    console.log('response------->', response)
 
     res.locals.monthlyIncomeAmount = response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
       response.statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
@@ -51,6 +50,5 @@ export default new PaymentPlanPage()
     ) : 0
     res.locals.statementOfMeans = response.statementOfMeans
 
-    console.log('res.locals------>',res.locals)
     next()
   })
