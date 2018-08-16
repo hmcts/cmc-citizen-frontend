@@ -22,14 +22,14 @@ export class DocumentsClient {
   }
 
   getCountyCourtJudgementReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
-    return this.getPDF(claimExternalId, 'ccj', bearerToken)
+    return this.getPDF(claimExternalId, 'ccj', bearerToken, '?issue=true')
   }
 
   getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
 
-  private async getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
+  private async getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string, queryParam: string = ''): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
@@ -40,7 +40,7 @@ export class DocumentsClient {
       throw new Error('User authorisation cannot be blank')
     }
     return request.get(
-      `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
+      `${this.documentsUrl}/${documentTemplate}/${claimExternalId}${queryParam}`,
       {
         headers: {
           Authorization: `Bearer ${bearerToken}`,
