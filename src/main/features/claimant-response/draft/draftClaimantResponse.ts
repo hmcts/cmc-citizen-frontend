@@ -7,7 +7,6 @@ import { FreeMediation } from 'response/form/models/freeMediation'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean

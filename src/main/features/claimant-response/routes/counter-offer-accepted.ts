@@ -6,7 +6,7 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { PaymentSchedule as DefendantPaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
-function isOverriddenByDefendantsPaymentFrequency (claimantPaymentSchedule: PaymentSchedule, defendantPaymentSchedule: PaymentSchedule): boolean {
+function isOverriddenByDefendantsPaymentFrequency (claimantPaymentSchedule: PaymentSchedule, defendantPaymentSchedule: DefendantPaymentSchedule): boolean {
   return true
 }
 
