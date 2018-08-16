@@ -17,6 +17,7 @@ export default express.Router()
         {
           claim: claim,
           confirmationDate: MomentFactory.currentDate(),
-          repaymentPlanOrigin: getRepaymentPlanOrigin(claim.settlement)
+          repaymentPlanOrigin: claim.settlement && getRepaymentPlanOrigin(claim.settlement),
+          countyCourtJudgement: claim.countyCourtJudgmentIssuedAt !== undefined
         })
     }))

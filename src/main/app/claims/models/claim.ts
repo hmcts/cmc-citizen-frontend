@@ -28,6 +28,7 @@ export class Claim {
   claimantEmail: string
   countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
+  countyCourtJudgmentIssuedAt: Moment
   response: Response
   defendantEmail: string
   settlement: Settlement
@@ -62,6 +63,9 @@ export class Claim {
       this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
       if (input.countyCourtJudgmentRequestedAt) {
         this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
+      }
+      if (input.countyCourtJudgmentIssuedAt) {
+        this.countyCourtJudgmentIssuedAt = MomentFactory.parse(input.countyCourtJudgmentIssuedAt)
       }
       if (input.settlement) {
         this.settlement = new Settlement().deserialize(input.settlement)

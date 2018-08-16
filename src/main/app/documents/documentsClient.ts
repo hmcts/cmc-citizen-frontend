@@ -21,11 +21,15 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'defendantResponseReceipt', bearerToken)
   }
 
+  getCountyCourtJudgementReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'ccj', bearerToken)
+  }
+
   getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
 
-  private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
+  private async getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
