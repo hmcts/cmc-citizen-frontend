@@ -20,7 +20,6 @@ export class DraftClaimantResponse extends DraftDocument {
   rejectionReason?: RejectionReason
   acceptCourtOffer?: AcceptCourtOffer
   alternatePaymentMethod?: PaymentIntention
-  freeMediation?: FreeMediation
 
   constructor () {
     super()
@@ -55,9 +54,6 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.alternatePaymentMethod) {
         this.alternatePaymentMethod = PaymentIntention.deserialise(input.alternatePaymentMethod)
-      }
-      if (input.freeMediation) {
-        this.freeMediation = new FreeMediation(input.freeMediation.option)
       }
       if (input.courtOfferedAmount) {
         this.courtOfferedAmount = input.courtOfferedAmount
