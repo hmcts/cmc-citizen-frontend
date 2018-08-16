@@ -3,24 +3,32 @@ import { Paths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
+import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendantResponseTask'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
+import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
+import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
-    tasks.push(
-      new TaskListItem(
-        'View the defendant’s full response',
-        Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-        true
+
+    if (claim.response.responseType === ResponseType.FULL_ADMISSION
+      || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)) {
+      tasks.push(
+        new TaskListItem(
+          'View the defendant’s full response',
+          Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
+          ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
+        )
       )
-    )
+    }
 
     return new TaskList('Before you start', tasks)
   }
@@ -61,6 +69,9 @@ export class TaskListBuilder {
           )
         )
       }
+
+      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
 
     if (claim.response.responseType === ResponseType.FULL_ADMISSION
@@ -73,8 +84,37 @@ export class TaskListBuilder {
           AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
+      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
+
     return new TaskList('How do you want to respond?', tasks)
+  }
+
+  private static buildSignSettlementAgreement (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.formaliseRepaymentPlan
+      && draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value
+    ) {
+      tasks.push(
+        new TaskListItem(
+          'Sign a settlement agreement',
+          Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
+          SignSettlementAgreementTask.isCompleted(draft.settlementAgreement)
+        )
+      )
+    }
+  }
+
+  private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+      tasks.push(
+        new TaskListItem(
+          'Formalise the repayment plan',
+          Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
+          ChooseHowToProceedTask.isCompleted(draft.formaliseRepaymentPlan)
+        )
+      )
+    }
   }
 
   static buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskList {
