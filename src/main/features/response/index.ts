@@ -79,6 +79,10 @@ export class Feature {
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
       }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.responseDraft
+        next()
+      },
       initiatePartyFromClaimHandler
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
