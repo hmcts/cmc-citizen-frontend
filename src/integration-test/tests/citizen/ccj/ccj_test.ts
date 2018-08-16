@@ -21,7 +21,7 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayByInstalments()
+  ccjSteps.ccjDefendantPaymentPlan()
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
@@ -35,7 +35,7 @@ Scenario('Request judgment as a Company, pay by set date @citizen', async (I: I)
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
-  ccjSteps.ccjDefendantToPayBySetDate()
+  ccjSteps.ccjDefendantPaymentDate()
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
