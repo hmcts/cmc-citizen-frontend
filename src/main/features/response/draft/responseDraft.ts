@@ -18,8 +18,6 @@ import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
@@ -140,16 +138,13 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponseFullyAdmitted (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
-      return false
-    }
-
     return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
   }
 
   // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
+
     return this.isResponseFullyAdmitted()
       && this.fullAdmission !== undefined
       && this.fullAdmission.paymentIntention !== undefined
@@ -158,6 +153,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponsePartiallyAdmittedWithInstalments (): boolean {
+
     return this.isResponsePartiallyAdmitted()
       && this.partialAdmission !== undefined
       && this.partialAdmission.paymentIntention !== undefined
@@ -166,9 +162,6 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponsePartiallyAdmitted (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission'))) {
-      return false
-    }
 
     return this.isResponsePopulated()
       && this.response.type === ResponseType.PART_ADMISSION

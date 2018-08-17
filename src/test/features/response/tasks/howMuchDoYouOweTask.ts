@@ -30,15 +30,6 @@ describe('HowMuchDoYouOweTask', () => {
 
   context('should not be completed when', () => {
 
-    it('response is not partial admission', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = {
-        type: ResponseType.FULL_ADMISSION
-      }
-
-      expect(HowMuchDoYouOweTask.isCompleted(draft)).to.be.false
-    })
-
     it('howMuchDoYouOwe is undefined', () => {
       const draft: ResponseDraft = validResponseDraft()
       draft.partialAdmission.howMuchDoYouOwe = undefined

@@ -1,10 +1,7 @@
 feature_fine_print = "true"
 feature_new_features_consent = "true"
-feature_full_admission = "true"
 feature_admissions = "true"
-feature_partial_admission = "true"
-feature_statement_of_means = "true"
-external_host_name = "moneyclaim.nonprod.platform.hmcts.net"
+external_host_name = "moneyclaims.aat.platform.hmcts.net"
 
 idam_api_url = "https://preprod-idamapi.reform.hmcts.net:3511"
 authentication_web_url = "https://idam.preprod.ccidam.reform.hmcts.net"

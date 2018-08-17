@@ -20,6 +20,8 @@ export class Paths {
   static readonly alternateRepaymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentOptionPage.uri)
   static readonly paymentDatePage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentDatePage.uri)
   static readonly paymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentPlanPage.uri)
+  static readonly confirmationPage = new RoutablePath(`${claimantResponsePath}/confirmation`)
+  static readonly rejectionReasonPage = new RoutablePath(`${claimantResponsePath}/rejection-reason`)
 }
 
 export const claimantResponseCCJPath = '/case/:externalId/claimant-response/ccj'
