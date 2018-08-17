@@ -20,10 +20,21 @@ import { YesNoOption } from 'models/yesNoOption'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
-import { RepaymentPlan } from 'claims/models/replaymentPlan'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentIntention } from 'shared/components/payment-intention/model'
+import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
+import { RepaymentPlan as CCJRepaymentPlan } from 'claims/models/replaymentPlan'
+
+
+import {
+  DefendantPaymentOption as PaymentOption,
+  DefendantPaymentType
+} from 'response/form/models/defendantPaymentOption'
+import { LocalDate } from 'forms/models/localDate'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
 function getDateOfBirth (claim: Claim): Moment {
   const defendant = claim.response.defendant
@@ -34,33 +45,46 @@ function getDateOfBirth (claim: Claim): Moment {
   return undefined
 }
 
-function getPaymentIntention (claim: Claim): PaymentIntention {
+function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-  return PaymentIntention.deserialise(response.paymentIntention)
+  const paymentIntention = new PaymentIntention()
+
+  if (response.paymentIntention) {
+    paymentIntention.paymentOption = new PaymentOption(DefendantPaymentType.valueOf(response.paymentIntention.paymentOption))
+    paymentIntention.paymentDate = response.paymentIntention.paymentDate && new PaymentDate(new LocalDate().deserialize(response.paymentIntention.paymentDate))
+
+    const repaymentPlan: RepaymentPlan = response.paymentIntention.repaymentPlan
+
+    paymentIntention.paymentPlan = new PaymentPlan(claim.totalAmountTillToday,
+      repaymentPlan.instalmentAmount,
+      new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month(), repaymentPlan.firstPaymentDate.day()),
+      PaymentSchedule.of(repaymentPlan.paymentSchedule)
+    )
+  }
+  return paymentIntention
 }
 
 function countyCourtJudgement (claim: Claim, draft: Draft<DraftClaimantResponse>): CountyCourtJudgment {
   const claimantResponse = draft.document
 
-  const acceptDefendantOffer = claimantResponse.acceptPaymentMethod.accept.option === YesNoOption.YES
+  const acceptDefendantOffer = claimantResponse.acceptPaymentMethod.accept.option === YesNoOption.YES.option
 
-  const paymentIntention: PaymentIntention = acceptDefendantOffer ? getPaymentIntention(claim)
+  const paymentIntention: PaymentIntention = acceptDefendantOffer ? getDefendantPaymentIntention(claim)
     : claimantResponse.alternatePaymentMethod
 
-  let repaymentPlan: RepaymentPlan
+  let repaymentPlan: CCJRepaymentPlan
   let payBySetDate: Moment
   let paymentOption: string
 
   if (paymentIntention) {
-    repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan().deserialize(paymentIntention.paymentPlan)
+    repaymentPlan = paymentIntention.paymentPlan && new CCJRepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
+      paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
+      paymentIntention.paymentPlan.paymentSchedule.value)
     payBySetDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
     paymentOption = paymentIntention.paymentOption && paymentIntention.paymentOption.option.value
   }
 
-  let amount: number
-  if (claimantResponse.paidAmount) {
-    amount = claimantResponse.paidAmount.amount
-  }
+  const amount: number = claimantResponse.paidAmount && claimantResponse.paidAmount.amount
 
   return new CountyCourtJudgment(getDateOfBirth(claim), paymentOption, amount, repaymentPlan, payBySetDate)
 }

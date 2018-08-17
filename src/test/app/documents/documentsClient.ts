@@ -8,7 +8,7 @@ describe('DocumentsClient', () => {
   const externalId = 'b17af4d2-273f-4999-9895-bce382fa24c8'
 
   it('should throw error when given undefined ExternalId', () => {
-    expect(() => client.getDefendantResponseReceiptPDF(
+    expect(() =>  client.getDefendantResponseReceiptPDF(
       undefined, bearerToken))
       .to.throw(Error, 'Claim external ID cannot be blank')
   })

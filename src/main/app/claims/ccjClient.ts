@@ -19,7 +19,6 @@ export class CCJClient {
       ccjUri = `${claimStoreApiUrl}/${externalId}/county-court-judgment`
     }
 
-    console.log(ccjUri)
     return request.post(ccjUri, {
       body: countyCourtJudgment,
       headers: {
