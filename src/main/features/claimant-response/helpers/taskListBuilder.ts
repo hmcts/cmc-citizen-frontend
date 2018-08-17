@@ -148,7 +148,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Request a County Court Judgment',
           CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId }),
-          true
+          isDefinedAndValid(draft.paidAmount)
         )
       )
     }

@@ -24,7 +24,7 @@ export class Paths {
   static readonly rejectionReasonPage = new RoutablePath(`${claimantResponsePath}/rejection-reason`)
 }
 
-export const claimantResponseCCJPath = '/case/:externalId/claimant-response/ccj'
+export const claimantResponseCCJPath = '/case/:externalId/claimant-response/county-court-judgment'
 
 export class CCJPaths {
   static readonly paidAmountPage = new RoutablePath(claimantResponseCCJPath + CountyCourtJudgementPaths.paidAmountPage.uri)

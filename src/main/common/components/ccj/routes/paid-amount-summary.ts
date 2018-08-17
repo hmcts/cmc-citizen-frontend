@@ -28,14 +28,12 @@ export abstract class AbstractPaidAmountSummaryPage<Draft> {
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const claim: Claim = res.locals.claim
           const model = this.createModelAccessor().get(res.locals.draft.document)
-
           res.render(
             this.getView(), {
               claim: claim,
               alreadyPaid: model.amount,
               interestDetails: await getInterestDetails(claim),
               nextPageUrl: this.buildRedirectUri(req, res),
-              // nextPageUrl: CCJPaths.taskListPage.evaluateUri({ externalId: externalId }),
               defaultJudgmentDate: MomentFactory.currentDate()
             }
           )
