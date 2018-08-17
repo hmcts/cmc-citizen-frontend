@@ -169,12 +169,12 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     }
   },
   incomes: [{
-    amountReceived: 200,
+    amount: 200,
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
   expenses: [{
-    amountPaid: 100,
+    amount: 100,
     frequency: PaymentFrequency.MONTH,
     type: ExpenseType.MORTGAGE
   }] as Expense[]
