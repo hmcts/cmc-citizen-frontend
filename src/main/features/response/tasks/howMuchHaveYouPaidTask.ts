@@ -12,6 +12,7 @@ export class HowMuchHaveYouPaidTask {
     if (responseDraft.isResponseRejectedFullyBecausePaidInFull()) {
       return HowMuchHaveYouPaidTask.isHowMuchHaveYouPaidValid(responseDraft.rejectAllOfClaim.howMuchHaveYouPaid)
     }
+    return false
   }
 
   private static isHowMuchHaveYouPaidValid (model: HowMuchHaveYouPaid): boolean {
