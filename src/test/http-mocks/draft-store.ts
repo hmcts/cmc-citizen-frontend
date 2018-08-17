@@ -347,10 +347,12 @@ export const sampleClaimantResponseDraftObj = {
   settlementAgreement: {
     signed: true
   },
+  freeMediation: {
+    option: FreeMediationOption.NO
+  },
   rejectionReason: {
     text: 'i reject repayment plan because ...'
   }
-
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {

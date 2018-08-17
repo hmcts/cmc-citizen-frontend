@@ -66,7 +66,7 @@ export class IncomeExpenseSource {
     }
 
     return new IncomeExpenseSource(
-      toNumberOrUndefined(income.amountReceived),
+      toNumberOrUndefined(income.amount),
       toIncomeExpenseScheduleOrUndefined(income.frequency)
     )
   }
@@ -77,7 +77,7 @@ export class IncomeExpenseSource {
     }
 
     return new IncomeExpenseSource(
-      toNumberOrUndefined(expense.amountPaid),
+      toNumberOrUndefined(expense.amount),
       toIncomeExpenseScheduleOrUndefined(expense.frequency)
     )
   }

@@ -332,70 +332,70 @@ export class ResponseModelConverter {
       incomes.push({
         type: IncomeType.JOB,
         frequency: income.salarySource.schedule.value as PaymentFrequency,
-        amountReceived: income.salarySource.amount
+        amount: income.salarySource.amount
       })
     }
     if (income.universalCreditSource && income.universalCreditSource.populated) {
       incomes.push({
         type: IncomeType.UNIVERSAL_CREDIT,
         frequency: income.universalCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: income.universalCreditSource.amount
+        amount: income.universalCreditSource.amount
       })
     }
     if (income.jobseekerAllowanceIncomeSource && income.jobseekerAllowanceIncomeSource.populated) {
       incomes.push({
         type: IncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES,
         frequency: income.jobseekerAllowanceIncomeSource.schedule.value as PaymentFrequency,
-        amountReceived: income.jobseekerAllowanceIncomeSource.amount
+        amount: income.jobseekerAllowanceIncomeSource.amount
       })
     }
     if (income.jobseekerAllowanceContributionSource && income.jobseekerAllowanceContributionSource.populated) {
       incomes.push({
         type: IncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED,
         frequency: income.jobseekerAllowanceContributionSource.schedule.value as PaymentFrequency,
-        amountReceived: income.jobseekerAllowanceContributionSource.amount
+        amount: income.jobseekerAllowanceContributionSource.amount
       })
     }
     if (income.incomeSupportSource && income.incomeSupportSource.populated) {
       incomes.push({
         type: IncomeType.INCOME_SUPPORT,
         frequency: income.incomeSupportSource.schedule.value as PaymentFrequency,
-        amountReceived: income.incomeSupportSource.amount
+        amount: income.incomeSupportSource.amount
       })
     }
     if (income.workingTaxCreditSource && income.workingTaxCreditSource.populated) {
       incomes.push({
         type: IncomeType.WORKING_TAX_CREDIT,
         frequency: income.workingTaxCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: income.workingTaxCreditSource.amount
+        amount: income.workingTaxCreditSource.amount
       })
     }
     if (income.childTaxCreditSource && income.childTaxCreditSource.populated) {
       incomes.push({
         type: IncomeType.CHILD_TAX_CREDIT,
         frequency: income.childTaxCreditSource.schedule.value as PaymentFrequency,
-        amountReceived: income.childTaxCreditSource.amount
+        amount: income.childTaxCreditSource.amount
       })
     }
     if (income.childBenefitSource && income.childBenefitSource.populated) {
       incomes.push({
         type: IncomeType.CHILD_BENEFIT,
         frequency: income.childBenefitSource.schedule.value as PaymentFrequency,
-        amountReceived: income.childBenefitSource.amount
+        amount: income.childBenefitSource.amount
       })
     }
     if (income.councilTaxSupportSource && income.councilTaxSupportSource.populated) {
       incomes.push({
         type: IncomeType.COUNCIL_TAX_SUPPORT,
         frequency: income.councilTaxSupportSource.schedule.value as PaymentFrequency,
-        amountReceived: income.councilTaxSupportSource.amount
+        amount: income.councilTaxSupportSource.amount
       })
     }
     if (income.pensionSource && income.pensionSource.populated) {
       incomes.push({
         type: IncomeType.PENSION,
         frequency: income.pensionSource.schedule.value as PaymentFrequency,
-        amountReceived: income.pensionSource.amount
+        amount: income.pensionSource.amount
       })
     }
     if (income.otherSources && income.anyOtherIncomePopulated) {
@@ -403,7 +403,7 @@ export class ResponseModelConverter {
         incomes.push({
           type: IncomeType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,
-          amountReceived: source.amount,
+          amount: source.amount,
           otherSource: source.name
         })
       })
@@ -422,7 +422,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.MORTGAGE,
         frequency: monthlyExpenses.mortgage.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.mortgage.amount
+        amount: monthlyExpenses.mortgage.amount
       })
     }
 
@@ -430,7 +430,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.RENT,
         frequency: monthlyExpenses.rent.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.rent.amount
+        amount: monthlyExpenses.rent.amount
       })
     }
 
@@ -438,7 +438,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.COUNCIL_TAX,
         frequency: monthlyExpenses.councilTax.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.councilTax.amount
+        amount: monthlyExpenses.councilTax.amount
       })
     }
 
@@ -446,7 +446,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.GAS,
         frequency: monthlyExpenses.gas.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.gas.amount
+        amount: monthlyExpenses.gas.amount
       })
     }
 
@@ -454,7 +454,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.ELECTRICITY,
         frequency: monthlyExpenses.electricity.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.electricity.amount
+        amount: monthlyExpenses.electricity.amount
       })
     }
 
@@ -462,7 +462,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.WATER,
         frequency: monthlyExpenses.water.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.water.amount
+        amount: monthlyExpenses.water.amount
       })
     }
 
@@ -470,7 +470,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.TRAVEL,
         frequency: monthlyExpenses.travel.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.travel.amount
+        amount: monthlyExpenses.travel.amount
       })
     }
 
@@ -478,7 +478,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.SCHOOL_COSTS,
         frequency: monthlyExpenses.schoolCosts.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.schoolCosts.amount
+        amount: monthlyExpenses.schoolCosts.amount
       })
     }
 
@@ -486,7 +486,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.FOOD_HOUSEKEEPING,
         frequency: monthlyExpenses.foodAndHousekeeping.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.foodAndHousekeeping.amount
+        amount: monthlyExpenses.foodAndHousekeeping.amount
       })
     }
 
@@ -494,7 +494,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.TV_AND_BROADBAND,
         frequency: monthlyExpenses.tvAndBroadband.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.tvAndBroadband.amount
+        amount: monthlyExpenses.tvAndBroadband.amount
       })
     }
 
@@ -502,7 +502,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.HIRE_PURCHASES,
         frequency: monthlyExpenses.hirePurchase.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.hirePurchase.amount
+        amount: monthlyExpenses.hirePurchase.amount
       })
     }
 
@@ -510,7 +510,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.MOBILE_PHONE,
         frequency: monthlyExpenses.mobilePhone.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.mobilePhone.amount
+        amount: monthlyExpenses.mobilePhone.amount
       })
     }
 
@@ -518,7 +518,7 @@ export class ResponseModelConverter {
       expenses.push({
         type: ExpenseType.MAINTENANCE_PAYMENTS,
         frequency: monthlyExpenses.maintenance.schedule.value as PaymentFrequency,
-        amountPaid: monthlyExpenses.maintenance.amount
+        amount: monthlyExpenses.maintenance.amount
       })
     }
 
@@ -527,7 +527,7 @@ export class ResponseModelConverter {
         expenses.push({
           type: ExpenseType.OTHER,
           frequency: source.schedule.value as PaymentFrequency,
-          amountPaid: source.amount,
+          amount: source.amount,
           otherName: source.name
         })
       })
