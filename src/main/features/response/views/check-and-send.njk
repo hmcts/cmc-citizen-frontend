@@ -193,7 +193,7 @@
           {{ tableEnd() }}
         {% else %}
           {{
-          notImmediatePayment(
+            notImmediatePayment(
               type = draft.partialAdmission.paymentOption,
               paymentDate = draft.partialAdmission.paymentDate,
               paymentPlan = draft.partialAdmission.paymentPlan,
@@ -244,12 +244,12 @@
     {% if (admissionsApplicable and draft.isResponsePartiallyAdmitted()) or draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
-        row(
-          label = 'Will you try mediation?',
-          value = t(draft.freeMediation.option) | capitalize,
-          changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
-          bold = true
-        )
+          row(
+            label = 'Will you try mediation?',
+            value = t(draft.freeMediation.option) | capitalize,
+            changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
       }}
       {{ tableEnd() }}
     {% endif %}
