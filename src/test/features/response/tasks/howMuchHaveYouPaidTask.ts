@@ -137,11 +137,11 @@ function testAll (
         expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.false
       })
     })
+  })
 
-    it('should be completed when howMuchHaveYouPaid is valid', () => {
-      const draft: ResponseDraft = draftSupplier()
+  it('should be completed when howMuchHaveYouPaid is valid', () => {
+    const draft: ResponseDraft = draftSupplier()
 
-      expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.true
-    })
+    expect(HowMuchHaveYouPaidTask.isCompleted(draft)).to.be.true
   })
 }
