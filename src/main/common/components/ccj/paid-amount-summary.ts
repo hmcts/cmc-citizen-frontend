@@ -13,7 +13,6 @@ import { AbstractModelAccessor } from 'shared/components/model-accessor'
 /* tslint:disable:no-default-export */
 export abstract class AbstractPaidAmountSummaryPage<Draft> {
 
-  abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaidAmount>
   abstract buildRedirectUri (req: express.Request, res: express.Response): string
 

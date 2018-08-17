@@ -8,10 +8,6 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 
 class PaidAmountPage extends AbstractPaidAmountPage<DraftClaimantResponse> {
 
-  getHeading (): string {
-    return ''
-  }
-
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaidAmount> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
   }

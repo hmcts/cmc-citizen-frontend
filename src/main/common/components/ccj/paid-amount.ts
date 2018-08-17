@@ -15,7 +15,6 @@ import { RoutablePath } from 'shared/router/routablePath'
 /* tslint:disable:no-default-export */
 export abstract class AbstractPaidAmountPage<Draft> {
 
-  abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaidAmount>
 
   getView (): string {

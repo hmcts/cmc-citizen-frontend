@@ -7,10 +7,6 @@ import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/m
 
 class PaidAmountPage extends AbstractPaidAmountPage<DraftCCJ> {
 
-  getHeading (): string {
-    return ''
-  }
-
   createModelAccessor (): AbstractModelAccessor<DraftCCJ, PaidAmount> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
   }
