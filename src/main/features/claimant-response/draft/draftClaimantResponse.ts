@@ -5,6 +5,7 @@ import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseR
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { FreeMediation } from 'response/form/models/freeMediation'
+import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -15,6 +16,7 @@ export class DraftClaimantResponse extends DraftDocument {
   settlementAgreement?: SettlementAgreement
   alternatePaymentMethod?: PaymentIntention
   freeMediation?: FreeMediation
+  rejectionReason?: RejectionReason
 
   constructor () {
     super()
@@ -43,6 +45,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.freeMediation) {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
+      }
+      if (input.rejectionReason) {
+        this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
       }
     }
     return this

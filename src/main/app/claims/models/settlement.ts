@@ -6,6 +6,10 @@ import { MadeBy } from 'offer/form/models/madeBy'
 export class Settlement {
   partyStatements: PartyStatement[]
 
+  constructor (partyStatements?: PartyStatement[]) {
+    this.partyStatements = partyStatements
+  }
+
   deserialize (input: any): Settlement {
     if (input) {
       this.partyStatements = this.deserializePartyStatement(input.partyStatements)

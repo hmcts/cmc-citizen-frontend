@@ -138,23 +138,6 @@ describe('StatementOfMeansTask', () => {
       })
     })
 
-    context('when it does not apply', () => {
-
-      beforeEach(() => {
-        responseDraft.response = new Response(ResponseType.DEFENCE)
-      })
-
-      it('should be complete when statement of means is undefined', () => {
-        responseDraft.statementOfMeans = undefined
-        expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
-      })
-
-      it('should be complete when statement of means item is invalid', () => {
-        responseDraft.statementOfMeans.residence.type = undefined
-        expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
-      })
-    })
-
     context('isCompleted: ', () => {
 
       context('dependants group', () => {

@@ -28,7 +28,7 @@ import { Defendant } from 'drafts/models/defendant'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
-
+const features: string[] = ['admissions']
 describe('Defendant response task list builder', () => {
   let claim: Claim
 
@@ -153,7 +153,7 @@ describe('Defendant response task list builder', () => {
         isResponseRejectedFullyWithDisputePaidStub.returns(true)
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
@@ -162,7 +162,7 @@ describe('Defendant response task list builder', () => {
         isResponseRejectedFullyWithAmountClaimedPaidStub.returns(true)
         isResponsePartiallyAdmittedStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
@@ -170,7 +170,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(true)
         isResponsePartiallyAdmittedStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
         expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
       })
 
@@ -181,7 +181,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedStub.returns(false)
         isResponsePartiallyAdmittedStub.returns(false)
 
-        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId)
+        const taskList: TaskList = TaskListBuilder.buildSubmitSection(new ResponseDraft(), externalId, features)
         expect(taskList).to.be.equal(undefined)
       })
     })
