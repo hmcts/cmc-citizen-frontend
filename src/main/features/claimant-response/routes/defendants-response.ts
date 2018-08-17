@@ -48,7 +48,6 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
   res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
     totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
