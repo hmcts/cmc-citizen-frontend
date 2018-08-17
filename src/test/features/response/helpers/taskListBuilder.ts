@@ -25,6 +25,7 @@ import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 import { Defendant } from 'drafts/models/defendant'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
@@ -204,6 +205,7 @@ describe('Defendant response task list builder', () => {
         isResponseFullyAdmittedWithPayBySetDateStub.returns(false)
         const draft = new ResponseDraft()
         draft.fullAdmission = new FullAdmission()
+        draft.fullAdmission.paymentIntention = new PaymentIntention()
         draft.defendantDetails.partyDetails = new PartyDetails()
         draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
 
@@ -243,6 +245,7 @@ describe('Defendant response task list builder', () => {
         const draft = new ResponseDraft()
         draft.defendantDetails = new Defendant(new PartyDetails('John'))
         draft.fullAdmission = new FullAdmission()
+        draft.fullAdmission.paymentIntention = new PaymentIntention()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Your repayment plan')
@@ -284,10 +287,11 @@ describe('Defendant response task list builder', () => {
 
         const draft = new ResponseDraft()
         draft.response = new Response(ResponseType.FULL_ADMISSION)
-        draft.fullAdmission = new FullAdmission()
         draft.defendantDetails.partyDetails = new PartyDetails()
         draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
-        draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
+        draft.fullAdmission = new FullAdmission()
+        draft.fullAdmission.paymentIntention = new PaymentIntention()
+        draft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(DefendantPaymentType.BY_SET_DATE)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('Share your financial details')
@@ -356,11 +360,12 @@ describe('Defendant response task list builder', () => {
         const draft = new ResponseDraft()
 
         draft.response = new Response(ResponseType.PART_ADMISSION)
-        draft.partialAdmission = new PartialAdmission()
         draft.defendantDetails.partyDetails = new PartyDetails()
         draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+        draft.partialAdmission = new PartialAdmission()
         draft.partialAdmission.alreadyPaid = new AlreadyPaid(YesNoOption.NO)
         draft.partialAdmission.howMuchDoYouOwe = new HowMuchDoYouOwe(100, 200)
+        draft.partialAdmission.paymentIntention = new PaymentIntention()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay the £100?')

@@ -25,7 +25,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
-draft.fullAdmission.paymentOption.option = DefendantPaymentType.BY_SET_DATE
+draft.fullAdmission.paymentIntention.paymentOption.option = DefendantPaymentType.BY_SET_DATE
 
 function nextDay () {
   const nextDay: moment.Moment = moment().add(1, 'days')

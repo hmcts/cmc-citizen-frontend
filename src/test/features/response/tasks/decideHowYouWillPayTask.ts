@@ -15,18 +15,20 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { Defendant } from 'drafts/models/defendant'
 import { ResponseType } from 'response/form/models/responseType'
 import { Response } from 'response/form/models/response'
+import { PaymentIntention } from 'shared/components/payment-intention/model'
 
 function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
   responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.fullAdmission = new FullAdmission()
-  responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
+  responseDraft.fullAdmission.paymentIntention = new PaymentIntention()
+  responseDraft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(paymentType)
   switch (paymentType) {
     case DefendantPaymentType.BY_SET_DATE:
-      responseDraft.fullAdmission.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
+      responseDraft.fullAdmission.paymentIntention.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
       break
     case DefendantPaymentType.INSTALMENTS:
-      responseDraft.fullAdmission.paymentPlan = new PaymentPlan(
+      responseDraft.fullAdmission.paymentIntention.paymentPlan = new PaymentPlan(
         1000,
         100,
         localDateFrom(MomentFactory.currentDate().add(1, 'day')),
@@ -45,7 +47,8 @@ describe('DecideHowYouWillPayTask', () => {
     it('payment object is undefined', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.fullAdmission = new FullAdmission()
-      draft.fullAdmission.paymentOption = undefined
+      draft.fullAdmission.paymentIntention = new PaymentIntention()
+      draft.fullAdmission.paymentIntention.paymentOption = undefined
 
       expect(DecideHowYouWillPayTask.isCompleted(draft)).to.be.false
     })
@@ -53,7 +56,8 @@ describe('DecideHowYouWillPayTask', () => {
     it('payment option is undefined', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.fullAdmission = new FullAdmission()
-      draft.fullAdmission.paymentOption = new DefendantPaymentOption(undefined)
+      draft.fullAdmission.paymentIntention = new PaymentIntention()
+      draft.fullAdmission.paymentIntention.paymentOption = new DefendantPaymentOption(undefined)
 
       expect(DecideHowYouWillPayTask.isCompleted(draft)).to.be.false
     })
@@ -67,17 +71,17 @@ describe('DecideHowYouWillPayTask', () => {
     })
 
     it('should not be completed when payment date wrapper is undefined', () => {
-      responseDraft.fullAdmission.paymentDate = undefined
+      responseDraft.fullAdmission.paymentIntention.paymentDate = undefined
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
     it('should not be completed when payment date is undefined', () => {
-      responseDraft.fullAdmission.paymentDate.date = undefined
+      responseDraft.fullAdmission.paymentIntention.paymentDate.date = undefined
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
     it('should not be completed when payment date is not valid', () => {
-      responseDraft.fullAdmission.paymentDate.date = new LocalDate()
+      responseDraft.fullAdmission.paymentIntention.paymentDate.date = new LocalDate()
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 

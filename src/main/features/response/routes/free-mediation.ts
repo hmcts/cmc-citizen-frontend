@@ -3,10 +3,10 @@ import * as express from 'express'
 import { AbstractFreeMediationPage } from 'shared/components/free-mediation/free-mediation'
 
 import { responsePath, Paths } from 'features/response/paths'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Claim } from 'claims/models/claim'
 
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { Claim } from 'claims/models/claim'
-import { ResponseDraft } from 'response/draft/responseDraft'
 
 class FreeMediationPage extends AbstractFreeMediationPage {
   buildRedirectUri (req: express.Request, res: express.Response): string {

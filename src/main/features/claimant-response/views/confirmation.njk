@@ -16,6 +16,8 @@
             {{ t('You’ve proposed an alternative repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
+          {% elseif countyCourtJudgement %}
+            {{ t('County Court Judgment requested') }}
           {% endif %}
         </h1>
         <p class="reference-number">
@@ -24,6 +26,9 @@
         </p>
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
+        </p>
+        <p class="receipt-download-container">
+          <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgement') }}</a> (PDF)
         </p>
       </div>
 
@@ -35,6 +40,10 @@
         {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
+      {% elseif hasAcceptedOffer %}
+         {{ t('A County Court Judgment has been issued against the defendant.') }}
+      {% else %}
+        {{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}
