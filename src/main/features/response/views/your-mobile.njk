@@ -1,14 +1,14 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, input, saveAndContinueButton, errorSummary %}
 
-{% set heading = 'Add a phone number (optional)' %}
+{% set heading = 'Enter a phone number (optional)' %}
 
 {% block content %}
   <div class="grid-row">
       <div class="column-two-thirds">
 
-        <p>{{ t('We might need to contact you about this claim. We’ll only call on weekdays between 9am and 5pm.') }}</p>
-        <p>{{ t('The claimant and the court can use this to contact you.') }}</p>
+        <p>{{ t('We might need to speak to you about this claim. We'll only call on weekdays between 9am and 5pm.') }}</p>
+        <p>{{ t('We'll also give your number to the claimant.') }}</p>
 
         <form method="post">
           {{ csrfProtection(csrf) }}
