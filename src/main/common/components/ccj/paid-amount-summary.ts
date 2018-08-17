@@ -18,7 +18,7 @@ export abstract class AbstractPaidAmountSummaryPage<Draft> {
   abstract buildRedirectUri (req: express.Request, res: express.Response): string
 
   getView (): string {
-    return 'components/ccj/views/paid-amount-summary'
+    return 'components/ccj/paid-amount-summary'
   }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {

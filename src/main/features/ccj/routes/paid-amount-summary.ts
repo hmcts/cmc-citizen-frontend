@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/routes/paid-amount-summary'
+import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/paid-amount-summary'
 import { ccjPath, Paths } from 'features/ccj/paths'
 
 import { DraftCCJ } from 'ccj/draft/draftCCJ'

@@ -19,7 +19,7 @@ export abstract class AbstractPaidAmountPage<Draft> {
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaidAmount>
 
   getView (): string {
-    return 'components/ccj/views/paid-amount'
+    return 'components/ccj/paid-amount'
   }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {

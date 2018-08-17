@@ -1,6 +1,6 @@
 import { ccjPath } from 'ccj/paths'
 
-import { AbstractPaidAmountPage } from 'shared/components/ccj/routes/paid-amount'
+import { AbstractPaidAmountPage } from 'shared/components/ccj/paid-amount'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'

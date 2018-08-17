@@ -1,17 +1,14 @@
 import * as express from 'express'
 
-import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/routes/paid-amount-summary'
+import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/paid-amount-summary'
+import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
+
 import { claimantResponseCCJPath, Paths } from 'features/claimant-response/paths'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantResponse> {
-
-  getView (): string {
-    return 'components/ccj/views/paid-amount-summary'
-  }
 
   getHeading (): string {
     return ''
