@@ -73,93 +73,93 @@ describe(`Defendant: reject all - ${header}`, () => {
         })
       })
     })
+  })
 
-    describe('on POST', () => {
-      const method = 'post'
-      checkAuthorizationGuards(app, method, pagePath)
-      checkNotDefendantInCaseGuard(app, method, pagePath)
+  describe('on POST', () => {
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotDefendantInCaseGuard(app, method, pagePath)
 
-      context('when user authorised', () => {
-        beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+    context('when user authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+      })
+
+      context('when service is unhealthy', () => {
+        it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        context('when service is unhealthy', () => {
-          it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+        it('should return 500 and render error page when cannot retrieve response draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.rejectFind('Error')
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
 
-          it('should return 500 and render error page when cannot retrieve response draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.rejectFind('Error')
+        it('should return 500 and render error page when cannot save response draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.rejectSave()
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+      })
 
-          it('should return 500 and render error page when cannot save response draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      context('when service is healthy', () => {
+        context('when amount paid is less than that claimed', async () => {
+          beforeEach(() => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount + 1 })
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.rejectSave()
+          })
 
+          it('when form is valid should render `you have paid less` page', async () => {
+            draftStoreServiceMock.resolveSave()
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.youHavePaidLess.evaluateUri({ externalId: externalId })))
+          })
+
+          it('when form is invalid should render page', async () => {
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ amount: -100 })
+              .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
           })
         })
 
-        context('when service is healthy', () => {
-          context('when amount paid is less than that claimed', async () => {
-            beforeEach(() => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount + 1 })
-              draftStoreServiceMock.resolveFind('response')
-            })
-
-            it('when form is valid should render `you have paid less` page', async () => {
-              draftStoreServiceMock.resolveSave()
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormData)
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(Paths.youHavePaidLess.evaluateUri({ externalId: externalId })))
-            })
-
-            it('when form is invalid should render page', async () => {
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ amount: -100 })
-                .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
-            })
+        context('when amount paid is equal to that claimed', async () => {
+          beforeEach(() => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount })
+            draftStoreServiceMock.resolveFind('response')
           })
 
-          context('when amount paid is equal to that claimed', async () => {
-            beforeEach(() => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount })
-              draftStoreServiceMock.resolveFind('response')
-            })
-
-            it('when form is valid should render task list page', async () => {
-              draftStoreServiceMock.resolveSave()
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormData)
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
-            })
+          it('when form is valid should render task list page', async () => {
+            draftStoreServiceMock.resolveSave()
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(validFormData)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
           })
         })
       })
