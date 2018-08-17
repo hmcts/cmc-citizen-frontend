@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { calculateCourtOrderAmount } from 'common/determination-of-means/determinationOfMeansCalculations'
 
-describe.only('DeterminationOfMeansCalculations', () => {
+describe('DeterminationOfMeansCalculations', () => {
 
   describe('calculateCourtOrderAmount', () => {
     describe('when the defendant’s instalment amount is greater than to disposable income', () => {
