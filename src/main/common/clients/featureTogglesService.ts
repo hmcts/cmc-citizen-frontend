@@ -8,12 +8,12 @@ import { User } from 'idam/user'
 const service = new FeatureToggleService(config.get<string>('feature-toggles-api.url'), requestPromiseApi)
 
 export class FeatureTogglesService {
-
-  isAdmissionsAllowed (user: User, roles: string[]): Promise<boolean> {
+  
+  isToggleFeatureEnabled(user: User, roles: string[], feature: string): Promise<boolean> {
     if (!user) {
       return Promise.reject(new Error('user must be set'))
     }
 
-    return service.isFeatureEnabled('cmc_admissions', user.email, roles.join(','))
+    return service.isFeatureEnabled(feature, user.email, roles.join(','))
   }
 }
