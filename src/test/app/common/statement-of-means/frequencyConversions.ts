@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import * as FrequencyConversions from 'common/statement-of-means/frequencyConversions'
+import { FrequencyConversions } from 'common/statement-of-means/frequencyConversions'
 import { Frequency } from 'common/statement-of-means/models/frequency'
 
 describe('CalculateAmountByFrequency', () => {
