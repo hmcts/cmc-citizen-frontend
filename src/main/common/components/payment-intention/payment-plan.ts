@@ -22,7 +22,7 @@ import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 
 export abstract class AbstractPaymentPlanPage<Draft> {
   abstract getHeading (): string
-  abstract createModelAccessor (req?: express.Request, res?: express.Response): AbstractModelAccessor<Draft, PaymentIntention>
+  abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
   abstract buildPostSubmissionUri (req: express.Request, res: express.Response): string
 
   getView (): string {
@@ -49,7 +49,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
         ...guards,
         stateGuardRequestHandler,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-          this.renderView(new Form(this.createModelAccessor(req, res).get(res.locals.draft.document).paymentPlan), res)
+          this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentPlan), res)
         }))
       .post(path + Paths.paymentPlanPage.uri,
         ...guards,
@@ -61,7 +61,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)
             } else {
-              this.createModelAccessor(req, res).patch(res.locals.draft.document, model => model.paymentPlan = form.model)
+              this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentPlan = form.model)
 
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)

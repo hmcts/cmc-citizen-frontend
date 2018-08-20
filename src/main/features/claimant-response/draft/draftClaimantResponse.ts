@@ -10,7 +10,7 @@ import { PaymentIntention } from 'shared/components/payment-intention/model/paym
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
-  courtOfferedAmount: number
+  courtOrderAmount: number
 
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
@@ -55,8 +55,8 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.alternatePaymentMethod) {
         this.alternatePaymentMethod = PaymentIntention.deserialise(input.alternatePaymentMethod)
       }
-      if (input.courtOfferedAmount) {
-        this.courtOfferedAmount = input.courtOfferedAmount
+      if (input.courtOrderAmount) {
+        this.courtOrderAmount = input.courtOrderAmount
       }
     }
     return this

@@ -12,9 +12,9 @@
 
         {% if isOverriddenByDefendantsPaymentFrequency %}
           <p> {{ t('The court has accepted your repayment amount, but the frequency will be set by the defendant.
-          We`ve converted the {{ courtOfferedAmount }} {{ claimantPaymentSchedule }} payment to
+          We`ve converted the {{ courtOrderAmount }} {{ claimantPaymentSchedule }} payment to
           {{ convertedCourtOfferedAmount }} {{ defendantPaymentSchedule }} payments.', {
-              courtOfferedAmount: courtOfferedAmount | numeral,
+              courtOrderAmount: courtOrderAmount | numeral,
               claimantPaymentSchedule: claimantPaymentSchedule | renderPaymentScheduleType,
               convertedCourtOfferedAmount: convertedCourtOfferedAmount | numeral,
               defendantPaymentSchedule: defendantPaymentSchedule | renderPaymentScheduleType

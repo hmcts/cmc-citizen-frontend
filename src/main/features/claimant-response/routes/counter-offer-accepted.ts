@@ -17,12 +17,12 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claimantPaymentSchedule: PaymentSchedule = res.locals.claim.response.paymentIntention.repaymentPlan.paymentSchedule
       const defendantPaymentSchedule: DefendantPaymentSchedule = draft.document.alternatePaymentMethod.paymentPlan.paymentSchedule
-      const courtOfferedAmount: number = draft.document.courtOfferedAmount
+      const courtOrderAmount: number = draft.document.courtOrderAmount
       const courtOfferedRepaymentAmount: number = 100
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
         isOverriddenByDefendantsPaymentFrequency : isOverriddenByDefendantsPaymentFrequency(claimantPaymentSchedule, defendantPaymentSchedule),
-        courtOfferedAmount: courtOfferedAmount,
+        courtOrderAmount: courtOrderAmount,
         claimantPaymentSchedule: claimantPaymentSchedule,
         courtOfferedRepaymentAmount: courtOfferedRepaymentAmount,
         defendantPaymentFrequency: defendantPaymentSchedule
