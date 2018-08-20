@@ -24,12 +24,7 @@
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
 
-      <div class="form-group">
-        <fieldset>
-          <legend class="visually-hidden">{{ t('Regular payments of') }}</legend>
-          {{ poundInput('Regular payments of:', 'instalmentAmount', form, 'For example, £200', bold = true) }}
-        </fieldset>
-      </div>
+      {{ poundInput('Regular payments of:', 'instalmentAmount', form, 'For example, £200', bold = true) }}
 
       <div class="form-group">
         {{ radioGroup(
@@ -61,12 +56,7 @@
       <h2 class="heading-small">Length of repayment plan</h2>
       <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
 
-      <div class="form-group">
-        <fieldset>
-          <legend class="visually-hidden">{{ t('When will you make the first payment') }}</legend>
-          {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'When will you make the first payment?') }}
-        </fieldset>
-      </div>
+      {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'When will you make the first payment?') }}
 
       {{ saveAndContinueButton() }}
     </form>

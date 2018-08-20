@@ -8,7 +8,7 @@
       <form method="post">
         {{ csrfProtection(csrf) }}
 
-        {{ dateInput(form = form, name = 'date', hint = t('For example, {{ futureDate }}', { futureDate: futureDate | inputDate })) }}
+        {{ dateInput(form = form, name = 'date', hint = t('For example, {{ nextMonth }}', { nextMonth : 'now' | addDays(30) | inputDate })) }}
 
         {{ saveAndContinueButton() }}
       </form>
