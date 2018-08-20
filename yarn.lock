@@ -312,9 +312,9 @@
   version "9.6.28"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.28.tgz#198927ce0786106ec2a7c8652d46d5f8b87bfc5f"
 
-"@types/nunjucks@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/nunjucks/-/nunjucks-3.0.0.tgz#9393e33128d12c834b4bc8db6bbfd18ebce474f0"
+"@types/nunjucks@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@types/nunjucks/-/nunjucks-3.1.0.tgz#fdc2fce6f4d8046f7df88f06f32c9842aabdfa46"
 
 "@types/request-promise-native@^1.0.2":
   version "1.0.10"
@@ -3270,6 +3270,10 @@ graceful-fs@~1.2.0:
 "graceful-readlink@>= 1.0.0":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
+
+grapheme-splitter@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/grapheme-splitter/-/grapheme-splitter-1.0.2.tgz#639e9dc1bf065892c643de31daa27cf58b1068e2"
 
 growl@1.10.3:
   version "1.10.3"
@@ -6654,7 +6658,7 @@ retry@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
 
-rgb2hex@~0.1.4:
+rgb2hex@^0.1.9:
   version "0.1.9"
   resolved "https://registry.yarnpkg.com/rgb2hex/-/rgb2hex-0.1.9.tgz#5d3e0e14b0177b568e6f0d5b43e34fbfdb670346"
 
@@ -8036,9 +8040,9 @@ wdio-dot-reporter@~0.0.8:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/wdio-dot-reporter/-/wdio-dot-reporter-0.0.10.tgz#facfb7c9c5984149951f59cbc3cd0752101cf0e0"
 
-webdriverio@^4.13.1:
-  version "4.13.1"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-4.13.1.tgz#624ef4ca569f3c9a5e8e9b11302b4431eda1fb8a"
+webdriverio@^4.13.2:
+  version "4.13.2"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-4.13.2.tgz#1feafe0ebd0e3e03a7c7f89417e437d3f6a5a5a6"
   dependencies:
     archiver "~2.1.0"
     babel-runtime "^6.26.0"
@@ -8048,6 +8052,7 @@ webdriverio@^4.13.1:
     ejs "~2.5.6"
     gaze "~1.1.2"
     glob "~7.1.1"
+    grapheme-splitter "^1.0.2"
     inquirer "~3.3.0"
     json-stringify-safe "~5.0.1"
     mkdirp "~0.5.1"
@@ -8055,7 +8060,7 @@ webdriverio@^4.13.1:
     optimist "~0.6.1"
     q "~1.5.0"
     request "^2.83.0"
-    rgb2hex "~0.1.4"
+    rgb2hex "^0.1.9"
     safe-buffer "~5.1.1"
     supports-color "~5.0.0"
     url "~0.11.0"
