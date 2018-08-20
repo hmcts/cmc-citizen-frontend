@@ -29,7 +29,7 @@
         {% if interestDetails %}
         <tr>
           <th scope="row">
-            {{ interestSnippet(label = 'Interest', interestDetails.rate, interestDetails.numberOfDays,
+            {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
               interestDetails.interestFromDate, defaultJudgmentDate, interestDetails.specificDailyAmount) }}
           </th>
           <td class="numeric last">
