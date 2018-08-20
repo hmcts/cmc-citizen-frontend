@@ -38,7 +38,7 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
   return paymentIntention
 }
 
-function hasAcceptedOffer (claim: Claim) {
+function hasAcceptedOffer (claim: Claim): boolean {
   const paymentIntention: PaymentIntention = getDefendantPaymentIntention(claim)
 
   const ccjRepaymentPlan: CCJRepaymentPlan = claim.countyCourtJudgment.repaymentPlan

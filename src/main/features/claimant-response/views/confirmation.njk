@@ -17,19 +17,21 @@
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
           {% elseif countyCourtJudgement %}
-            {{ t('County Court Judgment requested') }}
+            {{ t('County Court Judgment issued') }}
           {% endif %}
         </h1>
         <p class="reference-number">
-          <span>{{ t('Claim number:') }}</span>
+          <span>{{ t('Your claim number:') }}</span>
           <span class="block bold-large">{{ claim.claimNumber }}</span>
         </p>
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
-        <p class="receipt-download-container">
-          <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgement') }}</a> (PDF)
-        </p>
+        {% if countyCourtJudgement %}
+          <p class="receipt-download-container">
+            <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgement') }}</a> (PDF)
+          </p>
+        {% endif %}
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
