@@ -1,5 +1,7 @@
 import { RoutablePath } from 'shared/router/routablePath'
-import { Paths as FreeMediationPaths } from 'main/common/components/free-mediation/paths'
+
+import { Paths as FreeMediationPaths } from 'shared/components/free-mediation/paths'
+import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
 export const claimantResponsePath = '/case/:externalId/claimant-response'
 
@@ -14,6 +16,9 @@ export class Paths {
   static readonly chooseHowToProceedPage = new RoutablePath(`${claimantResponsePath}/choose-how-to-proceed`)
   static readonly signSettlementAgreementPage = new RoutablePath(`${claimantResponsePath}/sign-settlement-agreement`)
   static readonly freeMediationPage = new RoutablePath(claimantResponsePath + FreeMediationPaths.freeMediationPage.uri)
+  static readonly alternateRepaymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentOptionPage.uri)
+  static readonly paymentDatePage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentDatePage.uri)
+  static readonly paymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentPlanPage.uri)
   static readonly confirmationPage = new RoutablePath(`${claimantResponsePath}/confirmation`)
   static readonly rejectionReasonPage = new RoutablePath(`${claimantResponsePath}/rejection-reason`)
 }

@@ -5,6 +5,7 @@ import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
+import { Validator } from 'class-validator'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
@@ -14,6 +15,12 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
+
+const validator: Validator = new Validator()
+
+function isDefinedAndValid (value: any): boolean {
+  return value && validator.validateSync(value).length === 0
+}
 
 export class TaskListBuilder {
   static buildDefendantResponseSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
@@ -71,6 +78,7 @@ export class TaskListBuilder {
         )
       }
 
+      this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
 
@@ -97,11 +105,24 @@ export class TaskListBuilder {
           AcceptPaymentMethodTask.isCompleted(draft.acceptPaymentMethod)
         )
       )
+      this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
     }
 
     return new TaskList('How do you want to respond?', tasks)
+  }
+
+  private static buildProposeAlternateRepaymentPlanTask (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.NO) {
+      tasks.push(
+        new TaskListItem(
+          'Propose an alternative repayment plan',
+          Paths.alternateRepaymentPlanPage.evaluateUri({ externalId: externalId }),
+          isDefinedAndValid(draft.alternatePaymentMethod)
+        )
+      )
+    }
   }
 
   private static buildSignSettlementAgreement (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
@@ -119,7 +140,8 @@ export class TaskListBuilder {
   }
 
   private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
-    if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+    if (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
+        || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)))) {
       tasks.push(
         new TaskListItem(
           'Formalise the repayment plan',
