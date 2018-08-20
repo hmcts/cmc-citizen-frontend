@@ -9,7 +9,7 @@ export class HowMuchHaveYouPaidTask {
     if (responseDraft.isResponsePartiallyAdmitted()) {
       return HowMuchHaveYouPaidTask.isHowMuchHaveYouPaidValid(responseDraft.partialAdmission.howMuchHaveYouPaid)
     }
-    if (responseDraft.isResponseRejectedFullyBecausePaidInFull()) {
+    if (responseDraft.isResponseRejectedFullyBecausePaidWhatOwed()) {
       return HowMuchHaveYouPaidTask.isHowMuchHaveYouPaidValid(responseDraft.rejectAllOfClaim.howMuchHaveYouPaid)
     }
     return false

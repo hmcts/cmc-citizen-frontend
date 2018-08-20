@@ -22,7 +22,6 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   static readonly sendYourResponseByEmailPage = new RoutablePath(`${responsePath}/eligibility/send-your-response-by-email`)
   static readonly whenDidYouPay = new RoutablePath(`${responsePath}/when-did-you-pay`)
-  static readonly defendantHowMuchPaidClaimant = new RoutablePath(`${responsePath}/eligibility/how-much-paid-claimant`)
   static readonly howMuchHaveYouPaid = new RoutablePath(`${responsePath}/how-much-have-you-paid`)
   static readonly youHavePaidLess = new RoutablePath(`${responsePath}/you-have-paid-less`)
   static readonly whyDoYouDisagreePage = new RoutablePath(`${responsePath}/why-do-you-disagree`)

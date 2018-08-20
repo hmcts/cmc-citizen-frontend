@@ -71,18 +71,18 @@ describe('Defendant response task list builder', () => {
 
   describe('"Respond to claim" section', () => {
     describe('"How much have you paid?" task', () => {
-      let isResponseRejectedFullyBecausePaidInFullStub: sinon.SinonStub
+      let isResponseRejectedFullyBecausePaidWhatOwedStub: sinon.SinonStub
 
       beforeEach(() => {
-        isResponseRejectedFullyBecausePaidInFullStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidInFull')
+        isResponseRejectedFullyBecausePaidWhatOwedStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidWhatOwed')
       })
 
       afterEach(() => {
-        isResponseRejectedFullyBecausePaidInFullStub.restore()
+        isResponseRejectedFullyBecausePaidWhatOwedStub.restore()
       })
 
-      it('should be enabled when claim is fully rejected because paid in full', () => {
-        isResponseRejectedFullyBecausePaidInFullStub.returns(true)
+      it('should be enabled when claim is fully rejected because already paid what is owed', () => {
+        isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
         const draft = new ResponseDraft()
         draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID, new HowMuchHaveYouPaid())
 
@@ -91,7 +91,7 @@ describe('Defendant response task list builder', () => {
       })
 
       it('should be disabled otherwise', () => {
-        isResponseRejectedFullyBecausePaidInFullStub.returns(false)
+        isResponseRejectedFullyBecausePaidWhatOwedStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
         expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid?')
@@ -99,15 +99,15 @@ describe('Defendant response task list builder', () => {
     })
 
     describe('"Why do you disagree with the amount claimed?" task', () => {
-      let isResponseRejectedFullyBecausePaidInFullStub: sinon.SinonStub
+      let isResponseRejectedFullyBecausePaidWhatOwedStub: sinon.SinonStub
 
       beforeEach(() => {
-        isResponseRejectedFullyBecausePaidInFullStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidInFull')
-        isResponseRejectedFullyBecausePaidInFullStub.returns(true)
+        isResponseRejectedFullyBecausePaidWhatOwedStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidWhatOwed')
+        isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
       })
 
       afterEach(() => {
-        isResponseRejectedFullyBecausePaidInFullStub.restore()
+        isResponseRejectedFullyBecausePaidWhatOwedStub.restore()
       })
 
       it('should be enabled when claim is fully rejected because paid in full but less than claim amount', () => {
@@ -410,7 +410,7 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputePaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
       isResponseRejectedFullyWithAmountClaimedPaidStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithAmountClaimedPaid')
       isResponseFullyAdmittedStub = sinon.stub(ResponseDraft.prototype, 'isResponseFullyAdmitted')
-      isResponseRejectedFullyBecausePaidInFullStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidInFull')
+      isResponseRejectedFullyBecausePaidInFullStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidWhatOwed')
     })
 
     afterEach(() => {

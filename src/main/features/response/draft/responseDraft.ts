@@ -194,7 +194,7 @@ export class ResponseDraft extends DraftDocument {
     return this.response.type === ResponseType.DEFENCE
   }
 
-  public isResponseRejectedFullyBecausePaidInFull (): boolean {
+  public isResponseRejectedFullyBecausePaidWhatOwed (): boolean {
     return this.isResponseRejected()
       && this.rejectAllOfClaim !== undefined
       && this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID

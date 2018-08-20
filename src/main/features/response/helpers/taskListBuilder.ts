@@ -61,7 +61,7 @@ export class TaskListBuilder {
       )
     )
 
-    if (draft.isResponseRejectedFullyBecausePaidInFull()) {
+    if (draft.isResponseRejectedFullyBecausePaidWhatOwed()) {
       tasks.push(
         new TaskListItem(
           'How much have you paid?',
@@ -71,7 +71,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (draft.isResponseRejectedFullyBecausePaidInFull()
+    if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
       && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
       && claim.totalAmountTillToday > draft.rejectAllOfClaim.howMuchHaveYouPaid.amount) {
       tasks.push(
@@ -237,13 +237,13 @@ export class TaskListBuilder {
   }
 
   private static isRejectedFullyBecausePaidInFullAtLeastClaimAmount (claim: Claim, draft: ResponseDraft): boolean {
-    return draft.isResponseRejectedFullyBecausePaidInFull()
+    return draft.isResponseRejectedFullyBecausePaidWhatOwed()
       && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
       && claim.totalAmountTillToday <= draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
   }
 
   private static isRejectedFullyBecausePaidInFullLessThanClaimAmountAndExplanationGiven (claim: Claim, draft: ResponseDraft): boolean {
-    return draft.isResponseRejectedFullyBecausePaidInFull()
+    return draft.isResponseRejectedFullyBecausePaidWhatOwed()
       && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
       && claim.totalAmountTillToday > draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
       && WhyDoYouDisagreeTask.isCompleted(draft)

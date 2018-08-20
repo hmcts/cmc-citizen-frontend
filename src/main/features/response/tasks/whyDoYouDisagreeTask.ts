@@ -9,7 +9,7 @@ export class WhyDoYouDisagreeTask {
     if (responseDraft.isResponsePartiallyAdmitted()) {
       return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.partialAdmission.whyDoYouDisagree)
     }
-    if (responseDraft.isResponseRejectedFullyBecausePaidInFull()) {
+    if (responseDraft.isResponseRejectedFullyBecausePaidWhatOwed()) {
       return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.rejectAllOfClaim.whyDoYouDisagree)
     }
   }
