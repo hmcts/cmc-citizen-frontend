@@ -113,10 +113,8 @@ export default express.Router()
       if (draft.document.formaliseRepaymentPlan.option == FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
         const ccj: CountyCourtJudgment = countyCourtJudgement(claim, draft)
 
-        await CCJClient.persistCCJ(claim.externalId, true, ccj, user)
-
+        await CCJClient.persistCCJ(claim.externalId, ccj, user, true)
       } else {
-
         const settlement: Settlement = prepareSettlement(claim, draft.document)
 
         await OfferClient.signSettlementAgreement(claim.externalId, user, settlement)
