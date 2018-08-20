@@ -47,13 +47,15 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
 
   if (response.paymentIntention) {
     paymentIntention.paymentOption = new PaymentOption(PaymentType.valueOf(response.paymentIntention.paymentOption))
-    paymentIntention.paymentDate = response.paymentIntention.paymentDate && new PaymentDate(new LocalDate().deserialize(response.paymentIntention.paymentDate))
+    paymentIntention.paymentDate = response.paymentIntention.paymentDate && new PaymentDate(
+      new LocalDate(response.paymentIntention.paymentDate.year(), response.paymentIntention.paymentDate.month(), response.paymentIntention.paymentDate.date())
+    )
 
     const repaymentPlan: RepaymentPlan = response.paymentIntention.repaymentPlan
 
     paymentIntention.paymentPlan = repaymentPlan && new PaymentPlan(claim.totalAmountTillToday,
       repaymentPlan.instalmentAmount,
-      new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month(), repaymentPlan.firstPaymentDate.day()),
+      new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month(), repaymentPlan.firstPaymentDate.date()),
       PaymentSchedule.of(repaymentPlan.paymentSchedule)
     )
   }
