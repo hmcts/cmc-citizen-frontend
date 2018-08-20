@@ -26,12 +26,7 @@
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
 
-      <div class="form-group">
-        <fieldset>
-          <legend class="visually-hidden">{{ t('Regular payments of') }}</legend>
-          {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
-        </fieldset>
-      </div>
+      {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
 
       <div class="form-group">
         {% set error = form.errorFor('paymentSchedule') %}
@@ -78,12 +73,7 @@
       <h2 class="heading-small">{{ t('Length of repayment plan') }}</h2>
       <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
 
-      <div class="form-group">
-        <fieldset>
-          <legend class="visually-hidden">{{ t('Date for first instalment') }}</legend>
-          {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
-        </fieldset>
-      </div>
+      {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
 
       {{ saveAndContinueButton() }}
     </form>
