@@ -1,5 +1,4 @@
 import * as express from 'express'
-import { Moment } from 'moment'
 
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
@@ -10,7 +9,6 @@ import { Paths } from 'shared/components/payment-intention/paths'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { ErrorHandling } from 'shared/errorHandling'
 import { NotFoundError } from 'errors'
-import { MomentFactory } from 'shared/momentFactory'
 
 import { User } from 'idam/user'
 import { Form } from 'forms/form'
@@ -66,12 +64,9 @@ export abstract class AbstractPaymentDatePage<Draft> {
   }
 
   private renderView (form: Form<PaymentDate>, res: express.Response) {
-    const futureDate: Moment = MomentFactory.currentDate().add(1, 'month')
-
     res.render(this.getView(), {
       heading: this.getHeading(),
-      form: form,
-      futureDate: futureDate
+      form: form
     })
   }
 }

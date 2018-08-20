@@ -28,6 +28,8 @@ const validFormData = {
   claimedAmount: 100
 }
 
+const heading: string = 'Has the defendant paid some of the amount owed?'
+
 describe('Claimant Response - paid amount page', () => {
   attachDefaultHooks(app)
 
@@ -67,7 +69,7 @@ describe('Claimant Response - paid amount page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?'))
+          .expect(res => expect(res).to.be.successful.withText(heading))
       })
     })
 
@@ -139,7 +141,7 @@ describe('Claimant Response - paid amount page', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({})
-              .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"'))
           })
         })
 
@@ -156,7 +158,7 @@ describe('Claimant Response - paid amount page', () => {
                 amount: 101,
                 claimedAmount: 100
               })
-              .expect(res => expect(res).to.be.successful.withText('Has the defendant paid some of the amount owed?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"'))
           })
         })
       })

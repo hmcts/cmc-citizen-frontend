@@ -20,6 +20,8 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = CCJPaths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
 
+const heading: string = 'Judgment amount'
+
 describe('Claimant Response - paid amount summary page', () => {
   attachDefaultHooks(app)
 
@@ -59,7 +61,7 @@ describe('Claimant Response - paid amount summary page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
+          .expect(res => expect(res).to.be.successful.withText(heading))
       })
     })
   })

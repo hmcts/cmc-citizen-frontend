@@ -414,7 +414,6 @@ describe('Claimant response task list builder', () => {
         })
       })
     })
-
   })
 
   describe('"Submit" section', () => {
