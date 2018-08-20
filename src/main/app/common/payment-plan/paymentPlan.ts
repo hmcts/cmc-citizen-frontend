@@ -11,22 +11,23 @@ export class PaymentPlan {
   constructor (
     public readonly totalAmount: number,
     public readonly instalmentAmount: number,
-    public readonly frequency: Frequency) {
+    public readonly frequency: Frequency,
+    public readonly startDate: moment.Moment) {
     this.numberOfInstalments = totalAmount / instalmentAmount
   }
 
   static create (
     totalAmount: number,
     instalmentAmount: number,
-    frequency: Frequency): PaymentPlan {
-    return new PaymentPlan(totalAmount, instalmentAmount, frequency)
+    frequency: Frequency,
+    startDate: moment.Moment = MomentFactory.currentDate()): PaymentPlan {
+    return new PaymentPlan(totalAmount, instalmentAmount, frequency, startDate)
   }
 
   calculatePaymentLength (): string {
-    const now: moment.Moment = MomentFactory.currentDate()
-    const lastPaymentDate: moment.Moment = this.calculateLastPaymentDate(now)
+    const lastPaymentDate: moment.Moment = this.calculateLastPaymentDate()
 
-    const { years, months, days } = (moment as any).preciseDiff(now, lastPaymentDate, true)
+    const { years, months, days } = (moment as any).preciseDiff(this.startDate, lastPaymentDate, true)
     const paymentLength: Array<string> = []
 
     if (years) {
@@ -48,9 +49,9 @@ export class PaymentPlan {
     return paymentLength.join(' ')
   }
 
-  calculateLastPaymentDate (fromDate: moment.Moment = MomentFactory.currentDate()): moment.Moment {
+  calculateLastPaymentDate (): moment.Moment {
     const timeToCompletePaymentsInWeeks: number = this.numberOfInstalments * this.frequency.inWeeks
-    return fromDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
+    return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
 
   calculateMonthlyInstalmentAmount() {

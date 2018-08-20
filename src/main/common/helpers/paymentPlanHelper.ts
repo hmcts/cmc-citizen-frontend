@@ -1,4 +1,6 @@
 
+import { Moment } from 'moment'
+
 import { Frequency } from 'common/frequency/frequency'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
@@ -57,7 +59,8 @@ export class PaymentPlanHelper {
     return PaymentPlanHelper.createPaymentPlan(
       paymentPlanForm.totalAmount, 
       paymentPlanForm.instalmentAmount, 
-      paymentPlanForm.paymentSchedule ? paymentPlanForm.paymentSchedule.value : undefined)
+      paymentPlanForm.paymentSchedule ? paymentPlanForm.paymentSchedule.value : undefined, 
+      undefined)
   }
 
   private static createPaymentPlanFromClaimPartialAdmission (response: PartialAdmissionResponse): PaymentPlan {
@@ -68,7 +71,8 @@ export class PaymentPlanHelper {
     return PaymentPlanHelper.createPaymentPlan(
       response.amount, 
       paymentPlan.instalmentAmount, 
-      paymentPlan.paymentSchedule
+      paymentPlan.paymentSchedule,
+      paymentPlan.firstPaymentDate
     )
   }
 
@@ -80,7 +84,8 @@ export class PaymentPlanHelper {
     return PaymentPlanHelper.createPaymentPlan(
       totalAmount, 
       paymentPlan.instalmentAmount, 
-      paymentPlan.paymentSchedule
+      paymentPlan.paymentSchedule,
+      paymentPlan.firstPaymentDate
     )
   }
 
@@ -101,14 +106,16 @@ export class PaymentPlanHelper {
     return PaymentPlanHelper.createPaymentPlan(
       paymentPlan.totalAmount, 
       paymentPlan.instalmentAmount, 
-      paymentPlan.paymentSchedule ? paymentPlan.paymentSchedule.value : undefined
+      paymentPlan.paymentSchedule ? paymentPlan.paymentSchedule.value : undefined,
+      paymentPlan.firstPaymentDate ? paymentPlan.firstPaymentDate.toMoment() : undefined
     )
   }
 
-  private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: string): PaymentPlan {
+  private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: string, firstPaymentDate: Moment): PaymentPlan {
     if (!totalAmount || !instalmentAmount || !frequency) {
       return undefined
     }
-    return PaymentPlan.create(totalAmount, instalmentAmount, Frequency.of(frequency))
+
+    return PaymentPlan.create(totalAmount, instalmentAmount, Frequency.of(frequency), firstPaymentDate)  
   }
 }

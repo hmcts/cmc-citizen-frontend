@@ -8,15 +8,15 @@ const TOTAL_AMOUNT = 1000
 
 describe('PaymentPlan', () => {
   describe('calculateLastPaymentDate', () => {
-    it('should return the last payment date from given fromDate', () => {
+    it('should return the last payment date from given start date', () => {
       const instalmentAmount = 10
       const fromDate = moment('2018-01-01')
       const numberOfInstalmentsInWeeks = 200
       const expectedLastPaymentDate = fromDate.clone().add(numberOfInstalmentsInWeeks, 'weeks')
 
-      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.TWO_WEEKLY)
+      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.TWO_WEEKLY, fromDate)
 
-      expect(paymentPlan.calculateLastPaymentDate(fromDate).isSame(expectedLastPaymentDate)).to.be.true
+      expect(paymentPlan.calculateLastPaymentDate().isSame(expectedLastPaymentDate)).to.be.true
     })
   })
 
