@@ -312,9 +312,9 @@
   version "9.6.28"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.28.tgz#198927ce0786106ec2a7c8652d46d5f8b87bfc5f"
 
-"@types/nunjucks@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/nunjucks/-/nunjucks-3.0.0.tgz#9393e33128d12c834b4bc8db6bbfd18ebce474f0"
+"@types/nunjucks@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@types/nunjucks/-/nunjucks-3.1.0.tgz#fdc2fce6f4d8046f7df88f06f32c9842aabdfa46"
 
 "@types/request-promise-native@^1.0.2":
   version "1.0.10"
