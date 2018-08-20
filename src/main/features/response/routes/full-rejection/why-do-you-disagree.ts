@@ -12,6 +12,8 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
+import { FullRejectionGuard } from 'response/guards/fullRejectionGuard'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = FullRejectionPaths.whyDoYouDisagreePage
 
@@ -26,12 +28,16 @@ function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
 export default express.Router()
   .get(
     page.uri,
+    FullRejectionGuard.requestHandler(),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.rejectAllOfClaim.whyDoYouDisagree), res)
     }))
   .post(
     page.uri,
+    FullRejectionGuard.requestHandler(),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FormValidator.requestHandler(WhyDoYouDisagree, WhyDoYouDisagree.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<WhyDoYouDisagree> = req.body

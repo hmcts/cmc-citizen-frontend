@@ -14,6 +14,8 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
+import { FullRejectionGuard } from 'response/guards/fullRejectionGuard'
 
 const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaid
 
@@ -31,12 +33,16 @@ function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
 export default express.Router()
   .get(
     page.uri,
+    FullRejectionGuard.requestHandler(),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.rejectAllOfClaim.howMuchHaveYouPaid), res)
     }))
   .post(
     page.uri,
+    FullRejectionGuard.requestHandler(),
+    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FormValidator.requestHandler(HowMuchHaveYouPaid, HowMuchHaveYouPaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<HowMuchHaveYouPaid> = req.body
