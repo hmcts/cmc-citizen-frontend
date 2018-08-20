@@ -54,8 +54,7 @@ function hasAcceptedOffer (claim: Claim): boolean {
     paymentSchedule
   )
 
-  return defendantRepaymentPlan && defendantPaymentPlan === defendantRepaymentPlan
-    || (paymentIntention.paymentOption && paymentIntention.paymentOption.option && paymentIntention.paymentOption.option.value === claim.countyCourtJudgment.paymentOption)
+  return (!!defendantRepaymentPlan && defendantPaymentPlan === defendantRepaymentPlan)
     || (paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment() === claim.countyCourtJudgment.payBySetDate)
 }
 

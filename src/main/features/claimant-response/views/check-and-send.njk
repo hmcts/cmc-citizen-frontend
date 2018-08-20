@@ -66,15 +66,15 @@
 
     {{ tableEnd() }}
 
-    {{ tableStart('howYouWnatToProceed', 'How you wish to proceed') }}
     {% if draft.formaliseRepaymentPlan %}
-      {{ row(
-        label = 'How do you want to formalise the repayment plan?',
-        bold = true,
-        value = draft.formaliseRepaymentPlan.option | renderFormaliseRepaymentPlanOption,
-        changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
-      ) }}
-    {% endif %}
+      {{ tableStart('howYouWantToProceed', 'How you wish to proceed') }}
+        {{ row(
+          label = 'How do you want to formalise the repayment plan?',
+          bold = true,
+          value = draft.formaliseRepaymentPlan.option | renderFormaliseRepaymentPlanOption,
+          changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
+        ) }}
+      {% endif %}
     {{ tableEnd() }}
 
     {%  if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
