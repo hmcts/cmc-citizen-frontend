@@ -1,5 +1,6 @@
 feature_fine_print = "true"
 feature_new_features_consent = "true"
+feature_full_admission = "true"
 feature_admissions = "true"
 
 idam_api_url = "https://preprod-idamapi.reform.hmcts.net:3511"

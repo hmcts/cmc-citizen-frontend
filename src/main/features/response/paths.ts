@@ -1,5 +1,5 @@
 import { RoutablePath } from 'shared/router/routablePath'
-import { Paths as PaymentIntentionPaths } from 'response/components/payment-intention/paths'
+import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 
 export const responsePath = '/case/:externalId/response'
 

@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as path from 'path'
 
-import { Paths } from 'claimant-response/paths'
+import { CCJPaths, Paths } from 'claimant-response/paths'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -37,6 +37,7 @@ export class ClaimantResponseFeature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
       app.settings.nunjucksEnv.globals.ClaimantResponsePaths = Paths
+      app.settings.nunjucksEnv.globals.ClaimantResponseCCJPath = CCJPaths
       app.settings.nunjucksEnv.globals.FormaliseRepaymentPlanOption = FormaliseRepaymentPlanOption
     }
 

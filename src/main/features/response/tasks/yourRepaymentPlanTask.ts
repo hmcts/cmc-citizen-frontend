@@ -1,5 +1,5 @@
 import { Validator } from 'class-validator'
-import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 
 const validator = new Validator()
 
