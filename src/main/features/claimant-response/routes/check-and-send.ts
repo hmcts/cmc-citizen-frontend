@@ -27,7 +27,7 @@ export default express.Router()
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
-        lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined
+        lastPaymentDate: paymentPlan ? paymentPlan.calculateLastPaymentDate() : undefined
       })
     })
   )

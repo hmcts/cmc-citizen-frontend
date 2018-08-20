@@ -17,7 +17,7 @@
           firstPaymentDate: response.paymentIntention.repaymentPlan.firstPaymentDate | date
         }
       )) }}
-      {{ row('Completion date', paymentPlan.getLastPaymentDate(response.paymentIntention.repaymentPlan.firstPaymentDate) | date) }}
+      {{ row('Completion date', paymentPlan.calculateLastPaymentDate(response.paymentIntention.repaymentPlan.firstPaymentDate) | date) }}
     {% endif %}
 
   </fieldset>

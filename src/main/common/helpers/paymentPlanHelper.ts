@@ -1,12 +1,18 @@
+
 import { Frequency } from 'common/frequency/frequency'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Claim } from 'claims/models/claim'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 
-import { PaymentPlan as PaymentPlanForm } from 'shared/components/payment-intention/model/paymentPlan'
+import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse'
+import { ResponseDraft } from 'features/response/draft/responseDraft'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+
+import { RepaymentPlan as ClaimPaymentPlan } from 'claims/models/response/core/repaymentPlan'
+import { PaymentPlan as DraftPaymentPlan} from 'main/common/components/payment-intention/model/paymentPlan'
+import { PaymentPlan as FormPaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 
 export class PaymentPlanHelper {
 
@@ -21,15 +27,29 @@ export class PaymentPlanHelper {
 
     switch (responseType) {
       case ResponseType.PART_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromPartialAdmission(response as PartialAdmissionResponse)
+        return PaymentPlanHelper.createPaymentPlanFromClaimPartialAdmission(response as PartialAdmissionResponse)
       case ResponseType.FULL_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromFullAdmission(response as FullAdmissionResponse, claim.claimData.amount.totalAmount())
+        return PaymentPlanHelper.createPaymentPlanFromClaimFullAdmission(
+          response as FullAdmissionResponse, 
+          claim.claimData.amount.totalAmount()
+        )
       default:
         throw new Error(`Incompatible response type: ${responseType}`)
     }
   }
 
-  static createPaymentPlanFromForm (paymentPlanForm: PaymentPlanForm): PaymentPlan {
+  static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {
+    switch (draft.constructor) {
+      case DraftClaimantResponse:
+        return PaymentPlanHelper.createPaymentPlanFromDraftDraftClaimantResponse(draft as DraftClaimantResponse)
+      case ResponseDraft:
+        throw new Error(`Draft object of type 'ResponseDraft' not yet supported`)
+      default: 
+        throw new Error(`Incompatible draft object: ${draft}`)
+    }
+  }
+
+  static createPaymentPlanFromForm (paymentPlanForm: FormPaymentPlan): PaymentPlan {
     if (!paymentPlanForm) {
       return undefined
     }
@@ -40,20 +60,49 @@ export class PaymentPlanHelper {
       paymentPlanForm.paymentSchedule ? paymentPlanForm.paymentSchedule.value : undefined)
   }
 
-  private static createPaymentPlanFromPartialAdmission (response: PartialAdmissionResponse): PaymentPlan {
-    const repaymentPlan: RepaymentPlan = response.paymentIntention.repaymentPlan
-    if (!repaymentPlan) {
+  private static createPaymentPlanFromClaimPartialAdmission (response: PartialAdmissionResponse): PaymentPlan {
+    const paymentPlan: ClaimPaymentPlan = response.paymentIntention.repaymentPlan
+    if (!paymentPlan) {
       return undefined
     }
-    return PaymentPlanHelper.createPaymentPlan(response.amount, repaymentPlan.instalmentAmount, repaymentPlan.paymentSchedule)
+    return PaymentPlanHelper.createPaymentPlan(
+      response.amount, 
+      paymentPlan.instalmentAmount, 
+      paymentPlan.paymentSchedule
+    )
   }
 
-  private static createPaymentPlanFromFullAdmission (response: FullAdmissionResponse, totalAmount: number): PaymentPlan {
-    const repaymentPlan: RepaymentPlan = response.paymentIntention.repaymentPlan
-    if (!repaymentPlan) {
+  private static createPaymentPlanFromClaimFullAdmission (response: FullAdmissionResponse, totalAmount: number): PaymentPlan {
+    const paymentPlan: ClaimPaymentPlan = response.paymentIntention.repaymentPlan
+    if (!paymentPlan) {
       return undefined
     }
-    return PaymentPlanHelper.createPaymentPlan(totalAmount, repaymentPlan.instalmentAmount, repaymentPlan.paymentSchedule)
+    return PaymentPlanHelper.createPaymentPlan(
+      totalAmount, 
+      paymentPlan.instalmentAmount, 
+      paymentPlan.paymentSchedule
+    )
+  }
+
+  private static createPaymentPlanFromDraftDraftClaimantResponse (draft: DraftClaimantResponse): PaymentPlan {
+    if (!draft) {
+      return undefined
+    }
+
+    return PaymentPlanHelper.createPaymentPlanFromDraftPaymentIntention(draft.alternatePaymentMethod)
+  }
+
+  private static createPaymentPlanFromDraftPaymentIntention (paymentIntention: PaymentIntention): PaymentPlan {
+    const paymentPlan: DraftPaymentPlan = paymentIntention.paymentPlan
+    if (!paymentPlan) {
+      return undefined
+    }
+
+    return PaymentPlanHelper.createPaymentPlan(
+      paymentPlan.totalAmount, 
+      paymentPlan.instalmentAmount, 
+      paymentPlan.paymentSchedule ? paymentPlan.paymentSchedule.value : undefined
+    )
   }
 
   private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: string): PaymentPlan {
@@ -62,21 +111,4 @@ export class PaymentPlanHelper {
     }
     return PaymentPlan.create(totalAmount, instalmentAmount, Frequency.of(frequency))
   }
-
-  // static getDefendantPaymentPlanAmountFrom(claim: Claim)
-	// static getDefendantPaymentPlanFrequencyFrom(claim: Claim)
-  // static getDefendantMonthlyPaymentPlanAmountFrom(claim: Claim)
-
-  // static getClaimantPaymentPlanFrequencyFrom(draft)
-  // static getClaimantMonthlyPaymentPlanAmountFrom(draft)
-
-
-  // const paymentPlan = createPaymentPlan (
-    
-  // )
-
-  // paymentPlan.getTotalAmount()
-  // paymentPlan.getInstalmentAmount()
-  // paymentPlan.getMontlhlyInstalmentAmount()
-  // paymentPlan.getFrequency()
 }

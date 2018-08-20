@@ -30,8 +30,8 @@ export default express.Router()
 
     return res.status(HttpStatus.OK).json({
       paymentPlan: {
-        paymentLength: paymentPlan.getPaymentLength(),
-        lastPaymentDate: paymentPlan.getLastPaymentDate().toJSON()
+        paymentLength: paymentPlan.calculatePaymentLength(),
+        lastPaymentDate: paymentPlan.calculateLastPaymentDate().toJSON()
       }
     })
   })

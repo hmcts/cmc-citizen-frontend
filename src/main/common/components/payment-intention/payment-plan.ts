@@ -74,7 +74,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
   renderView (form: Form<PaymentPlanModel>, res: express.Response): void {
     const claim: Claim = res.locals.claim
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromForm(form.model)
-    const paymentLength: string = paymentPlan ? paymentPlan.getPaymentLength() : undefined
+    const paymentLength: string = paymentPlan ? paymentPlan.calculatePaymentLength() : undefined
 
     res.render(this.getView(), {
       heading: this.getHeading(),

@@ -52,7 +52,7 @@ export function prepareDefendantOffer (claim: Claim): Offer {
     const instalmentAmount: string = NumberFormatter.formatMoney(response.paymentIntention.repaymentPlan.instalmentAmount)
     const paymentSchedule: string = PaymentScheduleTypeViewFilter.render(response.paymentIntention.repaymentPlan.paymentSchedule)
     const firstPaymentDate: string = MomentFormatter.formatLongDate(response.paymentIntention.repaymentPlan.firstPaymentDate)
-    const completionDate: Moment = paymentPlan.getLastPaymentDate(response.paymentIntention.repaymentPlan.firstPaymentDate)
+    const completionDate: Moment = paymentPlan.calculateLastPaymentDate(response.paymentIntention.repaymentPlan.firstPaymentDate)
     const content: string = `${response.defendant.name} will pay instalments of ${instalmentAmount} ${paymentSchedule}. The first instalment will be paid by ${firstPaymentDate}.`
     return new Offer(content, completionDate)
   }

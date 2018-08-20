@@ -120,8 +120,8 @@ describe('when all query parameters are provided', () => {
 
   before(() => {
     const mockedPaymentPlan = {
-      getPaymentLength: () => '3 days',
-      getLastPaymentDate: () => moment('2018-01-01')
+      calculatePaymentLength: () => '3 days',
+      calculateLastPaymentDate: () => moment('2018-01-01')
     }
 
     createPaymentPlanStub = sinon.stub(PaymentPlan, 'create')
