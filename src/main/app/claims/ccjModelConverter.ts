@@ -22,6 +22,8 @@ import { PaymentOption } from 'shared/components/payment-intention/model/payment
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
+import { Party } from 'claims/models/details/yours/party'
+import { ResponseType } from 'claims/models/response/responseType'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -48,11 +50,9 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
     ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 
-function getDateOfBirth (claim: Claim): Moment {
-  const defendant = claim.response.defendant
+function getDateOfBirth (defendant: Party): Moment {
   if (defendant.type === PartyType.INDIVIDUAL.value) {
-    const user: Individual = new Individual().deserialize(defendant)
-    return MomentFactory.parse(user.dateOfBirth)
+    return MomentFactory.parse((defendant as Individual).dateOfBirth)
   }
   return undefined
 }
@@ -78,14 +78,25 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
   return paymentIntention
 }
 
+function convertAlreadyPaidAmount (claim: Claim, claimantResponse: DraftClaimantResponse): number {
+  switch (claim.response.responseType) {
+    case ResponseType.PART_ADMISSION:
+      return claimantResponse.paidAmount.amount
+    case ResponseType.FULL_ADMISSION:
+      return claim.claimData.amount.totalAmount()
+    default:
+      throw new Error(`Incompatible response type: ${claim.response.responseType}`)
+  }
+}
+
 export class CCJModelConverter {
 
   static convertForIssue (claim: Claim, draft: Draft<DraftClaimantResponse>): CountyCourtJudgment {
-    const claimantResponse = draft.document
+    const claimantResponse: DraftClaimantResponse = draft.document
 
-    const acceptDefendantOffer = claimantResponse.acceptPaymentMethod.accept.option === YesNoOption.YES.option
+    const defendantPaymentMethodAccepted = claimantResponse.acceptPaymentMethod.accept.option === YesNoOption.YES.option
 
-    const paymentIntention: PaymentIntention = acceptDefendantOffer ? getDefendantPaymentIntention(claim)
+    const paymentIntention: PaymentIntention = defendantPaymentMethodAccepted ? getDefendantPaymentIntention(claim)
       : claimantResponse.alternatePaymentMethod
 
     let repaymentPlan: RepaymentPlan
@@ -97,12 +108,12 @@ export class CCJModelConverter {
         paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
         paymentIntention.paymentPlan.paymentSchedule.value)
       payBySetDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
-      paymentOption = paymentIntention.paymentOption && paymentIntention.paymentOption.option.value
+      paymentOption = paymentIntention.paymentOption.option.value
     }
 
-    const amount: number = claimantResponse.paidAmount && claimantResponse.paidAmount.amount
+    const alreadyPaidAmount: number = convertAlreadyPaidAmount(claim, claimantResponse)
 
-    return new CountyCourtJudgment(getDateOfBirth(claim), paymentOption, amount, repaymentPlan, payBySetDate)
+    return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, payBySetDate)
   }
 
   static convertForRequest (draft: DraftCCJ): CountyCourtJudgment {
