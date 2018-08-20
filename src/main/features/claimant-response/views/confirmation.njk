@@ -43,9 +43,9 @@
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
       {% elseif hasAcceptedOffer %}
-         {{ t('A County Court Judgment has been issued against the defendant.') }}
+        <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
       {% else %}
-        {{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}
+        <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}</p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}
