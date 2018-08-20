@@ -51,7 +51,7 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
 
     const repaymentPlan: RepaymentPlan = response.paymentIntention.repaymentPlan
 
-    paymentIntention.paymentPlan = new PaymentPlan(claim.totalAmountTillToday,
+    paymentIntention.paymentPlan = repaymentPlan && new PaymentPlan(claim.totalAmountTillToday,
       repaymentPlan.instalmentAmount,
       new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month(), repaymentPlan.firstPaymentDate.day()),
       PaymentSchedule.of(repaymentPlan.paymentSchedule)
