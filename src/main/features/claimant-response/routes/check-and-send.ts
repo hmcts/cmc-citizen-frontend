@@ -105,12 +105,12 @@ export default express.Router()
   .post(
     Paths.checkAndSendPage.uri,
     AllClaimantResponseTasksCompletedGuard.requestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
 
-      if (draft.document.formaliseRepaymentPlan.option == FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
+      if (draft.document.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
         const ccj: CountyCourtJudgment = countyCourtJudgement(claim, draft)
 
         await CCJClient.persistCCJ(claim.externalId, ccj, user, true)
