@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { FrequencyConversions } from 'common/statement-of-means/frequencyConversions'
-import { Frequency } from 'common/statement-of-means/models/frequency'
+import { FrequencyConversions } from 'common/frequency/frequencyConversions'
+import { Frequency } from 'common/frequency/frequency'
 
 describe('CalculateAmountByFrequency', () => {
   describe('convertAmountToMonthly', () => {

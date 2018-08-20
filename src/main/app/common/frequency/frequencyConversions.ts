@@ -1,4 +1,4 @@
-import { Frequency } from 'common/statement-of-means/models/frequency'
+import { Frequency } from 'common/frequency/frequency'
 
 export class FrequencyConversions {
   static convertAmountToMonthly (amount: number, frequency: Frequency): number {

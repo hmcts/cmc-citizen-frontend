@@ -104,8 +104,16 @@ describe('StatementOfMeansCalculations', () => {
   //
 
   describe('calculateTotalMontlyExpense', () => {
-    it('should calculate the total monthly expense', () => {
-      expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense(sampleStatementOfMeans)).to.equal(283.3333333333333)
+    describe('when valid debts, courtOrders and expenses are provided', () => {
+      it('should calculate the total monthly expense', () => {
+        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense(sampleStatementOfMeans)).to.equal(283.3333333333333)
+      })
+    })
+
+    describe('when no debts, courtOrders and expenses are provided', () => {
+      it('should calculate a total monthly expense of zero', () => {
+        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense({bankAccounts: []})).to.equal(0)
+      })
     })
   })
 
@@ -206,8 +214,16 @@ describe('StatementOfMeansCalculations', () => {
   //
 
   describe('calculateTotalMontlyIncome', () => {
-    it('should calculate the total monthly income', () => {
-      expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome(sampleStatementOfMeans)).to.equal(2335.416666666667)
+    describe('when valid bankAccounts, employment and incomes are provided', () => {
+      it('should calculate the total monthly income', () => {
+        expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome(sampleStatementOfMeans)).to.equal(2335.416666666667)
+      })
+    })
+
+    describe('when no employment and incomes are provided', () => {
+      it('should calculate a total monthly income of zero', () => {
+        expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome({bankAccounts: []})).to.equal(0)
+      })
     })
   })
 

@@ -1,5 +1,5 @@
-import { FrequencyConversions } from 'common/statement-of-means/frequencyConversions'
-import { Frequency } from 'common/statement-of-means/models/frequency'
+import { FrequencyConversions } from 'common/frequency/frequencyConversions'
+import { Frequency } from 'common/frequency/frequency'
 
 import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
 import { Debt } from 'claims/models/response/statement-of-means/debt'
@@ -29,9 +29,9 @@ export class StatementOfMeansCalculations {
   //
 
   static calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
-    const monthlyDebts = StatementOfMeansCalculations.calculateMonthlyDebts(statementOfMeans.debts)
-    const monthlyCourtOrders = StatementOfMeansCalculations.calculateMonthlyCourtOrders(statementOfMeans.courtOrders)
-    const monthlyRegularExpense = StatementOfMeansCalculations.calculateMonthlyRegularExpense(statementOfMeans.expenses)
+    const monthlyDebts: number = statementOfMeans.debts ? StatementOfMeansCalculations.calculateMonthlyDebts(statementOfMeans.debts) : 0
+    const monthlyCourtOrders: number = statementOfMeans.courtOrders ? StatementOfMeansCalculations.calculateMonthlyCourtOrders(statementOfMeans.courtOrders) : 0
+    const monthlyRegularExpense: number = statementOfMeans.expenses? StatementOfMeansCalculations.calculateMonthlyRegularExpense(statementOfMeans.expenses): 0
 
     return monthlyDebts + monthlyCourtOrders + monthlyRegularExpense
   }
@@ -75,8 +75,8 @@ export class StatementOfMeansCalculations {
   //
 
   static calculateTotalMonthlyIncome (statementOfMeans: StatementOfMeans): number {
-    const monthlyRegularIncome = StatementOfMeansCalculations.calculateMonthlyRegularIncome(statementOfMeans.incomes)
-    const monthlySelfEmployedTurnover = StatementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(statementOfMeans.employment)
+    const monthlyRegularIncome = statementOfMeans.incomes ? StatementOfMeansCalculations.calculateMonthlyRegularIncome(statementOfMeans.incomes) : 0
+    const monthlySelfEmployedTurnover = statementOfMeans.employment ? StatementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(statementOfMeans.employment) : 0
     const monthlySavings = StatementOfMeansCalculations.calculateMonthlySavings(statementOfMeans.bankAccounts, monthlyRegularIncome);
 
     return monthlySelfEmployedTurnover + monthlySavings + monthlyRegularIncome

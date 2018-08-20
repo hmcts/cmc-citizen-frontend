@@ -45,7 +45,6 @@ describe('settlementHelper', () => {
       expect(partyStatement.offer).is.not.undefined
       expect(partyStatement.offer.content).to.be.eql('John Smith will pay the full amount, no later than 31 December 2050')
       expect(partyStatement.offer.completionDate).to.be.eql(MomentFactory.parse('2050-12-31'))
-
     })
 
     it('should return settlement object', () => {

@@ -1,17 +1,24 @@
 import * as moment from 'moment'
 import 'moment-precise-range-plugin'
 import { MomentFactory } from 'shared/momentFactory'
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
+
+import { Frequency } from 'common/frequency/frequency'
 
 export class PaymentPlan {
   private numberOfInstalments: number
 
   constructor (
+    public readonly totalAmount: number,
+    public readonly instalmentAmount: number,
+    public readonly frequency: Frequency) {
+    this.numberOfInstalments = totalAmount / instalmentAmount
+  }
+
+  static create (
     totalAmount: number,
     instalmentAmount: number,
-    private frequencyInWeeks: number) {
-    this.numberOfInstalments = totalAmount / instalmentAmount
+    frequency: Frequency): PaymentPlan {
+    return new PaymentPlan(totalAmount, instalmentAmount, frequency)
   }
 
   getPaymentLength (): string {
@@ -46,36 +53,7 @@ export class PaymentPlan {
   }
 
   getLastPaymentDate (fromDate: moment.Moment = MomentFactory.currentDate()): moment.Moment {
-    const timeToCompletePaymentsInWeeks: number = this.numberOfInstalments * this.frequencyInWeeks
+    const timeToCompletePaymentsInWeeks: number = this.numberOfInstalments * this.frequency.inWeeks
     return fromDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
-}
-
-function mapFrequencyInWeeks (paymentSchedule: PaymentSchedule): number {
-  switch (paymentSchedule) {
-    case 'EACH_WEEK':
-      return 1
-    case 'EVERY_TWO_WEEKS':
-      return 2
-    case 'EVERY_MONTH':
-      return 4
-    default:
-      return undefined
-  }
-}
-
-export function generatePaymentPlan (
-  totalAmount: number,
-  repaymentPlan: RepaymentPlan): PaymentPlan {
-  if (!repaymentPlan) {
-    return undefined
-  }
-  return new PaymentPlan(totalAmount, repaymentPlan.instalmentAmount, mapFrequencyInWeeks(repaymentPlan.paymentSchedule))
-}
-
-export function createPaymentPlan (
-  totalAmount: number,
-  instalmentAmount: number,
-  frequencyInWeeks: number): PaymentPlan {
-  return new PaymentPlan(totalAmount, instalmentAmount, frequencyInWeeks)
 }

@@ -10,7 +10,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
-import { generatePaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { Expense } from 'claims/models/response/statement-of-means/expense'
@@ -45,7 +45,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
     claim: claim,
     totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
     totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
-    paymentPlan: generatePaymentPlan(response.responseType === ResponseType.PART_ADMISSION ? response.amount : claim.totalAmountTillToday, response.paymentIntention.repaymentPlan)
+    paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   })
 }
 /* tslint:disable:no-default-export */

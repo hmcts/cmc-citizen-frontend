@@ -3,7 +3,8 @@ import * as HttpStatus from 'http-status-codes'
 import * as _ from 'lodash'
 
 import { Paths as AppPaths } from 'paths'
-import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -24,7 +25,8 @@ export default express.Router()
       })
     }
 
-    const paymentPlan = createPaymentPlan(Number(totalAmount), Number(instalmentAmount), Number(frequencyInWeeks))
+    const frequency: Frequency = Frequency.ofWeekly(Number(frequencyInWeeks))
+    const paymentPlan: PaymentPlan = PaymentPlan.create(Number(totalAmount), Number(instalmentAmount), frequency)
 
     return res.status(HttpStatus.OK).json({
       paymentPlan: {

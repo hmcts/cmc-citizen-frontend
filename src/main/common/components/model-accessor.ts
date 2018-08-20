@@ -1,4 +1,9 @@
+import * as express from 'express'
+
 export abstract class AbstractModelAccessor<Draft, Model> {
+
+  constructor (protected req?: express.Request, protected res?: express.Response) {}
+
   abstract get (draft: Draft): Model
   abstract set (draft: Draft, model: Model): void
 

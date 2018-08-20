@@ -4,7 +4,7 @@ import * as sinon from 'sinon'
 import * as request from 'supertest'
 import * as HttpStatus from 'http-status-codes'
 
-import * as paymentPlan from 'common/calculate-payment-plan/paymentPlan'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 
 import { app } from 'main/app'
 
@@ -124,7 +124,7 @@ describe('when all query parameters are provided', () => {
       getLastPaymentDate: () => moment('2018-01-01')
     }
 
-    createPaymentPlanStub = sinon.stub(paymentPlan, 'createPaymentPlan')
+    createPaymentPlanStub = sinon.stub(PaymentPlan, 'create')
     createPaymentPlanStub.returns(mockedPaymentPlan)
   })
 

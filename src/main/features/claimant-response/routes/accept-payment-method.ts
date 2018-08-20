@@ -15,7 +15,7 @@ import { PaymentOption } from 'claims/models/response/core/paymentOption'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
-import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -24,7 +24,7 @@ function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
     claim: claim,
     paymentOption: getPaymentOption(claim.response),
     paymentDate: getPaymentDate(claim.response),
-    paymentPlan: getPaymentPlan(claim)
+    paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   })
 }
 
