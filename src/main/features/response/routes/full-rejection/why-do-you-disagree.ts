@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { FullRejectionPaths, Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -13,7 +13,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
-const page: RoutablePath = Paths.whyDoYouDisagreePage
+const page: RoutablePath = FullRejectionPaths.whyDoYouDisagreePage
 
 function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
   res.render(page.associatedView, {

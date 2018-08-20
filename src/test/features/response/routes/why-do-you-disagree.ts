@@ -5,7 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
-import { Paths } from 'response/paths'
+import { FullRejectionPaths, Paths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -18,7 +18,7 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId })
+const pagePath = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId })
 
 const validFormData = { text: 'I will not pay!' }
 const header: string = 'Why do you disagree with the claim amount?'

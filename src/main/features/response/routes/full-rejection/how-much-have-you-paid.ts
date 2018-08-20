@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { FullRejectionPaths, Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
@@ -15,7 +15,7 @@ import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 
-const page: RoutablePath = Paths.howMuchHaveYouPaid
+const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaid
 
 function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
   const pastDate: Moment = MomentFactory.currentDate().subtract(3, 'months')
@@ -53,7 +53,7 @@ export default express.Router()
 
         const { externalId } = req.params
         if (form.model.amount < res.locals.claim.totalAmountTillToday) {
-          res.redirect(Paths.youHavePaidLess.evaluateUri({ externalId: externalId }))
+          res.redirect(FullRejectionPaths.youHavePaidLess.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }

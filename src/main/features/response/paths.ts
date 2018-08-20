@@ -22,9 +22,6 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   static readonly sendYourResponseByEmailPage = new RoutablePath(`${responsePath}/eligibility/send-your-response-by-email`)
   static readonly whenDidYouPay = new RoutablePath(`${responsePath}/when-did-you-pay`)
-  static readonly howMuchHaveYouPaid = new RoutablePath(`${responsePath}/how-much-have-you-paid`)
-  static readonly youHavePaidLess = new RoutablePath(`${responsePath}/you-have-paid-less`)
-  static readonly whyDoYouDisagreePage = new RoutablePath(`${responsePath}/why-do-you-disagree`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')
   static readonly defendantHowMuchOwed = new RoutablePath(`${responsePath}/how-much-owed`)
@@ -74,4 +71,12 @@ export class PartAdmissionPaths {
   static readonly paymentOptionPage = new RoutablePath(partialAdmissionPath + PaymentIntentionPaths.paymentOptionPage.uri)
   static readonly paymentDatePage: RoutablePath = new RoutablePath(partialAdmissionPath + PaymentIntentionPaths.paymentDatePage.uri)
   static readonly paymentPlanPage = new RoutablePath(`${partialAdmissionPath}/payment-plan`)
+}
+
+export const fullRejectionPath = `${responsePath}/full-rejection`
+
+export class FullRejectionPaths {
+  static readonly howMuchHaveYouPaid = new RoutablePath(`${fullRejectionPath}/how-much-have-you-paid`)
+  static readonly youHavePaidLess = new RoutablePath(`${fullRejectionPath}/you-have-paid-less`)
+  static readonly whyDoYouDisagreePage = new RoutablePath(`${fullRejectionPath}/why-do-you-disagree`)
 }

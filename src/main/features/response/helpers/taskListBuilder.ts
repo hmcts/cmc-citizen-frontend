@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { FullAdmissionPaths, PartAdmissionPaths, Paths, StatementOfMeansPaths } from 'response/paths'
+import { FullAdmissionPaths, PartAdmissionPaths, FullRejectionPaths, Paths, StatementOfMeansPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -65,7 +65,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'How much have you paid?',
-          Paths.howMuchHaveYouPaid.evaluateUri({ externalId: externalId }),
+          FullRejectionPaths.howMuchHaveYouPaid.evaluateUri({ externalId: externalId }),
           HowMuchHaveYouPaidTask.isCompleted(draft)
         )
       )
@@ -77,7 +77,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'Why do you disagree with the amount claimed?',
-          Paths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
+          FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
           WhyDoYouDisagreeTask.isCompleted(draft)
         )
       )

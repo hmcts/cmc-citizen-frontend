@@ -5,7 +5,7 @@ import 'test/routes/expectations'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 
-import { Paths } from 'response/paths'
+import { FullRejectionPaths, Paths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -18,7 +18,7 @@ import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.youHavePaidLess.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath: string = FullRejectionPaths.youHavePaidLess.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('You have paid less page', () => {
   attachDefaultHooks(app)
