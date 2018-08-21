@@ -32,7 +32,6 @@ export class RejectAllOfClaim {
   @IsIn(RejectAllOfClaimOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
   option?: string
 
-  @ValidateNested()
   howMuchHaveYouPaid?: HowMuchHaveYouPaid
 
   whyDoYouDisagree?: WhyDoYouDisagree

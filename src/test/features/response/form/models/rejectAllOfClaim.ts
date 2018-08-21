@@ -3,10 +3,7 @@ import { expect } from 'chai'
 import { Validator } from 'class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { RejectAllOfClaim, RejectAllOfClaimOption, ValidationErrors } from 'response/form/models/rejectAllOfClaim'
-import {
-  HowMuchHaveYouPaid,
-  ValidationErrors as HowmuchHaveYouPaidValidationErrors
-} from 'response/form/models/howMuchHaveYouPaid'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { LocalDate } from 'forms/models/localDate'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 import moment = require('moment')
@@ -32,15 +29,6 @@ describe('RejectAllOfClaim', () => {
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.OPTION_REQUIRED)
-    })
-
-    it('should reject when invalid `how much have you paid`', () => {
-      RejectAllOfClaimOption.all().forEach(type => {
-        const errors = validator.validateSync(new RejectAllOfClaim(type, new HowMuchHaveYouPaid()))
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, HowmuchHaveYouPaidValidationErrors.AMOUNT_NOT_VALID)
-      })
     })
 
     it('should accept despite invalid `why do you disagree`', () => {
