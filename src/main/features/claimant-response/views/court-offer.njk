@@ -35,13 +35,13 @@
           {
             label: 'Yes',
             value: YesNoOption.YES.option,
-            checked: (form.valueFor('acceptCourtOffer').value === YesNoOption.YES),
+            checked: (form.valueFor('acceptCourtOffer') === YesNoOption.YES),
             bold: false
           },
           {
             label: 'No - I want a judge to make a new repayment plan',
             value:  YesNoOption.NO.option,
-            checked: (form.valueFor('acceptCourtOffer').value === YesNoOption.NO),
+            checked: (form.valueFor('acceptCourtOffer') === YesNoOption.NO),
             bold: false
           }
         ]
