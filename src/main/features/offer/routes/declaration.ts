@@ -16,7 +16,8 @@ function renderView (form: Form<Declaration>, res: express.Response) {
     {
       claim: claim,
       form: form,
-      offer: claim.defendantOffer
+      offer: claim.defendantOffer,
+      isThroughAdmissions: claim.settlement && claim.settlement.isThroughAdmissions()
     }
   )
 }

@@ -1,31 +1,50 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
+
+{% set claimantName = claim.claimData.claimant.name %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
-        <h1 class="bold-large">{{ t('You’ve settled out of court') }}</h1>
+        <h1 class="bold-large">{{ t('You’ve both signed a settlement agreement') }}</h1>
         <div class="action-date-container">
           <span class="bold">{{ claim.settlementReachedAt | date }}</span>
         </div>
         <div class="receipt-download-container">
-          <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download agreement as a PDF') }}</a>
+          <a
+            href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download settlement agreement (PDF)') }}</a>
         </div>
       </div>
 
-      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       <p>
-        {{ t('You’ve both signed a legal agreement which replaces the claim.') }}
+        {{ t('We’ll email {{ claimantName }} telling them that you have signed the settlement agreement.',{claimantName: claim.claimData.claimant.name}) }}
+      </p>
+
+      <p>
+        {{ t('Now both parties have signed the agreement, this claim has been put on hold.') }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+
+      <p>
+        {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+        {{ t('if you need their payment details.') }}
+      </p>
+
+      <p>
+        {{ t('Make sure you get receipts for any payments.') }}
       </p>
 
       {% include "includes/service_survey_link.njk" %}
 
       <p>
-        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Finished') }}</a>
+        <a href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Back to your account') }}</a>
       </p>
 
       {{ supportWidget() }}
