@@ -20,7 +20,7 @@ function hasAcceptedDefendantsPaymentIntention (claim: Claim): boolean {
 
   switch (paymentOptionFromCCJ) {
     case PaymentOption.BY_SPECIFIED_DATE:
-      return paymentIntentionFromResponse.paymentDate === claim.countyCourtJudgment.payBySetDate
+      return paymentIntentionFromResponse.paymentDate.toISOString() === claim.countyCourtJudgment.payBySetDate.toISOString()
     case PaymentOption.INSTALMENTS:
       return paymentIntentionFromResponse.repaymentPlan === claim.countyCourtJudgment.repaymentPlan
     default:
