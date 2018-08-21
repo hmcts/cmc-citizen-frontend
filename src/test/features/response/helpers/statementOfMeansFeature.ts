@@ -8,7 +8,7 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { ResponseType } from 'response/form/models/responseType'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { Claim } from 'claims/models/claim'
@@ -60,8 +60,10 @@ describe('StatementOfMeansFeature', () => {
           type: ResponseType.FULL_ADMISSION
         },
         fullAdmission: {
-          paymentOption: {
-            option: DefendantPaymentType.INSTALMENTS
+          paymentIntention: {
+            paymentOption: {
+              option: PaymentType.INSTALMENTS
+            }
           }
         }
       } as ResponseDraft
@@ -93,8 +95,10 @@ describe('StatementOfMeansFeature', () => {
           alreadyPaid: { option: 'no' },
           howMuchHaveYouPaid: { amount: 100 },
           whyDoYouDisagree: { text: 'bbb' },
-          paymentOption: {
-            option: DefendantPaymentType.INSTALMENTS
+          paymentIntention: {
+            paymentOption: {
+              option: PaymentType.INSTALMENTS
+            }
           }
         })
       } as ResponseDraft

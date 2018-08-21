@@ -11,7 +11,7 @@ export class ValidationErrors {
   static readonly DATE_TODAY_OR_IN_FUTURE: string = 'Enter a date that is today or in the future'
 }
 
-export class PayBySetDate {
+export class PaymentDate {
 
   @ValidateNested()
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
@@ -23,15 +23,15 @@ export class PayBySetDate {
     this.date = date
   }
 
-  static fromObject (value?: any): PayBySetDate {
+  static fromObject (value?: any): PaymentDate {
     if (value == null) {
       return value
     }
 
-    return new PayBySetDate(LocalDate.fromObject(value.date))
+    return new PaymentDate(LocalDate.fromObject(value.date))
   }
 
-  deserialize (input?: any): PayBySetDate {
+  deserialize (input?: any): PaymentDate {
     if (input) {
       this.date = new LocalDate().deserialize(input.date)
     }

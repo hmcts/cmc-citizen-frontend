@@ -41,7 +41,7 @@
     <p> {{ t('If you pay by cheque or transfer the money must be clear in their account.') }} </p>
     <p> {{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }} </p>
     <p>
-      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }} 
+      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
       {{ t('if you need their payment details.') }}
     </p>
     <p> {{ t('Make sure you get receipts for any payments.') }} </p>
@@ -116,5 +116,5 @@
 {% endmacro %}
 
 {% macro _viewAndRespondOffer(claim) %}
-  <a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t('View and respond to offer') }}</a>
+  <a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t('View and respond to the offer') }}</a>
 {% endmacro %}

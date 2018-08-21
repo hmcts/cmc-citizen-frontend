@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { Validator } from 'class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { DefendantPaymentPlan, ValidationErrors } from 'response/form/models/defendantPaymentPlan'
+import { PaymentPlan, ValidationErrors } from 'shared/components/payment-intention/model/paymentPlan'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
@@ -25,32 +25,32 @@ const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
   text: 'I owe nothing'
 }
 
-function validPaymentPlan (): DefendantPaymentPlan {
-  return new DefendantPaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH)
+function validPaymentPlan (): PaymentPlan {
+  return new PaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH)
 }
 
-describe('DefendantPaymentPlan', () => {
+describe('PaymentPlan', () => {
   describe('form object deserialization', () => {
     it('should return undefined when value is undefined', () => {
-      expect(DefendantPaymentPlan.fromObject(undefined)).to.equal(undefined)
+      expect(PaymentPlan.fromObject(undefined)).to.equal(undefined)
     })
 
     it('should leave missing fields undefined', () => {
-      expect(DefendantPaymentPlan.fromObject({})).to.deep.equal(new DefendantPaymentPlan())
+      expect(PaymentPlan.fromObject({})).to.deep.equal(new PaymentPlan())
     })
 
     it('should deserialize all fields', () => {
-      expect(DefendantPaymentPlan.fromObject(DEFAULT_PAYMENT_PLAN)).to.deep.equal(validPaymentPlan())
+      expect(PaymentPlan.fromObject(DEFAULT_PAYMENT_PLAN)).to.deep.equal(validPaymentPlan())
     })
   })
 
   describe('deserialization', () => {
     it('should return instance initialised with defaults given undefined', () => {
-      expect(new DefendantPaymentPlan().deserialize(undefined)).to.deep.equal(new DefendantPaymentPlan())
+      expect(new PaymentPlan().deserialize(undefined)).to.deep.equal(new PaymentPlan())
     })
 
     it('should return instance with set fields from given object', () => {
-      expect(new DefendantPaymentPlan().deserialize(DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION)).to.deep.equal(validPaymentPlan())
+      expect(new PaymentPlan().deserialize(DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION)).to.deep.equal(validPaymentPlan())
     })
   })
 
@@ -59,11 +59,11 @@ describe('DefendantPaymentPlan', () => {
 
     describe('should reject when', () => {
       it('undefined option', () => {
-        const errors = validator.validateSync(new DefendantPaymentPlan(undefined))
+        const errors = validator.validateSync(new PaymentPlan(undefined))
         expect(errors.length).to.equal(3)
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
-        expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
-        expectValidationError(errors, ValidationErrors.INVALID_DATE)
+        expectValidationError(errors, ValidationErrors.SCHEDULE_REQUIRED)
+        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_DATE_INVALID)
       })
 
       it('instalment amount > remainingAmount', () => {
@@ -102,7 +102,7 @@ describe('DefendantPaymentPlan', () => {
         const errors = validator.validateSync(paymentPlan)
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.FUTURE_DATE)
+        expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_DATE_NOT_IN_FUTURE)
       })
 
       it('unknown payment schedule', () => {
@@ -111,7 +111,7 @@ describe('DefendantPaymentPlan', () => {
         const errors = validator.validateSync(paymentPlan)
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.SELECT_PAYMENT_SCHEDULE)
+        expectValidationError(errors, ValidationErrors.SCHEDULE_REQUIRED)
       })
     })
 
