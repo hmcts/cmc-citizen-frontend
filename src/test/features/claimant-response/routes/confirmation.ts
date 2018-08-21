@@ -48,7 +48,7 @@ describe('Claimant response: confirmation page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Claim number:'))
+            .expect(res => expect(res).to.be.successful.withText('Your claim number:'))
         })
       })
     })

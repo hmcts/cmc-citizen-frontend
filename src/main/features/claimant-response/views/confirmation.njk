@@ -16,20 +16,33 @@
             {{ t('You’ve proposed an alternative repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
+          {% elseif claim.countyCourtJudgmentIssuedAt %}
+            {{ t('County Court Judgment issued') }}
           {% endif %}
         </h1>
         <p class="reference-number">
-          <span>{{ t('Claim number:') }}</span>
+          <span>{{ t('Your claim number:') }}</span>
           <span class="block bold-large">{{ claim.claimNumber }}</span>
         </p>
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
+        {% if claim.countyCourtJudgmentIssuedAt %}
+          <p class="receipt-download-container">
+            <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgment') }}</a> (PDF)
+          </p>
+        {% endif %}
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
 
-      {% if repaymentPlanOrigin === 'DEFENDANT' %}
+      {% if claim.countyCourtJudgmentIssuedAt %}
+        {% if paymentIntentionAccepted %}
+          <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
+        {% else %}
+          <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}</p>
+        {% endif %}
+      {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
         {% include "./confirmation/accepted-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
         {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
