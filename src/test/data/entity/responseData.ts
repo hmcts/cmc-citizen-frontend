@@ -90,6 +90,47 @@ export const partialAdmissionWithImmediatePaymentData = {
   amount: 3000
 }
 
+export const partialAdmissionFromStatesPaidDefence = {
+  responseType: 'PART_ADMISSION',
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  defendant: {
+    type: 'individual',
+    name: 'John Smith',
+    address: {
+      line1: 'Flat 1',
+      line2: 'Street 1',
+      line3: 'Cool house name',
+      city: 'London',
+      postcode: 'E1A'
+    },
+    correspondenceAddress: {
+      line1: 'Flat 10',
+      line2: 'Street 10',
+      line3: 'Cooler house name',
+      city: 'Belfast',
+      postcode: 'B10A'
+    },
+    mobilePhone: '0700000000',
+    email: 'user@example.com',
+    dateOfBirth: '1999-01-01'
+  },
+  freeMediation: undefined,
+  paymentIntention: undefined,
+  statementOfMeans: undefined
+}
+
 export const partialAdmissionAlreadyPaidData = {
   ...baseResponseData,
   ...basePartialAdmissionData,

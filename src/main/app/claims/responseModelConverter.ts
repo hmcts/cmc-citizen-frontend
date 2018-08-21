@@ -52,13 +52,18 @@ import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { Claim } from 'claims/models/claim'
 
 export class ResponseModelConverter {
 
-  static convert (draft: ResponseDraft): Response {
+  static convert (draft: ResponseDraft, claim: Claim): Response {
     switch (draft.response.type) {
       case FormResponseType.DEFENCE:
-        return this.convertFullDefence(draft)
+        if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
+          && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
+          return this.convertFullDefenceAsPartialAdmission(draft)
+        }
+        return this.convertFullDefence(draft, claim)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft)
       case FormResponseType.PART_ADMISSION:
@@ -68,7 +73,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
+  private static convertFullDefence (draft: ResponseDraft, claim: Claim): FullDefenceResponse {
     let paymentDeclaration: PaymentDeclaration = undefined
     if (draft.isResponseRejectedFullyBecausePaidWhatOwed() && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined) {
       paymentDeclaration = this.convertHowMuchHaveYouPaid(draft.rejectAllOfClaim.howMuchHaveYouPaid)
@@ -89,6 +94,30 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       paymentDeclaration,
+      statementOfTruth: this.convertStatementOfTruth(draft)
+    }
+  }
+
+  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+    return {
+      responseType: ResponseType.PART_ADMISSION,
+      amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
+      paymentDeclaration: draft.rejectAllOfClaim.howMuchHaveYouPaid.date
+        && draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+        && {
+          paidDate: draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
+          explanation: draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+        } as PaymentDeclaration,
+      defence: draft.rejectAllOfClaim.whyDoYouDisagree.text,
+      timeline: {
+        rows: draft.timeline.getPopulatedRowsOnly(),
+        comment: draft.timeline.comment
+      } as DefendantTimeline,
+      evidence: {
+        rows: convertEvidence(draft.evidence) as any,
+        comment: draft.evidence.comment
+      } as DefendantEvidence,
+      defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
   }
