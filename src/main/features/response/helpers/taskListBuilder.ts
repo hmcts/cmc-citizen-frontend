@@ -27,7 +27,6 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
-import { FeatureToggles } from 'utils/featureToggles'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -76,9 +75,9 @@ export class TaskListBuilder {
         )
       )
 
-      if (draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
-        && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday
-        && FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
+      if (ClaimFeatureToggles.areAdmissionsEnabled(claim)
+        && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
+        && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
         tasks.push(
           new TaskListItem(
             'Why do you disagree with the amount claimed?',
