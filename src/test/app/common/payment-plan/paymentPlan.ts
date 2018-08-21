@@ -94,16 +94,6 @@ describe('PaymentPlan', () => {
     })
   })
 
-  describe('calculateMonthlyInstalmentAmount', () => {
-    it('should return the instalment amount converted to monthly frequency', () => {
-      const instalmentAmount = 100
-
-      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.TWO_WEEKLY)
-
-      expect(paymentPlan.calculateMonthlyInstalmentAmount()).to.equal(216.66666666666666)
-    })
-  })
-
   describe('convertTo', () => {
     it('should return the payment plan converted to weekly frequency', () => {
       const instalmentAmount = 100

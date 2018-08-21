@@ -54,10 +54,6 @@ export class PaymentPlan {
     return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
 
-  calculateMonthlyInstalmentAmount() {
-    return FrequencyConversions.convertAmountToMonthly(this.instalmentAmount, this.frequency)
-  }
-
   convertTo(frequency: Frequency): PaymentPlan {
     let monthlyInstalmentAmount
     switch (frequency) {

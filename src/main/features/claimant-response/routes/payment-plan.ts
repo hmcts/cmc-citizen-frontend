@@ -15,6 +15,7 @@ import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-e
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
+import { Frequency } from 'common/frequency/frequency'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { DeterminationOfMeansCalculations } from 'common/determination-of-means/determinationOfMeansCalculations'
@@ -46,8 +47,8 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     const claimPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
     const draftPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(res.locals.draft.document)
 
-    const defendantMonthlyInstalmentAmount: number = claimPaymentPlan.calculateMonthlyInstalmentAmount()
-    const claimantMonthlyInstalmentAmount: number = draftPaymentPlan.calculateMonthlyInstalmentAmount()
+    const defendantMonthlyInstalmentAmount: number = claimPaymentPlan.convertTo(Frequency.MONTHLY).instalmentAmount
+    const claimantMonthlyInstalmentAmount: number = draftPaymentPlan.convertTo(Frequency.MONTHLY).instalmentAmount
     const defendantMonthlyDisposableIncome: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(claimResponse.statementOfMeans)
 
     const courtOrderAmount: number = DeterminationOfMeansCalculations.calculateCourtOrderAmount(
