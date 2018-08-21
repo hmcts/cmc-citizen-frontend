@@ -58,6 +58,28 @@ export class PaymentPlan {
     return FrequencyConversions.convertAmountToMonthly(this.instalmentAmount, this.frequency)
   }
 
+  convertTo(frequency: Frequency): PaymentPlan {
+    let monthlyInstalmentAmount
+    switch (frequency) {
+      case Frequency.WEEKLY:
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToWeekly(this.instalmentAmount, this.frequency)
+        break
+      case Frequency.TWO_WEEKLY:
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToTwoWeekly(this.instalmentAmount, this.frequency)
+        break
+      case Frequency.FOUR_WEEKLY:
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToFourWeekly(this.instalmentAmount, this.frequency)
+        break
+      case Frequency.MONTHLY:
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToMonthly(this.instalmentAmount, this.frequency)
+        break
+      default:
+        throw new Error(`Incompatible Frequency: ${frequency}`)
+    }
+    
+    return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, this.startDate)
+  }
+
   private pluralize (num: number, word: string) {
     const plural: string = num < 2 ? '' : 's'
     return `${num} ${word}${plural}`

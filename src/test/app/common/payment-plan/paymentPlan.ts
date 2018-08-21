@@ -103,4 +103,46 @@ describe('PaymentPlan', () => {
       expect(paymentPlan.calculateMonthlyInstalmentAmount()).to.equal(216.66666666666666)
     })
   })
+
+  describe('convertTo', () => {
+    it('should return the payment plan converted to weekly frequency', () => {
+      const instalmentAmount = 100
+
+      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.TWO_WEEKLY)
+      const convertedPaymentPlan = paymentPlan.convertTo(Frequency.WEEKLY)
+
+      expect(convertedPaymentPlan.instalmentAmount).to.equal(50)
+      expect(convertedPaymentPlan.frequency).to.equal(Frequency.WEEKLY)
+    })
+
+    it('should return the payment plan converted to two-weekly frequency', () => {
+      const instalmentAmount = 100
+
+      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.WEEKLY)
+      const convertedPaymentPlan = paymentPlan.convertTo(Frequency.TWO_WEEKLY)
+
+      expect(convertedPaymentPlan.instalmentAmount).to.equal(200)
+      expect(convertedPaymentPlan.frequency).to.equal(Frequency.TWO_WEEKLY)
+    })
+
+    it('should return the payment plan converted to four-weekly frequency', () => {
+      const instalmentAmount = 100
+
+      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.WEEKLY)
+      const convertedPaymentPlan = paymentPlan.convertTo(Frequency.FOUR_WEEKLY)
+
+      expect(convertedPaymentPlan.instalmentAmount).to.equal(400)
+      expect(convertedPaymentPlan.frequency).to.equal(Frequency.FOUR_WEEKLY)
+    })
+
+    it('should return the payment plan converted to monthly frequency', () => {
+      const instalmentAmount = 100
+
+      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.WEEKLY)
+      const convertedPaymentPlan = paymentPlan.convertTo(Frequency.MONTHLY)
+
+      expect(convertedPaymentPlan.instalmentAmount).to.equal(433.3333333333333)
+      expect(convertedPaymentPlan.frequency).to.equal(Frequency.MONTHLY)
+    })
+  })
 })
