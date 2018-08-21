@@ -24,7 +24,8 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/statesPaid.njk" import
   paidAmountForClaimantClaimDetails,
-  paidAmountForDefendantClaimDetails %}
+  paidAmountForDefendantClaimDetails
+%}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import
   claimFullAdmissionForDefendantClaimDetails,
@@ -59,7 +60,7 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-            {% if (FeatureToggles.isEnabled('admissions')) %}
+            {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
                 {{ paidAmountForClaimantClaimDetails(claim) }}
               {% endif %}
             {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
@@ -70,7 +71,7 @@ ccjRequestedForDefendantClaimDetails %}
           {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
           {% if claim.response.paymentDeclaration %}
-            {{ paidLessThanClaimedForClaimantClaimDetails(claim) }}
+            {{ paidAmountForClaimantClaimDetails(claim) }}
           {% else %}
             {{ claimPartAdmittedToOweForClaimantClaimDetails(claim) }}
           {% endif %}
@@ -108,7 +109,7 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-            {% if (FeatureToggles.isEnabled('admissions')) %}
+            {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
               {{ paidAmountForDefendantClaimDetails(claim) }}
             {% endif %}
             {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
@@ -123,7 +124,7 @@ ccjRequestedForDefendantClaimDetails %}
           {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
           {% if claim.response.paymentDeclaration %}
-            {{ paidLessThanClaimedForDefendantClaimDetails(claim) }}
+            {{ paidAmountForDefendantClaimDetails(claim) }}
           {% else %}
             {{ claimPartAdmittedToOweForDefendantClaimDetails(claim) }}
           {% endif %}

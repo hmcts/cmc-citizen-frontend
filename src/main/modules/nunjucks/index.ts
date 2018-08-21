@@ -40,6 +40,7 @@ import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -104,6 +105,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('customerSurveyUrl', config.get('feedback.serviceSurvey.url'))
 
     nunjucksEnv.addGlobal('featureToggles', this.convertPropertiesToBoolean(config.get('featureToggles')))
+    nunjucksEnv.addGlobal('ClaimFeatureToggles', ClaimFeatureToggles)
     nunjucksEnv.addGlobal('RejectAllOfClaimOption', RejectAllOfClaimOption)
     nunjucksEnv.addGlobal('AlreadyPaid', AlreadyPaid)
     nunjucksEnv.addGlobal('DefendantPaymentType', DefendantPaymentType)

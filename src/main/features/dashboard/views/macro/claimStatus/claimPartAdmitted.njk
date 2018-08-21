@@ -41,8 +41,7 @@
 
 {% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}
   {#NEEDS TO BE DELETED - After admissions feature toggle is removed#}
-  {{ t('You’ve admitted part of the claim.') }}
-  {{ _respond(claim, 'View and respond to the offer') }}
+  <p>{{ t('You’ve admitted part of the claim.') }}</p>
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim) %}
