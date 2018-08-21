@@ -4,7 +4,7 @@
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
     {{ row('Regular payments of', instalmentAmount | numeral) }}
-    {{ row('Frequency of payments', paymentSchedule | renderPaymentScheduleType) }}
+    {{ row('Frequency of payments', paymentSchedule | renderFrequencyViewType) }}
     {{ row('Make the first payment on', firstPaymentDate | date) }}
     {{ row('Last payment on', lastPaymentOn | date) }}
     {{ row('Length of repayment plan', lengthOfPayment) }}

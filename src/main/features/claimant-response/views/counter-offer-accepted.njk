@@ -15,9 +15,9 @@
           We`ve converted the {{ courtOrderAmount }} {{ claimantPaymentSchedule }} payment to
           {{ convertedCourtOfferedAmount }} {{ defendantPaymentSchedule }} payments.', {
               courtOrderAmount: courtOrderAmount | numeral,
-              claimantPaymentSchedule: claimantPaymentSchedule | renderPaymentScheduleType,
+              claimantPaymentSchedule: claimantPaymentSchedule | renderFrequencyViewType,
               convertedCourtOfferedAmount: convertedCourtOfferedAmount | numeral,
-              defendantPaymentSchedule: defendantPaymentSchedule | renderPaymentScheduleType
+              defendantPaymentSchedule: defendantPaymentSchedule | renderFrequencyViewType
             }) }}</p>
 
           {{

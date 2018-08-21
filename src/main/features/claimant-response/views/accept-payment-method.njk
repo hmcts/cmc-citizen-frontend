@@ -19,7 +19,6 @@
         {% elseif paymentOption === domain.PaymentOption.INSTALMENTS and paymentPlan is defined %}
           {{
           repaymentPlanBlock(
-            repaymentPlan = claim.response.paymentIntention.repaymentPlan,
             paymentPlan = paymentPlan
           )
           }}
