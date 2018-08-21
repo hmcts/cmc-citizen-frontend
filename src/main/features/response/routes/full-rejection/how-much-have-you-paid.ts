@@ -14,20 +14,15 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
-import { MomentFactory } from 'shared/momentFactory'
-import { Moment } from 'moment'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Claim } from 'claims/models/claim'
 
 const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaidPage
 
 function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
-  const pastDate: Moment = MomentFactory.currentDate().subtract(3, 'months')
-
   res.render(page.associatedView, {
     form: form,
-    totalAmount: res.locals.claim.totalAmountTillToday,
-    pastDate
+    totalAmount: res.locals.claim.totalAmountTillToday
   })
 }
 
