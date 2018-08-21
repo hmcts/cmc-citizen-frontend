@@ -79,6 +79,4 @@ export class FullRejectionPaths {
   static readonly howMuchHaveYouPaidPage = new RoutablePath(`${fullRejectionPath}/how-much-have-you-paid`)
   static readonly youHavePaidLessPage = new RoutablePath(`${fullRejectionPath}/you-have-paid-less`)
   static readonly whyDoYouDisagreePage = new RoutablePath(`${fullRejectionPath}/why-do-you-disagree`)
-  static readonly timelinePage = new RoutablePath(`${fullRejectionPath}/timeline`)
-  static readonly evidencePage = new RoutablePath(`${fullRejectionPath}/evidence`)
 }
