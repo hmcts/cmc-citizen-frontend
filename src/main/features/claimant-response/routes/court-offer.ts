@@ -66,6 +66,14 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
     paymentPlan: monthlyCourtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
   })
 }
+
+async function saveAndRedirect (res: express.Response, draft: Draft<DraftClaimantResponse>, url: string) {
+  const user: User = res.locals.user
+
+  await new DraftService().save(draft, user.bearerToken)
+  res.redirect(url)
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
@@ -80,24 +88,26 @@ export default express.Router()
     FormValidator.requestHandler(AcceptCourtOffer, AcceptCourtOffer.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<AcceptCourtOffer> = req.body
+
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-        const user: User = res.locals.user
 
         draft.document.acceptCourtOffer = form.model
-
-        await new DraftService().save(draft, user.bearerToken)
-
+        
         const { externalId } = req.params
 
         if (form.model.acceptCourtOffer.option === YesNoOption.YES.option) {
-          res.redirect(ClaimantsResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+          draft.document.courtOrderAmount = CourtOrderHelper
+            .createCourtOrder(claim, draft.document)
+            .calculateAmount()
+          saveAndRedirect(res, draft, ClaimantsResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(ClaimantsResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId }))
+          saveAndRedirect(res, draft, ClaimantsResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId }))
         }
       }
     }
   )
-  )
+)

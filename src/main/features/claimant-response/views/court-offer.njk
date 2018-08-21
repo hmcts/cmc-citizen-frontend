@@ -30,18 +30,18 @@
           label = 'Do you want to accept the court`s proposed repayment plan?',
           labelForScreenReadersOnly = false,
           form = form,
-          name = 'courtOffer',
+          name = 'acceptCourtOffer',
           options = [
           {
             label: 'Yes',
             value: YesNoOption.YES.option,
-            checked: (form.valueFor('courtOffer').value === YesNoOption.YES),
+            checked: (form.valueFor('acceptCourtOffer').value === YesNoOption.YES),
             bold: false
           },
           {
             label: 'No - I want a judge to make a new repayment plan',
             value:  YesNoOption.NO.option,
-            checked: (form.valueFor('courtOffer').value === YesNoOption.NO),
+            checked: (form.valueFor('acceptCourtOffer').value === YesNoOption.NO),
             bold: false
           }
         ]
