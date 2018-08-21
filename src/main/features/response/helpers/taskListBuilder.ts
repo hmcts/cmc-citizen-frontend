@@ -200,7 +200,7 @@ export class TaskListBuilder {
 
   static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
     if (draft.isResponseRejectedFullyWithDispute()
-      || TaskListBuilder.isRejectedFullyBecausePaidInFullLessThanClaimAmountAndExplanationGiven(claim, draft)
+      || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
       return new TaskList(
         'Resolving the claim', [
@@ -220,8 +220,9 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
-      || TaskListBuilder.isRejectedFullyBecausePaidInFullAtLeastClaimAmount(claim, draft)
-      || TaskListBuilder.isRejectedFullyBecausePaidInFullLessThanClaimAmountAndExplanationGiven(claim, draft)
+      || TaskListBuilder.isRejectedFullyBecausePaidClaimAmount(claim, draft)
+      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidMoreThenClaimAmount(claim, draft))
+      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft))
       || draft.isResponseFullyAdmitted()
       || draft.isResponsePartiallyAdmitted()) {
       tasks.push(
@@ -241,13 +242,19 @@ export class TaskListBuilder {
     return draft.isResponsePartiallyAdmitted() && ValidationUtils.isValid(draft.partialAdmission.whyDoYouDisagree)
   }
 
-  private static isRejectedFullyBecausePaidInFullAtLeastClaimAmount (claim: Claim, draft: ResponseDraft): boolean {
+  private static isRejectedFullyBecausePaidClaimAmount (claim: Claim, draft: ResponseDraft): boolean {
     return draft.isResponseRejectedFullyBecausePaidWhatOwed()
       && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
-      && claim.totalAmountTillToday <= draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
+      && claim.totalAmountTillToday === draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
   }
 
-  private static isRejectedFullyBecausePaidInFullLessThanClaimAmountAndExplanationGiven (claim: Claim, draft: ResponseDraft): boolean {
+  private static isRejectedFullyBecausePaidMoreThenClaimAmount (claim: Claim, draft: ResponseDraft): boolean {
+    return draft.isResponseRejectedFullyBecausePaidWhatOwed()
+      && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
+      && claim.totalAmountTillToday < draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
+  }
+
+  private static isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven (claim: Claim, draft: ResponseDraft): boolean {
     return draft.isResponseRejectedFullyBecausePaidWhatOwed()
       && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
       && claim.totalAmountTillToday > draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
