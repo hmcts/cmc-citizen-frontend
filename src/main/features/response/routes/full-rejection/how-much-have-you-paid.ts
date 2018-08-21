@@ -49,14 +49,20 @@ export default express.Router()
 
         draft.document.rejectAllOfClaim.howMuchHaveYouPaid = form.model
 
-        await new DraftService().save(draft, user.bearerToken)
-
         const { externalId } = req.params
 
         const paidLessThanClaimed = form.model.amount < claim.totalAmountTillToday
         const paidEqualToClaimed = form.model.amount === claim.totalAmountTillToday
         const admissionsEnabled = ClaimFeatureToggles.areAdmissionsEnabled(claim)
 
+        if (!paidLessThanClaimed) {
+          delete draft.document.rejectAllOfClaim.whyDoYouDisagree
+          delete draft.document.timeline
+          delete draft.document.evidence
+          delete draft.document.freeMediation
+        }
+
+        await new DraftService().save(draft, user.bearerToken)
         /*
           redirection matrix:
               admissions            !admissions
