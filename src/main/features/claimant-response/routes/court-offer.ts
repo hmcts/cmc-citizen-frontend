@@ -51,7 +51,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   const courtOrderAmount: number = CourtOrderHelper.createCourtOrder(claim, draft).calculateAmount()
 
-  const monthlyCourtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+  const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
     defendantPaymentPlan.totalAmount,
     courtOrderAmount,
     Frequency.MONTHLY,
@@ -63,7 +63,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
     claim: claim,
     totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
     totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
-    paymentPlan: monthlyCourtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
+    courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
   })
 }
 

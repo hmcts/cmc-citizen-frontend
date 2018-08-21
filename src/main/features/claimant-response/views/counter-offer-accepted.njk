@@ -10,21 +10,20 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {% if isOverriddenByDefendantsPaymentFrequency %}
+        {% if iscourtOrderPaymentPlanConvertedByDefendantFrequency %}
           <p> {{ t('The court has accepted your repayment amount, but the frequency will be set by the defendant.
-          We`ve converted the {{ courtOrderAmount }} {{ claimantPaymentSchedule }} payment to
-          {{ convertedCourtOfferedAmount }} {{ defendantPaymentSchedule }} payments.', {
-              courtOrderAmount: courtOrderAmount | numeral,
-              claimantPaymentSchedule: claimantPaymentSchedule | renderFrequencyViewType,
-              convertedCourtOfferedAmount: convertedCourtOfferedAmount | numeral,
-              defendantPaymentSchedule: defendantPaymentSchedule | renderFrequencyViewType
+          We`ve converted the {{ claimantAmount }} {{ claimantFrequency }} payment to
+          {{ courtOrderAmount }} {{ courtOrderFrequency }} payments.', {
+              claimantAmount: claimantPaymentPlan.instalmentAmount | numeral,
+              claimantFrequency: claimantPaymentPlan.frequency | renderFrequencyViewType | lower,
+              courtOrderAmount: courtOrderPaymentPlan.instalmentAmount | numeral,
+              courtOrderFrequency: courtOrderPaymentPlan.frequency | renderFrequencyViewType | lower
             }) }}</p>
 
           {{
           repaymentPlanBlock(
             heading = 'The court`s proposed repayment plan',
-            repaymentPlan = claim.response.paymentIntention.repaymentPlan,
-            paymentPlan = paymentPlan
+            paymentPlan = courtOrderPaymentPlan
           )
           }}
         {% else %}

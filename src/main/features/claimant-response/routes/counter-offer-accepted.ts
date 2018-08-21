@@ -1,35 +1,48 @@
 import * as express from 'express'
 
 import { Paths } from 'claimant-response/paths'
-import { Draft } from '@hmcts/draft-store-client'
-import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { PaymentSchedule as DefendantPaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
-function isOverriddenByDefendantsPaymentFrequency (claimantPaymentSchedule: PaymentSchedule, defendantPaymentSchedule: DefendantPaymentSchedule): boolean {
-  return true
-}
+import { Claim } from 'claims/models/claim'
+
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftService } from 'services/draftService'
+
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { CourtOrderHelper } from 'shared/helpers/courtOrderHelper'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.counterOfferAcceptedPage.uri, (req: express.Request, res: express.Response) => {
-      const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      const claimantPaymentSchedule: PaymentSchedule = res.locals.claim.response.paymentIntention.repaymentPlan.paymentSchedule
-      const defendantPaymentSchedule: DefendantPaymentSchedule = draft.document.alternatePaymentMethod.paymentPlan.paymentSchedule
-      const courtOrderAmount: number = draft.document.courtOrderAmount
-      const courtOfferedRepaymentAmount: number = 100
+    Paths.counterOfferAcceptedPage.uri, async (req: express.Request, res: express.Response) => {
+      const claim: Claim = res.locals.claim
+      const draft: Draft<DraftClaimantResponse> = res.locals.draft
+      const user: User = res.locals.user
+
+      const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
+      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
+      const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+        defendantPaymentPlan.totalAmount,
+        claimantPaymentPlan.instalmentAmount,
+        claimantPaymentPlan.frequency,
+        defendantPaymentPlan.startDate
+      )
+
+      draft.document.courtOrderAmount = CourtOrderHelper
+        .createCourtOrder(claim, draft.document)
+        .calculateAmount()
+
+      await new DraftService().save(draft, user.bearerToken)
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
-        isOverriddenByDefendantsPaymentFrequency : isOverriddenByDefendantsPaymentFrequency(claimantPaymentSchedule, defendantPaymentSchedule),
-        courtOrderAmount: courtOrderAmount,
-        claimantPaymentSchedule: claimantPaymentSchedule,
-        courtOfferedRepaymentAmount: courtOfferedRepaymentAmount,
-        defendantPaymentFrequency: defendantPaymentSchedule
-      })
+        iscourtOrderPaymentPlanConvertedByDefendantFrequency: claimantPaymentPlan.frequency != defendantPaymentPlan.frequency,
+        claimantPaymentPlan, 
+        courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency) })
     })
   .post(
-    Paths.counterOfferAcceptedPage.uri, (req: express.Request, res: express.Response) => {
+    Paths.counterOfferAcceptedPage.uri, async (req: express.Request, res: express.Response) => {
       const { externalId } = req.params
       res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
     })
