@@ -65,14 +65,14 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
   if (response.paymentIntention) {
     paymentIntention.paymentOption = new FormPaymentOption(PaymentType.valueOf(response.paymentIntention.paymentOption))
     paymentIntention.paymentDate = response.paymentIntention.paymentDate && new PaymentDate(
-      new LocalDate(response.paymentIntention.paymentDate.year(), response.paymentIntention.paymentDate.month(), response.paymentIntention.paymentDate.date())
+      new LocalDate(response.paymentIntention.paymentDate.year(), response.paymentIntention.paymentDate.month() + 1, response.paymentIntention.paymentDate.date())
     )
 
     const repaymentPlan: ResponseRepaymentPlan = response.paymentIntention.repaymentPlan
 
     paymentIntention.paymentPlan = repaymentPlan && new PaymentPlan(claim.totalAmountTillToday,
       repaymentPlan.instalmentAmount,
-      new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month(), repaymentPlan.firstPaymentDate.date()),
+      new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month() + 1, repaymentPlan.firstPaymentDate.date()),
       PaymentSchedule.of(repaymentPlan.paymentSchedule)
     )
   }
@@ -99,6 +99,7 @@ export class CCJModelConverter {
 
     const paymentIntention: PaymentIntention = defendantPaymentMethodAccepted ? getDefendantPaymentIntention(claim)
       : claimantResponse.alternatePaymentMethod
+
 
     const repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
       paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
