@@ -1,4 +1,3 @@
-import { Error } from 'tslint/lib/error'
 
 export class Frequency {
   static readonly WEEKLY = new Frequency(['WEEK', 'EACH_WEEK'], 52 / 12, 1, 'Each week')
