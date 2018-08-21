@@ -40,6 +40,11 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
 function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+  // const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+  // const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(res.locals.draft.document)
+  // const courtOrderPaymentPlan
+
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
     claim: claim,

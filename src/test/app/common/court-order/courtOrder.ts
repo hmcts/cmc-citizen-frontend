@@ -1,26 +1,26 @@
 import { expect } from 'chai'
-import { DeterminationOfMeansCalculations } from 'common/determination-of-means/determinationOfMeansCalculations'
+import { CourtOrder } from 'common/court-order/courtOrder'
 
-describe('DeterminationOfMeansCalculations', () => {
+describe('CourtOrder', () => {
 
-  describe('calculateCourtOrderAmount', () => {
+  describe('calculateAmount', () => {
     describe('when the defendant’s instalment amount is greater than to disposable income', () => {
 
       describe('and the claimant’s instalment amount is greater than the defendant’s instalment amount', () => {
         it('should use the defendant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(2000, 3000, 1500)).to.equal(2000)
+          expect(new CourtOrder(2000, 3000, 1500).calculateAmount()).to.equal(2000)
         })
       })
 
       describe('and the claimant’s instalment amount is lower than the defendant’s instalment amount', () => {
         it('should use the defendant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(2000, 1000, 1500)).to.equal(2000)
+          expect(new CourtOrder(2000, 1000, 1500).calculateAmount()).to.equal(2000)
         })
       })
 
       describe('and the claimant’s instalment amount is equal to the defendant’s instalment amount', () => {
         it('should use the defendant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(2000, 2000, 1500)).to.equal(2000)
+          expect(new CourtOrder(2000, 2000, 1500).calculateAmount()).to.equal(2000)
         })
       })
     })
@@ -29,19 +29,19 @@ describe('DeterminationOfMeansCalculations', () => {
 
       describe('and the claimant’s instalment amount is greater than the defendant’s instalment amount', () => {
         it('should use the defendant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(1500, 3000, 1500)).to.equal(1500)
+          expect(new CourtOrder(1500, 3000, 1500).calculateAmount()).to.equal(1500)
         })
       })
 
       describe('and the claimant’s instalment amount is lower than the defendant’s instalment amount', () => {
         it('should use the defendant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(1500, 1000, 1500)).to.equal(1500)
+          expect(new CourtOrder(1500, 1000, 1500).calculateAmount()).to.equal(1500)
         })
       })
 
       describe('and the claimant’s instalment amount is equal to the defendant’s instalment amount', () => {
         it('should use the defendant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(1500, 1500, 1500)).to.equal(1500)
+          expect(new CourtOrder(1500, 1500, 1500).calculateAmount()).to.equal(1500)
         })
       })
     })
@@ -50,22 +50,21 @@ describe('DeterminationOfMeansCalculations', () => {
 
       describe('and the claimant’s instalment amount is greater than than disposable income', () => {
         it('should use the disposable income amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(1000, 3000, 1500)).to.equal(1500)
+          expect(new CourtOrder(1000, 3000, 1500).calculateAmount()).to.equal(1500)
         })
       })
 
       describe('and the claimant’s instalment amount is lower than than disposable income', () => {
         it('should use the claimant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(1000, 1300, 1500)).to.equal(1300)
+          expect(new CourtOrder(1000, 1300, 1500).calculateAmount()).to.equal(1300)
         })
       })
 
       describe('and the claimant’s instalment amount is equal to disposable income', () => {
         it('should use the claimant’s offered amount', () => {
-          expect(DeterminationOfMeansCalculations.calculateCourtOrderAmount(1000, 1500, 1500)).to.equal(1500)
+          expect(new CourtOrder(1000, 1500, 1500).calculateAmount()).to.equal(1500)
         })
       })
     })
-
   })
 })

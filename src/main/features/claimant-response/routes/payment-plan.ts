@@ -13,16 +13,13 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
+import { CourtOrder } from 'common/court-order/courtOrder'
+
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
-import { Frequency } from 'common/frequency/frequency'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { DeterminationOfMeansCalculations } from 'common/determination-of-means/determinationOfMeansCalculations'
-import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
+import { CourtOrderHelper } from 'shared/helpers/courtOrderHelper'
 
 const logger = Logger.getLogger('features/claimant-response/routes/payment-plan')
-
 class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   getView (): string {
     return 'claimant-response/views/payment-plan'
@@ -42,29 +39,19 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
-    const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+    const draft: DraftClaimantResponse = res.locals.draft.document
 
-    const claimPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-    const draftPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(res.locals.draft.document)
-
-    const defendantMonthlyInstalmentAmount: number = claimPaymentPlan.convertTo(Frequency.MONTHLY).instalmentAmount
-    const claimantMonthlyInstalmentAmount: number = draftPaymentPlan.convertTo(Frequency.MONTHLY).instalmentAmount
-    const defendantMonthlyDisposableIncome: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(claimResponse.statementOfMeans)
-
-    const courtOrderAmount: number = DeterminationOfMeansCalculations.calculateCourtOrderAmount(
-      defendantMonthlyInstalmentAmount, 
-      claimantMonthlyInstalmentAmount, 
-      defendantMonthlyDisposableIncome
-    )
+    const courtOrder: CourtOrder = CourtOrderHelper.calculateCourtOrderAmount(claim, draft)
+    const courtOrderAmount: number = courtOrder.calculateAmount()
 
     logger.info(`Court redetermination amount: ${courtOrderAmount}, `
-     + `based on Defendant monthly instalment amount: ${defendantMonthlyInstalmentAmount}, `
-     + `Defendant disposable amount: ${defendantMonthlyDisposableIncome}, `
-     + `Claimant monthly instalment amount: ${claimantMonthlyInstalmentAmount}`)
+      + `based on Defendant monthly instalment amount: ${courtOrder.defendantMonthlyInstalment}, `
+      + `Defendant disposable amount: ${courtOrder.defendantMonthlyDisposableIncome}, `
+      + `Claimant monthly instalment amount: ${courtOrder.claimantMonthlyInstalment}`)
 
     const externalId: string = req.params.externalId
 
-    if (courtOrderAmount == claimantMonthlyInstalmentAmount) {
+    if (courtOrderAmount == courtOrder.claimantMonthlyInstalment) {
       return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
     } else {
       return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
