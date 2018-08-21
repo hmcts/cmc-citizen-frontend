@@ -15,7 +15,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
 
       const filename: string = `${claim.claimNumber}-county-court-judgement`
-      const pdf: Buffer = await documentsClient.getCountyCourtJudgementReceiptPDF(externalId, res.locals.user.bearerToken)
+      const pdf: Buffer = await documentsClient.getCountyCourtJudgmentPDF(externalId, res.locals.user.bearerToken)
 
       DownloadUtils.downloadPDF(res, pdf, filename)
     }))
