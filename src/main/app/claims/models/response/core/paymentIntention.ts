@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
 
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { MomentFactory } from 'shared/momentFactory'
 
