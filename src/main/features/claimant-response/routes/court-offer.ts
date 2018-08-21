@@ -48,6 +48,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const draft: DraftClaimantResponse = res.locals.draft.document
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
+  const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
   const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   const courtOrderAmount: number = CourtOrderHelper.createCourtOrder(claim, draft).calculateAmount()
 
@@ -55,7 +56,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
     defendantPaymentPlan.totalAmount,
     courtOrderAmount,
     Frequency.MONTHLY,
-    defendantPaymentPlan.startDate
+    claimantPaymentPlan.startDate
   )
 
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {

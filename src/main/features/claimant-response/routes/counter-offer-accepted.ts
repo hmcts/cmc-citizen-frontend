@@ -27,7 +27,7 @@ export default express.Router()
         defendantPaymentPlan.totalAmount,
         claimantPaymentPlan.instalmentAmount,
         claimantPaymentPlan.frequency,
-        defendantPaymentPlan.startDate
+        claimantPaymentPlan.startDate
       )
 
       draft.document.courtOrderAmount = CourtOrderHelper
