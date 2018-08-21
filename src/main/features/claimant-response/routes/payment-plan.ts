@@ -29,10 +29,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     return 'Suggest instalments for the defendant'
   }
 
-  getValidationGroup (): string {
-    return 'claimant-suggestion'
-  }
-
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaymentIntention> {
     return new DefaultModelAccessor('alternatePaymentMethod')
   }

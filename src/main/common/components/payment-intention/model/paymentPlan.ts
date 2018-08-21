@@ -1,20 +1,16 @@
-import * as i18next from 'i18next'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { Fractions, IsLessThan, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
-import { IsFutureDate, IsFutureDateByNumberOfDays } from 'forms/validation/validators/dateFutureConstraint'
+import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { Moment } from 'moment'
-import { MomentFactory } from 'shared/momentFactory'
-import { MomentFormatter } from 'utils/momentFormatter'
 
 export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
   static readonly FIRST_PAYMENT_DATE_INVALID: string = 'Enter a valid first payment date'
   static readonly FIRST_PAYMENT_DATE_NOT_IN_FUTURE: string = 'Enter a first payment date in the future'
-  static readonly SCHEDULE_REQUIRED: string = 'Select an option'
+  static readonly SCHEDULE_REQUIRED: string = 'Choose a payment frequency'
 }
 
 export class PaymentPlan {
@@ -27,19 +23,12 @@ export class PaymentPlan {
   instalmentAmount?: number
 
   @ValidateNested({ groups: ['default', 'claimant-suggestion'] })
-  @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID, groups: ['default', 'claimant-suggestion'] })
-  @IsValidLocalDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID, groups: ['default', 'claimant-suggestion'] })
-  @IsFutureDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_NOT_IN_FUTURE, groups: ['default'] })
-  @IsFutureDateByNumberOfDays(30, { message: () => {
-    const date: Moment = MomentFactory.currentDate().add(30, 'days')
-
-    return i18next.t('Enter a first payment date in the future, no sooner then {{ date }}', {
-      date: MomentFormatter.formatLongDate(date)
-    })
-  }, groups: ['claimant-suggestion'] })
+  @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID })
+  @IsValidLocalDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID })
+  @IsFutureDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_NOT_IN_FUTURE })
   firstPaymentDate?: LocalDate
 
-  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED, groups: ['default', 'claimant-suggestion'] })
+  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED })
   paymentSchedule?: PaymentSchedule
 
   constructor (totalAmount?: number,

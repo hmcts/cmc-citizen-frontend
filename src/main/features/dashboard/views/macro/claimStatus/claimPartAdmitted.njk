@@ -82,7 +82,7 @@
     {{ t('You need to accept or reject the defendant’s admission of {{ amount }}.',
       { amount: claim.response.amount | numeral }) }}
   </p>
-  {{ _respond(claim, 'View and respond to offer') }}
+  {{ _respond(claim, 'View and respond to the offer') }}
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim) %}

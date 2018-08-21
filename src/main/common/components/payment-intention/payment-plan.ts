@@ -29,10 +29,6 @@ export abstract class AbstractPaymentPlanPage<Draft> {
     return 'components/payment-intention/payment-plan'
   }
 
-  getValidationGroup (): string {
-    return 'default'
-  }
-
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
     const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
       const model: PaymentIntention = this.createModelAccessor().get(res.locals.draft.document)
@@ -54,7 +50,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
       .post(path + Paths.paymentPlanPage.uri,
         ...guards,
         stateGuardRequestHandler,
-        FormValidator.requestHandler(PaymentPlanModel, PaymentPlanModel.fromObject, this.getValidationGroup(), ['calculatePaymentPlan']),
+        FormValidator.requestHandler(PaymentPlanModel, PaymentPlanModel.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {
             const form: Form<PaymentPlanModel> = req.body

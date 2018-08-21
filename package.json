@@ -48,7 +48,7 @@
     "@types/lodash": "^4.14.116",
     "@types/nock": "^9.3.0",
     "@types/node": "<10.0.0",
-    "@types/nunjucks": "^3.0.0",
+    "@types/nunjucks": "^3.1.0",
     "@types/request-promise-native": "^1.0.2",
     "@types/shortid": "^0.0.29",
     "applicationinsights": "^1.0.3",
@@ -136,7 +136,7 @@
     "tslint": "^5.11.0",
     "tslint-config-standard": "^7.1.0",
     "urlencode": "^1.1.0",
-    "webdriverio": "^4.13.1"
+    "webdriverio": "^4.13.2"
   },
   "nyc": {
     "extension": [

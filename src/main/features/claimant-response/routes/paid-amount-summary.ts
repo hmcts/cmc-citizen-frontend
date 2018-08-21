@@ -1,24 +1,24 @@
 import * as express from 'express'
 
 import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/paid-amount-summary'
-import { ccjPath, Paths } from 'features/ccj/paths'
-
-import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
+
+import { claimantResponseCCJPath, Paths } from 'features/claimant-response/paths'
+
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 
-class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
+class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantResponse> {
 
-  createModelAccessor (): AbstractModelAccessor<DraftCCJ, PaidAmount> {
+  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaidAmount> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
   }
-
   buildRedirectUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
-    return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+    return Paths.taskListPage.evaluateUri({ externalId: externalId })
   }
 }
 
 /* tslint:disable:no-default-export */
 export default new PaidAmountSummaryPage()
-  .buildRouter(ccjPath)
+  .buildRouter(claimantResponseCCJPath)

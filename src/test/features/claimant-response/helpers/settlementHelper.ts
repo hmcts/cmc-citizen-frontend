@@ -34,6 +34,12 @@ describe('settlementHelper', () => {
       expect(partyStatement).is.not.undefined
       expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
       expect(partyStatement.type).to.be.eql('OFFER')
+      expect(partyStatement.offer).is.not.undefined
+      expect(partyStatement.offer.paymentIntention).is.not.undefined
+      expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('INSTALMENTS')
+      expect(partyStatement.offer.paymentIntention.repaymentPlan).is.not.undefined
+      expect(partyStatement.offer.paymentIntention.paymentDate).is.undefined
+
     })
 
     it('should return defendant party statement by set date option', () => {
@@ -45,6 +51,11 @@ describe('settlementHelper', () => {
       expect(partyStatement.offer).is.not.undefined
       expect(partyStatement.offer.content).to.be.eql('John Smith will pay the full amount, no later than 31 December 2050')
       expect(partyStatement.offer.completionDate).to.be.eql(MomentFactory.parse('2050-12-31'))
+      expect(partyStatement.offer.paymentIntention).is.not.undefined
+      expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('BY_SPECIFIED_DATE')
+      expect(partyStatement.offer.paymentIntention.paymentDate).is.not.undefined
+      expect(partyStatement.offer.paymentIntention.repaymentPlan).is.undefined
+
     })
 
     it('should return settlement object', () => {

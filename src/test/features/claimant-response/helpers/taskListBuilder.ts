@@ -346,6 +346,74 @@ describe('Claimant response task list builder', () => {
         })
       })
     })
+
+    describe('"Request a County Court Judgment" task', () => {
+      const taskName = 'Request a County Court Judgment'
+
+      describe('when response type is part admission', () => {
+        it('should be available when claimant decided to proceed with CCJ', () => {
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithPaymentBySetDateData } })
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+            formaliseRepaymentPlan: {
+              option: {
+                value: 'requestCCJ',
+                displayValue: 'Request a County Court Judgment (CCJ)'
+              }
+            }
+          }})
+
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
+        })
+
+        it('should not be available when claimant decided to proceed with settlement', () => {
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithPaymentBySetDateData } })
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+            formaliseRepaymentPlan: {
+              option: {
+                value: 'signSettlementAgreement',
+                displayValue: 'Sign a settlement agreement'
+              }
+            }
+          }})
+
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
+        })
+      })
+
+      describe('when response type is full admission', () => {
+        it('should be available when claimant decided to proceed with CCJ', () => {
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentBySetDateData } })
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+            formaliseRepaymentPlan: {
+              option: {
+                value: 'requestCCJ',
+                displayValue: 'Request a County Court Judgment (CCJ)'
+              }
+            }
+          }})
+
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(task => task.name === taskName)).not.to.be.undefined
+        })
+
+        it('should not be available when claimant decided to proceed with settlement', () => {
+          claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithImmediatePaymentData } })
+          draft = new DraftClaimantResponse().deserialize({ ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+            formaliseRepaymentPlan: {
+              option: {
+                value: 'signSettlementAgreement',
+                displayValue: 'Sign a settlement agreement'
+              }
+            }
+          }})
+
+          const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
+        })
+      })
+    })
   })
 
   describe('"Submit" section', () => {

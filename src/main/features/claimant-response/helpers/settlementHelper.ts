@@ -46,7 +46,7 @@ export function prepareDefendantOffer (claim: Claim): Offer {
   if (response.paymentIntention.paymentDate) {
     const completionDate: Moment = response.paymentIntention.paymentDate
     const content: string = `${response.defendant.name} will pay the full amount, no later than ${MomentFormatter.formatLongDate(completionDate)}`
-    return new Offer(content, completionDate)
+    return new Offer(content, completionDate, response.paymentIntention)
   } else if (response.paymentIntention.repaymentPlan) {
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
     const instalmentAmount: string = NumberFormatter.formatMoney(paymentPlan.instalmentAmount)
@@ -54,7 +54,7 @@ export function prepareDefendantOffer (claim: Claim): Offer {
     const firstPaymentDate: string = MomentFormatter.formatLongDate(paymentPlan.startDate)
     const completionDate: Moment = paymentPlan.calculateLastPaymentDate()
     const content: string = `${response.defendant.name} will pay instalments of ${instalmentAmount} ${paymentSchedule}. The first instalment will be paid by ${firstPaymentDate}.`
-    return new Offer(content, completionDate)
+    return new Offer(content, completionDate, response.paymentIntention)
   }
   throw new Error('Invalid paymentIntention')
 }

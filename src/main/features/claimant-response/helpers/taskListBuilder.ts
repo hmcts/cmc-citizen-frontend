@@ -1,5 +1,5 @@
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Paths } from 'claimant-response/paths'
+import { Paths, CCJPaths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
@@ -9,7 +9,7 @@ import { Validator } from 'class-validator'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendantResponseTask'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
@@ -81,6 +81,7 @@ export class TaskListBuilder {
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
+      this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
       if (claim.response.freeMediation === YesNoOption.YES
         && draft.settleAdmitted
@@ -108,6 +109,7 @@ export class TaskListBuilder {
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
       this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       this.buildSignSettlementAgreement(draft, tasks, externalId)
+      this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
 
     return new TaskList('How do you want to respond?', tasks)
@@ -134,6 +136,20 @@ export class TaskListBuilder {
           'Sign a settlement agreement',
           Paths.signSettlementAgreementPage.evaluateUri({ externalId: externalId }),
           SignSettlementAgreementTask.isCompleted(draft.settlementAgreement)
+        )
+      )
+    }
+  }
+
+  private static buildRequestCountyCourtJudgment (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
+    if (draft.formaliseRepaymentPlan
+      && draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value
+    ) {
+      tasks.push(
+        new TaskListItem(
+          'Request a County Court Judgment',
+          CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId }),
+          isDefinedAndValid(draft.paidAmount)
         )
       )
     }

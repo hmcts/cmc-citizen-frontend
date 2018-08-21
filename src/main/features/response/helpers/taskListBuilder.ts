@@ -1,6 +1,6 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { FullAdmissionPaths, PartAdmissionPaths, Paths, StatementOfMeansPaths } from 'response/paths'
+import { Paths, FullAdmissionPaths, PartAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'

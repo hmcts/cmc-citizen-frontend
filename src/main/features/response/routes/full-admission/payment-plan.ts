@@ -44,12 +44,12 @@ export default new PaymentPlanPage()
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.draft
 
-      res.locals.monthlyIncomeAmount = CalculateMonthlyIncomeExpense.calculateTotalAmount(
+      res.locals.monthlyIncomeAmount = draft.document.statementOfMeans ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
         IncomeExpenseSources.fromMonthlyIncomeFormModel(draft.document.statementOfMeans.monthlyIncome).incomeExpenseSources
-      )
-      res.locals.monthlyExpensesAmount = CalculateMonthlyIncomeExpense.calculateTotalAmount(
+      ) : 0
+      res.locals.monthlyExpensesAmount = draft.document.statementOfMeans ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
         IncomeExpenseSources.fromMonthlyExpensesFormModel(draft.document.statementOfMeans.monthlyExpenses).incomeExpenseSources
-      )
+      ) : 0
       next()
     }
   )

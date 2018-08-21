@@ -93,7 +93,7 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
         }
 
-        await CCJClient.save(claim.externalId, draft, user)
+        await CCJClient.request(claim.externalId, draft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
