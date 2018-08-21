@@ -1,4 +1,4 @@
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 import { AgeGroupType } from 'claims/models/response/statement-of-means/dependant'
