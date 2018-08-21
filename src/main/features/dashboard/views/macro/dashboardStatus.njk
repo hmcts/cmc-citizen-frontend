@@ -45,7 +45,7 @@
 
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
-{% macro caseDashboardStatusForClaimant(status, claim) %}
+{% macro dashboardStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -62,7 +62,7 @@
             {{ paidAmountForClaimantDashboard(claim) }}
             {% else %}
               {{ paidLessThanClaimedForClaimantDashboard(claim) }}
-          {% elseif %}
+          {% else %}
             {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
         {% endif %}
       {% elif claim.response.freeMediation === FreeMediationOption.NO %}
@@ -90,7 +90,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro caseDashboardStatusForDefendant(status, claim) %}
+{% macro dashboardStatusForDefendant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}

@@ -1,4 +1,4 @@
-{% from "./caseDashboardStatus.njk" import caseDashboardStatusForClaimant, caseDashboardStatusForDefendant %}
+{% from "./dashboardStatus.njk" import dashboardStatusForClaimant, dashboardStatusForDefendant %}
 
 {% from "./claimStatus/noReponse.njk" import noResponseForClaimantClaimDetails, noResponseForDefendantClaimDetails %}
 {% from "./claimStatus/moreTimeRequested.njk" import moreTimeRequestedForClaimantClaimDetails, moreTimeRequestedForDefendantClaimDetails %}
@@ -45,7 +45,7 @@ ccjRequestedForDefendantClaimDetails %}
 {% from "./claimStatus/offerSettlement.njk" import
   offerSettlementReachedClaimDetails %}
 
-{% macro caseClaimDetailsForClaimant(claim, csrf) %}
+{% macro claimDetailsForClaimant(claim, csrf) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -87,14 +87,14 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseDashboardStatusForClaimant(state.status, claim) }}
+          {{ dashboardStatusForClaimant(state.status, claim) }}
         </p>
       {% endif %}
     </div>
   {% endfor %}
 {% endmacro %}
 
-{% macro caseClaimDetailsForDefendant(claim) %}
+{% macro claimDetailsForDefendant(claim) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -140,7 +140,7 @@ ccjRequestedForDefendantClaimDetails %}
           {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseDashboardStatusForDefendant(claim.status, claim) }}
+          {{ dashboardStatusForDefendant(claim.status, claim) }}
         </p>
       {% endif %}
     </div>
