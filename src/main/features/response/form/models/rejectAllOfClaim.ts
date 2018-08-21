@@ -37,10 +37,10 @@ export class RejectAllOfClaim {
 
   whyDoYouDisagree?: WhyDoYouDisagree
 
-  constructor (option?: string, howMuchHaveYouPaid?: HowMuchHaveYouPaid, defence?: WhyDoYouDisagree) {
+  constructor (option?: string, howMuchHaveYouPaid?: HowMuchHaveYouPaid, whyDoYouDisagree?: WhyDoYouDisagree) {
     this.option = option
     this.howMuchHaveYouPaid = howMuchHaveYouPaid
-    this.whyDoYouDisagree = defence
+    this.whyDoYouDisagree = whyDoYouDisagree
   }
 
   deserialize (input: any): RejectAllOfClaim {

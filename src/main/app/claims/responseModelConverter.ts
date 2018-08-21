@@ -1,7 +1,10 @@
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { PaymentOption } from 'claims/models/response/core/paymentOption'
-import { PaymentOption as PaymentOptionDraft, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import {
+  PaymentOption as PaymentOptionDraft,
+  PaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/dependant'
@@ -34,7 +37,6 @@ import { CourtOrderRow } from 'response/form/models/statement-of-means/courtOrde
 import { DebtRow } from 'response/form/models/statement-of-means/debtRow'
 import { EmployerRow } from 'response/form/models/statement-of-means/employerRow'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
-import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { convertEvidence } from 'claims/converters/evidenceConverter'
@@ -49,6 +51,7 @@ import { PaymentDate } from 'shared/components/payment-intention/model/paymentDa
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 export class ResponseModelConverter {
 
@@ -67,8 +70,8 @@ export class ResponseModelConverter {
 
   private static convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
     let paymentDeclaration: PaymentDeclaration = undefined
-    if (draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
-      paymentDeclaration = this.convertWhenDidYouPay(draft.whenDidYouPay)
+    if (draft.isResponseRejectedFullyBecausePaidWhatOwed() && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined) {
+      paymentDeclaration = this.convertHowMuchHaveYouPaid(draft.rejectAllOfClaim.howMuchHaveYouPaid)
     }
 
     return {
@@ -112,11 +115,11 @@ export class ResponseModelConverter {
       responseType: ResponseType.PART_ADMISSION,
       amount: amount,
       paymentDeclaration: draft.partialAdmission.howMuchHaveYouPaid.date
-      && draft.partialAdmission.howMuchHaveYouPaid.text
-      && {
-        paidDate: draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
-        explanation: draft.partialAdmission.howMuchHaveYouPaid.text
-      } as PaymentDeclaration,
+        && draft.partialAdmission.howMuchHaveYouPaid.text
+        && {
+          paidDate: draft.partialAdmission.howMuchHaveYouPaid.date.asString(),
+          explanation: draft.partialAdmission.howMuchHaveYouPaid.text
+        } as PaymentDeclaration,
       defence: draft.partialAdmission.whyDoYouDisagree.text,
       timeline: {
         rows: draft.partialAdmission.timeline.getPopulatedRowsOnly(),
@@ -280,11 +283,8 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertWhenDidYouPay (whenDidYouPay: WhenDidYouPay): PaymentDeclaration {
-    if (whenDidYouPay === undefined) {
-      return undefined
-    }
-    return new PaymentDeclaration(whenDidYouPay.date.asString(), whenDidYouPay.text)
+  private static convertHowMuchHaveYouPaid (howMuchHaveYouPaid: HowMuchHaveYouPaid): PaymentDeclaration {
+    return new PaymentDeclaration(howMuchHaveYouPaid.date.asString(), howMuchHaveYouPaid.text)
   }
 
   private static convertStatementOfMeansChildren (draft: ResponseDraft): Child[] {

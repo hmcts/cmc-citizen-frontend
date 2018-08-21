@@ -123,13 +123,6 @@
       }}
     {% endif %}
 
-    {% if draft.isResponseRejectedFullyWithAmountClaimedPaid() %}
-      {{ tableStart('yourResponse', 'Your response') }}
-        {{ row(label = 'When did you pay this amount?', value = draft.whenDidYouPay.date.toMoment() | date, changeLink = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'How did you pay the amount claimed?', value = draft.whenDidYouPay.text, changeLink = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {{ tableEnd() }}
-    {% endif %}
-
     {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
 
       {{ tableStart('responseDetails', 'Response details') }}

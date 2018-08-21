@@ -214,7 +214,6 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
-      || draft.isResponseRejectedFullyWithAmountClaimedPaid()
       || TaskListBuilder.isRejectedFullyBecausePaidInFullAtLeastClaimAmount(claim, draft)
       || TaskListBuilder.isRejectedFullyBecausePaidInFullLessThanClaimAmountAndExplanationGiven(claim, draft)
       || draft.isResponseFullyAdmitted()
