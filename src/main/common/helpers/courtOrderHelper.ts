@@ -14,7 +14,7 @@ import { StatementOfMeansCalculations } from 'common/statement-of-means/statemen
 
 export class CourtOrderHelper {
 
-  static calculateCourtOrderAmount (claim: Claim, draft: DraftClaimantResponse | ResponseDraft): CourtOrder {
+  static createCourtOrder (claim: Claim, draft: DraftClaimantResponse | ResponseDraft): CourtOrder {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const claimPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)

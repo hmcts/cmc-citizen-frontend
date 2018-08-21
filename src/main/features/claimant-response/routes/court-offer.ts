@@ -4,20 +4,26 @@ import { Paths as ClaimantsResponsePaths } from 'claimant-response/paths'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { Form } from 'forms/form'
 import { ErrorHandling } from 'shared/errorHandling'
+import { FormValidator } from 'forms/validation/formValidator'
+import { YesNoOption } from 'models/yesNoOption'
+
+import { Claim } from 'claims/models/claim'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Draft } from '@hmcts/draft-store-client'
-import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
-import { YesNoOption } from 'models/yesNoOption'
-import { ResponseType } from 'claims/models/response/responseType'
+
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { CourtOrderHelper } from 'shared/helpers/courtOrderHelper'
+
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { Expense } from 'claims/models/response/statement-of-means/expense'
 import { Income } from 'claims/models/response/statement-of-means/income'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { Claim } from 'claims/models/claim'
-import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 
 function calculateTotalMonthlyIncome (incomes: Income[]): number {
   if (incomes === undefined) {
@@ -39,18 +45,25 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
 
 function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const claim: Claim = res.locals.claim
+  const draft: DraftClaimantResponse = res.locals.draft.document
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-  // const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-  // const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(res.locals.draft.document)
-  // const courtOrderPaymentPlan
+  const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+  const courtOrderAmount: number = CourtOrderHelper.createCourtOrder(claim, draft).calculateAmount()
+
+  const monthlyCourtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+    defendantPaymentPlan.totalAmount,
+    courtOrderAmount,
+    Frequency.MONTHLY,
+    defendantPaymentPlan.startDate
+  )
 
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
     claim: claim,
     totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
     totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
-    paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+    paymentPlan: monthlyCourtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
   })
 }
 /* tslint:disable:no-default-export */

@@ -41,7 +41,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     const claim: Claim = res.locals.claim
     const draft: DraftClaimantResponse = res.locals.draft.document
 
-    const courtOrder: CourtOrder = CourtOrderHelper.calculateCourtOrderAmount(claim, draft)
+    const courtOrder: CourtOrder = CourtOrderHelper.createCourtOrder(claim, draft)
     const courtOrderAmount: number = courtOrder.calculateAmount()
 
     logger.info(`Court redetermination amount: ${courtOrderAmount}, `
