@@ -121,48 +121,57 @@ describe(`Defendant: reject all - ${header}`, () => {
       })
 
       context('when service is healthy', () => {
-        context('when amount paid is less than that claimed', async () => {
-          beforeEach(() => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount + 1 })
-            draftStoreServiceMock.resolveFind('response')
-          })
+        it('when form is invalid should render page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount + 1 })
+          draftStoreServiceMock.resolveFind('response')
 
-          it('when form is valid should render `you have paid less` page', async () => {
-            draftStoreServiceMock.resolveSave()
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId })))
-          })
-
-          it('when form is invalid should render page', async () => {
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ amount: -100 })
-              .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ amount: -100 })
+            .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
         })
 
-        context('when amount paid is equal to that claimed', async () => {
-          beforeEach(() => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount })
-            draftStoreServiceMock.resolveFind('response')
-          })
-
-          it('when form is valid should render task list page', async () => {
-            draftStoreServiceMock.resolveSave()
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
-          })
-        })
+        testValidPost(-1, true,
+          FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId }))
+        testValidPost(-1, false,
+          Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
+        testValidPost(0, true,
+          Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        testValidPost(0, false,
+          Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        testValidPost(1, true,
+          Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        testValidPost(1, false,
+          Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
       })
     })
   })
 })
+
+function testValidPost (paidDifference: number, admissionsEnabled: boolean, redirect: string) {
+  let difference: string
+  if (paidDifference < 0) {
+    difference = `£${Math.abs(paidDifference)} less than`
+  } else if (paidDifference > 0) {
+    difference = `£${paidDifference} greater than`
+  } else {
+    difference = 'the same as'
+  }
+  const admissionsOverride = admissionsEnabled ? {} : { features: undefined }
+
+  it(`when form is valid having paid ${difference} the claimed amount`, async () => {
+    claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+      ...admissionsOverride,
+      totalAmountTillToday: validFormData.amount - paidDifference
+    })
+    draftStoreServiceMock.resolveFind('response')
+    draftStoreServiceMock.resolveSave()
+
+    await request(app)
+      .post(pagePath)
+      .set('Cookie', `${cookieName}=ABC`)
+      .send(validFormData)
+      .expect(res => expect(res).to.be.redirect.toLocation(redirect))
+  })
+}

@@ -63,14 +63,31 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        if (form.model.amount < res.locals.claim.totalAmountTillToday) {
-          if (FeatureToggles.hasAnyAuthorisedFeature(res.locals.claim.features, 'admissions')) {
+
+        const paidLessThanClaimed = form.model.amount < res.locals.claim.totalAmountTillToday
+        const paidEqualToClaimed = form.model.amount === res.locals.claim.totalAmountTillToday
+        const admissionsEnabled = FeatureToggles.hasAnyAuthorisedFeature(res.locals.claim.features, 'admissions')
+
+        /* redirection matrix:
+
+              admissions            !admissions
+           <  youHavePaidLessPage   sendYourResponseByEmailPage
+           =  taskListPage          taskListPage
+           >  taskListPage          sendYourResponseByEmailPage
+         */
+
+        if (paidLessThanClaimed) {
+          if (admissionsEnabled) {
             res.redirect(FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId }))
           } else {
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
           }
-        } else {
+        } else if (paidEqualToClaimed) {
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        } else if (admissionsEnabled) {
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        } else {
+          res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
         }
       }
     }))

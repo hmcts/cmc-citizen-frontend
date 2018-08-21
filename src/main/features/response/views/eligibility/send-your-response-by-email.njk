@@ -30,7 +30,7 @@
           {% if draft.response.type === ResponseType.DEFENCE %}
             {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
               {{ t('Download the <span class="bold-small">defence and counterclaim form.</span>') | safe }}
-            {% elseif draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
+            {% else %}
               {{ t('Download the <span class="bold-small">admission form</span> and the <span class="bold-small">defence form</span>') | safe }}
             {% endif %}
           {% endif %}

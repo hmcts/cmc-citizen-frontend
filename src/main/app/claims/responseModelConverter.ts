@@ -102,12 +102,10 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.PART_ADMISSION,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
-      paymentDeclaration: draft.rejectAllOfClaim.howMuchHaveYouPaid.date
-        && draft.rejectAllOfClaim.howMuchHaveYouPaid.text
-        && {
-          paidDate: draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
-          explanation: draft.rejectAllOfClaim.howMuchHaveYouPaid.text
-        } as PaymentDeclaration,
+      paymentDeclaration: {
+        paidDate: draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
+        explanation: draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+      } as PaymentDeclaration,
       defence: draft.rejectAllOfClaim.whyDoYouDisagree.text,
       timeline: {
         rows: draft.timeline.getPopulatedRowsOnly(),
