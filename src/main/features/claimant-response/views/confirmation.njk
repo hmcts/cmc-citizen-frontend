@@ -36,16 +36,18 @@
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
 
-      {% if repaymentPlanOrigin === 'DEFENDANT' %}
+      {% if claim.countyCourtJudgmentIssuedAt %}
+        {% if hasAcceptedDefendantsPaymentIntention %}
+          <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
+        {% else %}
+          <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}</p>
+        {% endif %}
+      {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
         {% include "./confirmation/accepted-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
         {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
-      {% elseif hasAcceptedOffer %}
-        <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
-      {% else %}
-        <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}</p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}

@@ -14,8 +14,6 @@ import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
-import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
-import { CCJModelConverter } from 'claims/ccjModelConverter'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

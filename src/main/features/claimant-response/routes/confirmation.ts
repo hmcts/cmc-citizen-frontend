@@ -5,57 +5,27 @@ import { Claim } from 'claims/models/claim'
 import { ErrorHandling } from 'shared/errorHandling'
 import { getRepaymentPlanOrigin } from 'claimant-response/helpers/settlementHelper'
 import { MomentFactory } from 'shared/momentFactory'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { RepaymentPlan as CCJRepaymentPlan } from 'claims/models/replaymentPlan'
-import { LocalDate } from 'forms/models/localDate'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { PaymentOption } from 'main/common/components/payment-intention/model/paymentOption'
-import { PaymentDate } from 'main/common/components/payment-intention/model/paymentDate'
-import { PaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentOption } from 'claims/models/paymentOption'
 
-function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
-  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-  const paymentIntention = new PaymentIntention()
+function hasAcceptedDefendantsPaymentIntention (claim: Claim): boolean {
+  const paymentIntentionFromResponse: PaymentIntention = (claim.response as FullAdmissionResponse | PartialAdmissionResponse).paymentIntention
+  const paymentOptionFromCCJ = claim.countyCourtJudgment.paymentOption
 
-  if (response.paymentIntention) {
-    paymentIntention.paymentOption = new PaymentOption(PaymentType.valueOf(response.paymentIntention.paymentOption))
-    paymentIntention.paymentDate = response.paymentIntention.paymentDate && new PaymentDate(new LocalDate().deserialize(response.paymentIntention.paymentDate))
-
-    const repaymentPlan: RepaymentPlan = response.paymentIntention.repaymentPlan
-
-    if (repaymentPlan) {
-      paymentIntention.paymentPlan = new PaymentPlan(claim.totalAmountTillToday,
-        repaymentPlan.instalmentAmount,
-        new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month(), repaymentPlan.firstPaymentDate.day()),
-        PaymentSchedule.of(repaymentPlan.paymentSchedule)
-      )
-    }
+  if (paymentIntentionFromResponse.paymentOption !== paymentOptionFromCCJ) {
+    return false
   }
-  return paymentIntention
-}
 
-function hasAcceptedOffer (claim: Claim): boolean {
-  const paymentIntention: PaymentIntention = getDefendantPaymentIntention(claim)
-
-  const ccjRepaymentPlan: CCJRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-  const defendantRepaymentPlan: PaymentPlan = paymentIntention.paymentPlan
-  const paymentSchedule: PaymentSchedule = ccjRepaymentPlan && ccjRepaymentPlan.paymentSchedule as PaymentSchedule
-
-  const defendantPaymentPlan = ccjRepaymentPlan && new PaymentPlan(claim.totalAmountTillToday,
-    ccjRepaymentPlan.instalmentAmount,
-    new LocalDate(ccjRepaymentPlan.firstPaymentDate.year(),
-      ccjRepaymentPlan.firstPaymentDate.month(),
-      ccjRepaymentPlan.firstPaymentDate.date()
-    ),
-    paymentSchedule
-  )
-
-  return (!!defendantRepaymentPlan && defendantPaymentPlan === defendantRepaymentPlan)
-    || (paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment() === claim.countyCourtJudgment.payBySetDate)
+  switch (paymentOptionFromCCJ) {
+    case PaymentOption.BY_SPECIFIED_DATE:
+      return paymentIntentionFromResponse.paymentDate === claim.countyCourtJudgment.payBySetDate
+    case PaymentOption.INSTALMENTS:
+      return paymentIntentionFromResponse.repaymentPlan === claim.countyCourtJudgment.repaymentPlan
+    default:
+      throw new Error(`Unhandled payment option ${paymentOptionFromCCJ}`)
+  }
 }
 
 /* tslint:disable:no-default-export */
@@ -70,6 +40,6 @@ export default express.Router()
           claim: claim,
           confirmationDate: MomentFactory.currentDate(),
           repaymentPlanOrigin: claim.settlement && getRepaymentPlanOrigin(claim.settlement),
-          hasAcceptedOffer: hasAcceptedOffer(claim)
+          hasAcceptedDefendantsPaymentIntention: hasAcceptedDefendantsPaymentIntention(claim)
         })
     }))

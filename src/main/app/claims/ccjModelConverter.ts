@@ -18,12 +18,13 @@ import { PaymentDate } from 'shared/components/payment-intention/model/paymentDa
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
-import { PaymentOption } from 'shared/components/payment-intention/model/paymentOption'
+import { PaymentOption as FormPaymentOption } from 'shared/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
 import { Party } from 'claims/models/details/yours/party'
 import { ResponseType } from 'claims/models/response/responseType'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -62,7 +63,7 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
   const paymentIntention = new PaymentIntention()
 
   if (response.paymentIntention) {
-    paymentIntention.paymentOption = new PaymentOption(PaymentType.valueOf(response.paymentIntention.paymentOption))
+    paymentIntention.paymentOption = new FormPaymentOption(PaymentType.valueOf(response.paymentIntention.paymentOption))
     paymentIntention.paymentDate = response.paymentIntention.paymentDate && new PaymentDate(
       new LocalDate(response.paymentIntention.paymentDate.year(), response.paymentIntention.paymentDate.month(), response.paymentIntention.paymentDate.date())
     )
@@ -103,7 +104,7 @@ export class CCJModelConverter {
       paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
       paymentIntention.paymentPlan.paymentSchedule.value)
     const payBySetDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
-    const paymentOption: string = paymentIntention.paymentOption.option.value
+    const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption
 
     const alreadyPaidAmount: number = convertAlreadyPaidAmount(claim, claimantResponse)
 
@@ -122,7 +123,7 @@ export class CCJModelConverter {
 
     return new CountyCourtJudgment(
       draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined,
-      draft.paymentOption.option.value,
+      draft.paymentOption.option.value as PaymentOption,
       convertPaidAmount(draft),
       convertRepaymentPlan(draft.repaymentPlan),
       convertPayBySetDate(draft),
