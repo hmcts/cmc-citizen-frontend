@@ -18,7 +18,7 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = FullRejectionPaths.howMuchHaveYouPaid.evaluateUri({ externalId: externalId })
+const pagePath = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId })
 
 const validFormData = { amount: 100, date: { day: 1, month: 1, year: 1990 }, text: 'aaa' }
 const header: string = 'How much have you paid?'
@@ -134,7 +134,7 @@ describe(`Defendant: reject all - ${header}`, () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(FullRejectionPaths.youHavePaidLess.evaluateUri({ externalId: externalId })))
+                .toLocation(FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId })))
           })
 
           it('when form is invalid should render page', async () => {

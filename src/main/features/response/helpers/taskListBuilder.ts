@@ -70,7 +70,7 @@ export class TaskListBuilder {
       tasks.push(
         new TaskListItem(
           'How much have you paid?',
-          FullRejectionPaths.howMuchHaveYouPaid.evaluateUri({ externalId: externalId }),
+          FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
           ValidationUtils.isValid(draft.rejectAllOfClaim.howMuchHaveYouPaid)
         )
       )

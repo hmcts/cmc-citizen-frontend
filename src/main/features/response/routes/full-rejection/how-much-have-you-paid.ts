@@ -19,7 +19,7 @@ import { Moment } from 'moment'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Claim } from 'claims/models/claim'
 
-const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaid
+const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaidPage
 
 function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
   const pastDate: Moment = MomentFactory.currentDate().subtract(3, 'months')
@@ -70,7 +70,7 @@ export default express.Router()
         const { externalId } = req.params
         if (form.model.amount < res.locals.claim.totalAmountTillToday) {
           if (FeatureToggles.hasAnyAuthorisedFeature(res.locals.claim.features, 'admissions')) {
-            res.redirect(FullRejectionPaths.youHavePaidLess.evaluateUri({ externalId: externalId }))
+            res.redirect(FullRejectionPaths.youHavePaidLessPage.evaluateUri({ externalId: externalId }))
           } else {
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
           }

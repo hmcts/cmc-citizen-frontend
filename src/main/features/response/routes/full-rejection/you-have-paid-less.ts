@@ -5,13 +5,13 @@ import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(FullRejectionPaths.youHavePaidLess.uri,
+  .get(FullRejectionPaths.youHavePaidLessPage.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FullRejectionGuard.requestHandler(),
     async (req: express.Request, res: express.Response) => {
-      await Promise.resolve(res.render(FullRejectionPaths.youHavePaidLess.associatedView, { claim: res.locals.claim }))
+      await Promise.resolve(res.render(FullRejectionPaths.youHavePaidLessPage.associatedView, { claim: res.locals.claim }))
     })
-  .post(FullRejectionPaths.youHavePaidLess.uri,
+  .post(FullRejectionPaths.youHavePaidLessPage.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FullRejectionGuard.requestHandler(),
     function (req: express.Request, res: express.Response) {
