@@ -28,16 +28,6 @@ export const defenceWithDisputeData = {
   defenceType: 'DISPUTE'
 }
 
-export const defenceWithAmountClaimedAlreadyPaidData = {
-  ...baseResponseData,
-  ...baseDefenceData,
-  defenceType: 'ALREADY_PAID',
-  paymentDeclaration: {
-    paidDate: '2017-12-31',
-    explanation: 'I paid in cash'
-  }
-}
-
 const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
   freeMediation: undefined
@@ -91,7 +81,8 @@ export const partialAdmissionWithImmediatePaymentData = {
 }
 
 export const partialAdmissionFromStatesPaidDefence = {
-  responseType: 'PART_ADMISSION',
+  ...baseResponseData,
+  ...basePartialAdmissionData,
   amount: 100,
   paymentDeclaration: {
     paidDate: '2017-12-31',
@@ -105,30 +96,7 @@ export const partialAdmissionFromStatesPaidDefence = {
   evidence: {
     rows: []
   },
-  defendant: {
-    type: 'individual',
-    name: 'John Smith',
-    address: {
-      line1: 'Flat 1',
-      line2: 'Street 1',
-      line3: 'Cool house name',
-      city: 'London',
-      postcode: 'E1A'
-    },
-    correspondenceAddress: {
-      line1: 'Flat 10',
-      line2: 'Street 10',
-      line3: 'Cooler house name',
-      city: 'Belfast',
-      postcode: 'B10A'
-    },
-    mobilePhone: '0700000000',
-    email: 'user@example.com',
-    dateOfBirth: '1999-01-01'
-  },
-  freeMediation: 'no',
-  paymentIntention: undefined,
-  statementOfMeans: undefined
+  freeMediation: 'no'
 }
 
 export const partialAdmissionAlreadyPaidData = {

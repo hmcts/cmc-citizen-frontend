@@ -19,8 +19,7 @@ const page: RoutablePath = FullRejectionPaths.whyDoYouDisagreePage
 
 function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
   res.render(page.associatedView, {
-    form: form,
-    totalAmount: res.locals.claim.totalAmountTillToday
+    form: form
   })
 }
 
@@ -30,7 +29,7 @@ export default express.Router()
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FullRejectionGuard.requestHandler(),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.rejectAllOfClaim.whyDoYouDisagree), res)
     }))
@@ -39,7 +38,7 @@ export default express.Router()
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FullRejectionGuard.requestHandler(),
     FormValidator.requestHandler(WhyDoYouDisagree, WhyDoYouDisagree.fromObject),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<WhyDoYouDisagree> = req.body
 
       if (form.hasErrors()) {

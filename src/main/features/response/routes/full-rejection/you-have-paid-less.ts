@@ -8,13 +8,13 @@ export default express.Router()
   .get(FullRejectionPaths.youHavePaidLessPage.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FullRejectionGuard.requestHandler(),
-    async (req: express.Request, res: express.Response) => {
-      await Promise.resolve(res.render(FullRejectionPaths.youHavePaidLessPage.associatedView, { claim: res.locals.claim }))
+    (req: express.Request, res: express.Response) => {
+      res.render(FullRejectionPaths.youHavePaidLessPage.associatedView)
     })
   .post(FullRejectionPaths.youHavePaidLessPage.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FullRejectionGuard.requestHandler(),
     function (req: express.Request, res: express.Response) {
-      const claim: Claim = res.locals.claim
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+      const { externalId } = req.params
+      res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
     })

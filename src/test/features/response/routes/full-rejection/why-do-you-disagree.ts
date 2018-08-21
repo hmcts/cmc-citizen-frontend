@@ -13,7 +13,6 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { ResponseType } from 'response/form/models/responseType'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -61,11 +60,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
       context('when service is healthy', () => {
         it(`should render page asking '${header}' when full reject was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', {
-            response: {
-              type: ResponseType.DEFENCE
-            }
-          })
+          draftStoreServiceMock.resolveFind('response:full-rejection')
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -109,7 +104,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
 
         it('should return 500 and render error page when cannot save response draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-rejection')
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -123,29 +118,26 @@ describe('Defendant: full reject - why do you disagree?', () => {
       context('when service is healthy', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response', {
-            response: {
-              type: ResponseType.DEFENCE
-            }
-          })
+          draftStoreServiceMock.resolveFind('response:full-rejection')
         })
 
-        it('when form is valid should render page', async () => {
+        it('when form is invalid should render page with errors', async () => {
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({})
+            .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
+        })
+
+        it('when form is valid should redirect to timeline page', async () => {
           draftStoreServiceMock.resolveSave()
+
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.timelinePage.evaluateUri({ externalId: externalId })))
-        })
-
-        it('when form is invalid should render page', async () => {
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ text: '' })
-            .expect(res => expect(res).to.be.successful.withText(header, 'div class="error-summary"'))
         })
       })
     })

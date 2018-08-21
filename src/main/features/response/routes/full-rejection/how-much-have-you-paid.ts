@@ -13,15 +13,15 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { RoutablePath } from 'shared/router/routablePath'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
-import { FeatureToggles } from 'utils/featureToggles'
 import { FullRejectionGuard } from 'response/guards/fullRejectionGuard'
+import { Claim } from 'claims/models/claim'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaidPage
 
 function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
   res.render(page.associatedView, {
-    form: form,
-    totalAmount: res.locals.claim.totalAmountTillToday
+    form: form
   })
 }
 
@@ -29,7 +29,7 @@ export default express.Router()
   .get(
     page.uri,
     FullRejectionGuard.requestHandler(),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.rejectAllOfClaim.howMuchHaveYouPaid), res)
     }))
@@ -37,12 +37,13 @@ export default express.Router()
     page.uri,
     FormValidator.requestHandler(HowMuchHaveYouPaid, HowMuchHaveYouPaid.fromObject),
     FullRejectionGuard.requestHandler(),
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<HowMuchHaveYouPaid> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
@@ -52,12 +53,12 @@ export default express.Router()
 
         const { externalId } = req.params
 
-        const paidLessThanClaimed = form.model.amount < res.locals.claim.totalAmountTillToday
-        const paidEqualToClaimed = form.model.amount === res.locals.claim.totalAmountTillToday
-        const admissionsEnabled = FeatureToggles.hasAnyAuthorisedFeature(res.locals.claim.features, 'admissions')
+        const paidLessThanClaimed = form.model.amount < claim.totalAmountTillToday
+        const paidEqualToClaimed = form.model.amount === claim.totalAmountTillToday
+        const admissionsEnabled = ClaimFeatureToggles.areAdmissionsEnabled(claim)
 
-        /* redirection matrix:
-
+        /*
+          redirection matrix:
               admissions            !admissions
            <  youHavePaidLessPage   sendYourResponseByEmailPage
            =  taskListPage          taskListPage

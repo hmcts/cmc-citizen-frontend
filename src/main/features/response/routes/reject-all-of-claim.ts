@@ -59,7 +59,6 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.rejectAllOfClaim = form.model
-        draft.document.partialAdmission = draft.document.fullAdmission = undefined
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
@@ -68,8 +67,6 @@ export default express.Router()
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
             break
           case RejectAllOfClaimOption.ALREADY_PAID:
-            res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-            break
           case RejectAllOfClaimOption.DISPUTE:
             res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             break

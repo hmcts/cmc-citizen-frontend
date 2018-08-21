@@ -77,34 +77,6 @@ export const defenceWithAmountClaimedAlreadyPaidDraft = {
   }
 }
 
-// export const partialAdmissionFromStatesPaidDraft = {
-//   ...baseResponseDraft,
-//   responseType: ResponseType.PART_ADMISSION,
-//   defendant: Party
-//   moreTimeNeeded?: YesNoOption
-//   freeMediation?: YesNoOption
-//   statementOfTruth?: StatementOfTruth,
-//     responseType: ResponseType.PART_ADMISSION,
-//     amount: input.amount,
-//     paymentDeclaration: input.paymentDeclaration
-//       && {
-//         paidDate: input.paymentDeclaration.paidDate,
-//         explanation: input.paymentDeclaration.explanation
-//       } as PaymentDeclaration,
-//     defence: input.defence,
-//     timeline: {
-//       rows: input.timeline && input.timeline.rows || [],
-//       comment: input.timeline && input.timeline.comment || undefined
-//     } as DefendantTimeline,
-//     evidence: {
-//       rows: input.evidence && input.evidence.rows || [],
-//       comment: input.evidence && input.evidence.comment || undefined
-//     } as DefendantEvidence,
-//     paymentIntention: PaymentIntention.deserialize(input.paymentIntention),
-//     statementOfMeans: input.statementOfMeans
-//
-//   }
-
 const baseFullAdmissionDraft = {
   response: {
     type: {
