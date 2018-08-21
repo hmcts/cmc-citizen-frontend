@@ -93,6 +93,28 @@
 
         {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
           {{ row(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+          {{
+            timelineCheckAndSend(
+              header = 'Timeline of what happened (optional)',
+              timeline = draft.timeline.getPopulatedRowsOnly(),
+              url = FullRejectionPaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+              bottomBorder = false
+            )
+          }}
+          {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+
+          {{
+             evidenceCheckAndSend(
+               header = 'Your evidence (optional)',
+               evidence = draft.evidence.getPopulatedRowsOnly(),
+               url = FullRejectionPaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+               bottomBorder = false
+             )
+          }}
+
+          {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+
         {% endif %}
       {% endif %}
     {% endif %}

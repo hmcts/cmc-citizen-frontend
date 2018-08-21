@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { Paths } from 'response/paths'
+import { FullRejectionPaths } from 'response/paths'
 import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
@@ -16,9 +16,9 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath: string = Paths.timelinePage.evaluateUri({ externalId: externalId })
+const pagePath: string = FullRejectionPaths.timelinePage.evaluateUri({ externalId: externalId })
 
-describe('Defendant response: timeline', () => {
+describe('Defendant response: Full rejection timeline', () => {
 
   attachDefaultHooks(app)
 
@@ -112,7 +112,7 @@ describe('Defendant response: timeline', () => {
 
         context('valid form', () => {
 
-          ['response', 'response:partial-admission'].forEach(responseDraftType => {
+          ['response', 'response:full-rejection'].forEach(responseDraftType => {
             it('should redirect to evidence page when and everything is fine', async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
               draftStoreServiceMock.resolveFind(responseDraftType)
@@ -123,7 +123,7 @@ describe('Defendant response: timeline', () => {
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ rows: [{ date: 'Damaged roof', description: '299' }] })
                 .expect(res => expect(res).to.be.redirect
-                  .toLocation(Paths.evidencePage.evaluateUri({ externalId: externalId })))
+                  .toLocation(FullRejectionPaths.evidencePage.evaluateUri({ externalId: externalId })))
             })
           })
         })

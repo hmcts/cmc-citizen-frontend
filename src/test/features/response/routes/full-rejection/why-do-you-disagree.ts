@@ -137,7 +137,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
+              .toLocation(Paths.timelinePage.evaluateUri({ externalId: externalId })))
         })
 
         it('when form is invalid should render page', async () => {

@@ -1,6 +1,6 @@
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import {
   PaymentOption as PaymentOptionDraft,
   PaymentType

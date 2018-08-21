@@ -1,6 +1,6 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
+import { FullRejectionPaths, Paths } from 'response/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -13,7 +13,7 @@ import { Claim } from 'claims/models/claim'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
-const page: RoutablePath = Paths.evidencePage
+const page: RoutablePath = FullRejectionPaths.evidencePage
 
 function renderView (form: Form<DefendantEvidence>, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -41,14 +41,7 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      const claim: Claim = res.locals.claim
-      let evidence
-
-      if (ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()) {
-        evidence = draft.document.partialAdmission.evidence
-      } else {
-        evidence = draft.document.evidence
-      }
+      let evidence = draft.document.evidence
 
       renderView(new Form(evidence), res)
     })

@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { Paths } from 'response/paths'
+import { FullRejectionPaths, Paths } from 'response/paths'
 import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
@@ -16,12 +16,11 @@ import { generateString } from 'test/app/forms/models/validationUtils'
 import { EvidenceType } from 'forms/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
-import { ResponseType } from 'response/form/models/responseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath: string = Paths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath: string = FullRejectionPaths.evidencePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Defendant response: evidence', () => {
+describe('Defendant response: Full rejection evidence', () => {
 
   attachDefaultHooks(app)
 
@@ -114,36 +113,9 @@ describe('Defendant response: evidence', () => {
       describe('submit form', () => {
 
         context('valid form should redirect to', () => {
-
-          it('impactOfDisputePage when it is not FULL DEFENCE', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
-            draftStoreServiceMock.resolveSave(100)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.impactOfDisputePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
           it('taskListPage when it is FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave(100)
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ rows: [{ type: EvidenceType.CONTRACTS_AND_AGREEMENTS.value, description: 'Bla bla' }] })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
-          it('taskListPage when it is PART ADMISSION', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response:partial-admission', { response: { type: ResponseType.PART_ADMISSION } })
             draftStoreServiceMock.resolveSave(100)
 
             await request(app)
