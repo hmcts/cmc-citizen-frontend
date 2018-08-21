@@ -9,6 +9,8 @@
 {% from "./claimStatus/ccjRequested.njk" import
 ccjRequestedForClaimantClaimDetails,
 ccjRequestedForDefendantClaimDetails %}
+{% from "./claimStatus/ccjIssued.njk" import
+ccjIssuedForClaimantClaimDetails %}
 
 {% from "./claimStatus/claimRejected.njk" import
   claimRejectedAlreadyPaidForClaimantClaimDetails,
@@ -50,6 +52,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.CCJ_ISSUED %}
+        {{ ccjIssuedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
@@ -74,6 +78,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerRejectedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForClaimantClaimDetails(claim) }}
+      {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED and claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+        {{ repaymentPlanOfferSettlementReachedClaimDetails() }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
@@ -124,6 +130,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerRejectedForDefendantClaimDetails() }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
+      {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED and claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+        {{ repaymentPlanOfferSettlementReachedClaimDetails() }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
           {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
