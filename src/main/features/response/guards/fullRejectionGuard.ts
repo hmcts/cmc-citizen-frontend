@@ -7,7 +7,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { NotFoundError } from 'errors'
 
-const logger = Logger.getLogger('response/guards/responseGuard')
+const logger = Logger.getLogger('response/guards/fullRejectionGuard')
 
 export class FullRejectionGuard {
 
