@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set headingVisible = false %}
+{% set heading = 'Confirmation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="govuk-box-highlight">
+        <h1 class="bold-large">
+          {% if accepted %}
+            {{ t('You’ve accepted their response') }}
+          {% elif mediationRequested %}
+            {{ t('You’ve requested free mediation') }}
+          {% else %}
+            {{ t('You’ve rejected their response') }}
+          {% endif %}
+        </h1>
+        <p class="reference-number">
+          <span>{{ t('Claim number:') }}</span>
+          <span class="block bold-large">{{ claim.claimNumber }}</span>
+        </p>
+        <p>
+          <span class="bold">{{ confirmationDate | date }}</span>
+        </p>
+      </div>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+
+      {% if accepted %}
+        <p>The claim is now settled. We'll email the defendant Mary Richards to tell them.</p>
+      {% elif mediationRequested %}
+      {% else %}
+        <p>The court will review the case. You might have to go to a hearing.</p>
+        <p>We'll contact you if we set a hearing date to tell you how to prepare.</p>
+      {% endif %}
+
+
+      {% include "includes/service_survey_link.njk" %}
+
+      <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
+
+      {{ supportWidget() }}
+    </div>
+  </div>
+{% endblock %}

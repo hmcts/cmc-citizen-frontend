@@ -6,6 +6,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { Claim } from 'claims/models/claim'
 import { NotFoundError } from 'errors'
 import { Paths as DashboardPaths } from 'dashboard/paths'
+import { ResponseType } from 'response/form/models/responseType'
 
 const logger = Logger.getLogger('response/guards/responseGuard')
 
@@ -40,6 +41,19 @@ export class ResponseGuard {
     }
     const accessDeniedCallback = (req: express.Request, res: express.Response) => {
       logger.warn('State guard: no response exists - rendering not found page')
+      throw new NotFoundError(req.path)
+    }
+    return GuardFactory.create(allowed, accessDeniedCallback)
+  }
+
+  static checkStatesPaidResponseExists (): express.RequestHandler {
+    const allowed = (res: express.Response) => {
+      const claim: Claim = res.locals.claim
+      return claim.response !== undefined && claim.response.responseType === ResponseType.PART_ADMISSION.value
+    }
+
+    const accessDeniedCallback = (req: express.Request, res: express.Response) => {
+      logger.warn('State guard: response is not states paid - rendering not found page')
       throw new NotFoundError(req.path)
     }
     return GuardFactory.create(allowed, accessDeniedCallback)
