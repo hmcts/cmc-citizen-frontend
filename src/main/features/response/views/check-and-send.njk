@@ -86,7 +86,8 @@
           paymentPlan = draft.fullAdmission.paymentIntention.paymentPlan,
           explanation = draft.statementOfMeans.explanation.text,
           Paths = FullAdmissionPaths,
-          externalId = claim.externalId
+          externalId = claim.externalId,
+          statementOfMeansIsApplicable = statementOfMeansIsApplicable
         )
       }}
     {% endif %}
@@ -191,7 +192,8 @@
               paymentPlan = draft.partialAdmission.paymentIntention.paymentPlan,
               explanation = draft.statementOfMeans.explanation.text,
               Paths = PartAdmissionPaths,
-              externalId = claim.externalId
+              externalId = claim.externalId,
+              statementOfMeansIsApplicable = statementOfMeansIsApplicable
             )
           }}
         {% endif %}
