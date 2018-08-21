@@ -43,9 +43,7 @@ export default express.Router()
       const user: User = res.locals.user
 
       if (draft.document.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
-        const ccj: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
-
-        await CCJClient.issue(claim.externalId, ccj, user)
+        await CCJClient.issue(claim, draft, user)
       } else {
         const settlement: Settlement = prepareSettlement(claim, draft.document)
 

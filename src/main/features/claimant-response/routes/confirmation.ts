@@ -49,7 +49,7 @@ function hasAcceptedOffer (claim: Claim): boolean {
     ccjRepaymentPlan.instalmentAmount,
     new LocalDate(ccjRepaymentPlan.firstPaymentDate.year(),
       ccjRepaymentPlan.firstPaymentDate.month(),
-      ccjRepaymentPlan.firstPaymentDate.day()
+      ccjRepaymentPlan.firstPaymentDate.date()
     ),
     paymentSchedule
   )
@@ -70,7 +70,6 @@ export default express.Router()
           claim: claim,
           confirmationDate: MomentFactory.currentDate(),
           repaymentPlanOrigin: claim.settlement && getRepaymentPlanOrigin(claim.settlement),
-          countyCourtJudgement: claim.countyCourtJudgmentIssuedAt !== undefined,
           hasAcceptedOffer: hasAcceptedOffer(claim)
         })
     }))

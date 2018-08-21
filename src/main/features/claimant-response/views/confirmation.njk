@@ -16,7 +16,7 @@
             {{ t('You’ve proposed an alternative repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
-          {% elseif countyCourtJudgement %}
+          {% elseif claim.countyCourtJudgmentIssuedAt %}
             {{ t('County Court Judgment issued') }}
           {% endif %}
         </h1>

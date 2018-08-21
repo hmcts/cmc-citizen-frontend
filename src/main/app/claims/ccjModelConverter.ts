@@ -99,17 +99,11 @@ export class CCJModelConverter {
     const paymentIntention: PaymentIntention = defendantPaymentMethodAccepted ? getDefendantPaymentIntention(claim)
       : claimantResponse.alternatePaymentMethod
 
-    let repaymentPlan: RepaymentPlan
-    let payBySetDate: Moment
-    let paymentOption: string
-
-    if (paymentIntention) {
-      repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
-        paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-        paymentIntention.paymentPlan.paymentSchedule.value)
-      payBySetDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
-      paymentOption = paymentIntention.paymentOption.option.value
-    }
+    const repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
+      paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
+      paymentIntention.paymentPlan.paymentSchedule.value)
+    const payBySetDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
+    const paymentOption: string = paymentIntention.paymentOption.option.value
 
     const alreadyPaidAmount: number = convertAlreadyPaidAmount(claim, claimantResponse)
 
