@@ -40,6 +40,6 @@ export default express.Router()
           claim: claim,
           confirmationDate: MomentFactory.currentDate(),
           repaymentPlanOrigin: claim.settlement && getRepaymentPlanOrigin(claim.settlement),
-          hasAcceptedDefendantsPaymentIntention: hasAcceptedDefendantsPaymentIntention(claim)
+          paymentIntentionAccepted: hasAcceptedDefendantsPaymentIntention(claim)
         })
     }))

@@ -103,12 +103,12 @@ export class CCJModelConverter {
     const repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
       paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
       paymentIntention.paymentPlan.paymentSchedule.value)
-    const payBySetDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
+    const paymentDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
     const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption
 
     const alreadyPaidAmount: number = convertAlreadyPaidAmount(claim, claimantResponse)
 
-    return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, payBySetDate)
+    return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, paymentDate)
   }
 
   static convertForRequest (draft: DraftCCJ): CountyCourtJudgment {

@@ -37,7 +37,7 @@
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
 
       {% if claim.countyCourtJudgmentIssuedAt %}
-        {% if hasAcceptedDefendantsPaymentIntention %}
+        {% if paymentIntentionAccepted %}
           <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
         {% else %}
           <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}</p>
