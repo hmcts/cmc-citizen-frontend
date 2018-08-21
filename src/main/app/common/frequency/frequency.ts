@@ -30,7 +30,7 @@ export class Frequency {
   }
 
   static ofWeekly (weeklyValue: number): Frequency {
-    const filterByFrequencyWeeklyValue = (frequency: Frequency) => frequency.inWeeks == weeklyValue
+    const filterByFrequencyWeeklyValue = (frequency: Frequency) => frequency.inWeeks === weeklyValue
 
     const result: Frequency = Frequency.all().filter(filterByFrequencyWeeklyValue).pop()
 

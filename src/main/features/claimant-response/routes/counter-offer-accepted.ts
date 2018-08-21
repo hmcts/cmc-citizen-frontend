@@ -37,8 +37,8 @@ export default express.Router()
       await new DraftService().save(draft, user.bearerToken)
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
-        iscourtOrderPaymentPlanConvertedByDefendantFrequency: claimantPaymentPlan.frequency != defendantPaymentPlan.frequency,
-        claimantPaymentPlan, 
+        iscourtOrderPaymentPlanConvertedByDefendantFrequency: claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency,
+        claimantPaymentPlan,
         courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency) })
     })
   .post(

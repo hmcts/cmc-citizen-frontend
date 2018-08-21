@@ -25,8 +25,8 @@ export class CourtOrderHelper {
     const defendantMonthlyDisposableIncome: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(claimResponse.statementOfMeans)
 
     const courtOrder: CourtOrder = new CourtOrder(
-      defendantMonthlyInstalmentAmount, 
-      claimantMonthlyInstalmentAmount, 
+      defendantMonthlyInstalmentAmount,
+      claimantMonthlyInstalmentAmount,
       defendantMonthlyDisposableIncome
     )
 

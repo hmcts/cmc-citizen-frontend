@@ -20,7 +20,7 @@ export class DraftClaimantResponse extends DraftDocument {
   rejectionReason?: RejectionReason
   acceptCourtOffer?: AcceptCourtOffer
   alternatePaymentMethod?: PaymentIntention
-  
+
   constructor () {
     super()
   }

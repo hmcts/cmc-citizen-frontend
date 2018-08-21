@@ -4,7 +4,7 @@ import * as _ from 'lodash'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { PaymentPlan as PaymentPlanModel} from 'shared/components/payment-intention/model/paymentPlan'
+import { PaymentPlan as PaymentPlanModel } from 'shared/components/payment-intention/model/paymentPlan'
 import { Paths } from 'shared/components/payment-intention/paths'
 
 import { GuardFactory } from 'response/guards/guardFactory'

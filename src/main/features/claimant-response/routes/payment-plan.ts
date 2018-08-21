@@ -51,7 +51,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     const externalId: string = req.params.externalId
 
-    if (courtOrderAmount == courtOrder.claimantMonthlyInstalment) {
+    if (courtOrderAmount === courtOrder.claimantMonthlyInstalment) {
       return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
     } else {
       return Paths.courtOfferPage.evaluateUri({ externalId: externalId })

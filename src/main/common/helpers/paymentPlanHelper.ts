@@ -13,7 +13,7 @@ import { ResponseDraft } from 'features/response/draft/responseDraft'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 import { RepaymentPlan as ClaimPaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { PaymentPlan as DraftPaymentPlan} from 'main/common/components/payment-intention/model/paymentPlan'
+import { PaymentPlan as DraftPaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
 import { PaymentPlan as FormPaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 
 export class PaymentPlanHelper {
@@ -32,7 +32,7 @@ export class PaymentPlanHelper {
         return PaymentPlanHelper.createPaymentPlanFromClaimPartialAdmission(response as PartialAdmissionResponse)
       case ResponseType.FULL_ADMISSION:
         return PaymentPlanHelper.createPaymentPlanFromClaimFullAdmission(
-          response as FullAdmissionResponse, 
+          response as FullAdmissionResponse,
           claim.claimData.amount.totalAmount()
         )
       default:
@@ -46,7 +46,7 @@ export class PaymentPlanHelper {
         return PaymentPlanHelper.createPaymentPlanFromDraftDraftClaimantResponse(draft as DraftClaimantResponse)
       case ResponseDraft:
         throw new Error(`Draft object of type 'ResponseDraft' not yet supported`)
-      default: 
+      default:
         throw new Error(`Incompatible draft object: ${draft}`)
     }
   }
@@ -57,9 +57,9 @@ export class PaymentPlanHelper {
     }
 
     return PaymentPlanHelper.createPaymentPlan(
-      paymentPlanForm.totalAmount, 
-      paymentPlanForm.instalmentAmount, 
-      paymentPlanForm.paymentSchedule ? paymentPlanForm.paymentSchedule.value : undefined, 
+      paymentPlanForm.totalAmount,
+      paymentPlanForm.instalmentAmount,
+      paymentPlanForm.paymentSchedule ? paymentPlanForm.paymentSchedule.value : undefined,
       undefined)
   }
 
@@ -69,8 +69,8 @@ export class PaymentPlanHelper {
       return undefined
     }
     return PaymentPlanHelper.createPaymentPlan(
-      response.amount, 
-      paymentPlan.instalmentAmount, 
+      response.amount,
+      paymentPlan.instalmentAmount,
       paymentPlan.paymentSchedule,
       paymentPlan.firstPaymentDate
     )
@@ -82,8 +82,8 @@ export class PaymentPlanHelper {
       return undefined
     }
     return PaymentPlanHelper.createPaymentPlan(
-      totalAmount, 
-      paymentPlan.instalmentAmount, 
+      totalAmount,
+      paymentPlan.instalmentAmount,
       paymentPlan.paymentSchedule,
       paymentPlan.firstPaymentDate
     )
@@ -104,8 +104,8 @@ export class PaymentPlanHelper {
     }
 
     return PaymentPlanHelper.createPaymentPlan(
-      paymentPlan.totalAmount, 
-      paymentPlan.instalmentAmount, 
+      paymentPlan.totalAmount,
+      paymentPlan.instalmentAmount,
       paymentPlan.paymentSchedule ? paymentPlan.paymentSchedule.value : undefined,
       paymentPlan.firstPaymentDate ? paymentPlan.firstPaymentDate.toMoment() : undefined
     )
@@ -116,6 +116,6 @@ export class PaymentPlanHelper {
       return undefined
     }
 
-    return PaymentPlan.create(totalAmount, instalmentAmount, Frequency.of(frequency), firstPaymentDate)  
+    return PaymentPlan.create(totalAmount, instalmentAmount, Frequency.of(frequency), firstPaymentDate)
   }
 }

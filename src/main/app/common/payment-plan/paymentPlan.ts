@@ -54,7 +54,7 @@ export class PaymentPlan {
     return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
 
-  convertTo(frequency: Frequency): PaymentPlan {
+  convertTo (frequency: Frequency): PaymentPlan {
     let monthlyInstalmentAmount
     switch (frequency) {
       case Frequency.WEEKLY:
@@ -72,7 +72,7 @@ export class PaymentPlan {
       default:
         throw new Error(`Incompatible Frequency: ${frequency}`)
     }
-    
+
     return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, this.startDate)
   }
 

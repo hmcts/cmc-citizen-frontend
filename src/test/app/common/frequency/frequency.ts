@@ -38,7 +38,7 @@ describe('Frequency', () => {
       ].forEach(testCase => {
         it(`should return Frequency object for valid weekly value input: ${testCase.frequencyWeeklyValue}`, () => {
           const frequency: Frequency = Frequency.ofWeekly(testCase.frequencyWeeklyValue)
-  
+
           expect(frequency instanceof Frequency).to.equal(true)
           expect(frequency).to.equal(testCase.expectedFrequency)
           expect(frequency.monthlyRatio).to.equal(testCase.expectedFrequency.monthlyRatio)

@@ -112,7 +112,7 @@ describe('StatementOfMeansCalculations', () => {
 
     describe('when no debts, courtOrders and expenses are provided', () => {
       it('should calculate a total monthly expense of zero', () => {
-        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense({bankAccounts: []})).to.equal(0)
+        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense({ bankAccounts: [] })).to.equal(0)
       })
     })
   })
@@ -222,7 +222,7 @@ describe('StatementOfMeansCalculations', () => {
 
     describe('when no employment and incomes are provided', () => {
       it('should calculate a total monthly income of zero', () => {
-        expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome({bankAccounts: []})).to.equal(0)
+        expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome({ bankAccounts: [] })).to.equal(0)
       })
     })
   })

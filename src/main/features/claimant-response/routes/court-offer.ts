@@ -96,7 +96,7 @@ export default express.Router()
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
 
         draft.document.acceptCourtOffer = form.model
-        
+
         const { externalId } = req.params
 
         if (form.model.acceptCourtOffer.option === YesNoOption.YES.option) {
