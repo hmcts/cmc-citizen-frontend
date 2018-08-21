@@ -5,10 +5,10 @@ import { BankAccountType } from 'response/form/models/statement-of-means/bankAcc
 import { OnTaxPayments } from 'response/form/models/statement-of-means/onTaxPayments'
 
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
-import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { localDateFrom } from 'test/localDateUtils'
@@ -42,18 +42,20 @@ import { Explanation } from 'response/form/models/statement-of-means/explanation
 import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
-function validResponseDraftWith (paymentType: DefendantPaymentType): ResponseDraft {
+function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
   responseDraft.response = new Response(ResponseType.FULL_ADMISSION)
   responseDraft.fullAdmission = new FullAdmission()
-  responseDraft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
+  responseDraft.fullAdmission.paymentIntention = new PaymentIntention()
+  responseDraft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(paymentType)
   switch (paymentType) {
-    case DefendantPaymentType.BY_SET_DATE:
-      responseDraft.fullAdmission.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
+    case PaymentType.BY_SET_DATE:
+      responseDraft.fullAdmission.paymentIntention.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
       break
-    case DefendantPaymentType.INSTALMENTS:
-      responseDraft.fullAdmission.paymentPlan = new PaymentPlan(
+    case PaymentType.INSTALMENTS:
+      responseDraft.fullAdmission.paymentIntention.paymentPlan = new PaymentPlan(
         1000,
         100,
         localDateFrom(MomentFactory.currentDate().add(1, 'day')),
@@ -111,7 +113,7 @@ describe('StatementOfMeansTask', () => {
     let responseDraft: ResponseDraft
 
     beforeEach(() => {
-      responseDraft = validResponseDraftWith(DefendantPaymentType.BY_SET_DATE)
+      responseDraft = validResponseDraftWith(PaymentType.BY_SET_DATE)
     })
 
     context('when it applies', () => {
@@ -132,23 +134,6 @@ describe('StatementOfMeansTask', () => {
       })
 
       it('should be completed when all SOM items are valid', () => {
-        expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
-      })
-    })
-
-    context('when it does not apply', () => {
-
-      beforeEach(() => {
-        responseDraft.response = new Response(ResponseType.DEFENCE)
-      })
-
-      it('should be complete when statement of means is undefined', () => {
-        responseDraft.statementOfMeans = undefined
-        expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
-      })
-
-      it('should be complete when statement of means item is invalid', () => {
-        responseDraft.statementOfMeans.residence.type = undefined
         expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
       })
     })

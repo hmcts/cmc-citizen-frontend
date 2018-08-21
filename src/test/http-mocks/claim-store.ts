@@ -300,6 +300,18 @@ export function resolveRejectOffer (by: string = 'claimant') {
     .reply(HttpStatus.CREATED)
 }
 
+export function resolveSignSettlementAgreement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/.+/settlement`))
+    .reply(HttpStatus.CREATED)
+}
+
+export function rejectSignSettlementAgreement (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/.+/settlement`))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveCountersignOffer (by: string = 'defendant') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/.+/offers/${by}/countersign`))
@@ -323,6 +335,18 @@ export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
     .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
     .reply(HttpStatus.OK)
+}
+
+export function resolvePostponedDeadline (deadline: string): mock.Scope {
+  return mock(`${serviceBaseURL}/deadline`)
+    .get(new RegExp('/\\d{4}-\\d{2}-\\d{2}'))
+    .reply(HttpStatus.OK, deadline)
+}
+
+export function rejectPostponedDeadline (reason: string = 'HTTP error'): mock.Scope {
+  return mock(`${serviceBaseURL}/deadline`)
+    .get(new RegExp('/\\d{4}-\\d{2}-\\d{2}'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveAddRolesToUser (role: string) {

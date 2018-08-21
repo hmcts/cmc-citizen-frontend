@@ -6,8 +6,7 @@ const validator = new Validator()
 
 export class WhyDoYouDisagreeTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return responseDraft.isResponsePartiallyAdmitted()
-      && WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.partialAdmission.whyDoYouDisagree)
+    return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.partialAdmission.whyDoYouDisagree)
   }
 
   private static isWhyDoYouDisagreeValid (model: Defence): boolean {

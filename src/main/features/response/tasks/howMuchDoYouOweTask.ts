@@ -7,8 +7,7 @@ const validator = new Validator()
 
 export class HowMuchDoYouOweTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
-    return responseDraft.isResponsePartiallyAdmitted()
-      && responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
+    return responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
       && HowMuchDoYouOweTask.isHowMuchDoYouOweValid(responseDraft.partialAdmission.howMuchDoYouOwe)
   }
 

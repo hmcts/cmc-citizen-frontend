@@ -37,15 +37,13 @@
       { amount: claim.response.amount | numeral }) }}
   </p>
   {{ _respond(claim, 'View and respond to offer') }}
-
-
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}
   {#NEEDS TO BE DELETED - After admissions feature toggle is removed#}
   {{ t('You’ve admitted part of the claim.') }}
+  {{ _respond(claim, 'View and respond to the offer') }}
 {% endmacro %}
-
 
 {% macro _downloadResponseLink(claim) %}
   <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}

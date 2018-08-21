@@ -5,13 +5,14 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const validator = new Validator()
 
+function isValid (model: HowMuchDoYouOwe): boolean {
+  return !!model && validator.validateSync(model).length === 0
+}
+
 export class WhenWillYouPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
     return responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
-      && WhenWillYouPayTask.isWhenWillYouPayValid(responseDraft.partialAdmission.paymentOption)
-  }
-
-  private static isWhenWillYouPayValid (model: HowMuchDoYouOwe): boolean {
-    return !!model && validator.validateSync(model).length === 0
+      && responseDraft.partialAdmission.paymentIntention !== undefined
+      && isValid(responseDraft.partialAdmission.paymentIntention.paymentOption)
   }
 }
