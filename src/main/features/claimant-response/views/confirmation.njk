@@ -29,7 +29,7 @@
         </p>
         {% if claim.countyCourtJudgmentIssuedAt %}
           <p class="receipt-download-container">
-            <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgement') }}</a> (PDF)
+            <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgment') }}</a> (PDF)
           </p>
         {% endif %}
       </div>
