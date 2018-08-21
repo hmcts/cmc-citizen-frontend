@@ -7,6 +7,7 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { Frequency } from 'common/frequency/frequency'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { OfferClient } from 'claims/offerClient'
@@ -24,12 +25,21 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
-      const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
+      const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
+      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
+      const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+        defendantPaymentPlan.totalAmount,
+        draft.document.courtOrderAmount,
+        Frequency.MONTHLY,
+        claimantPaymentPlan.startDate
+      )
 
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
-        lastPaymentDate: paymentPlan ? paymentPlan.calculateLastPaymentDate() : undefined
+        courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
       })
     })
   )

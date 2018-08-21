@@ -54,11 +54,11 @@
           changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
         {% if draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.INSTALMENTS.value %}
-          {{ row(label = 'Regular payments of', bold = true, value = draft.alternatePaymentMethod.paymentPlan.instalmentAmount | numeral,
+          {{ row(label = 'Regular payments of', bold = true, value = courtOrderPaymentPlan.instalmentAmount | numeral,
             changeLink = ClaimantResponsePaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
-          {{ row(label = 'Frequency of payments', bold = true, value = draft.alternatePaymentMethod.paymentPlan.paymentSchedule.displayValue,
+          {{ row(label = 'Frequency of payments', bold = true, value = courtOrderPaymentPlan.frequency | renderFrequencyViewType,
             bottomBorder = false) }}
-          {{ row(label = 'Date for first instalment', bold = true, value = draft.alternatePaymentMethod.paymentPlan.firstPaymentDate.toMoment() | date,
+          {{ row(label = 'Date for first instalment', bold = true, value = courtOrderPaymentPlan.startDate | date,
             bottomBorder = true) }}
         {% endif %}
       {% endif %}
@@ -105,7 +105,7 @@
           bottomBorder = true, bold = true
         ) }}
         {{ row(label = 'Completion date',
-          value = lastPaymentDate | date,
+          value = courtOrderPaymentPlan.calculateLastPaymentDate() | date,
           bottomBorder = true, bold = true
         ) }}
       {% endif %}
