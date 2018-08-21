@@ -53,7 +53,7 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.partialAdmission.howMuchHaveYouPaidPage = form.model
+        draft.document.partialAdmission.howMuchHaveYouPaid = form.model
 
         await new DraftService().save(draft, user.bearerToken)
 
