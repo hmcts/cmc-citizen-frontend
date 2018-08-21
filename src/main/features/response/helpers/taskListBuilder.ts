@@ -199,8 +199,9 @@ export class TaskListBuilder {
   }
 
   static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)
-      || draft.isResponseRejectedFullyWithDispute()) {
+    if (draft.isResponseRejectedFullyWithDispute()
+      || TaskListBuilder.isRejectedFullyBecausePaidInFullLessThanClaimAmountAndExplanationGiven(claim, draft)
+      || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
       return new TaskList(
         'Resolving the claim', [
           new TaskListItem(

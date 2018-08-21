@@ -283,7 +283,7 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if (admissionsApplicable and draft.isResponsePartiallyAdmitted()) or draft.isResponseRejectedFullyWithDispute() %}
+    {% if (admissionsApplicable and (draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyBecausePaidWhatOwed())) or draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(
