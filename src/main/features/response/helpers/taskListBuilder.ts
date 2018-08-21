@@ -1,10 +1,10 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import {
-  Paths,
   FullAdmissionPaths,
-  PartAdmissionPaths,
   FullRejectionPaths,
+  PartAdmissionPaths,
+  Paths,
   StatementOfMeansPaths
 } from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -27,6 +27,7 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -76,7 +77,8 @@ export class TaskListBuilder {
       )
 
       if (draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
-        && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
+        && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday
+        && FeatureToggles.hasAnyAuthorisedFeature(claim.features, 'admissions')) {
         tasks.push(
           new TaskListItem(
             'Why do you disagree with the amount claimed?',

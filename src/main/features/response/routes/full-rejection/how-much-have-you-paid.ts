@@ -1,9 +1,11 @@
+/* tslint:disable:no-default-export */
 import * as express from 'express'
 
 import { FullRejectionPaths, Paths } from 'response/paths'
 
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
+import { Logger } from '@hmcts/nodejs-logging'
 
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
@@ -14,8 +16,8 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
-import { FullRejectionGuard } from 'response/guards/fullRejectionGuard'
+import { FeatureToggles } from 'utils/featureToggles'
+import { Claim } from 'claims/models/claim'
 
 const page: RoutablePath = FullRejectionPaths.howMuchHaveYouPaid
 
@@ -29,21 +31,29 @@ function renderView (form: Form<HowMuchHaveYouPaid>, res: express.Response) {
   })
 }
 
-/* tslint:disable:no-default-export */
+const responseRejectedGuardHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+  if (draft.document.isResponseRejected()) {
+    next()
+  } else {
+    const claim: Claim = res.locals.claim
+    Logger.getLogger('response/guards/responseGuard').warn('Full Rejection Guard: user tried to access page for full rejection flow')
+    res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: claim.externalId }))
+  }
+}
+
 export default express.Router()
   .get(
     page.uri,
-    FullRejectionGuard.requestHandler(),
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
+    responseRejectedGuardHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.rejectAllOfClaim.howMuchHaveYouPaid), res)
     }))
   .post(
     page.uri,
-    FullRejectionGuard.requestHandler(),
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     FormValidator.requestHandler(HowMuchHaveYouPaid, HowMuchHaveYouPaid.fromObject),
+    responseRejectedGuardHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<HowMuchHaveYouPaid> = req.body
 
@@ -59,7 +69,11 @@ export default express.Router()
 
         const { externalId } = req.params
         if (form.model.amount < res.locals.claim.totalAmountTillToday) {
-          res.redirect(FullRejectionPaths.youHavePaidLess.evaluateUri({ externalId: externalId }))
+          if (FeatureToggles.hasAnyAuthorisedFeature(res.locals.claim.features, 'admissions')) {
+            res.redirect(FullRejectionPaths.youHavePaidLess.evaluateUri({ externalId: externalId }))
+          } else {
+            res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
+          }
         } else {
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         }
