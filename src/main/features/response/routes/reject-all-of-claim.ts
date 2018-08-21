@@ -13,7 +13,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
-import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 function isRequestAllowed (res: express.Response): boolean {
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -69,7 +69,8 @@ export default express.Router()
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
             break
           case RejectAllOfClaimOption.ALREADY_PAID:
-            if (FeatureToggles.isEnabled('admissions')) {
+            const claim: Claim = res.locals.claim
+            if (ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
               res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             } else {
               res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
