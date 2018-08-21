@@ -11,6 +11,7 @@ import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { RoutablePath } from 'shared/router/routablePath'
+import { getAmountSettledFor } from 'shared/components/ccj/ccjHelper'
 
 /* tslint:disable:no-default-export */
 export abstract class AbstractPaidAmountPage<Draft> {
@@ -54,7 +55,7 @@ export abstract class AbstractPaidAmountPage<Draft> {
     const claim: Claim = res.locals.claim
     res.render(this.getView(), {
       form: form,
-      totalAmount: claim.totalAmountTillToday
+      totalAmount: getAmountSettledFor(claim, res.locals.draft.document) || claim.totalAmountTillToday
     })
   }
 
