@@ -51,7 +51,7 @@
 
     {% if draft.response.type === ResponseType.DEFENCE %}
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
-        {% set rejectAllOption = 'I’ve already paid the claim in full' %}
+        {% set rejectAllOption = 'I’ve paid what I believe I owe' %}
       {% endif %}
 
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
@@ -99,7 +99,7 @@
             timelineCheckAndSend(
               header = 'Timeline of what happened (optional)',
               timeline = draft.timeline.getPopulatedRowsOnly(),
-              url = FullRejectionPaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+              url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
               bottomBorder = false
             )
           }}
@@ -109,7 +109,7 @@
              evidenceCheckAndSend(
                header = 'Your evidence (optional)',
                evidence = draft.evidence.getPopulatedRowsOnly(),
-               url = FullRejectionPaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+               url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
                bottomBorder = false
              )
           }}
