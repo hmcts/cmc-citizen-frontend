@@ -27,7 +27,7 @@
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
-        {% if countyCourtJudgement %}
+        {% if claim.countyCourtJudgmentIssuedAt %}
           <p class="receipt-download-container">
             <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgement') }}</a> (PDF)
           </p>
