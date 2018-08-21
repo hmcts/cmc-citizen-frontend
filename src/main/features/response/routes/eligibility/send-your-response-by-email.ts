@@ -23,7 +23,6 @@ export default express.Router()
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
     res.render(Paths.sendYourResponseByEmailPage.associatedView,
       {
-        claim: res.locals.claim,
         draft: draft.document,
         fees: supportedIssueFees
       }
