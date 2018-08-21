@@ -1,17 +1,12 @@
-import { ResponseDraft } from 'response/draft/responseDraft'
 import { Validator } from 'class-validator'
 import { Defence } from 'response/form/models/defence'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 const validator = new Validator()
 
 export class WhyDoYouDisagreeTask {
-  static isCompleted (responseDraft: ResponseDraft): boolean {
-    if (responseDraft.isResponsePartiallyAdmitted()) {
-      return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.partialAdmission.whyDoYouDisagree)
-    }
-    if (responseDraft.isResponseRejectedFullyBecausePaidWhatOwed()) {
-      return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(responseDraft.rejectAllOfClaim.whyDoYouDisagree)
-    }
+  static isCompleted (whyDoYouDisagree: WhyDoYouDisagree): boolean {
+    return WhyDoYouDisagreeTask.isWhyDoYouDisagreeValid(whyDoYouDisagree)
   }
 
   private static isWhyDoYouDisagreeValid (model: Defence): boolean {

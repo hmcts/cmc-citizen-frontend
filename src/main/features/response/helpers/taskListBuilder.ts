@@ -66,7 +66,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'How much have you paid?',
           FullRejectionPaths.howMuchHaveYouPaid.evaluateUri({ externalId: externalId }),
-          HowMuchHaveYouPaidTask.isCompleted(draft)
+          HowMuchHaveYouPaidTask.isCompleted(draft.rejectAllOfClaim.howMuchHaveYouPaid)
         )
       )
     }
@@ -78,7 +78,7 @@ export class TaskListBuilder {
         new TaskListItem(
           'Why do you disagree with the amount claimed?',
           FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
-          WhyDoYouDisagreeTask.isCompleted(draft)
+          WhyDoYouDisagreeTask.isCompleted(draft.rejectAllOfClaim.whyDoYouDisagree)
         )
       )
     }
@@ -134,7 +134,7 @@ export class TaskListBuilder {
             new TaskListItem(
               'How much have you paid?',
               PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
-              HowMuchHaveYouPaidTask.isCompleted(draft)
+              HowMuchHaveYouPaidTask.isCompleted(draft.partialAdmission.howMuchHaveYouPaid)
             )
           )
         } else {
@@ -151,7 +151,7 @@ export class TaskListBuilder {
           new TaskListItem(
             'Why do you disagree with the amount claimed?',
             PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
-            WhyDoYouDisagreeTask.isCompleted(draft)
+            WhyDoYouDisagreeTask.isCompleted(draft.partialAdmission.whyDoYouDisagree)
           )
         )
 
@@ -233,7 +233,7 @@ export class TaskListBuilder {
   }
 
   private static isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted (draft: ResponseDraft): boolean {
-    return draft.isResponsePartiallyAdmitted() && WhyDoYouDisagreeTask.isCompleted(draft)
+    return draft.isResponsePartiallyAdmitted() && WhyDoYouDisagreeTask.isCompleted(draft.partialAdmission.whyDoYouDisagree)
   }
 
   private static isRejectedFullyBecausePaidInFullAtLeastClaimAmount (claim: Claim, draft: ResponseDraft): boolean {
@@ -246,7 +246,7 @@ export class TaskListBuilder {
     return draft.isResponseRejectedFullyBecausePaidWhatOwed()
       && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
       && claim.totalAmountTillToday > draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
-      && WhyDoYouDisagreeTask.isCompleted(draft)
+      && WhyDoYouDisagreeTask.isCompleted(draft.rejectAllOfClaim.whyDoYouDisagree)
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {

@@ -68,7 +68,7 @@
         {{
           row(
             label = 'How much have you paid?',
-            value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral),
+            value = draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral,
             changeLink = FullRejectionPaths.howMuchHaveYouPaid.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false,
             bold = true)
@@ -86,13 +86,13 @@
         {{
           row(
             label = 'How did you pay?',
-            value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.text),
+            value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
             bold = true
           )
         }}
 
         {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
-          {{ row(label = 'Why do you disagree with the amount claimed?', value = t(draft.rejectAllOfClaim.whyDoYouDisagree.text), changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+          {{ row(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
         {% endif %}
       {% endif %}
     {% endif %}
