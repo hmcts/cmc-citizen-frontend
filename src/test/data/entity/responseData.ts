@@ -126,7 +126,7 @@ export const partialAdmissionFromStatesPaidDefence = {
     email: 'user@example.com',
     dateOfBirth: '1999-01-01'
   },
-  freeMediation: undefined,
+  freeMediation: 'no',
   paymentIntention: undefined,
   statementOfMeans: undefined
 }

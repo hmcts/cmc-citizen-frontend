@@ -51,7 +51,6 @@ import { PaymentDate } from 'shared/components/payment-intention/model/paymentDa
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
-import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { Claim } from 'claims/models/claim'
 
 export class ResponseModelConverter {
@@ -63,7 +62,7 @@ export class ResponseModelConverter {
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
           return this.convertFullDefenceAsPartialAdmission(draft)
         }
-        return this.convertFullDefence(draft, claim)
+        return this.convertFullDefence(draft)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft)
       case FormResponseType.PART_ADMISSION:
@@ -73,12 +72,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft, claim: Claim): FullDefenceResponse {
-    let paymentDeclaration: PaymentDeclaration = undefined
-    if (draft.isResponseRejectedFullyBecausePaidWhatOwed() && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined) {
-      paymentDeclaration = this.convertHowMuchHaveYouPaid(draft.rejectAllOfClaim.howMuchHaveYouPaid)
-    }
-
+  private static convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -93,7 +87,9 @@ export class ResponseModelConverter {
         comment: draft.evidence.comment
       } as DefendantEvidence,
       freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
-      paymentDeclaration,
+      paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+      ) : undefined,
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
   }
@@ -115,6 +111,7 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
+      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -308,10 +305,6 @@ export class ResponseModelConverter {
       default:
         return undefined
     }
-  }
-
-  private static convertHowMuchHaveYouPaid (howMuchHaveYouPaid: HowMuchHaveYouPaid): PaymentDeclaration {
-    return new PaymentDeclaration(howMuchHaveYouPaid.date.asString(), howMuchHaveYouPaid.text)
   }
 
   private static convertStatementOfMeansChildren (draft: ResponseDraft): Child[] {
