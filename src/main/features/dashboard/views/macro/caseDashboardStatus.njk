@@ -21,14 +21,17 @@
   claimRejectedFreeMediationYESForDefendantDashboard %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
-  claimPartAdmittedAlreadyPaidForClaimantDashboard,
-  claimPartAdmittedAlreadyPaidForDefendantDashboard,
-  claimPartAdmittedToOweForDefendantDashboard,
-  claimPartAdmittedToOweForClaimantDashboard %}
+  claimPartAdmittedToOweForDefendantDashboard %}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import
   claimFullAdmissionForClaimantDashboard,
   claimFullAdmissionForDefendantDashboard %}
+
+{% from "./claimStatus/statesPaid.njk" import
+  paidAmountForClaimantDashboard,
+  paidAmountForDefendantDashboard,
+  paidLessThanClaimedForClaimantDashboard
+   %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
   offerSubmittedForClaimantDashboard,
@@ -42,7 +45,7 @@
 
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
-{% macro caseStatusForClaimant(status, claim) %}
+{% macro caseDashboardStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -54,7 +57,14 @@
   {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
     {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
       {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-        {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
+        {% if (FeatureToggles.isEnabled('admissions')) %}
+          {% if paidInFull %}
+            {{ paidAmountForClaimantDashboard(claim) }}
+            {% else %}
+              {{ paidLessThanClaimedForClaimantDashboard(claim) }}
+          {% elseif %}
+            {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
+        {% endif %}
       {% elif claim.response.freeMediation === FreeMediationOption.NO %}
         {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
       {% else %}
@@ -62,9 +72,9 @@
       {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       {% if claim.response.paymentDeclaration %}
-        {{ claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) }}
+        {{ paidAmountForClaimantDashboard(claim) }}
       {% else %}
-        {{ claimPartAdmittedToOweForClaimantDashboard(claim) }}
+        {{ paidLessThanClaimedForClaimantDashboard(claim) }}
       {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       {{ claimFullAdmissionForClaimantDashboard(claim) }}
@@ -80,7 +90,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro caseStatusForDefendant(status, claim) %}
+{% macro caseDashboardStatusForDefendant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -92,7 +102,11 @@
     {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-          {{ claimRejectedAlreadyPaidForDefendantDashboard(claim) }}
+          {% if (FeatureToggles.isEnabled('admissions')) %}
+            {{ paidAmountForDefendantDashboard(claim) }}
+          {% elseif %}
+            {{ claimRejectedAlreadyPaidForDefendantDashboard(claim) }}
+          {% endif %}
           {% elif claim.response.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedFreeMediationNOForDefendantDashboard() }}
         {% else %}
@@ -100,7 +114,7 @@
         {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if claim.response.paymentDeclaration %}
-          {{ claimPartAdmittedAlreadyPaidForDefendantDashboard(claim) }}
+          {{ paidAmountForDefendantDashboard(claim) }}
         {% else %}
           {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
         {% endif %}

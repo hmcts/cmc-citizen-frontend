@@ -1,4 +1,4 @@
-{% from "./caseStatus.njk" import caseStatusForClaimant, caseStatusForDefendant %}
+{% from "./caseDashboardStatus.njk" import caseDashboardStatusForClaimant, caseDashboardStatusForDefendant %}
 
 {% from "./claimStatus/noReponse.njk" import noResponseForClaimantClaimDetails, noResponseForDefendantClaimDetails %}
 {% from "./claimStatus/moreTimeRequested.njk" import moreTimeRequestedForClaimantClaimDetails, moreTimeRequestedForDefendantClaimDetails %}
@@ -20,9 +20,11 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
-  claimPartAdmittedToOweForClaimantClaimDetails,
-  claimPartAdmittedAlreadyPaidForDefendantClaimDetails,
-  claimPartAdmittedAlreadyPaidForClaimantClaimDetails%}
+  claimPartAdmittedToOweForClaimantClaimDetails %}
+
+{% from "./claimStatus/statesPaid.njk" import
+  paidAmountForClaimantClaimDetails,
+  paidAmountForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import
   claimFullAdmissionForDefendantClaimDetails,
@@ -31,15 +33,19 @@ ccjRequestedForDefendantClaimDetails %}
 {% from "./claimStatus/offerSubmitted.njk" import
   offerSubmittedForClaimantClaimDetails,
   offerSubmittedForDefendantClaimDetails %}
+
 {% from "./claimStatus/offerAccepted.njk" import
   offerAcceptedForClaimantClaimDetails,
   offerAcceptedForDefendantClaimDetails %}
+
 {% from "./claimStatus/offerRejected.njk" import
   offerRejectedForClaimantClaimDetails,
   offerRejectedForDefendantClaimDetails %}
-{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
+{% from "./claimStatus/offerSettlement.njk" import
+  offerSettlementReachedClaimDetails %}
+
+{% macro caseClaimDetailsForClaimant(claim, csrf) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -53,6 +59,9 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+            {% if (FeatureToggles.isEnabled('admissions')) %}
+                {{ paidAmountForClaimantClaimDetails(claim) }}
+              {% endif %}
             {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
           {% elif claim.response.freeMediation === FreeMediationOption.NO %}
             {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
@@ -61,7 +70,7 @@ ccjRequestedForDefendantClaimDetails %}
           {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
           {% if claim.response.paymentDeclaration %}
-            {{ claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) }}
+            {{ paidLessThanClaimedForClaimantClaimDetails(claim) }}
           {% else %}
             {{ claimPartAdmittedToOweForClaimantClaimDetails(claim) }}
           {% endif %}
@@ -78,14 +87,14 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseStatusForClaimant(state.status, claim) }}
+          {{ caseDashboardStatusForClaimant(state.status, claim) }}
         </p>
       {% endif %}
     </div>
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantClaimDetails(claim) %}
+{% macro caseClaimDetailsForDefendant(claim) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -99,6 +108,9 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+            {% if (FeatureToggles.isEnabled('admissions')) %}
+              {{ paidAmountForDefendantClaimDetails(claim) }}
+            {% endif %}
             {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
           {% elif claim.response.freeMediation === FreeMediationOption.NO %}
             {{ claimRejectedFreeMediationNOForDefendantClaimDetails(claim) }}
@@ -111,7 +123,7 @@ ccjRequestedForDefendantClaimDetails %}
           {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
           {% if claim.response.paymentDeclaration %}
-            {{ claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) }}
+            {{ paidLessThanClaimedForDefendantClaimDetails(claim) }}
           {% else %}
             {{ claimPartAdmittedToOweForDefendantClaimDetails(claim) }}
           {% endif %}
@@ -128,7 +140,7 @@ ccjRequestedForDefendantClaimDetails %}
           {{ offerSettlementReachedClaimDetails(claim) }}
       {% else %}
         <p>
-          {{ caseStatusForDefendant(claim.status, claim) }}
+          {{ caseDashboardStatusForDefendant(claim.status, claim) }}
         </p>
       {% endif %}
     </div>
