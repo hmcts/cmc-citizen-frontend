@@ -60,6 +60,7 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.rejectAllOfClaim = form.model
+        draft.document.partialAdmission = draft.document.fullAdmission = undefined
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
