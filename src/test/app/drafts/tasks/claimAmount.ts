@@ -36,7 +36,7 @@ describe('Claim amount', () => {
         amount: {
           rows: [{
             reason: 'Bills',
-            amount: 1000
+            amount: 10000
           }]
         },
         interest: {

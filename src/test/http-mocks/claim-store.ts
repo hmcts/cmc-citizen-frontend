@@ -337,6 +337,18 @@ export function resolveRetrieveDocument () {
     .reply(HttpStatus.OK)
 }
 
+export function resolvePostponedDeadline (deadline: string): mock.Scope {
+  return mock(`${serviceBaseURL}/deadline`)
+    .get(new RegExp('/\\d{4}-\\d{2}-\\d{2}'))
+    .reply(HttpStatus.OK, deadline)
+}
+
+export function rejectPostponedDeadline (reason: string = 'HTTP error'): mock.Scope {
+  return mock(`${serviceBaseURL}/deadline`)
+    .get(new RegExp('/\\d{4}-\\d{2}-\\d{2}'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function resolveAddRolesToUser (role: string) {
   mock(`${serviceBaseURL}/user`)
     .post('/roles')

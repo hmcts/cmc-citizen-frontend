@@ -93,7 +93,8 @@ const excludedPaths: DefendantResponsePaths[] = [
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.legacyDashboardRedirect,
   OfferPaths.agreementReceiver,
-  DefendantFirstContactPaths.receiptReceiver
+  DefendantFirstContactPaths.receiptReceiver,
+  ClaimantResponsePaths.receiptReceiver
 ]
 
 describe('Accessibility', () => {

@@ -13,7 +13,7 @@ import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption as DefendantPaymentOption, PaymentType as DefendantPaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { SignatureType } from 'common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
@@ -64,6 +64,7 @@ export class Nunjucks {
     app.set('view engine', 'njk')
     const nunjucksEnv = nunjucks.configure([
       path.join(__dirname, '..', '..', 'views'),
+      path.join(__dirname, '..', '..', 'common'),
       path.join(__dirname, '..', '..', 'features'),
       path.join(__dirname, '..', '..', 'views', 'macro'),
       path.join(__dirname, '..', '..', '..', '..', 'node_modules', '@hmcts', 'cmc-common-frontend', 'macros')

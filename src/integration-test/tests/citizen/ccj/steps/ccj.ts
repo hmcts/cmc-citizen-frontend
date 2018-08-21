@@ -2,8 +2,8 @@ import { PartyType } from 'integration-test/data/party-type'
 import { createDefendant } from 'integration-test/data/test-data'
 import { CountyCourtJudgementCheckAndSendPage } from 'integration-test/tests/citizen/ccj/pages/ccj-check-and-send'
 import { DefendantPaidAnyMoneyPage } from 'integration-test/tests/citizen/ccj/pages/defendant-paid-any-money'
-import { DefendantPaymentPlanPage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
-import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
+import { DefendantPayByInstalmentsPage } from 'integration-test/tests/citizen/ccj/pages/defendant-pay-by-instalments'
+import { DefendantPayBySetDatePage } from 'integration-test/tests/citizen/ccj/pages/defendant-pay-by-set-date'
 import { PaidAmountSummaryPage } from 'integration-test/tests/citizen/ccj/pages/paid-amount-summary'
 import { PaymentOptionsPage } from 'integration-test/tests/citizen/ccj/pages/payment-options'
 import { CitizenDobPage } from 'integration-test/tests/citizen/claim/pages/citizen-dob'
@@ -18,8 +18,8 @@ const ccjDateOfBirthPage: CitizenDobPage = new CitizenDobPage()
 const ccjDefendantPaidAnyMoneyPage: DefendantPaidAnyMoneyPage = new DefendantPaidAnyMoneyPage()
 const ccjPaidAmountSummary: PaidAmountSummaryPage = new PaidAmountSummaryPage()
 const ccjPaymentOptionsPage: PaymentOptionsPage = new PaymentOptionsPage()
-const ccjDefendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentPlanPage()
-const ccjDefendantPaymentDatePage: DefendantPaymentDatePage = new DefendantPaymentDatePage()
+const ccjDefendantPaidByInstalmentsPage: DefendantPayByInstalmentsPage = new DefendantPayByInstalmentsPage()
+const ccjDefendantPayBySetDatePage: DefendantPayBySetDatePage = new DefendantPayBySetDatePage()
 const ccjCheckAndSendPage: CountyCourtJudgementCheckAndSendPage = new CountyCourtJudgementCheckAndSendPage()
 
 const ccjRepaymentPlan: PaymentPlan = {
@@ -48,17 +48,15 @@ export class CountyCourtJudgementSteps {
     ccjPaidAmountSummary.continue()
   }
 
-  ccjDefendantPaymentPlan (): void {
+  ccjDefendantToPayByInstalments (): void {
     ccjPaymentOptionsPage.chooseInstalments()
-    ccjDefendantPaymentPlanPage.checkOutstandingAmount(defendantPaidAmount)
-    ccjDefendantPaymentPlanPage.enterRepaymentPlan(ccjRepaymentPlan)
-    ccjDefendantPaymentPlanPage.saveAndContinue()
+    ccjDefendantPaidByInstalmentsPage.checkOutstandingAmount(defendantPaidAmount)
+    ccjDefendantPaidByInstalmentsPage.enterRepaymentPlan(ccjRepaymentPlan)
   }
 
-  ccjDefendantPaymentDate (): void {
+  ccjDefendantToPayBySetDate (): void {
     ccjPaymentOptionsPage.chooseFullBySetDate()
-    ccjDefendantPaymentDatePage.paymentBySetDate(paymentBySetDate)
-    ccjDefendantPaymentDatePage.saveAndContinue()
+    ccjDefendantPayBySetDatePage.paymentBySetDate(paymentBySetDate)
   }
 
   ccjDefendantToPayImmediately (): void {

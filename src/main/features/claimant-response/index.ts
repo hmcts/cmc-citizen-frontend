@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as path from 'path'
 
-import { Paths, StatesPaidPaths } from 'claimant-response/paths'
+import { CCJPaths, Paths, StatesPaidPaths } from 'claimant-response/paths'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -39,6 +39,7 @@ export class ClaimantResponseFeature {
     if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
       app.settings.nunjucksEnv.globals.ClaimantResponsePaths = Paths
       app.settings.nunjucksEnv.globals.StatesPaidPaths = StatesPaidPaths
+      app.settings.nunjucksEnv.globals.ClaimantResponseCCJPath = CCJPaths
       app.settings.nunjucksEnv.globals.FormaliseRepaymentPlanOption = FormaliseRepaymentPlanOption
     }
 
@@ -67,7 +68,11 @@ export class ClaimantResponseFeature {
     app.all(/^\/case\/.+\/claimant-response\/(?!confirmation|states-paid).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claimantResponse', 100, (value: any): DraftClaimantResponse => {
         return new DraftClaimantResponse().deserialize(value)
-      }))
+      }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.claimantResponseDraft
+        next()
+      })
 
     app.all(allStatesPaid, ResponseGuard.checkStatesPaidResponseExists())
 

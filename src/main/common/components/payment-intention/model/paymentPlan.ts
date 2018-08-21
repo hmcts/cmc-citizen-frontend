@@ -8,12 +8,12 @@ import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
-  static readonly INVALID_DATE: string = 'Enter a valid first payment date'
-  static readonly FUTURE_DATE: string = 'Enter a first payment date in the future'
-  static readonly SELECT_PAYMENT_SCHEDULE: string = 'Select how often you wish to pay'
+  static readonly FIRST_PAYMENT_DATE_INVALID: string = 'Enter a valid first payment date'
+  static readonly FIRST_PAYMENT_DATE_NOT_IN_FUTURE: string = 'Enter a first payment date in the future'
+  static readonly SCHEDULE_REQUIRED: string = 'Choose a payment frequency'
 }
 
-export class DefendantPaymentPlan {
+export class PaymentPlan {
 
   totalAmount?: number
 
@@ -22,13 +22,13 @@ export class DefendantPaymentPlan {
   @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
   instalmentAmount?: number
 
-  @ValidateNested()
-  @IsDefined({ message: ValidationErrors.INVALID_DATE })
-  @IsValidLocalDate({ message: ValidationErrors.INVALID_DATE })
-  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
+  @ValidateNested({ groups: ['default', 'claimant-suggestion'] })
+  @IsDefined({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID })
+  @IsValidLocalDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_INVALID })
+  @IsFutureDate({ message: ValidationErrors.FIRST_PAYMENT_DATE_NOT_IN_FUTURE })
   firstPaymentDate?: LocalDate
 
-  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SELECT_PAYMENT_SCHEDULE })
+  @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED })
   paymentSchedule?: PaymentSchedule
 
   constructor (totalAmount?: number,
@@ -42,19 +42,19 @@ export class DefendantPaymentPlan {
     this.paymentSchedule = paymentSchedule
   }
 
-  static fromObject (value?: any): DefendantPaymentPlan {
+  static fromObject (value?: any): PaymentPlan {
     if (!value) {
       return undefined
     }
 
-    return new DefendantPaymentPlan(
+    return new PaymentPlan(
       toNumberOrUndefined(value.totalAmount),
       toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
       value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined)
   }
 
-  deserialize (input?: any): DefendantPaymentPlan {
+  deserialize (input?: any): PaymentPlan {
     if (input) {
       this.totalAmount = input.totalAmount
       this.instalmentAmount = input.instalmentAmount

@@ -7,6 +7,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 
 describe('DraftClaimantResponse', () => {
   describe('deserialization', () => {
@@ -38,6 +39,11 @@ describe('DraftClaimantResponse', () => {
         },
         formaliseRepaymentPlan: {
           option: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT
+        },
+        paidAmount: {
+          option: PaidAmountOption.YES,
+          amount: 999,
+          claimedAmount: 1000
         }
       })
       expect(draft.externalId).to.eql(myExternalId)
@@ -52,6 +58,9 @@ describe('DraftClaimantResponse', () => {
       expect(draft.settlementAgreement.signed).to.be.eqls(true)
       expect(draft.formaliseRepaymentPlan).to.be.instanceOf(FormaliseRepaymentPlan)
       expect(draft.formaliseRepaymentPlan.option).to.be.eqls(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
+      expect(draft.paidAmount.option).to.be.equal(PaidAmountOption.YES)
+      expect(draft.paidAmount.amount).to.be.equal(999)
+      expect(draft.paidAmount.claimedAmount).to.be.equal(1000)
 
     })
   })
