@@ -13,7 +13,7 @@ import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption as DefendantPaymentOption, PaymentType as DefendantPaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { SignatureType } from 'common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'

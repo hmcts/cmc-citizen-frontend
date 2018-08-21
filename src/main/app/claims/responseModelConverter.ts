@@ -1,7 +1,7 @@
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentOption as PaymentOptionDraft, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 import { AgeGroupType, Child } from 'claims/models/response/statement-of-means/dependant'
@@ -45,10 +45,10 @@ import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIn
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { DefendantPaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 
 export class ResponseModelConverter {
 
@@ -94,11 +94,7 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.FULL_ADMISSION,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentIntention: this.convertPaymentIntention(
-        draft.fullAdmission.paymentOption,
-        draft.fullAdmission.paymentDate,
-        draft.fullAdmission.paymentPlan
-      ),
+      paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -131,11 +127,7 @@ export class ResponseModelConverter {
         comment: draft.partialAdmission.evidence.comment
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentIntention: draft.partialAdmission.paymentOption && this.convertPaymentIntention(
-        draft.partialAdmission.paymentOption,
-        draft.partialAdmission.paymentDate,
-        draft.partialAdmission.paymentPlan
-      ),
+      paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
       freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
@@ -265,23 +257,23 @@ export class ResponseModelConverter {
     return party
   }
 
-  private static convertPaymentIntention (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate, paymentPlan: DefendantPaymentPlan): PaymentIntention {
+  private static convertPaymentIntention (paymentIntention: PaymentIntentionDraft): PaymentIntention {
     return {
-      paymentOption: paymentOption.option.value as PaymentOption,
-      paymentDate: this.convertPaymentDate(paymentOption, paymentDate),
-      repaymentPlan: paymentPlan && {
-        instalmentAmount: paymentPlan.instalmentAmount,
-        firstPaymentDate: paymentPlan.firstPaymentDate.toMoment(),
-        paymentSchedule: paymentPlan.paymentSchedule.value as PaymentSchedule
+      paymentOption: paymentIntention.paymentOption.option.value as PaymentOption,
+      paymentDate: this.convertPaymentDate(paymentIntention.paymentOption, paymentIntention.paymentDate),
+      repaymentPlan: paymentIntention.paymentPlan && {
+        instalmentAmount: paymentIntention.paymentPlan.instalmentAmount,
+        firstPaymentDate: paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
+        paymentSchedule: paymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
       }
     } as PaymentIntention
   }
 
-  private static convertPaymentDate (paymentOption: DefendantPaymentOption, paymentDate: PaymentDate): Moment {
+  private static convertPaymentDate (paymentOption: PaymentOptionDraft, paymentDate: PaymentDate): Moment {
     switch (paymentOption.option) {
-      case DefendantPaymentType.IMMEDIATELY:
+      case PaymentType.IMMEDIATELY:
         return MomentFactory.currentDate().add(5, 'days')
-      case DefendantPaymentType.BY_SET_DATE:
+      case PaymentType.BY_SET_DATE:
         return paymentDate.date.toMoment()
       default:
         return undefined
