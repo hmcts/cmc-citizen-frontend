@@ -47,7 +47,7 @@ export default express.Router()
         if (form.model.received.option === YesNoOption.NO.option) {
           res.redirect(StatesPaidPaths.rejectReasonPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          res.redirect(StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
       }
     })

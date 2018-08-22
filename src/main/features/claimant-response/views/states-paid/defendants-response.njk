@@ -50,11 +50,15 @@
       {% endif %}
 
       {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+          <p>{{ t('{{ defendantName }} said they paid you {{ amount }}. They said this is all they owe, not the amount you claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
 
-          <h2 class="heading-medium">{{ t('Their defence') }}</h2>
+          <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
+          <p>{{ claim.response.paymentDeclaration.paidDate | date }}</p>
 
-          <h3 class="heading-small form-group-related">{{ t('Why they don’t owe the amount claimed') }}</h3>
+          <h3 class="heading-small">{{ t('How they say they paid') }}</h3>
+          <p>{{ claim.response.paymentDeclaration.explanation }}</p>
+
+          <h3 class="heading-small form-group-related">{{ t('Why they say they don’t owe the amount you claimed') }}</h3>
           <p>{{ t('"{{ defence }}"', { defence: claim.response.defence }) }}</p>
 
           {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
