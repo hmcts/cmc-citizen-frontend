@@ -17,7 +17,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
-import { PaymentPlan as PaymentPlanModel} from 'shared/components/payment-intention/model/paymentPlan'
+import { PaymentPlan as PaymentPlanModel } from 'shared/components/payment-intention/model/paymentPlan'
 import { PaymentOption as FormPaymentOption } from 'shared/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
@@ -97,7 +97,7 @@ function convertAlreadyPaidAmount (claim: Claim, claimantResponse: DraftClaimant
 // NOTE:
 // This whole `convertForIssue`method needs to be refactored.
 // Introducing `getRepaymentPlan` as a temporary fix to get us over the line
-function buildRepaymentPlan(claim: Claim, claimantResponse: DraftClaimantResponse): RepaymentPlan {
+function buildRepaymentPlan (claim: Claim, claimantResponse: DraftClaimantResponse): RepaymentPlan {
   const defendantPaymentIntention: PaymentIntention = getDefendantPaymentIntention(claim)
 
   if (!defendantPaymentIntention.paymentPlan) {
