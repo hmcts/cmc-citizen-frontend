@@ -39,7 +39,17 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
+      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+        {{ t('{{ defendantName }} states they paid you {{ amount }}.', { defendantName: defendantName, amount: claim.totalAmountTillToday | numeral }) }}
+
+        <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
+        <p>{{ claim.response.paymentDeclaration.paidDate | date }}</p>
+
+        <h3 class="heading-small">{{ t('How they say they paid') }}</h3>
+        <p>{{ claim.response.paymentDeclaration.explanation }}</p>
+      {% endif %}
+
+      {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
           <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
 
           <h2 class="heading-medium">{{ t('Their defence') }}</h2>

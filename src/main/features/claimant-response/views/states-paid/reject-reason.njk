@@ -9,8 +9,6 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p> {{ t('Explain why you reject their response.') }} </p>
-
         {{ textArea(name = 'reason', form = form) }}
 
         {{ saveAndContinueButton() }}

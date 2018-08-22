@@ -6,7 +6,9 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { Claim } from 'claims/models/claim'
 import { NotFoundError } from 'errors'
 import { Paths as DashboardPaths } from 'dashboard/paths'
-import { ResponseType } from 'response/form/models/responseType'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { ResponseType } from 'claims/models/response/responseType'
+import { DefenceType } from 'claims/models/response/defenceType'
 
 const logger = Logger.getLogger('response/guards/responseGuard')
 
@@ -49,7 +51,9 @@ export class ResponseGuard {
   static checkStatesPaidResponseExists (): express.RequestHandler {
     const allowed = (res: express.Response) => {
       const claim: Claim = res.locals.claim
-      return claim.response !== undefined && claim.response.responseType === ResponseType.PART_ADMISSION.value
+      return claim.response !== undefined
+        && (claim.response.responseType === ResponseType.FULL_DEFENCE && (claim.response as FullDefenceResponse).defenceType === DefenceType.ALREADY_PAID)
+          || claim.response.responseType === ResponseType.PART_ADMISSION
     }
 
     const accessDeniedCallback = (req: express.Request, res: express.Response) => {

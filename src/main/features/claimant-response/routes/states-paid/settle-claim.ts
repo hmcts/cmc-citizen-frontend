@@ -1,4 +1,3 @@
-
 import * as express from 'express'
 import { StatesPaidPaths } from 'claimant-response/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
@@ -11,17 +10,19 @@ import { DraftService } from 'services/draftService'
 import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
 import { YesNoOption } from 'models/yesNoOption'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { ResponseType } from 'claims/models/response/responseType'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 
 function renderView (form: Form<ClaimSettled>, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  const response: PartialAdmissionResponse = claim.response as PartialAdmissionResponse
-  const paidInFull: boolean = claim.totalAmountTillDateOfIssue === response.amount
-  const totalAmount: number = paidInFull ? claim.totalAmountTillDateOfIssue : response.amount
+  const response: FullDefenceResponse | PartialAdmissionResponse = claim.response as FullDefenceResponse | PartialAdmissionResponse
+  const paidInFull: boolean = claim.totalAmountTillDateOfIssue === (response as PartialAdmissionResponse).amount
+  const totalAmount: number = paidInFull ? claim.totalAmountTillDateOfIssue : (response as PartialAdmissionResponse).amount
 
   res.render(StatesPaidPaths.settleClaimPage.associatedView,{
     form: form,
-    totalAmount: totalAmount,
-    paidInFull: paidInFull
+    totalAmount: response.responseType === ResponseType.FULL_DEFENCE ? claim.totalAmountTillToday : totalAmount,
+    paidInFull: response.responseType === ResponseType.FULL_DEFENCE || paidInFull
   })
 }
 
