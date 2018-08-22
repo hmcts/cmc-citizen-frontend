@@ -8,6 +8,7 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { ClaimantResponse } from 'claims/models/claimantResponse'
 
 interface State {
   status: ClaimStatus
@@ -30,6 +31,7 @@ export class Claim {
   countyCourtJudgmentRequestedAt: Moment
   countyCourtJudgmentIssuedAt: Moment
   response: Response
+  claimantResponse: ClaimantResponse
   defendantEmail: string
   settlement: Settlement
   settlementReachedAt: Moment
@@ -58,6 +60,9 @@ export class Claim {
       }
       if (input.response) {
         this.response = Response.deserialize(input.response)
+      }
+      if (input.claimantResponse) {
+        this.claimantResponse = ClaimantResponse.deserialize(input.claimantResponse)
       }
       this.claimantEmail = input.submitterEmail
       this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)

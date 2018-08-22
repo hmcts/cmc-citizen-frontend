@@ -8,14 +8,15 @@
 {% macro claimRejectedAlreadyPaidForClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>
-    {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
-      + 'Email {{ emailAddress }} if you want to proceed with the claim. '
-      + 'You must do this before 4pm on {{ respondToResponseDeadline }}.',
-      { defendantName: claim.claimData.defendant.name, emailAddress: supportEmailAddress,
-        respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}
+    {{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paidDate }}.',
+      { defendantName: claim.claimData.defendant.name, amount: claim.totalAmountTillToday | numeral, paidDate: claim.response.paymentDeclaration.paidDate | date }) }}
+  </p>
+  <p>{{ t('You can accept or reject this response.') }}</p>
+  <p>{{ t('You need to respond before 4pm on {{ respondToResponseDeadline }} or your claim won’t proceed.',
+      { respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}
   </p>
   <p>
-    {{ _downloadResponseLink(claim, 'Download their response') }}
+    {{ _respond(claim, 'Respond') }}
   </p>
 {% endmacro %}
 
@@ -118,4 +119,8 @@
 
 {% macro _downloadResponseLink(claim, text) %}
   <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+{% endmacro %}
+
+{% macro _respond(claim, text) %}
+  <p><a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t(text) }}</a></p>
 {% endmacro %}

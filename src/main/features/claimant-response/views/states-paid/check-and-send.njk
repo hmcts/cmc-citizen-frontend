@@ -1,0 +1,62 @@
+{% extends "layout.njk" %}
+
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+
+{% set heading = 'Check your answers before submitting your response' %}
+
+{% block content %}
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+
+    {{ tableStart('yourResponse', 'Your response') }}
+
+    {% if draft.partPaymentReceived %}
+      {% if draft.partPaymentReceived.received.option === 'yes' %}
+        {% set paymentReceivedResponse = 'Yes' %}
+      {% else %}
+        {% set paymentReceivedResponse = 'No' %}
+      {% endif %}
+
+      {{ row(label = 'Do you agree the defendant has paid ' + paidAmount | numeral + '?', bold = true, value = paymentReceivedResponse,
+        changeLink = StatesPaidPaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+    {% endif %}
+
+    {% if draft.accepted %}
+      {% if draft.accepted.accepted.option === 'yes' %}
+        {% set paymentAcceptedResponse = 'Yes' %}
+      {% else %}
+        {% set paymentAcceptedResponse = 'No' %}
+      {% endif %}
+
+      {% if draft.partPaymentReceived %}
+        {% set paymentAcceptedText = 'Do you want to settle the claim for the ' + paidAmount | numeral + '?' %}
+      {% else %}
+        {% set paymentAcceptedText = 'Do you agree the defendant has paid ' + claimAmount | numeral + '?'  %}
+      {% endif %}
+      {{ row(label = paymentAcceptedText, bold = true, value = paymentAcceptedResponse,
+        changeLink = StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+    {% endif %}
+
+    {% if draft.disputeReason %}
+      {{ row(label = 'Reason for rejecting their response', bold = true, value = draft.disputeReason.reason,
+        changeLink = StatesPaidPaths.rejectReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+    {% endif %}
+
+    {% if draft.freeMediation %}
+      {% if draft.freeMediation.freeMediation.option === 'yes' %}
+        {% set freeMediationResponse = 'Yes' %}
+      {% else %}
+        {% set freeMediationResponse = 'No' %}
+      {% endif %}
+
+      {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
+        changeLink = StatesPaidPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+    {% endif %}
+
+    {{ tableEnd() }}
+
+    {{ submitButton('Submit response') }}
+
+  </form>
+{% endblock %}

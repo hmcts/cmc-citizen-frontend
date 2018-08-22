@@ -10,6 +10,8 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
+import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
+import { ClaimantResponseModelConverter } from 'claims/claimantResponseModelConverter'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -71,6 +73,18 @@ export class ClaimStoreClient {
 
     return this.request
       .post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
+        body: response,
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+  }
+
+  saveClaimantResponseForUser (externalId: string, draft: Draft<DraftStatesPaidResponse>, claim: Claim, user: User): Promise<void> {
+    const response = ClaimantResponseModelConverter.convert(draft.document, claim)
+
+    return this.request
+      .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {
         body: response,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
