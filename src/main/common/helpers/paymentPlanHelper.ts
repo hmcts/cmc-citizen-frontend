@@ -1,4 +1,3 @@
-
 import { Moment } from 'moment'
 
 import { Frequency } from 'common/frequency/frequency'

@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { StatementOfMeansCalculations } from './../../../../main/app/common/statement-of-means/statementOfMeansCalculations'
+import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
 
 import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Debt } from 'claims/models/response/statement-of-means/debt'

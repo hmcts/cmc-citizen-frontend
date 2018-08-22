@@ -16,7 +16,7 @@
       {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
         {{
         repaymentPlanBlock(
-          heading = 'The court`s proposed repayment plan',
+          heading = 'The court’s proposed repayment plan',
           paymentPlan = courtOrderPaymentPlan
         )
         }}
@@ -27,7 +27,7 @@
 
         {{
         radioGroup(
-          label = 'Do you want to accept the court`s proposed repayment plan?',
+          label = 'Do you want to accept the court’s proposed repayment plan?',
           labelForScreenReadersOnly = false,
           form = form,
           name = 'acceptCourtOffer',
