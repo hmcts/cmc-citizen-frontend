@@ -55,7 +55,7 @@ export abstract class AbstractPaidAmountPage<Draft> {
     const claim: Claim = res.locals.claim
     res.render(this.getView(), {
       form: form,
-      totalAmount: getAmountSettledFor(claim, res.locals.draft.document) || claim.totalAmountTillToday
+      totalAmount: getAmountSettledFor(claim, res.locals.draft.document) + claim.claimData.feeAmountInPennies / 100 || claim.totalAmountTillToday
     })
   }
 

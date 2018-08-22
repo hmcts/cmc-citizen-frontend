@@ -30,7 +30,7 @@ export default express.Router()
         draft: draft.document,
         claim: claim,
         lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined,
-        totalAmount: getAmountSettledFor(claim, res.locals.draft.document) || claim.totalAmountTillToday
+        totalAmount: getAmountSettledFor(claim, res.locals.draft.document) + claim.claimData.feeAmountInPennies / 100 || claim.totalAmountTillToday
       })
     })
   )

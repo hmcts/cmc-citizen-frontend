@@ -8,7 +8,7 @@
   <div class="column-two-thirds">
 
     <div class="form-group">
-      {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor %}
+      {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
 
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
@@ -45,21 +45,17 @@
           </td>
         </tr>
         {% endif %}
-        {% if not amountSettledFor %}
-          <tr>
-            <th scope="row">{{ t('Claim fee') }}</th>
-            <td class="numeric last">
-              <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
-            </td>
-          </tr>
-        {% endif %}
+        <tr>
+          <th scope="row">{{ t('Claim fee') }}</th>
+          <td class="numeric last">
+            <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
+          </td>
+        </tr>
         {% if alreadyPaid %}
-          {% if not amountSettledFor %}
-            <tr>
-              <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
-              <td class="numeric last bold-small"><span id="sub-total">{{ total | numeral }}</span></td>
-            </tr>
-          {% endif %}
+          <tr>
+            <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
+            <td class="numeric last bold-small"><span id="sub-total">{{ total | numeral }}</span></td>
+          </tr>
           <tr>
             <th scope="row">{{ t('Minus amount already paid') }}</th>
             <td class="numeric last">
