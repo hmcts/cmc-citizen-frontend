@@ -8,10 +8,6 @@
   <div class="column-two-thirds">
 
     <div class="form-group">
-      <p>
-        {{ t('Judgment will be entered against the defendant for this amount.') }}
-      </p>
-
       {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor %}
 
       <table class="table-form">
@@ -32,7 +28,7 @@
           </tr>
         {% else %}
           <tr>
-            <th scope="row">{{ t('Amount settling for') }}</th>
+            <th scope="row">{{ t('Amount you are settling for') }}</th>
             <td class="numeric last">
               <span class="font-small">{{ amountSettledFor | numeral }}</span>
             </td>
