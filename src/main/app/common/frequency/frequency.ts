@@ -1,8 +1,8 @@
 
 export class Frequency {
   static readonly WEEKLY = new Frequency(['WEEK', 'EACH_WEEK'], 52 / 12, 1, 'Each week')
-  static readonly TWO_WEEKLY = new Frequency(['TWO_WEEK', 'EVERY_TWO_WEEKS'], 52 / 12 / 2, 2, 'Every two weeks')
-  static readonly FOUR_WEEKLY = new Frequency(['FOUR_WEEK', 'EVERY_FOUR_WEEKS'], 52 / 12 / 4, 4, 'Every four weeks')
+  static readonly TWO_WEEKLY = new Frequency(['TWO_WEEK', 'EVERY_TWO_WEEKS'], 52 / 12 / 2, 2, 'Every 2 weeks')
+  static readonly FOUR_WEEKLY = new Frequency(['FOUR_WEEK', 'EVERY_FOUR_WEEKS'], 52 / 12 / 4, 4, 'Every 4 weeks')
   static readonly MONTHLY = new Frequency(['MONTH', 'EVERY_MONTH'], 1, 4, 'Every month')
 
   constructor (private readonly values: string[], public readonly monthlyRatio: number, public readonly inWeeks: number, public readonly displayValue: string) {}
