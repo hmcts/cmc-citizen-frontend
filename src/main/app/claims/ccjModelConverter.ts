@@ -125,7 +125,7 @@ function buildRepaymentPlan(claim: Claim, claimantResponse: DraftClaimantRespons
   ).convertTo(defendantPaymentPlan.frequency)
 
   return new RepaymentPlan(
-    courtOrderPaymentPlan.instalmentAmount,
+    Number(courtOrderPaymentPlan.instalmentAmount.toFixed(2)),
     defendantPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
     defendantPaymentIntention.paymentPlan.paymentSchedule.value)
 }
