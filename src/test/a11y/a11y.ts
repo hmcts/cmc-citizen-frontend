@@ -121,6 +121,6 @@ describe('Accessibility', () => {
   checkPaths(OfferPaths)
   checkPaths(StatementOfMeansPaths)
   checkPaths(FullAdmissionPaths)
-  //skipped for demo
+  // skipped for demo
   // checkPaths(ClaimantResponsePaths)
 })
