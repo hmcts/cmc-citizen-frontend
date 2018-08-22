@@ -9,6 +9,7 @@ import { SettlementAgreement } from 'features/claimant-response/form/models/sett
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
 import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { ResponseType } from 'claims/models/response/responseType'
 
 function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -16,7 +17,8 @@ function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   res.render(Paths.signSettlementAgreementPage.associatedView, {
     form: form,
     claim: claim,
-    paymentPlan: getPaymentPlan(claim)
+    paymentPlan: getPaymentPlan(claim),
+    totalAmount: claim.response.responseType === ResponseType.PART_ADMISSION ? claim.response.amount : claim.totalAmountTillToday
   })
 }
 

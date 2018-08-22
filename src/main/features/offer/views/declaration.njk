@@ -17,15 +17,16 @@
             defendantName: claim.claimData.defendant.name
           }) }}
         </p>
-        <p>
-          {{ t('Neither party can make any further claims relating to this case, other than to enforce it.') }}
-        </p>
       {% else %}
         <p>
           {{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.', {
             claimantName: claim.claimData.claimant.name,
             defendantName: claim.claimData.defendant.name
           }) }}
+        </p>
+
+        <p>
+          {{ t('Neither party can make any further claims relating to this case, other than to enforce it.') }}
         </p>
       {% endif %}
 
@@ -35,24 +36,31 @@
       {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
         {{ t('The claimant can request a County Court Judgment (CCJ) for any money still owed from this agreement.') }}
       {% else %}
-        <p>{{ t('Either party can apply to:') }}</p>
+        {% if isThroughAdmissions %}
+          <p>{{ t('The claimant can apply to:') }}</p>
+        {% else %}
+          <p>{{ t('Either party can apply to:') }}</p>
+        {% endif %}
         <ul class="list list-bullet">
           <li>{{ t('request a judgment for any money still owed from this agreement') }}</li>
           <li>{{ t('resume the original claim or counterclaim for the full amount of the claim') }}</li>
           <li>{{ t('ask the court to enforce any of the steps to be taken') }}
         </ul>
 
-        <p>
-          {{ t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.', {
-            n244formUri: 'http://formfinder.hmctsformfinder.justice.gov.uk/n244-eng.pdf',
-            countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc'
-          }) | safe }}
-        </p>
+        {% if not isThroughAdmissions %}
+          <p>
+            {{ t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.', {
+              n244formUri: 'http://formfinder.hmctsformfinder.justice.gov.uk/n244-eng.pdf',
+              countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc'
+            }) | safe }}
+          </p>
+        {% endif %}
       {% endif %}
 
       <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
 
-      <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ defendantName }} before signing. You won’t be able to change this later.') }}
+      <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ otherPartyName }} before signing. You won’t be able to change this later.',
+          { otherPartyName: otherPartyName }) }}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}

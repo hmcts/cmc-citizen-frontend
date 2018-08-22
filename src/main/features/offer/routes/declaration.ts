@@ -11,13 +11,16 @@ import { OfferAcceptedGuard } from 'offer/guards/offerAcceptedGuard'
 
 function renderView (form: Form<Declaration>, res: express.Response) {
   const claim: Claim = res.locals.claim
+
+  const user: User = res.locals.user
   res.render(
     Paths.declarationPage.associatedView,
     {
       claim: claim,
       form: form,
       offer: claim.defendantOffer,
-      isThroughAdmissions: claim.settlement && claim.settlement.isThroughAdmissions()
+      isThroughAdmissions: claim.settlement && claim.settlement.isThroughAdmissions(),
+      otherPartyName: user.id === claim.defendantId ? claim.claimData.claimant.name : claim.claimData.defendant.name
     }
   )
 }
