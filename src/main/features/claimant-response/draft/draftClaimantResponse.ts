@@ -7,9 +7,11 @@ import { PaymentIntention } from 'shared/components/payment-intention/model/paym
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
+  courtOrderAmount: number
 
   settleAdmitted?: SettleAdmitted
   acceptPaymentMethod?: AcceptPaymentMethod
@@ -19,6 +21,7 @@ export class DraftClaimantResponse extends DraftDocument {
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
+  acceptCourtOffer?: AcceptCourtOffer
 
   constructor () {
     super()
@@ -42,9 +45,6 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.settlementAgreement) {
         this.settlementAgreement = new SettlementAgreement().deserialize(input.settlementAgreement)
       }
-      if (input.alternatePaymentMethod) {
-        this.alternatePaymentMethod = PaymentIntention.deserialise(input.alternatePaymentMethod)
-      }
       if (input.freeMediation) {
         this.freeMediation = new FreeMediation(input.freeMediation.option)
       }
@@ -53,6 +53,15 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.rejectionReason) {
         this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
+      }
+      if (input.acceptCourtOffer) {
+        this.acceptCourtOffer = new AcceptCourtOffer().deserialize(input.acceptCourtOffer)
+      }
+      if (input.alternatePaymentMethod) {
+        this.alternatePaymentMethod = PaymentIntention.deserialise(input.alternatePaymentMethod)
+      }
+      if (input.courtOrderAmount) {
+        this.courtOrderAmount = input.courtOrderAmount
       }
     }
     return this

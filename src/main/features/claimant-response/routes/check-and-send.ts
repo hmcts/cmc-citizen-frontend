@@ -6,14 +6,35 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
-import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { Frequency } from 'common/frequency/frequency'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { OfferClient } from 'claims/offerClient'
 import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+
+function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim: Claim) {
+  if (draft.document.alternatePaymentMethod.paymentOption.option !== PaymentType.INSTALMENTS) {
+    return undefined
+  }
+
+  const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
+  const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
+  const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+    defendantPaymentPlan.totalAmount,
+    draft.document.courtOrderAmount,
+    Frequency.MONTHLY,
+    claimantPaymentPlan.startDate
+  )
+
+  return courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
+}
 import { getAmountSettledFor } from 'shared/components/ccj/ccjHelper'
 
 /* tslint:disable:no-default-export */
@@ -24,12 +45,11 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
-      const paymentPlan = getPaymentPlan(claim)
 
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
-        lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined,
+        courtOrderPaymentPlan: createCourtOrderPaymentPlan(draft, claim),
         totalAmount: getAmountSettledFor(claim, res.locals.draft.document) + claim.claimData.feeAmountInPennies / 100 || claim.totalAmountTillToday
       })
     })
