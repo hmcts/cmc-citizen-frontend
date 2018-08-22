@@ -88,14 +88,14 @@ describe('Defendant response task list builder', () => {
         draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID, new HowMuchHaveYouPaid())
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Tell us how much you’ve paid')
       })
 
       it('should be disabled otherwise', () => {
         isResponseRejectedFullyBecausePaidWhatOwedStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('How much have you paid?')
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Tell us how much you’ve paid')
       })
     })
 

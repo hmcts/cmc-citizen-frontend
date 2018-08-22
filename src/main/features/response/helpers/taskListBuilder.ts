@@ -69,7 +69,7 @@ export class TaskListBuilder {
     if (draft.isResponseRejectedFullyBecausePaidWhatOwed()) {
       tasks.push(
         new TaskListItem(
-          'How much have you paid?',
+          'Tell us how much you’ve paid',
           FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
           ValidationUtils.isValid(draft.rejectAllOfClaim.howMuchHaveYouPaid)
         )
