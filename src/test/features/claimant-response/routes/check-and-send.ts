@@ -78,7 +78,7 @@ describe('Claimant response: check and send page', () => {
               .toLocation(ClaimantResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
-        it('should render page when everything is fine', async () => {
+        it.skip('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
 
