@@ -18,7 +18,7 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { CCJClient } from 'claims/ccjClient'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
-function createCourtOrderPaymentPlan(draft: Draft<DraftClaimantResponse>, claim: Claim) {
+function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim: Claim) {
   if (draft.document.alternatePaymentMethod.paymentOption.option !== PaymentType.INSTALMENTS) {
     return undefined
   }
