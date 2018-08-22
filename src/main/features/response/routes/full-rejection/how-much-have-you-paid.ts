@@ -63,13 +63,6 @@ export default express.Router()
         }
 
         await new DraftService().save(draft, user.bearerToken)
-        /*
-          redirection matrix:
-              admissions            !admissions
-           <  youHavePaidLessPage   sendYourResponseByEmailPage
-           =  taskListPage          taskListPage
-           >  taskListPage          sendYourResponseByEmailPage
-         */
 
         if (paidLessThanClaimed) {
           if (admissionsEnabled) {

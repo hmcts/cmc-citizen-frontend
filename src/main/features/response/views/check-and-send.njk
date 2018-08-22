@@ -197,52 +197,53 @@
     {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
       {{ tableStart('responseDetails', 'Response details') }}
       {{
-      row(
-        label = 'How much have you paid?',
-        value = draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral,
-        changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
-        bottomBorder = false,
-        bold = true
-      )
+        row(
+          label = 'How much have you paid?',
+          value = draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral,
+          changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false,
+          bold = true
+        )
       }}
 
       {{
-      row(
-        label = 'When did you pay this amount?',
-        value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.date.toMoment() | date),
-        bottomBorder = false,
-        bold = true
-      )
+        row(
+          label = 'When did you pay this amount?',
+          value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.date.toMoment() | date),
+          bottomBorder = false,
+          bold = true
+        )
       }}
 
       {{
-      row(
-        label = 'How did you pay this amount?',
-        value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
-        bold = true
-      )
+        row(
+          label = 'How did you pay this amount?',
+          value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
+          bold = true
+        )
       }}
 
       {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
         {{ row(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
         {{
-        timelineCheckAndSend(
-          header = 'Timeline of what happened (optional)',
-          timeline = draft.timeline.getPopulatedRowsOnly(),
-          url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
-          bottomBorder = false
-        )
+          timelineCheckAndSend(
+            header = 'Timeline of what happened (optional)',
+            timeline = draft.timeline.getPopulatedRowsOnly(),
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
         }}
+
         {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
 
         {{
-        evidenceCheckAndSend(
-          header = 'Your evidence (optional)',
-          evidence = draft.evidence.getPopulatedRowsOnly(),
-          url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-          bottomBorder = false
-        )
+          evidenceCheckAndSend(
+            header = 'Your evidence (optional)',
+            evidence = draft.evidence.getPopulatedRowsOnly(),
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
         }}
 
         {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
