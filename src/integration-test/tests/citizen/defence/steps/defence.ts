@@ -179,7 +179,7 @@ export class DefenceSteps {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.rejectAllOfMoneyClaim()
     defendantRejectAllOfClaimPage.selectAlreadyPaidOption()
-    defendantSteps.selectTaskHowMuchHaveYouPaid()
+    defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
     defendantHowMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(claimAmount.getTotal() - 1, '2018-01-01', 'Paid Cash')
   }
 
@@ -391,10 +391,9 @@ export class DefenceSteps {
 
       case DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT:
         this.chooseLessThenAmountClaimedOption()
-        I.see('the admission form')
-        I.see(claimRef)
+        I.see('You’ve paid less than the total claim amount')
+        I.see('You need to explain why you believe you don’t owe the remaining amount')
         I.see(claimant.name)
-        I.see(defendant.name)
         break
 
       default:
