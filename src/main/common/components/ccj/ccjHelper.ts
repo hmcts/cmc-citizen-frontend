@@ -5,7 +5,7 @@ import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
 export function getAmountSettledFor(claim: Claim, draft: DraftClaimantResponse): number {
-  const settledForLessThanClaimAmount = claim.response.responseType === ResponseType.PART_ADMISSION
+  const settledForLessThanClaimAmount = claim.response && claim.response.responseType === ResponseType.PART_ADMISSION
     && claim.response.paymentIntention !== undefined && draft.settleAdmitted && draft.settleAdmitted.admitted === YesNoOption.YES
 
   if (settledForLessThanClaimAmount) {
