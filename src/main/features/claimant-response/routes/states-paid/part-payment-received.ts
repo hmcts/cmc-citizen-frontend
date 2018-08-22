@@ -42,6 +42,10 @@ export default express.Router()
           draft.document.accepted = undefined
         }
 
+        if (draft.document.amount === undefined) {
+          draft.document.amount = (res.locals.claim.response as PartialAdmissionResponse).amount
+        }
+
         await new DraftService().save(draft, res.locals.user.bearerToken)
 
         if (form.model.received.option === YesNoOption.NO.option) {

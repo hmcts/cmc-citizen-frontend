@@ -49,6 +49,13 @@ export default express.Router()
           draft.document.disputeReason = undefined
           draft.document.freeMediation = undefined
         }
+
+        if (draft.document.amount === undefined) {
+          const claim: Claim = res.locals.claim
+          const response: PartialAdmissionResponse = claim.response as PartialAdmissionResponse
+          draft.document.amount = response.amount
+        }
+
         await new DraftService().save(draft, res.locals.user.bearerToken)
 
         if (draft.document.accepted.accepted.option === YesNoOption.NO.option) {

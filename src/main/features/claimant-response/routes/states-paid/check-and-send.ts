@@ -9,7 +9,7 @@ import { StatesPaidPaths } from 'claimant-response/paths'
 import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
 import { AllStatesPaidTasksCompleteGuard } from 'claimant-response/guards/allStatesPaidTasksCompleteGuard'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { YesNoOption } from 'models/yesNoOption'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -36,20 +36,10 @@ export default express.Router()
       const draft: Draft<DraftStatesPaidResponse> = res.locals.statesPaidResponseDraft
       const user: User = res.locals.user
 
-      let scenario: string = '1'
-
-      if (draft.document.freeMediation !== undefined && draft.document.freeMediation.freeMediation.option === YesNoOption.YES.option) {
-        scenario = '2'
-      } else if (draft.document.partPaymentReceived !== undefined && draft.document.partPaymentReceived.received.option === YesNoOption.NO.option) {
-        scenario = '3'
-      } else if (draft.document.accepted !== undefined && draft.document.accepted.accepted.option === YesNoOption.NO.option) {
-        scenario = '3'
-      }
-
-      // TODO: Create response and post to claim store api
+      await new ClaimStoreClient().saveClaimantResponseForUser(claim.externalId, draft, user)
       await new DraftService().delete(draft.id, user.bearerToken)
 
       res.redirect(StatesPaidPaths.confirmationPage.evaluateUri({
         externalId: claim.externalId
-      }) + `?scenario=${scenario}`)
+      }))
     }))

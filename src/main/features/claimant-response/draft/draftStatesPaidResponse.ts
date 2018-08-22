@@ -11,6 +11,7 @@ export class DraftStatesPaidResponse extends DraftDocument {
   accepted?: ClaimSettled
   disputeReason?: RejectReason
   freeMediation?: FreeMediation
+  amount?: number
 
   constructor () {
     super()
@@ -36,6 +37,10 @@ export class DraftStatesPaidResponse extends DraftDocument {
 
       if (input.freeMediation) {
         this.freeMediation = new FreeMediation().deserialize(input.freeMediation)
+      }
+
+      if (input.amount) {
+        this.amount = input.amount
       }
     }
     return this
