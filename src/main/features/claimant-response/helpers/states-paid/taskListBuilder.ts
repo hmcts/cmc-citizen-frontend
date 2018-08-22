@@ -38,7 +38,7 @@ export class TaskListBuilder {
           ClaimSettledTask.isCompleted(draft)
         ))
     } else {
-      const amount = (response as PartialAdmissionResponse).amount
+      const amount = response.amount
       const paidInFull: boolean = claim.totalAmountTillDateOfIssue === amount
       if (paidInFull) {
         tasks.push(

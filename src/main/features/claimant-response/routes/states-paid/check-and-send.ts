@@ -36,7 +36,7 @@ export default express.Router()
       const draft: Draft<DraftStatesPaidResponse> = res.locals.statesPaidResponseDraft
       const user: User = res.locals.user
 
-      await new ClaimStoreClient().saveClaimantResponseForUser(claim.externalId, draft, user)
+      await new ClaimStoreClient().saveClaimantResponseForUser(claim.externalId, draft, claim, user)
       await new DraftService().delete(draft.id, user.bearerToken)
 
       res.redirect(StatesPaidPaths.confirmationPage.evaluateUri({

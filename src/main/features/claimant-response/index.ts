@@ -25,9 +25,7 @@ import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
 import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
 import { Claim } from 'claims/models/claim'
 import { ResponseType } from 'claims/models/response/responseType'
-import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -87,12 +85,12 @@ export class ClaimantResponseFeature {
 
         switch (claim.response.responseType) {
           case ResponseType.FULL_DEFENCE:
-            if ((claim.response as FullDefenceResponse).defenceType === DefenceType.ALREADY_PAID) {
+            if (claim.response.defenceType === DefenceType.ALREADY_PAID) {
               return res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             }
             break
           case ResponseType.PART_ADMISSION:
-            if ((claim.response as PartialAdmissionResponse).paymentDeclaration !== undefined) {
+            if (claim.response.paymentDeclaration !== undefined) {
               return res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             }
             break

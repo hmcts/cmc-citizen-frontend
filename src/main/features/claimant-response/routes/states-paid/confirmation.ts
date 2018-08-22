@@ -11,13 +11,13 @@ import { ResponseRejection } from 'claims/models/claimant-response/responseRejec
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(StatesPaidPaths.confirmationPage.uri,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const response: ClaimantResponse = claim.claimantResponse
       let accepted: boolean = true
       let mediationRequested: boolean = false
 
-      if(response.type === ClaimantResponseType.REJECTION) {
+      if (response.type === ClaimantResponseType.REJECTION) {
         accepted = false
         mediationRequested = (response as ResponseRejection).freeMediation
       } else {
