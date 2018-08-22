@@ -14,7 +14,7 @@ import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
-import { getAmountSettledFor } from 'shared/components/ccj/ccjHelper'
+import { calculateTotalAmount } from 'claimant-response/helpers/amountHelper'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -30,7 +30,7 @@ export default express.Router()
         draft: draft.document,
         claim: claim,
         lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined,
-        totalAmount: getAmountSettledFor(claim, res.locals.draft.document) + claim.claimData.feeAmountInPennies / 100 || claim.totalAmountTillToday
+        totalAmount: calculateTotalAmount(claim, res.locals.draft.document)
       })
     })
   )

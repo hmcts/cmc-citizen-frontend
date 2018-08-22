@@ -7,15 +7,21 @@ import { claimantResponseCCJPath, Paths } from 'features/claimant-response/paths
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { Claim } from 'claims/models/claim'
+import { calculateAmountSettledFor } from 'claimant-response/helpers/amountHelper'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantResponse> {
 
-  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaidAmount> {
+  paidAmount (): AbstractModelAccessor<DraftClaimantResponse, PaidAmount> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
   }
   buildRedirectUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
     return Paths.taskListPage.evaluateUri({ externalId: externalId })
+  }
+
+  amountSettledFor (claim: Claim, draft: DraftClaimantResponse): number {
+    return calculateAmountSettledFor(claim, draft)
   }
 }
 
