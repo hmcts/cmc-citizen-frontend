@@ -12,7 +12,7 @@
         {{ t('Judgment will be entered against the defendant for this amount.') }}
       </p>
 
-      {% set total = claim.totalAmountTillToday if amountSettledFor === 0 else amountSettledFor %}
+      {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor %}
 
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
