@@ -23,6 +23,11 @@ import { ExpenseTypeViewFilter } from 'claimant-response/filters/expense-type-vi
 import { AgeGroupTypeViewFilter } from 'claimant-response/filters/age-group-type-view-filter'
 import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
 import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
+import { Claim } from 'claims/models/claim'
+import { ResponseType } from 'claims/models/response/responseType'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { DefenceType } from 'claims/models/response/defenceType'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -75,6 +80,26 @@ export class ClaimantResponseFeature {
       })
 
     app.all(allStatesPaid, ResponseGuard.checkStatesPaidResponseExists())
+
+    app.all(allClaimantResponse, (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const claim: Claim = res.locals.claim
+      if (req.path.endsWith(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))) {
+
+        switch (claim.response.responseType) {
+          case ResponseType.FULL_DEFENCE:
+            if ((claim.response as FullDefenceResponse).defenceType === DefenceType.ALREADY_PAID) {
+              return res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+            }
+            break
+          case ResponseType.PART_ADMISSION:
+            if ((claim.response as PartialAdmissionResponse).paymentDeclaration !== undefined) {
+              return res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+            }
+            break
+        }
+      }
+      next()
+    })
 
     app.all(/^\/case\/.+\/claimant-response\/states-paid\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'statesPaidResponse', 100, (value: any): DraftStatesPaidResponse => {
