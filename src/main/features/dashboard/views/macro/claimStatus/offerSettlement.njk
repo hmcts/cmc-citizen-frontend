@@ -1,3 +1,5 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% macro offerSettlementReachedDashboard() %}
   {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
 {% endmacro %}
@@ -12,6 +14,39 @@
   </p>
 {% endmacro %}
 
+{% macro offerSettlementReachedForDefendant(claim) %}
+  {% if claim.settlement.isThroughAdmissions() %}
+    {% set claimantName = claim.claimData.claimant.name %}
+    {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+    <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+
+    <p>
+      {{ t('The claimant can’t request a County Court Judgment against you if you pay by the agreed date.') }}
+    </p>
+
+    <p>
+      {{ _downloadAgreementLink(claim) }}
+    </p>
+    
+    <p>
+      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+      {{ t('if you need their payment details.') }}
+    </p>
+    <p>
+      {{ t('Make sure you get receipts for any payments.') }}
+    </p>
+  {% else %}
+    <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
+    <p>
+      {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
+    </p>
+    <p>
+      {{ _downloadAgreementLink(claim) }}
+    </p>
+  {% endif %}
+{% endmacro %}
+
 {% macro _downloadAgreementLink(claim) %}
-  <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the agreement') }}</a>
+  <a
+    href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the settlement agreement') }}</a> {{ t(' (PDF)') }}
 {% endmacro %}
