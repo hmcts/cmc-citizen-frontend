@@ -20,7 +20,7 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 
 function createCourtOrderPaymentPlan(draft: Draft<DraftClaimantResponse>, claim: Claim) {
   if (draft.document.alternatePaymentMethod.paymentOption.option !== PaymentType.INSTALMENTS) {
-    return undefined  
+    return undefined
   }
 
   const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
