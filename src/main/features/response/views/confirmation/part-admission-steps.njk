@@ -6,9 +6,9 @@
 {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
 
-<h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer', { claimantName: claimantName }) }}</h3>
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  <h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer', { claimantName: claimantName }) }}</h3>
   <p>{{ t('You should:') }}</p>
   <ul class="list list-bullet">
     <li>{{ t('pay {{ claimantName }} by {{ paymentDate }}', { claimantName: claimantName, paymentDate: paymentDate }) }}</li>
@@ -32,7 +32,7 @@
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
 
-  <p>{{ t('You need to pay {{ claim.claimData.claimant.name }} {{amount}} immediately.', { claimantName: claimantName, amount: amount }) }}</p>
+  <p>{{ t('You need to pay {{ claimantName }} {{amount}} immediately.', { claimantName: claimantName, amount: amount }) }}</p>
 
   <p>{{ t('Make sure that:') }}</p>
 
@@ -42,7 +42,7 @@
     <li>{{ t('you get a receipt for any payments') }} </li>
   </ul>
 
-  <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI ) }} if you need their payment details</p>
+  <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI ) }} if you need their payment details.</p>
 
   <h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer of {{amount}}', { claimantName:claimantName, amount: amount }) }}</h3>
   <p>The claim will be settled.</p>
