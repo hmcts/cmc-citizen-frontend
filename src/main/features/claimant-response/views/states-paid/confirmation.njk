@@ -30,7 +30,7 @@
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
 
       {% if accepted %}
-        <p>The claim is now settled. We'll email the defendant Mary Richards to tell them.</p>
+        <p>The claim is now settled. We'll email the defendant {{ claim.claimData.defendant.name }} to tell them.</p>
       {% elif mediationRequested %}
       {% else %}
         <p>The court will review the case. You might have to go to a hearing.</p>

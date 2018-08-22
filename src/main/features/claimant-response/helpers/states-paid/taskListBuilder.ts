@@ -42,20 +42,20 @@ export class TaskListBuilder {
       const paidInFull: boolean = claim.totalAmountTillDateOfIssue === amount
       if (paidInFull) {
         tasks.push(
-          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue) }`,
+          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue) }?`,
             StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
             ClaimSettledTask.isCompleted(draft)
           ))
       } else {
         tasks.push(
-          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(amount) }`,
+          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(amount) }?`,
             StatesPaidPaths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
             PartPaymentReceivedTask.isCompleted(draft)
           ))
 
         if (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.YES.option) {
           tasks.push(
-            new TaskListItem(`Settle the claim for ${ NumberFormatter.formatMoney(amount) }`,
+            new TaskListItem(`Settle the claim for ${ NumberFormatter.formatMoney(amount) }?`,
               StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
               ClaimSettledTask.isCompleted(draft)
             ))
