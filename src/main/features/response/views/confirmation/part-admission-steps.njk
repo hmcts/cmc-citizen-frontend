@@ -7,15 +7,9 @@
 
 
 <h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer', { claimantName: claimantName }) }}</h3>
-<p>{{ t('You should:') }}</p>
-
-{% if claim.response.paymentDeclaration %}
-  <p>{{ t('If {{ claimantName }} accepts your response the claim will be settled. We’ll email you to tell you.', { claimantName: claimantName }) }}</p>
-  <p>{{ t('If they reject your response the court will review the case. You might have to go to a hearing.') }}</p>
-  <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare') }}.</p>
-{% endif %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  <p>{{ t('You should:') }}</p>
   <ul class="list list-bullet">
     <li>{{ t('pay {{ claimantName }} by {{ paymentDate }}', { claimantName: claimantName, paymentDate: paymentDate }) }}</li>
     <li>{{ t('make sure any cheques or bank transfers are clear in their account by the deadline') }}</li>
@@ -29,9 +23,34 @@
   </ul>
   <h3 class="heading-small">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }},', {claimantName:claimantName, amount: amount}) }}</h3>
 
-  <p>{{ t('The court will review the case for the full amount of {{fullAmount}}.', {fullAmount:fullAmount}) }}</p>
+  <p>{{ t('The court will review the case for the full amount of {{fullAmount}}.', { fullAmount:fullAmount }) }}</p>
 
   <h3 class="heading-small">{{t('If {{ claimantName }} rejects your offer to pay by {{ paymentDate }}', { claimantName: claimantName, paymentDate: paymentDate }) }}</h3>
   <p>The court will decide how you must pay.</p>
 
 {% endif %}
+
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+
+  <p>{{ t('You need to pay {{ claim.claimData.claimant.name }} {{amount}} immediately.', { claimantName: claimantName, amount: amount }) }}</p>
+
+  <p>{{ t('Make sure that:') }}</p>
+
+  <ul class="list list-bullet">
+    <li>{{ t('they get the money by {{ paymentDate }} - they can request a County Court Judgment against you if not', { paymentDate: paymentDate }) }}</li>
+    <li>{{ t('any cheques or bank transfers are clear in their account by the deadline') }}</li>
+    <li>{{ t('you get a receipt for any payments') }} </li>
+  </ul>
+
+  <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI ) }} if you need their payment details</p>
+
+  <h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer of {{amount}}', { claimantName:claimantName, amount: amount }) }}</h3>
+  <p>The claim will be settled.</p>
+
+  <h3 class="heading-small">{{ t('If {{ claimantName }} rejects your offer', { claimantName: claimantName } ) }}</h3>
+
+  <p>{{ t('The court will review the case for the full amount of {{fullAmount}}.', { fullAmount:fullAmount }) }}</p>
+
+{% endif %}
+
+
