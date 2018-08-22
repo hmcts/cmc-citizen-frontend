@@ -41,7 +41,9 @@
   offerRejectedForClaimantDashboard,
   offerRejectedForDefendantDashboard %}
 
-{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
+{% from "./claimStatus/offerSettlement.njk" import
+  offerSettlementReachedDashboard,
+  repaymentPlanOfferSettlementDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}

@@ -2,6 +2,10 @@
   {{ t('A County Court Judgment has been issued.') }}
 {% endmacro %}
 
+{% macro ccjIssuedForDefendantDashboard(claim) %}
+  {{ t('A County Court Judgment has been issued.') }}
+{% endmacro %}
+
 {% macro ccjIssuedForClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('A County Court Judgment has been issued') }}</h2>
   <p>
@@ -10,8 +14,13 @@
   <p>
     {{ t('When you’ve been paid in full, you need to let us know.') }}
   </p>
+  {{ _respond(claim, 'Tell us you’ve been paid') }}
 {% endmacro %}
 
 {% macro _viewJudgementLink(claim) %}
   <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the settlement agreement') }}</a>
+{% endmacro %}
+
+{% macro _respond(claim, text) %}
+  <p><a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t(text) }}</a></p>
 {% endmacro %}

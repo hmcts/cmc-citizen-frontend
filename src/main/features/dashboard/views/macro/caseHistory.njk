@@ -39,7 +39,9 @@ ccjIssuedForClaimantClaimDetails %}
 {% from "./claimStatus/offerRejected.njk" import
   offerRejectedForClaimantClaimDetails,
   offerRejectedForDefendantClaimDetails %}
-{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
+{% from "./claimStatus/offerSettlement.njk" import
+  offerSettlementReachedClaimDetails,
+  repaymentPlanOfferSettlementReachedClaimDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
