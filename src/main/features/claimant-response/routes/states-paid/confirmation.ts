@@ -11,8 +11,20 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
       // TODO: get claimant response data from claim once in claim-store
+      const scenario = req.query.scenario
       let accepted: boolean = true
-      const mediationRequested: boolean = true
+      let mediationRequested: boolean = true
+
+      if (scenario === '1') {
+        accepted = true
+        mediationRequested = false
+      } else if (scenario === '2') {
+        accepted = false
+        mediationRequested = true
+      } else if (scenario === '3') {
+        accepted = false
+        mediationRequested = false
+      }
 
       res.render(
         StatesPaidPaths.confirmationPage.associatedView,
