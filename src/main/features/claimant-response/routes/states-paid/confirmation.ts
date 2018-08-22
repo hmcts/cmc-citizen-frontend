@@ -17,7 +17,7 @@ export default express.Router()
       let accepted: boolean = true
       let mediationRequested: boolean = false
 
-      if(response.type === ClaimantResponseType.REJECTION) {
+      if (response.type === ClaimantResponseType.REJECTION) {
         accepted = false
         mediationRequested = (response as ResponseRejection).freeMediation
       } else {
