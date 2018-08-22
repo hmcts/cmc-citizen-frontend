@@ -42,7 +42,10 @@
     <li>{{ t('you get a receipt for any payments') }} </li>
   </ul>
 
-  <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI ) }} if you need their payment details.</p>
+  <p>
+    {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI ) }}
+    {{ t('if you need their payment details.') }}
+  </p>
 
   <h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer of {{amount}}', { claimantName:claimantName, amount: amount }) }}</h3>
   <p>The claim will be settled.</p>
@@ -50,6 +53,34 @@
   <h3 class="heading-small">{{ t('If {{ claimantName }} rejects your offer', { claimantName: claimantName } ) }}</h3>
 
   <p>{{ t('The court will review the case for the full amount of {{fullAmount}}.', { fullAmount:fullAmount }) }}</p>
+
+{% endif %}
+
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+<h3 class="bold">{{ t('If {{ claimantName }} accepts your offer', { claimantName: claimantName }) }}</h3>
+<p>{{ t('You should:') }}</p>
+
+<ul class="list list-bullet">
+  <li>{{ t('set up your repayment plan to begin when you said it would') }}</li>
+  <li>
+    {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+    {{ t('if you need their payment details.') }}
+  </li>
+  <li>{{ t('make sure you get a receipt for any payments') }}</li>
+</ul>
+
+<p>{{ t('Because you’ve said you won’t pay immediately, {{ claimantName }} can either:', { claimantName: claimantName }) }}</p>
+
+<ul class="list list-bullet">
+  <li>{{ t('ask you to sign a settlement agreement to formalise the repayment plan') }}</li>
+  <li>{{ t('request a County Court Judgment against you for {{ amount }}', { amount: amount }) }}</li>
+</ul>
+
+<h3 class="bold">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }}', { claimantName: claimantName, amount: amount }) }}</h3>
+<p>{{ t('The court will review the case for the full amount of {{ fullAmount }}', { fullAmount:fullAmount }) }}.</p>
+<h3 class="bold">{{ t('If {{ claimantName }} rejects rejects your offer to pay in instalments', { claimantName: claimantName }) }}</h3>
+<p>{{ t('The court will decide how you must pay.') }}</p>
+
 
 {% endif %}
 
