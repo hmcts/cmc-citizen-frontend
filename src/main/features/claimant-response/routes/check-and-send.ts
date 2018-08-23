@@ -14,7 +14,7 @@ import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
-import { calculateTotalAmount } from 'claimant-response/helpers/amountHelper'
+import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -30,7 +30,7 @@ export default express.Router()
         draft: draft.document,
         claim: claim,
         lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined,
-        totalAmount: calculateTotalAmount(claim, res.locals.draft.document)
+        totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document)
       })
     })
   )

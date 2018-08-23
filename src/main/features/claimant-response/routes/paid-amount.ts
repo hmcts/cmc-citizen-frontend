@@ -6,7 +6,7 @@ import { claimantResponseCCJPath } from 'features/claimant-response/paths'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
-import { calculateTotalAmount } from 'claimant-response/helpers/amountHelper'
+import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 
 class PaidAmountPage extends AbstractPaidAmountPage<DraftClaimantResponse> {
 
@@ -15,7 +15,7 @@ class PaidAmountPage extends AbstractPaidAmountPage<DraftClaimantResponse> {
   }
 
   totalAmount (claim: Claim, draft: DraftClaimantResponse): number {
-    return calculateTotalAmount(claim, draft)
+    return AmountHelper.calculateTotalAmount(claim, draft)
   }
 }
 
