@@ -1,7 +1,6 @@
 import { ResponseType } from 'claims/models/response/responseType'
 import { Claim } from 'claims/models/claim'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 export function isResponseAlreadyPaid (claim: Claim): boolean {
   switch (claim.response.responseType) {
@@ -28,6 +27,6 @@ export function getAlreadyPaidAmount (claim: Claim): number {
     case ResponseType.FULL_DEFENCE:
       return claim.totalAmountTillDateOfIssue
     case ResponseType.PART_ADMISSION:
-      return (claim.response as PartialAdmissionResponse).amount
+      return claim.response.amount
   }
 }

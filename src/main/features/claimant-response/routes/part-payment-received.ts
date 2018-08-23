@@ -23,7 +23,6 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
   throw new NotFoundError(req.path)
 })
 
-
 function renderView (form: Form<PartPaymentReceived>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const response: PartialAdmissionResponse = claim.response as PartialAdmissionResponse

@@ -54,7 +54,7 @@ export default express.Router()
             claim: claim,
             confirmationDate: MomentFactory.currentDate(),
             accepted: accepted,
-            mediationRequested: mediationRequested,
+            mediationRequested: mediationRequested
           })
       } else {
         res.render(
