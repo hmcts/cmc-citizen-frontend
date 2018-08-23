@@ -1,5 +1,5 @@
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Paths, CCJPaths } from 'claimant-response/paths'
+import { Paths, CCJPaths, StatesPaidPaths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
@@ -15,6 +15,11 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettledTask'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/partPaymentReceivedTask'
+import { isAlreadyPaidLessThanAmount, isResponseAlreadyPaid } from 'claimant-response/helpers/statesPaidHelper'
 
 const validator: Validator = new Validator()
 
@@ -27,21 +32,72 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
 
-    if (claim.response.responseType === ResponseType.FULL_ADMISSION
-      || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)) {
-      tasks.push(
-        new TaskListItem(
-          'View the defendant’s full response',
-          Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
-          ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
-        )
+    tasks.push(
+      new TaskListItem(
+        'View the defendant’s full response',
+        Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
+        ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
       )
-    }
+    )
 
     return new TaskList('Before you start', tasks)
   }
 
+  static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
+    const tasks: TaskListItem[] = []
+    const response: FullDefenceResponse | PartialAdmissionResponse = claim.response as FullDefenceResponse | PartialAdmissionResponse
+    const externalId: string = claim.externalId
+
+    if (response.responseType === ResponseType.FULL_DEFENCE) {
+      tasks.push(
+        new TaskListItem('Accept or reject their response',
+          StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
+          ClaimSettledTask.isCompleted(draft)
+        ))
+    } else {
+      if (isAlreadyPaidLessThanAmount(claim)) {
+        tasks.push(
+          new TaskListItem(`Have you been paid ${ NumberFormatter.formatMoney(response.amount) }?`,
+            StatesPaidPaths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
+            PartPaymentReceivedTask.isCompleted(draft)
+          ))
+
+        if (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.YES) {
+          tasks.push(
+            new TaskListItem(`Settle the claim for ${ NumberFormatter.formatMoney(response.amount) }?`,
+              StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
+              ClaimSettledTask.isCompleted(draft)
+            ))
+        }
+      } else {
+        tasks.push(
+          new TaskListItem(`Have you been paid the full ${ NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue) }?`,
+            StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
+            ClaimSettledTask.isCompleted(draft)
+          ))
+      }
+    }
+
+    if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
+      (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
+      tasks.push(
+        new TaskListItem(
+          'Consider free mediation',
+          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
+          draft.freeMediation !== undefined
+        ))
+    }
+
+    return new TaskList('Your response', tasks)
+
+  }
+
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
+
+    if (isResponseAlreadyPaid(claim)) {
+      return this.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+    }
+
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
 
@@ -157,7 +213,7 @@ export class TaskListBuilder {
 
   private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
     if (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
-        || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)))) {
+      || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)))) {
       tasks.push(
         new TaskListItem(
           'Formalise the repayment plan',

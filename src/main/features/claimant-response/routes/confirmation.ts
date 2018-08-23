@@ -9,6 +9,9 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { isResponseAlreadyPaid } from 'claimant-response/helpers/statesPaidHelper'
+import { ResponseRejection } from 'claims/models/claimant-response/responseRejection'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 function hasAcceptedDefendantsPaymentIntention (claim: Claim): boolean {
   const paymentIntentionFromResponse: PaymentIntention = (claim.response as FullAdmissionResponse | PartialAdmissionResponse).paymentIntention
@@ -34,12 +37,34 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
 
-      res.render(
-        Paths.confirmationPage.associatedView,
-        {
-          claim: claim,
-          confirmationDate: MomentFactory.currentDate(),
-          repaymentPlanOrigin: claim.settlement && getRepaymentPlanOrigin(claim.settlement),
-          paymentIntentionAccepted: hasAcceptedDefendantsPaymentIntention(claim)
-        })
+      if (isResponseAlreadyPaid(claim)) {
+        let accepted: boolean = true
+        let mediationRequested: boolean = false
+
+        if (claim.claimantResponse.type === ClaimantResponseType.REJECTION) {
+          accepted = false
+          mediationRequested = (claim.claimantResponse as ResponseRejection).freeMediation
+        } else {
+          accepted = true
+        }
+
+        res.render(
+          Paths.confirmationPage.associatedView,
+          {
+            claim: claim,
+            confirmationDate: MomentFactory.currentDate(),
+            accepted: accepted,
+            mediationRequested: mediationRequested,
+          })
+      } else {
+        res.render(
+          Paths.confirmationPage.associatedView,
+          {
+            claim: claim,
+            confirmationDate: MomentFactory.currentDate(),
+            repaymentPlanOrigin: claim.settlement && getRepaymentPlanOrigin(claim.settlement),
+            paymentIntentionAccepted: hasAcceptedDefendantsPaymentIntention(claim)
+          })
+      }
+
     }))

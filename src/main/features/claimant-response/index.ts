@@ -22,10 +22,6 @@ import { IncomeTypeViewFilter } from 'claimant-response/filters/income-type-view
 import { ExpenseTypeViewFilter } from 'claimant-response/filters/expense-type-view-filter'
 import { AgeGroupTypeViewFilter } from 'claimant-response/filters/age-group-type-view-filter'
 import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
-import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
-import { Claim } from 'claims/models/claim'
-import { ResponseType } from 'claims/models/response/responseType'
-import { DefenceType } from 'claims/models/response/defenceType'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -61,14 +57,12 @@ export class ClaimantResponseFeature {
 
     const allClaimantResponse = '/case/*/claimant-response/*'
 
-    const allStatesPaid = '/case/*/claimant-response/states-paid/*'
-
     app.all(allClaimantResponse, requestHandler())
     app.all(allClaimantResponse, ClaimMiddleware.retrieveByExternalId)
     app.all(allClaimantResponse, OnlyClaimantLinkedToClaimCanDoIt.check())
     app.all(allClaimantResponse, ResponseGuard.checkResponseExists())
 
-    app.all(/^\/case\/.+\/claimant-response\/(?!confirmation|states-paid).*$/,
+    app.all(/^\/case\/.+\/claimant-response\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claimantResponse', 100, (value: any): DraftClaimantResponse => {
         return new DraftClaimantResponse().deserialize(value)
       }),
@@ -76,33 +70,6 @@ export class ClaimantResponseFeature {
         res.locals.draft = res.locals.claimantResponseDraft
         next()
       })
-
-    app.all(allStatesPaid, ResponseGuard.checkStatesPaidResponseExists())
-
-    app.all(allClaimantResponse, (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const claim: Claim = res.locals.claim
-      if (req.path.endsWith(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))) {
-
-        switch (claim.response.responseType) {
-          case ResponseType.FULL_DEFENCE:
-            if (claim.response.defenceType === DefenceType.ALREADY_PAID) {
-              return res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
-            }
-            break
-          case ResponseType.PART_ADMISSION:
-            if (claim.response.paymentDeclaration !== undefined) {
-              return res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
-            }
-            break
-        }
-      }
-      next()
-    })
-
-    app.all(/^\/case\/.+\/claimant-response\/states-paid\/(?!confirmation).*$/,
-      DraftMiddleware.requestHandler(new DraftService(), 'statesPaidResponse', 100, (value: any): DraftStatesPaidResponse => {
-        return new DraftStatesPaidResponse().deserialize(value)
-      }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

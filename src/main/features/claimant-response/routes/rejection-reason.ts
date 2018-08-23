@@ -8,10 +8,14 @@ import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
+import { Claim } from 'claims/models/claim'
+import { isResponseAlreadyPaid } from 'claimant-response/helpers/statesPaidHelper'
 
 function renderView (form: Form<RejectionReason>, res: express.Response) {
+  const claim: Claim = res.locals.claim
   res.render(Paths.rejectionReasonPage.associatedView, {
-    form: form
+    form: form,
+    alreadyPaid: isResponseAlreadyPaid(claim)
   })
 }
 
@@ -21,6 +25,7 @@ export default express.Router()
     Paths.rejectionReasonPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+
       renderView(new Form(draft.document.rejectionReason), res)
     })
     )

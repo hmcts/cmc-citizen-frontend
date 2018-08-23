@@ -7,6 +7,8 @@ import { PaymentIntention } from 'shared/components/payment-intention/model/paym
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/partPaymentReceived'
+import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -19,6 +21,8 @@ export class DraftClaimantResponse extends DraftDocument {
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
+  partPaymentReceived?: PartPaymentReceived
+  accepted?: ClaimSettled
 
   constructor () {
     super()
@@ -53,6 +57,12 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.rejectionReason) {
         this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
+      }
+      if (input.partPaymentReceived) {
+        this.partPaymentReceived = new PartPaymentReceived().deserialize(input.partPaymentReceived)
+      }
+      if (input.accepted) {
+        this.accepted = new ClaimSettled().deserialize(input.accepted)
       }
     }
     return this

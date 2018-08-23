@@ -17,12 +17,14 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { generatePaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { ResponseType } from 'claims/models/response/responseType'
+import { isAlreadyPaidLessThanAmount, isResponseAlreadyPaid } from 'claimant-response/helpers/statesPaidHelper'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
 
   return claim.response.responseType === ResponseType.FULL_ADMISSION
-    || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)
+    || (claim.response.responseType === ResponseType.PART_ADMISSION)
+    || claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.paymentDeclaration !== undefined
 }, (req: express.Request): void => {
   throw new NotFoundError(req.path)
 })
@@ -47,14 +49,26 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
 
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
-  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-  res.render(Paths.defendantsResponsePage.associatedView, {
-    claim: claim,
-    totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
-    totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
-    paymentPlan: generatePaymentPlan(response.responseType === ResponseType.PART_ADMISSION ? response.amount : claim.totalAmountTillToday, response.paymentIntention.repaymentPlan),
-    page: page
-  })
+  const alreadyPaid: boolean = isResponseAlreadyPaid(claim)
+  const partiallyPaid: boolean = isAlreadyPaidLessThanAmount(claim)
+  if (alreadyPaid) {
+    res.render(Paths.defendantsResponsePage.associatedView, {
+      claim: claim,
+      page: page,
+      alreadyPaid: alreadyPaid,
+      partiallyPaid: partiallyPaid
+    })
+  } else {
+    const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+    res.render(Paths.defendantsResponsePage.associatedView, {
+      claim: claim,
+      totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
+      totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
+      paymentPlan: generatePaymentPlan(response.responseType === ResponseType.PART_ADMISSION ? response.amount : claim.totalAmountTillToday, response.paymentIntention.repaymentPlan),
+      page: page,
+      alreadyPaid: alreadyPaid
+    })
+  }
 }
 
 /* tslint:disable:no-default-export */
@@ -72,9 +86,10 @@ export default express.Router()
     stateGuardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+      const claim: Claim = res.locals.claim
       const user: User = res.locals.user
 
-      if (req.body.action && req.body.action.showPage) {
+      if (req.body.action && req.body.action.showPage && !isResponseAlreadyPaid(claim)) {
         const page: number = +req.body.action.showPage
         return renderView(res, page)
       }

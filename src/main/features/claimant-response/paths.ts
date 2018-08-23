@@ -32,16 +32,7 @@ export class CCJPaths {
   static readonly paidAmountSummaryPage = new RoutablePath(claimantResponseCCJPath + CountyCourtJudgementPaths.paidAmountSummaryPage.uri)
 }
 
-export const statesPaidPath = `${claimantResponsePath}/states-paid`
-
 export class StatesPaidPaths {
-  static readonly taskListPage = new RoutablePath(`${statesPaidPath}/task-list`)
-  static readonly partPaymentReceivedPage = new RoutablePath(`${statesPaidPath}/part-payment-received`)
-  static readonly settleClaimPage = new RoutablePath(`${statesPaidPath}/settle-claim`)
-  static readonly rejectReasonPage = new RoutablePath(`${statesPaidPath}/reject-reason`)
-  static readonly checkAndSendPage = new RoutablePath(`${statesPaidPath}/check-and-send`)
-  static readonly confirmationPage = new RoutablePath(`${statesPaidPath}/confirmation`)
-  static readonly freeMediationPage = new RoutablePath(`${statesPaidPath}/free-mediation`)
-  static readonly incompleteSubmissionPage = new RoutablePath(`${statesPaidPath}/incomplete-submission`)
-  static readonly defendantsResponsePage = new RoutablePath(`${statesPaidPath}/defendants-response`)
+  static readonly partPaymentReceivedPage = new RoutablePath(`${claimantResponsePath}/part-payment-received`)
+  static readonly settleClaimPage = new RoutablePath(`${claimantResponsePath}/settle-claim`)
 }

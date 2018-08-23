@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { StatesPaidPaths } from 'claimant-response/paths'
+import { Paths, StatesPaidPaths } from 'claimant-response/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { Claim } from 'main/app/claims/models/claim'
 import { Form } from 'main/app/forms/form'
@@ -7,11 +7,14 @@ import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSet
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
-import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
-import { YesNoOption } from 'models/yesNoOption'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { ResponseType } from 'claims/models/response/responseType'
-import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { YesNoOption } from 'main/app/models/yesNoOption'
+import { PartialAdmissionResponse } from 'main/app/claims/models/response/partialAdmissionResponse'
+import { ResponseType } from 'main/app/claims/models/response/responseType'
+import { FullDefenceResponse } from 'main/app/claims/models/response/fullDefenceResponse'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { getAlreadyPaidAmount } from 'claimant-response/helpers/statesPaidHelper'
 
 function renderView (form: Form<ClaimSettled>, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -30,7 +33,7 @@ function renderView (form: Form<ClaimSettled>, res: express.Response): void {
 export default express.Router()
   .get(StatesPaidPaths.settleClaimPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<DraftStatesPaidResponse> = res.locals.statesPaidResponseDraft
+      const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       renderView(new Form(draft.document.accepted), res)
     }))
   .post(
@@ -41,27 +44,27 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const draft: Draft<DraftStatesPaidResponse> = res.locals.statesPaidResponseDraft
-
+        const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         draft.document.accepted = form.model
 
         if (form.model.accepted.option === YesNoOption.YES.option) {
-          draft.document.disputeReason = undefined
+          draft.document.rejectionReason = undefined
           draft.document.freeMediation = undefined
         }
 
-        if (draft.document.amount === undefined) {
+        if (draft.document.paidAmount === undefined) {
           const claim: Claim = res.locals.claim
-          const response: PartialAdmissionResponse = claim.response as PartialAdmissionResponse
-          draft.document.amount = response.amount
+          draft.document.paidAmount = new PaidAmount(new PaidAmountOption(YesNoOption.YES.option),
+            getAlreadyPaidAmount(claim),
+            claim.totalAmountTillDateOfIssue)
         }
 
         await new DraftService().save(draft, res.locals.user.bearerToken)
 
         if (draft.document.accepted.accepted.option === YesNoOption.NO.option) {
-          res.redirect(StatesPaidPaths.rejectReasonPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          res.redirect(Paths.rejectionReasonPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          res.redirect(StatesPaidPaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
       }
     })

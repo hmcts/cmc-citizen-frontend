@@ -14,6 +14,8 @@ import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
+import { isResponseAlreadyPaid } from 'claimant-response/helpers/statesPaidHelper'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -23,12 +25,14 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
-      const paymentPlan = getPaymentPlan(claim)
+      const alreadyPaid: boolean = isResponseAlreadyPaid(claim)
+      const paymentPlan = alreadyPaid ? undefined : getPaymentPlan(claim)
 
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
-        lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined
+        lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined,
+        alreadyPaid: alreadyPaid
       })
     })
   )
@@ -40,7 +44,9 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
 
-      if (draft.document.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
+      if (isResponseAlreadyPaid(claim)) {
+        await new ClaimStoreClient().saveClaimantResponseForUser(claim.externalId, draft.document, claim, user)
+      } else if (draft.document.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
         await CCJClient.issue(claim, draft, user)
       } else {
         const settlement: Settlement = prepareSettlement(claim, draft.document)

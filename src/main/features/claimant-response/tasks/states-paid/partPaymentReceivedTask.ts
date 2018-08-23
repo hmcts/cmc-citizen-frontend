@@ -1,12 +1,12 @@
 import { Validator } from 'class-validator'
 
-import { DraftStatesPaidResponse } from 'claimant-response/draft/draftStatesPaidResponse'
 import { YesNoOption } from 'models/yesNoOption'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
 const validator = new Validator()
 
 export class PartPaymentReceivedTask {
-  static isCompleted (value: DraftStatesPaidResponse): boolean {
+  static isCompleted (value: DraftClaimantResponse): boolean {
     if (!value.partPaymentReceived || validator.validateSync(value.partPaymentReceived).length > 0) {
       return false
     }
@@ -14,7 +14,7 @@ export class PartPaymentReceivedTask {
     const isReasonNeeded: boolean = value.partPaymentReceived.received.option === YesNoOption.NO.option
 
     if (isReasonNeeded) {
-      return value.disputeReason !== undefined && validator.validateSync(value.disputeReason).length === 0
+      return value.rejectionReason !== undefined && validator.validateSync(value.rejectionReason).length === 0
     } else {
       return true
     }
