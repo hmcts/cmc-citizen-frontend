@@ -15,13 +15,17 @@ export class AmountHelper {
   }
 
   static calculateAmountSettledFor (claim: Claim, draft: DraftClaimantResponse): number | undefined {
-    const settledForLessThanClaimAmount = claim.response && claim.response.responseType === ResponseType.PART_ADMISSION
-      && draft.settleAdmitted && draft.settleAdmitted.admitted === YesNoOption.YES
+    const settledForLessThanClaimAmount = AmountHelper.isSettledForLessThanClaim(claim, draft)
 
     if (settledForLessThanClaimAmount) {
       return (claim.response as PartialAdmissionResponse).amount
     }
     return undefined
+  }
+
+  static isSettledForLessThanClaim (claim: Claim, draft: DraftClaimantResponse): boolean {
+    return claim.response && claim.response.responseType === ResponseType.PART_ADMISSION
+      && draft.settleAdmitted && draft.settleAdmitted.admitted === YesNoOption.YES
   }
 
 }

@@ -3317,7 +3317,7 @@ gulp-livereload@^3.8.0:
     lodash.assign "^3.0.0"
     mini-lr "^0.1.8"
 
-gulp-nodemon@^2.0.2:
+gulp-nodemon@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/gulp-nodemon/-/gulp-nodemon-2.2.1.tgz#d9bf199f5585458159d3d299153e60b46868b6f4"
   dependencies:

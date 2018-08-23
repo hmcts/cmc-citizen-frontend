@@ -12,12 +12,15 @@ export class CountyCourtJudgment {
                public paidAmount?: number,
                public repaymentPlan?: RepaymentPlan,
                public payBySetDate?: Moment,
-               public statementOfTruth?: StatementOfTruth) {
+               public settledLessThanClaimAmount?: boolean,
+               public statementOfTruth?: StatementOfTruth
+  ) {
     this.defendantDateOfBirth = defendantDateOfBirth
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount
     this.repaymentPlan = repaymentPlan
     this.payBySetDate = payBySetDate
+    this.settledLessThanClaimAmount = settledLessThanClaimAmount
   }
 
   public deserialize (input: any): CountyCourtJudgment {
@@ -30,6 +33,7 @@ export class CountyCourtJudgment {
       this.repaymentPlan = input.repaymentPlan ? new RepaymentPlan().deserialize(input.repaymentPlan) : undefined
       this.payBySetDate = input.payBySetDate ? MomentFactory.parse(input.payBySetDate) : undefined
       this.statementOfTruth = new StatementOfTruth().deserialize(input.statementOfTruth)
+      this.settledLessThanClaimAmount = input.settledLessThanClaimAmount
     }
     return this
   }
