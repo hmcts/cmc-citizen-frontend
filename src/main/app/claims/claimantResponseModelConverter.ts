@@ -4,24 +4,25 @@ import { ClaimantResponse } from 'claims/models/claimantResponse'
 import { ResponseAcceptation } from 'claims/models/claimant-response/responseAcceptation'
 import { ResponseRejection } from 'claims/models/claimant-response/responseRejection'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { Claim } from 'claims/models/claim'
 
 export class ClaimantResponseModelConverter {
-  static convert (draft: DraftStatesPaidResponse): ClaimantResponse {
+  static convert (draft: DraftStatesPaidResponse, claim: Claim): ClaimantResponse {
     if (draft.accepted !== undefined && draft.accepted.accepted.option === YesNoOption.YES.option) {
-      return this.convertAcceptedResponse(draft)
+      return this.convertAcceptedResponse(draft, claim)
     } else {
-      return this.convertRejectedResponse(draft)
+      return this.convertRejectedResponse(draft, claim)
     }
   }
 
-  private static convertAcceptedResponse (draft: DraftStatesPaidResponse): ResponseAcceptation {
+  private static convertAcceptedResponse (draft: DraftStatesPaidResponse, claim: Claim): ResponseAcceptation {
     return {
       type: ClaimantResponseType.ACCEPTATION,
-      amountPaid: draft.amount
+      amountPaid: draft.amount || claim.totalAmountTillToday
     }
   }
 
-  private static convertRejectedResponse (draft: DraftStatesPaidResponse): ResponseRejection {
+  private static convertRejectedResponse (draft: DraftStatesPaidResponse, claim: Claim): ResponseRejection {
     let freeMediation: boolean = false
 
     if (draft.freeMediation !== undefined && draft.freeMediation.freeMediation.option === YesNoOption.YES.option) {
@@ -29,7 +30,7 @@ export class ClaimantResponseModelConverter {
     }
     return {
       type: ClaimantResponseType.REJECTION,
-      amountPaid: draft.amount,
+      amountPaid: draft.amount || claim.totalAmountTillToday,
       freeMediation: freeMediation,
       reason: draft.disputeReason.reason
     }

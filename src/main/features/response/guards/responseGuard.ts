@@ -6,7 +6,6 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { Claim } from 'claims/models/claim'
 import { NotFoundError } from 'errors'
 import { Paths as DashboardPaths } from 'dashboard/paths'
-import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
 
@@ -52,7 +51,7 @@ export class ResponseGuard {
     const allowed = (res: express.Response) => {
       const claim: Claim = res.locals.claim
       return claim.response !== undefined
-        && (claim.response.responseType === ResponseType.FULL_DEFENCE && (claim.response as FullDefenceResponse).defenceType === DefenceType.ALREADY_PAID)
+        && (claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.defenceType === DefenceType.ALREADY_PAID)
           || claim.response.responseType === ResponseType.PART_ADMISSION
     }
 

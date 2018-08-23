@@ -12,14 +12,12 @@
         <h1 class="bold-large">
           {% if accepted %}
             {{ t('You’ve accepted their response') }}
-          {% elif mediationRequested %}
-            {{ t('You’ve requested free mediation') }}
           {% else %}
             {{ t('You’ve rejected their response') }}
           {% endif %}
         </h1>
         <p class="reference-number">
-          <span>{{ t('Claim number:') }}</span>
+          <span>{{ t('Your claim number:') }}</span>
           <span class="block bold-large">{{ claim.claimNumber }}</span>
         </p>
         <p>
@@ -30,8 +28,10 @@
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
 
       {% if accepted %}
-        <p>The claim is now settled. We'll email the defendant Mary Richards to tell them.</p>
+        <p>The claim is now settled. We'll email the defendant {{ claim.claimData.defendant.name }} to tell them.</p>
       {% elif mediationRequested %}
+        <p>You agreed to try to resolve the claim using mediation.</p>
+        <p>A mediator will contact you and the defendant in the next 14 days to arrange an appointment.</p>
       {% else %}
         <p>The court will review the case. You might have to go to a hearing.</p>
         <p>We'll contact you if we set a hearing date to tell you how to prepare.</p>
