@@ -28,7 +28,6 @@ import { ClaimantResponseFeature } from 'claimant-response/index'
 import { FeatureTogglesService } from 'shared/clients/featureTogglesService'
 import { Paths as AppPath } from 'paths'
 import { User } from 'idam/user'
-import { userInfo } from 'os'
 
 export const app: express.Express = express()
 
