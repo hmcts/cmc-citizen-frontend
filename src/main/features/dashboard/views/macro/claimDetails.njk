@@ -19,8 +19,7 @@ ccjRequestedForDefendantClaimDetails %}
   claimRejectedFreeMediationYESForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
-  claimPartAdmittedToOweForDefendantClaimDetails,
-  claimPartAdmittedToOweForClaimantClaimDetails %}
+  claimPartAdmittedToOweForDefendantClaimDetails %}
 
 {% from "./claimStatus/statesPaid.njk" import
   paidAmountForClaimantClaimDetails,
@@ -70,11 +69,7 @@ ccjRequestedForDefendantClaimDetails %}
             {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
           {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-          {% if claim.response.paymentDeclaration %}
             {{ paidAmountForClaimantClaimDetails(claim) }}
-          {% else %}
-            {{ claimPartAdmittedToOweForClaimantClaimDetails(claim) }}
-          {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
           {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
         {% endif %}
@@ -109,16 +104,12 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-            {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
               {{ paidAmountForDefendantClaimDetails(claim) }}
-            {% endif %}
-            {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
           {% elif claim.response.freeMediation === FreeMediationOption.NO %}
             {{ claimRejectedFreeMediationNOForDefendantClaimDetails(claim) }}
           {% else %}
             {{ claimRejectedFreeMediationYESForDefendantClaimDetails(claim) }}
           {% endif %}
-
           {% if not claim.settlement and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
             {{ _settleOutOfCourtOption (claim) }}
           {% endif %}

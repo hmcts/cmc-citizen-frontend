@@ -1,8 +1,13 @@
 {% from "externalLink.njk" import externalLink %}
 
+{#TODO#}
+{##No status for DEFENDANT#}
+{#part admit -> haven't paid -> will pay [IMMEDIATLY] or by set datew#}
+{#claimant saw#}
+{#The defendant believes they owe you £5,000. You can accept or reject that this is the amount owed.#}
+
 {% macro claimPartAdmittedToOweForDefendantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
-
   <p>
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
       {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} immediately.',
