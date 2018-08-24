@@ -4,6 +4,7 @@ import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
 import * as bodyParser from 'body-parser'
+
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'shared/router/routerFinder'
@@ -23,6 +24,11 @@ import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
+
+import { FeatureTogglesService } from 'shared/clients/featureTogglesService'
+import { Paths as AppPath } from 'paths'
+import { User } from 'idam/user'
+import { userInfo } from 'os'
 
 export const app: express.Express = express()
 
@@ -47,6 +53,17 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser())
 
 app.use(express.static(path.join(__dirname, 'public')))
+
+const featureTogglesService: FeatureTogglesService = new FeatureTogglesService()
+// test credentials for localhost:8580
+const user: User = new User('27','tharacka@kainos.com', 'tharack', 'ahmed',[], '', '')
+const roles: string[] = []
+
+if (featureTogglesService.isToggleFeatureEnabled(user, roles, 'cmc_shutter_page')) {
+  app.all(/^((?!shutter-unplanned).)*$/, (req,res) => {
+    res.redirect(AppPath.unplannedShutterPage.uri)
+  })
+}
 
 if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)

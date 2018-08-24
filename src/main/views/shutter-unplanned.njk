@@ -1,0 +1,33 @@
+{% extends "layout.njk" %}
+
+{% set heading = 'Sorry, there is a problem with this service' %}
+
+{% block content %}
+ <div class="grid-row">
+    <div class="column-two-thirds">
+      <header class="page-heading page-heading-with-context page-heading-without-breadcrumb">
+
+
+        <p>{{ t('We’re working on fixing the problem. Please try again later.') }}</p>
+
+        <p>{{ t('If you were making a claim or responding to one then your information has been saved in your account.') }}</p>
+
+        <p>{{ t('You can contact us if you need help.') }}</p>
+
+        <p><h3 class="heading-medium">{{ t('Contact us') }}</h3></p>
+
+        <div>
+          <span><span class="bold">{{ t('Money Claims') }}</span><br>
+            {{ t('Email: <a href="{{}}">moneyclaims@hmcts.gsi.gov.uk</a> ') }}<br>
+            {{ t('Telephone: 0300 123 7050') }}<br>
+            {{ t('Monday to Friday, 9am to 5pm') }}<br>
+            {{ t('<a href="">Find out about call charges</a>') }}<br>
+          </p>
+        </div>
+
+    </div>
+
+  </div>
+
+{% endblock %}
+
