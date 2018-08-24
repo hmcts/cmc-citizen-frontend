@@ -43,14 +43,15 @@ describe('Claimant Response - Counter offer accepted', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it.skip('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+      it('should render page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
         draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment '))
+          .expect(res => expect(res).to.be.successful.withText('Repayment plan accepted'))
       })
     })
   })

@@ -11,11 +11,13 @@ import { DraftService } from 'services/draftService'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { CourtOrderHelper } from 'shared/helpers/courtOrderHelper'
+import { ErrorHandling } from 'shared/errorHandling'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.counterOfferAcceptedPage.uri, async (req: express.Request, res: express.Response) => {
+    Paths.counterOfferAcceptedPage.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.draft
       const user: User = res.locals.user
@@ -40,9 +42,9 @@ export default express.Router()
         isCourtOrderPaymentPlanConvertedByDefendantFrequency: claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency,
         claimantPaymentPlan,
         courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency) })
-    })
+    }))
   .post(
     Paths.counterOfferAcceptedPage.uri, async (req: express.Request, res: express.Response) => {
-      const { externalId } = req.params
+      const { externalId } = await req.params
       res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
     })

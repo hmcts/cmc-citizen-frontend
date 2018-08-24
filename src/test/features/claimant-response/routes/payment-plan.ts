@@ -147,12 +147,12 @@ describe('Claimant response: payment plan', () => {
               draftStoreServiceMock.resolveSave()
             })
 
-            it.skip('should redirect to task list page', async () => {
+            it('should redirect to task list page', async () => {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send(validFormData)
-                .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
+                .expect(res => expect(res).to.be.redirect.toLocation(Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })))
             })
           })
 
