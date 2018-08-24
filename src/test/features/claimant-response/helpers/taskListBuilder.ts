@@ -489,7 +489,7 @@ describe('Claimant response task list builder', () => {
       })
     })
 
-    describe('Formalise Repayment Plan task', () => {
+    describe('"Formalise Repayment Plan task"', () => {
       const taskName = 'Formalise the repayment plan'
 
       it('should render page with Formalise repayment plan task', () => {
