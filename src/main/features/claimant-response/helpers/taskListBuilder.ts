@@ -159,7 +159,7 @@ export class TaskListBuilder {
     if (
       (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
         || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)
-        && (draft.acceptCourtOffer && (draft.acceptCourtOffer.acceptCourtOffer.option === YesNoOption.YES)))))) {
+        && (draft.rejectionReason === undefined))))) {
       tasks.push(
         new TaskListItem(
           'Formalise the repayment plan',
