@@ -37,7 +37,9 @@ ccjRequestedForDefendantClaimDetails %}
 {% from "./claimStatus/offerRejected.njk" import
   offerRejectedForClaimantClaimDetails,
   offerRejectedForDefendantClaimDetails %}
-{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
+{% from "./claimStatus/offerSettlement.njk" import
+  offerSettlementReachedForDefendantClaimDetails,
+  offerSettlementReachedForClaimantClaimDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
@@ -75,7 +77,7 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ offerSettlementReachedClaimDetails(claim) }}
+        {{ offerSettlementReachedForClaimantClaimDetails(claim) }}
       {% else %}
         <p>
           {{ caseStatusForClaimant(state.status, claim) }}
@@ -86,8 +88,9 @@ ccjRequestedForDefendantClaimDetails %}
 {% endmacro %}
 
 {% macro caseHistoryForDefendantClaimDetails(claim) %}
-  {% for state in claim.stateHistory %}
+  {% if claim.stateHistory and claim.stateHistory[0] %}
     <div class="status-block">
+      {% set state = claim.stateHistory[0] %}
       {% if state.status === ClaimStatus.NO_RESPONSE %}
         {{ noResponseForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -125,14 +128,14 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-          {{ offerSettlementReachedClaimDetails(claim) }}
+          {{ offerSettlementReachedForDefendantClaimDetails(claim) }}
       {% else %}
         <p>
           {{ caseStatusForDefendant(claim.status, claim) }}
         </p>
       {% endif %}
     </div>
-  {% endfor %}
+  {% endif %}
 {% endmacro %}
 
 {% macro _settleOutOfCourtOption (claim) %}
