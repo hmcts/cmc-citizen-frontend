@@ -14,6 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -43,7 +44,7 @@ describe('Claimant Response - Counter offer accepted', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should render page when everything is fine', async () => {
+      it('should render page when both defendant and claimants payment frequency are same', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
         draftStoreServiceMock.resolveFind('claimantResponse')
         draftStoreServiceMock.resolveSave()
@@ -51,7 +52,40 @@ describe('Claimant Response - Counter offer accepted', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Repayment plan accepted'))
+          .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment plan'))
+      })
+
+      it('should render page when both defendant and claimants payment frequency are different', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
+        draftStoreServiceMock.resolveFind('claimantResponse', {
+          alternatePaymentMethod: {
+            paymentOption: {
+              option: {
+                value: 'INSTALMENTS',
+                displayValue: 'By instalments'
+              }
+            },
+            paymentPlan: {
+              totalAmount: 3326.59,
+              instalmentAmount: 10,
+              firstPaymentDate: {
+                year: 2019,
+                month: 1,
+                day: 1
+              },
+              paymentSchedule: {
+                value: PaymentSchedule.EVERY_TWO_WEEKS,
+                displayValue: 'Every 2 weeks'
+              }
+            }
+          }
+        })
+        draftStoreServiceMock.resolveSave()
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The court’s proposed repayment plan'))
       })
     })
   })
