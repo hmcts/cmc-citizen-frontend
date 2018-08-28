@@ -17,9 +17,10 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = ClaimantResponsePaths.courtOfferPage.evaluateUri({externalId: externalId})
-const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({externalId: externalId})
+const pagePath = ClaimantResponsePaths.courtOfferPage.evaluateUri({ externalId: externalId })
+const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 const defendantFullAdmissionResponse = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
+const rejectionReasonPagePath = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId })
 const draftOverrideForClaimantReponse = {
   alternatePaymentMethod: {
     paymentOption: {
@@ -73,7 +74,8 @@ describe('Claimant Response - Court offer', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Your instalments are more than the defendant can afford'))
+          .expect(res => expect(res).to.be.successful.withText('Your instalments are more than the ' +
+            'defendant can afford'))
       })
     })
   })
@@ -109,7 +111,7 @@ describe('Claimant Response - Court offer', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ acceptCourtOffer: 'no' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId })))
+          .expect(res => expect(res).to.be.redirect.toLocation(rejectionReasonPagePath))
       })
     })
   })
