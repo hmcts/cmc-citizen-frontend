@@ -1,5 +1,5 @@
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Paths, CCJPaths, StatesPaidPaths } from 'claimant-response/paths'
+import { Paths, CCJPaths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
@@ -19,7 +19,7 @@ import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettledTask'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/partPaymentReceivedTask'
-import { isAlreadyPaidLessThanAmount, isResponseAlreadyPaid } from 'claimant-response/helpers/statesPaidHelper'
+import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 
 const validator: Validator = new Validator()
 
@@ -51,28 +51,28 @@ export class TaskListBuilder {
     if (response.responseType === ResponseType.FULL_DEFENCE) {
       tasks.push(
         new TaskListItem('Accept or reject their response',
-          StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
+          Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
           ClaimSettledTask.isCompleted(draft)
         ))
     } else {
-      if (isAlreadyPaidLessThanAmount(claim)) {
+      if (StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)) {
         tasks.push(
           new TaskListItem(`Have you been paid ${ NumberFormatter.formatMoney(response.amount) }?`,
-            StatesPaidPaths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
+            Paths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
             PartPaymentReceivedTask.isCompleted(draft)
           ))
 
         if (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.YES) {
           tasks.push(
             new TaskListItem(`Settle the claim for ${ NumberFormatter.formatMoney(response.amount) }?`,
-              StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
+              Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
               ClaimSettledTask.isCompleted(draft)
             ))
         }
       } else {
         tasks.push(
           new TaskListItem(`Have you been paid the full ${ NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue) }?`,
-            StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: externalId }),
+            Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
             ClaimSettledTask.isCompleted(draft)
           ))
       }
@@ -94,7 +94,7 @@ export class TaskListBuilder {
 
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
 
-    if (isResponseAlreadyPaid(claim)) {
+    if (StatesPaidHelper.isResponseAlreadyPaid(claim)) {
       return this.buildStatesPaidHowYouWantToRespondSection(draft, claim)
     }
 

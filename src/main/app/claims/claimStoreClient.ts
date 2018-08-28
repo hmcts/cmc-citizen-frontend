@@ -12,6 +12,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
 import { ClaimantResponseModelConverter } from 'claims/claimantResponseModelConverter'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { ClaimantResponse } from 'claims/models/claimantResponse'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -80,7 +81,7 @@ export class ClaimStoreClient {
   }
 
   saveClaimantResponseForUser (externalId: string, draft: DraftClaimantResponse, claim: Claim, user: User): Promise<void> {
-    const response = ClaimantResponseModelConverter.convert(draft, claim)
+    const response: ClaimantResponse = ClaimantResponseModelConverter.convert(draft, claim)
 
     return this.request
       .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {

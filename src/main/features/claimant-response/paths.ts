@@ -23,6 +23,8 @@ export class Paths {
   static readonly confirmationPage = new RoutablePath(`${claimantResponsePath}/confirmation`)
   static readonly rejectionReasonPage = new RoutablePath(`${claimantResponsePath}/rejection-reason`)
   static readonly receiptReceiver = new RoutablePath(`${claimantResponsePath}/receipt`)
+  static readonly partPaymentReceivedPage = new RoutablePath(`${claimantResponsePath}/part-payment-received`)
+  static readonly settleClaimPage = new RoutablePath(`${claimantResponsePath}/settle-claim`)
 }
 
 export const claimantResponseCCJPath = '/case/:externalId/claimant-response/county-court-judgment'
@@ -30,9 +32,4 @@ export const claimantResponseCCJPath = '/case/:externalId/claimant-response/coun
 export class CCJPaths {
   static readonly paidAmountPage = new RoutablePath(claimantResponseCCJPath + CountyCourtJudgementPaths.paidAmountPage.uri)
   static readonly paidAmountSummaryPage = new RoutablePath(claimantResponseCCJPath + CountyCourtJudgementPaths.paidAmountSummaryPage.uri)
-}
-
-export class StatesPaidPaths {
-  static readonly partPaymentReceivedPage = new RoutablePath(`${claimantResponsePath}/part-payment-received`)
-  static readonly settleClaimPage = new RoutablePath(`${claimantResponsePath}/settle-claim`)
 }

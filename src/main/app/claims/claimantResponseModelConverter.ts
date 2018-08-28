@@ -5,6 +5,7 @@ import { ResponseRejection } from 'claims/models/claimant-response/responseRejec
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 
 export class ClaimantResponseModelConverter {
   static convert (draft: DraftClaimantResponse, claim: Claim): ClaimantResponse {
@@ -18,14 +19,14 @@ export class ClaimantResponseModelConverter {
   private static convertAcceptedResponse (draft: DraftClaimantResponse, claim: Claim): ResponseAcceptation {
     return {
       type: ClaimantResponseType.ACCEPTATION,
-      amountPaid: draft.paidAmount.amount
+      amountPaid: StatesPaidHelper.getAlreadyPaidAmount(claim)
     }
   }
 
   private static convertRejectedResponse (draft: DraftClaimantResponse, claim: Claim): ResponseRejection {
     return {
       type: ClaimantResponseType.REJECTION,
-      amountPaid: draft.paidAmount.amount,
+      amountPaid: StatesPaidHelper.getAlreadyPaidAmount(claim),
       freeMediation: draft.freeMediation.option === YesNoOption.YES.option,
       reason: draft.rejectionReason.text
     }

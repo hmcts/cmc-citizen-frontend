@@ -17,7 +17,7 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { generatePaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { ResponseType } from 'claims/models/response/responseType'
-import { isAlreadyPaidLessThanAmount, isResponseAlreadyPaid } from 'claimant-response/helpers/statesPaidHelper'
+import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
@@ -49,8 +49,8 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
 
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
-  const alreadyPaid: boolean = isResponseAlreadyPaid(claim)
-  const partiallyPaid: boolean = isAlreadyPaidLessThanAmount(claim)
+  const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
+  const partiallyPaid: boolean = StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)
   if (alreadyPaid) {
     res.render(Paths.defendantsResponsePage.associatedView, {
       claim: claim,
@@ -89,7 +89,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const user: User = res.locals.user
 
-      if (req.body.action && req.body.action.showPage && !isResponseAlreadyPaid(claim)) {
+      if (req.body.action && req.body.action.showPage && !StatesPaidHelper.isResponseAlreadyPaid(claim)) {
         const page: number = +req.body.action.showPage
         return renderView(res, page)
       }

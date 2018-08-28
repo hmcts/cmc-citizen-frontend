@@ -20,8 +20,8 @@
           {% set paymentReceivedResponse = 'No' %}
         {% endif %}
 
-        {{ row(label = 'Do you agree the defendant has paid ' + draft.paidAmount.amount | numeral + '?', bold = true, value = paymentReceivedResponse,
-          changeLink = StatesPaidPaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true, value = paymentReceivedResponse,
+          changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
       {% if draft.accepted %}
@@ -32,12 +32,12 @@
         {% endif %}
 
         {% if draft.partPaymentReceived %}
-          {% set paymentAcceptedText = 'Do you want to settle the claim for the ' + draft.paidAmount.amount | numeral + '?' %}
+          {% set paymentAcceptedText = 'Do you want to settle the claim for the ' + amount | numeral + '?' %}
         {% else %}
-          {% set paymentAcceptedText = 'Do you agree the defendant has paid ' + draft.paidAmount.amount | numeral + '?'  %}
+          {% set paymentAcceptedText = 'Do you agree the defendant has paid ' + amount | numeral + '?'  %}
         {% endif %}
         {{ row(label = paymentAcceptedText, bold = true, value = paymentAcceptedResponse,
-          changeLink = StatesPaidPaths.settleClaimPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+          changeLink = ClaimantResponsePaths.settleClaimPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
       {% if draft.rejectionReason %}
