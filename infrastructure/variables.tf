@@ -95,3 +95,15 @@ variable "capacity" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "asp_capacity" {
+  default = "2"
+}
+
+variable "asp_name" {
+  default = "cmc-citizen-frontend"
+}
+
+variable "asp_rg" {
+  default = "cmc-citizen-frontend-shared-infrastructure"
+}
