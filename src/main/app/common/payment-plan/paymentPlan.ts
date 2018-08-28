@@ -13,7 +13,7 @@ export class PaymentPlan {
     public readonly instalmentAmount: number,
     public readonly frequency: Frequency,
     public readonly startDate: moment.Moment) {
-    this.numberOfInstalments = totalAmount / instalmentAmount
+    this.numberOfInstalments = Math.ceil(totalAmount / instalmentAmount)
   }
 
   static create (
@@ -34,18 +34,25 @@ export class PaymentPlan {
       paymentLength.push(this.pluralize(years, 'year'))
     }
 
+    if (this.frequency === Frequency.MONTHLY) {
+      if (days) {
+        paymentLength.push(this.pluralize(months + 1, 'month'))
+      } else {
+        paymentLength.push(this.pluralize(months, 'month'))
+      }
+      return paymentLength.join(' ')
+    }
+
     if (months) {
       paymentLength.push(this.pluralize(months, 'month'))
     }
 
     if (days) {
       const weeks = moment.duration(days, 'day').get('week')
-
       if (weeks) {
         paymentLength.push(this.pluralize(weeks, 'week'))
       }
     }
-
     return paymentLength.join(' ')
   }
 
