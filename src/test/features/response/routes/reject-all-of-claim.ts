@@ -144,7 +144,7 @@ describe('Defendant response: full admission options', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: RejectAllOfClaimOption.ALREADY_PAID })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defendantHowMuchPaidClaimant
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 

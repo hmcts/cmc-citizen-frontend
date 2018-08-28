@@ -14,7 +14,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Claim } from 'claims/models/claim'
 import { ClaimData } from 'claims/models/claimData'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
-import moment = require('moment')
+import * as moment from 'moment'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 

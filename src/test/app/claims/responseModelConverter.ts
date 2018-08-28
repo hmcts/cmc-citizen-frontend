@@ -4,41 +4,38 @@ import { ResponseModelConverter } from 'claims/responseModelConverter'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import {
-  defenceWithDisputeDraft,
   defenceWithAmountClaimedAlreadyPaidDraft,
+  defenceWithDisputeDraft,
   fullAdmissionWithImmediatePaymentDraft,
-  fullAdmissionWithPaymentBySetDateDraft,
   fullAdmissionWithPaymentByInstalmentsDraft,
-  statementOfMeansWithMandatoryFieldsDraft,
-  statementOfMeansWithAllFieldsDraft,
-  partialAdmissionWithPaymentBySetDateDraft,
-  partialAdmissionWithPaymentByInstalmentsDraft,
+  fullAdmissionWithPaymentBySetDateDraft,
+  partialAdmissionAlreadyPaidDraft,
   partialAdmissionWithImmediatePaymentDraft,
-  partialAdmissionAlreadyPaidDraft
+  partialAdmissionWithPaymentByInstalmentsDraft,
+  partialAdmissionWithPaymentBySetDateDraft,
+  statementOfMeansWithAllFieldsDraft,
+  statementOfMeansWithMandatoryFieldsDraft
 } from 'test/data/draft/responseDraft'
-import {
-  companyDetails,
-  individualDetails,
-  organisationDetails,
-  soleTraderDetails
-} from 'test/data/draft/partyDetails'
+import { companyDetails, individualDetails, organisationDetails, soleTraderDetails } from 'test/data/draft/partyDetails'
 
 import { Response } from 'claims/models/response'
 import {
   defenceWithDisputeData,
-  defenceWithAmountClaimedAlreadyPaidData,
   fullAdmissionWithImmediatePaymentData,
-  fullAdmissionWithPaymentBySetDateData,
   fullAdmissionWithPaymentByInstalmentsData,
-  statementOfMeansWithMandatoryFieldsOnlyData,
-  statementOfMeansWithAllFieldsData,
-  partialAdmissionWithPaymentBySetDateData,
-  partialAdmissionWithPaymentByInstalmentsData,
+  fullAdmissionWithPaymentBySetDateData,
+  partialAdmissionAlreadyPaidData,
+  partialAdmissionFromStatesPaidDefence,
   partialAdmissionWithImmediatePaymentData,
-  partialAdmissionAlreadyPaidData
+  partialAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithPaymentBySetDateData,
+  statementOfMeansWithAllFieldsData,
+  statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { Claim } from 'claims/models/claim'
+import * as claimStoreMock from 'test/http-mocks/claim-store'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
   return new ResponseDraft().deserialize({
@@ -79,15 +76,18 @@ describe('ResponseModelConverter', () => {
       it(`should convert defence with dispute submitted by ${partyDetails.type}`, () => {
         const responseDraft = prepareResponseDraft(defenceWithDisputeDraft, partyDetails)
         const responseData = prepareResponseData(defenceWithDisputeData, party)
+        const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-        expect(ResponseModelConverter.convert(responseDraft)).to.deep.equal(responseData)
+        expect(ResponseModelConverter.convert(responseDraft, claim)).to.deep.equal(responseData)
       })
 
-      it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type}`, () => {
+      it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
         const responseDraft = prepareResponseDraft(defenceWithAmountClaimedAlreadyPaidDraft, partyDetails)
-        const responseData = prepareResponseData(defenceWithAmountClaimedAlreadyPaidData, party)
+        const responseData = preparePartialResponseData(partialAdmissionFromStatesPaidDefence, party)
+        const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-        expect(ResponseModelConverter.convert(responseDraft)).to.deep.equal(responseData)
+        expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, claim)))
+          .to.deep.equal(Response.deserialize(responseData))
       })
     })
 
@@ -104,8 +104,9 @@ describe('ResponseModelConverter', () => {
         }
       }, individualDetails)
       const responseData = prepareResponseData(defenceWithDisputeData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(ResponseModelConverter.convert(responseDraft)).to.deep.equal(responseData)
+      expect(ResponseModelConverter.convert(responseDraft, claim)).to.deep.equal(responseData)
     })
   })
 
@@ -113,40 +114,57 @@ describe('ResponseModelConverter', () => {
     it('should convert full admission paid immediately', () => {
       const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualDetails)
       const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert full admission paid by set date', () => {
       const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentBySetDateDraft, individualDetails)
       const responseData = prepareResponseData(fullAdmissionWithPaymentBySetDateData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert full admission paid by set date with mandatory SoM only', () => {
-      const responseDraft = prepareResponseDraft({ ...fullAdmissionWithPaymentBySetDateDraft, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft } }, individualDetails)
-      const responseData = prepareResponseData({ ...fullAdmissionWithPaymentBySetDateData, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsOnlyData } }, individual)
+      const responseDraft = prepareResponseDraft({
+        ...fullAdmissionWithPaymentBySetDateDraft,
+        statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
+      }, individualDetails)
+      const responseData = prepareResponseData({
+        ...fullAdmissionWithPaymentBySetDateData,
+        statementOfMeans: { ...statementOfMeansWithMandatoryFieldsOnlyData }
+      }, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert full admission paid by instalments', () => {
       const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentByInstalmentsDraft, individualDetails)
       const responseData = prepareResponseData(fullAdmissionWithPaymentByInstalmentsData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert full admission paid by instalments with complete SoM', () => {
-      const responseDraft = prepareResponseDraft({ ...fullAdmissionWithPaymentByInstalmentsDraft, statementOfMeans: { ...statementOfMeansWithAllFieldsDraft } }, individualDetails)
-      const responseData = prepareResponseData({ ...fullAdmissionWithPaymentByInstalmentsData, statementOfMeans: { ...statementOfMeansWithAllFieldsData } }, individual)
+      const responseDraft = prepareResponseDraft({
+        ...fullAdmissionWithPaymentByInstalmentsDraft,
+        statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
+      }, individualDetails)
+      const responseData = prepareResponseData({
+        ...fullAdmissionWithPaymentByInstalmentsData,
+        statementOfMeans: { ...statementOfMeansWithAllFieldsData }
+      }, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
   })
@@ -155,48 +173,66 @@ describe('ResponseModelConverter', () => {
     it('should convert already paid partial admission', () => {
       const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
       const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert partial admission paid immediately', () => {
       const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
       const responseData = preparePartialResponseData(partialAdmissionWithImmediatePaymentData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert partial admission paid by set date', () => {
       const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentBySetDateDraft, individualDetails)
       const responseData = preparePartialResponseData(partialAdmissionWithPaymentBySetDateData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert partial admission paid by set date with mandatory SoM only', () => {
-      const responseDraft = prepareResponseDraft({ ...partialAdmissionWithPaymentBySetDateDraft, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft } }, individualDetails)
-      const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentBySetDateData, statementOfMeans: { ...statementOfMeansWithMandatoryFieldsOnlyData } }, individual)
+      const responseDraft = prepareResponseDraft({
+        ...partialAdmissionWithPaymentBySetDateDraft,
+        statementOfMeans: { ...statementOfMeansWithMandatoryFieldsDraft }
+      }, individualDetails)
+      const responseData = preparePartialResponseData({
+        ...partialAdmissionWithPaymentBySetDateData,
+        statementOfMeans: { ...statementOfMeansWithMandatoryFieldsOnlyData }
+      }, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert partial admission paid by instalments', () => {
       const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentByInstalmentsDraft, individualDetails)
       const responseData = preparePartialResponseData(partialAdmissionWithPaymentByInstalmentsData, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
 
     it('should convert partial admission paid by instalments with complete SoM', () => {
-      const responseDraft = prepareResponseDraft({ ...partialAdmissionWithPaymentByInstalmentsDraft, statementOfMeans: { ...statementOfMeansWithAllFieldsDraft } }, individualDetails)
-      const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentByInstalmentsData, statementOfMeans: { ...statementOfMeansWithAllFieldsData } }, individual)
+      const responseDraft = prepareResponseDraft({
+        ...partialAdmissionWithPaymentByInstalmentsDraft,
+        statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
+      }, individualDetails)
+      const responseData = preparePartialResponseData({
+        ...partialAdmissionWithPaymentByInstalmentsData,
+        statementOfMeans: { ...statementOfMeansWithAllFieldsData }
+      }, individual)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
-      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft)))
+      expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
   })
