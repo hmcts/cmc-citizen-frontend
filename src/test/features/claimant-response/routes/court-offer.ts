@@ -98,7 +98,7 @@ describe('Claimant Response - Court offer', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ acceptCourtOffer: 'yes' })
+          .send({ accept: 'yes' })
           .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
       })
 
@@ -110,7 +110,7 @@ describe('Claimant Response - Court offer', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ acceptCourtOffer: 'no' })
+          .send({ accept: 'no' })
           .expect(res => expect(res).to.be.redirect.toLocation(rejectionReasonPagePath))
       })
     })

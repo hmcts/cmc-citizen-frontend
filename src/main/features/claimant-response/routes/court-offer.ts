@@ -100,7 +100,7 @@ export default express.Router()
 
         const { externalId } = req.params
 
-        if (form.model.acceptCourtOffer.option === YesNoOption.YES.option) {
+        if (form.model.accept.option === YesNoOption.YES.option) {
           draft.document.courtOrderAmount = CourtOrderHelper
             .createCourtOrder(claim, draft.document)
             .calculateAmount()
