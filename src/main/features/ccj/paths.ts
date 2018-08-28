@@ -1,6 +1,6 @@
 import { RoutablePath } from 'shared/router/routablePath'
 
-const ccjPath = '/case/:externalId/ccj'
+export const ccjPath = '/case/:externalId/ccj'
 
 export class Paths {
   static readonly dateOfBirthPage = new RoutablePath(`${ccjPath}/date-of-birth`)

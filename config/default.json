@@ -85,10 +85,8 @@
   "featureToggles": {
     "clusterMode": false,
     "testingSupport": false,
-    "fullAdmission": false,
-    "partialAdmission": false,
+    "newFeaturesConsent": false,
     "admissions": false,
-    "statementOfMeans": false,
     "returnErrorToUser": false,
     "mockPay": false
   },

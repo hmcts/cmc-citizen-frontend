@@ -1,5 +1,5 @@
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResponseType } from 'response/form/models/responseType'
@@ -97,8 +97,10 @@ export const fullAdmissionWithImmediatePaymentDraft = {
   ...baseResponseDraft,
   ...baseFullAdmissionDraft,
   fullAdmission: {
-    paymentOption: {
-      option: DefendantPaymentType.IMMEDIATELY
+    paymentIntention: {
+      paymentOption: {
+        option: PaymentType.IMMEDIATELY
+      }
     }
   }
 }
@@ -163,8 +165,10 @@ export const partialAdmissionWithImmediatePaymentDraft = {
   ...basePartialAdmissionDraft,
   partialAdmission: {
     ...basePartialFuturePaymentDetails,
-    paymentOption: {
-      option: DefendantPaymentType.IMMEDIATELY
+    paymentIntention: {
+      paymentOption: {
+        option: PaymentType.IMMEDIATELY
+      }
     },
     ...partialTimelineAndEvidences
   }
@@ -183,14 +187,16 @@ export const fullAdmissionWithPaymentBySetDateDraft = {
   ...baseResponseDraft,
   ...baseFullAdmissionDraft,
   fullAdmission: {
-    paymentOption: {
-      option: DefendantPaymentType.BY_SET_DATE
-    },
-    paymentDate: {
-      date: {
-        year: 2050,
-        month: 12,
-        day: 31
+    paymentIntention: {
+      paymentOption: {
+        option: PaymentType.BY_SET_DATE
+      },
+      paymentDate: {
+        date: {
+          year: 2050,
+          month: 12,
+          day: 31
+        }
       }
     }
   }
@@ -201,14 +207,16 @@ export const partialAdmissionWithPaymentBySetDateDraft = {
   ...basePartialAdmissionDraft,
   partialAdmission: {
     ...basePartialFuturePaymentDetails,
-    paymentOption: {
-      option: DefendantPaymentType.BY_SET_DATE
-    },
-    paymentDate: {
-      date: {
-        year: 2050,
-        month: 12,
-        day: 31
+    paymentIntention: {
+      paymentOption: {
+        option: PaymentType.BY_SET_DATE
+      },
+      paymentDate: {
+        date: {
+          year: 2050,
+          month: 12,
+          day: 31
+        }
       }
     },
     ...partialTimelineAndEvidences
@@ -219,18 +227,20 @@ export const fullAdmissionWithPaymentByInstalmentsDraft = {
   ...baseResponseDraft,
   ...baseFullAdmissionDraft,
   fullAdmission: {
-    paymentOption: {
-      option: DefendantPaymentType.INSTALMENTS
-    },
-    paymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: {
-        year: 2050,
-        month: 12,
-        day: 31
+    paymentIntention: {
+      paymentOption: {
+        option: PaymentType.INSTALMENTS
       },
-      paymentSchedule: {
-        value: PaymentSchedule.EACH_WEEK
+      paymentPlan: {
+        instalmentAmount: 100,
+        firstPaymentDate: {
+          year: 2050,
+          month: 12,
+          day: 31
+        },
+        paymentSchedule: {
+          value: PaymentSchedule.EACH_WEEK
+        }
       }
     }
   }
@@ -241,18 +251,20 @@ export const partialAdmissionWithPaymentByInstalmentsDraft = {
   ...basePartialAdmissionDraft,
   partialAdmission: {
     ...basePartialFuturePaymentDetails,
-    paymentOption: {
-      option: DefendantPaymentType.INSTALMENTS
-    },
-    paymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: {
-        year: 2050,
-        month: 12,
-        day: 31
+    paymentIntention: {
+      paymentOption: {
+        option: PaymentType.INSTALMENTS
       },
-      paymentSchedule: {
-        value: PaymentSchedule.EACH_WEEK
+      paymentPlan: {
+        instalmentAmount: 100,
+        firstPaymentDate: {
+          year: 2050,
+          month: 12,
+          day: 31
+        },
+        paymentSchedule: {
+          value: PaymentSchedule.EACH_WEEK
+        }
       }
     },
     ...partialTimelineAndEvidences

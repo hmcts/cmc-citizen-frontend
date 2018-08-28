@@ -1,4 +1,4 @@
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 import { AgeGroupType } from 'claims/models/response/statement-of-means/dependant'
@@ -169,12 +169,12 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     }
   },
   incomes: [{
-    amountReceived: 200,
+    amount: 200,
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
   expenses: [{
-    amountPaid: 100,
+    amount: 100,
     frequency: PaymentFrequency.MONTH,
     type: ExpenseType.MORTGAGE
   }] as Expense[]

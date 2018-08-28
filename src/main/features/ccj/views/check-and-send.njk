@@ -35,7 +35,7 @@
       {{ row('Amount already paid', draft.paidAmount.amount | numeral, bottomBorder = false) }}
     {% endif %}
 
-    {{ row('Amount to be paid by defendant', amountToBePaid | numeral) }}
+    {{ row('Total to be paid by defendant', amountToBePaid | numeral) }}
 
     {% if draft.paymentOption.option.value === PaymentType.IMMEDIATELY %}
       {{ row('When you want the defendant to pay',

@@ -1,8 +1,10 @@
+/* tslint:disable:no-unused-expression */
+
 import { expect } from 'chai'
 import { LocalDate } from 'forms/models/localDate'
 
 import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
@@ -13,6 +15,11 @@ import { ResidenceType } from 'response/form/models/statement-of-means/residence
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import {
+  fullAdmissionWithImmediatePaymentDraft,
+  statementOfMeansWithAllFieldsDraft, partialAdmissionWithImmediatePaymentDraft
+} from 'test/data/draft/responseDraft'
 
 describe('ResponseDraft', () => {
 
@@ -72,8 +79,15 @@ describe('ResponseDraft', () => {
           option: MoreTimeNeededOption.YES
         },
         fullAdmission: {
-          paymentDate: {
-            date: paymentDate
+          paymentIntention: {
+            paymentOption: {
+              option: {
+                value: 'BY_SPECIFIED_DATE'
+              }
+            },
+            paymentDate: {
+              date: paymentDate
+            }
           }
         },
         statementOfMeans: {
@@ -93,8 +107,28 @@ describe('ResponseDraft', () => {
       expect(draft.response.type).to.eql(responseType)
       expect(draft.moreTimeNeeded.option).to.eql(MoreTimeNeededOption.YES)
       expect(draft.freeMediation.option).to.eql(FreeMediationOption.YES)
-      assertLocalDateEquals(draft.fullAdmission.paymentDate.date, paymentDate)
+      assertLocalDateEquals(draft.fullAdmission.paymentIntention.paymentDate.date, paymentDate)
       expect(draft.statementOfMeans.residence.type).to.eql(ResidenceType.OTHER)
+    })
+
+    it('should return not have statement of means populated when immediate payment is declared (full admission)', () => {
+      const draft: ResponseDraft = new ResponseDraft().deserialize({
+        ...fullAdmissionWithImmediatePaymentDraft,
+        statementOfMeans: {
+          ...statementOfMeansWithAllFieldsDraft
+        }
+      })
+      expect(draft.statementOfMeans).to.be.undefined
+    })
+
+    it('should return not have statement of means populated when immediate payment is declared (partial admission)', () => {
+      const draft: ResponseDraft = new ResponseDraft().deserialize({
+        ...partialAdmissionWithImmediatePaymentDraft,
+        statementOfMeans: {
+          ...statementOfMeansWithAllFieldsDraft
+        }
+      })
+      expect(draft.statementOfMeans).to.be.undefined
     })
   })
 
@@ -169,11 +203,12 @@ describe('ResponseDraft', () => {
     })
 
     it('should return false when response is full admission but payment option is not instalments', () => {
-      DefendantPaymentType.except(DefendantPaymentType.INSTALMENTS).forEach(paymentType => {
+      PaymentType.except(PaymentType.INSTALMENTS).forEach(paymentType => {
         const draft: ResponseDraft = new ResponseDraft()
         draft.response = new Response(ResponseType.FULL_ADMISSION)
         draft.fullAdmission = new FullAdmission()
-        draft.fullAdmission.paymentOption = new DefendantPaymentOption(paymentType)
+        draft.fullAdmission.paymentIntention = new PaymentIntention()
+        draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(paymentType)
 
         expect(draft.isResponseFullyAdmittedWithInstalments()).to.be.eq(false)
       })
@@ -183,7 +218,8 @@ describe('ResponseDraft', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.FULL_ADMISSION)
       draft.fullAdmission = new FullAdmission()
-      draft.fullAdmission.paymentOption = new DefendantPaymentOption(DefendantPaymentType.INSTALMENTS)
+      draft.fullAdmission.paymentIntention = new PaymentIntention()
+      draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(PaymentType.INSTALMENTS)
 
       expect(draft.isResponseFullyAdmitted()).to.be.eq(true)
     })

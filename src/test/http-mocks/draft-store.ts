@@ -206,22 +206,24 @@ export const sampleFullAdmissionResponseDraftObj = {
     type: ResponseType.FULL_ADMISSION
   },
   fullAdmission: {
-    paymentOption: {
-      option: {
-        value: 'INSTALMENTS'
-      }
-    },
-    paymentPlan: {
-      totalAmount: 3685,
-      instalmentAmount: 100,
-      firstPaymentDate: {
-        year: 2019,
-        month: 1,
-        day: 1
+    paymentIntention: {
+      paymentOption: {
+        option: {
+          value: 'INSTALMENTS'
+        }
       },
-      paymentSchedule: {
-        value: 'EVERY_MONTH',
-        displayValue: 'every month'
+      paymentPlan: {
+        totalAmount: 3685,
+        instalmentAmount: 100,
+        firstPaymentDate: {
+          year: 2019,
+          month: 1,
+          day: 1
+        },
+        paymentSchedule: {
+          value: 'EVERY_MONTH',
+          displayValue: 'every month'
+        }
       }
     }
   },
@@ -338,6 +340,14 @@ export const sampleClaimantResponseDraftObj = {
       option: 'yes'
     }
   },
+  alternatePaymentMethod: {
+    paymentOption: {
+      option: {
+        value: 'INSTALMENTS',
+        displayValue: 'By instalments'
+      }
+    }
+  },
   formaliseRepaymentPlan: {
     option: {
       value: 'signSettlementAgreement',
@@ -346,6 +356,12 @@ export const sampleClaimantResponseDraftObj = {
   },
   settlementAgreement: {
     signed: true
+  },
+  freeMediation: {
+    option: FreeMediationOption.NO
+  },
+  rejectionReason: {
+    text: 'i reject repayment plan because ...'
   }
 }
 

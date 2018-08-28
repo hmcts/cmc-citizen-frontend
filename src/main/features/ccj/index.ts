@@ -31,7 +31,12 @@ export class CCJFeature {
     app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {
         return new DraftCCJ().deserialize(value)
-      }))
+      }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.ccjDraft
+        next()
+      }
+    )
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

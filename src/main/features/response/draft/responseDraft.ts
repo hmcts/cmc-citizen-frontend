@@ -1,4 +1,3 @@
-import { PayBySetDate as PaymentDate } from 'forms/models/payBySetDate'
 import { Response } from 'response/form/models/response'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
@@ -11,11 +10,7 @@ import { Defendant } from 'drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
 import { HowMuchOwed } from 'response/form/models/howMuchOwed'
-import {
-  DefendantPaymentOption as PaymentOption,
-  DefendantPaymentType
-} from 'response/form/models/defendantPaymentOption'
-import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
@@ -23,28 +18,19 @@ import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
 import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 export class FullAdmission {
-  paymentOption: PaymentOption
-  paymentDate?: PaymentDate
-  paymentPlan?: PaymentPlan
+  paymentIntention: PaymentIntention
 
   deserialize (input: any): FullAdmission {
     if (input) {
-      this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
-      if (input.paymentDate) {
-        this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
-      }
-      if (input.paymentPlan) {
-        this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
-      }
+      this.paymentIntention = PaymentIntention.deserialise(input.paymentIntention)
       return this
     }
   }
@@ -58,9 +44,7 @@ export class PartialAdmission {
   whyDoYouDisagree?: WhyDoYouDisagree
   timeline?: DefendantTimeline
   evidence?: DefendantEvidence
-  paymentOption?: PaymentOption
-  paymentDate?: PaymentDate
-  paymentPlan?: PaymentPlan
+  paymentIntention?: PaymentIntention
 
   deserialize (input: any): PartialAdmission {
     if (input) {
@@ -70,14 +54,8 @@ export class PartialAdmission {
       this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
-      if (input.paymentOption) {
-        this.paymentOption = new PaymentOption().deserialize(input.paymentOption)
-      }
-      if (input.paymentDate) {
-        this.paymentDate = new PaymentDate().deserialize(input.paymentDate)
-      }
-      if (input.paymentPlan) {
-        this.paymentPlan = new PaymentPlan().deserialize(input.paymentPlan)
+      if (input.paymentIntention) {
+        this.paymentIntention = PaymentIntention.deserialise(input.paymentIntention)
       }
     }
 
@@ -139,6 +117,19 @@ export class ResponseDraft extends DraftDocument {
       }
     }
 
+    const isImmediatePaymentOptionSelected = (data: FullAdmission | PartialAdmission): boolean => {
+      const isPaymentOptionPopulated = (): boolean => {
+        return data !== undefined
+          && data.paymentIntention !== undefined
+          && data.paymentIntention.paymentOption !== undefined
+      }
+      return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(PaymentType.IMMEDIATELY)
+    }
+
+    if (isImmediatePaymentOptionSelected(this.fullAdmission) || isImmediatePaymentOptionSelected(this.partialAdmission)) {
+      delete this.statementOfMeans
+    }
+
     return this
   }
 
@@ -147,33 +138,30 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isResponseFullyAdmitted (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.fullAdmission'))) {
-      return false
-    }
-
     return this.isResponsePopulated() && this.response.type === ResponseType.FULL_ADMISSION
   }
 
   // TODO: Because of an overlap between two stories (ROC-3657, ROC-3658), the logic of this function
   // is incomplete. ROC-3658 should revisit once 'statement of means' flow is complete.
   public isResponseFullyAdmittedWithInstalments (): boolean {
+
     return this.isResponseFullyAdmitted()
       && this.fullAdmission !== undefined
-      && this.fullAdmission.paymentOption !== undefined
-      && this.fullAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
+      && this.fullAdmission.paymentIntention !== undefined
+      && this.fullAdmission.paymentIntention.paymentOption !== undefined
+      && this.fullAdmission.paymentIntention.paymentOption.option === PaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyAdmittedWithInstalments (): boolean {
+
     return this.isResponsePartiallyAdmitted()
       && this.partialAdmission !== undefined
-      && this.partialAdmission.paymentOption !== undefined
-      && this.partialAdmission.paymentOption.option === DefendantPaymentType.INSTALMENTS
+      && this.partialAdmission.paymentIntention !== undefined
+      && this.partialAdmission.paymentIntention.paymentOption !== undefined
+      && this.partialAdmission.paymentIntention.paymentOption.option === PaymentType.INSTALMENTS
   }
 
   public isResponsePartiallyAdmitted (): boolean {
-    if (!toBoolean(config.get<boolean>('featureToggles.partialAdmission'))) {
-      return false
-    }
 
     return this.isResponsePopulated()
       && this.response.type === ResponseType.PART_ADMISSION
@@ -219,13 +207,15 @@ export class ResponseDraft extends DraftDocument {
 
   public isResponseFullyAdmittedWithPayBySetDate (): boolean {
     return this.fullAdmission !== undefined
-      && this.fullAdmission.paymentOption !== undefined
-      && this.fullAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+      && this.fullAdmission.paymentIntention !== undefined
+      && this.fullAdmission.paymentIntention.paymentOption !== undefined
+      && this.fullAdmission.paymentIntention.paymentOption.option === PaymentType.BY_SET_DATE
   }
 
   public isResponsePartiallyAdmittedWithPayBySetDate (): boolean {
     return this.partialAdmission !== undefined
-      && this.partialAdmission.paymentOption !== undefined
-      && this.partialAdmission.paymentOption.option === DefendantPaymentType.BY_SET_DATE
+      && this.partialAdmission.paymentIntention !== undefined
+      && this.partialAdmission.paymentIntention.paymentOption !== undefined
+      && this.partialAdmission.paymentIntention.paymentOption.option === PaymentType.BY_SET_DATE
   }
 }

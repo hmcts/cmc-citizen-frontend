@@ -19,7 +19,6 @@ const pagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri(
 )
 
 describe('Defendant response: Statement of means: debts', () => {
-
   attachDefaultHooks(app)
 
   describe('on GET', () => {
