@@ -6,6 +6,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { Validator } from 'class-validator'
 
 describe('AcceptCourtOffer', () => {
+
   describe('validation', () => {
     const validator: Validator = new Validator()
 
