@@ -13,6 +13,7 @@ import { I18Next } from 'modules/i18n'
 import { Nunjucks } from 'modules/nunjucks'
 import * as moment from 'moment'
 
+import { Shutter as ShutterMiddleWare } from 'routes/shutter'
 import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
@@ -25,9 +26,9 @@ import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 
-import { FeatureTogglesService } from 'shared/clients/featureTogglesService'
-import { Paths as AppPath } from 'paths'
-import { User } from 'idam/user'
+// import { FeatureTogglesService } from 'shared/clients/featureTogglesService'
+// import { Paths as AppPath } from 'paths'
+// import { User } from 'idam/user'
 
 export const app: express.Express = express()
 
@@ -53,21 +54,24 @@ app.use(cookieParser())
 
 app.use(express.static(path.join(__dirname, 'public')))
 
-const featureTogglesService: FeatureTogglesService = new FeatureTogglesService()
-// test credentials for localhost:8580
-const user: User = new User('27','tharacka@kainos.com', 'tharack', 'ahmed',[], '', '')
-const roles: string[] = []
-
-if (featureTogglesService.isToggleFeatureEnabled(user, roles, 'cmc_shutter_page')) {
-  app.all(/^((?!shutter-unplanned).)*$/, (req,res) => {
-    res.redirect(AppPath.unplannedShutterPage.uri)
-  })
-}
-
 if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
 
+// const featureTogglesService: FeatureTogglesService = new FeatureTogglesService()
+
+// // test credentials for localhost:8580
+// const user: User = new User('27','tharacka@kainos.com', 'tharack', 'ahmed',[], '', '')
+// const roles: string[] = ['cmc-new-features-consent-given']
+
+// featureTogglesService.isToggleFeatureEnabled(user, roles, 'cmc_shutter_page').then(isFeatureToggleEnabled => {
+//   if (isFeatureToggleEnabled) {
+//     app.all(/^((?!shutter-unplanned).)*$/, (req,res) => {
+//       app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+//       res.redirect(AppPath.unplannedShutterPage.uri)
+//     })
+//   } else {
+new ShutterMiddleWare().enableFor(app)
 new EligibilityFeature().enableFor(app)
 new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
@@ -116,3 +120,5 @@ app.use((err, req, res, next) => {
   }
   next()
 })
+//   }
+// })

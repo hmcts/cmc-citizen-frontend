@@ -1,4 +1,5 @@
 {% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
 
 {% set heading = 'Sorry, there is a problem with this service' %}
 
@@ -14,16 +15,7 @@
 
         <p>{{ t('You can contact us if you need help.') }}</p>
 
-        <p><h3 class="heading-medium">{{ t('Contact us') }}</h3></p>
-
-        <div>
-          <span><span class="bold">{{ t('Money Claims') }}</span><br>
-            {{ t('Email: <a href="{{}}">moneyclaims@hmcts.gsi.gov.uk</a> ') }}<br>
-            {{ t('Telephone: 0300 123 7050') }}<br>
-            {{ t('Monday to Friday, 9am to 5pm') }}<br>
-            {{ t('<a href="">Find out about call charges</a>') }}<br>
-          </p>
-        </div>
+        {{ supportWidget() }}
 
     </div>
 
