@@ -50,8 +50,9 @@ function calculateTotalMonthlyExpense (expenses: Expense[]): number {
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
-  const partiallyPaid: boolean = StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)
+
   if (alreadyPaid) {
+    const partiallyPaid: boolean = StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)
     res.render(Paths.defendantsResponsePage.associatedView, {
       claim: claim,
       page: page,

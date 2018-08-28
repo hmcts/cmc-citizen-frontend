@@ -3,6 +3,9 @@ import { Claim } from 'claims/models/claim'
 import { DefenceType } from 'claims/models/response/defenceType'
 
 export class StatesPaidHelper {
+
+  static readonly FULL_ADMISSION_NOT_SUPPORTED: string = 'Full admission not supported'
+
   static isResponseAlreadyPaid (claim: Claim): boolean {
     switch (claim.response.responseType) {
       case ResponseType.FULL_DEFENCE:
@@ -20,6 +23,8 @@ export class StatesPaidHelper {
         return false
       case ResponseType.PART_ADMISSION:
         return claim.response.amount < claim.totalAmountTillDateOfIssue
+      default:
+        throw new Error(this.FULL_ADMISSION_NOT_SUPPORTED)
     }
   }
 
@@ -29,6 +34,8 @@ export class StatesPaidHelper {
         return claim.totalAmountTillDateOfIssue
       case ResponseType.PART_ADMISSION:
         return claim.response.amount
+      default:
+        throw new Error(this.FULL_ADMISSION_NOT_SUPPORTED)
     }
   }
 

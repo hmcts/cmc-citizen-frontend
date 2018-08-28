@@ -13,7 +13,7 @@ import {
   fullAdmissionWithSoMPaymentByInstalmentsData,
   fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
-} from 'test/data/entity/responseData'
+  } from 'test/data/entity/responseData'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 
