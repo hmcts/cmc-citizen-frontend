@@ -58,18 +58,15 @@
     {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
       {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
         {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
-          {% if paidInFull %}
-            {{ paidAmountForClaimantDashboard(claim) }}
-          {% else %}
-            {{ paidLessThanClaimedForClaimantDashboard(claim) }}
-          {% endif %}
-        {% else %}
-          {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
+          {{ paidAmountForClaimantDashboard(claim) }}
         {% endif %}
-        {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
-      {% else %}
-        {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
+      {% endif %}
+      {% if claim.response.defenceType === DefenceType.DISPUTE %}
+        {% if claim.response.freeMediation === FreeMediationOption.NO %}
+          {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
+        {% endif %}
       {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       {% if claim.response.paymentDeclaration %}
