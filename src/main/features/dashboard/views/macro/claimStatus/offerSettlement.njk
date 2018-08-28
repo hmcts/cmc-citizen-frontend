@@ -39,7 +39,7 @@
         t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
           {
             instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
-            paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule |lower,
+            paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
             firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
           }
         )
