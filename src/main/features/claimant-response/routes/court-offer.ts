@@ -68,7 +68,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   })
 }
 
-async function saveAndRedirect (res: express.Response, draft: Draft<DraftClaimantResponse>, url: string) {
+async function saveAndRedirect (res: express.Response, draft: Draft<DraftClaimantResponse>, url: string): Promise<void> {
   const user: User = res.locals.user
 
   await new DraftService().save(draft, user.bearerToken)
@@ -104,9 +104,9 @@ export default express.Router()
           draft.document.courtOrderAmount = CourtOrderHelper
             .createCourtOrder(claim, draft.document)
             .calculateAmount()
-          saveAndRedirect(res, draft, ClaimantsResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+          await saveAndRedirect(res, draft, ClaimantsResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
         } else {
-          saveAndRedirect(res, draft, ClaimantsResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId }))
+          await saveAndRedirect(res, draft, ClaimantsResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId }))
         }
       }
     }

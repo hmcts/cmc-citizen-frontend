@@ -28,7 +28,7 @@
     "prepush": "yarn test && yarn test:routes"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.50.0",
+    "@hmcts/cmc-common-frontend": "^1.51.1",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/cmc-validators": "^0.1.9",
     "@hmcts/draft-store-client": "^1.1.1",
@@ -124,7 +124,7 @@
     "mock-require": "^3.0.2",
     "nock": "^9.6.1",
     "nsp": "^3.0.0",
-    "nyc": "^12.0.2",
+    "nyc": "^13.0.1",
     "pa11y": "^5.0.0",
     "randomstring": "^1.1.5",
     "sass-lint": "^1.10.2",
