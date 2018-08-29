@@ -40,11 +40,6 @@
 
   <p>{{ t('View the judgment') }} {{ t(' (PDF)') }}</p>
 
-  <p>{{
-    t('If you repay the debt within 28 days you can ')
-  }}<a href="https://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=1157">{{
-    t('apply for a certificate of cancellation')
-  }}</a>{{
-    t(' to cancel the CCJ. This application costs £15.')
-  }}</p>
+  <p>{{ t('If you repay the debt within 28 days you can <a href="{{ link }}">apply for a certificate of cancellation</a> to cancel the CCJ. This application costs £15.',
+      { link: 'https://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=1157' }) | safe }}</p>
 {% endmacro %}
