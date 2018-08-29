@@ -1,0 +1,31 @@
+{% extends "layout.njk" %}
+
+{% set heading = 'How much have you paid?' %}
+
+{% from "form.njk" import poundInput, textArea, saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "date.njk" import dateInput %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <form method="post" novalidate>
+
+      {{ csrfProtection(csrf) }}
+
+      <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.',
+                { totalAmount: claim.totalAmountTillToday | numeral }) }}</p>
+
+      {{ poundInput(label = 'How much have you paid?', name = 'amount', form = form, bold = true) }}
+
+      <h4 class="heading-small">{{ t('When did you pay this amount?') }}</h4>
+      {{ dateInput('date', form, hint = t('For example, {{ threeMonthsAgo }}', { threeMonthsAgo: 'now' | addDays(-90) | inputDate })) }}
+
+      {{ textArea(label = 'How did you pay this amount?', name = 'text', form = form, bold = true) }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}
