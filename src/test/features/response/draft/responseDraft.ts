@@ -12,14 +12,15 @@ import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
-import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import {
   fullAdmissionWithImmediatePaymentDraft,
-  statementOfMeansWithAllFieldsDraft, partialAdmissionWithImmediatePaymentDraft
+  partialAdmissionWithImmediatePaymentDraft,
+  statementOfMeansWithAllFieldsDraft
 } from 'test/data/draft/responseDraft'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 
 describe('ResponseDraft', () => {
 
@@ -304,13 +305,13 @@ describe('ResponseDraft', () => {
 
   })
 
-  describe('isResponseRejectedFullyWithAmountClaimedPaid', () => {
+  describe('isResponseRejectedFullyBecausePaidWhatOwed', () => {
 
     it('should return false when no response type set', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = undefined
 
-      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(false)
+      expect(draft.isResponseRejectedFullyBecausePaidWhatOwed()).to.be.equals(false)
     })
 
     it('should return false when full rejection option is undefined', () => {
@@ -318,25 +319,15 @@ describe('ResponseDraft', () => {
       draft.response = new Response(ResponseType.DEFENCE)
       draft.rejectAllOfClaim = undefined
 
-      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(false)
-    })
-
-    it('should return false when payment option undefined', () => {
-      const draft: ResponseDraft = new ResponseDraft()
-      draft.response = new Response(ResponseType.DEFENCE)
-      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
-      draft.howMuchPaidClaimant = undefined
-
-      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(false)
+      expect(draft.isResponseRejectedFullyBecausePaidWhatOwed()).to.be.equals(false)
     })
 
     it('should return true when response is full admission with already paid and amount claimed', () => {
       const draft: ResponseDraft = new ResponseDraft()
       draft.response = new Response(ResponseType.DEFENCE)
-      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID)
-      draft.howMuchPaidClaimant = new HowMuchPaidClaimant(HowMuchPaidClaimantOption.AMOUNT_CLAIMED)
+      draft.rejectAllOfClaim = new RejectAllOfClaim(RejectAllOfClaimOption.ALREADY_PAID, new HowMuchHaveYouPaid(100))
 
-      expect(draft.isResponseRejectedFullyWithAmountClaimedPaid()).to.be.equals(true)
+      expect(draft.isResponseRejectedFullyBecausePaidWhatOwed()).to.be.equals(true)
     })
   })
 

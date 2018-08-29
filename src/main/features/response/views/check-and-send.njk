@@ -51,7 +51,7 @@
 
     {% if draft.response.type === ResponseType.DEFENCE %}
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
-        {% set rejectAllOption = 'I’ve already paid the claim in full' %}
+        {% set rejectAllOption = 'I’ve paid what I believe I owe' %}
       {% endif %}
 
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
@@ -63,6 +63,7 @@
       {% endif %}
 
       {{ row(label = 'Why do you reject all of this claim?', value = rejectAllOption, changeLink = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
     {% endif %}
 
     {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
@@ -90,13 +91,6 @@
           statementOfMeansIsApplicable = statementOfMeansIsApplicable
         )
       }}
-    {% endif %}
-
-    {% if draft.isResponseRejectedFullyWithAmountClaimedPaid() %}
-      {{ tableStart('yourResponse', 'Your response') }}
-        {{ row(label = 'When did you pay this amount?', value = draft.whenDidYouPay.date.toMoment() | date, changeLink = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'How did you pay the amount claimed?', value = draft.whenDidYouPay.text, changeLink = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {{ tableEnd() }}
     {% endif %}
 
     {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
@@ -200,6 +194,64 @@
       {% endif %}
     {% endif %}
 
+    {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
+      {{ tableStart('responseDetails', 'Response details') }}
+      {{
+        row(
+          label = 'How much have you paid?',
+          value = draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral,
+          changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false,
+          bold = true
+        )
+      }}
+
+      {{
+        row(
+          label = 'When did you pay this amount?',
+          value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.date.toMoment() | date),
+          bottomBorder = false,
+          bold = true
+        )
+      }}
+
+      {{
+        row(
+          label = 'How did you pay this amount?',
+          value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
+          bold = true
+        )
+      }}
+
+      {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
+        {{ row(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+        {{
+          timelineCheckAndSend(
+            header = 'Timeline of what happened (optional)',
+            timeline = draft.timeline.getPopulatedRowsOnly(),
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+
+        {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+
+        {{
+          evidenceCheckAndSend(
+            header = 'Your evidence (optional)',
+            evidence = draft.evidence.getPopulatedRowsOnly(),
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+
+        {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+
+      {% endif %}
+      {{ tableEnd() }}
+    {% endif %}
+
     {% if draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('responseDetails', 'Response details') }}
       {{
@@ -235,7 +287,8 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if (admissionsApplicable and draft.isResponsePartiallyAdmitted()) or draft.isResponseRejectedFullyWithDispute() %}
+    {% if (admissionsApplicable and (draft.isResponsePartiallyAdmitted() or (draft.isResponseRejectedFullyBecausePaidWhatOwed() and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
+      or draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(

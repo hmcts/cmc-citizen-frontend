@@ -15,7 +15,6 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { ImpactOfDispute } from 'response/form/models/impactOfDispute'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { WhenDidYouPay } from 'response/form/models/whenDidYouPay'
-import { HowMuchPaidClaimant, HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
@@ -74,14 +73,14 @@ export class ResponseDraft extends DraftDocument {
   evidence: DefendantEvidence
   qualifiedStatementOfTruth?: QualifiedStatementOfTruth
   howMuchOwed?: HowMuchOwed
-  rejectAllOfClaim?: RejectAllOfClaim
   paidAmount?: PaidAmount
   impactOfDispute?: ImpactOfDispute
   whenDidYouPay?: WhenDidYouPay
-  howMuchPaidClaimant?: HowMuchPaidClaimant
 
   fullAdmission?: FullAdmission
   partialAdmission?: PartialAdmission
+  rejectAllOfClaim?: RejectAllOfClaim
+
   statementOfMeans?: StatementOfMeans
 
   deserialize (input: any): ResponseDraft {
@@ -98,11 +97,9 @@ export class ResponseDraft extends DraftDocument {
       if (input.qualifiedStatementOfTruth) {
         this.qualifiedStatementOfTruth = new QualifiedStatementOfTruth().deserialize(input.qualifiedStatementOfTruth)
       }
-      this.rejectAllOfClaim = new RejectAllOfClaim(input.rejectAllOfClaim && input.rejectAllOfClaim.option)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.impactOfDispute = new ImpactOfDispute().deserialize(input.impactOfDispute)
       this.whenDidYouPay = new WhenDidYouPay().deserialize(input.whenDidYouPay)
-      this.howMuchPaidClaimant = new HowMuchPaidClaimant(input.howMuchPaidClaimant && input.howMuchPaidClaimant.option)
 
       if (input.fullAdmission) {
         this.fullAdmission = new FullAdmission().deserialize(input.fullAdmission)
@@ -110,6 +107,10 @@ export class ResponseDraft extends DraftDocument {
 
       if (input.partialAdmission) {
         this.partialAdmission = new PartialAdmission().deserialize(input.partialAdmission)
+      }
+
+      if (input.rejectAllOfClaim) {
+        this.rejectAllOfClaim = new RejectAllOfClaim().deserialize(input.rejectAllOfClaim)
       }
 
       if (input.statementOfMeans) {
@@ -189,16 +190,10 @@ export class ResponseDraft extends DraftDocument {
     return this.response.type === ResponseType.DEFENCE
   }
 
-  public isResponseRejectedFullyWithAmountClaimedPaid (): boolean {
-    if (!this.isResponsePopulated()) {
-      return false
-    }
-
-    return this.response.type === ResponseType.DEFENCE
+  public isResponseRejectedFullyBecausePaidWhatOwed (): boolean {
+    return this.isResponseRejected()
       && this.rejectAllOfClaim !== undefined
       && this.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
-      && this.howMuchPaidClaimant !== undefined
-      && this.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.AMOUNT_CLAIMED
   }
 
   public isResponsePopulated (): boolean {
