@@ -1,6 +1,5 @@
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResponseType } from 'response/form/models/responseType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
@@ -62,18 +61,19 @@ export const defenceWithAmountClaimedAlreadyPaidDraft = {
   ...baseResponseDraft,
   ...baseDefenceDraft,
   rejectAllOfClaim: {
-    option: RejectAllOfClaimOption.ALREADY_PAID
-  },
-  howMuchPaidClaimant: {
-    option: HowMuchPaidClaimantOption.AMOUNT_CLAIMED
-  },
-  whenDidYouPay: {
-    date: {
-      year: 2017,
-      month: 12,
-      day: 31
+    option: RejectAllOfClaimOption.ALREADY_PAID,
+    howMuchHaveYouPaid: {
+      amount: 100,
+      date: {
+        year: 2017,
+        month: 12,
+        day: 31
+      },
+      text: 'I paid in cash'
     },
-    text: 'I paid in cash'
+    whyDoYouDisagree: {
+      text: 'bla bla bla'
+    }
   }
 }
 

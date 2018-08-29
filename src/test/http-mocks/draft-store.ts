@@ -272,6 +272,28 @@ export const sampleFullAdmissionResponseDraftObj = {
   }
 }
 
+export const sampleFullRejectionDraftObj = {
+  ...commonResponsePartial,
+  response: {
+    type: ResponseType.DEFENCE
+  },
+  rejectAllOfClaim: {
+    option: RejectAllOfClaimOption.ALREADY_PAID,
+    howMuchHaveYouPaid: {
+      amount: 200,
+      date: {
+        year: 2018,
+        month: 7,
+        day: 27
+      },
+      text: 'by pigeon'
+    },
+    whyDoYouDisagree: {
+      text: 'bla bla bla'
+    }
+  }
+}
+
 export const samplePartialAdmissionResponseDraftObj = {
   ...commonResponsePartial,
   response: {
@@ -393,6 +415,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'response:partial-admission':
       documentDocument = { ...samplePartialAdmissionResponseDraftObj, ...draftOverride }
+      break
+    case 'response:full-rejection':
+      documentDocument = { ...sampleFullRejectionDraftObj, ...draftOverride }
       break
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
