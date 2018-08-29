@@ -12,9 +12,10 @@
         amount: claim.totalAmountTillToday | numeral,
         paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}
   </p>
-  <p> {{ t('You can accept or reject this response.') }}</p>
+  <p>{{ t('You can accept or reject this response.') }}</p>
   <p>
-    {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.', { respondDate: claim.respondToResponseDeadline | date}) }}
+    {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.',
+      { respondDate: claim.respondToResponseDeadline | date}) }}
   </p>
   {{ _respond(claim, 'Respond') }}
 {% endmacro %}
@@ -29,7 +30,8 @@
   </p>
   <p> {{ t('You can accept or reject this response.') }}</p>
   <p>
-    {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.', { respondDate: claim.respondToResponseDeadline | date}) }}
+    {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.',
+      { respondDate: claim.respondToResponseDeadline | date}) }}
   </p>
   {{ _respond(claim, 'Respond') }}
 {% endmacro %}
