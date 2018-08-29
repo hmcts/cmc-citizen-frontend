@@ -35,7 +35,7 @@ describe('Frequency', () => {
         { frequencyWeeklyValue: 1, expectedFrequency: Frequency.WEEKLY },
         { frequencyWeeklyValue: 2, expectedFrequency: Frequency.TWO_WEEKLY },
         { frequencyWeeklyValue: 4, expectedFrequency: Frequency.FOUR_WEEKLY },
-        { frequencyWeeklyValue: 52/12, expectedFrequency: Frequency.MONTHLY }
+        { frequencyWeeklyValue: 52 / 12, expectedFrequency: Frequency.MONTHLY }
       ].forEach(testCase => {
         it(`should return Frequency object for valid weekly value input: ${testCase.frequencyWeeklyValue}`, () => {
           const frequency: Frequency = Frequency.ofWeekly(testCase.frequencyWeeklyValue)
