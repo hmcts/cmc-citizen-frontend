@@ -7,7 +7,7 @@ import * as moment from 'moment'
 const TOTAL_AMOUNT = 1000
 const TOTAL_AMOUNT_2 = 1643.20
 
-describe.only('calculateMonthlyPaymentLength', () => {
+describe('calculateMonthlyPaymentLength', () => {
 
   it('should return a payment length of 1 month paying full amount', () => {
     const instalmentAmount = 1000
@@ -52,7 +52,7 @@ describe.only('calculateMonthlyPaymentLength', () => {
   })
 })
 
-describe.only('calculateWeeklyPaymentLength', () => {
+describe('calculateWeeklyPaymentLength', () => {
 
   it('should return a payment length of 1 week payment full amount', () => {
     const instalmentAmount = 1000
@@ -103,7 +103,7 @@ describe.only('calculateWeeklyPaymentLength', () => {
   })
 })
 
-describe.only('calculateBiWeeklyPaymentLength', () => {
+describe('calculateBiWeeklyPaymentLength', () => {
 
   it('should return a payment length of 2 weeks payment full amount', () => {
     const instalmentAmount = 1000
