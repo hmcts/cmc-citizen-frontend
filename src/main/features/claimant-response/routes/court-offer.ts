@@ -81,6 +81,7 @@ export default express.Router()
     ClaimantsResponsePaths.courtOfferPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+      draft.document.acceptCourtOffer = undefined
       renderView(new Form(draft.document.acceptCourtOffer), res)
     }))
 
@@ -101,6 +102,11 @@ export default express.Router()
         const { externalId } = req.params
 
         if (form.model.accept.option === YesNoOption.YES.option) {
+
+          draft.document.settlementAgreement = undefined
+          draft.document.formaliseRepaymentPlan = undefined
+          draft.document.rejectionReason = undefined
+
           draft.document.courtOrderAmount = CourtOrderHelper
             .createCourtOrder(claim, draft.document)
             .calculateAmount()
