@@ -44,7 +44,17 @@ export default express.Router()
         courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency) })
     }))
   .post(
-    Paths.counterOfferAcceptedPage.uri, async (req: express.Request, res: express.Response) => {
+    Paths.counterOfferAcceptedPage.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const { externalId } = await req.params
+      const draft: Draft<DraftClaimantResponse> = res.locals.draft
+      const user: User = res.locals.user
+
+      draft.document.settlementAgreement = undefined
+      draft.document.formaliseRepaymentPlan = undefined
+      draft.document.rejectionReason = undefined
+
+      await new DraftService().save(draft, user.bearerToken)
+
       res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
-    })
+    }))

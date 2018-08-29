@@ -103,6 +103,7 @@ describe('Claimant Response - Counter offer accepted', () => {
       it('should redirect to task list page', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)
