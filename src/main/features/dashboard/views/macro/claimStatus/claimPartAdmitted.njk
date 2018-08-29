@@ -1,11 +1,5 @@
 {% from "externalLink.njk" import externalLink %}
 
-{#TODO#}
-{##No status for DEFENDANT#}
-{#part admit -> haven't paid -> will pay [IMMEDIATLY] or by set datew#}
-{#claimant saw#}
-{#The defendant believes they owe you £5,000. You can accept or reject that this is the amount owed.#}
-
 {% macro claimPartAdmittedToOweForDefendantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
   <p>
@@ -33,7 +27,6 @@
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForClaimantClaimDetails(claim) %}
-    {#NEEDS TO BE DELETED - After admissions feature toggle is removed#}
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>{{ t('{{ defendantName }} admits they owe you {{ amount }} - they said they don’t owe the full amount you claimed.',
       { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral }) }} </p>
@@ -45,7 +38,6 @@
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}
-  {#NEEDS TO BE DELETED - After admissions feature toggle is removed#}
   <p>{{ t('You’ve admitted part of the claim.') }}</p>
 {% endmacro %}
 
