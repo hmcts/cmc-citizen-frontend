@@ -25,7 +25,6 @@ import { Individual } from 'claims/models/details/theirs/individual'
 import { Party } from 'claims/models/details/yours/party'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -108,9 +107,8 @@ export class CCJModelConverter {
     const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption
 
     const alreadyPaidAmount: number = convertAlreadyPaidAmount(claim, claimantResponse)
-    const settledLessThanClaimAmount: boolean = AmountHelper.isSettledForLessThanClaim(claim, claimantResponse)
 
-    return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, paymentDate, settledLessThanClaimAmount)
+    return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, paymentDate)
   }
 
   static convertForRequest (draft: DraftCCJ): CountyCourtJudgment {
