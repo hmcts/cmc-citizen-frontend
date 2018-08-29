@@ -7,7 +7,7 @@ import * as moment from 'moment'
 const TOTAL_AMOUNT = 1000
 const TOTAL_AMOUNT_2 = 1643.20
 
-describe.only('calculateMonthlyPaymentLength', () => {
+describe('calculateMonthlyPaymentLength', () => {
 
   it('should return a payment length of 1 month paying full amount', () => {
     const instalmentAmount = 1000
@@ -52,7 +52,7 @@ describe.only('calculateMonthlyPaymentLength', () => {
   })
 })
 
-describe.only('calculateWeeklyPaymentLength', () => {
+describe('calculateWeeklyPaymentLength', () => {
 
   it('should return a payment length of 1 week payment full amount', () => {
     const instalmentAmount = 1000
@@ -103,7 +103,7 @@ describe.only('calculateWeeklyPaymentLength', () => {
   })
 })
 
-describe.only('calculateBiWeeklyPaymentLength', () => {
+describe('calculateBiWeeklyPaymentLength', () => {
 
   it('should return a payment length of 2 weeks payment full amount', () => {
     const instalmentAmount = 1000
@@ -141,7 +141,7 @@ describe.only('calculateBiWeeklyPaymentLength', () => {
     expect(paymentPlan.calculatePaymentLength()).to.equal('3 months')
   })
 
-  it('should return a payment length of 66 weeks / 1 y 3 m (8m1w)(where the last instalment is partial)', () => {
+  it('should return a payment length of 66 weeks / 1 y 3 m (where the last instalment is partial)', () => {
     const instalmentAmount = 50
     const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT_2, instalmentAmount, Frequency.TWO_WEEKLY)
     expect(paymentPlan.calculatePaymentLength()).to.equal('1 year 3 months')
