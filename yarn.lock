@@ -268,9 +268,9 @@
   dependencies:
     "@types/i18next" "^2"
 
-"@types/i18next@*", "@types/i18next@^8.4.4":
-  version "8.4.4"
-  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-8.4.4.tgz#76591ab5974b65910e44b8860202d4f544f39b9d"
+"@types/i18next@*", "@types/i18next@^8.4.5":
+  version "8.4.5"
+  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-8.4.5.tgz#d6c0cb594258815219c70006e9f5cd65ad6d797f"
 
 "@types/i18next@^2":
   version "2.3.40"
@@ -6949,11 +6949,9 @@ slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
 
-slug@0.9.1:
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/slug/-/slug-0.9.1.tgz#af08f608a7c11516b61778aa800dce84c518cfda"
-  dependencies:
-    unicode ">= 0.3.1"
+slugify@1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/slugify/-/slugify-1.3.1.tgz#f572127e8535329fbc6c1edb74ab856b61ad7de2"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
@@ -6988,9 +6986,9 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-sonarqube-scanner@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/sonarqube-scanner/-/sonarqube-scanner-2.1.0.tgz#aaeb8b57644b3bc79b6f5d4f3fb9e76bcff0dc1c"
+sonarqube-scanner@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/sonarqube-scanner/-/sonarqube-scanner-2.1.1.tgz#6374cb0b18c7a16c1e4d523a6da1b6d3756fc8a3"
   dependencies:
     download "7.0.0"
     extend "3.0.1"
@@ -7000,7 +6998,7 @@ sonarqube-scanner@^2.1.0:
     mkdirp "0.5.1"
     progress "^2.0.0"
     read-pkg "2.0.0"
-    slug "0.9.1"
+    slugify "1.3.1"
 
 sort-keys-length@^1.0.0:
   version "1.0.1"
@@ -7792,10 +7790,6 @@ undertaker@^1.0.0:
     object.defaults "^1.0.0"
     object.reduce "^1.0.0"
     undertaker-registry "^1.0.0"
-
-"unicode@>= 0.3.1":
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/unicode/-/unicode-10.0.0.tgz#e5d51c1db93b6c71a0b879e0b0c4af7e6fdf688e"
 
 union-value@^1.0.0:
   version "1.0.0"
