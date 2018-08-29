@@ -36,6 +36,9 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
     const draft: DraftClaimantResponse = res.locals.draft.document
+    draft.acceptCourtOffer = undefined
+    draft.settlementAgreement = undefined
+    draft.formaliseRepaymentPlan = undefined
 
     const courtOrder: CourtOrder = CourtOrderHelper.createCourtOrder(claim, draft)
     const courtOrderAmount: number = courtOrder.calculateAmount()

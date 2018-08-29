@@ -36,9 +36,6 @@ export default express.Router()
         .createCourtOrder(claim, draft.document)
         .calculateAmount()
 
-      draft.document.settlementAgreement = undefined
-      draft.document.formaliseRepaymentPlan = undefined
-
       await new DraftService().save(draft, user.bearerToken)
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {

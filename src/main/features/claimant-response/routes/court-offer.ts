@@ -81,7 +81,7 @@ export default express.Router()
     ClaimantsResponsePaths.courtOfferPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      draft.document.acceptCourtOffer = undefined
+
       renderView(new Form(draft.document.acceptCourtOffer), res)
     }))
 
