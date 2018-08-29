@@ -23,8 +23,7 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/statesPaid.njk" import
   paidAmountForClaimantClaimDetails,
-  paidAmountForDefendantClaimDetails,
-  paidAmountClaimedForClaimantClaimDetails
+  paidAmountForDefendantClaimDetails
 %}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import
@@ -61,7 +60,7 @@ ccjRequestedForDefendantClaimDetails %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
             {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
-                {{ paidAmountClaimedForClaimantClaimDetails(claim) }}
+                {{ paidAmountForClaimantClaimDetails(claim, claim.totalAmountTillToday) }}
               {% endif %}
             {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
           {% elif claim.response.freeMediation === FreeMediationOption.NO %}
@@ -70,7 +69,7 @@ ccjRequestedForDefendantClaimDetails %}
             {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
           {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-            {{ paidAmountForClaimantClaimDetails(claim) }}
+            {{ paidAmountForClaimantClaimDetails(claim,claim.response.amount) }}
         {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
           {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
         {% endif %}

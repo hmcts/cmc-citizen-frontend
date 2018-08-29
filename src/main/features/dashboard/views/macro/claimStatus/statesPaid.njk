@@ -4,28 +4,12 @@
   {{ t('The defendant believes that they’ve paid the claim in full.') }}
 {% endmacro %}
 
-{% macro paidAmountClaimedForClaimantClaimDetails(claim) %}
+{% macro paidAmountForClaimantClaimDetails(claim, amount) %}
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>
     {{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
       { defendantName: claim.claimData.defendant.name,
-        amount: claim.totalAmountTillToday | numeral,
-        paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}
-  </p>
-  <p>{{ t('You can accept or reject this response.') }}</p>
-  <p>
-    {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.',
-      { respondDate: claim.respondToResponseDeadline | date}) }}
-  </p>
-  {{ _respond(claim, 'Respond') }}
-{% endmacro %}
-
-{% macro paidAmountForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
-      { defendantName: claim.claimData.defendant.name,
-        amount: claim.response.amount | numeral,
+        amount: amount | numeral,
         paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}
   </p>
   <p> {{ t('You can accept or reject this response.') }}</p>
