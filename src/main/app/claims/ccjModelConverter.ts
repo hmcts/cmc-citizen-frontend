@@ -79,17 +79,6 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
   return paymentIntention
 }
 
-function convertAlreadyPaidAmount (claim: Claim, claimantResponse: DraftClaimantResponse): number {
-  switch (claim.response.responseType) {
-    case ResponseType.PART_ADMISSION:
-      return claimantResponse.paidAmount.amount
-    case ResponseType.FULL_ADMISSION:
-      return claim.claimData.amount.totalAmount()
-    default:
-      throw new Error(`Incompatible response type: ${claim.response.responseType}`)
-  }
-}
-
 export class CCJModelConverter {
 
   static convertForIssue (claim: Claim, draft: Draft<DraftClaimantResponse>): CountyCourtJudgment {
@@ -106,7 +95,7 @@ export class CCJModelConverter {
     const paymentDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
     const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption
 
-    const alreadyPaidAmount: number = convertAlreadyPaidAmount(claim, claimantResponse)
+    const alreadyPaidAmount: number = claimantResponse.paidAmount.amount
 
     return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, paymentDate)
   }
