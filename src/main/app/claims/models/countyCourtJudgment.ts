@@ -1,4 +1,4 @@
-import { RepaymentPlan } from 'claims/models/replaymentPlan'
+import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
