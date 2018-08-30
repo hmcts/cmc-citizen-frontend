@@ -34,7 +34,8 @@ export default express.Router()
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         paymentIntention: paymentIntention,
-        lastInstalmentPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ? getPaymentPlan(claim).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
+        lastInstalmentPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
+          getPaymentPlan(claim, paymentIntention).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
       })
     })
   )

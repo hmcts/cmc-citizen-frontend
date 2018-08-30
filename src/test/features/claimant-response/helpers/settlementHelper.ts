@@ -1,9 +1,7 @@
 /* tslint:disable:no-unused-expression */
 
 import {
-  acceptOffer,
   getRepaymentPlanOrigin,
-  prepareDefendantPartyStatement,
   prepareSettlement
 } from 'claimant-response/helpers/settlementHelper'
 import { PartyStatement } from 'claims/models/partyStatement'
@@ -27,35 +25,6 @@ describe('settlementHelper', () => {
     beforeEach(() => {
       claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
       draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj })
-    })
-
-    it('should return defendant party statement by installment option', () => {
-      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
-      expect(partyStatement).is.not.undefined
-      expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
-      expect(partyStatement.type).to.be.eql('OFFER')
-      expect(partyStatement.offer).is.not.undefined
-      expect(partyStatement.offer.paymentIntention).is.not.undefined
-      expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('INSTALMENTS')
-      expect(partyStatement.offer.paymentIntention.repaymentPlan).is.not.undefined
-      expect(partyStatement.offer.paymentIntention.paymentDate).is.undefined
-
-    })
-
-    it('should return defendant party statement by set date option', () => {
-      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
-      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
-      expect(partyStatement).is.not.undefined
-      expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
-      expect(partyStatement.type).to.be.eql('OFFER')
-      expect(partyStatement.offer).is.not.undefined
-      expect(partyStatement.offer.content).to.be.eql('John Smith will pay the full amount, no later than 31 December 2050')
-      expect(partyStatement.offer.completionDate).to.be.eql(MomentFactory.parse('2050-12-31'))
-      expect(partyStatement.offer.paymentIntention).is.not.undefined
-      expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('BY_SPECIFIED_DATE')
-      expect(partyStatement.offer.paymentIntention.paymentDate).is.not.undefined
-      expect(partyStatement.offer.paymentIntention.repaymentPlan).is.undefined
-
     })
 
     it('should return settlement object', () => {
@@ -82,7 +51,7 @@ describe('settlementHelper', () => {
   describe('getRepaymentPlanOrigin', () => {
     it('should return DEFENDANT if offer accepted was made by defendant', () => {
       const defendantStatement = new PartyStatement(StatementType.OFFER.value, 'DEFENDANT', new Offer('contents', MomentFactory.currentDate()))
-      const partyStatements: PartyStatement[] = [defendantStatement, acceptOffer()]
+      const partyStatements: PartyStatement[] = [defendantStatement, new PartyStatement(StatementType.ACCEPTATION.value, MadeBy.CLAIMANT.value)]
       const settlement: Settlement = new Settlement(partyStatements)
 
       const repaymentPlanOrigin: string = getRepaymentPlanOrigin(settlement)
@@ -92,7 +61,7 @@ describe('settlementHelper', () => {
 
     it('should return CLAIMANT if offer accepted was made by claimant', () => {
       const defendantStatement = new PartyStatement(StatementType.OFFER.value, 'CLAIMANT', new Offer('contents', MomentFactory.currentDate()))
-      const partyStatements: PartyStatement[] = [defendantStatement, acceptOffer()]
+      const partyStatements: PartyStatement[] = [defendantStatement, new PartyStatement(StatementType.ACCEPTATION.value, MadeBy.CLAIMANT.value)]
       const settlement: Settlement = new Settlement(partyStatements)
 
       const repaymentPlanOrigin: string = getRepaymentPlanOrigin(settlement)
@@ -102,7 +71,7 @@ describe('settlementHelper', () => {
 
     it('should return COURT if offer accepted was made by court', () => {
       const defendantStatement = new PartyStatement(StatementType.OFFER.value, 'COURT', new Offer('contents', MomentFactory.currentDate()))
-      const partyStatements: PartyStatement[] = [defendantStatement, acceptOffer()]
+      const partyStatements: PartyStatement[] = [defendantStatement, new PartyStatement(StatementType.ACCEPTATION.value, MadeBy.CLAIMANT.value)]
       const settlement: Settlement = new Settlement(partyStatements)
 
       const repaymentPlanOrigin: string = getRepaymentPlanOrigin(settlement)
@@ -115,16 +84,7 @@ describe('settlementHelper', () => {
     })
 
     it('should throw error if partyStatement is undefined', () => {
-      expect(() => getRepaymentPlanOrigin(new Settlement([undefined, acceptOffer()]))).to.throw(Error, 'partyStatement must not be null')
-    })
-  })
-
-  describe('acceptOffer', () => {
-    it('should generate acceptation party statement', () => {
-      const partyStatement: PartyStatement = acceptOffer()
-      expect(partyStatement).is.not.undefined
-      expect(partyStatement.type).to.be.eql(StatementType.ACCEPTATION.value)
-      expect(partyStatement.madeBy).to.be.eql(MadeBy.CLAIMANT.value)
+      expect(() => getRepaymentPlanOrigin(new Settlement([undefined, new PartyStatement(StatementType.ACCEPTATION.value, MadeBy.CLAIMANT.value)]))).to.throw(Error, 'partyStatement must not be null')
     })
   })
 })

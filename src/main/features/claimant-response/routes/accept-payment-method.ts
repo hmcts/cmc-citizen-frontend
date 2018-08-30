@@ -15,7 +15,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
-import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { getDefendantPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
 import { YesNoOption } from 'models/yesNoOption'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
@@ -25,7 +25,7 @@ function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
     claim: claim,
     paymentOption: getPaymentOption(claim.response),
     paymentDate: getPaymentDate(claim.response),
-    paymentPlan: getPaymentPlan(claim)
+    paymentPlan: getDefendantPaymentPlan(claim)
   })
 }
 

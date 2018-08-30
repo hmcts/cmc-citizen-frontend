@@ -26,7 +26,7 @@ function renderView (form: Form<SettlementAgreement>, res: express.Response) {
     form: form,
     paymentIntention: paymentIntention,
     lastInstalmentPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
-      getPaymentPlan(claim).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
+      getPaymentPlan(claim, paymentIntention).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
   })
 }
 
