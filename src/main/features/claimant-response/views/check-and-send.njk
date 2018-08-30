@@ -123,7 +123,7 @@
           {{ row('Amount already paid', draft.paidAmount.amount | numeral, bottomBorder = true, bold = true) }}
         {% endif %}
 
-        {{ row('Total to be paid by defendant', (claim.totalAmountTillToday - (draft.paidAmount.amount or 0)) | numeral,bold = true) }}
+        {{ row('Total to be paid by defendant', (totalAmount - (draft.paidAmount.amount or 0)) | numeral,bold = true) }}
 
       {{ tableEnd() }}
     {% endif %}

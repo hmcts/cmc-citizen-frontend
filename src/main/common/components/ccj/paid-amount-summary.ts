@@ -9,6 +9,7 @@ import { getInterestDetails } from 'shared/interestUtils'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
+import { getAmountSettledFor } from 'shared/components/ccj/ccjHelper'
 
 /* tslint:disable:no-default-export */
 export abstract class AbstractPaidAmountSummaryPage<Draft> {
@@ -27,13 +28,15 @@ export abstract class AbstractPaidAmountSummaryPage<Draft> {
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const claim: Claim = res.locals.claim
           const model = this.createModelAccessor().get(res.locals.draft.document)
+
           res.render(
             this.getView(), {
               claim: claim,
               alreadyPaid: model.amount || 0,
               interestDetails: await getInterestDetails(claim),
               nextPageUrl: this.buildRedirectUri(req, res),
-              defaultJudgmentDate: MomentFactory.currentDate()
+              defaultJudgmentDate: MomentFactory.currentDate(),
+              amountSettledFor: getAmountSettledFor(claim, res.locals.draft.document)
             }
           )
         }))
