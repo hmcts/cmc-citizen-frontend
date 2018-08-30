@@ -29,6 +29,17 @@ export class Settlement {
     return partyStatement ? partyStatement.offer : undefined
   }
 
+  getLastOffer (): Offer {
+    if (!this.partyStatements) {
+      return undefined
+    }
+
+    const partyStatement: PartyStatement = this.partyStatements.reverse()
+      .find(statement => statement.type === StatementType.OFFER.value)
+
+    return partyStatement ? partyStatement.offer : undefined
+  }
+
   isOfferAccepted (): boolean {
     if (!this.partyStatements) {
       return false
@@ -55,6 +66,11 @@ export class Settlement {
 
   isOfferResponded (): boolean {
     return this.isOfferAccepted() || this.isOfferRejected()
+  }
+
+  isThroughAdmissions (): boolean {
+    const lastOffer: Offer = this.getLastOffer()
+    return lastOffer && !!lastOffer.paymentIntention
   }
 
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {

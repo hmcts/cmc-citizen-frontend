@@ -17,7 +17,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
-import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
+import { PaymentPlan as PaymentPlanModel } from 'shared/components/payment-intention/model/paymentPlan'
 import { PaymentOption as FormPaymentOption } from 'shared/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
@@ -25,6 +25,10 @@ import { Individual } from 'claims/models/details/theirs/individual'
 import { Party } from 'claims/models/details/yours/party'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentOption } from 'claims/models/paymentOption'
+
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -70,7 +74,7 @@ function getDefendantPaymentIntention (claim: Claim): PaymentIntention {
 
     const repaymentPlan: ResponseRepaymentPlan = response.paymentIntention.repaymentPlan
 
-    paymentIntention.paymentPlan = repaymentPlan && new PaymentPlan(claim.totalAmountTillToday,
+    paymentIntention.paymentPlan = repaymentPlan && new PaymentPlanModel(claim.totalAmountTillToday,
       repaymentPlan.instalmentAmount,
       new LocalDate(repaymentPlan.firstPaymentDate.year(), repaymentPlan.firstPaymentDate.month() + 1, repaymentPlan.firstPaymentDate.date()),
       PaymentSchedule.of(repaymentPlan.paymentSchedule)
@@ -90,6 +94,42 @@ function convertAlreadyPaidAmount (claim: Claim, claimantResponse: DraftClaimant
   }
 }
 
+// NOTE:
+// This whole `convertForIssue`method needs to be refactored.
+// Introducing `getRepaymentPlan` as a temporary fix to get us over the line
+function buildRepaymentPlan (claim: Claim, claimantResponse: DraftClaimantResponse): RepaymentPlan {
+  const defendantPaymentIntention: PaymentIntention = getDefendantPaymentIntention(claim)
+
+  if (!defendantPaymentIntention.paymentPlan) {
+    return undefined
+  }
+
+  const defendantPaymentMethodAccepted = claimantResponse.acceptPaymentMethod.accept.option === YesNoOption.YES.option
+  if (defendantPaymentMethodAccepted) {
+    return new RepaymentPlan(
+      defendantPaymentIntention.paymentPlan.instalmentAmount,
+      defendantPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
+      defendantPaymentIntention.paymentPlan.paymentSchedule.value
+    )
+  }
+
+  // Use Court Order
+  const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(claimantResponse)
+  const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
+  const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+    defendantPaymentPlan.totalAmount,
+    claimantResponse.courtOrderAmount,
+    Frequency.MONTHLY,
+    claimantPaymentPlan.startDate
+  ).convertTo(defendantPaymentPlan.frequency)
+
+  return new RepaymentPlan(
+    courtOrderPaymentPlan.instalmentAmount,
+    defendantPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
+    defendantPaymentIntention.paymentPlan.paymentSchedule.value)
+}
+
 export class CCJModelConverter {
 
   static convertForIssue (claim: Claim, draft: Draft<DraftClaimantResponse>): CountyCourtJudgment {
@@ -100,9 +140,8 @@ export class CCJModelConverter {
     const paymentIntention: PaymentIntention = defendantPaymentMethodAccepted ? getDefendantPaymentIntention(claim)
       : claimantResponse.alternatePaymentMethod
 
-    const repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
-      paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-      paymentIntention.paymentPlan.paymentSchedule.value)
+    const repaymentPlan: RepaymentPlan = buildRepaymentPlan(claim, claimantResponse)
+
     const paymentDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
     const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption
 

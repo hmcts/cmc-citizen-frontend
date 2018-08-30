@@ -26,7 +26,12 @@
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
 
-      {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
+      <div class="form-group">
+        <fieldset>
+          <legend class="visually-hidden">{{ t('Regular payments of') }}</legend>
+          {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
+        </fieldset>
+      </div>
 
       <div class="form-group">
         {% set error = form.errorFor('paymentSchedule') %}
