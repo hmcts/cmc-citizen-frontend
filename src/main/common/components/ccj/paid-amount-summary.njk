@@ -21,61 +21,53 @@
           </thead>
           <tbody>
           {% if claim.response and claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-            <tr>
-              <th scope="row">{{ t('Claim amount') }}</th>
-              <td class="numeric last">
-                <span class="font-small">{{ claim.response.amount | numeral }}</span>
-              </td>
-            </tr>
-            <tr>
-              <th scope="col" class="bold-medium">{{ t('Total') }}</th>
-              <td class="numeric last bold-medium"><span
-                  id="total">{{ claim.response.amount | numeral }}</span></td>
-            </tr>
+            {% set amount = claim.response.amount %}
           {% else %}
+            {% set amount = claim.claimData.amount.totalAmount() %}
+          {% endif %}
+          <tr>
+            <th scope="row">{{ t('Claim amount') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ amount | numeral }}</span>
+            </td>
+          </tr>
+          {% if interestDetails %}
             <tr>
-              <th scope="row">{{ t('Claim amount') }}</th>
+              <th scope="row">
+                {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
+                  interestDetails.interestFromDate, defaultJudgmentDate, interestDetails.specificDailyAmount) }}
+              </th>
               <td class="numeric last">
-                <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
+                <span class="font-small">{{ interestDetails.interest | numeral }}</span>
               </td>
-            </tr>
-            {% if interestDetails %}
-              <tr>
-                <th scope="row">
-                  {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
-                    interestDetails.interestFromDate, defaultJudgmentDate, interestDetails.specificDailyAmount) }}
-                </th>
-                <td class="numeric last">
-                  <span class="font-small">{{ interestDetails.interest | numeral }}</span>
-                </td>
-              </tr>
-            {% endif %}
-            <tr>
-              <th scope="row">{{ t('Claim fee') }}</th>
-              <td class="numeric last">
-                <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
-              </td>
-            </tr>
-            {% if alreadyPaid %}
-              <tr>
-                <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
-                <td class="numeric last bold-small"><span
-                    id="sub-total">{{ claim.totalAmountTillToday | numeral }}</span></td>
-              </tr>
-              <tr>
-                <th scope="row">{{ t('Minus amount already paid') }}</th>
-                <td class="numeric last">
-                  <span class="font-small">{{ alreadyPaid | numeral }}</span>
-                </td>
-              </tr>
-            {% endif %}
-
-            <tr>
-              <th scope="col" class="bold-medium">{{ t('Total') }}</th>
-              <td class="numeric last bold-medium"><span
-                  id="total">{{ (claim.totalAmountTillToday - alreadyPaid) | numeral }}</span></td>
             </tr>
           {% endif %}
+          <tr>
+            <th scope="row">{{ t('Claim fee') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
+            </td>
+          </tr>
+          {% if alreadyPaid %}
+            <tr>
+              <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
+              <td class="numeric last bold-small"><span
+                  id="sub-total">{{ claim.totalAmountTillToday | numeral }}</span></td>
+            </tr>
+            <tr>
+              <th scope="row">{{ t('Minus amount already paid') }}</th>
+              <td class="numeric last">
+                <span class="font-small">{{ alreadyPaid | numeral }}</span>
+              </td>
+            </tr>
+          {% endif %}
+
+          <tr>
+            <th scope="col" class="bold-medium">{{ t('Total') }}</th>
+            <td class="numeric last bold-medium"><span
+                id="total">{{ ((amount + claim.totalInterest + (claim.claimData.feeAmountInPennies / 100)) - alreadyPaid) | numeral }}</span>
+            </td>
+          </tr>
           </tbody>
         </table>
       </div>
