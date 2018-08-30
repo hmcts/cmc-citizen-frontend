@@ -12,7 +12,6 @@ export class CountyCourtJudgment {
                public paidAmount?: number,
                public repaymentPlan?: RepaymentPlan,
                public payBySetDate?: Moment,
-               public settledLessThanClaimAmount?: boolean,
                public statementOfTruth?: StatementOfTruth
   ) {
     this.defendantDateOfBirth = defendantDateOfBirth
