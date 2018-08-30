@@ -25,7 +25,8 @@ function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   res.render(Paths.signSettlementAgreementPage.associatedView, {
     form: form,
     paymentIntention: paymentIntention,
-    lastPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ? getPaymentPlan(claim).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
+    lastInstalmentPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
+      getPaymentPlan(claim).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
   })
 }
 
