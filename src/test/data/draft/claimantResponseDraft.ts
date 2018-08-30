@@ -1,3 +1,5 @@
+import { MomentFactory } from 'shared/momentFactory'
+
 const baseClaimantResponseDraft = {
   paidAmount: {
     amount: 100
@@ -13,7 +15,7 @@ export const claimantResponseDraftWithPaymentMethodAccepted = {
   ...baseClaimantResponseDraft
 }
 
-export const claimantResponseDraftWithPaymentMethodRejectedAndImmediatePaymentSuggested = {
+export const claimantResponseDraftWithPaymentMethodRejectedAndImmediatePaymentProposed = {
   acceptPaymentMethod: {
     accept: {
       option: 'no'
@@ -24,12 +26,15 @@ export const claimantResponseDraftWithPaymentMethodRejectedAndImmediatePaymentSu
       option: {
         value: 'IMMEDIATELY'
       }
+    },
+    paymentDate: {
+      date: MomentFactory.currentDate().add(5, 'days')
     }
   },
   ...baseClaimantResponseDraft
 }
 
-export const claimantResponseDraftWithPaymentMethodRejectedAndPaymentBySetDateSuggested = {
+export const claimantResponseDraftWithPaymentMethodRejectedAndPaymentBySetDateProposed = {
   acceptPaymentMethod: {
     accept: {
       option: 'no'
@@ -47,6 +52,27 @@ export const claimantResponseDraftWithPaymentMethodRejectedAndPaymentBySetDateSu
         month: 12,
         day: 31
       }
+    }
+  },
+  ...baseClaimantResponseDraft
+}
+
+export const claimantResponseDraftWithPaymentMethodRejectedAndPaymentByInstalmentProposed = {
+  acceptPaymentMethod: {
+    accept: {
+      option: 'no'
+    }
+  },
+  alternatePaymentMethod: {
+    paymentOption: {
+      option: {
+        value: 'INSTALMENTS'
+      }
+    },
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31T00:00:00.000Z',
+      paymentSchedule: 'EACH_WEEK'
     }
   },
   ...baseClaimantResponseDraft
