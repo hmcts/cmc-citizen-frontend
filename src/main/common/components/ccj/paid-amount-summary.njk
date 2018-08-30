@@ -52,7 +52,7 @@
             <tr>
               <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
               <td class="numeric last bold-small"><span
-                  id="sub-total">{{ claim.totalAmountTillToday | numeral }}</span></td>
+                  id="sub-total">{{ (amount + claim.totalInterest + (claim.claimData.feeAmountInPennies / 100)) | numeral }}</span></td>
             </tr>
             <tr>
               <th scope="row">{{ t('Minus amount already paid') }}</th>
