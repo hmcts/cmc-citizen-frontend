@@ -365,8 +365,7 @@ export const sampleClaimantResponseDraftObj = {
   alternatePaymentMethod: {
     paymentOption: {
       option: {
-        value: 'INSTALMENTS',
-        displayValue: 'By instalments'
+        value: 'IMMEDIATELY'
       }
     }
   },
