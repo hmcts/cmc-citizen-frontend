@@ -90,6 +90,25 @@ export const partialAdmissionWithImmediatePaymentData = {
   amount: 3000
 }
 
+export const partialAdmissionFromStatesPaidDefence = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  freeMediation: 'no'
+}
+
 export const partialAdmissionAlreadyPaidData = {
   ...baseResponseData,
   ...basePartialAdmissionData,

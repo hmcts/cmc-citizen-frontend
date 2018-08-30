@@ -8,12 +8,11 @@
 {% macro claimRejectedAlreadyPaidForClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>
-    {{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paidDate }}.',
-      { defendantName: claim.claimData.defendant.name, amount: claim.totalAmountTillToday | numeral, paidDate: claim.response.paymentDeclaration.paidDate | date }) }}
-  </p>
-  <p>{{ t('You can accept or reject this response.') }}</p>
-  <p>{{ t('You need to respond before 4pm on {{ respondToResponseDeadline }} or your claim won’t proceed.',
-      { respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}
+    {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
+      + 'Email {{ emailAddress }} if you want to proceed with the claim. '
+      + 'You must do this before 4pm on {{ respondToResponseDeadline }}.',
+      { defendantName: claim.claimData.defendant.name, emailAddress: supportEmailAddress,
+        respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}
   </p>
   <p>
     {{ _respond(claim, 'Respond') }}
