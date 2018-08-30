@@ -12,11 +12,14 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 import { GuardFactory } from 'response/guards/guardFactory'
 import { NotFoundError } from 'main/errors'
+import { Logger } from '@hmcts/nodejs-logging'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
   return StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)
 }, (req: express.Request): void => {
+  const logger = Logger.getLogger('claimant-response/guards/stateGuardRequestHandler')
+  logger.warn('State guard: claimant response already exists - redirecting to dashboard')
   throw new NotFoundError(req.path)
 })
 
