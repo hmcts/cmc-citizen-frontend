@@ -16,6 +16,7 @@ import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
 import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { YesNoOption } from 'models/yesNoOption'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -69,6 +70,9 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.acceptPaymentMethod = form.model
+        if (form.model.accept === YesNoOption.YES) {
+          delete draft.document.alternatePaymentMethod
+        }
 
         await new DraftService().save(draft, user.bearerToken)
 

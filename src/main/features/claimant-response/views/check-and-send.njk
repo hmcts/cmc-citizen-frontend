@@ -80,27 +80,42 @@
     {%  if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
 
-      {% if claim.response.paymentIntention.paymentDate %}
+      {% if paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
         {{ row(label = 'The offer',
-          value = t('{{ defendantFullName }} will pay the full amount, no later than {{ paymentDate }}',
+          value = t('{{ defendantFullName }} will pay the full amount immediately. {{ claimantFullName }} will receive the money no later than {{ paymentDate }}. Any cheques or transfers will be clear in their account by this date.',
             {
-              defendantFullName: claim.response.defendant.name,
-              paymentDate: claim.response.paymentIntention.paymentDate | date
+              claimantFullName: claim.claimData.claimant.name,
+              defendantFullName: claim.claimData.defendant.name,
+              paymentDate: paymentIntention.paymentDate | date
             }
           ),
           bottomBorder = true, bold = true
         ) }}
         {{ row(label = 'Completion date',
-          value = claim.response.paymentIntention.paymentDate | date,
+          value = paymentIntention.paymentDate | date,
           bottomBorder = true, bold = true
         ) }}
-      {% elseif claim.response.paymentIntention.repaymentPlan %}
+      {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+        {{ row(label = 'The offer',
+          value = t('{{ defendantFullName }} will pay the full amount, no later than {{ paymentDate }}',
+            {
+              defendantFullName: claim.response.defendant.name,
+              paymentDate: paymentIntention.paymentDate | date
+            }
+          ),
+          bottomBorder = true, bold = true
+        ) }}
+        {{ row(label = 'Completion date',
+          value = paymentIntention.paymentDate | date,
+          bottomBorder = true, bold = true
+        ) }}
+      {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
         {{ row(label = 'The offer',
           value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
             { defendantFullName: claim.response.defendant.name,
-              instalmentAmount: claim.response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
-              paymentSchedule: claim.response.paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
-              firstPaymentDate: claim.response.paymentIntention.repaymentPlan.firstPaymentDate | date
+              instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+              paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+              firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
             }),
           bottomBorder = true, bold = true
         ) }}

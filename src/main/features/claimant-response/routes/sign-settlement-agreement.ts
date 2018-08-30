@@ -9,14 +9,23 @@ import { SettlementAgreement } from 'features/claimant-response/form/models/sett
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
 import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentIntentionConverter } from 'claimant-response/helpers/paymentIntentionConverter'
 
 function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   const claim: Claim = res.locals.claim
+  const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+
+  const paymentIntention: PaymentIntention = draft.document.alternatePaymentMethod ? PaymentIntentionConverter.convertFromDraft(draft.document.alternatePaymentMethod)
+    : (claim.response as FullAdmissionResponse | PartialAdmissionResponse).paymentIntention
 
   res.render(Paths.signSettlementAgreementPage.associatedView, {
     form: form,
-    claim: claim,
-    paymentPlan: getPaymentPlan(claim)
+    paymentIntention: paymentIntention,
+    lastPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ? getPaymentPlan(claim).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
   })
 }
 

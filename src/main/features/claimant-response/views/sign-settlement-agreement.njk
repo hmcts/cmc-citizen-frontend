@@ -17,8 +17,10 @@
 
         {{ termsOfAgreement (
           id = 'termsOfAgreement',
-          response = claim.response,
-          paymentPlan = paymentPlan
+          claimantName = claim.claimData.claimant.name,
+          defendantName = claim.claimData.defendant.name,
+          paymentIntention = paymentIntention,
+          lastPaymentDate = lastPaymentDate
         ) }}
 
         <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.',

@@ -14,21 +14,27 @@ import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentIntentionConverter } from 'claimant-response/helpers/paymentIntentionConverter'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,
     AllClaimantResponseTasksCompletedGuard.requestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
-      const paymentPlan = getPaymentPlan(claim)
+
+      const paymentIntention = draft.document.alternatePaymentMethod ? PaymentIntentionConverter.convertFromDraft(draft.document.alternatePaymentMethod)
+        : (claim.response as FullAdmissionResponse | PartialAdmissionResponse).paymentIntention
 
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
-        claim: claim,
-        lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined
+        paymentIntention: paymentIntention,
+        lastPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ? getPaymentPlan(claim).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined
       })
     })
   )
