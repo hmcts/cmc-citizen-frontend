@@ -49,7 +49,7 @@ export class OfferSteps {
     I.click('Sign the settlement agreement')
     I.click('Make an agreement')
     this.signAgreement()
-    I.see('You’ve settled out of court')
+    I.see('You’ve both signed a settlement agreement')
   }
 
   countersignOfferFromDashboard (claimRef: string): void {
