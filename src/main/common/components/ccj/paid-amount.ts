@@ -15,7 +15,8 @@ import { RoutablePath } from 'shared/router/routablePath'
 /* tslint:disable:no-default-export */
 export abstract class AbstractPaidAmountPage<Draft> {
 
-  abstract createModelAccessor (): AbstractModelAccessor<Draft, PaidAmount>
+  abstract paidAmount (): AbstractModelAccessor<Draft, PaidAmount>
+  abstract totalAmount (claim: Claim, draft: Draft): number
 
   getView (): string {
     return 'components/ccj/paid-amount'
@@ -26,8 +27,7 @@ export abstract class AbstractPaidAmountPage<Draft> {
       .get(
         path + Paths.paidAmountPage.uri,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-          this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document)), res)
-
+          this.renderView(new Form(this.paidAmount().get(res.locals.draft.document)), res)
         }))
       .post(
         path + Paths.paidAmountPage.uri,
@@ -39,7 +39,7 @@ export abstract class AbstractPaidAmountPage<Draft> {
             if (form.hasErrors()) {
               this.renderView(form, res)
             } else {
-              this.createModelAccessor().set(res.locals.draft.document, form.model)
+              this.paidAmount().set(res.locals.draft.document, form.model)
 
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)
@@ -54,7 +54,7 @@ export abstract class AbstractPaidAmountPage<Draft> {
     const claim: Claim = res.locals.claim
     res.render(this.getView(), {
       form: form,
-      totalAmount: claim.totalAmountTillToday
+      totalAmount: this.totalAmount(claim, res.locals.draft.document)
     })
   }
 

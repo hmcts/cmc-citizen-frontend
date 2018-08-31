@@ -16,6 +16,7 @@ import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
+import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
 function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim: Claim) {
@@ -48,6 +49,7 @@ export default express.Router()
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
+        totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
         courtOrderPaymentPlan: createCourtOrderPaymentPlan(draft, claim)
       })
     })
