@@ -23,7 +23,6 @@ import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
 import { Party } from 'claims/models/details/yours/party'
-// import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentOption } from 'claims/models/paymentOption'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {

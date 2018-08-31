@@ -1,6 +1,5 @@
 import { expect } from 'chai'
-import { CCJModelConverter } from 'claims/ccjModelConverter'
-// Claim Data
+import { CCJModelConverter } from 'claims/ccjModelConverter']
 import { fullAdmissionWithImmediatePaymentData,
   fullAdmissionWithPaymentBySetDateData,
   fullAdmissionWithPaymentByInstalmentsData,
@@ -8,14 +7,11 @@ import { fullAdmissionWithImmediatePaymentData,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithPaymentByInstalmentsCompanyData
  } from 'test/data/entity/responseData'
-// Claimant-Response Draft and Data
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { claimantResponseDraftWithPaymentMethodAccepted,
   claimantResponseDraftWithPaymentMethodRejectedAndImmediatePaymentProposed,
   claimantResponseDraftWithPaymentMethodRejectedAndPaymentBySetDateProposed
 } from 'test/data/draft/claimantResponseDraft'
-// CCJ Draft and Data
-// import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import {
   ccjIssueRequestPayImmediately,
   ccjIssueRequestPayBySetDate,
@@ -27,7 +23,6 @@ import {
 import { Claim } from 'claims/models/claim'
 import { Response } from 'claims/models/response'
 import { Draft } from '@hmcts/draft-store-client'
-// import { Defendant } from 'drafts/models/defendant'
 
 function prepareClaim (responseTemplate: any): Claim {
   const claim = new Claim()
