@@ -20,7 +20,6 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.draft
-      const user: User = res.locals.user
 
       const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
       const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
@@ -35,8 +34,6 @@ export default express.Router()
       draft.document.courtOrderAmount = CourtOrderHelper
         .createCourtOrder(claim, draft.document)
         .calculateAmount()
-
-      await new DraftService().save(draft, user.bearerToken)
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
         isCourtOrderPaymentPlanConvertedByDefendantFrequency: claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency,
