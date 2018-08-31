@@ -64,20 +64,21 @@ function prepareDefendantPartyStatement (offer: Offer): PartyStatement {
 
 function prepareOffer (claim: Claim, paymentIntention: PaymentIntention): Offer {
   const amount: number = claim.response.responseType === ResponseType.PART_ADMISSION ? claim.response.amount : claim.claimData.amount.totalAmount()
+  const formattedAmount: string = claim.response.responseType === ResponseType.PART_ADMISSION ? NumberFormatter.formatMoney(amount) : 'full amount'
 
-  const content: string = prepareContent(claim.claimData.claimant.name, claim.claimData.defendant.name, paymentIntention)
+  const content: string = prepareContent(claim.claimData.claimant.name, claim.claimData.defendant.name, formattedAmount, paymentIntention)
   const completionDate: Moment = paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
     calculateLastInstalmentPaymentDate(amount, paymentIntention.repaymentPlan) : paymentIntention.paymentDate
 
   return new Offer(content, completionDate, paymentIntention)
 }
 
-function prepareContent (claimantName: string, defendantName: string, paymentIntention: PaymentIntention): string {
+function prepareContent (claimantName: string, defendantName: string, amount: string, paymentIntention: PaymentIntention): string {
   switch (paymentIntention.paymentOption) {
     case PaymentOption.IMMEDIATELY:
-      return `${defendantName} will pay the full amount immediately. ${claimantName} will receive the money no later than ${MomentFormatter.formatLongDate(paymentIntention.paymentDate)}. Any cheques or transfers will be clear in their account by this date.`
+      return `${defendantName} will pay the ${amount} immediately. ${claimantName} will receive the money no later than ${MomentFormatter.formatLongDate(paymentIntention.paymentDate)}. Any cheques or transfers will be clear in their account by this date.`
     case PaymentOption.BY_SPECIFIED_DATE:
-      return `${defendantName} will pay the full amount, no later than ${MomentFormatter.formatLongDate(paymentIntention.paymentDate)}`
+      return `${defendantName} will pay the ${amount}, no later than ${MomentFormatter.formatLongDate(paymentIntention.paymentDate)}`
     case PaymentOption.INSTALMENTS:
       return `${defendantName} will pay instalments of ${NumberFormatter.formatMoney(paymentIntention.repaymentPlan.instalmentAmount)} ${PaymentScheduleTypeViewFilter.render(paymentIntention.repaymentPlan.paymentSchedule).toLowerCase()}. The first instalment will be paid by ${MomentFormatter.formatLongDate(paymentIntention.repaymentPlan.firstPaymentDate)}.`
     default:

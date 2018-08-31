@@ -18,6 +18,7 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentIntentionConverter } from 'claimant-response/helpers/paymentIntentionConverter'
+import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -33,6 +34,7 @@ export default express.Router()
 
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
+        totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
         paymentIntention: paymentIntention,
         lastInstalmentPaymentDate: paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
           getPaymentPlan(claim, paymentIntention).getLastPaymentDate(paymentIntention.repaymentPlan.firstPaymentDate) : undefined

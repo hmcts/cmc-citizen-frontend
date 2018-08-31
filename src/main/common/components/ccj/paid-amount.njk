@@ -22,9 +22,7 @@
 
           <div class="panel panel-border-narrow js-hidden" id="option-yes">
 
-            <p>{{ t('Total claim amount: {{ totalAmount }}', { totalAmount: totalAmount | numeral }) }}</p>
-
-            <input type="hidden" name="claimedAmount" value="{{totalAmount}}" />
+            <input type="hidden" name="claimedAmount" value="{{ totalAmount }}" />
             {{ poundInput(label = 'Amount already paid', name = 'amount', form = form) }}
 
           </div>

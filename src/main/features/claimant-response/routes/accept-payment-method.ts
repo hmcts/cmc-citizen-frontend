@@ -70,6 +70,7 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.acceptPaymentMethod = form.model
+
         if (form.model.accept === YesNoOption.YES) {
           delete draft.document.alternatePaymentMethod
         }

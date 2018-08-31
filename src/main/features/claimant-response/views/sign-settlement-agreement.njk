@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, checkboxSingle, saveAndContinueButton, errorSummary %}
 {% from "./macro/termsOfAgreementTable.njk" import termsOfAgreement %}
 
-{% set heading = 'Terms of the agreement' %}
+{% set heading = 'Sign a settlement agreement' %}
 
 {% block content %}
   <div class="grid-row">
@@ -15,10 +15,16 @@
 
         {{ csrfProtection(csrf) }}
 
+        {% set amount = 'the full amount' %}
+        {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+          {% set amount = claim.response.amount | numeral %}
+        {% endif %}
+
         {{ termsOfAgreement (
           id = 'termsOfAgreement',
           claimantName = claim.claimData.claimant.name,
           defendantName = claim.claimData.defendant.name,
+          amount = amount,
           paymentIntention = paymentIntention,
           lastInstalmentPaymentDate = lastInstalmentPaymentDate
         ) }}

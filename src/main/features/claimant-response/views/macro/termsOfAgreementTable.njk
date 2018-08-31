@@ -1,17 +1,17 @@
-{% macro termsOfAgreement(id, claimantName, defendantName, paymentIntention, lastInstalmentPaymentDate) %}
+{% macro termsOfAgreement(id, claimantName, defendantName, amount, paymentIntention, lastInstalmentPaymentDate) %}
   <fieldset id="{{ id }}" class="form-group">
     <legend>
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
 
     {% if paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay the full amount immediately. {{ claimantFullName }} will receive the money no later than {{ paymentDate }}. Any cheques or transfers will be clear in their account by this date.',
-        { claimantFullName: claimantName, defendantFullName: defendantName, paymentDate: paymentIntention.paymentDate | date }
+      {{ row('The offer', t('{{ defendantFullName }} will pay {{ amount }} immediately. {{ claimantFullName }} will receive the money no later than {{ paymentDate }}. Any cheques or transfers will be clear in their account by this date.',
+        { claimantFullName: claimantName, defendantFullName: defendantName, amount: t(amount), paymentDate: paymentIntention.paymentDate | date }
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay the full amount, no later than {{ paymentDate }}.',
-        { defendantFullName: defendantName, paymentDate: paymentIntention.paymentDate | date }
+      {{ row('The offer', t('{{ defendantFullName }} will pay {{ amount }}, no later than {{ paymentDate }}.',
+        { defendantFullName: defendantName, amount: t(amount), paymentDate: paymentIntention.paymentDate | date}
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
