@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { CCJModelConverter } from 'claims/ccjModelConverter']
+import { CCJModelConverter } from 'claims/ccjModelConverter'
 import { fullAdmissionWithImmediatePaymentData,
   fullAdmissionWithPaymentBySetDateData,
   fullAdmissionWithPaymentByInstalmentsData,
@@ -8,9 +8,7 @@ import { fullAdmissionWithImmediatePaymentData,
   partialAdmissionWithPaymentByInstalmentsCompanyData
  } from 'test/data/entity/responseData'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { claimantResponseDraftWithPaymentMethodAccepted,
-  claimantResponseDraftWithPaymentMethodRejectedAndImmediatePaymentProposed,
-  claimantResponseDraftWithPaymentMethodRejectedAndPaymentBySetDateProposed
+import { claimantResponseDraftWithPaymentMethodAccepted
 } from 'test/data/draft/claimantResponseDraft'
 import {
   ccjIssueRequestPayImmediately,
@@ -63,30 +61,6 @@ describe('CCJModelConverter - full admission by individual - claimant accepts', 
 
 })
 
-describe('CCJModelConverter - full admission by individual - claimant rejects', () => {
-  xit('should convert to CCJ - defendant pays immediately - claimant propose new immediate payment', () => {
-    const claim = prepareClaim(fullAdmissionWithImmediatePaymentData)
-    const draft = prepareDraft(claimantResponseDraftWithPaymentMethodRejectedAndImmediatePaymentProposed)
-
-    expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
-      .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayImmediately))
-  })
-  xit('should convert to CCJ - defendant pays immediately - claimant propose new set date payment', () => {
-    const claim = prepareClaim(fullAdmissionWithImmediatePaymentData)
-    const draft = prepareDraft(claimantResponseDraftWithPaymentMethodRejectedAndPaymentBySetDateProposed)
-
-    expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
-      .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayByInstalments))
-  })
-  xit('should convert to CCJ - defendant pays immediately - claimant propose new instalment payment', () => {
-    const claim = prepareClaim(fullAdmissionWithImmediatePaymentData)
-    const draft = prepareDraft(claimantResponseDraftWithPaymentMethodAccepted)
-
-    expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
-      .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayByInstalments))
-  })
-})
-
 describe('CCJModelConverter - part admission made by company - claimant accepts', () => {
   it('should convert to CCJ - defendant pays immediately', () => {
     const claim = prepareClaim(partialAdmissionWithImmediatePaymentCompanyData)
@@ -108,29 +82,5 @@ describe('CCJModelConverter - part admission made by company - claimant accepts'
 
     expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
       .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayByInstalmentsForCompany))
-  })
-})
-
-describe('CCJModelConverter - part admission made by company - claimant rejects', () => {
-  xit('should convert to CCJ - defendant pays immediately - claimant propose new immediate payment', () => {
-    const claim = prepareClaim(partialAdmissionWithImmediatePaymentCompanyData)
-    const draft = prepareDraft(claimantResponseDraftWithPaymentMethodRejectedAndImmediatePaymentProposed)
-
-    expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
-      .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayImmediately))
-  })
-  xit('should convert to CCJ - defendant pays immediately - claimant propose new set date payment', () => {
-    const claim = prepareClaim(partialAdmissionWithPaymentBySetDateCompanyData)
-    const draft = prepareDraft(claimantResponseDraftWithPaymentMethodRejectedAndPaymentBySetDateProposed)
-
-    expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
-      .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayByInstalments))
-  })
-  xit('should convert to CCJ - defendant pays immediately - claimant propose new instalment payment', () => {
-    const claim = prepareClaim(partialAdmissionWithPaymentByInstalmentsCompanyData)
-    const draft = prepareDraft(claimantResponseDraftWithPaymentMethodAccepted)
-
-    expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
-      .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayByInstalments))
   })
 })
