@@ -14,6 +14,7 @@ import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
+import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -28,7 +29,8 @@ export default express.Router()
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
-        lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined
+        lastPaymentDate: paymentPlan ? paymentPlan.getLastPaymentDate() : undefined,
+        totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document)
       })
     })
   )

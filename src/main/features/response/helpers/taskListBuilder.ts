@@ -1,6 +1,12 @@
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { Paths, FullAdmissionPaths, PartAdmissionPaths, StatementOfMeansPaths } from 'response/paths'
+import {
+  FullAdmissionPaths,
+  FullRejectionPaths,
+  PartAdmissionPaths,
+  Paths,
+  StatementOfMeansPaths
+} from 'response/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -10,19 +16,17 @@ import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
-import { WhenDidYouPayTask } from 'response/tasks/whenDidYouPayTask'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
-import { HowMuchHaveYouPaidTask } from 'response/tasks/howMuchHaveYouPaidTask'
-import { WhyDoYouDisagreeTask } from 'response/tasks/whyDoYouDisagreeTask'
 import { HowMuchDoYouOweTask } from 'response/tasks/howMuchDoYouOweTask'
 import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { ValidationUtils } from 'shared/ValidationUtils'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -62,14 +66,26 @@ export class TaskListBuilder {
       )
     )
 
-    if (draft.isResponseRejectedFullyWithAmountClaimedPaid()) {
+    if (draft.isResponseRejectedFullyBecausePaidWhatOwed()) {
       tasks.push(
         new TaskListItem(
-          'When did you pay?',
-          Paths.whenDidYouPay.evaluateUri({ externalId: externalId }),
-          WhenDidYouPayTask.isCompleted(draft)
+          'Tell us how much you’ve paid',
+          FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
+          ValidationUtils.isValid(draft.rejectAllOfClaim.howMuchHaveYouPaid)
         )
       )
+
+      if (ClaimFeatureToggles.areAdmissionsEnabled(claim)
+        && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
+        && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
+        tasks.push(
+          new TaskListItem(
+            'Why do you disagree with the amount claimed?',
+            FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
+            ValidationUtils.isValid(draft.rejectAllOfClaim.whyDoYouDisagree)
+          )
+        )
+      }
     }
 
     if (draft.isResponseRejectedFullyWithDispute()) {
@@ -123,7 +139,7 @@ export class TaskListBuilder {
             new TaskListItem(
               'How much have you paid?',
               PartAdmissionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: externalId }),
-              HowMuchHaveYouPaidTask.isCompleted(draft)
+              ValidationUtils.isValid(draft.partialAdmission.howMuchHaveYouPaid)
             )
           )
         } else {
@@ -140,7 +156,7 @@ export class TaskListBuilder {
           new TaskListItem(
             'Why do you disagree with the amount claimed?',
             PartAdmissionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: externalId }),
-            WhyDoYouDisagreeTask.isCompleted(draft)
+            ValidationUtils.isValid(draft.partialAdmission.whyDoYouDisagree)
           )
         )
 
@@ -183,8 +199,9 @@ export class TaskListBuilder {
   }
 
   static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
-    if (TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)
-      || draft.isResponseRejectedFullyWithDispute()) {
+    if (draft.isResponseRejectedFullyWithDispute()
+      || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
+      || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
       return new TaskList(
         'Resolving the claim', [
           new TaskListItem(
@@ -199,11 +216,13 @@ export class TaskListBuilder {
     return undefined
   }
 
-  static buildSubmitSection (draft: ResponseDraft, externalId: string, features: string[]): TaskList {
+  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string, features: string[]): TaskList {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
-      || draft.isResponseRejectedFullyWithAmountClaimedPaid()
+      || TaskListBuilder.isRejectedFullyBecausePaidClaimAmount(claim, draft)
+      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidMoreThenClaimAmount(claim, draft))
+      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft))
       || draft.isResponseFullyAdmitted()
       || draft.isResponsePartiallyAdmitted()) {
       tasks.push(
@@ -220,7 +239,26 @@ export class TaskListBuilder {
   }
 
   private static isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted (draft: ResponseDraft): boolean {
-    return draft.isResponsePartiallyAdmitted() && WhyDoYouDisagreeTask.isCompleted(draft)
+    return draft.isResponsePartiallyAdmitted() && ValidationUtils.isValid(draft.partialAdmission.whyDoYouDisagree)
+  }
+
+  private static isRejectedFullyBecausePaidClaimAmount (claim: Claim, draft: ResponseDraft): boolean {
+    return draft.isResponseRejectedFullyBecausePaidWhatOwed()
+      && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
+      && claim.totalAmountTillToday === draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
+  }
+
+  private static isRejectedFullyBecausePaidMoreThenClaimAmount (claim: Claim, draft: ResponseDraft): boolean {
+    return draft.isResponseRejectedFullyBecausePaidWhatOwed()
+      && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
+      && claim.totalAmountTillToday < draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
+  }
+
+  private static isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven (claim: Claim, draft: ResponseDraft): boolean {
+    return draft.isResponseRejectedFullyBecausePaidWhatOwed()
+      && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
+      && claim.totalAmountTillToday > draft.rejectAllOfClaim.howMuchHaveYouPaid.amount
+      && ValidationUtils.isValid(draft.rejectAllOfClaim.whyDoYouDisagree)
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {

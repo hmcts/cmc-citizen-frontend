@@ -33,16 +33,6 @@ export const defenceWithDisputeData = {
   defenceType: 'DISPUTE'
 }
 
-export const defenceWithAmountClaimedAlreadyPaidData = {
-  ...baseResponseData,
-  ...baseDefenceData,
-  defenceType: 'ALREADY_PAID',
-  paymentDeclaration: {
-    paidDate: '2017-12-31',
-    explanation: 'I paid in cash'
-  }
-}
-
 const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
   freeMediation: undefined
@@ -93,6 +83,25 @@ export const partialAdmissionWithImmediatePaymentData = {
     paymentDate: MomentFactory.currentDate().add(5, 'days')
   },
   amount: 3000
+}
+
+export const partialAdmissionFromStatesPaidDefence = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  freeMediation: 'no'
 }
 
 export const partialAdmissionAlreadyPaidData = {
