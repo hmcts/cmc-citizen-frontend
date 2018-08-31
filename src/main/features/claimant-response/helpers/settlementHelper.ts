@@ -13,6 +13,7 @@ import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
 import { MomentFormatter } from 'utils/momentFormatter'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { PaymentScheduleTypeViewFilter } from 'claimant-response/filters/payment-schedule-type-view-filter'
+import { ResponseType } from 'claims/models/response/responseType'
 
 export function getRepaymentPlanOrigin (settlement: Settlement): string {
   if (!settlement) {
@@ -46,7 +47,8 @@ export function prepareDefendantOffer (claim: Claim, paymentPlan: PaymentPlan): 
 
   if (response.paymentIntention.paymentDate) {
     const completionDate: Moment = response.paymentIntention.paymentDate
-    const content: string = `${response.defendant.name} will pay the full amount, no later than ${MomentFormatter.formatLongDate(completionDate)}`
+    const amount = response.responseType === ResponseType.PART_ADMISSION ? NumberFormatter.formatMoney(response.amount) : 'the full amount'
+    const content: string = `${response.defendant.name} will pay ${amount}, no later than ${MomentFormatter.formatLongDate(completionDate)}`
     return new Offer(content, completionDate, response.paymentIntention)
   } else if (response.paymentIntention.repaymentPlan) {
     const instalmentAmount: string = NumberFormatter.formatMoney(response.paymentIntention.repaymentPlan.instalmentAmount)

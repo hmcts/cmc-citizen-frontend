@@ -12,7 +12,8 @@ export class CountyCourtJudgment {
                public paidAmount?: number,
                public repaymentPlan?: RepaymentPlan,
                public payBySetDate?: Moment,
-               public statementOfTruth?: StatementOfTruth) {
+               public statementOfTruth?: StatementOfTruth
+  ) {
     this.defendantDateOfBirth = defendantDateOfBirth
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount

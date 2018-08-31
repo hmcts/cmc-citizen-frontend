@@ -13,7 +13,8 @@ import { AbstractModelAccessor } from 'shared/components/model-accessor'
 /* tslint:disable:no-default-export */
 export abstract class AbstractPaidAmountSummaryPage<Draft> {
 
-  abstract createModelAccessor (): AbstractModelAccessor<Draft, PaidAmount>
+  abstract paidAmount (): AbstractModelAccessor<Draft, PaidAmount>
+  abstract amountSettledFor (claim: Claim, draft: Draft): number
   abstract buildRedirectUri (req: express.Request, res: express.Response): string
 
   getView (): string {
@@ -26,14 +27,16 @@ export abstract class AbstractPaidAmountSummaryPage<Draft> {
         path + Paths.paidAmountSummaryPage.uri,
         ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
           const claim: Claim = res.locals.claim
-          const model = this.createModelAccessor().get(res.locals.draft.document)
+          const model = this.paidAmount().get(res.locals.draft.document)
+
           res.render(
             this.getView(), {
               claim: claim,
               alreadyPaid: model.amount || 0,
               interestDetails: await getInterestDetails(claim),
               nextPageUrl: this.buildRedirectUri(req, res),
-              defaultJudgmentDate: MomentFactory.currentDate()
+              defaultJudgmentDate: MomentFactory.currentDate(),
+              amountSettledFor: this.amountSettledFor(claim, res.locals.draft.document)
             }
           )
         }))
