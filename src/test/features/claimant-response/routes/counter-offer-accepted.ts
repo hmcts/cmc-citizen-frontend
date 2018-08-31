@@ -79,7 +79,6 @@ describe('Claimant Response - Counter offer accepted', () => {
             }
           }
         })
-        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .get(pagePath)
