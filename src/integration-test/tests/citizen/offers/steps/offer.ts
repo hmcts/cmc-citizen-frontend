@@ -46,7 +46,7 @@ export class OfferSteps {
   }
 
   countersignAgreement (): void {
-    I.click('Sign the agreement')
+    I.click('Sign the settlement agreement')
     I.click('Make an agreement')
     this.signAgreement()
     I.see('You’ve settled out of court')
