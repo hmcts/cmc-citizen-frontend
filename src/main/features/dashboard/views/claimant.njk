@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "./macro/caseHistory.njk" import caseHistoryForClaimantClaimDetails %}
+{% from "./macro/claimDetails.njk" import claimDetailsForClaimant %}
 {% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 
 {% set headingVisible = false %}
@@ -15,7 +15,7 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
         {% if claim %}
-          {{ caseHistoryForClaimantClaimDetails(claim, csrf) }}
+          {{ claimDetailsForClaimant(claim, csrf) }}
         {% else %}
           <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
           <p>

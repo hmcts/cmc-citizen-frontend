@@ -72,7 +72,7 @@
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('{{ defendantName }} has rejected the claim. But they’ve suggested a mediation session to help resolve this dispute.',
+  {{ t('{{ defendantName }} has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.',
     { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 

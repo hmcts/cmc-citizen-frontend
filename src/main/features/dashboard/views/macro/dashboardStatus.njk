@@ -21,14 +21,16 @@
   claimRejectedFreeMediationYESForDefendantDashboard %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
-  claimPartAdmittedAlreadyPaidForClaimantDashboard,
-  claimPartAdmittedAlreadyPaidForDefendantDashboard,
-  claimPartAdmittedToOweForDefendantDashboard,
-  claimPartAdmittedToOweForClaimantDashboard %}
+  claimPartAdmittedToOweForDefendantDashboard %}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import
   claimFullAdmissionForClaimantDashboard,
   claimFullAdmissionForDefendantDashboard %}
+
+{% from "./claimStatus/statesPaid.njk" import
+  paidAmountForClaimantDashboard,
+  paidAmountForDefendantDashboard,
+  paidLessThanClaimedForClaimantDashboard %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
   offerSubmittedForClaimantDashboard,
@@ -40,47 +42,55 @@
   offerRejectedForClaimantDashboard,
   offerRejectedForDefendantDashboard %}
 
-{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
+{% from "./claimStatus/offerSettlement.njk" import
+  offerSettlementReachedDashboard %}
 
-{% macro caseStatusForClaimant(status, claim) %}
+{% macro dashboardStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
-  {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
+    {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForClaimantDashboard(claim) }}
-  {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+    {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
     {{ ccjEligibleForClaimantDashboard() }}
-  {% elif status === ClaimStatus.CCJ_REQUESTED %}
+    {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForClaimantDashboard(claim) }}
-  {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
+    {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
     {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
       {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-        {{ claimRejectedAlreadyPaidForClaimantDashboard(claim) }}
-      {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
-      {% else %}
-        {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
+        {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
+          {{ paidAmountForClaimantDashboard(claim) }}
+        {% endif %}
       {% endif %}
-    {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+      {% if claim.response.defenceType === DefenceType.DISPUTE %}
+        {% if claim.response.freeMediation === FreeMediationOption.NO %}
+          {{ claimRejectedFreeMediationNOForClaimantDashboard(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
+        {% endif %}
+      {% endif %}
+      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       {% if claim.response.paymentDeclaration %}
-        {{ claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) }}
+        {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
+          {{ paidAmountForClaimantDashboard(claim) }}
+        {% endif %}
       {% else %}
-        {{ claimPartAdmittedToOweForClaimantDashboard(claim) }}
+        {{ paidLessThanClaimedForClaimantDashboard(claim) }}
       {% endif %}
-    {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+      {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       {{ claimFullAdmissionForClaimantDashboard(claim) }}
     {% endif %}
-  {% elif status === ClaimStatus.OFFER_SUBMITTED %}
+    {% elif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ offerSubmittedForClaimantDashboard(claim) }}
-  {% elif status === ClaimStatus.OFFER_REJECTED %}
+    {% elif status === ClaimStatus.OFFER_REJECTED %}
     {{ offerRejectedForClaimantDashboard(claim) }}
-  {% elif status === ClaimStatus.OFFER_ACCEPTED %}
+    {% elif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ offerAcceptedForClaimantDashboard(claim) }}
-  {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+    {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ offerSettlementReachedDashboard() }}
   {% endif %}
 {% endmacro %}
 
-{% macro caseStatusForDefendant(status, claim) %}
+{% macro dashboardStatusForDefendant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -90,23 +100,27 @@
     {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
-      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
-        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+    {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+      {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+        {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
+          {{ paidAmountForDefendantDashboard(claim) }}
+        {% endif %}
           {{ claimRejectedAlreadyPaidForDefendantDashboard(claim) }}
-          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedFreeMediationNOForDefendantDashboard() }}
-        {% else %}
-          {{ claimRejectedFreeMediationYESForDefendantDashboard() }}
-        {% endif %}
-      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-        {% if claim.response.paymentDeclaration %}
-          {{ claimPartAdmittedAlreadyPaidForDefendantDashboard(claim) }}
-        {% else %}
-          {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
-        {% endif %}
-      {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-        {{ claimFullAdmissionForDefendantDashboard(claim) }}
+      {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+      {{ claimRejectedFreeMediationNOForDefendantDashboard() }}
+    {% else %}
+      {{ claimRejectedFreeMediationYESForDefendantDashboard() }}
+    {% endif %}
+    {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+    {% if claim.response.paymentDeclaration %}
+      {% if ClaimFeatureToggles.areAdmissionsEnabled(claim) %}
+        {{ paidAmountForDefendantDashboard(claim) }}
       {% endif %}
+      {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
+    {% endif %}
+    {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+    {{ claimFullAdmissionForDefendantDashboard(claim) }}
+  {% endif %}
     {% elif status === ClaimStatus.OFFER_SUBMITTED %}
     {{ offerSubmittedForDefendantDashboard() }}
     {% elif status === ClaimStatus.OFFER_REJECTED %}

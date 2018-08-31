@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
-{% from "./macro/caseStatus.njk" import caseStatusForDefendant, caseStatusForClaimant %}
+{% from "./macro/dashboardStatus.njk" import dashboardStatusForDefendant, dashboardStatusForClaimant %}
 {% from "support.njk" import supportWidget %}
 
 {% set heading = 'Your money claims account' %}
@@ -48,13 +48,13 @@
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForClaimant(claim.status, claim) }}
+              {{ dashboardStatusForClaimant(claim.status, claim) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status: ') }}
-              {{ caseStatusForClaimant(claim.status, claim) }}
+              {{ dashboardStatusForClaimant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}
@@ -93,12 +93,12 @@
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForDefendant(claim.status, claim) }}
+              {{ dashboardStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
-              {{ t('Status: ') }} {{ caseStatusForDefendant(claim.status, claim) }}
+              {{ t('Status: ') }} {{ dashboardStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}
