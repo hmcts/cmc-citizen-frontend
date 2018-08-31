@@ -12,7 +12,7 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 describe('DraftClaimantResponse', () => {
   describe('deserialization', () => {
 
-    it('should return a DraftClaimantRyaresponse instance initialised with defaults for undefined', () => {
+    it('should return a DraftClaimantResponse instance initialised with defaults for undefined', () => {
       expect(new DraftClaimantResponse().deserialize(undefined)).to.eql(new DraftClaimantResponse())
     })
 
