@@ -33,7 +33,6 @@ export class DefendantPaidAnyMoneyPage {
 
   defendantPaid (amount: number): void {
     this.paidSome()
-    I.see('Total claim amount: ' + AmountHelper.formatMoney(claimAmount.getTotal()))
     I.fillField(fields.paidAmount, amount.toString())
     I.click(buttons.submit)
   }
