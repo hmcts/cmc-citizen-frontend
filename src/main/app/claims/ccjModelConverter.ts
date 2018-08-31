@@ -3,7 +3,7 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPlan'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
-import { RepaymentPlan } from 'claims/models/replaymentPlan'
+import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { RepaymentPlan as ResponseRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Moment } from 'moment'
@@ -91,9 +91,9 @@ export class CCJModelConverter {
     const repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
       paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
       paymentIntention.paymentPlan.paymentSchedule.value)
+
     const paymentDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
     const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption
-
     const alreadyPaidAmount: number = claimantResponse.paidAmount.amount
 
     return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, paymentDate)

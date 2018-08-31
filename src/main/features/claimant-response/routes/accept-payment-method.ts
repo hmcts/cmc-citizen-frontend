@@ -69,6 +69,8 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.acceptPaymentMethod = form.model
+        draft.document.alternatePaymentMethod = undefined
+        draft.document.formaliseRepaymentPlan = undefined
 
         await new DraftService().save(draft, user.bearerToken)
 
