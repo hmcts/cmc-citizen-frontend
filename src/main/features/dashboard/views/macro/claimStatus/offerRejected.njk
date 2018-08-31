@@ -28,3 +28,48 @@
     {{ t('The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.') }}
   </p>
 {% endmacro %}
+
+{% macro repaymentPlanRedeterminationClaimantDashboard(claim) %}
+  <p>
+    {{ t('Awaiting judge’s repayment plan.') }}
+  </p>
+{% endmacro %}
+
+{% macro repaymentPlanRedeterminationClaimDetails(claim) %}
+  <h2 class="bold-small">{{ t('Awaiting judge’s repayment plan') }}</h2>
+  <p>
+    {{ t('You’ve rejected the defendant’s repayment plan and haven’t been able to agree to an alternative plan') }}
+  </p>
+  <p>
+    {{ t('A judge will make a repayment plan within the next 10 days. We’ll contact you when it’s available') }}
+  </p>
+{% endmacro %}
+
+{% macro repaymentPlanCounteredClaimantDashboard(claim) %}
+  <p>
+    {{ t('You’ve signed a settlement agreement. The defendant can choose to sign it or not.') }}
+  </p>
+{% endmacro %}
+
+{% macro repaymentPlanCounteredClaimDetails(claim) %}
+
+  {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
+  {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
+  {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
+  {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
+
+  <h2 class="bold-small">{{ t('You’ve signed the settlement agreement') }}</h2>
+  <p> {{ t('The agreement proposes the defendant pays you in instalments of {{ amount }} {{ paymentSchedule }} starting {{ repaymentDate }}.',
+    { amount: installmentAmount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }} </p>
+  <p>
+  <p>
+    {{ t('The agreement is not binding unless the defendant signs it. We’ve emailed it to them and we’ll contact you when they respond') }}
+  </p>
+  <p>
+    {{ _downloadAgreementLink(claim) }}
+  </p>
+{% endmacro %}
+
+{% macro _downloadAgreementLink(claim) %}
+  <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the settlement agreement') }}</a>
+{% endmacro %}

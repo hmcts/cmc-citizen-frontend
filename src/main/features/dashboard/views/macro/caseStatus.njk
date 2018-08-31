@@ -11,6 +11,7 @@
 {% from "./claimStatus/ccjRequested.njk" import
   ccjRequestedForClaimantDashboard,
   ccjRequestedForDefendantDashboard %}
+{% from "./claimStatus/ccjIssued.njk" import ccjIssuedForClaimantDashboard %}
 
 {% from "./claimStatus/claimRejected.njk" import
   claimRejectedAlreadyPaidForClaimantDashboard,
@@ -40,7 +41,9 @@
   offerRejectedForClaimantDashboard,
   offerRejectedForDefendantDashboard %}
 
-{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
+{% from "./claimStatus/offerSettlement.njk" import
+  offerSettlementReachedDashboard,
+  repaymentPlanOfferSettlementDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
@@ -51,6 +54,8 @@
     {{ ccjEligibleForClaimantDashboard() }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.CCJ_ISSUED %}
+    {{ ccjIssuedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
     {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
       {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
@@ -77,6 +82,8 @@
     {{ offerAcceptedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ offerSettlementReachedDashboard() }}
+  {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED and claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+  {{ repaymentPlanOfferSettlementDashboard() }}
   {% endif %}
 {% endmacro %}
 
@@ -115,5 +122,7 @@
     {{ offerAcceptedForDefendantDashboard() }}
     {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
     {{ offerSettlementReachedDashboard() }}
+    {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED and claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {{ repaymentPlanOfferSettlementDashboard() }}
   {% endif %}
 {% endmacro %}
