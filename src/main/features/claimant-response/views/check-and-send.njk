@@ -81,8 +81,13 @@
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
 
       {% if claim.response.paymentIntention.paymentDate %}
+        {% set amountToPay = 'the full amount' %}
+        {% if claim.response.responseType == ResponseType.PART_ADMISSION.value %}
+          {% set amountToPay = claim.response.amount | numeral %}
+        {% endif %}
+
         {{ row(label = 'The offer',
-          value = t('{{ defendantFullName }} will pay the full amount, no later than {{ paymentDate }}',
+          value = t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
             {
               defendantFullName: claim.response.defendant.name,
               paymentDate: claim.response.paymentIntention.paymentDate | date
