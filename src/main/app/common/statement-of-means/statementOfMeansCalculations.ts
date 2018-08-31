@@ -17,10 +17,6 @@ const logger = Logger.getLogger('common/statement-of-means')
 
 export class StatementOfMeansCalculations {
 
-  //
-  // DISPOSABLE INCOMES
-  //
-
   static calculateTotalMonthlyDisposableIncome (statementOfMeans: StatementOfMeans): number {
     const totalMonthlyIncome: number = StatementOfMeansCalculations.calculateTotalMonthlyIncome(statementOfMeans)
     const totalMonthlyExpense: number = StatementOfMeansCalculations.calculateTotalMonthlyExpense(statementOfMeans)
@@ -29,10 +25,6 @@ export class StatementOfMeansCalculations {
     logger.debug('Monthly disposable income calculation: ', totalMonthlyDisposableIncome)
     return totalMonthlyDisposableIncome
   }
-
-  //
-  // EXPENSES
-  //
 
   static calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
     const monthlyDebts: number = statementOfMeans.debts ? StatementOfMeansCalculations.calculateMonthlyDebts(statementOfMeans.debts) : 0
@@ -83,10 +75,6 @@ export class StatementOfMeansCalculations {
     logger.debug('Monthly regular expense calculation: ', monthlyRegularExpense)
     return monthlyRegularExpense
   }
-
-  //
-  // INCOMES
-  //
 
   static calculateTotalMonthlyIncome (statementOfMeans: StatementOfMeans): number {
     const monthlyRegularIncome = statementOfMeans.incomes ? StatementOfMeansCalculations.calculateMonthlyRegularIncome(statementOfMeans.incomes) : 0

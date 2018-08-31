@@ -25,13 +25,7 @@
       {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
-
-      <div class="form-group">
-        <fieldset>
-          <legend class="visually-hidden">{{ t('Regular payments of') }}</legend>
-          {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
-        </fieldset>
-      </div>
+      {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
 
       <div class="form-group">
         {% set error = form.errorFor('paymentSchedule') %}

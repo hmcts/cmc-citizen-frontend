@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, textArea %}
+{% from "form.njk" import csrfProtection, submitButton %}
 {% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 
 {% set heading = 'Repayment plan accepted' %}
@@ -29,7 +29,7 @@
         {% else %}
           <p> {{ t('The court has accepted your repayment plan.') }} </p>
         {% endif %}
-        {{ saveAndContinueButton() }}
+        {{ submitButton() }}
       </form>
     </div>
   </div>
