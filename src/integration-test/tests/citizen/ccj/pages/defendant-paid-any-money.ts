@@ -1,6 +1,4 @@
 import I = CodeceptJS.I
-import { claimAmount } from 'integration-test/data/test-data'
-import { AmountHelper } from 'integration-test/helpers/amountHelper'
 
 const I: I = actor()
 
