@@ -47,7 +47,6 @@ describe('Claimant Response - Counter offer accepted', () => {
       it('should render page when both defendant and claimants payment frequency are same', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
         draftStoreServiceMock.resolveFind('claimantResponse')
-        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .get(pagePath)
