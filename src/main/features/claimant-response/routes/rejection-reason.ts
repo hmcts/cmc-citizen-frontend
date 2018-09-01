@@ -35,6 +35,9 @@ export default express.Router()
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const user: User = res.locals.user
 
+        draft.document.settlementAgreement = undefined
+        draft.document.formaliseRepaymentPlan = undefined
+
         draft.document.rejectionReason = form.model
 
         await new DraftService().save(draft, user.bearerToken)
