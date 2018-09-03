@@ -19,6 +19,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -31,7 +32,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     form: form,
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
-    statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(draft.document)
+    statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
+    admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim)
   })
 }
 
@@ -118,7 +120,7 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        await claimStoreClient.saveResponseForUser(claim.externalId, draft, user)
+        await claimStoreClient.saveResponseForUser(claim, draft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }

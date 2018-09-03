@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, checkboxSingle, saveAndContinueButton, errorSummary %}
 {% from "./macro/termsOfAgreementTable.njk" import termsOfAgreement %}
 
-{% set heading = 'Terms of the agreement' %}
+{% set heading = 'Sign a settlement agreement' %}
 
 {% block content %}
   <div class="grid-row">
@@ -18,7 +18,8 @@
         {{ termsOfAgreement (
           id = 'termsOfAgreement',
           response = claim.response,
-          paymentPlan = paymentPlan
+          paymentPlan = paymentPlan,
+          totalAmount = totalAmount
         ) }}
 
         <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.',

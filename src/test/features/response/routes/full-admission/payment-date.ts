@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import * as request from 'supertest'
 import * as config from 'config'
 import * as _ from 'lodash'
@@ -18,14 +18,14 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import * as moment from 'moment'
-import { ValidationErrors } from 'forms/models/payBySetDate'
+import { ValidationErrors } from 'shared/components/payment-intention/model/paymentDate'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
-draft.fullAdmission.paymentOption.option = DefendantPaymentType.BY_SET_DATE
+draft.fullAdmission.paymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
 
 function nextDay () {
   const nextDay: moment.Moment = moment().add(1, 'days')

@@ -14,7 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { ResponseType } from 'response/form/models/responseType'
-import { DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -22,7 +22,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: externalId })
 
 const validFormData: object = {
-  option: DefendantPaymentType.INSTALMENTS.value
+  option: PaymentType.INSTALMENTS.value
 }
 
 describe('Defendant - when will you pay options', () => {
@@ -146,19 +146,19 @@ describe('Defendant - when will you pay options', () => {
 
             it('should redirect to repayment plan page for "INSTALMENTS" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
-                { option: DefendantPaymentType.INSTALMENTS.value },
+                { option: PaymentType.INSTALMENTS.value },
                 Paths.taskListPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
-                { option: DefendantPaymentType.BY_SET_DATE.value },
+                { option: PaymentType.BY_SET_DATE.value },
                 FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to task list page for "IMMEDIATELY" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
-                { option: DefendantPaymentType.IMMEDIATELY.value },
+                { option: PaymentType.IMMEDIATELY.value },
                 Paths.taskListPage.evaluateUri({ externalId: externalId }))
             })
           })

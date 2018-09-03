@@ -23,18 +23,18 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
-  afterCheckout {
-    onMaster {
-      try {
-        sh """
-          git fetch origin demo:demo
-          git push --force origin HEAD:demo
-        """
-      } catch (err) {
-        notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
-      }
-    }
-  }
+  //afterCheckout {
+   // onMaster {
+      //try {
+      // sh """
+       //   git fetch origin demo:demo
+       //   git push --force origin HEAD:demo
+      //  """
+    //  } catch (err) {
+    //    notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+    //  }
+    //}
+  //}
 
   after('build') {
     sh 'yarn setup'

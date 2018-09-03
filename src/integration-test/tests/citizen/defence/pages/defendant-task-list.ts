@@ -24,6 +24,10 @@ export class DefendantTaskListPage {
     I.click('How much have you paid?')
   }
 
+  selectTaskTellUsHowMuchYouHavePaid (): void {
+    I.click('Tell us how much you’ve paid')
+  }
+
   selectTaskHowMuchMoneyBelieveYouOwe (): void {
     I.click('How much money do you believe you owe?')
   }

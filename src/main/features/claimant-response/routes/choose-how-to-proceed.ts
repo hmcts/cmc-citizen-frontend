@@ -9,6 +9,7 @@ import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseR
 import { Form } from 'forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 
 function renderView (form: Form<FormaliseRepaymentPlan>, res: express.Response) {
   res.render(Paths.chooseHowToProceedPage.associatedView, {
@@ -39,6 +40,14 @@ export default express.Router()
 
         draft.document.formaliseRepaymentPlan = form.model
 
+        switch (form.model.option) {
+          case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
+            delete draft.document.paidAmount
+            break
+          case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
+            delete draft.document.settlementAgreement
+            break
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         const externalId: string = req.params.externalId

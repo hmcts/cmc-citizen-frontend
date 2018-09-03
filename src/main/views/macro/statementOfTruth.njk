@@ -32,17 +32,16 @@ macro statementOfTruth(
           <li>{{ t('chief executive') }} </li>
           <li>{{ t('manager or other officer of the company or corporation') }}</li>
         </ul>
-        <p>{{ t("If your company isn't registered, a senior position could also be the:") }}</p>
+        <p>{{ t("If your corporation isn't registered, a senior position could be:") }}</p>
         <ul class="list-bullet list">
-          <li>{{ t('chairman') }}</li>
-          <li>{{ t('president') }}</li>
-          <li>{{ t('town clerk or other similar officer of the corporation.') }}</li>
+          <li>{{ t('the chairperson or president') }}</li>
+          <li>{{ t('another officer of the corporation') }}</li>
         </ul>
       </div>
     </details>
 
     {{ textInput(t('Full name'), 'signerName', form, inputClass = 'form-control-1-2') }}
-    {{ textInput(t('Role'), 'signerRole', form, inputClass = 'form-control-1-2') }}
+    {{ textInput(t('Job title'), 'signerRole', form, inputClass = 'form-control-1-2') }}
   {% endif %}
 
   {{

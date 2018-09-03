@@ -1,4 +1,4 @@
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 import { AgeGroupType } from 'claims/models/response/statement-of-means/dependant'
@@ -26,16 +26,6 @@ export const defenceWithDisputeData = {
   ...baseResponseData,
   ...baseDefenceData,
   defenceType: 'DISPUTE'
-}
-
-export const defenceWithAmountClaimedAlreadyPaidData = {
-  ...baseResponseData,
-  ...baseDefenceData,
-  defenceType: 'ALREADY_PAID',
-  paymentDeclaration: {
-    paidDate: '2017-12-31',
-    explanation: 'I paid in cash'
-  }
 }
 
 const baseFullAdmissionData = {
@@ -88,6 +78,25 @@ export const partialAdmissionWithImmediatePaymentData = {
     paymentDate: MomentFactory.currentDate().add(5, 'days')
   },
   amount: 3000
+}
+
+export const partialAdmissionFromStatesPaidDefence = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  freeMediation: 'no'
 }
 
 export const partialAdmissionAlreadyPaidData = {
@@ -169,12 +178,12 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     }
   },
   incomes: [{
-    amountReceived: 200,
+    amount: 200,
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
   expenses: [{
-    amountPaid: 100,
+    amount: 100,
     frequency: PaymentFrequency.MONTH,
     type: ExpenseType.MORTGAGE
   }] as Expense[]
