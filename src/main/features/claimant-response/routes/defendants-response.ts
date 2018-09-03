@@ -15,7 +15,7 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { StatementOfMeans } from "claims/models/response/statement-of-means/statementOfMeans"
+import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
