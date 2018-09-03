@@ -47,11 +47,7 @@
 
 {% macro claimRejectedFreeMediationNOForClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} has rejected your claim. We’ll send you a directions questionnaire – '
-      + 'this is a form which you must complete to tell us more about the claim.',
-      { defendantName: claim.claimData.defendant.name }) }}
-  </p>
+
   <p>{{ t('{{ defendantName }} has rejected your claim. You’ll have to go to a hearing to resolve it.',
         { defendantName: claim.claimData.defendant.name }) }}</p>
 
