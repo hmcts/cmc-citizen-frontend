@@ -1,4 +1,4 @@
-import { RepaymentPlan } from 'claims/models/replaymentPlan'
+import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
@@ -12,7 +12,8 @@ export class CountyCourtJudgment {
                public paidAmount?: number,
                public repaymentPlan?: RepaymentPlan,
                public payBySetDate?: Moment,
-               public statementOfTruth?: StatementOfTruth) {
+               public statementOfTruth?: StatementOfTruth
+  ) {
     this.defendantDateOfBirth = defendantDateOfBirth
     this.paymentOption = paymentOption
     this.paidAmount = paidAmount
