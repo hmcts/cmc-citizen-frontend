@@ -70,6 +70,12 @@ For accessibility testing:
 $ yarn test:a11y
 ```
 
+For accessibility testing of a specific feature:
+
+```
+$ A11Y_FILTER={feature name} yarn test:a11y
+```
+
 For test coverage:
 
 ```bash

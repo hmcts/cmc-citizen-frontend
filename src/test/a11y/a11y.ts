@@ -98,28 +98,30 @@ const excludedPaths: DefendantResponsePaths[] = [
 ]
 
 describe('Accessibility', () => {
-  function checkPaths (pathsRegistry: object): void {
-    Object.values(pathsRegistry).forEach((path: RoutablePath) => {
-      const excluded = excludedPaths.some(_ => _ === path)
-      if (!excluded) {
-        if (path.uri.includes(':externalId')) {
-          check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
-        } else {
-          check(path.uri)
-        }
-      }
-    })
-  }
-
-  checkPaths(EligibilityPaths)
-  checkPaths(ClaimIssuePaths)
-  checkPaths(ClaimIssueErrorPaths)
-  checkPaths(DefendantFirstContactPaths)
-  checkPaths(DefendantFirstContactErrorPaths)
-  checkPaths(DefendantResponsePaths)
-  checkPaths(CCJPaths)
-  checkPaths(OfferPaths)
-  checkPaths(StatementOfMeansPaths)
-  checkPaths(FullAdmissionPaths)
-  checkPaths(ClaimantResponsePaths)
+  checkPaths('ccj', CCJPaths)
+  checkPaths('claim', ClaimIssuePaths)
+  checkPaths('claim', ClaimIssueErrorPaths)
+  checkPaths('claimant-response', ClaimantResponsePaths)
+  checkPaths('eligibility', EligibilityPaths)
+  checkPaths('first-contact', DefendantFirstContactPaths)
+  checkPaths('first-contact', DefendantFirstContactErrorPaths)
+  checkPaths('offer', OfferPaths)
+  checkPaths('response', DefendantResponsePaths)
+  checkPaths('response', StatementOfMeansPaths)
+  checkPaths('response', FullAdmissionPaths)
 })
+
+async function checkPaths (filter: string, pathsRegistry: object): Promise<any> {
+  Object.values(pathsRegistry).forEach((path: RoutablePath) => {
+    let envFilter = process.env.A11Y_FILTER || 'ALL'
+    let excluded = excludedPaths.some(_ => _ === path)
+    let included = (envFilter.toUpperCase() === 'ALL' || envFilter === filter)
+    if (!excluded && included) {
+      if (path.uri.includes(':externalId')) {
+        check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
+      } else {
+        check(path.uri)
+      }
+    }
+  })
+}
