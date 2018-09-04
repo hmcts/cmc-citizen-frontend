@@ -25,6 +25,8 @@
     {% else %}
       {{ t('They’ve offered to pay you this in instalments.') }}
     {% endif %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    {{ t('They’ve offered to pay you {{ amount }} immediately.', { amount: amount | numeral }) }}
   {% endif %}
 {% endmacro %}
 
@@ -93,7 +95,7 @@
           <p>
             {{
               paymentIntentionFragment(
-                amount = undefined,
+                amount = claim.response.amount,
                 paymentIntention = claim.response.paymentIntention
               )
             }}
@@ -140,7 +142,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 %}
+        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
           <input type="hidden" name="action[showPage]" value="{{ page + 1 }}">
         {% endif %}
 
