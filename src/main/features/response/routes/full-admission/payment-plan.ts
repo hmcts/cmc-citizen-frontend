@@ -31,7 +31,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<ResponseDraft> {
     return new ModelAccessor()
   }
 
-  buildTaskListUri (req: express.Request, res: express.Response): string {
+  buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
     return Paths.taskListPage.evaluateUri({ externalId: externalId })
   }

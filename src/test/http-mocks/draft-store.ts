@@ -368,6 +368,19 @@ export const sampleClaimantResponseDraftObj = {
         value: 'INSTALMENTS',
         displayValue: 'By instalments'
       }
+    },
+    paymentPlan: {
+      totalAmount: 3326.59,
+      instalmentAmount: 10,
+      firstPaymentDate: {
+        year: 2019,
+        month: 1,
+        day: 1
+      },
+      paymentSchedule: {
+        value: 'EACH_WEEK',
+        displayValue: 'Each week'
+      }
     }
   },
   formaliseRepaymentPlan: {

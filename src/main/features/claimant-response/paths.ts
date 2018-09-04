@@ -22,6 +22,8 @@ export class Paths {
   static readonly paymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentPlanPage.uri)
   static readonly confirmationPage = new RoutablePath(`${claimantResponsePath}/confirmation`)
   static readonly rejectionReasonPage = new RoutablePath(`${claimantResponsePath}/rejection-reason`)
+  static readonly courtOfferPage = new RoutablePath(`${claimantResponsePath}/court-offer`)
+  static readonly counterOfferAcceptedPage = new RoutablePath(`${claimantResponsePath}/counter-offer-accepted`)
   static readonly receiptReceiver = new RoutablePath(`${claimantResponsePath}/receipt`)
 }
 
