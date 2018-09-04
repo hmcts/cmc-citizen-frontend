@@ -115,7 +115,7 @@ async function checkPaths (filter: string, pathsRegistry: object): Promise<any> 
   Object.values(pathsRegistry).forEach((path: RoutablePath) => {
     let envFilter = process.env.A11Y_FILTER || 'ALL'
     let excluded = excludedPaths.some(_ => _ === path)
-    let included = (envFilter.toUpperCase() === 'ALL' || envFilter === filter)
+    let included = (envFilter.toUpperCase() === 'ALL' || envFilter.toUpperCase() === filter.toUpperCase())
     if (!excluded && included) {
       if (path.uri.includes(':externalId')) {
         check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
