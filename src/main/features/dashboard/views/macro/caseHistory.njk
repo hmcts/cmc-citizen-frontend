@@ -37,7 +37,9 @@ ccjRequestedForDefendantClaimDetails %}
 {% from "./claimStatus/offerRejected.njk" import
   offerRejectedForClaimantClaimDetails,
   offerRejectedForDefendantClaimDetails %}
-{% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedClaimDetails %}
+{% from "./claimStatus/offerSettlement.njk" import
+  offerSettlementReachedClaimDetails,
+  offerSettlementReachedForDefendant %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
@@ -125,7 +127,7 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-          {{ offerSettlementReachedClaimDetails(claim) }}
+          {{ offerSettlementReachedForDefendant(claim) }}
       {% else %}
         <p>
           {{ caseStatusForDefendant(claim.status, claim) }}

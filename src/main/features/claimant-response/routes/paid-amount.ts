@@ -5,11 +5,17 @@ import { claimantResponseCCJPath } from 'features/claimant-response/paths'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { Claim } from 'claims/models/claim'
+import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 
 class PaidAmountPage extends AbstractPaidAmountPage<DraftClaimantResponse> {
 
-  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaidAmount> {
+  paidAmount (): AbstractModelAccessor<DraftClaimantResponse, PaidAmount> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
+  }
+
+  totalAmount (claim: Claim, draft: DraftClaimantResponse): number {
+    return AmountHelper.calculateTotalAmount(claim, draft)
   }
 }
 

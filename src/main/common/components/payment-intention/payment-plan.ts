@@ -4,8 +4,7 @@ import * as _ from 'lodash'
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
-import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
+import { PaymentPlan as PaymentPlanModel } from 'shared/components/payment-intention/model/paymentPlan'
 import { Paths } from 'shared/components/payment-intention/paths'
 
 import { GuardFactory } from 'response/guards/guardFactory'
@@ -18,38 +17,13 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 
-import { createPaymentPlan } from 'common/calculate-payment-plan/paymentPlan'
-
-function mapFrequencyInWeeks (frequency: PaymentSchedule): number {
-  switch (frequency) {
-    case PaymentSchedule.EACH_WEEK:
-      return 1
-    case PaymentSchedule.EVERY_TWO_WEEKS:
-      return 2
-    case PaymentSchedule.EVERY_MONTH:
-      return 4
-    default:
-      throw new Error('Unknown payment schedule')
-  }
-}
-
-function calculatePaymentPlanLength (model: PaymentPlan): string {
-  if (!model) {
-    return undefined
-  }
-
-  const { totalAmount, instalmentAmount, paymentSchedule } = model
-  if (totalAmount && instalmentAmount && paymentSchedule) {
-    return createPaymentPlan(totalAmount, instalmentAmount, mapFrequencyInWeeks(paymentSchedule)).getPaymentLength()
-  }
-
-  return undefined
-}
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 
 export abstract class AbstractPaymentPlanPage<Draft> {
   abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
-  abstract buildTaskListUri (req: express.Request, res: express.Response): string
+  abstract buildPostSubmissionUri (req: express.Request, res: express.Response): string
 
   getView (): string {
     return 'components/payment-intention/payment-plan'
@@ -76,10 +50,10 @@ export abstract class AbstractPaymentPlanPage<Draft> {
       .post(path + Paths.paymentPlanPage.uri,
         ...guards,
         stateGuardRequestHandler,
-        FormValidator.requestHandler(PaymentPlan, PaymentPlan.fromObject, undefined, ['calculatePaymentPlan']),
+        FormValidator.requestHandler(PaymentPlanModel, PaymentPlanModel.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {
-            const form: Form<PaymentPlan> = req.body
+            const form: Form<PaymentPlanModel> = req.body
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)
             } else {
@@ -88,19 +62,21 @@ export abstract class AbstractPaymentPlanPage<Draft> {
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)
 
-              res.redirect(this.buildTaskListUri(req, res))
+              res.redirect(this.buildPostSubmissionUri(req, res))
             }
           }))
   }
 
-  renderView (form: Form<PaymentPlan>, res: express.Response): void {
+  renderView (form: Form<PaymentPlanModel>, res: express.Response): void {
     const claim: Claim = res.locals.claim
+    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromForm(form.model)
+    const paymentLength: string = paymentPlan ? paymentPlan.calculatePaymentLength() : undefined
 
     res.render(this.getView(), {
       heading: this.getHeading(),
-      form: form,
+      form,
       totalAmount: claim.totalAmountTillToday,
-      paymentLength: calculatePaymentPlanLength(form.model)
+      paymentLength
     })
   }
 }
