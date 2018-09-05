@@ -95,6 +95,7 @@ export class CCJModelConverter {
     const paymentDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
     const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption
     const alreadyPaidAmount: number = claimantResponse.paidAmount.amount
+
     return new CountyCourtJudgment(getDateOfBirth(claim.response.defendant), paymentOption, alreadyPaidAmount, repaymentPlan, paymentDate)
   }
 

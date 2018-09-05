@@ -309,8 +309,8 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@<10.0.0":
-  version "9.6.30"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.30.tgz#1ecf83eaf7ac2d0dada7a9d61a1e4e7a6183ac06"
+  version "9.6.31"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.31.tgz#4d1722987f8d808b4c194dceb8c213bd92f028e5"
 
 "@types/nunjucks@^3.1.0":
   version "3.1.0"
@@ -7727,9 +7727,9 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.1.tgz#43738f29585d3a87575520a4b93ab6026ef11fdb"
+typescript@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.0.3.tgz#4853b3e275ecdaa27f78fda46dc273a7eb7fc1c8"
 
 ua-parser-js@^0.7.9:
   version "0.7.17"
