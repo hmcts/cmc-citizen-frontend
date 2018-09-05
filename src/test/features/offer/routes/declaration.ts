@@ -15,6 +15,7 @@ const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const declarationPage = OfferPaths.declarationPage.evaluateUri({ externalId: externalId })
 const acceptedPage = OfferPaths.acceptedPage.evaluateUri({ externalId: externalId })
 const settledPage = OfferPaths.settledPage.evaluateUri({ externalId: externalId })
+const pageHeading: string = 'Sign a settlement agreement'
 
 describe('declaration page', () => {
   attachDefaultHooks(app)
@@ -41,7 +42,7 @@ describe('declaration page', () => {
         await request(app)
           .get(declarationPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Terms of the agreement'))
+          .expect(res => expect(res).to.be.successful.withText(pageHeading))
       })
     })
 

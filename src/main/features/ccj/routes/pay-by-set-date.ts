@@ -3,7 +3,7 @@ import { Paths } from 'ccj/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { PayBySetDate } from 'forms/models/payBySetDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -12,7 +12,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { MomentFactory } from 'shared/momentFactory'
 import { Moment } from 'moment'
 
-function renderView (form: Form<PayBySetDate>, res: express.Response): void {
+function renderView (form: Form<PaymentDate>, res: express.Response): void {
   const futureDate: Moment = MomentFactory.currentDate().add(30, 'days')
   res.render(Paths.payBySetDatePage.associatedView, {
     form: form,
@@ -27,9 +27,9 @@ export default express.Router()
   })
   .post(
     Paths.payBySetDatePage.uri,
-    FormValidator.requestHandler(PayBySetDate, PayBySetDate.fromObject),
+    FormValidator.requestHandler(PaymentDate, PaymentDate.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<PayBySetDate> = req.body
+      const form: Form<PaymentDate> = req.body
       if (form.hasErrors()) {
         renderView(form, res)
       } else {

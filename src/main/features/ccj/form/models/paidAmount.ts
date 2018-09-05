@@ -46,9 +46,12 @@ export class PaidAmount {
   }
 
   deserialize (input?: any): PaidAmount {
-    if (input) {
-      this.option = input.option
+    if (input && input.option) {
+      this.option = PaidAmountOption.all()
+        .filter(option => option.value === input.option.value)
+        .pop()
       this.amount = (input.option && input.option.value === PaidAmountOption.YES.value) ? input.amount : undefined
+      this.claimedAmount = toNumberOrUndefined(input.claimedAmount)
     }
 
     return this
