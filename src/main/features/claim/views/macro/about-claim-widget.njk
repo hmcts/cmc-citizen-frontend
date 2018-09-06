@@ -5,11 +5,11 @@
 {% if partyType === 'defendant' %}
   {% set otherPartyLabel = 'Defendant name:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
-  {% set responseLabel = 'Defendant’s response:' %}
+  {% set responseLabel = 'Your response:' %}
 {% elseif partyType === 'claimant' %}
   {% set otherPartyLabel = 'Claimant name:' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
-  {% set responseLabel = 'Your response:' %}
+  {% set responseLabel = 'Defendant response:' %}
 {% endif %}
 
 <div class="about-claim-widget">
