@@ -520,9 +520,9 @@ append-transform@^1.0.0:
   dependencies:
     default-require-extensions "^2.0.0"
 
-applicationinsights@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/applicationinsights/-/applicationinsights-1.0.3.tgz#ddbf503612cbbfd7c28e087894dd28cfb06450a1"
+applicationinsights@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/applicationinsights/-/applicationinsights-1.0.4.tgz#f3221a7d8fd29cea8aa6bfcf66201e51e12480e4"
   dependencies:
     diagnostic-channel "0.2.0"
     diagnostic-channel-publishers "0.2.1"
@@ -1432,12 +1432,13 @@ codeceptjs@^1.3.3:
     requireg "^0.1.8"
     sprintf-js "^1.1.1"
 
-codecov@^3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.0.4.tgz#37f2bf9ed71086923aac7496d982e32e5899dfd8"
+codecov@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.1.0.tgz#340bd968d361f256976b5af782dd8ba9f82bc849"
   dependencies:
     argv "^0.0.2"
     ignore-walk "^3.0.1"
+    js-yaml "^3.12.0"
     request "^2.87.0"
     urlgrey "^0.4.4"
 
@@ -3323,7 +3324,7 @@ gulp-livereload@^4.0.0:
     tiny-lr "^1.1.1"
     vinyl "^2.2.0"
 
-gulp-nodemon@^2.2.1:
+gulp-nodemon@^2.0.2:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/gulp-nodemon/-/gulp-nodemon-2.2.1.tgz#d9bf199f5585458159d3d299153e60b46868b6f4"
   dependencies:
@@ -4297,6 +4298,13 @@ js-tokens@^3.0.0, js-tokens@^3.0.2:
 js-yaml@^3.10.0, js-yaml@^3.4.6, js-yaml@^3.5.1, js-yaml@^3.5.4:
   version "3.10.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
+  dependencies:
+    argparse "^1.0.7"
+    esprima "^4.0.0"
+
+js-yaml@^3.12.0:
+  version "3.12.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.12.0.tgz#eaed656ec8344f10f527c6bfa1b6e2244de167d1"
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
