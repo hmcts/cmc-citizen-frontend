@@ -6,6 +6,6 @@ export function calculateMonthIncrement (startDate: moment.Moment) {
   }
 
   const futureMonth = moment(startDate).add(1, 'M')
-  const futureMonthEnd = moment(futureMonth).endOf('month')
-  return startDate.date() !== futureMonth.date() && futureMonth.isSame(futureMonthEnd.format('YYYY-MM-DD')) ? futureMonth.add(1, 'd') : futureMonth
+
+  return startDate.date() !== futureMonth.date() && futureMonth.daysInMonth() === futureMonth.date() ? futureMonth.add(1, 'd') : futureMonth
 }
