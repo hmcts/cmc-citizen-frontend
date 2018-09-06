@@ -83,4 +83,12 @@ describe('calculateMonthIncrement', () => {
     const calculateMonthDate: moment.Moment = calculateMonthIncrement(startDate)
     expect(calculateMonthDate.toString()).to.equal(MomentFactory.parse('2019-01-31').toString())
   })
+
+  it('should return null when given a null start date', () => {
+    expect(calculateMonthIncrement(null)).to.be.equal(null)
+  })
+
+  it('should return undefined when given an undefined start date', () => {
+    expect(calculateMonthIncrement(undefined)).to.be.equal(undefined)
+  })
 })
