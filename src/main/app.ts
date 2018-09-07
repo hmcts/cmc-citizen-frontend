@@ -62,7 +62,7 @@ new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 
-if (FeatureToggles.isEnabled('paid-in-full')) {
+if (FeatureToggles.isEnabled('paidInFull')) {
   new PaidInFullFeature().enableFor(app)
 }
 
