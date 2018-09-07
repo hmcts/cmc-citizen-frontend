@@ -23,6 +23,7 @@ import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
+import { PaidInFullFeature } from 'paid-in-full/index'
 
 export const app: express.Express = express()
 
@@ -53,12 +54,17 @@ if (env !== 'mocha') {
 }
 
 new EligibilityFeature().enableFor(app)
+
 new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
+
+if (FeatureToggles.isEnabled('paid-in-full')) {
+  new PaidInFullFeature().enableFor(app)
+}
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   new TestingSupportFeature().enableFor(app)
