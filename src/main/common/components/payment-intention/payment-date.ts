@@ -40,7 +40,6 @@ export abstract class AbstractPaymentDatePage<Draft> {
         ...guards,
         stateGuardRequestHandler,
         (req: express.Request, res: express.Response) => {
-          console.log('draft---->',JSON.stringify(res.locals.draft.document))
           this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentDate), res)
         })
       .post(
