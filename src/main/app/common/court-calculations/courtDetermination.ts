@@ -12,20 +12,15 @@ export class CourtDetermination {
                              claimantPaymentDate: Moment,
                              courtGeneratedPaymentDate: Moment): DecisionType {
 
-    if (claimantPaymentDate > defendantPaymentDate) {
+    if (claimantPaymentDate.isAfter(defendantPaymentDate) || claimantPaymentDate.isAfter(courtGeneratedPaymentDate)) {
       return DecisionType.CLAIMANT
     }
-
-    if (claimantPaymentDate < defendantPaymentDate && claimantPaymentDate > courtGeneratedPaymentDate) {
-      return DecisionType.CLAIMANT
-    }
-
-    if (claimantPaymentDate < defendantPaymentDate && claimantPaymentDate < courtGeneratedPaymentDate) {
-      return DecisionType.COURT
-    }
-
-    if (claimantPaymentDate < defendantPaymentDate && defendantPaymentDate < courtGeneratedPaymentDate) {
-      return DecisionType.DEFENDANT
+    if (claimantPaymentDate.isBefore(courtGeneratedPaymentDate)) {
+      if (defendantPaymentDate.isBefore(courtGeneratedPaymentDate)) {
+        return DecisionType.DEFENDANT
+      } else {
+        return DecisionType.COURT
+      }
     }
   }
 }
