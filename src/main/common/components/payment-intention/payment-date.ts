@@ -19,7 +19,7 @@ export abstract class AbstractPaymentDatePage<Draft> {
 
   abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
-  abstract buildTaskListUri (req: express.Request, res: express.Response): string
+  abstract buildPostSubmissionUri (req: express.Request, res: express.Response): string
 
   getView (): string {
     return 'components/payment-intention/payment-date'
@@ -40,6 +40,7 @@ export abstract class AbstractPaymentDatePage<Draft> {
         ...guards,
         stateGuardRequestHandler,
         (req: express.Request, res: express.Response) => {
+          console.log('draft---->',JSON.stringify(res.locals.draft.document))
           this.renderView(new Form(this.createModelAccessor().get(res.locals.draft.document).paymentDate), res)
         })
       .post(
@@ -58,7 +59,7 @@ export abstract class AbstractPaymentDatePage<Draft> {
             const user: User = res.locals.user
             await new DraftService().save(res.locals.draft, user.bearerToken)
 
-            res.redirect(this.buildTaskListUri(req, res))
+            res.redirect(this.buildPostSubmissionUri(req, res))
           }
         }))
   }

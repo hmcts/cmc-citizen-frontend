@@ -9,11 +9,16 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 
 import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse'
 import { ResponseDraft } from 'features/response/draft/responseDraft'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
-import { RepaymentPlan as ClaimPaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { PaymentPlan as DraftPaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
 import { PaymentPlan as FormPaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
+import { Error } from 'tslint/lib/error'
+import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculate-month-increment'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { PaymentIntention as PI } from 'claims/models/response/core/paymentIntention'
 
 export class PaymentPlanHelper {
 
@@ -28,7 +33,8 @@ export class PaymentPlanHelper {
 
     switch (responseType) {
       case ResponseType.PART_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromClaimPartialAdmission(response as PartialAdmissionResponse)
+        return PaymentPlanHelper.createPaymentPlanFromClaimPartialAdmission(response as PartialAdmissionResponse,
+          claim.claimData.amount.totalAmount())
       case ResponseType.FULL_ADMISSION:
         return PaymentPlanHelper.createPaymentPlanFromClaimFullAdmission(
           response as FullAdmissionResponse,
@@ -37,6 +43,16 @@ export class PaymentPlanHelper {
       default:
         throw new Error(`Incompatible response type: ${responseType}`)
     }
+  }
+
+  static createPaymentPlanFromClaimWhenSetDate (response: PartialAdmissionResponse | FullAdmissionResponse, totalAmount: number): PaymentPlan {
+    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = response as FullAdmissionResponse | PartialAdmissionResponse
+
+    return PaymentPlanHelper.createPaymentPlan(
+      totalAmount,
+      StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(claimResponse.statementOfMeans),
+      PaymentSchedule.EVERY_MONTH,
+      calculateMonthIncrement(response.paymentIntention.paymentDate)) // not sure if this is correct date to pass as param
   }
 
   static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {
@@ -62,30 +78,44 @@ export class PaymentPlanHelper {
       undefined)
   }
 
-  private static createPaymentPlanFromClaimPartialAdmission (response: PartialAdmissionResponse): PaymentPlan {
-    const paymentPlan: ClaimPaymentPlan = response.paymentIntention.repaymentPlan
-    if (!paymentPlan) {
+  private static createPaymentPlanFromClaimPartialAdmission (response: PartialAdmissionResponse, totalAmount: number): PaymentPlan {
+    const paymentIntention: PI = response.paymentIntention
+    if (!paymentIntention) {
       return undefined
     }
-    return PaymentPlanHelper.createPaymentPlan(
-      response.amount,
-      paymentPlan.instalmentAmount,
-      paymentPlan.paymentSchedule,
-      paymentPlan.firstPaymentDate
-    )
+
+    if (paymentIntention.repaymentPlan) {
+      return PaymentPlanHelper.createPaymentPlan(
+        response.amount,
+        paymentIntention.repaymentPlan.instalmentAmount,
+        paymentIntention.repaymentPlan.paymentSchedule,
+        paymentIntention.repaymentPlan.firstPaymentDate
+      )
+    }
+
+    if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      PaymentPlanHelper.createPaymentPlanFromClaimWhenSetDate(response, totalAmount)
+    }
   }
 
   private static createPaymentPlanFromClaimFullAdmission (response: FullAdmissionResponse, totalAmount: number): PaymentPlan {
-    const paymentPlan: ClaimPaymentPlan = response.paymentIntention.repaymentPlan
-    if (!paymentPlan) {
+    const paymentIntention: PI = response.paymentIntention
+    if (!paymentIntention) {
       return undefined
     }
-    return PaymentPlanHelper.createPaymentPlan(
-      totalAmount,
-      paymentPlan.instalmentAmount,
-      paymentPlan.paymentSchedule,
-      paymentPlan.firstPaymentDate
-    )
+
+    if (paymentIntention.repaymentPlan) {
+      return PaymentPlanHelper.createPaymentPlan(
+        totalAmount,
+        paymentIntention.repaymentPlan.instalmentAmount,
+        paymentIntention.repaymentPlan.paymentSchedule,
+        paymentIntention.repaymentPlan.firstPaymentDate
+      )
+    }
+
+    if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      PaymentPlanHelper.createPaymentPlanFromClaimWhenSetDate(response, totalAmount)
+    }
   }
 
   private static createPaymentPlanFromDraftDraftClaimantResponse (draft: DraftClaimantResponse): PaymentPlan {
