@@ -20,6 +20,8 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { attachDefaultHooks } from 'test/hooks'
+import * as _ from 'lodash'
+import { CookieProperties } from 'shared/cookieProperties'
 
 chai.use(spies)
 
@@ -60,10 +62,12 @@ describe('Claim eligibility guard', () => {
 
   context('when draft is not marked as eligible but eligibility cookie exists', () => {
     beforeEach(() => {
+      res.cookie(eligibilityCookieName, JSON.stringify(eligibleCookie), CookieProperties.getCookieParameters())
       claimDraft.document.eligibility = false
       req.protocol = 'https'
+      req.cookie = req.signedCookies.eligibilityCheck
       req.headers = {
-        cookie: `${eligibilityCookieName}=${JSON.stringify(eligibleCookie)}`
+        cookie: `${eligibilityCookieName}=${JSON.stringify(eligibleCookie)}; Secure; HttpOnly; Signed; sameSite;`
       }
       res.getHeader = () => { return void 0 }
       res.setHeader = () => { return void 0 }
