@@ -1,61 +1,61 @@
 import { expect } from 'chai'
 
 import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
-import { LocalDate } from 'forms/models/localDate'
+import moment = require('moment')
 
 describe('CourtDetermination', () => {
 
   context('calculateDecision', () => {
     it('should return a claimant decision type when claimantPaymentDate is after the defendantPaymentDate', () => {
 
-      let defendantPaymentDate = new LocalDate(2019, 10, 10).toMoment()
-      let claimantPaymentDate = new LocalDate(2019, 10, 11).toMoment()
-      let courtGeneratedPaymentDate = new LocalDate(2019, 10, 12).toMoment()
+      let defendantPaymentDate = moment(new Date())
+      let claimantPaymentDate = moment(new Date()).add(1,'days')
+      let courtGeneratedPaymentDate = moment(new Date()).add(2,'days')
 
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
     })
 
     it('should return a claimant or defendant decision type when claimantPaymentDate and defendantPaymentDate are the same', () => {
 
-      let defendantPaymentDate = new LocalDate(2019, 12, 31).toMoment()
-      let claimantPaymentDate = new LocalDate(2019, 12, 31).toMoment()
-      let courtGeneratedPaymentDate = new LocalDate(2019, 10, 11).toMoment()
+      let defendantPaymentDate = moment(new Date())
+      let claimantPaymentDate = moment(new Date())
+      let courtGeneratedPaymentDate = moment(new Date())
 
-      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
+      expect(Object.values(DecisionType).includes(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)))
     })
 
     it('should return a claimant decision type when claimantPaymentDate and courtGeneratedPaymentDate are the same', () => {
 
-      let defendantPaymentDate = new LocalDate(2019, 10, 10).toMoment()
-      let claimantPaymentDate = new LocalDate(2019, 10, 11).toMoment()
-      let courtGeneratedPaymentDate = new LocalDate(2019, 10, 11).toMoment()
+      let defendantPaymentDate = moment(new Date())
+      let claimantPaymentDate = moment(new Date()).add(1,'days')
+      let courtGeneratedPaymentDate = moment(new Date()).add(1,'days')
 
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
     })
 
     it('should return a claimant decision type when claimantPaymentDate is before defendantPaymentDate and after the courtGeneratedPaymentDate', () => {
 
-      let defendantPaymentDate = new LocalDate(2019, 10, 11).toMoment()
-      let claimantPaymentDate = new LocalDate(2019, 10, 10).toMoment()
-      let courtGeneratedPaymentDate = new LocalDate(2019, 10, 9).toMoment()
+      let defendantPaymentDate = moment(new Date()).add(11,'days')
+      let claimantPaymentDate = moment(new Date()).add(10,'days')
+      let courtGeneratedPaymentDate = moment(new Date()).add(9,'days')
 
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
     })
 
     it('should return a defendant decision type when claimantPaymentDate is before defendantPaymentDate and before the courtGeneratedPaymentDate', () => {
 
-      let defendantPaymentDate = new LocalDate(2019, 10, 5).toMoment()
-      let claimantPaymentDate = new LocalDate(2019, 10, 1).toMoment()
-      let courtGeneratedPaymentDate = new LocalDate(2019, 10, 2).toMoment()
+      let defendantPaymentDate = moment(new Date()).add(5,'days')
+      let claimantPaymentDate = moment(new Date()).add(1,'days')
+      let courtGeneratedPaymentDate = moment(new Date()).add(2,'days')
 
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.COURT)
     })
 
     it('should return a court decision type when the claimantPaymentDate is before defendantPaymentDate and the defendantPaymentDate is before the courtGeneratedPaymentDate', () => {
 
-      let defendantPaymentDate = new LocalDate(2019, 10, 10).toMoment()
-      let claimantPaymentDate = new LocalDate(2019, 10, 7).toMoment()
-      let courtGeneratedPaymentDate = new LocalDate(2019, 10, 15).toMoment()
+      let defendantPaymentDate = moment(new Date()).add(10,'days')
+      let claimantPaymentDate = moment(new Date()).add(7,'days')
+      let courtGeneratedPaymentDate = moment(new Date()).add(15,'days')
 
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
     })
