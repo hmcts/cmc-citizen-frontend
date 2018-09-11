@@ -135,9 +135,9 @@
 
 {% macro _linkToDirectionsQuestionnairePage(externalId) %}
 <p>
-  {{ t('You need to complete a {{ url }} to tell us more about the claim.',
+  {{ t('You need to {{ url }} form to tell us more about the claim.',
         { url: internalLink(
-          'directions questionnaire form',
+          'complete a directions questionnaire',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
         }
       ) | safe
