@@ -296,3 +296,102 @@ export const partialAdmissionWithPaymentByInstalmentsCompanyData = {
   },
   amount: 3000
 }
+
+export const fullAdmissionWithPaymentByInstalmentsDataPaymentDateBeforeMonth = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: MomentFactory.currentDate().add(10, 'days'),
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
+  }
+}
+
+export const fullAdmissionWithPaymentByInstalmentsDataPaymentDateAfterMonth = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: MomentFactory.currentDate().add(50, 'days'),
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
+  }
+}
+
+export const partialAdmissionWithPaymentByInstalmentsDataPaymentDateBeforeMonth = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: MomentFactory.currentDate().add(10, 'days'),
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
+  },
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentByInstalmentsDataPaymentDateAfterMonth = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: MomentFactory.currentDate().add(50, 'days'),
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
+  },
+  amount: 3000
+}
+
+export const fullAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: MomentFactory.currentDate().add(10, 'days')
+  }
+}
+
+export const fullAdmissionWithPaymentBySetDateDataPaymentDateAfterMonth = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: MomentFactory.currentDate().add(50, 'days')
+  }
+}
+export const partialAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: MomentFactory.currentDate().add(10, 'days')
+  },
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentBySetDateDataPaymentDateAfterMonth = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: MomentFactory.currentDate().add(50, 'days')
+  },
+  amount: 3000
+}
