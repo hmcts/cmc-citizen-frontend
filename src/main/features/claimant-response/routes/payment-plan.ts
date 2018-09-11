@@ -64,8 +64,13 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   postValidation (req: express.Request, res: express.Response): FormValidationError {
 
     const model = req.body.model
+    if (!model.firstPaymentDate) {
+      return undefined
+    }
+
     const validDate: moment.Moment = getEarliestPaymentDateForAlternatePaymentInstalments(res.locals.claim, model.firstPaymentDate.toMoment())
-    if (validDate > model.firstPaymentDate.toMoment()) {
+
+    if (!model.firstPaymentDate === undefined || validDate > model.firstPaymentDate.toMoment()) {
       const error: ValidationError = {
         target: model,
         property: 'firstPaymentDate',
