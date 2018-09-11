@@ -1,30 +1,22 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, errorSummary %}
 {% from "timelineFragment.njk" import timelineFragment %}
+{% from "date.njk" import dateInput %}
 
 {% set heading = ('When did you receive the money?') %}
 
-{#{% block content %}#}
-  {#<div class="grid-row">#}
-    {#<div class="column-two-thirds">#}
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post">
+        <input type="hidden" name="known" value="true"/>
+        {{ csrfProtection(csrf) }}
 
-      {#<form method="post" novalidate>#}
-        {#{{ csrfProtection(csrf) }}#}
-        {#<h2 class="heading-small">{{ t('Example timeline') }}</h2>#}
-        {#<ul class="list list-bullet">#}
-          {#<li>{{ t('{{ earliest }} - John Smith gave me a quote to replace the roof.', { earliest: 'now' | addDays(-180) | date }) }}</li>#}
-          {#<li>{{ t('{{ later }} - We agreed and signed a contract for the work.', { later: 'now' | addDays(-178) | date }) }}</li>#}
-          {#<li>{{ t('{{ latest }} - I noticed a leak on the landing and told Mr Smith about this.', { latest: 'now' | addDays(-176) | date }) }}</li>#}
-        {#</ul>#}
+        <p>{{ t('Enter the exact date the money was clear in your account if you were paid by cheque or bank transfer.') }}</p>
+        {{ dateInput(form = form, name = 'date', hint = 'For example, 10 9 2018') }}
+        <a class="button" href="{{ "nextPageUrl" }}">{{ t('Continue') }}</a>
 
-        {#{{ timelineFragment(form) }}#}
-        {#{{ saveAndContinueButton() }}#}
-
-      {#</form>#}
-    {#</div>#}
-  {#</div>#}
-{#{% endblock %}#}
-
-{#{% block additional_scripts %}#}
-  {#<script src="{{ asset_paths['js'] }}/append-row.js"></script>#}
-{#{% endblock %}#}
+      </form>
+    </div>
+  </div>
+{% endblock %}
