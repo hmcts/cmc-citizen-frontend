@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from 'test/http-mocks/claim-store'
 import {
   defenceWithAmountClaimedAlreadyPaidData,
   defenceWithDisputeData,

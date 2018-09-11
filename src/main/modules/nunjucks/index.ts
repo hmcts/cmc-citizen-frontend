@@ -40,6 +40,7 @@ import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -120,6 +121,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
+    nunjucksEnv.addGlobal('ClaimantResponseType', ClaimantResponseType)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)

@@ -20,9 +20,9 @@
             {{ t('County Court Judgment issued') }}
           {% elseif claim.claimantResponse.freeMediation %}
             {{ t('You’ve requested free mediation') }}
-          {% elseif claim.claimantResponse.type === 'rejection' %}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
             {{ t('You’ve rejected their response') }}
-          {% elseif claim.claimantResponse.type === 'acceptation' %}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
             {{ t('You’ve accpeted their response') }}
           {% endif %}
         </h1>
@@ -35,9 +35,7 @@
         </p>
         {% if claim.countyCourtJudgmentIssuedAt %}
           <p class="receipt-download-container">
-            <a
-              href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgment') }}</a>
-            (PDF)
+            <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgment') }}</a> (PDF)
           </p>
         {% endif %}
       </div>
@@ -56,14 +54,14 @@
         {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
-      {% elseif claim.claimantResponse.type === 'acceptation' %}
-        <p>The claim is now settled. We'll email the defendant {{ claim.claimData.defendant.name }} to tell them.</p>
-      {% elseif claim.claimantResponse.type === 'rejection' %}
-        <p>The court will review the case. You might have to go to a hearing.</p>
-        <p>We'll contact you if we set a hearing date to tell you how to prepare.</p>
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
+        <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+        <p>{{ t('The court will review the case. You might have to go to a hearing.') }}</p>
+        <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% elseif claim.claimantResponse.freeMediation %}
-        <p>You agreed to try to resolve the claim using mediation.</p>
-        <p>A mediator will contact you and the defendant in the next 14 days to arrange an appointment.</p>
+        <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
+        <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}
