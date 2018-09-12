@@ -11,7 +11,7 @@
   }}
 {% endmacro %}
 
-{% macro notImmediatePayment(type, paymentDate, paymentPlan, explanation, Paths = {}, externalId) %}
+{% macro notImmediatePayment(type, paymentDate, paymentPlan, explanation, Paths = {}, externalId, statementOfMeansIsApplicable) %}
   {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
   {% set whenWillYouPayLabel = t(type.option.displayValue) | capitalize %}
 
@@ -55,13 +55,15 @@
     }}
   {% endif %}
 
-  {{
-    row(
-      label = 'Why you can’t pay now',
-      value = explanation,
-      changeLink = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: externalId }),
-      bold = true
-    )
-  }}
+  {% if statementOfMeansIsApplicable %}
+    {{
+      row(
+        label = 'Why you can’t pay now',
+        value = explanation,
+        changeLink = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: externalId }),
+        bold = true
+      )
+    }}
+  {% endif %}
   {{ tableEnd() }}
 {% endmacro %}

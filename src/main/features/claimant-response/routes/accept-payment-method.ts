@@ -11,11 +11,11 @@ import { Paths } from 'claimant-response/paths'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Claim } from 'claims/models/claim'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
-import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -24,7 +24,7 @@ function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
     claim: claim,
     paymentOption: getPaymentOption(claim.response),
     paymentDate: getPaymentDate(claim.response),
-    paymentPlan: getPaymentPlan(claim)
+    paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   })
 }
 
@@ -69,6 +69,8 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.acceptPaymentMethod = form.model
+        draft.document.alternatePaymentMethod = undefined
+        draft.document.formaliseRepaymentPlan = undefined
 
         await new DraftService().save(draft, user.bearerToken)
 

@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as spies from 'sinon-chai'
 import { mockReq as req, mockRes as res } from 'sinon-express-mock'
-import moment = require('moment')
+import * as moment from 'moment'
 
 import { Paths } from 'eligibility/paths'
 

@@ -39,7 +39,7 @@
        )
     }}
 
-    {% if draft.isResponsePartiallyAdmitted() %}
+    {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
       {{ row(
         label = 'Have you paid the claimant the amount you admit you owe?',
         value = t(draft.partialAdmission.alreadyPaid.option.option) | capitalize,
@@ -51,7 +51,7 @@
 
     {% if draft.response.type === ResponseType.DEFENCE %}
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
-        {% set rejectAllOption = 'I’ve already paid the claim in full' %}
+        {% set rejectAllOption = 'I’ve paid what I believe I owe' %}
       {% endif %}
 
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
@@ -63,13 +63,14 @@
       {% endif %}
 
       {{ row(label = 'Why do you reject all of this claim?', value = rejectAllOption, changeLink = ResponsePaths.defenceRejectAllOfClaimPage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
     {% endif %}
 
-    {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
 
       {{
         whenWillYouPayRow(
-          value = t(draft.fullAdmission.paymentOption.option.displayValue) | capitalize,
+          value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
           url = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
         )
       }}
@@ -77,28 +78,22 @@
 
     {{ tableEnd() }}
 
-    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
 
       {{
         notImmediatePayment(
-          type = draft.fullAdmission.paymentOption,
-          paymentDate = draft.fullAdmission.paymentDate,
-          paymentPlan = draft.fullAdmission.paymentPlan,
+          type = draft.fullAdmission.paymentIntention.paymentOption,
+          paymentDate = draft.fullAdmission.paymentIntention.paymentDate,
+          paymentPlan = draft.fullAdmission.paymentIntention.paymentPlan,
           explanation = draft.statementOfMeans.explanation.text,
           Paths = FullAdmissionPaths,
-          externalId = claim.externalId
+          externalId = claim.externalId,
+          statementOfMeansIsApplicable = statementOfMeansIsApplicable
         )
       }}
     {% endif %}
 
-    {% if draft.isResponseRejectedFullyWithAmountClaimedPaid() %}
-      {{ tableStart('yourResponse', 'Your response') }}
-        {{ row(label = 'When did you pay this amount?', value = draft.whenDidYouPay.date.toMoment() | date, changeLink = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-        {{ row(label = 'How did you pay the amount claimed?', value = draft.whenDidYouPay.text, changeLink = ResponsePaths.whenDidYouPay.evaluateUri({ externalId: claim.externalId }), bold = true) }}
-      {{ tableEnd() }}
-    {% endif %}
-
-    {% if draft.isResponsePartiallyAdmitted() %}
+    {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
 
       {{ tableStart('responseDetails', 'Response details') }}
 
@@ -174,11 +169,11 @@
         }}
         {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
       {% else %}
-        {% if draft.partialAdmission.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+        {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
           {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
           {{
             whenWillYouPayRow(
-              value = t(draft.partialAdmission.paymentOption.option.displayValue) | capitalize,
+              value = t(draft.partialAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
               url = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
             )
           }}
@@ -186,16 +181,75 @@
         {% else %}
           {{
             notImmediatePayment(
-              type = draft.partialAdmission.paymentOption,
-              paymentDate = draft.partialAdmission.paymentDate,
-              paymentPlan = draft.partialAdmission.paymentPlan,
+              type = draft.partialAdmission.paymentIntention.paymentOption,
+              paymentDate = draft.partialAdmission.paymentIntention.paymentDate,
+              paymentPlan = draft.partialAdmission.paymentIntention.paymentPlan,
               explanation = draft.statementOfMeans.explanation.text,
               Paths = PartAdmissionPaths,
-              externalId = claim.externalId
+              externalId = claim.externalId,
+              statementOfMeansIsApplicable = statementOfMeansIsApplicable
             )
           }}
         {% endif %}
       {% endif %}
+    {% endif %}
+
+    {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
+      {{ tableStart('responseDetails', 'Response details') }}
+      {{
+        row(
+          label = 'How much have you paid?',
+          value = draft.rejectAllOfClaim.howMuchHaveYouPaid.amount | numeral,
+          changeLink = FullRejectionPaths.howMuchHaveYouPaidPage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false,
+          bold = true
+        )
+      }}
+
+      {{
+        row(
+          label = 'When did you pay this amount?',
+          value = t(draft.rejectAllOfClaim.howMuchHaveYouPaid.date.toMoment() | date),
+          bottomBorder = false,
+          bold = true
+        )
+      }}
+
+      {{
+        row(
+          label = 'How did you pay this amount?',
+          value = draft.rejectAllOfClaim.howMuchHaveYouPaid.text,
+          bold = true
+        )
+      }}
+
+      {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
+        {{ row(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+        {{
+          timelineCheckAndSend(
+            header = 'Timeline of what happened (optional)',
+            timeline = draft.timeline.getPopulatedRowsOnly(),
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+
+        {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+
+        {{
+          evidenceCheckAndSend(
+            header = 'Your evidence (optional)',
+            evidence = draft.evidence.getPopulatedRowsOnly(),
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+
+        {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+
+      {% endif %}
+      {{ tableEnd() }}
     {% endif %}
 
     {% if draft.isResponseRejectedFullyWithDispute() %}
@@ -233,7 +287,8 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyWithDispute() %}
+    {% if (admissionsApplicable and (draft.isResponsePartiallyAdmitted() or (draft.isResponseRejectedFullyBecausePaidWhatOwed() and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
+      or draft.isResponseRejectedFullyWithDispute() %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(

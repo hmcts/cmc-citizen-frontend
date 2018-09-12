@@ -28,16 +28,16 @@ function renderView (form: Form<WhyDoYouDisagree>, res: express.Response) {
 export default express.Router()
   .get(
     page.uri,
-    PartialAdmissionGuard.requestHandler(),
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
+    PartialAdmissionGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.partialAdmission.whyDoYouDisagree), res)
     }))
   .post(
     page.uri,
-    PartialAdmissionGuard.requestHandler(),
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
+    PartialAdmissionGuard.requestHandler(),
     FormValidator.requestHandler(WhyDoYouDisagree, WhyDoYouDisagree.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<WhyDoYouDisagree> = req.body

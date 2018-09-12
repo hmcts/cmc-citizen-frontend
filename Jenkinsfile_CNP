@@ -26,7 +26,7 @@ withPipeline("nodejs", product, component) {
   afterCheckout {
     onMaster {
       try {
-        sh """
+       sh """
           git fetch origin demo:demo
           git push --force origin HEAD:demo
         """

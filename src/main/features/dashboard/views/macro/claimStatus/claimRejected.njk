@@ -9,8 +9,8 @@
   <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
   <p>
     {{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
-      + 'Email {{ emailAddress }} if you want to proceed with the claim '
-      + 'you must do this before 4pm on {{ respondToResponseDeadline }}.',
+      + 'Email {{ emailAddress }} if you want to proceed with the claim. '
+      + 'You must do this before 4pm on {{ respondToResponseDeadline }}.',
       { defendantName: claim.claimData.defendant.name, emailAddress: supportEmailAddress,
         respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}
   </p>
@@ -86,8 +86,11 @@
   <p>{{ externalLink('Find out how mediation works (PDF, 399KB)', 'https://formfinder.hmctsformfinder.justice.gov.uk/ex730-eng.pdf') }}</p>
 
   <p>
-    {{ t('Tell us whether you agree to mediation or not by emailing {{ emailAddress }} before {{ respondToMediationDeadline }}.',
+    {{ t('You need to email {{ emailAddress }} before {{ respondToMediationDeadline }} to tell us if you agree to mediation or not.',
       { emailAddress: supportEmailAddress, respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}
+  </p>
+  <p>
+    {{ t('If you don’t send an email before the deadline, the claim will proceed without mediation.') }}
   </p>
   <p>
     {{ _downloadResponseLink(claim, 'Download their response') }}

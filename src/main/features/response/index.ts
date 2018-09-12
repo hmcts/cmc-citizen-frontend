@@ -11,7 +11,7 @@ import { FullAdmissionPaths, PartAdmissionPaths, StatementOfMeansPaths } from 'r
 import { RouterFinder } from 'shared/router/routerFinder'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { PaymentOption } from 'claims/models/response/core/paymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'
@@ -79,6 +79,10 @@ export class Feature {
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
       }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.responseDraft
+        next()
+      },
       initiatePartyFromClaimHandler
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
