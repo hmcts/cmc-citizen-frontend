@@ -12,6 +12,7 @@ import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { Moment } from 'moment'
+import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -26,28 +27,30 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const claim: Claim = res.locals.claim
     const draft: DraftClaimantResponse = res.locals.draft.document
     const externalId: string = req.params.externalId
-
-    const defendantPaymentDate = this.getDefendantPaymentDate(claim)
-    const claimantPaymentDate = draft.alternatePaymentMethod.paymentDate.date.toMoment()
-
-    if (claimantPaymentDate
-      .isSameOrAfter(defendantPaymentDate)) {
-      return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
-    } else {
-      // Change this to court proposed date page
-      return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
-    }
-  }
-
-  private getDefendantPaymentDate (claim: Claim): Moment {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    if (claimResponse.paymentIntention.paymentDate) {
-      return claimResponse.paymentIntention.paymentDate
-    }
+    const courtGeneratedPayBySetDate: Moment = PaymentPlanHelper
+      .createPaymentPlanFromClaimWhenSetDate(
+        claimResponse,
+        claim.claimData.amount.totalAmount()
+      )
+      .calculateLastPaymentDate()
+    const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
+    const claimantPaymentDate: Moment = draft.alternatePaymentMethod.paymentDate.date.toMoment()
+    const courtDecision: DecisionType = CourtDetermination.calculateDecision(
+      defendantEnteredPayBySetDate,
+      claimantPaymentDate,
+      courtGeneratedPayBySetDate
+    )
 
-    if (claimResponse.paymentIntention.repaymentPlan) {
-      return PaymentPlanHelper.createCourtOrderedPaymentPlanFromDefendantSetDate(claim).calculateLastPaymentDate()
+    switch (courtDecision) {
+      case DecisionType.COURT: {
+        return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+      }
+      case DecisionType.DEFENDANT:
+      case DecisionType.CLAIMANT: {
+        return Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })
+      }
     }
   }
 }

@@ -18,23 +18,24 @@ import { calculateMonthIncrement } from 'common/calculate-month-increment/calcul
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentIntention as PI } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
+import moment = require('moment')
 // import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 // import { DecisionType } from 'common/court-calculations/courtDetermination'
 
 export class PaymentPlanHelper {
 
-  static createCourtOrderedPaymentPlanFromDefendantSetDate (claim: Claim): PaymentPlan {
-
-    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const defendantSuggestedPaymentPlan = this.createPaymentPlanFromClaimWhenSetDate(claimResponse, claim.claimData.amount.totalAmount())
-
-    return PaymentPlanHelper.createPaymentPlan(
-      claim.claimData.amount.totalAmount(),
-      defendantSuggestedPaymentPlan.instalmentAmount,
-      defendantSuggestedPaymentPlan.frequency,
-      defendantSuggestedPaymentPlan.startDate
-      ).convertTo(defendantSuggestedPaymentPlan.frequency)
-  }
+  // static createCourtOrderedPaymentPlanFromDefendantSetDate (claim: Claim): PaymentPlan {
+  //
+  //   const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+  //   const defendantSuggestedPaymentPlan = this.createPaymentPlanFromClaimWhenSetDate(claimResponse, claim.claimData.amount.totalAmount())
+  //
+  //   return PaymentPlanHelper.createPaymentPlan(
+  //     claim.claimData.amount.totalAmount(),
+  //     defendantSuggestedPaymentPlan.instalmentAmount,
+  //     defendantSuggestedPaymentPlan.frequency,
+  //     defendantSuggestedPaymentPlan.startDate
+  //     ).convertTo(defendantSuggestedPaymentPlan.frequency)
+  // }
   //
   // private static courtOrderAmount (decisionType: DecisionType, claimantInstalmentAmount: number, defendantInstalmentAmount: number, defendantDisposableIncome: number): number {
   //   switch (decisionType) {
@@ -77,12 +78,14 @@ export class PaymentPlanHelper {
 
   static createPaymentPlanFromClaimWhenSetDate (response: PartialAdmissionResponse | FullAdmissionResponse, totalAmount: number): PaymentPlan {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = response as FullAdmissionResponse | PartialAdmissionResponse
+    const instalmentAmount: number = StatementOfMeansCalculations
+      .calculateTotalMonthlyDisposableIncome(claimResponse.statementOfMeans) / Frequency.WEEKLY.monthlyRatio
 
     return PaymentPlanHelper.createPaymentPlan(
       totalAmount,
-      StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans),
-      Frequency.MONTHLY,
-      calculateMonthIncrement(claimResponse.paymentIntention.paymentDate)) // not sure if this is correct date to pass as param
+      instalmentAmount,
+      Frequency.WEEKLY,
+      calculateMonthIncrement(moment()))
   }
 
   static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {
@@ -174,8 +177,6 @@ export class PaymentPlanHelper {
     if (!totalAmount || !instalmentAmount || !frequency) {
       return undefined
     }
-
-    console.log('frequency------>', frequency)
 
     return PaymentPlan.create(totalAmount, instalmentAmount, frequency, firstPaymentDate)
   }
