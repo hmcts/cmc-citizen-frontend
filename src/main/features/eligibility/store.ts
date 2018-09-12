@@ -28,6 +28,6 @@ export class CookieEligibilityStore {
   }
 
   clear (req: express.Request, res: express.Response): void {
-    res.cookie(cookieName, '', { sameSite: 'lax' })
+    res.clearCookie(cookieName, { sameSite: 'lax' })
   }
 }
