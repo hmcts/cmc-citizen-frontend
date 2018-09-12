@@ -19,6 +19,7 @@
     {% set claimantName = claim.claimData.claimant.name %}
     {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
     {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+    {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({externalId:claim.externalId}) %}
 
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
 
@@ -28,7 +29,7 @@
     {% endif %}
 
     {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate}}.',
+      <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
           { amount: amountToPay,
             paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date
           }
@@ -68,8 +69,8 @@
 
    <p>
     <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2> 
-    {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can ') }} 
-    {{ _requestCCJLink(claim) }}
+    {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
+      + internalLink('request a County Court Judgment. ', ccjRequest )) | safe }} 
   </p>
 
   {% else %}
@@ -81,11 +82,6 @@
       {{ _downloadAgreementLink(claim) }}
     </p>
   {% endif %}
-{% endmacro %}
-
-{% macro _requestCCJLink(claim) %}
-  <a class="block" href="{{ CCJPaths.paidAmountPage.evaluateUri({externalId: claim.externalId}) }}">
- {{ t('request a County Court Judgment.') }}</a>
 {% endmacro %}
 
 {% macro _downloadAgreementLink(claim) %}
