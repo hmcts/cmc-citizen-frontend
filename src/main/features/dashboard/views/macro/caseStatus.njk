@@ -93,7 +93,7 @@
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
           {{ claimRejectedAlreadyPaidForDefendantDashboard(claim) }}
-          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+        {% elif claim.response.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedFreeMediationNOForDefendantDashboard() }}
         {% else %}
           {{ claimRejectedFreeMediationYESForDefendantDashboard() }}
