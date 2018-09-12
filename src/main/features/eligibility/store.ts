@@ -1,14 +1,17 @@
+import * as config from 'config'
 import * as express from 'express'
 import * as _ from 'lodash'
 
 import { Eligibility } from 'eligibility/model/eligibility'
-import { CookieProperties } from 'shared/cookieProperties'
 
-export const cookieName = 'eligibilityCheck'
+const minuteInMilliseconds = 60 * 1000
+const cookieTimeToLiveInMinutes = config.get<number>('eligibility.cookie.timeToLiveInMinutes') * minuteInMilliseconds
+
+export const cookieName = 'eligibility-check'
 
 export class CookieEligibilityStore {
   read (req: express.Request, res: express.Response): Eligibility {
-    const cookie: string = req.signedCookies.eligibilityCheck
+    const cookie: string = req.signedCookies[cookieName]
     return new Eligibility().deserialize(cookie !== undefined ? JSON.parse(cookie) : undefined)
   }
 
@@ -21,7 +24,7 @@ export class CookieEligibilityStore {
       }
       return undefined
     }
-    res.cookie(cookieName, JSON.stringify(_.cloneDeepWith(eligibility, excludeDisplayValue)), CookieProperties.getCookieParameters())
+    res.cookie(cookieName, JSON.stringify(_.cloneDeepWith(eligibility, excludeDisplayValue)), { signed: true, httpOnly: true, secure: true, sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes })
   }
 
   clear (req: express.Request, res: express.Response): void {
