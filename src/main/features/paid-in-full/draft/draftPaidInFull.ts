@@ -1,5 +1,5 @@
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
-import {LocalDate} from "forms/models/localDate";
+import { LocalDate } from 'forms/models/localDate'
 
 export class DraftPaidInFull extends DraftDocument {
   datePaid: LocalDate

@@ -1,11 +1,10 @@
-
-import {IsNotBlank, IsValidLocalDate} from '@hmcts/cmc-validators'
-import {IsDefined, MaxLength, ValidateIf, ValidateNested} from "class-validator";
-import {LocalDate} from "forms/models/localDate"
-import {ValidationConstraints} from "forms/models/timelineRow";
-import {IsPastDate} from "forms/validation/validators/datePastConstraint";
-import {MomentFormatter} from "utils/momentFormatter";
-import {MomentFactory} from "shared/momentFactory";
+import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
+import { IsDefined, MaxLength, ValidateIf, ValidateNested } from 'class-validator'
+import { LocalDate } from 'forms/models/localDate'
+import { ValidationConstraints } from 'forms/models/timelineRow'
+import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
+import { MomentFormatter } from 'utils/momentFormatter'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class ValidationErrors {
   static readonly DATE_TOO_LONG: string = 'Enter a date no longer than $constraint1 characters'
@@ -16,6 +15,7 @@ export class ValidationErrors {
     return `Enter date before ${currentDate}`
   }
 }
+
 export class DatePaid {
 
   @ValidateNested()
