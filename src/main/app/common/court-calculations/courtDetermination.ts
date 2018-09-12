@@ -12,7 +12,7 @@ export class CourtDetermination {
                              claimantPaymentDate: Moment,
                              courtGeneratedPaymentDate: Moment): DecisionType {
 
-    if (defendantPaymentDate === undefined || claimantPaymentDate === undefined || courtGeneratedPaymentDate === undefined) {
+    if (!defendantPaymentDate || !claimantPaymentDate || !courtGeneratedPaymentDate) {
       throw new Error('Input should be a moment, cannot be empty')
     }
 

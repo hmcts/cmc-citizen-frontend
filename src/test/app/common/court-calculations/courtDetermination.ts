@@ -13,6 +13,12 @@ describe('CourtDetermination', () => {
       }).to.throw(Error, 'Input should be a moment, cannot be empty')
     })
 
+    it('should throw an error if defendantPaymentDate, claimantPaymentDate or courtGeneratedPaymentDate are null', () => {
+      expect(() => {
+        CourtDetermination.calculateDecision(null, null, null)
+      }).to.throw(Error, 'Input should be a moment, cannot be empty')
+    })
+
     it('should return a claimant decision type when claimantPaymentDate is after the defendantPaymentDate', () => {
 
       let defendantPaymentDate = moment(new Date())
