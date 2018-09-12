@@ -2,7 +2,7 @@ import * as moment from 'moment'
 
 export function calculateMonthIncrement (startDate: moment.Moment) {
   if (!startDate) {
-    return startDate
+    throw new Error(`Start Date is invalid`)
   }
 
   const futureMonth = moment(startDate).add(1, 'M')
