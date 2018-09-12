@@ -45,7 +45,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
     switch (courtDecision) {
       case DecisionType.COURT: {
-        return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+        return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
       }
       case DecisionType.DEFENDANT:
       case DecisionType.CLAIMANT: {
