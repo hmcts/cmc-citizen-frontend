@@ -41,16 +41,12 @@ async function runPa11y (url: string): Promise<Issue[]> {
   return result.issues
 }
 
-function check (uri: string): void {
-  describe(`Page ${uri}`, () => {
-    it('should have no accessibility errors', async () => {
-      const text = await extractPageText(uri)
-      ensureHeadingIsIncludedInPageTitle(text)
+async function check (uri: string) {
+  const text = await extractPageText(uri)
+  ensureHeadingIsIncludedInPageTitle(text)
 
-      const issues: Issue[] = await runPa11y(agent.get(uri).url)
-      ensureNoAccessibilityErrors(issues)
-    })
-  })
+  const issues: Issue[] = await runPa11y(agent.get(uri).url)
+  ensureNoAccessibilityErrors(issues)
 }
 
 async function extractPageText (url: string): Promise<string> {
@@ -85,7 +81,10 @@ function ensureNoAccessibilityErrors (issues: Issue[]): void {
   expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
 }
 
-const excludedPaths: DefendantResponsePaths[] = [
+// better to find the number of processors available?
+const LIMIT: number = (process.env.PARALLA11Y || 'FALSE').toUpperCase() === 'TRUE' ? 8 : 1
+
+const excludedPaths: RoutablePath[] = [
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
   ClaimIssuePaths.receiptReceiver,
@@ -97,31 +96,89 @@ const excludedPaths: DefendantResponsePaths[] = [
   ClaimantResponsePaths.receiptReceiver
 ]
 
-describe('Accessibility', () => {
-  checkPaths('ccj', CCJPaths)
-  checkPaths('claim', ClaimIssuePaths)
-  checkPaths('claim', ClaimIssueErrorPaths)
-  checkPaths('claimant-response', ClaimantResponsePaths)
-  checkPaths('eligibility', EligibilityPaths)
-  checkPaths('first-contact', DefendantFirstContactPaths)
-  checkPaths('first-contact', DefendantFirstContactErrorPaths)
-  checkPaths('offer', OfferPaths)
-  checkPaths('response', DefendantResponsePaths)
-  checkPaths('response', StatementOfMeansPaths)
-  checkPaths('response', FullAdmissionPaths)
+describe('Accessibility', () => {const analysisQueue: string[] = []
+  const analysesRunning: string[] = []
+  let analysisStarted: boolean = false
+  const analysisProblems: string[] = []
+
+  function queueForAnalysis (uri: string) {
+    analysisQueue.push(uri)
+  }
+
+  async function startAnalysis () {
+    const onfulfilled = function (uri: string) {
+      console.log('onfulfilled')
+      analysesRunning.splice(analysesRunning.indexOf(uri), 1)
+    }
+    const onrejected = function (uri: string, reason: string) {
+      console.log(`onrejected(${reason})`)
+      analysesRunning.splice(analysesRunning.indexOf(uri), 1)
+      analysisProblems.push(reason)
+    }
+
+    analysisStarted = true
+    while (analysisQueue.length > 0) {
+      console.log('analysis loop start')
+      while (analysesRunning.length >= LIMIT) {
+        await sleep(100)
+      }
+      const uri: string = analysisQueue.pop()
+      analysesRunning.push(uri)
+      console.log(`check(${uri})`)
+      check(uri)
+        .then(() => onfulfilled(uri))
+        .catch(reason => onrejected(uri, reason))
+      console.log('analysis loop end ' + analysisQueue.length)
+    }
+    console.log('END startAnalysis()')
+    analysisStarted = false
+  }
+
+  const paths: RoutablePath[] = [
+    ...Object.values(CCJPaths),
+    ...Object.values(ClaimIssuePaths),
+    ...Object.values(ClaimIssueErrorPaths),
+    ...Object.values(ClaimantResponsePaths),
+    ...Object.values(EligibilityPaths),
+    ...Object.values(DefendantFirstContactPaths),
+    ...Object.values(DefendantFirstContactErrorPaths),
+    ...Object.values(OfferPaths),
+    ...Object.values(DefendantResponsePaths),
+    ...Object.values(StatementOfMeansPaths),
+    ...Object.values(FullAdmissionPaths)
+  ]
+
+  excludedPaths.forEach(excludedPath => paths.splice(paths.indexOf(excludedPath as RoutablePath), 1))
+
+  paths.forEach(path => {
+    const uri: string = path.uri.includes(':externalId')
+      ? path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' })
+      : path.uri
+    queueForAnalysis(uri)
+  })
+
+  startAnalysis()
+
+  it('should find no problems', async () => {
+    while (!analysisStarted) {
+      console.log('Waiting for analysis to start')
+      await sleep(100)
+    }
+    console.log('Analysis has started')
+    while (analysisQueue.length > 0) {
+      console.log(`Waiting for the analysis queue to be consumed (${analysesRunning.length}:${analysisQueue.length})`)
+      await sleep(1000)
+    }
+    console.log('Analysis queue has been consumed')
+    while (analysesRunning.length > 0) {
+      console.log('Waiting for final analyses to finish')
+      await sleep(100)
+    }
+    console.log('All analyses finished')
+    expect(analysisProblems).to.be.empty
+  })
 })
 
-async function checkPaths (filter: string, pathsRegistry: object): Promise<any> {
-  Object.values(pathsRegistry).forEach((path: RoutablePath) => {
-    let envFilter = process.env.A11Y_FILTER || 'ALL'
-    let excluded = excludedPaths.some(_ => _ === path)
-    let included = (envFilter.toUpperCase() === 'ALL' || envFilter.toUpperCase() === filter.toUpperCase())
-    if (!excluded && included) {
-      if (path.uri.includes(':externalId')) {
-        check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
-      } else {
-        check(path.uri)
-      }
-    }
-  })
+function sleep (ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
