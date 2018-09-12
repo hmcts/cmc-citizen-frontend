@@ -47,7 +47,7 @@ describe('Claim eligibility guard', () => {
   context('when draft is marked as eligible', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = true
-      req.signedCookies = {}
+      req.cookies = {}
     })
 
     it('should pass request through', async () => {
@@ -61,7 +61,7 @@ describe('Claim eligibility guard', () => {
   context('when draft is not marked as eligible but eligibility cookie exists', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
-      req.signedCookies = {
+      req.cookies = {
         [eligibilityCookieName]: eligibleCookie
       }
       idamServiceMock.resolveRetrieveServiceToken()
@@ -85,7 +85,7 @@ describe('Claim eligibility guard', () => {
   context('when draft is not marked as eligible and eligibility cookie does not exist', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
-      req.signedCookies = {}
+      req.cookies = {}
     })
 
     it('should redirect to eligibility page', async () => {

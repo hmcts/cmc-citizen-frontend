@@ -11,7 +11,7 @@ export const cookieName = 'eligibility-check'
 
 export class CookieEligibilityStore {
   read (req: express.Request, res: express.Response): Eligibility {
-    const cookie: string = req.signedCookies[cookieName]
+    const cookie: string = req.cookies[cookieName]
     return new Eligibility().deserialize(cookie !== undefined ? cookie : undefined)
   }
 
@@ -24,7 +24,7 @@ export class CookieEligibilityStore {
       }
       return undefined
     }
-    res.cookie(cookieName, _.cloneDeepWith(eligibility, excludeDisplayValue), { signed: true, httpOnly: true, secure: true, sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes })
+    res.cookie(cookieName, _.cloneDeepWith(eligibility, excludeDisplayValue), { httpOnly: true, secure: true, sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes })
   }
 
   clear (req: express.Request, res: express.Response): void {

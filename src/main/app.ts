@@ -46,7 +46,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
   extended: true
 }))
-app.use(cookieParser(config.get('session.encryptionKey')))
+app.use(cookieParser())
 app.use(cookieEncrypter(config.get('session.encryptionKey'), {
   options: {
     algorithm: 'aes128'
