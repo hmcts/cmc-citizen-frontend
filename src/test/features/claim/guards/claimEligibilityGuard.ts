@@ -62,7 +62,7 @@ describe('Claim eligibility guard', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
       req.signedCookies = {
-        [eligibilityCookieName]: JSON.stringify(eligibleCookie)
+        [eligibilityCookieName]: eligibleCookie
       }
       idamServiceMock.resolveRetrieveServiceToken()
       draftStoreServiceMock.resolveSave()
