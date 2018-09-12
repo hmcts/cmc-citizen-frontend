@@ -9,7 +9,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
-import { CourtOrder } from 'common/court-order/courtOrder'
+import { CourtOrder } from 'common/court-calculations/courtOrder'
 import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
 
 export class CourtOrderHelper {
