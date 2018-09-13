@@ -61,11 +61,11 @@ export default express.Router()
         const { externalId } = req.params
 
         draft.document.acceptCourtOffer = form.model
-        // draft.document.alternatePaymentMethod = undefined
-        // draft.document.formaliseRepaymentPlan = undefined
 
-        if (draft.document.rejectionReason) {
+        if (draft.document.rejectionReason || draft.document.formaliseRepaymentPlan) {
           delete draft.document.rejectionReason
+          delete draft.document.formaliseRepaymentPlan
+          delete draft.document.settlementAgreement
         }
         await new DraftService().save(draft, user.bearerToken)
 
