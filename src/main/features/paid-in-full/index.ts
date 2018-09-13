@@ -9,7 +9,6 @@ import { DraftService } from 'services/draftService'
 import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { DraftPaidInFull } from 'features/paid-in-full/draft/DraftPaidInFull'
-import { ResponseGuard } from 'response/guards/responseGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -28,9 +27,9 @@ export class PaidInFullFeature {
     app.all(allPaidInFull, requestHandler())
     app.all(allPaidInFull, ClaimMiddleware.retrieveByExternalId)
     app.all(allPaidInFull, OnlyClaimantLinkedToClaimCanDoIt.check())
-    app.all(allPaidInFull, ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.+\/paid-in-full\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'paidInFull', 100, (value: any): DraftPaidInFull => {
+        console.log('retrieved', value)
         return new DraftPaidInFull().deserialize(value)
       }),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -18,7 +18,7 @@ function renderView (form: Form<DatePaid>, res: express.Response): void {
 export default express.Router()
   .get(Paths.datePaidPage.uri,
     (req: express.Request, res: express.Response) => {
-      const draft: Draft<DraftPaidInFull> = res.locals.draftPaidInFull
+      const draft: Draft<DraftPaidInFull> = res.locals.paidInFullDraft
       renderView(new Form(draft.document.datePaid), res)
     })
   .post(
@@ -30,7 +30,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const draft: Draft<DraftPaidInFull> = res.locals.draftPaidInFull
+        const draft: Draft<DraftPaidInFull> = res.locals.paidInFullDraft
         const user: User = res.locals.user
 
         draft.document.datePaid = form.model
