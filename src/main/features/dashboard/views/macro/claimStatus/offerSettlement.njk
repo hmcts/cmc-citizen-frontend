@@ -113,14 +113,24 @@
 
     <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
      {#add here 'Tell us you’ve been paid' button#}
+    
+    {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE
+          and isPastPaymentDeadline( MomentFactory.currentDateTime(), 
+                                    claim.settlement.getLastOffer().paymentIntention.paymentDate ) 
+        or paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS
+          and paymentIntention.repaymentPlan is defined
+          and isPastPaymentDeadline( MomentFactory.currentDateTime(), 
+                                    paymentIntention.repaymentPlan.firstPaymentDate )
+    %}
 
-     {#if condition for showing Request CCJ#}
-    <hr>
-    <p>
-    <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
-    {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
-    + internalLink('request a County Court Judgment. ', ccjRequest )) | safe }}
-    </p>
+      <hr>
+      <p>
+      <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
+      {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
+      + internalLink('request a County Court Judgment. ', ccjRequest )) | safe }}
+      </p>
+
+    {% endif %}
 
   {% else %}
     <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
