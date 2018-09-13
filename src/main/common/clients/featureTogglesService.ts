@@ -1,5 +1,4 @@
 import * as config from 'config'
-
 import { FeatureToggleService } from '@hmcts/feature-toggle-client'
 
 import { request as requestPromiseApi } from 'client/request'

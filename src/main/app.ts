@@ -26,10 +26,6 @@ import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 
-// import { FeatureTogglesService } from 'shared/clients/featureTogglesService'
-// import { Paths as AppPath } from 'paths'
-// import { User } from 'idam/user'
-
 export const app: express.Express = express()
 
 const env = process.env.NODE_ENV || 'development'
@@ -57,20 +53,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
-
-// const featureTogglesService: FeatureTogglesService = new FeatureTogglesService()
-
-// // test credentials for localhost:8580
-// const user: User = new User('27','tharacka@kainos.com', 'tharack', 'ahmed',[], '', '')
-// const roles: string[] = ['cmc-new-features-consent-given']
-
-// featureTogglesService.isToggleFeatureEnabled(user, roles, 'cmc_shutter_page').then(isFeatureToggleEnabled => {
-//   if (isFeatureToggleEnabled) {
-//     app.all(/^((?!shutter-unplanned).)*$/, (req,res) => {
-//       app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
-//       res.redirect(AppPath.unplannedShutterPage.uri)
-//     })
-//   } else {
 new ShutterMiddleWare().enableFor(app)
 new EligibilityFeature().enableFor(app)
 new DashboardFeature().enableFor(app)
@@ -120,5 +102,3 @@ app.use((err, req, res, next) => {
   }
   next()
 })
-//   }
-// })
