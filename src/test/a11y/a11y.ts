@@ -82,7 +82,6 @@ function ensureNoAccessibilityErrors (issues: Issue[]) {
   expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
 }
 
-// better to find the number of processors available?
 const LIMIT: number = (process.env.PARALLA11Y || 'FALSE').toUpperCase() === 'TRUE' ? os.cpus().length : 1
 
 const excludedPaths: RoutablePath[] = [

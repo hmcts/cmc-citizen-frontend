@@ -26,12 +26,12 @@ import { ClaimantResponseFeature } from 'claimant-response/index'
 
 export const app: express.Express = express()
 
-const env = process.env.NODE_ENV || 'development'
+const env: string = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
-const developmentMode = env === 'development'
+const developmentMode: boolean = env === 'development'
 
-const i18next = I18Next.enableFor(app)
+const i18next: I18Next = I18Next.enableFor(app)
 
 new Nunjucks(developmentMode, i18next)
   .enableFor(app)
@@ -81,7 +81,7 @@ app.use((req, res, next) => {
 })
 
 // error handlers
-const errorLogger = new ErrorLogger()
+const errorLogger: ErrorLogger = new ErrorLogger()
 app.use((err, req, res, next) => {
   errorLogger.log(err)
   res.status(err.statusCode || 500)
