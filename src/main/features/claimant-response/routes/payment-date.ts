@@ -13,6 +13,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { Moment } from 'moment'
 import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
+import { Draft } from '@hmcts/draft-store-client'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -25,7 +26,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
-    const draft: DraftClaimantResponse = res.locals.draft.document
+    const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
     const externalId: string = req.params.externalId
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
@@ -36,12 +37,17 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
       )
       .calculateLastPaymentDate()
     const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const claimantPaymentDate: Moment = draft.alternatePaymentMethod.paymentDate.date.toMoment()
+    const claimantPaymentDate: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
     const courtDecision: DecisionType = CourtDetermination.calculateDecision(
       defendantEnteredPayBySetDate,
       claimantPaymentDate,
       courtGeneratedPayBySetDate
     )
+
+    // if (draft.document.acceptCourtOffer || draft.document.rejectionReason) {
+    //   delete draft.document.acceptCourtOffer
+    //   delete draft.document.rejectionReason
+    // }
 
     switch (courtDecision) {
       case DecisionType.COURT: {
