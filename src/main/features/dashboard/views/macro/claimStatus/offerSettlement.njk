@@ -76,16 +76,16 @@
 {% macro offerSettlementReachedForClaimant(claim) %}
 
   {% if claim.settlement.isThroughAdmissions() %}
-    {% set claimantName = claim.claimData.claimaint.name %}
+    {% set claimantName = claim.claimData.claimant.name %}
     {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
     {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
-    {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({ externalId: claim.externalId }) %}
+    {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({ externalId:claim.externalId }) %}
 
-    <h2 class="heading-small"> {{ t(' You’ve both signed a settlement agreement')) }} </h2>
+    <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
 
     {% set amountToPay = 'the full amount' %}
     {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
-      {% set amountToPay = claim.response.aomunt | numeral %}
+      {% set amountToPay = claim.response.amount | numeral %}
     {% endif %}
 
     {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -106,15 +106,15 @@
       }}</p>
     {% endif %}
 
-    <p>The agreement explains what you can do if the defendant breaks the terms.</p>
+    <p> {{ t('The agreement explains what you can do if the defendant breaks the terms.') }} </p>
     <p>
       {{ _downloadAgreementLink(claim) }}
     </p>
 
-    <p>When you've been paid in full, you need to let us know.</p>
-     {#add here 'Tell us you’ve been paid' button #}
+    <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
+     {#add here 'Tell us you’ve been paid' button#}
 
-     {#if condition for showing Request CCJ #}
+     {#if condition for showing Request CCJ#}
     <hr>
     <p>
     <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
