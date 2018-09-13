@@ -89,7 +89,7 @@
     "string.prototype.startswith": "^0.2.0",
     "to-boolean": "^1.0.0",
     "ts-node": "^7.0.1",
-    "tsconfig-paths": "^3.5.0",
+    "tsconfig-paths": "^3.6.0",
     "typescript": "^3.0.3",
     "uuid": "^3.3.2"
   },
