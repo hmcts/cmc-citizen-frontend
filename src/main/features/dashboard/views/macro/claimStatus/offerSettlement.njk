@@ -75,7 +75,7 @@
 
 {% macro offerSettlementReachedForClaimant(claim) %}
 
-  {% if claim.settlement.isThrougAdmission() %}
+  {% if claim.settlement.isThroughAdmissions() %}
     {% set claimantName = claim.claimData.claimaint.name %}
     {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
     {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
@@ -96,7 +96,7 @@
         )
         }}</p>
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS and paymentIntention.repaymentPlan is defined %}
-      <p>{{ t('The agreement says the defendant will pay in installments of £{{ instalmentAmount }} {{ paymentSchedule }}, starting {{ firstPaymentDate }}.',
+      <p>{{ t('The agreement says the defendant will pay in installments of £ {{ instalmentAmount }} {{ paymentSchedule }}, starting {{ firstPaymentDate }}.',
         {
           instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
           paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
@@ -112,9 +112,9 @@
     </p>
 
     <p>When you've been paid in full, you need to let us know.</p>
-    {#} add here 'Tell us you’ve been paid' button {#}
+     {#add here 'Tell us you’ve been paid' button #}
 
-    {#} if condition for showing Request CCJ {#}
+     {#if condition for showing Request CCJ #}
     <hr>
     <p>
     <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
