@@ -98,6 +98,22 @@ describe('addDaysFilter', () => {
     expect(addDaysFilter('2018-01-01', -1).toJSON()).to.eq(moment('2017-12-31').toJSON())
   })
 
+  it('adds days to "now"', () => {
+    const tomorrow = moment().add(1, 'day')
+    expect(addDaysFilter('now', 1).date()).to.eq(tomorrow.date())
+    expect(addDaysFilter('now', 1).month()).to.eq(tomorrow.month())
+    expect(addDaysFilter('now', 1).year()).to.eq(tomorrow.year())
+  })
+
+  it('adds days to moment object - immutable', () => {
+    const plus2days = moment()
+    plus2days.add(2, 'days')
+    const input = moment()
+
+    expect(addDaysFilter(input, 2).diff(plus2days, 'days')).to.eq(0)
+    expect(input.diff(moment(), 'days')).to.eq(0)
+  })
+
   describe('throws exception when', () => {
     it('null given', () => {
       expectAddDaysFilterToThrowErrorWithMsg(null, 'Input should be moment or string, cannot be empty')
