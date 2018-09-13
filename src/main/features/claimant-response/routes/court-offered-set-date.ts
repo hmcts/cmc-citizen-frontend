@@ -14,6 +14,8 @@ import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPayment
 import { Moment } from 'moment'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { ResponseType } from 'claims/models/response/responseType'
+import { YesNoOption } from 'models/yesNoOption'
+import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -43,27 +45,34 @@ export default express.Router()
     Paths.courtOfferedSetDatePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      renderView(new Form(draft.document.acceptPaymentMethod), res)
+      renderView(new Form(draft.document.acceptCourtOffer), res)
     }))
 
   .post(
     Paths.courtOfferedSetDatePage.uri,
-    FormValidator.requestHandler(AcceptPaymentMethod, AcceptPaymentMethod.fromObject),
+    FormValidator.requestHandler(AcceptCourtOffer, AcceptCourtOffer.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<AcceptPaymentMethod> = req.body
+      const form: Form<AcceptCourtOffer> = req.body
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const user: User = res.locals.user
+        const { externalId } = req.params
 
-        draft.document.acceptPaymentMethod = form.model
-        draft.document.alternatePaymentMethod = undefined
-        draft.document.formaliseRepaymentPlan = undefined
+        draft.document.acceptCourtOffer = form.model
+        // draft.document.alternatePaymentMethod = undefined
+        // draft.document.formaliseRepaymentPlan = undefined
 
+        if (draft.document.rejectionReason) {
+          delete draft.document.rejectionReason
+        }
         await new DraftService().save(draft, user.bearerToken)
 
-        const { externalId } = req.params
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        if (form.model.accept.option === YesNoOption.YES.option) {
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+        } else {
+          res.redirect(Paths.rejectionReasonPage.evaluateUri({ externalId: externalId }))
+        }
       }
     }))

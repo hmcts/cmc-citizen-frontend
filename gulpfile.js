@@ -123,7 +123,6 @@ gulp.task('develop', (done) => {
       cert: fs.readFileSync(path.join(__dirname, 'src', 'main', 'resources', 'localhost-ssl', 'localhost.crt'), 'utf-8'),
     })
     nodemon({
-      exec: 'node --inspect=5858 server.js',
       ext: 'ts js po',
       stdout: true,
       ignore: ['./src/integration-test/', 'src/main/public/js/lib', 'src/test']
