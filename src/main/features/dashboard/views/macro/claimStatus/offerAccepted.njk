@@ -20,20 +20,6 @@
       { defendantName: defendantName }) }}
   </p>
 
-  <p>
-    <hr>
-  </p>
-
-  <p>
-    <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2> 
-    {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can ') }} {{ _requestCCJLink(claim) }}
-  </p>
-
-{% endmacro %}
-
-{% macro _requestCCJLink(claim) %}
-  <a class="block" href="{{ CCJPaths.paidAmountPage.evaluateUri({externalId: claim.externalId}) }}">
- {{ t('request a County Court Judgment.') }}</a>
 {% endmacro %}
 
 {% macro offerAcceptedForDefendantDashboard() %}
