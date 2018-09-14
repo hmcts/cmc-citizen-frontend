@@ -24,20 +24,20 @@ function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim
     && draft.document.alternatePaymentMethod.paymentOption
     && draft.document.alternatePaymentMethod.paymentOption.option !== PaymentType.INSTALMENTS
   ) {
-    return undefined
+
+    const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
+    const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
+    const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+      defendantPaymentPlan.totalAmount,
+      draft.document.courtOrderAmount,
+      Frequency.MONTHLY,
+      claimantPaymentPlan.startDate
+    )
+
+    return courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
   }
-
-  const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
-  const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-
-  const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
-    defendantPaymentPlan.totalAmount,
-    draft.document.courtOrderAmount,
-    Frequency.MONTHLY,
-    claimantPaymentPlan.startDate
-  )
-
-  return courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
+  return undefined
 }
 
 /* tslint:disable:no-default-export */
