@@ -137,13 +137,6 @@ export class Claim {
     return false
   }
 
-  // get eligibleForCCJAfterBreachedSettlement (): boolean {
-  //   return !this.countyCourtJudgmentRequestedAt
-  //     && this.isSettlementReached()
-  //     && isPastPaymentDeadline(MomentFactory.currentDateTime(),
-  //       (this.response as FullAdmissionResponse).paymentIntention.repaymentPlan.firstPaymentDate)
-  // }
-
   get status (): ClaimStatus {
     if (this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.CCJ_REQUESTED

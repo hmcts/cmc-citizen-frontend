@@ -96,7 +96,7 @@
         )
         }}</p>
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS and paymentIntention.repaymentPlan is defined %}
-      <p>{{ t('The agreement says the defendant will pay in installments of {{ instalmentAmount }} {{ paymentSchedule }}, starting {{ firstPaymentDate }}.',
+      <p>{{ t('The agreement says the defendant will pay you in installments of {{ instalmentAmount }} {{ paymentSchedule }}, starting {{ firstPaymentDate }}.',
         {
           instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
           paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
@@ -113,13 +113,6 @@
 
     <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
      {#add here 'Tell us you’ve been paid' button#}
-    {# {{ claim.response.paymentIntention.repaymentPlan.firstPaymentDate }}
-    {{ claim.response.paymentIntention.paymentDate}}
-    {{ claim.status }}
-    {{ ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT }}
-    {{ claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT}} #}
-
-    {# need to test when defendant pays by set date  #}
 
     {% if claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
 
