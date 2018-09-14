@@ -112,10 +112,9 @@
     </p>
 
     <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
-     {#add here 'Tell us you’ve been paid' button#}
-
+    <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've been paid</a>
+    
     {% if claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
-
       <hr>
       <p>
       <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
