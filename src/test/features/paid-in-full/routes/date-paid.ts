@@ -97,19 +97,19 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      context('when form is valid', async () => {
-        it('should return 500 and render error page when cannot save CCJ draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.rejectSave()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormData)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
-      })
+      // context('when form is valid', async () => {
+      //   it('should return 500 and render error page when cannot save CCJ draft', async () => {
+      //     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+      //     draftStoreServiceMock.resolveFind('ccj')
+      //     draftStoreServiceMock.rejectSave()
+      //
+      //     await request(app)
+      //       .post(pagePath)
+      //       .set('Cookie', `${cookieName}=ABC`)
+      //       .send(validFormData)
+      //       .expect(res => expect(res).to.be.serverError.withText('Error'))
+      //   })
+      // })
 
       context('when form is invalid', async () => {
         it('should render page when everything is fine', async () => {
