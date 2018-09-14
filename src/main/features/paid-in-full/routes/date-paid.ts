@@ -2,13 +2,13 @@ import * as express from 'express'
 
 import { Paths } from 'paid-in-full/paths'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Draft } from "@hmcts/draft-store-client";
-import { DraftPaidInFull } from "paid-in-full/draft/draftPaidInFull";
-import { Form } from "forms/form";
-import { FormValidator } from "forms/validation/formValidator";
-import { User } from "idam/user";
-import { DraftService } from "services/draftService";
-import { DatePaid } from "paid-in-full/form/models/datePaid";
+import { Draft } from '@hmcts/draft-store-client'
+import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
+import { Form } from 'forms/form'
+import { FormValidator } from 'forms/validation/formValidator'
+import { User } from 'idam/user'
+import { DraftService } from 'services/draftService'
+import { DatePaid } from 'paid-in-full/form/models/datePaid'
 
 function renderView (form: Form<DatePaid>, res: express.Response): void {
   res.render(Paths.datePaidPage.associatedView, { form: form })
@@ -40,13 +40,3 @@ export default express.Router()
         res.redirect(Paths.datePaidPage.uri.replace(':externalId', externalId))
       }
     }))
-
-
-
-// /* tslint:disable:no-default-export */
-// export default express.Router()
-//   .get(Paths.datePaidPage.uri,
-//     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-//       res.render(Paths.datePaidPage.associatedView, { paths: Paths })
-//     })
-//   )

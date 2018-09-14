@@ -29,7 +29,6 @@ export class PaidInFullFeature {
     app.all(allPaidInFull, OnlyClaimantLinkedToClaimCanDoIt.check())
     app.all(/^\/case\/.+\/paid-in-full\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'paidInFull', 100, (value: any): DraftPaidInFull => {
-        console.log('retrieved', value)
         return new DraftPaidInFull().deserialize(value)
       }),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {

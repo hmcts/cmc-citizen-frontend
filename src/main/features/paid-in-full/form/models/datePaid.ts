@@ -1,29 +1,16 @@
-import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
-import { IsDefined, MaxLength, ValidateIf, ValidateNested } from 'class-validator'
+import { IsValidLocalDate } from '@hmcts/cmc-validators'
+import { ValidateNested } from 'class-validator'
 import { LocalDate } from 'forms/models/localDate'
-import { ValidationConstraints } from 'forms/models/timelineRow'
-import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
-import { MomentFormatter } from 'utils/momentFormatter'
-import { MomentFactory } from 'shared/momentFactory'
-
+import { IsNotInFuture } from 'forms/validation/validators/notInFuture'
 export class ValidationErrors {
-  static readonly DATE_TOO_LONG: string = 'Enter a date no longer than $constraint1 characters'
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
-  static readonly DATE_REQUIRED: string = 'Enter date'
-  static readonly DATE_OUTSIDE_RANGE = () => {
-    const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
-    return `Enter date before ${currentDate}`
-  }
+  static readonly DATE_IN_FUTURE = 'Please enter a date that is not in the future'
 }
 
 export class DatePaid {
 
   @ValidateNested()
-  @IsPastDate({ message: ValidationErrors.DATE_OUTSIDE_RANGE })
-  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
-  @MaxLength(ValidationConstraints.DATE_MAX_LENGTH, { message: ValidationErrors.DATE_TOO_LONG })
-  @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.DATE_REQUIRED })
+  @IsNotInFuture({ message: ValidationErrors.DATE_IN_FUTURE })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   date: LocalDate
 
