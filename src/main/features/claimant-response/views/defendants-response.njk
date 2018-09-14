@@ -7,7 +7,7 @@
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set defendantName = claim.claimData.defendant.name %}
@@ -25,21 +25,9 @@
     {% else %}
       {{ t('They’ve offered to pay you this in instalments.') }}
     {% endif %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    {{ t('They’ve offered to pay you {{ amount }} immediately.', { amount: amount | numeral }) }}
   {% endif %}
-{% endmacro %}
-
-{% macro repaymentPlanBlock(heading = 'How they want to pay', repaymentPlan, paymentPlan) %}
-  {% if heading %}
-    <h2 class="heading-medium">{{ t(heading) }}</h2>
-  {% endif %}
-  <p>{{ t('The defendant suggested this repayment plan:') }}</p>
-  {{ paymentPlanTable(
-    id = 'payment-table',
-    instalmentAmount = repaymentPlan.instalmentAmount,
-    firstPaymentDate = repaymentPlan.firstPaymentDate,
-    lastPaymentOn = paymentPlan.getLastPaymentDate(),
-    lengthOfPayment = paymentPlan.getPaymentLength()
-  ) }}
 {% endmacro %}
 
 {% macro paymentDateExplanationBlock(reason) %}
@@ -123,9 +111,10 @@
             ) }}
           </p>
 
-          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-            {{ repaymentPlanBlock(
-              repaymentPlan = claim.response.paymentIntention.repaymentPlan,
+        {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+          {{
+            repaymentPlanBlock(
+              heading = 'How they want to pay',
               paymentPlan = paymentPlan
             ) }}
           {% endif %}
@@ -135,13 +124,13 @@
           {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
         {% endif %}
 
-
-        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
-          {% if page === 0 %}
-            <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
-            <p>
-              {{ paymentIntentionFragment(
-                amount = undefined,
+      {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
+        {% if page === 0 %}
+          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+          <p>
+            {{
+              paymentIntentionFragment(
+                amount = claim.response.amount,
                 paymentIntention = claim.response.paymentIntention
               ) }}
             </p>
@@ -184,7 +173,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 %}
+        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
           <input type="hidden" name="action[showPage]" value="{{ page + 1 }}">
         {% endif %}
 

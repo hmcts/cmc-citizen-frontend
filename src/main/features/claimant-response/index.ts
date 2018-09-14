@@ -14,15 +14,14 @@ import { DraftClaimantResponse } from 'features/claimant-response/draft/draftCla
 import { ResponseGuard } from 'response/guards/responseGuard'
 import { FormaliseRepaymentPlanOptionFilter } from 'claimant-response/filters/renderFormaliseRepaymentPlanOption'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
-
 import { BankAccountTypeViewFilter } from 'claimant-response/filters/bank-account-type-view-filter'
 import { ResidenceTypeViewFilter } from 'claimant-response/filters/residence-type-view-filter'
-import { PaymentScheduleTypeViewFilter } from 'claimant-response/filters/payment-schedule-type-view-filter'
 import { IncomeTypeViewFilter } from 'claimant-response/filters/income-type-view-filter'
 import { ExpenseTypeViewFilter } from 'claimant-response/filters/expense-type-view-filter'
 import { AgeGroupTypeViewFilter } from 'claimant-response/filters/age-group-type-view-filter'
 import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
 import { ClaimantResponseGuard } from 'claimant-response/guards/claimantResponseGuard'
+import { FrequencyViewFilter } from 'claimant-response/filters/frequency-view-filter'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -50,13 +49,12 @@ export class ClaimantResponseFeature {
       app.settings.nunjucksEnv.filters.renderBankAccountType = BankAccountTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderResidenceType = ResidenceTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderAgeGroupType = AgeGroupTypeViewFilter.render
-      app.settings.nunjucksEnv.filters.renderPaymentScheduleType = PaymentScheduleTypeViewFilter.render
+      app.settings.nunjucksEnv.filters.renderFrequencyViewType = FrequencyViewFilter.render
       app.settings.nunjucksEnv.filters.renderIncomeType = IncomeTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderExpenseType = ExpenseTypeViewFilter.render
     }
 
     const allClaimantResponse = '/case/*/claimant-response/*'
-
     app.all(allClaimantResponse, requestHandler())
     app.all(allClaimantResponse, ClaimMiddleware.retrieveByExternalId)
     app.all(allClaimantResponse, OnlyClaimantLinkedToClaimCanDoIt.check())

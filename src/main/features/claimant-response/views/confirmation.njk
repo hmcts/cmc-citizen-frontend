@@ -56,12 +56,12 @@
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
       {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
         <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
-      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
-        <p>{{ t('The court will review the case. You might have to go to a hearing.') }}</p>
-        <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% elseif claim.claimantResponse.freeMediation %}
         <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
         <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+        <p>{{ t('The court will review the case. You might have to go to a hearing.') }}</p>
+        <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}

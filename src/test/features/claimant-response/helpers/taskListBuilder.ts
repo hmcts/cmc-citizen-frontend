@@ -629,6 +629,38 @@ describe('Claimant response task list builder', () => {
         })
       })
     })
+
+    describe('"Formalise Repayment Plan task"', () => {
+      const taskName = 'Formalise the repayment plan'
+
+      it('should render page with Formalise repayment plan task', () => {
+        claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
+        draft = new DraftClaimantResponse().deserialize({
+          ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+            rejectionReason: undefined
+          }
+        })
+
+        const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
+        expect(taskList.tasks.find(task => task.name === taskName)).to.not.be.undefined
+      })
+
+      it('should render page without Formalise repayment plan task when court offer is rejected', async () => {
+        claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
+        draft = new DraftClaimantResponse().deserialize({
+          ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+            acceptPaymentMethod: {
+              accept: {
+                option: 'no'
+              }
+            }
+          }
+        })
+
+        const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim)
+        expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
+      })
+    })
   })
 
   describe('"Submit" section', () => {

@@ -17,9 +17,9 @@ export class PaymentPlan {
 
   totalAmount?: number
 
-  @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
-  @IsLessThan('totalAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID })
-  @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID, groups: ['default', 'claimant-suggestion'] })
+  @IsLessThan('totalAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID, groups: ['default', 'claimant-suggestion'] })
+  @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS, groups: ['default', 'claimant-suggestion'] })
   instalmentAmount?: number
 
   @ValidateNested({ groups: ['default', 'claimant-suggestion'] })
