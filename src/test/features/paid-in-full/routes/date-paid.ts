@@ -12,8 +12,8 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
-import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
+import { checkAuthorizationGuards } from 'test/features/paid-in-full/routes/checks/authorization-check'
+import { checkNotClaimantInCaseGuard } from 'test/features/paid-in-full/routes/checks/not-claimant-in-case-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -42,7 +42,7 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot retrieve CCJ draft', async () => {
+      it('should return 500 and render error page when cannot retrieve paid-in-full draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.rejectFind('Error')
 
@@ -54,7 +54,7 @@ describe('claim - date money was received', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.resolveFind('ccj')
+        draftStoreServiceMock.resolveFind('paid-in-full')
 
         await request(app)
           .get(pagePath)
@@ -86,7 +86,7 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 when cannot retrieve CCJ draft', async () => {
+      it('should return 500 when cannot retrieve paid-in-full draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.rejectFind('Error')
 
@@ -97,24 +97,24 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      // context('when form is valid', async () => {
-      //   it('should return 500 and render error page when cannot save CCJ draft', async () => {
-      //     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-      //     draftStoreServiceMock.resolveFind('ccj')
-      //     draftStoreServiceMock.rejectSave()
-      //
-      //     await request(app)
-      //       .post(pagePath)
-      //       .set('Cookie', `${cookieName}=ABC`)
-      //       .send(validFormData)
-      //       .expect(res => expect(res).to.be.serverError.withText('Error'))
-      //   })
-      // })
+      context('when form is valid', async () => {
+        it('should return 500 and render error page when cannot save paid-in-full draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('paid-in-full')
+          draftStoreServiceMock.rejectSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+      })
 
       context('when form is invalid', async () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
+          draftStoreServiceMock.resolveFind('paid-in-full')
 
           await request(app)
             .post(pagePath)
