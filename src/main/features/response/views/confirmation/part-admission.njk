@@ -1,5 +1,4 @@
 {% set claimantName = claim.claimData.claimant.name %}
-{% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
 {% set amount = claim.response.amount | numeral %}
 
 {% if claim.response.paymentDeclaration %}
@@ -20,4 +19,5 @@
   {% endif %}
 
   <p>{{ t('We’ve also sent them your explanation of why you do not believe you owe the amount claimed.') }}</p>
+  <p>{{ t('We’ll email you to tell you their response. If they don’t respond within 6 months, the claim will be put on hold.') }}</p>
 {% endif %}

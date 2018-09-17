@@ -1,25 +1,19 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% set claimantName = claim.claimData.claimant.name %}
-{% set claimantDetailsPageURI = ClaimPaths.claimantDetailsPage.evaluateUri({ externalId: claim.externalId }) %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
   <p>{{ t('We’ve emailed {{ claimantName }} to tell them you’ll pay immediately.', { claimantName: claimantName }) }}</p>
-
-  <p>{{ t('You need to make sure that:') }}</p>
-
-  <ul class="list list-bullet">
-    <li>{{ t('they get the money before 4pm on {{ paymentDate }} - they can request a County Court Judgment against you if not', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</li>
-    <li>{{ t('any cheques or bank transfers are clear in their account by the deadline') }}</li>
-    <li>{{ t('you get a receipt for any payments') }}</li>
-  </ul>
-
-  <p>{{ t('<a href="{{ link }}">Contact {{ claimantName }}</a> if you need their payment details.', { claimantName: claimantName, link: claimantDetailsPageURI }) | safe }}</p>
 {% endif %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
   <p>{{ t('We’ve emailed {{ claimantName }} your offer to pay by {{ paymentDate }} and your explanation of why you can’t pay before then.',
       { claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+  <p>{{ t('We’ll email you to tell you their response. If they do not respond within 6 months, the claim will be put on hold.') }}</p>
 {% endif %}
 
 {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
   <p>{{ t('We’ve emailed {{ claimantName }} to tell them you’ve suggested paying by instalments.', { claimantName: claimantName }) }}</p>
+  <p>{{ t('We’ll email you to tell you their response. If they do not respond within 6 months, the claim will be put on hold.') }}</p>
 {% endif %}

@@ -206,22 +206,24 @@ export const sampleFullAdmissionResponseDraftObj = {
     type: ResponseType.FULL_ADMISSION
   },
   fullAdmission: {
-    paymentOption: {
-      option: {
-        value: 'INSTALMENTS'
-      }
-    },
-    paymentPlan: {
-      totalAmount: 3685,
-      instalmentAmount: 100,
-      firstPaymentDate: {
-        year: 2019,
-        month: 1,
-        day: 1
+    paymentIntention: {
+      paymentOption: {
+        option: {
+          value: 'INSTALMENTS'
+        }
       },
-      paymentSchedule: {
-        value: 'EVERY_MONTH',
-        displayValue: 'every month'
+      paymentPlan: {
+        totalAmount: 3685,
+        instalmentAmount: 100,
+        firstPaymentDate: {
+          year: 2019,
+          month: 1,
+          day: 1
+        },
+        paymentSchedule: {
+          value: 'EVERY_MONTH',
+          displayValue: 'every month'
+        }
       }
     }
   },
@@ -267,6 +269,28 @@ export const sampleFullAdmissionResponseDraftObj = {
     },
     courtOrders: { declared: false },
     explanation: { text: 'aaa' }
+  }
+}
+
+export const sampleFullRejectionDraftObj = {
+  ...commonResponsePartial,
+  response: {
+    type: ResponseType.DEFENCE
+  },
+  rejectAllOfClaim: {
+    option: RejectAllOfClaimOption.ALREADY_PAID,
+    howMuchHaveYouPaid: {
+      amount: 200,
+      date: {
+        year: 2018,
+        month: 7,
+        day: 27
+      },
+      text: 'by pigeon'
+    },
+    whyDoYouDisagree: {
+      text: 'bla bla bla'
+    }
   }
 }
 
@@ -327,7 +351,7 @@ const sampleCCJDraftObj = {
 }
 
 export const sampleClaimantResponseDraftObj = {
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantResponseViewed: true,
   settleAdmitted: {
     admitted: {
       option: 'yes'
@@ -337,6 +361,42 @@ export const sampleClaimantResponseDraftObj = {
     accept: {
       option: 'yes'
     }
+  },
+  alternatePaymentMethod: {
+    paymentOption: {
+      option: {
+        value: 'INSTALMENTS',
+        displayValue: 'By instalments'
+      }
+    },
+    paymentPlan: {
+      totalAmount: 3326.59,
+      instalmentAmount: 10,
+      firstPaymentDate: {
+        year: 2019,
+        month: 1,
+        day: 1
+      },
+      paymentSchedule: {
+        value: 'EACH_WEEK',
+        displayValue: 'Each week'
+      }
+    }
+  },
+  formaliseRepaymentPlan: {
+    option: {
+      value: 'signSettlementAgreement',
+      displayValue: 'Sign a settlement agreement'
+    }
+  },
+  settlementAgreement: {
+    signed: true
+  },
+  freeMediation: {
+    option: FreeMediationOption.NO
+  },
+  rejectionReason: {
+    text: 'i reject repayment plan because ...'
   }
 }
 
@@ -355,6 +415,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'response:partial-admission':
       documentDocument = { ...samplePartialAdmissionResponseDraftObj, ...draftOverride }
+      break
+    case 'response:full-rejection':
+      documentDocument = { ...sampleFullRejectionDraftObj, ...draftOverride }
       break
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }

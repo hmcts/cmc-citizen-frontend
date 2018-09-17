@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import { dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
+import { addDaysFilter, dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -13,7 +13,7 @@ import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { DefendantPaymentOption, DefendantPaymentType } from 'response/form/models/defendantPaymentOption'
+import { PaymentOption as DefendantPaymentOption, PaymentType as DefendantPaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { SignatureType } from 'common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
@@ -29,7 +29,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
-import { Paths as ResponsePaths, PartAdmissionPaths } from 'features/response/paths'
+import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
@@ -64,6 +64,7 @@ export class Nunjucks {
     app.set('view engine', 'njk')
     const nunjucksEnv = nunjucks.configure([
       path.join(__dirname, '..', '..', 'views'),
+      path.join(__dirname, '..', '..', 'common'),
       path.join(__dirname, '..', '..', 'features'),
       path.join(__dirname, '..', '..', 'views', 'macro'),
       path.join(__dirname, '..', '..', '..', '..', 'node_modules', '@hmcts', 'cmc-common-frontend', 'macros')
@@ -94,6 +95,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
+    nunjucksEnv.addFilter('addDays', addDaysFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
     nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
@@ -128,6 +130,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
+    nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('MonthlyIncomeType', MonthlyIncomeType)
     nunjucksEnv.addGlobal('MonthlyExpenseType', MonthlyExpenseType)

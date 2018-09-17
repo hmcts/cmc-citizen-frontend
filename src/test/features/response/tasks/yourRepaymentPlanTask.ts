@@ -3,7 +3,7 @@ import { expect } from 'chai'
 
 import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
-import { DefendantPaymentPlan as PaymentPlan } from 'response/form/models/defendantPaymentPlan'
+import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { localDateFrom } from 'test/localDateUtils'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'

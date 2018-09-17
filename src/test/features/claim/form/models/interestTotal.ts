@@ -89,10 +89,10 @@ describe('InterestTotal', () => {
     })
 
     it('should reject custom InterestTotal with reason longer then upper limit', () => {
-      const errors = validator.validateSync(new InterestTotal(10, _.repeat('*', 251)))
+      const errors = validator.validateSync(new InterestTotal(10, _.repeat('*', 10001)))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, CommonValidationErrors.REASON_TOO_LONG.replace('$constraint1', '250'))
+      expectValidationError(errors, CommonValidationErrors.REASON_TOO_LONG.replace('$constraint1', '10000'))
     })
 
     it('should accept valid amount and reason', () => {

@@ -20,7 +20,11 @@ locals {
 
   s2sUrl = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
   claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
+  featureTogglesApiUrl = "http://rpe-feature-toggle-api-${local.local_env}.service.${local.local_ase}.internal"
   draftStoreUrl = "http://draft-store-service-${local.local_env}.service.${local.local_ase}.internal"
+
+  sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
+  asp_name = "${var.env == "prod" ? "cmc-citizen-frontend-prod" : "${var.product}-${var.env}"}"
 }
 
 data "azurerm_key_vault" "cmc_key_vault" {
@@ -59,7 +63,7 @@ data "azurerm_key_vault_secret" "staff_email" {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:hmcts/moj-module-webapp.git?ref=RPE-389/local-cache"
+  source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
@@ -71,6 +75,9 @@ module "citizen-frontend" {
   https_only = "true"
   capacity = "${var.capacity}"
   common_tags = "${var.common_tags}"
+  asp_name = "${local.asp_name}"
+  asp_rg = "${local.asp_name}"
+  instance_size = "${local.sku_size}"
 
   app_settings = {
     // Node specific vars
@@ -109,6 +116,7 @@ module "citizen-frontend" {
     // Our service dependencies
     CLAIM_STORE_URL = "${local.claimStoreUrl}"
 
+    FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
     FEEDBACK_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPFB/"
@@ -117,10 +125,8 @@ module "citizen-frontend" {
     // Feature toggles
     FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
     // Enabled everywhere except prod
-    FEATURE_STATEMENT_OF_MEANS = "${var.feature_statement_of_means}"
-    FEATURE_FULL_ADMISSION = "${var.feature_full_admission}"
+    FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
-    FEATURE_PARTIAL_ADMISSION = "${var.feature_partial_admission}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"

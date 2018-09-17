@@ -3,6 +3,8 @@ import { toNumberOrUndefined } from 'main/common/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { IsDefined, IsIn, IsPositive } from 'class-validator'
 import { Fractions } from '@hmcts/cmc-validators'
+import { Income } from 'claims/models/response/statement-of-means/income'
+import { Expense } from 'claims/models/response/statement-of-means/expense'
 import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
 import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
@@ -55,6 +57,28 @@ export class IncomeExpenseSource {
     return new IncomeExpenseSource(
       toNumberOrUndefined(expenseSource.amount),
       toIncomeExpenseScheduleOrUndefined(schedule)
+    )
+  }
+
+  static fromClaimIncome (income: Income): IncomeExpenseSource {
+    if (!income) {
+      return undefined
+    }
+
+    return new IncomeExpenseSource(
+      toNumberOrUndefined(income.amount),
+      toIncomeExpenseScheduleOrUndefined(income.frequency)
+    )
+  }
+
+  static fromClaimExpense (expense: Expense): IncomeExpenseSource {
+    if (!expense) {
+      return undefined
+    }
+
+    return new IncomeExpenseSource(
+      toNumberOrUndefined(expense.amount),
+      toIncomeExpenseScheduleOrUndefined(expense.frequency)
     )
   }
 }

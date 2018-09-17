@@ -13,6 +13,9 @@
   "claim-store": {
     "url": "http://localhost:14400"
   },
+  "feature-toggles-api": {
+    "url": "http://localhost:18580"
+  },
   "draft-store": {
     "url": "http://localhost:18800"
   },
@@ -24,10 +27,8 @@
   },
   "featureToggles": {
     "testingSupport": true,
-    "fullAdmission": true,
-    "partialAdmission": true,
+    "newFeaturesConsent": true,
     "admissions": true,
-    "statementOfMeans": true,
     "returnErrorToUser": true
   },
   "appInsights": {

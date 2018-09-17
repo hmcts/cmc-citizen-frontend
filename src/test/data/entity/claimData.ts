@@ -3,7 +3,7 @@ import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
-import moment = require('moment')
+import * as moment from 'moment'
 
 export const interestDateData = {
   type: InterestDateType.CUSTOM,

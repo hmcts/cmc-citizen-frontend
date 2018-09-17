@@ -6,6 +6,10 @@ import { MadeBy } from 'offer/form/models/madeBy'
 export class Settlement {
   partyStatements: PartyStatement[]
 
+  constructor (partyStatements?: PartyStatement[]) {
+    this.partyStatements = partyStatements
+  }
+
   deserialize (input: any): Settlement {
     if (input) {
       this.partyStatements = this.deserializePartyStatement(input.partyStatements)
@@ -21,6 +25,17 @@ export class Settlement {
     const partyStatement: PartyStatement = this.partyStatements
       .filter(this.isOfferMadeByDefendant)
       .pop()
+
+    return partyStatement ? partyStatement.offer : undefined
+  }
+
+  getLastOffer (): Offer {
+    if (!this.partyStatements) {
+      return undefined
+    }
+
+    const partyStatement: PartyStatement = this.partyStatements.reverse()
+      .find(statement => statement.type === StatementType.OFFER.value)
 
     return partyStatement ? partyStatement.offer : undefined
   }
@@ -51,6 +66,11 @@ export class Settlement {
 
   isOfferResponded (): boolean {
     return this.isOfferAccepted() || this.isOfferRejected()
+  }
+
+  isThroughAdmissions (): boolean {
+    const lastOffer: Offer = this.getLastOffer()
+    return lastOffer && !!lastOffer.paymentIntention
   }
 
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {

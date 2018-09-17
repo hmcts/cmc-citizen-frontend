@@ -28,6 +28,7 @@ export class Claim {
   claimantEmail: string
   countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
+  countyCourtJudgmentIssuedAt: Moment
   response: Response
   defendantEmail: string
   settlement: Settlement
@@ -35,6 +36,8 @@ export class Claim {
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
+  features: string[]
+  directionsQuestionnaireDeadline: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -62,6 +65,9 @@ export class Claim {
       if (input.countyCourtJudgmentRequestedAt) {
         this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
       }
+      if (input.countyCourtJudgmentIssuedAt) {
+        this.countyCourtJudgmentIssuedAt = MomentFactory.parse(input.countyCourtJudgmentIssuedAt)
+      }
       if (input.settlement) {
         this.settlement = new Settlement().deserialize(input.settlement)
       }
@@ -71,6 +77,10 @@ export class Claim {
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
+      this.features = input.features
+      if (input.directionsQuestionnaireDeadline) {
+        this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
+      }
     }
     return this
   }

@@ -1,6 +1,7 @@
 import { MomentFormatter } from 'utils/momentFormatter'
 import * as moment from 'moment'
 import { Logger } from '@hmcts/nodejs-logging'
+import { MomentFactory } from 'shared/momentFactory'
 
 const logger = Logger.getLogger('modules/nunjucks/dateFilter')
 
@@ -50,6 +51,49 @@ export function dateInputFilter (value: moment.Moment | string): string {
       throw new Error('Invalid date')
     }
     return MomentFormatter.formatInputDate(date)
+  } catch (err) {
+    logger.error(err)
+    throw err
+  }
+}
+
+/* *
+ * This filter should be used when you need to dynamically modify a date. The keyword 'now' may be given as
+ * input to generate dates relative to the current date.
+ *
+ * Usage (in njk):
+ * Example 1:
+ * {{ someMoment | addDays(1) }}
+ *
+ * output:
+ *  a moment representing the day after that given
+ *
+ * Example 2:
+ * {{ 'now' | addDays(-7) }}
+ *
+ * output:
+ *  a moment representing the date 1 week before today
+ */
+export function addDaysFilter (value: moment.Moment | string, num: number): moment.Moment {
+  try {
+    if (!value || !(typeof value === 'string' || value instanceof moment)) {
+      throw new Error('Input should be moment or string, cannot be empty')
+    }
+
+    let date: moment.Moment
+    if (typeof value === 'string') {
+      if (value === 'now') {
+        date = MomentFactory.currentDate()
+      } else {
+        date = moment(value)
+      }
+    } else {
+      date = value.clone()
+    }
+    if (!date.isValid()) {
+      throw new Error('Invalid date')
+    }
+    return date.add(num, 'day')
   } catch (err) {
     logger.error(err)
     throw err

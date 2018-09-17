@@ -17,6 +17,18 @@ const claimStoreResponsesApiUrl: string = `${claimApiBaseUrl}/responses/claim`
 
 const logger = Logger.getLogger('claims/claimStoreClient')
 
+function buildCaseSubmissionHeaders (claimant: User, features: string[]): object {
+  const headers = {
+    Authorization: `Bearer ${claimant.bearerToken}`
+  }
+
+  if (features.length > 0) {
+    headers['Features'] = features
+  }
+
+  return headers
+}
+
 export class ClaimStoreClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
     // Nothing to do
@@ -32,14 +44,13 @@ export class ClaimStoreClient {
     })
   }
 
-  saveClaim (draft: Draft<DraftClaim>, claimant: User): Promise<Claim> {
+  saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
         body: convertedDraftClaim,
-        headers: {
-          Authorization: `Bearer ${claimant.bearerToken}`
-        }
+        headers: buildCaseSubmissionHeaders(claimant, features)
       })
       .then(claim => {
         return new Claim().deserialize(claim)
@@ -54,8 +65,9 @@ export class ClaimStoreClient {
       })
   }
 
-  saveResponseForUser (externalId: string, draft: Draft<ResponseDraft>, user: User): Promise<void> {
-    const response = ResponseModelConverter.convert(draft.document)
+  saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, user: User): Promise<void> {
+    const response = ResponseModelConverter.convert(draft.document, claim)
+    const externalId: string = claim.externalId
 
     return this.request
       .post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
@@ -170,5 +182,37 @@ export class ClaimStoreClient {
     return this.request
       .get(`${claimStoreApiUrl}/${reference}/defendant-link-status`)
       .then(linkStatus => linkStatus.linked)
+  }
+
+  async retrieveUserRoles (user: User): Promise<string[]> {
+    if (!user) {
+      return Promise.reject(new Error('User must be set'))
+    }
+
+    return this.request
+      .get(`${claimApiBaseUrl}/user/roles`, {
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+  }
+
+  // This is a tactical solution until SIDAM is able to add roles to user ID
+  addRoleToUser (user: User, role: string): Promise<void> {
+    if (!user) {
+      return Promise.reject(new Error('User is required'))
+    }
+
+    if (!role) {
+      return Promise.reject(new Error('role is required'))
+    }
+
+    return this.request
+      .post(`${claimApiBaseUrl}/user/roles`, {
+        body: { role: role },
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
   }
 }
