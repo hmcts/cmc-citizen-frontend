@@ -1,5 +1,11 @@
 import { PaymentOption } from 'integration-test/data/payment-option'
-import { createClaimant, createDefendant, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
+import {
+  claimAmount,
+  createClaimant,
+  createDefendant,
+  DEFAULT_PASSWORD,
+  defence
+} from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
@@ -27,8 +33,6 @@ import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defendant'
 import { PartyType } from 'integration-test/data/party-type'
 import { DefenceType } from 'integration-test/data/defence-type'
-import { DefendantHowMuchHaveYouPaidClaimantPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid-claimant'
-import { DefendantWhenDidYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-did-you-pay'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
@@ -64,8 +68,7 @@ const defendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentP
 const defendantWhenWillYouPage: DefendantWhenWillYouPayPage = new DefendantWhenWillYouPayPage()
 const defendantSteps: DefendantSteps = new DefendantSteps()
 const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
-const defendantHowMuchHaveYouPaidClaimantPage: DefendantHowMuchHaveYouPaidClaimantPage = new DefendantHowMuchHaveYouPaidClaimantPage()
-const defendantWhenDidYouPayPage: DefendantWhenDidYouPayPage = new DefendantWhenDidYouPayPage()
+const defendantHowMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
 const haveYouPaidTheClaimantPage: DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage = new DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage()
 
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'BS1 5TL' }
@@ -176,17 +179,16 @@ export class DefenceSteps {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.rejectAllOfMoneyClaim()
     defendantRejectAllOfClaimPage.selectAlreadyPaidOption()
-    defendantHowMuchHaveYouPaidClaimantPage.selectLessThanClaimedOption()
+    defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
+    defendantHowMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(claimAmount.getTotal() - 1, '2018-01-01', 'Paid Cash')
   }
 
   enterWhenDidYouPay (defence: PartialDefence) {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.rejectAllOfMoneyClaim()
     defendantRejectAllOfClaimPage.selectAlreadyPaidOption()
-    defendantHowMuchHaveYouPaidClaimantPage.selectAmountClaimedOption()
-    defendantSteps.selectTaskWhenDidYouPay()
-    defendantWhenDidYouPayPage.enterDateAndExplaination('2017-01-01', 'Paid Cash')
-    I.click('Save and continue')
+    defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
+    defendantHowMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(claimAmount.getTotal(), '2018-01-01', 'Paid Cash')
   }
 
   admitPartOfTheClaimAlreadyPaid (defence: PartialDefence): void {
@@ -266,7 +268,7 @@ export class DefenceSteps {
         this.enterWhenDidYouPay(defence)
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
-        I.see('How did you pay the amount claimed?')
+        I.see('How did you pay this amount?')
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence)
@@ -302,7 +304,7 @@ export class DefenceSteps {
         break
       case PaymentOption.BY_SET_DATE:
         defendantWhenWillYouPage.chooseFullBySetDate()
-        defendantPaymentDatePage.paymentBySetDate('2025-01-01')
+        defendantPaymentDatePage.enterDate('2025-01-01')
         defendantPaymentDatePage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
         statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
@@ -389,10 +391,9 @@ export class DefenceSteps {
 
       case DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT:
         this.chooseLessThenAmountClaimedOption()
-        I.see('the admission form')
-        I.see(claimRef)
+        I.see('You’ve paid less than the total claim amount')
+        I.see('You need to explain why you believe you don’t owe the remaining amount')
         I.see(claimant.name)
-        I.see(defendant.name)
         break
 
       default:

@@ -19,7 +19,7 @@ import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/chec
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
-const headerText: string = 'Add a phone number (optional)'
+const headerText: string = 'Enter a phone number (optional)'
 
 describe('Defendant user details: your mobile page', () => {
   attachDefaultHooks(app)

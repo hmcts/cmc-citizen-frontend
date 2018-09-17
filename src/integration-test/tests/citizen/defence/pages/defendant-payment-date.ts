@@ -15,17 +15,16 @@ const buttons = {
 
 export class DefendantPaymentDatePage {
 
-  paymentBySetDate (paymentDate: string): void {
-    const [ year, month, day ] = DateParser.parse(paymentDate)
+  enterDate (date: string): void {
+    const [ year, month, day ] = DateParser.parse(date)
 
     I.fillField(fields.day, day)
     I.fillField(fields.month, month)
     I.fillField(fields.year, year)
-    I.click(buttons.submit)
   }
 
   saveAndContinue (): void {
     I.click(buttons.submit)
-
   }
+
 }
