@@ -33,9 +33,9 @@
 
       {% if claim.countyCourtJudgmentIssuedAt %}
         {% if paymentIntentionAccepted %}
-          <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
+          <p>{{ t('A County Court Judgment has been requested against the defendant.') }}</p>
         {% else %}
-          <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}</p>
+          <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been requested against them.') }}</p>
         {% endif %}
       {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
         {% include "./confirmation/accepted-payment-plan.njk" %}
