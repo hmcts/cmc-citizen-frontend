@@ -18,6 +18,7 @@ export class DraftClaimantResponse extends DraftDocument {
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
   settlementAgreement?: SettlementAgreement
   alternatePaymentMethod?: PaymentIntention
+  courtOfferedPaymentIntention?: PaymentIntention
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
@@ -59,6 +60,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.alternatePaymentMethod) {
         this.alternatePaymentMethod = PaymentIntention.deserialise(input.alternatePaymentMethod)
+      }
+      if (input.courtOfferedPaymentIntention) {
+        this.courtOfferedPaymentIntention = PaymentIntention.deserialise(input.courtOfferedPaymentIntention)
       }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount

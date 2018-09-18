@@ -56,9 +56,10 @@ export abstract class AbstractPaymentDatePage<Draft> {
             this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentDate = form.model)
 
             const user: User = res.locals.user
-            await new DraftService().save(res.locals.draft, user.bearerToken)
-
+            
             res.redirect(this.buildPostSubmissionUri(req, res))
+            await new DraftService().save(res.locals.draft, user.bearerToken)
+            console.log('paymentIntention-PaymentDate----->', res.locals.draft.document)
           }
         }))
   }

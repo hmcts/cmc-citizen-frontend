@@ -11,32 +11,20 @@ import { Paths } from 'claimant-response/paths'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Claim } from 'main/app/claims/models/claim'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
-import { Moment } from 'moment'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { ResponseType } from 'claims/models/response/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
+  const draft: Draft<DraftClaimantResponse> = res.locals.draft
+  console.log('draft-------->',JSON.stringify(draft))
+  console.log('courtOfferedPaymentIntention---->',draft.document.courtOfferedPaymentIntention)
 
   res.render(Paths.courtOfferedSetDatePage.associatedView, {
     form: form,
     claim: claim,
-    paymentDate: getPaymentDate(claim)
+    paymentDate: draft.document.courtOfferedPaymentIntention.paymentDate.date.toMoment()
   })
-}
-
-function getPaymentDate (claim: Claim): Moment {
-  switch (claim.response.responseType) {
-    case ResponseType.FULL_ADMISSION:
-    case ResponseType.PART_ADMISSION:
-      return PaymentPlanHelper
-        .createPaymentPlanFromClaimWhenSetDate(
-          claim.response,
-          claim.claimData.amount.totalAmount()
-        ).calculateLastPaymentDate()
-  }
 }
 
 /* tslint:disable:no-default-export */

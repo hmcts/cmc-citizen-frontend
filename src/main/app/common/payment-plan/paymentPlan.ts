@@ -9,10 +9,10 @@ export class PaymentPlan {
   private numberOfInstalments: number
 
   constructor (
-    public readonly totalAmount: number,
-    public readonly instalmentAmount: number,
-    public readonly frequency: Frequency,
-    public readonly startDate: moment.Moment) {
+    public totalAmount: number,
+    public instalmentAmount: number,
+    public frequency: Frequency,
+    public startDate: moment.Moment) {
     this.numberOfInstalments = Math.ceil(totalAmount / instalmentAmount)
   }
 
@@ -86,5 +86,15 @@ export class PaymentPlan {
   private pluralize (num: number, word: string) {
     const plural: string = num < 2 ? '' : 's'
     return `${num} ${word}${plural}`
+  }
+
+  deserialize (input?: any): PaymentPlan {
+    if (input) {
+      this.totalAmount = input.totalAmount
+      this.instalmentAmount = input.instalmentAmount
+      this.startDate = input.startDate
+      this.frequency = input.frequency
+    }
+    return this
   }
 }
