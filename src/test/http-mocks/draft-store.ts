@@ -41,12 +41,12 @@ import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
-import * as moment from "moment";
+import * as moment from 'moment'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
 export const samplePaidInFullDraftObj = {
-    datePaid: moment()
+  datePaid: moment()
 }
 
 export const sampleClaimDraftObj = {

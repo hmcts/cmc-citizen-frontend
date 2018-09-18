@@ -41,4 +41,3 @@ export default express.Router()
         res.redirect(Paths.datePaidPage.uri.replace(':externalId', externalId))
       }
     }))
-
