@@ -21,7 +21,6 @@
     ],
     "no-default-export": true,
     "no-floating-promises": false,
-    "no-console": true,
-    "no-unused-variable": false
+    "no-console": true
   }
 }
