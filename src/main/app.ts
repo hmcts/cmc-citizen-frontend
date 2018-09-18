@@ -24,79 +24,84 @@ import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 
-export const app: express.Express = express()
-
 const env: string = process.env.NODE_ENV || 'development'
-app.locals.ENV = env
-
 const developmentMode: boolean = env === 'development'
 
-const i18next: I18Next = I18Next.enableFor(app)
+export function createApp (): express.Express {
+  const app: express.Express = express()
+  app.locals.ENV = env
 
-new Nunjucks(developmentMode, i18next)
-  .enableFor(app)
-new Helmet(config.get<HelmetConfig>('security'), developmentMode)
-  .enableFor(app)
+  const i18next: I18Next = I18Next.enableFor(app)
 
-app.enable('trust proxy')
-app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({
-  extended: true
-}))
-app.use(cookieParser())
+  new Nunjucks(developmentMode, i18next)
+    .enableFor(app)
+  new Helmet(config.get<HelmetConfig>('security'), developmentMode)
+    .enableFor(app)
 
-app.use(express.static(path.join(__dirname, 'public')))
+  app.enable('trust proxy')
+  app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }))
+  app.use(cookieParser())
 
-if (env !== 'mocha') {
-  new CsrfProtection().enableFor(app)
-}
+  app.use(express.static(path.join(__dirname, 'public')))
 
-new EligibilityFeature().enableFor(app)
-new DashboardFeature().enableFor(app)
-new ClaimIssueFeature().enableFor(app)
-new DefendantFirstContactFeature().enableFor(app)
-new DefendantResponseFeature().enableFor(app)
-new CCJFeature().enableFor(app)
-new OfferFeature().enableFor(app)
-
-if (FeatureToggles.isEnabled('testingSupport')) {
-  new TestingSupportFeature().enableFor(app)
-}
-
-if (FeatureToggles.isEnabled('admissions')) {
-  new ClaimantResponseFeature().enableFor(app)
-}
-// Below method overrides the moment's toISOString method, which is used by RequestPromise
-// to convert moment object to String
-moment.prototype.toISOString = function () {
-  return this.format('YYYY-MM-DD[T]HH:mm:ss.SSS')
-}
-
-app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
-
-// Below will match all routes not covered by the router, which effectively translates to a 404 response
-app.use((req, res, next) => {
-  next(new NotFoundError(req.path))
-})
-
-// error handlers
-const errorLogger: ErrorLogger = new ErrorLogger()
-app.use((err, req, res, next) => {
-  errorLogger.log(err)
-  res.status(err.statusCode || 500)
-  if (err.statusCode === 302 && err.associatedView) {
-    res.redirect(err.associatedView)
-  } else if (err.associatedView) {
-    res.render(err.associatedView)
-  } else if (err.statusCode === 403) {
-    res.render(new ForbiddenError().associatedView)
-  } else {
-    const view = FeatureToggles.isEnabled('returnErrorToUser') ? 'error_dev' : 'error'
-    res.render(view, {
-      error: err,
-      title: 'error'
-    })
+  if (env !== 'mocha') {
+    new CsrfProtection().enableFor(app)
   }
-  next()
-})
+
+  new EligibilityFeature().enableFor(app)
+  new DashboardFeature().enableFor(app)
+  new ClaimIssueFeature().enableFor(app)
+  new DefendantFirstContactFeature().enableFor(app)
+  new DefendantResponseFeature().enableFor(app)
+  new CCJFeature().enableFor(app)
+  new OfferFeature().enableFor(app)
+
+  if (FeatureToggles.isEnabled('testingSupport')) {
+    new TestingSupportFeature().enableFor(app)
+  }
+
+  if (FeatureToggles.isEnabled('admissions')) {
+    new ClaimantResponseFeature().enableFor(app)
+  }
+  // Below method overrides the moment's toISOString method, which is used by RequestPromise
+  // to convert moment object to String
+  moment.prototype.toISOString = function () {
+    return this.format('YYYY-MM-DD[T]HH:mm:ss.SSS')
+  }
+
+  app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+
+  // Below will match all routes not covered by the router, which effectively translates to a 404 response
+  app.use((req, res, next) => {
+    next(new NotFoundError(req.path))
+  })
+
+  // error handlers
+  const errorLogger: ErrorLogger = new ErrorLogger()
+  app.use((err, req, res, next) => {
+    errorLogger.log(err)
+    res.status(err.statusCode || 500)
+    if (err.statusCode === 302 && err.associatedView) {
+      res.redirect(err.associatedView)
+    } else if (err.associatedView) {
+      res.render(err.associatedView)
+    } else if (err.statusCode === 403) {
+      res.render(new ForbiddenError().associatedView)
+    } else {
+      const view = FeatureToggles.isEnabled('returnErrorToUser') ? 'error_dev' : 'error'
+      res.render(view, {
+        error: err,
+        title: 'error'
+      })
+    }
+    next()
+  })
+
+  return app
+}
+
+export const app: express.Express = createApp()
