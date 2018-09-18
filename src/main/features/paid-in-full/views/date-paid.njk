@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, errorSummary %}
+{% from "form.njk" import csrfProtection, errorSummary, saveAndContinueButton %}
 {% from "timelineFragment.njk" import timelineFragment %}
 {% from "date.njk" import dateInput %}
 
@@ -14,8 +14,7 @@
 
         <p>{{ t('Enter the exact date the money was clear in your account if you were paid by cheque or bank transfer.') }}</p>
         {{ dateInput(form = form, name = 'date', hint = 'For example, 10 9 2018') }}
-        <a class="button" href="{{ "nextPageUrl" }}">{{ t('Continue') }}</a>
-
+        {{ saveAndContinueButton() }}
       </form>
     </div>
   </div>

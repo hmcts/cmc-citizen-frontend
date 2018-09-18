@@ -19,10 +19,13 @@ export class DatePaid {
   }
 
   static fromObject (input?: any): DatePaid {
-    if (input == null) {
+    if (!input) {
       return input
     }
-    return new DatePaid(input)
+
+    const datePaid = new DatePaid(LocalDate.fromObject(input.date))
+
+    return datePaid
   }
 
   deserialize (input: any): DatePaid {

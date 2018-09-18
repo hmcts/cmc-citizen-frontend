@@ -25,6 +25,7 @@ export default express.Router()
     Paths.datePaidPage.uri,
     FormValidator.requestHandler(DatePaid, DatePaid.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+
       const form: Form<DatePaid> = req.body
 
       if (form.hasErrors()) {
@@ -40,3 +41,4 @@ export default express.Router()
         res.redirect(Paths.datePaidPage.uri.replace(':externalId', externalId))
       }
     }))
+

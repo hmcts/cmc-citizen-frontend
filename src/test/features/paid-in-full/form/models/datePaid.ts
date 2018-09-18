@@ -26,9 +26,11 @@ describe('DatePaid', () => {
 
     it('should deserialize all fields', () => {
       expect(DatePaid.fromObject({
-        year: 2017,
-        month: 12,
-        day: 31
+        date: {
+          year: 2017,
+          month: 12,
+          day: 31
+        }
       })).to.deep.equal(datePaid(2017, 12, 31))
     })
   })

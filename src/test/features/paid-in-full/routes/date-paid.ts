@@ -18,9 +18,9 @@ import { checkNotClaimantInCaseGuard } from 'test/features/paid-in-full/routes/c
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = Paths.datePaidPage.uri.replace(':externalId', externalId)
+const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
 
-describe('claim - date money was received', () => {
+describe.only('claim - date money was received', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -42,7 +42,7 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot retrieve paid-in-full draft', async () => {
+      it('should return 500 and render error page when cannot retrieve paidInFull draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.rejectFind('Error')
 
@@ -54,7 +54,7 @@ describe('claim - date money was received', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.resolveFind('paid-in-full')
+        draftStoreServiceMock.resolveFind('paidInFull')
 
         await request(app)
           .get(pagePath)
@@ -65,7 +65,7 @@ describe('claim - date money was received', () => {
   })
 
   describe('on POST', () => {
-    const validFormData = { known: 'true', date: { day: '31', month: '12', year: '2017' } }
+    const validFormData = { date: { day: '31', month: '12', year: '2000' } }
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
@@ -86,7 +86,7 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 when cannot retrieve paid-in-full draft', async () => {
+      it('should return 500 when cannot retrieve paidInFull draft', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.rejectFind('Error')
 
@@ -97,10 +97,11 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
+      // EXPECTING 500 BUT GETS 404: expects nothing but gets draft
       context('when form is valid', async () => {
-        it('should return 500 and render error page when cannot save paid-in-full draft', async () => {
+        it('should return 500 and render error page when cannot save paidInFull draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('paid-in-full')
+          draftStoreServiceMock.resolveFind('paidInFull')
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -114,12 +115,12 @@ describe('claim - date money was received', () => {
       context('when form is invalid', async () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('paid-in-full')
+          draftStoreServiceMock.resolveFind('paidInFull')
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ known: undefined })
+            .send({ date: { day: '31', month: '12', year: '2020' } })
             .expect(res => expect(res).to.be.successful.withText('When did you receive the money?', 'div class="error-summary"'))
         })
       })

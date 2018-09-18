@@ -429,7 +429,6 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'paid-in-full':
       documentDocument = { ...samplePaidInFullDraftObj, ...draftOverride }
-      console.log("HEYYYY: ", samplePaidInFullDraftObj)
       break
     case 'claimantResponse':
       documentDocument = { ...sampleClaimantResponseDraftObj, ...draftOverride }
