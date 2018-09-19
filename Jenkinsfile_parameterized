@@ -24,8 +24,10 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-
-withParameterizedPipeline('nodejs', 'cmc', 'citizen-frontend', params.ENVIRONMENT, 'sandbox') {
+def type = "nodejs"
+def product = "cmc"
+def component = "citizen-frontend"
+withPipeline(type, product, component) {
   after('build') {
     sh 'yarn setup'
   }
