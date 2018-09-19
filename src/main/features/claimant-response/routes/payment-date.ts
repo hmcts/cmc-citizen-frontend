@@ -13,10 +13,9 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { Moment } from 'moment'
 import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
-import { Draft } from '@hmcts/draft-store-client'
-import { DraftService } from 'services/draftService'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { LocalDate } from 'forms/models/localDate'
+import { Draft } from '@hmcts/draft-store-client'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -29,18 +28,18 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
-    const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+    const draft: Draft<DraftClaimantResponse> = res.locals.draft
     const user: User = res.locals.user
-    
+
     const externalId: string = req.params.externalId
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtDecision = this.getCourtDecision(claimResponse, claim, draft, user)
 
     switch (courtDecision) {
-      case DecisionType.COURT: {
+      case DecisionType.COURT:
+      case DecisionType.DEFENDANT: {
         return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
       }
-      case DecisionType.DEFENDANT:
       case DecisionType.CLAIMANT: {
         return Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })
       }
@@ -75,16 +74,16 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   }
 
   saveCourtOfferedPaymentIntention (draft: Draft<DraftClaimantResponse>, defendantPaymentPlanWhenSetDate: PaymentPlan, courtOfferedPaymentDate: Moment, defendantLastPaymentDate: Moment, user: User) {
-    draft.document.courtOfferedPaymentIntention = new PaymentIntention()
+    const courtOfferedPaymentIntention = new PaymentIntention()
 
-    draft.document.courtOfferedPaymentIntention.paymentPlan = defendantPaymentPlanWhenSetDate
-    draft.document.courtOfferedPaymentIntention.paymentDate = new LocalDate(courtOfferedPaymentDate.year(),
+    courtOfferedPaymentIntention.paymentPlan = defendantPaymentPlanWhenSetDate
+    courtOfferedPaymentIntention.paymentDate = new LocalDate(courtOfferedPaymentDate.year(),
       defendantLastPaymentDate.month(),
       defendantLastPaymentDate.day())
-    draft.document.courtOfferedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.paymentOption
+    courtOfferedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.paymentOption
 
-    // await new DraftService().save(draft, user.bearerToken)
-    console.log('payment-date-courtOfferedPaymentIntention------>', draft.document.courtOfferedPaymentIntention)
+    draft.document.courtOfferedPaymentIntention = courtOfferedPaymentIntention
+    console.log('buildPostSubmissionUri--draft--->', JSON.stringify(draft))
   }
 
   getCourtOfferedDate (courtDecision: DecisionType,
