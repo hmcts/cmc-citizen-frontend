@@ -1,0 +1,71 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'State your disability status' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate
+            class="analytics-submit-event-trigger"
+            data-event-action="SoM: State your disability status"
+            data-event-label-from="value">
+
+        {{ csrfProtection(csrf) }}
+
+        {% set valueError = form.errorFor('value') %}
+        <fieldset id="value" class="form-group {% if valueError %} form-group-error{% endif %}">
+          <legend class="visually-hidden">{{ t('State your disability status') }}</legend>
+
+          {% if valueError %}<span class="error-message">{{ t(valueError) }}</span>{% endif %}
+          {{
+          radioGroup(
+            form = form,
+            label = 'State your disability status',
+            labelForScreenReadersOnly = true,
+            name = 'value',
+            options = [
+              {
+                bold: true,
+                label: 'None',
+                hint: 'You’re not disabled',
+                value: 'NO',
+                checked: (form.valueFor('value').value === 'NO')
+              },
+              {
+                bold: true,
+                label: 'Single',
+                hint: 'You’re disabled and your partner is not, if you have one',
+                value: 'SINGLE',
+                checked: (form.valueFor('value').value === 'SINGLE')
+              },
+              {
+                bold: true,
+                label: 'Couple',
+                hint: 'You and your partner are both disabled',
+                value: 'COUPLE',
+                checked: (form.valueFor('value').value === 'COUPLE')
+              },
+              {
+                bold: true,
+                label: 'Another type of organisation',
+                hint: 'For example a partnership, trust, charity, club or association',
+                value: 'organisation',
+                checked: (form.valueFor('type').value === 'organisation')
+              }
+            ]
+          )
+          }}
+
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

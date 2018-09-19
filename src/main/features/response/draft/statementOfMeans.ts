@@ -14,6 +14,7 @@ import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
+import { Disabilities } from 'response/form/models/statement-of-means/disabilities'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -32,6 +33,7 @@ export class StatementOfMeans {
   monthlyExpenses?: MonthlyExpenses
   courtOrders?: CourtOrders
   explanation?: Explanation
+  disabilities?: Disabilities
 
   deserialize (input: any): StatementOfMeans {
     if (input) {
@@ -51,6 +53,7 @@ export class StatementOfMeans {
       this.monthlyExpenses = new MonthlyExpenses().deserialize(input.monthlyExpenses)
       this.courtOrders = new CourtOrders().deserialize(input.courtOrders)
       this.explanation = new Explanation().deserialize(input.explanation)
+      this.disabilities = Disabilities.valueOf(input.disabilities)
     }
     return this
   }
