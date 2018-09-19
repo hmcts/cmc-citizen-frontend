@@ -6,10 +6,13 @@ import * as common from './commonMocks'
 import * as draftStoreMock from 'test/http-mocks/draft-store'
 
 export class ClaimIssueTestSuite extends FeatureTestSuite {
+
+   protected uuid = '91e1c70f-7d2c-4c1e-0003-cbb02c0e64d6'
+
   trainMocks () {
     common.mockIdamService()
     common.mockFees()
-    claimStoreMock.resolveRetrieveClaimByExternalId().persist()
+    claimStoreMock.resolveRetrieveClaimByFixedExternalId(this.uuid).persist()
     draftStoreMock.resolveFindAllDrafts().persist()
   }
 

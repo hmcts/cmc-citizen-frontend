@@ -143,6 +143,12 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
 
+export function resolveRetrieveClaimByFixedExternalId (externalId: string, claimOverride?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp(`/${externalId}`))
+    .reply(HttpStatus.OK, { ...sampleClaimObj, externalId: externalId, ...claimOverride })
+}
+
 export function resolveRetrieveClaimByExternalIdWithResponse (override?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))

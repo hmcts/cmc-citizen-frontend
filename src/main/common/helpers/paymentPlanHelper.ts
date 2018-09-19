@@ -89,7 +89,7 @@ export class PaymentPlanHelper {
   }
 
   private static createPaymentPlanFromDraftDraftClaimantResponse (draft: DraftClaimantResponse): PaymentPlan {
-    if (!draft) {
+    if (!draft || !draft.alternatePaymentMethod) {
       return undefined
     }
 

@@ -18,6 +18,7 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { CCJClient } from 'claims/ccjClient'
 import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import * as moment from 'moment'
 
 function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim: Claim) {
   if (draft.document.alternatePaymentMethod
@@ -29,12 +30,15 @@ function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim
 
   const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
   const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+  const startDate: moment.Moment = (claimantPaymentPlan && claimantPaymentPlan.startDate)
+    ? claimantPaymentPlan.startDate
+    : defendantPaymentPlan.startDate
 
   const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
     defendantPaymentPlan.totalAmount,
     draft.document.courtOrderAmount,
     Frequency.MONTHLY,
-    claimantPaymentPlan.startDate
+    startDate
   )
 
   return courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)

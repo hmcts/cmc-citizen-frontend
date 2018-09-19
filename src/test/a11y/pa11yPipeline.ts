@@ -30,7 +30,7 @@ export class Pa11yPipeline {
 
         it('should have the correct heading', async () => {
           while (pa11yTest.headingResults == null) {
-            await sleep(1000)
+            await sleep(100)
           }
           // verify
           expect(pa11yTest.headingResults.issues, JSON.stringify(pa11yTest.headingResults.issues)).to.be.empty
@@ -38,7 +38,7 @@ export class Pa11yPipeline {
 
         it('should have no a11y errors', async () => {
           while (pa11yTest.a11yResults == null) {
-            await sleep(1000)
+            await sleep(100)
           }
           // verify
           expect(pa11yTest.a11yResults.issues, JSON.stringify(pa11yTest.a11yResults.issues)).to.be.empty
@@ -55,7 +55,7 @@ export class Pa11yPipeline {
       while (testsRunning.length >= this.parallelism) {
         await sleep(100)
       }
-      const test: Pa11yTest = testQueue.pop()
+      const test: Pa11yTest = testQueue.shift()
       testsRunning.push(test)
       test.test().then(() => testsRunning.splice(testsRunning.indexOf(test), 1))
     }

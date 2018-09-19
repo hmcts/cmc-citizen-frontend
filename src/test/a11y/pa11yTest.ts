@@ -66,8 +66,8 @@ export class Pa11yTest {
   }
 
   async test () {
-    this.trainMocks()
     const agent: SuperTest<Test> = this.agentSupplier()
+    this.trainMocks()
 
     await this.ensureHeadingIsIncludedInPageTitle(this.uri, agent)
       .then(results => this.emitter.emit(this.headingResultsEventName(), results))

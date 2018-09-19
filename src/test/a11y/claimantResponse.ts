@@ -9,9 +9,12 @@ import {
 } from 'test/data/entity/responseData'
 
 export class ClaimantResponseTestSuite extends FeatureTestSuite {
+
+  protected uuid = '91e1c70f-7d2c-4c1e-0002-cbb02c0e64d6'
+
   trainMocks () {
     common.mockIdamService()
-    claimStoreMock.resolveRetrieveClaimByExternalId({
+    claimStoreMock.resolveRetrieveClaimByFixedExternalId(this.uuid, {
       response: {
         ...partialAdmissionWithPaymentByInstalmentsData,
         statementOfMeans: {

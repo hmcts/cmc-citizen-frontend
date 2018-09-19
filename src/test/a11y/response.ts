@@ -12,10 +12,13 @@ import { RoutablePath } from 'shared/router/routablePath'
 import * as common from './commonMocks'
 
 export class ResponseTestSuite extends FeatureTestSuite {
+
+  protected uuid = '91e1c70f-7d2c-4c1e-0008-cbb02c0e64d6'
+
   trainMocks () {
     common.mockIdamService()
     common.mockFees()
-    claimStoreMock.resolveRetrieveClaimByExternalId({
+    claimStoreMock.resolveRetrieveClaimByFixedExternalId(this.uuid, {
       respondedAt: '2017-08-07T15:27:34.654',
       response: {
         ...defenceWithDisputeData,

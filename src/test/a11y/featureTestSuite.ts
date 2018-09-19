@@ -17,10 +17,12 @@ export abstract class FeatureTestSuite {
 
   abstract getRoutablePaths (): RoutablePath[]
 
+  protected abstract uuid: string
+
   enqueue () {
     this.getRoutablePaths().forEach(path => {
       const uri: string = path.uri.includes(':externalId')
-        ? path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' })
+        ? path.evaluateUri({ externalId: this.uuid })
         : path.uri
       this.pa11yPipeline.add(new Pa11yTest(uri, this.eventEmitter, this.agentSupplier, this.trainMocks))
     })

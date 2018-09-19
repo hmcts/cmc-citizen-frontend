@@ -16,6 +16,19 @@ import * as express from 'express'
 import './guardmocks'
 import { createApp } from 'main/app'
 
+function ifIncluded (feature: string, testSuiteSupplier: () => FeatureTestSuite): FeatureTestSuite {
+  if (a11yFilter === 'ALL' || a11yFilter === feature.toUpperCase()) {
+    return testSuiteSupplier()
+  }
+  return null
+}
+
+function makeAgent (): SuperTest<Test> {
+  const app: express.Express = createApp()
+  app.locals.csrf = 'dummy-token'
+  return agent(app)
+}
+
 const a11yFilter: string = (process.env.A11Y_FILTER || 'ALL').toUpperCase()
 const parallel: boolean = (process.env.PARALLA11Y || 'FALSE') === 'TRUE'
 
@@ -41,16 +54,3 @@ describe('Accessibility', async () => {
   await pa11yPipeline.start()
 
 })
-
-function ifIncluded (feature: string, testSuiteSupplier: () => FeatureTestSuite): FeatureTestSuite {
-  if (a11yFilter === 'ALL' || a11yFilter === feature.toUpperCase()) {
-    return testSuiteSupplier()
-  }
-  return null
-}
-
-function makeAgent (): SuperTest<Test> {
-  const app: express.Express = createApp()
-  app.locals.csrf = 'dummy-token'
-  return agent(app)
-}
