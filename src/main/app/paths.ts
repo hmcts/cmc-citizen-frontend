@@ -24,4 +24,5 @@ export class Paths {
   static readonly enterClaimNumberPage = new RoutablePath('/enter-claim-number', false)
   static readonly noClaimNumberPage = new RoutablePath('/no-claim-number', false)
 
+  static readonly testMeansAllowances = new RoutablePath('/test-means-allowances', false)
 }

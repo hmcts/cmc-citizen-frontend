@@ -1,4 +1,7 @@
 {
+  "meansAllowances": {
+    "categories": [ ]
+  },
   "security": {
     "referrerPolicy": "origin"
   },
