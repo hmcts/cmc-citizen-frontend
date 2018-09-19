@@ -12,7 +12,7 @@ import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { Moment } from 'moment'
-import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
+import { CourtDetermination, DecisionType, PaymentDeadline } from 'common/court-calculations/courtDetermination'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { LocalDate } from 'forms/models/localDate'
 import { Draft } from '@hmcts/draft-store-client'
@@ -56,21 +56,14 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const defendantLastPaymentDate: Moment = defendantPaymentPlanWhenSetDate.calculateLastPaymentDate()
     const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
     const claimantEnteredPayBySetDate: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-    const courtDecision: DecisionType = CourtDetermination.calculateDecision(
+    const courtDecision: PaymentDeadline = CourtDetermination.determinePaymentDeadline(
       defendantEnteredPayBySetDate,
       claimantEnteredPayBySetDate,
       defendantLastPaymentDate
     )
 
-    const courtOfferedPaymentDate: Moment = this.getCourtOfferedDate(
-      courtDecision,
-      defendantEnteredPayBySetDate,
-      claimantEnteredPayBySetDate,
-      defendantLastPaymentDate
-    )
-
-    this.saveCourtOfferedPaymentIntention(draft, defendantPaymentPlanWhenSetDate, courtOfferedPaymentDate, defendantLastPaymentDate, user)
-    return courtDecision
+    this.saveCourtOfferedPaymentIntention(draft, defendantPaymentPlanWhenSetDate, courtDecision.date, defendantLastPaymentDate, user)
+    return courtDecision.source
   }
 
   saveCourtOfferedPaymentIntention (draft: Draft<DraftClaimantResponse>, defendantPaymentPlanWhenSetDate: PaymentPlan, courtOfferedPaymentDate: Moment, defendantLastPaymentDate: Moment, user: User) {
@@ -84,24 +77,6 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
     draft.document.courtOfferedPaymentIntention = courtOfferedPaymentIntention
     console.log('buildPostSubmissionUri--draft--->', JSON.stringify(draft))
-  }
-
-  getCourtOfferedDate (courtDecision: DecisionType,
-                               defendantEnteredPayBySetDate: Moment,
-                               claimantPaymentDate: Moment,
-                               courtOfferedPayBySetDate: Moment
-                               ): Moment {
-    switch (courtDecision) {
-      case DecisionType.COURT: {
-        return courtOfferedPayBySetDate
-      }
-      case DecisionType.DEFENDANT: {
-        return defendantEnteredPayBySetDate
-      }
-      case DecisionType.CLAIMANT: {
-        return claimantPaymentDate
-      }
-    }
   }
 }
 
