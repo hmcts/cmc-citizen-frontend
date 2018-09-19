@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ${SERVICE_NAME}-config
+  namespace: ${NAMESPACE}
+data:
+  FRONTEND_BASE_URL : "https://moneyclaims.aat.platform.hmcts.net"
+  DOCUMENT_MANAGEMENT_URL : "false"
+  IDAM_S2S_AUTH_URL : "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+  SPRING_MAIL_HOST : "mta.reform.hmcts.net"
+  REFORM_ENVIRONMENT : "preview"
+  CORE_CASE_DATA_API_URL : "false"
+  APPLICATION_INSIGHTS_IKEY : "4d7922fc-7d37-4278-b542-6ac8fe0408e2"
+  CMC_DB_HOST : "cmc-aat.postgres.database.azure.com"
+  SEND_LETTER_URL : "http://rpe-send-letter-service-aat.service.core-compute-aat.internal"
+  RESPOND_TO_CLAIM_URL : "https://moneyclaims.aat.platform.hmcts.net/first-contact/start"
+  CLAIM_STORE_DB_HOST : "preprod-data-lb.moneyclaim.reform.hmcts.net"
+  IDAM_API_URL : "https://preprod-idamapi.reform.hmcts.net:3511"
+  APPINSIGHTS_INSTRUMENTATIONKEY : "4d7922fc-7d37-4278-b542-6ac8fe0408e2"
+  PDF_SERVICE_URL : "http://cmc-pdf-service-aat.service.core-compute-aat.internal"
+  CMC_DB_USERNAME : "cmc@cmc-aat"
