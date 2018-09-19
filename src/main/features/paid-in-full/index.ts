@@ -8,7 +8,7 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { DraftPaidInFull } from 'features/paid-in-full/draft/DraftPaidInFull'
+import { DraftPaidInFull } from 'features/paid-in-full/draft/draftPaidInFull'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
