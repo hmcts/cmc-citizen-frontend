@@ -20,6 +20,10 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
+// Vars needed for AKS testing
+env.IDAM_API_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
+env.S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
+
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
@@ -42,4 +46,7 @@ withPipeline("nodejs", product, component) {
 
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
+  enableDockerBuild()
+  enableDeployToAKS()
+  setVaultName('cmc')
 }

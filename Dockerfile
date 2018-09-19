@@ -1,7 +1,12 @@
-FROM node:8.9.4-alpine
+FROM hmcts/cnp-java-base:openjdk-jre-8-alpine-1.4
+
+# Mandatory!
+ENV APP citizen-frontend.jar
+ENV APPLICATION_TOTAL_MEMORY 1024M
+ENV APPLICATION_SIZE_ON_DISK_IN_MB 66
 
 RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+COPY build/libs/$APP /usr/src/app/
 
 COPY package.json yarn.lock /usr/src/app/
 
