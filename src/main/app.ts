@@ -3,6 +3,8 @@ import * as config from 'config'
 import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
+import * as cookieEncrypter from 'cookie-encrypter'
+
 import * as bodyParser from 'body-parser'
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
@@ -46,6 +48,11 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(cookieParser())
+app.use(cookieEncrypter(config.get('session.encryptionKey'), {
+  options: {
+    algorithm: 'aes128'
+  }
+}))
 
 app.use(express.static(path.join(__dirname, 'public')))
 

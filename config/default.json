@@ -29,7 +29,8 @@
     }
   },
   "session": {
-    "cookieName": "SESSION_ID"
+    "cookieName": "SESSION_ID",
+    "encryptionKey": "not-a-real-32-bit-encryption-key"
   },
   "analytics": {
     "gaTrackingId": ""
