@@ -64,11 +64,10 @@ export class PaymentPlanHelper {
 
     switch (responseType) {
       case ResponseType.PART_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromClaimPartialAdmission(response as PartialAdmissionResponse,
+        return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as PartialAdmissionResponse,
           claim.claimData.amount.totalAmount())
       case ResponseType.FULL_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromClaimFullAdmission(
-          response as FullAdmissionResponse,
+        return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as FullAdmissionResponse,
           claim.claimData.amount.totalAmount()
         )
       default:
@@ -111,27 +110,7 @@ export class PaymentPlanHelper {
       undefined)
   }
 
-  private static createPaymentPlanFromClaimPartialAdmission (response: PartialAdmissionResponse, totalAmount: number): PaymentPlan {
-    const paymentIntention: PI = response.paymentIntention
-    if (!paymentIntention) {
-      return undefined
-    }
-
-    if (paymentIntention.repaymentPlan) {
-      return PaymentPlanHelper.createPaymentPlan(
-        totalAmount,
-        paymentIntention.repaymentPlan.instalmentAmount,
-        Frequency.of(paymentIntention.repaymentPlan.paymentSchedule),
-        paymentIntention.repaymentPlan.firstPaymentDate
-      )
-    }
-
-    if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      PaymentPlanHelper.createPaymentPlanFromClaimWhenSetDate(response, totalAmount)
-    }
-  }
-
-  private static createPaymentPlanFromClaimFullAdmission (response: FullAdmissionResponse, totalAmount: number): PaymentPlan {
+  private static createPaymentPlanFromClaimAdmission (response: FullAdmissionResponse | PartialAdmissionResponse, totalAmount: number): PaymentPlan {
     const paymentIntention: PI = response.paymentIntention
     if (!paymentIntention) {
       return undefined
