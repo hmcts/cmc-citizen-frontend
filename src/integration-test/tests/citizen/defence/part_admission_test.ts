@@ -37,3 +37,16 @@ Scenario('I can complete the journey when I partially admit the claim with immed
   defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
 })
 
+Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen', async (I: I) => {
+  await prepareClaim(I)
+
+  defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
+  defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
+})
+
+Scenario('I can complete the journey when I partially admit the claim with instalments payment @citizen', async (I: I) => {
+  await prepareClaim(I)
+
+  defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
+  defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
+})

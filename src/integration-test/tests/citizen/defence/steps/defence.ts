@@ -38,7 +38,7 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
 import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
 import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
-import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe';
+import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -381,8 +381,6 @@ export class DefenceSteps {
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
     defendantTaskListPage.selectTaskDecideHowWillYouPay()
-    
-
     switch (paymentOption) {
       case PaymentOption.IMMEDIATELY:
         defendantWhenWillYouPage.chooseImmediately()
@@ -406,12 +404,10 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
 
-     defendantTaskListPage.selectTaskFreeMediation()
-     defendantFreeMediationPage.chooseNo()
-     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
-    
+    defendantTaskListPage.selectTaskFreeMediation()
+    defendantFreeMediationPage.chooseNo()
+    defendantTaskListPage.selectTaskCheckAndSendYourResponse()
   }
-  
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {
     I.click('Respond to claim')
