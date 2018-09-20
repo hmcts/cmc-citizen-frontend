@@ -49,6 +49,18 @@ export class Frequency {
 
   static toPaymentSchedule (frequency: Frequency): PaymentSchedule {
 
-    return PaymentSchedule.of(frequency.values.filter(item => PaymentSchedule.all().includes(PaymentSchedule.of(item))).pop())
+    for (const value of frequency.values) {
+      switch (value) {
+        case PaymentSchedule.EACH_WEEK.value: {
+          return PaymentSchedule.EACH_WEEK
+        }
+        case PaymentSchedule.EVERY_TWO_WEEKS.value: {
+          return PaymentSchedule.EVERY_TWO_WEEKS
+        }
+        case PaymentSchedule.EVERY_MONTH.value: {
+          return PaymentSchedule.EVERY_MONTH
+        }
+      }
+    }
   }
 }
