@@ -23,35 +23,6 @@ import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 
 export class PaymentPlanHelper {
 
-  // static createCourtOrderedPaymentPlanFromDefendantSetDate (claim: Claim): PaymentPlan {
-  //
-  //   const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-  //   const defendantSuggestedPaymentPlan = this.createPaymentPlanFromClaimWhenSetDate(claimResponse, claim.claimData.amount.totalAmount())
-  //
-  //   return PaymentPlanHelper.createPaymentPlan(
-  //     claim.claimData.amount.totalAmount(),
-  //     defendantSuggestedPaymentPlan.instalmentAmount,
-  //     defendantSuggestedPaymentPlan.frequency,
-  //     defendantSuggestedPaymentPlan.startDate
-  //     ).convertTo(defendantSuggestedPaymentPlan.frequency)
-  // }
-  //
-  // private static courtOrderAmount (decisionType: DecisionType, claimantInstalmentAmount: number, defendantInstalmentAmount: number, defendantDisposableIncome: number): number {
-  //   switch (decisionType) {
-  //     case DecisionType.CLAIMANT: {
-  //       return claimantInstalmentAmount
-  //     }
-  //
-  //     case DecisionType.DEFENDANT: {
-  //       return defendantInstalmentAmount
-  //     }
-  //
-  //     case DecisionType.COURT: {
-  //       return defendantDisposableIncome
-  //     }
-  //   }
-  // }
-
   static createPaymentPlanFromClaim (claim: Claim): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
