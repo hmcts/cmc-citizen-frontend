@@ -10,10 +10,9 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { PartnerDisability } from 'response/form/models/statement-of-means/partnerDisability'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { PartnerSevereDisability } from 'response/form/models/statement-of-means/partnerSevereDisability'
 
-const page: RoutablePath = StatementOfMeansPaths.partnerDisabilityPage
+const page: RoutablePath = StatementOfMeansPaths.partnerSevereDisabilityPage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -24,16 +23,16 @@ export default express.Router()
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       res.render(page.associatedView, {
-        form: new Form(draft.document.statementOfMeans.partnerDisability)
+        form: new Form(draft.document.statementOfMeans.partnerSevereDisability)
       })
     })
   .post(
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(PartnerDisability, PartnerDisability.fromObject),
+    FormValidator.requestHandler(PartnerSevereDisability, PartnerSevereDisability.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<PartnerDisability> = req.body
+      const form: Form<PartnerSevereDisability> = req.body
       const { externalId } = req.params
 
       if (form.hasErrors()) {
@@ -42,14 +41,10 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.statementOfMeans.partnerDisability = form.model
+        draft.document.statementOfMeans.partnerSevereDisability = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.option.option === YesNoOption.YES) {
-          res.redirect(StatementOfMeansPaths.partnerSevereDisabilityPage.evaluateUri({ externalId: externalId }))
-        } else {
-          res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
-        }
+        res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
