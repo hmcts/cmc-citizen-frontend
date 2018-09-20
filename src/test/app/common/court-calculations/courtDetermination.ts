@@ -29,7 +29,6 @@ describe('CourtDetermination', () => {
       const claimantPaymentDate = MomentFactory.currentDate().add(1,'days')
       const courtGeneratedPaymentDate = MomentFactory.currentDate().add(2,'days')
 
-      // TODO: Kiran please double check this is correct, such case does not appear on the diagram
       expect(CourtDetermination.determinePaymentDeadline(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate).source).to.equal(DecisionType.CLAIMANT)
     })
 
@@ -38,8 +37,7 @@ describe('CourtDetermination', () => {
       const claimantPaymentDate = MomentFactory.currentDate()
       const courtGeneratedPaymentDate = MomentFactory.currentDate()
 
-      // TODO: Kiran please fix the test, there is no assertion, implementation returns undefined in such case which is wrong
-      expect(Object.values(DecisionType).includes(CourtDetermination.determinePaymentDeadline(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)))
+      expect(Object.values(DecisionType).includes(CourtDetermination.determinePaymentDeadline(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate).source)).to.be.true
     })
 
     it('should return a claimant decision type when claimantPaymentDate and courtGeneratedPaymentDate are the same', () => {

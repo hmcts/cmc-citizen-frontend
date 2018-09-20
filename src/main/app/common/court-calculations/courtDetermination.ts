@@ -26,17 +26,16 @@ export class CourtDetermination {
       throw new Error('Input should be a moment, cannot be empty')
     }
 
-    if (claimantPaymentDate.isAfter(defendantPaymentDate) || claimantPaymentDate.isAfter(courtGeneratedPaymentDate)) {
+    if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate) || claimantPaymentDate.isAfter(courtGeneratedPaymentDate)) {
       return new PaymentDeadline(DecisionType.CLAIMANT, claimantPaymentDate)
     }
-    if (claimantPaymentDate.isBefore(courtGeneratedPaymentDate)) {
-      if (defendantPaymentDate.isBefore(courtGeneratedPaymentDate)) {
+    if (claimantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate)) {
+      if (defendantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate)) {
         return new PaymentDeadline(DecisionType.DEFENDANT, defendantPaymentDate)
       } else {
         return new PaymentDeadline(DecisionType.COURT, courtGeneratedPaymentDate)
       }
     }
-    // TODO: Kiran in some cases undefined is returned, please fix it
   }
 
   static determinePaymentIntention (paymentDateProposedByDefendant: Moment, claimantPaymentIntention: PaymentIntention, paymentPlanDeterminedFromDefendantFinancialStatement: PaymentPlan): PaymentIntention {
