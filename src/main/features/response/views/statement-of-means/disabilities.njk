@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 
 {% set heading = 'State your disability status' %}
 
@@ -11,55 +11,67 @@
       <form method="post" novalidate
             class="analytics-submit-event-trigger"
             data-event-action="SoM: State your disability status"
-            data-event-label-from="value">
+            data-event-label-from="option">
 
         {{ csrfProtection(csrf) }}
 
-        {% set valueError = form.errorFor('value') %}
-        <fieldset id="value" class="form-group {% if valueError %} form-group-error{% endif %}">
-          <legend class="visually-hidden">{{ t('State your disability status') }}</legend>
-
-          {% if valueError %}<span class="error-message">{{ t(valueError) }}</span>{% endif %}
-          {{
-          radioGroup(
-            form = form,
-            label = 'State your disability status',
-            labelForScreenReadersOnly = true,
-            name = 'value',
-            options = [
-              {
-                bold: true,
-                label: 'None',
-                hint: 'You’re not disabled',
-                value: 'NO',
-                checked: (form.valueFor('value').value === 'NO')
-              },
-              {
-                bold: true,
-                label: 'Single',
-                hint: 'You’re disabled and your partner is not, if you have one',
-                value: 'SINGLE',
-                checked: (form.valueFor('value').value === 'SINGLE')
-              },
-              {
-                bold: true,
-                label: 'Couple',
-                hint: 'You and your partner are both disabled',
-                value: 'COUPLE',
-                checked: (form.valueFor('value').value === 'COUPLE')
-              },
-              {
-                bold: true,
-                label: 'Another type of organisation',
-                hint: 'For example a partnership, trust, charity, club or association',
-                value: 'organisation',
-                checked: (form.valueFor('type').value === 'organisation')
-              }
-            ]
-          )
-          }}
-
-        </fieldset>
+        {{ radioGroup(
+          form = form,
+          label = 'State your disability status',
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              bold: true,
+              label: 'None',
+              hint: 'You’re not disabled',
+              value: Disabilities.NO.value,
+              checked: (form.valueFor('option') === Disabilities.NO.value)
+            },
+            {
+              bold: true,
+              label: 'Single',
+              hint: 'You’re disabled and your partner is not, if you have one',
+              value: Disabilities.SINGLE.value,
+              checked: (form.valueFor('option') === Disabilities.SINGLE.value)
+            },
+            {
+              bold: true,
+              label: 'Couple',
+              hint: 'You and your partner are both disabled',
+              value: Disabilities.COUPLE.value,
+              checked: (form.valueFor('option') === Disabilities.COUPLE.value)
+            },
+            {
+              bold: true,
+              label: 'Single (Severe)',
+              hint: 'You’re severely disabled and your partner is not, if you have one',
+              value: Disabilities.SEVERE_SINGLE.value,
+              checked: (form.valueFor('option') === Disabilities.SEVERE_SINGLE.value)
+            },
+            {
+              bold: true,
+              label: 'Couple (Severe)',
+              hint: 'You and your partner are both severely disabled',
+              value: Disabilities.SEVERE_COUPLE.value,
+              checked: (form.valueFor('option') === Disabilities.SEVERE_COUPLE.value)
+            },
+            {
+              bold: true,
+              label: 'Disabled dependant(s)',
+              hint: 'You’re not disabled but one or more of your dependants are',
+              value: Disabilities.DISABLED_DEPENDANT.value,
+              checked: (form.valueFor('option') === Disabilities.DISABLED_DEPENDANT.value)
+            },
+            {
+              bold: true,
+              label: 'Carer',
+              hint: 'You’re a full-time carer',
+              value: Disabilities.CARER.value,
+              checked: (form.valueFor('option') === Disabilities.CARER.value)
+            }
+          ]
+        ) }}
 
         {{ saveAndContinueButton() }}
 

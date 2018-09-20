@@ -1,3 +1,9 @@
+import { IsDefined, IsIn } from 'class-validator'
+
+export class ValidationErrors {
+  static readonly OPTION_REQUIRED: string = 'Choose option'
+}
+
 export class Disabilities {
   static readonly NO = new Disabilities('NO', 'No')
   static readonly SINGLE = new Disabilities('SINGLE', 'Single')
@@ -19,6 +25,14 @@ export class Disabilities {
     return Disabilities.all().filter(type => type.value === value).pop()
   }
 
+  static fromObject (value?: any): Disabilities {
+    if (!value) {
+      return value
+    }
+
+    return this.valueOf(value.value)
+  }
+
   public static all (): Disabilities[] {
     return [
       Disabilities.NO,
@@ -29,5 +43,34 @@ export class Disabilities {
       Disabilities.DISABLED_DEPENDANT,
       Disabilities.CARER
     ]
+  }
+}
+
+export class DisabilitiesStatus {
+  @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
+  @IsIn(Disabilities.all(), { message: ValidationErrors.OPTION_REQUIRED })
+  option?: Disabilities
+
+  constructor (option?: Disabilities) {
+    this.option = option
+  }
+
+  static fromObject (value?: any): DisabilitiesStatus {
+    if (!value) {
+      return value
+    }
+    if (value.option) {
+      const option: Disabilities = Disabilities.valueOf(value.option)
+      return new DisabilitiesStatus(option)
+    } else {
+      return new DisabilitiesStatus()
+    }
+  }
+
+  deserialize (input?: any): DisabilitiesStatus {
+    if (input && input.option) {
+      this.option = Disabilities.valueOf(input.option.value)
+    }
+    return this
   }
 }
