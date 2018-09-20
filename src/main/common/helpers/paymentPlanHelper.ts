@@ -127,7 +127,7 @@ export class PaymentPlanHelper {
   }
 
   private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
-    if (!totalAmount || !instalmentAmount || !frequency) {
+    if (!totalAmount || !instalmentAmount || !frequency) { // TODO: Kiran please fix `!instalmentAmount` to not return undefined if instalmentAmount is equal 0
       return undefined
     }
 

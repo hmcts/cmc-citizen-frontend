@@ -57,6 +57,7 @@ export class PaymentPlan {
   }
 
   calculateLastPaymentDate (): moment.Moment {
+    // TODO: Kiran as discussed with Chris please return date far in the future if instalment amount is 0
     const timeToCompletePaymentsInWeeks: number = this.numberOfInstalments * this.frequency.inWeeks
     return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
