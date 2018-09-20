@@ -10,10 +10,9 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { Cohabiting } from 'response/form/models/statement-of-means/cohabiting'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { PartnerAge } from 'response/form/models/statement-of-means/PartnerAge'
 
-const page: RoutablePath = StatementOfMeansPaths.partnerPage
+const page: RoutablePath = StatementOfMeansPaths.partnerAgePage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -24,16 +23,16 @@ export default express.Router()
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       res.render(page.associatedView, {
-        form: new Form(draft.document.statementOfMeans.cohabiting)
+        form: new Form(draft.document.statementOfMeans.partnerAge)
       })
     })
   .post(
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(Cohabiting, Cohabiting.fromObject),
+    FormValidator.requestHandler(PartnerAge, PartnerAge.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<Cohabiting> = req.body
+      const form: Form<PartnerAge> = req.body
       const { externalId } = req.params
 
       if (form.hasErrors()) {
@@ -42,14 +41,10 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.statementOfMeans.cohabiting = form.model
+        draft.document.statementOfMeans.partnerAge = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.option.option === YesNoOption.YES) {
-          res.redirect(StatementOfMeansPaths.partnerAgePage.evaluateUri({ externalId: externalId }))
-        } else {
-          res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
-        }
+        res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
