@@ -17,13 +17,11 @@ import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
-  console.log('draft-------->',JSON.stringify(draft))
-  console.log('courtOfferedPaymentIntention---->',draft.document.courtOfferedPaymentIntention)
 
   res.render(Paths.courtOfferedSetDatePage.associatedView, {
     form: form,
     claim: claim,
-    paymentDate: draft.document.courtOfferedPaymentIntention.paymentDate.date.toMoment()
+    paymentDate: draft.document.courtOfferedPaymentIntention.paymentDate
   })
 }
 

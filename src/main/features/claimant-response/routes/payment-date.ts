@@ -2,7 +2,7 @@ import * as express from 'express'
 
 import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
@@ -16,20 +16,21 @@ import { CourtDetermination, DecisionType } from 'common/court-calculations/cour
 import { Draft } from '@hmcts/draft-store-client'
 import { User } from 'idam/user'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
     return 'What date do you want the defendant to pay by?'
   }
 
-  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaymentIntention> {
+  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {
     return new DefaultModelAccessor('alternatePaymentMethod')
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
     const response = locals.claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const paymentDateProposedByDefendant: Moment = response.paymentIntention.paymentDate // TODO: handle payments by installments properly
-    const paymentIntentionFromClaimant: any = locals.draft.document.alternatePaymentMethod as any // TODO: convert PI to claim store structure
+    const paymentIntentionFromClaimant: PaymentIntention = locals.draft.document.alternatePaymentMethod.toDomainInstance()
     const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, locals.claim.claimData.amount.totalAmount())
     locals.draft.document.courtOfferedPaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentDateDeterminedFromDefendantFinancialStatement)
 
