@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Frequency } from 'common/frequency/frequency'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 describe('Frequency', () => {
   describe('of', () => {

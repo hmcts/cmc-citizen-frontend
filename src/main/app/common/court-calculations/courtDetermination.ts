@@ -6,6 +6,8 @@ import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { Frequency } from 'common/frequency/frequency'
 
+import { checkDefined } from 'shared/preconditions'
+
 const logger = Logger.getLogger('court-determination')
 
 export enum DecisionType {
@@ -31,9 +33,9 @@ export class CourtDetermination {
                                    claimantPaymentDate: Moment,
                                    courtGeneratedPaymentDate: Moment): PaymentDeadline {
 
-    if (!defendantPaymentDate || !claimantPaymentDate || !courtGeneratedPaymentDate) {
-      throw new Error('Input should be a moment, cannot be empty')
-    }
+    checkDefined(defendantPaymentDate, 'Defendant payment date is required')
+    checkDefined(claimantPaymentDate, 'Claimant payment date is required')
+    checkDefined(courtGeneratedPaymentDate, 'Court generated payment date is required')
 
     function log (result: string): void {
       logger.debug(`${result} based on dates (defendant: ${formatDate(defendantPaymentDate)}, claimant: ${formatDate(claimantPaymentDate)}, court: ${formatDate(courtGeneratedPaymentDate)})`)
@@ -59,8 +61,22 @@ export class CourtDetermination {
       ${defendantPaymentDate}, ${claimantPaymentDate}, ${courtGeneratedPaymentDate}'`)
   }
 
-  static determinePaymentIntention (paymentDateProposedByDefendant: Moment, claimantPaymentIntention: PaymentIntention, paymentPlanDeterminedFromDefendantFinancialStatement: PaymentPlan): PaymentIntention {
-    const paymentDateProposedByClaimant: Moment = claimantPaymentIntention.paymentDate
+  static determinePaymentIntention (amount: number, paymentDateProposedByDefendant: Moment, claimantPaymentIntention: PaymentIntention, paymentPlanDeterminedFromDefendantFinancialStatement: PaymentPlan): PaymentIntention {
+    checkDefined(paymentDateProposedByDefendant, 'Payment date proposed by defendant is required')
+    checkDefined(claimantPaymentIntention, 'Claimant payment intention is required')
+    checkDefined(paymentPlanDeterminedFromDefendantFinancialStatement, 'Payment plan determined from defendant financial statement is required')
+
+    let paymentDateProposedByClaimant: Moment
+    switch (claimantPaymentIntention.paymentOption) {
+      case PaymentOption.BY_SPECIFIED_DATE:
+        paymentDateProposedByClaimant = claimantPaymentIntention.paymentDate
+        break
+      case PaymentOption.INSTALMENTS:
+        paymentDateProposedByClaimant = PaymentPlan.create(amount, claimantPaymentIntention.repaymentPlan.instalmentAmount, Frequency.of(claimantPaymentIntention.repaymentPlan.paymentSchedule), claimantPaymentIntention.repaymentPlan.firstPaymentDate).calculateLastPaymentDate()
+        break
+      default:
+        throw new Error(`Payment option is not supported: ${claimantPaymentIntention.paymentOption}`)
+    }
 
     const courtDecision: PaymentDeadline = CourtDetermination.determinePaymentDeadline(
       paymentDateProposedByDefendant,
@@ -77,7 +93,7 @@ export class CourtDetermination {
       case PaymentOption.INSTALMENTS:
         paymentIntention.repaymentPlan = {
           instalmentAmount: paymentPlanDeterminedFromDefendantFinancialStatement.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanDeterminedFromDefendantFinancialStatement.frequency) as any, // TODO: convert to payment schedule
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanDeterminedFromDefendantFinancialStatement.frequency),
           firstPaymentDate: paymentPlanDeterminedFromDefendantFinancialStatement.startDate
         }
         break

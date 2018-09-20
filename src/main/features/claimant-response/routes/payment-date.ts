@@ -18,6 +18,7 @@ import { User } from 'idam/user'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentDeadlineHelper } from 'shared/helpers/paymentDeadlineHelper'
+import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -32,7 +33,11 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const paymentDateProposedByDefendant: Moment = PaymentDeadlineHelper.getPaymentDeadlineFromAdmission(locals.claim)
     const paymentIntentionFromClaimant: PaymentIntention = locals.draft.document.alternatePaymentMethod.toDomainInstance()
     const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(locals.claim)
-    locals.draft.document.courtOfferedPaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentDateDeterminedFromDefendantFinancialStatement)
+
+    locals.draft.document.courtOfferedPaymentIntention = CourtDetermination.determinePaymentIntention(AdmissionHelper.getAdmittedAmount(locals.claim), paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentDateDeterminedFromDefendantFinancialStatement)
+    locals.draft.document.acceptCourtOffer = undefined
+    locals.draft.document.settlementAgreement = undefined
+    locals.draft.document.formaliseRepaymentPlan = undefined
 
     return super.saveDraft(locals)
   }
@@ -66,7 +71,7 @@ export default new PaymentDatePage()
       const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
       if (response.statementOfMeans === undefined) {
-        return next(new Error('Page cannot be rendered because response doe snot have statement of means'))
+        return next(new Error('Page cannot be rendered because response does not have statement of means'))
       }
 
       next()

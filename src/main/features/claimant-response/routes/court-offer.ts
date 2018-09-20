@@ -17,13 +17,12 @@ import { DraftService } from 'services/draftService'
 
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { CourtOrderHelper } from 'shared/helpers/courtOrderHelper'
 
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { Expense } from 'claims/models/response/statement-of-means/expense'
 import { Income } from 'claims/models/response/statement-of-means/income'
+import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 
 function calculateTotalMonthlyIncome (incomes: Income[]): number {
   if (incomes === undefined) {
@@ -48,23 +47,14 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const draft: DraftClaimantResponse = res.locals.draft.document
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-  const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
-  const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-  const courtOrderAmount: number = CourtOrderHelper.createCourtOrder(claim, draft).calculateAmount()
-
-  const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
-    defendantPaymentPlan.totalAmount,
-    courtOrderAmount,
-    Frequency.MONTHLY,
-    claimantPaymentPlan.startDate
-  )
+  const courtOfferedPaymentPlan: PaymentPlan = PaymentPlan.create(AdmissionHelper.getAdmittedAmount(claim), draft.courtOfferedPaymentIntention.repaymentPlan.instalmentAmount, Frequency.of(draft.courtOfferedPaymentIntention.repaymentPlan.paymentSchedule), draft.courtOfferedPaymentIntention.repaymentPlan.firstPaymentDate)
 
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
     claim: claim,
     totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
     totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
-    courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
+    courtOrderPaymentPlan: courtOfferedPaymentPlan.convertTo(Frequency.MONTHLY)
   })
 }
 
@@ -94,7 +84,6 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const claim: Claim = res.locals.claim
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
 
         draft.document.acceptCourtOffer = form.model
@@ -102,14 +91,10 @@ export default express.Router()
         const { externalId } = req.params
 
         if (form.model.accept.option === YesNoOption.YES.option) {
-
           draft.document.settlementAgreement = undefined
           draft.document.formaliseRepaymentPlan = undefined
           draft.document.rejectionReason = undefined
 
-          draft.document.courtOrderAmount = CourtOrderHelper
-            .createCourtOrder(claim, draft.document)
-            .calculateAmount()
           await saveAndRedirect(res, draft, ClaimantsResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
         } else {
           await saveAndRedirect(res, draft, ClaimantsResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId }))
