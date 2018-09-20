@@ -118,9 +118,9 @@ export class Claim {
 
   get eligibleForCCJ (): boolean {
     return this.isFullAdmissionPayImmediatelyPastPaymentDate()
-      || (!this.countyCourtJudgmentRequestedAt && !this.respondedAt)
-      || (isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline) && !this.respondedAt)
-
+      || (!this.countyCourtJudgmentRequestedAt
+          && !this.respondedAt
+          && isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
   }
 
   get eligibleForCCJAfterBreachedSettlement (): boolean {
