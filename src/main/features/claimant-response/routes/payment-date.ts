@@ -17,6 +17,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { User } from 'idam/user'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentDeadlineHelper } from 'shared/helpers/paymentDeadlineHelper'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -29,9 +30,9 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
     const response = locals.claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const paymentDateProposedByDefendant: Moment = response.paymentIntention.paymentDate // TODO: handle payments by installments properly
+    const paymentDateProposedByDefendant: Moment = PaymentDeadlineHelper.getPaymentDeadlineFromAdmission(locals.claim)
     const paymentIntentionFromClaimant: PaymentIntention = locals.draft.document.alternatePaymentMethod.toDomainInstance()
-    const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, locals.claim.claimData.amount.totalAmount())
+    const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, locals.claim.totalAmountTillToday)
     locals.draft.document.courtOfferedPaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentDateDeterminedFromDefendantFinancialStatement)
 
     return super.saveDraft(locals)
@@ -44,9 +45,9 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const externalId: string = req.params.externalId
     const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    const paymentDateProposedByDefendant: Moment = response.paymentIntention.paymentDate // TODO: handle payments by installments properly
+    const paymentDateProposedByDefendant: Moment = PaymentDeadlineHelper.getPaymentDeadlineFromAdmission(claim)
     const paymentDateProposedByClaimant: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-    const paymentDateDeterminedFromDefendantFinancialStatement: Moment = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, claim.claimData.amount.totalAmount()).calculateLastPaymentDate()
+    const paymentDateDeterminedFromDefendantFinancialStatement: Moment = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, claim.totalAmountTillToday).calculateLastPaymentDate()
 
     switch (CourtDetermination.determinePaymentDeadline(paymentDateProposedByDefendant, paymentDateProposedByClaimant, paymentDateDeterminedFromDefendantFinancialStatement).source) {
       case DecisionType.COURT:
