@@ -10,7 +10,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
 
-describe.only('CourtDetermination', () => {
+describe('CourtDetermination', () => {
   context('determinePaymentDeadline', () => {
     it('should throw an error if defendantPaymentDate, claimantPaymentDate or courtGeneratedPaymentDate are undefined', () => {
       expect(() => {
