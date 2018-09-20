@@ -200,7 +200,7 @@ export class Claim {
   }
 
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
-    if (this.response.responseType === ResponseType.FULL_ADMISSION) {
+    if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
       const response: FullAdmissionResponse = this.response
       return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
         response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())

@@ -21,9 +21,11 @@
   claimRejectedFreeMediationYESForDefendantDashboard %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
-  claimPartAdmittedAlreadyPaidForClaimantDashboard,
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
-  claimPartAdmittedToOweForDefendantDashboard,
+  claimPartAdmittedToOweForDefendantDashboard %}
+
+{% from "./claimStatus/claimPartAdmissionClaimant.njk" import
+  claimPartAdmittedAlreadyPaidForClaimantDashboard,
   claimPartAdmittedToOweForClaimantDashboard %}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import

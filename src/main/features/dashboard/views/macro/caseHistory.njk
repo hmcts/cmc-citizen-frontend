@@ -20,9 +20,11 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
+  claimPartAdmittedAlreadyPaidForDefendantClaimDetails %}
+
+{% from "./claimStatus/claimPartAdmissionClaimant.njk" import
   claimPartAdmittedToOweForClaimantClaimDetails,
-  claimPartAdmittedAlreadyPaidForDefendantClaimDetails,
-  claimPartAdmittedAlreadyPaidForClaimantClaimDetails%}
+  claimPartAdmittedAlreadyPaidForClaimantClaimDetails %}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import
   claimFullAdmissionForDefendantClaimDetails %}
