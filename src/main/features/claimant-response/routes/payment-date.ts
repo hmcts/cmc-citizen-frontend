@@ -30,7 +30,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const response = locals.claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const paymentDateProposedByDefendant: Moment = response.paymentIntention.paymentDate // TODO: handle payments by installments properly
     const paymentIntentionFromClaimant: any = locals.draft.document.alternatePaymentMethod as any // TODO: convert PI to claim store structure
-    const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, locals.claim.claimData.amount.totalAmount()) // TODO: handle cases where SoM is undefined (defendant paying immediately)
+    const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, locals.claim.claimData.amount.totalAmount())
     locals.draft.document.courtOfferedPaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentDateDeterminedFromDefendantFinancialStatement)
 
     return super.saveDraft(locals)
@@ -45,7 +45,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
     const paymentDateProposedByDefendant: Moment = response.paymentIntention.paymentDate // TODO: handle payments by installments properly
     const paymentDateProposedByClaimant: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-    const paymentDateDeterminedFromDefendantFinancialStatement: Moment = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, claim.claimData.amount.totalAmount()).calculateLastPaymentDate() // TODO: handle cases where SoM is undefined (defendant paying immediately)
+    const paymentDateDeterminedFromDefendantFinancialStatement: Moment = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, claim.claimData.amount.totalAmount()).calculateLastPaymentDate()
 
     switch (CourtDetermination.determinePaymentDeadline(paymentDateProposedByDefendant, paymentDateProposedByClaimant, paymentDateDeterminedFromDefendantFinancialStatement).source) {
       case DecisionType.COURT:
@@ -61,4 +61,15 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
 /* tslint:disable:no-default-export */
 export default new PaymentDatePage()
-  .buildRouter(claimantResponsePath)
+  .buildRouter(claimantResponsePath,
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const claim: Claim = res.locals.claim
+      const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+      if (response.statementOfMeans === undefined) {
+        return next(new Error('Page cannot be rendered because response doe snot have statement of means'))
+      }
+
+      next()
+    }
+  )
