@@ -56,7 +56,7 @@ describe('Frequency', () => {
       })
     })
 
-    describe.only('toPaymentSchedule', () => {
+    describe('toPaymentSchedule', () => {
       it('should pass when frequency is converted to paymentSchedule for EVERY_TWO_WEEKS', () => {
         expect(Frequency.toPaymentSchedule(Frequency.of('EVERY_TWO_WEEKS'))).to.deep.equal(PaymentSchedule.EVERY_TWO_WEEKS)
       })
