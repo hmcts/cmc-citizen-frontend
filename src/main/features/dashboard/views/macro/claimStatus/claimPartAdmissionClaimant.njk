@@ -26,10 +26,16 @@
 {% macro claimPartAdmittedToOweForClaimantClaimDetails(claim) %}
 
   <h2 class="heading-small">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
-  <p>{{ t('They said they don’t owe the full amount you claimed.') }}</p>
-  <p>{{ t('They’ve offered to pay the {{ amount }} immediately.', { amount: claim.response.amount | numeral }) }}</p>
-  <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
-      { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    <p>{{ t('They said they don’t owe the full amount you claimed.') }}</p>
+    <p>{{ t('They’ve offered to pay the {{ amount }} immediately.', { amount: claim.response.amount | numeral }) }}</p>
+    <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
+        { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <p>{{ t('They’ve offered to pay by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+  {% endif %}
+
   <p>{{ t('You can accept or reject their admission.') }}</p>
   {{ viewAndRespondOffer(claim, 'View and respond') }}
 {% endmacro %}
