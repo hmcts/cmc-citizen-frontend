@@ -19,6 +19,7 @@ import { SevereDisability } from 'response/form/models/statement-of-means/severe
 import { Cohabiting } from 'response/form/models/statement-of-means/cohabiting'
 import { PartnerAge } from 'response/form/models/statement-of-means/partnerAge'
 import { PartnerPension } from 'response/form/models/statement-of-means/partnerPension'
+import { PartnerDisability } from 'response/form/models/statement-of-means/partnerDisability'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -42,6 +43,7 @@ export class StatementOfMeans {
   cohabiting?: Cohabiting
   partnerAge?: PartnerAge
   partnerPension?: PartnerPension
+  partnerDisability?: PartnerDisability
 
   deserialize (input: any): StatementOfMeans {
     if (input) {
@@ -66,6 +68,7 @@ export class StatementOfMeans {
       this.cohabiting = new Cohabiting().deserialize(input.cohabiting)
       this.partnerAge = new PartnerAge().deserialize(input.partnerAge)
       this.partnerPension = new PartnerPension().deserialize(input.partnerPension)
+      this.partnerDisability = new PartnerDisability().deserialize(input.partnerDisability)
     }
     return this
   }
