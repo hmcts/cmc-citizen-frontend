@@ -10,7 +10,7 @@
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     {{ t('The defendant has offered to pay by a set date. You can accept or reject their offer.') }}
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    {{ t('The defendant admits they owe all the money. You need to accept or reject their offer.') }}
+    {{ t('The defendant has offered to pay in instalments. You can accept or reject their offer.') }}
   {% endif %}
 {% endmacro %}
 
@@ -45,9 +45,7 @@
     <p>{{ t('You can accept or reject their offer.') }}</p>
     {{ viewAndRespondOffer(claim) }}
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-    <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in instalments.',
-        { defendantName: defendantName }) }} </p>
+    <h2 class="heading-small">{{ t('The defendant has offered to pay in instalments') }}</h2>
     <p>
       {{ t('You can accept or reject their offer.') }}
     </p>

@@ -117,7 +117,7 @@ export class Claim {
   }
 
   get eligibleForCCJ (): boolean {
-    return this.isFullAdmissionPastPaymentDate()
+    return this.isFullAdmissionPayImmediatelyPastPaymentDate()
       || (!this.countyCourtJudgmentRequestedAt && !this.respondedAt)
       || (isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline) && !this.respondedAt)
 
@@ -147,7 +147,7 @@ export class Claim {
       return ClaimStatus.CCJ_REQUESTED
     } else if (this.eligibleForCCJAfterBreachedSettlement) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT
-    } else if (this.isFullAdmissionPastPaymentDate()) {
+    } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
@@ -199,9 +199,11 @@ export class Claim {
     return this.settlement && !!this.settlementReachedAt
   }
 
-  private isFullAdmissionPastPaymentDate (): boolean {
-    const response: FullAdmissionResponse = this.response as FullAdmissionResponse
-    return this.isResponseSubmitted() &&
-      response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+  private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
+    if (this.response.responseType === ResponseType.FULL_ADMISSION) {
+      const response: FullAdmissionResponse = this.response
+      return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+        response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+    }
   }
 }
