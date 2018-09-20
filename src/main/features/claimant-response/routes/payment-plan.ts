@@ -13,7 +13,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
-import { CourtOrder } from 'common/court-order/courtOrder'
+import { CourtOrder } from 'common/court-calculations/courtOrder'
 
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 

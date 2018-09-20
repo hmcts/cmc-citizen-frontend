@@ -89,7 +89,7 @@ export function addDaysFilter (value: moment.Moment | string, num: number): mome
         date = moment(value)
       }
     } else {
-      date = value
+      date = value.clone()
     }
     if (!date.isValid()) {
       throw new Error('Invalid date')

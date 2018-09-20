@@ -22,22 +22,21 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim: Claim) {
   if (draft.document.alternatePaymentMethod
     && draft.document.alternatePaymentMethod.paymentOption
-    && draft.document.alternatePaymentMethod.paymentOption.option !== PaymentType.INSTALMENTS
+    && draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.INSTALMENTS
   ) {
-    return undefined
+    const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
+    const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
+    const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
+      defendantPaymentPlan.totalAmount,
+      draft.document.courtOrderAmount,
+      Frequency.MONTHLY,
+      claimantPaymentPlan.startDate
+    )
+
+    return courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
   }
-
-  const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
-  const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-
-  const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
-    defendantPaymentPlan.totalAmount,
-    draft.document.courtOrderAmount,
-    Frequency.MONTHLY,
-    claimantPaymentPlan.startDate
-  )
-
-  return courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency)
+  return undefined
 }
 
 /* tslint:disable:no-default-export */
@@ -65,12 +64,16 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
 
-      if (draft.document.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
-        await CCJClient.issue(claim, draft, user)
-      } else {
-        const settlement: Settlement = prepareSettlement(claim, draft.document)
-
-        await OfferClient.signSettlementAgreement(claim.externalId, user, settlement)
+      if (draft.document.formaliseRepaymentPlan && draft.document.formaliseRepaymentPlan.option) {
+        switch (draft.document.formaliseRepaymentPlan.option) {
+          case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
+            await CCJClient.issue(claim, draft, user)
+            break
+          case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
+            const settlement: Settlement = prepareSettlement(claim, draft.document)
+            await OfferClient.signSettlementAgreement(claim.externalId, user, settlement)
+            break
+        }
       }
 
       await new DraftService().delete(draft.id, user.bearerToken)
