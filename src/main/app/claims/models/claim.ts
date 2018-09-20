@@ -8,6 +8,7 @@ import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 
 interface State {
   status: ClaimStatus
@@ -115,9 +116,10 @@ export class Claim {
 
   get eligibleForCCJ (): boolean {
 
-    return !this.countyCourtJudgmentRequestedAt
+    return (!this.countyCourtJudgmentRequestedAt
       && !this.respondedAt
-      && isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+      && isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline) ||
+        this.isFullAdmissionPastPaymentDate())
   }
 
   get status (): ClaimStatus {
@@ -171,5 +173,11 @@ export class Claim {
 
   private isSettlementReached (): boolean {
     return this.settlement && !!this.settlementReachedAt
+  }
+
+  private isFullAdmissionPastPaymentDate (): boolean {
+    const response: FullAdmissionResponse = this.response as FullAdmissionResponse
+    return this.isResponseSubmitted() &&
+      response.paymentIntention.paymentDate > MomentFactory.currentDateTime()
   }
 }
