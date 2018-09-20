@@ -16,6 +16,7 @@ import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthly
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { SevereDisability } from 'response/form/models/statement-of-means/severeDisability'
+import { Cohabiting } from 'response/form/models/statement-of-means/cohabiting'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -36,6 +37,7 @@ export class StatementOfMeans {
   explanation?: Explanation
   disability?: Disability
   severeDisability?: SevereDisability
+  cohabiting?: Cohabiting
 
   deserialize (input: any): StatementOfMeans {
     if (input) {
@@ -57,6 +59,7 @@ export class StatementOfMeans {
       this.explanation = new Explanation().deserialize(input.explanation)
       this.disability = new Disability().deserialize(input.disability)
       this.severeDisability = new SevereDisability().deserialize(input.severeDisability)
+      this.cohabiting = new Cohabiting().deserialize(input.cohabiting)
     }
     return this
   }

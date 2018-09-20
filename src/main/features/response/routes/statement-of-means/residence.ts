@@ -47,7 +47,7 @@ export default express.Router()
         draft.document.statementOfMeans.residence = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.dependantsPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.partnerPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

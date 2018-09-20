@@ -53,6 +53,7 @@ export class StatementOfMeansPaths {
   static readonly explanationPage = new RoutablePath(`${statementOfMeansPath}/explanation`)
   static readonly disabilityPage = new RoutablePath(`${statementOfMeansPath}/disability`)
   static readonly severeDisabilityPage = new RoutablePath(`${statementOfMeansPath}/severe-disability`)
+  static readonly partnerPage = new RoutablePath(`${statementOfMeansPath}/partner`)
 }
 
 export const fullAdmissionPath = `${responsePath}/full-admission`
