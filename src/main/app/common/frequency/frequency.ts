@@ -1,3 +1,4 @@
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
 export class Frequency {
   static readonly WEEKLY = new Frequency(['WEEK', 'EACH_WEEK'], 52 / 12, 1, 'Each week')
@@ -44,5 +45,10 @@ export class Frequency {
     }
 
     throw new Error(`There is no Frequency for weekly value: '${weeklyValue}'`)
+  }
+
+  static toPaymentSchedule (frequency: Frequency): PaymentSchedule {
+
+    return PaymentSchedule.of(frequency.values.filter(item => PaymentSchedule.all().includes(PaymentSchedule.of(item))).pop())
   }
 }

@@ -10,7 +10,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
 
-describe('CourtDetermination', () => {
+describe.only('CourtDetermination', () => {
   context('determinePaymentDeadline', () => {
     it('should throw an error if defendantPaymentDate, claimantPaymentDate or courtGeneratedPaymentDate are undefined', () => {
       expect(() => {
@@ -37,7 +37,7 @@ describe('CourtDetermination', () => {
       const claimantPaymentDate = MomentFactory.currentDate()
       const courtGeneratedPaymentDate = MomentFactory.currentDate()
 
-      expect(Object.values(DecisionType).includes(CourtDetermination.determinePaymentDeadline(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate).source)).to.be.true
+      expect(CourtDetermination.determinePaymentDeadline(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate).source).to.equal(DecisionType.CLAIMANT)
     })
 
     it('should return a claimant decision type when claimantPaymentDate and courtGeneratedPaymentDate are the same', () => {

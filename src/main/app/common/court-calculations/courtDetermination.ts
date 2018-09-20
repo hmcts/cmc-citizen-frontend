@@ -2,6 +2,7 @@ import { Moment } from 'moment'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { Frequency } from 'common/frequency/frequency'
 
 export enum DecisionType {
   CLAIMANT = 'CLAIMANT',
@@ -26,7 +27,7 @@ export class CourtDetermination {
       throw new Error('Input should be a moment, cannot be empty')
     }
 
-    if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate) || claimantPaymentDate.isAfter(courtGeneratedPaymentDate)) {
+    if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate) || claimantPaymentDate.isSameOrAfter(courtGeneratedPaymentDate)) {
       return new PaymentDeadline(DecisionType.CLAIMANT, claimantPaymentDate)
     }
     if (claimantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate)) {
@@ -36,6 +37,9 @@ export class CourtDetermination {
         return new PaymentDeadline(DecisionType.COURT, courtGeneratedPaymentDate)
       }
     }
+    throw new Error(
+      `Not able to determine payment deadline based on : '
+      ${defendantPaymentDate}, ${claimantPaymentDate}, ${courtGeneratedPaymentDate}'`)
   }
 
   static determinePaymentIntention (paymentDateProposedByDefendant: Moment, claimantPaymentIntention: PaymentIntention, paymentPlanDeterminedFromDefendantFinancialStatement: PaymentPlan): PaymentIntention {
@@ -56,7 +60,7 @@ export class CourtDetermination {
       case PaymentOption.INSTALMENTS:
         paymentIntention.repaymentPlan = {
           instalmentAmount: paymentPlanDeterminedFromDefendantFinancialStatement.instalmentAmount,
-          paymentSchedule: paymentPlanDeterminedFromDefendantFinancialStatement.frequency as any, // TODO: convert to payment schedule
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanDeterminedFromDefendantFinancialStatement.frequency) as any, // TODO: convert to payment schedule
           firstPaymentDate: paymentPlanDeterminedFromDefendantFinancialStatement.startDate
         }
         break
