@@ -1,10 +1,17 @@
+/* tslint:disable:no-unused-expression */
+
 import { expect } from 'chai'
 
 import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
 import { MomentFactory } from 'shared/momentFactory'
+import { Moment } from 'moment'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 describe('CourtDetermination', () => {
-  context('calculateDecision', () => {
+  context('determinePaymentDeadline', () => {
     it('should throw an error if defendantPaymentDate, claimantPaymentDate or courtGeneratedPaymentDate are undefined', () => {
       expect(() => {
         CourtDetermination.determinePaymentDeadline(undefined, undefined, undefined)
@@ -65,6 +72,44 @@ describe('CourtDetermination', () => {
       const courtGeneratedPaymentDate = MomentFactory.currentDate().add(15,'days')
 
       expect(CourtDetermination.determinePaymentDeadline(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate).source).to.equal(DecisionType.DEFENDANT)
+    })
+  })
+
+  context('determinePaymentIntention', () => {
+    context('when claimant wishes to be paid in full by set date', () => {
+      const paymentIntentionFromClaimant: PaymentIntention = new PaymentIntention()
+      paymentIntentionFromClaimant.paymentOption = PaymentOption.BY_SPECIFIED_DATE
+      paymentIntentionFromClaimant.paymentDate = MomentFactory.currentDate()
+
+      it('should return payment intention with date specified by defendant when claimant date < defendant date < court date [D]', () => {
+        const paymentDateProposedByDefendant: Moment = MomentFactory.currentDate().add(1, 'day')
+        const paymentPlanDeterminedFromDefendantFinancialStatement = new PaymentPlan(10, 10, Frequency.MONTHLY, MomentFactory.currentDate())
+
+        const paymentIntention: PaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentPlanDeterminedFromDefendantFinancialStatement)
+        expect(paymentIntention.paymentOption).to.be.equal(PaymentOption.BY_SPECIFIED_DATE)
+        expect(paymentIntention.paymentDate).to.be.deep.equal(paymentDateProposedByDefendant)
+        expect(paymentIntention.repaymentPlan).to.be.undefined
+      })
+
+      it('should return payment intention with date specified by claimant when court date < claimant date < defendant date [B]', () => {
+        const paymentDateProposedByDefendant: Moment = MomentFactory.currentDate().add(1, 'day')
+        const paymentPlanDeterminedFromDefendantFinancialStatement = new PaymentPlan(10, 10, Frequency.MONTHLY, MomentFactory.currentDate().subtract(1.5, 'month'))
+
+        const paymentIntention: PaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentPlanDeterminedFromDefendantFinancialStatement)
+        expect(paymentIntention.paymentOption).to.be.equal(PaymentOption.BY_SPECIFIED_DATE)
+        expect(paymentIntention.paymentDate).to.be.deep.equal(paymentIntentionFromClaimant.paymentDate)
+        expect(paymentIntention.repaymentPlan).to.be.undefined
+      })
+
+      it('should return payment intention with date specified by court when claimant date < court date < defendant date [C]', () => {
+        const paymentDateProposedByDefendant: Moment = MomentFactory.currentDate().add(2, 'months')
+        const paymentPlanDeterminedFromDefendantFinancialStatement = new PaymentPlan(10, 10, Frequency.MONTHLY, MomentFactory.currentDate())
+
+        const paymentIntention: PaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentPlanDeterminedFromDefendantFinancialStatement)
+        expect(paymentIntention.paymentOption).to.be.equal(PaymentOption.BY_SPECIFIED_DATE)
+        expect(paymentIntention.paymentDate).to.be.deep.equal(paymentPlanDeterminedFromDefendantFinancialStatement.calculateLastPaymentDate())
+        expect(paymentIntention.repaymentPlan).to.be.undefined
+      })
     })
   })
 })

@@ -14,6 +14,7 @@ import { User } from 'idam/user'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
 
 export abstract class AbstractPaymentDatePage<Draft> {
 
@@ -23,6 +24,11 @@ export abstract class AbstractPaymentDatePage<Draft> {
 
   getView (): string {
     return 'components/payment-intention/payment-date'
+  }
+
+  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft> }): Promise<void> {
+    const user: User = locals.user
+    await new DraftService().save(locals.draft, user.bearerToken)
   }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
@@ -55,11 +61,9 @@ export abstract class AbstractPaymentDatePage<Draft> {
           } else {
             this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentDate = form.model)
 
-            const user: User = res.locals.user
-            
+            await this.saveDraft(res.locals)
+
             res.redirect(this.buildPostSubmissionUri(req, res))
-            await new DraftService().save(res.locals.draft, user.bearerToken)
-            console.log('paymentIntention-PaymentDate----->', res.locals.draft.document)
           }
         }))
   }

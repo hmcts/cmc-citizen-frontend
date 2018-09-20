@@ -1,4 +1,7 @@
 import { Moment } from 'moment'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 export enum DecisionType {
   CLAIMANT = 'CLAIMANT',
@@ -33,6 +36,34 @@ export class CourtDetermination {
         return new PaymentDeadline(DecisionType.COURT, courtGeneratedPaymentDate)
       }
     }
-    // TODO: Kiran in some cases undefined is return, please fix it
+    // TODO: Kiran in some cases undefined is returned, please fix it
   }
+
+  static determinePaymentIntention (paymentDateProposedByDefendant: Moment, claimantPaymentIntention: PaymentIntention, paymentPlanDeterminedFromDefendantFinancialStatement: PaymentPlan): PaymentIntention {
+    const paymentDateProposedByClaimant: Moment = claimantPaymentIntention.paymentDate
+
+    const courtDecision: PaymentDeadline = CourtDetermination.determinePaymentDeadline(
+      paymentDateProposedByDefendant,
+      paymentDateProposedByClaimant,
+      paymentPlanDeterminedFromDefendantFinancialStatement.calculateLastPaymentDate()
+    )
+
+    const paymentIntention = new PaymentIntention()
+    paymentIntention.paymentOption = claimantPaymentIntention.paymentOption
+    switch (claimantPaymentIntention.paymentOption) {
+      case PaymentOption.BY_SPECIFIED_DATE:
+        paymentIntention.paymentDate = courtDecision.date
+        break
+      case PaymentOption.INSTALMENTS:
+        paymentIntention.repaymentPlan = {
+          instalmentAmount: paymentPlanDeterminedFromDefendantFinancialStatement.instalmentAmount,
+          paymentSchedule: paymentPlanDeterminedFromDefendantFinancialStatement.frequency as any, // TODO: convert to payment schedule
+          firstPaymentDate: paymentPlanDeterminedFromDefendantFinancialStatement.startDate
+        }
+        break
+    }
+
+    return paymentIntention
+  }
+
 }

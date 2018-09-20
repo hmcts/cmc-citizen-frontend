@@ -12,10 +12,10 @@ import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { Moment } from 'moment'
-import { CourtDetermination, DecisionType, PaymentDeadline } from 'common/court-calculations/courtDetermination'
-import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { LocalDate } from 'forms/models/localDate'
+import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
 import { Draft } from '@hmcts/draft-store-client'
+import { User } from 'idam/user'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -26,16 +26,28 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     return new DefaultModelAccessor('alternatePaymentMethod')
   }
 
+  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
+    const response = locals.claim.response as FullAdmissionResponse | PartialAdmissionResponse
+    const paymentDateProposedByDefendant: Moment = response.paymentIntention.paymentDate // TODO: handle payments by installments properly
+    const paymentIntentionFromClaimant: any = locals.draft.document.alternatePaymentMethod as any // TODO: convert PI to claim store structure
+    const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, locals.claim.claimData.amount.totalAmount()) // TODO: handle cases where SoM is undefined (defendant paying immediately)
+    locals.draft.document.courtOfferedPaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentDateDeterminedFromDefendantFinancialStatement)
+
+    return super.saveDraft(locals)
+  }
+
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
     const draft: Draft<DraftClaimantResponse> = res.locals.draft
-    const user: User = res.locals.user
 
     const externalId: string = req.params.externalId
-    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const courtDecision = this.getCourtDecision(claimResponse, claim, draft, user)
+    const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    switch (courtDecision) {
+    const paymentDateProposedByDefendant: Moment = response.paymentIntention.paymentDate // TODO: handle payments by installments properly
+    const paymentDateProposedByClaimant: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+    const paymentDateDeterminedFromDefendantFinancialStatement: Moment = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, claim.claimData.amount.totalAmount()).calculateLastPaymentDate() // TODO: handle cases where SoM is undefined (defendant paying immediately)
+
+    switch (CourtDetermination.determinePaymentDeadline(paymentDateProposedByDefendant, paymentDateProposedByClaimant, paymentDateDeterminedFromDefendantFinancialStatement).source) {
       case DecisionType.COURT:
       case DecisionType.DEFENDANT: {
         return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
@@ -44,39 +56,6 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
         return Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })
       }
     }
-  }
-
-  getCourtDecision (claimResponse: FullAdmissionResponse | PartialAdmissionResponse, claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): DecisionType {
-    const defendantPaymentPlanWhenSetDate: PaymentPlan = PaymentPlanHelper
-      .createPaymentPlanFromClaimWhenSetDate(
-        claimResponse,
-        claim.claimData.amount.totalAmount()
-      )
-
-    const defendantLastPaymentDate: Moment = defendantPaymentPlanWhenSetDate.calculateLastPaymentDate()
-    const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const claimantEnteredPayBySetDate: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-    const courtDecision: PaymentDeadline = CourtDetermination.determinePaymentDeadline(
-      defendantEnteredPayBySetDate,
-      claimantEnteredPayBySetDate,
-      defendantLastPaymentDate
-    )
-
-    this.saveCourtOfferedPaymentIntention(draft, defendantPaymentPlanWhenSetDate, courtDecision.date, defendantLastPaymentDate, user)
-    return courtDecision.source
-  }
-
-  saveCourtOfferedPaymentIntention (draft: Draft<DraftClaimantResponse>, defendantPaymentPlanWhenSetDate: PaymentPlan, courtOfferedPaymentDate: Moment, defendantLastPaymentDate: Moment, user: User) {
-    const courtOfferedPaymentIntention = new PaymentIntention()
-
-    courtOfferedPaymentIntention.paymentPlan = defendantPaymentPlanWhenSetDate
-    courtOfferedPaymentIntention.paymentDate = new LocalDate(courtOfferedPaymentDate.year(),
-      defendantLastPaymentDate.month(),
-      defendantLastPaymentDate.day())
-    courtOfferedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.paymentOption
-
-    draft.document.courtOfferedPaymentIntention = courtOfferedPaymentIntention
-    console.log('buildPostSubmissionUri--draft--->', JSON.stringify(draft))
   }
 }
 
