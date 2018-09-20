@@ -27,8 +27,10 @@
   claimPartAdmittedToOweForClaimantDashboard %}
 
 {% from "./claimStatus/claimFullyAdmitted.njk" import
-  claimFullAdmissionForClaimantDashboard,
   claimFullAdmissionForDefendantDashboard %}
+
+{% from "./claimStatus/claimFullAdmissionForClaimant.njk" import
+  claimFullAdmissionForClaimantDashboard %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
   offerSubmittedForClaimantDashboard,
