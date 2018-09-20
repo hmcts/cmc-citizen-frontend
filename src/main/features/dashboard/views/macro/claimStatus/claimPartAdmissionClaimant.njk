@@ -34,6 +34,8 @@
         { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     <p>{{ t('They’ve offered to pay by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    <p>{{ t('They’ve offered to pay in instalments.') }}</p>
   {% endif %}
 
   <p>{{ t('You can accept or reject their admission.') }}</p>
