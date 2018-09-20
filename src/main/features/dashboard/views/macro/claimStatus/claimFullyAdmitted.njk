@@ -74,6 +74,7 @@
   {% set claimantName = claim.claimData.claimant.name %}
   {% set defendantName = claim.claimData.defendant.name %}
   {% set amount = claim.totalAmountTillToday | numeral %}
+  {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({externalId:claim.externalId}) %}
 
   {% if claim.response.paymentIntention.paymentDate %}
     {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
