@@ -18,10 +18,8 @@ import { calculateMonthIncrement } from 'common/calculate-month-increment/calcul
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentIntention as PI } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
 import { MomentFactory } from 'shared/momentFactory'
-// import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-// import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 
 export class PaymentPlanHelper {
 
@@ -93,14 +91,23 @@ export class PaymentPlanHelper {
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
       // TODO: return value
-      PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, totalAmount)
+      const instalmentAmount: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans) / Frequency.WEEKLY.monthlyRatio
+      PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
     }
   }
 
-  static createPaymentPlanFromFinancialStatement (statementOfMeans: StatementOfMeans, amount: number): PaymentPlan {
-    const instalmentAmount: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(statementOfMeans) / Frequency.WEEKLY.monthlyRatio
+  static createPaymentPlanFromFinancialStatement (claim: Claim): PaymentPlan {
+    const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    return PaymentPlanHelper.createPaymentPlan(amount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+    if (response === undefined) {
+      throw new Error('Claim does not have response attached')
+    }
+    if (response.statementOfMeans === undefined) {
+      throw new Error(`Claim response does not have financial statement attached`)
+    }
+
+    const instalmentAmount: number = Math.max(StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans), 0) / Frequency.WEEKLY.monthlyRatio
+    return PaymentPlanHelper.createPaymentPlan(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
   static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {

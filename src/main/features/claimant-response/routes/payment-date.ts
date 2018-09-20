@@ -29,10 +29,9 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-    const response = locals.claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const paymentDateProposedByDefendant: Moment = PaymentDeadlineHelper.getPaymentDeadlineFromAdmission(locals.claim)
     const paymentIntentionFromClaimant: PaymentIntention = locals.draft.document.alternatePaymentMethod.toDomainInstance()
-    const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, locals.claim.totalAmountTillToday)
+    const paymentDateDeterminedFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(locals.claim)
     locals.draft.document.courtOfferedPaymentIntention = CourtDetermination.determinePaymentIntention(paymentDateProposedByDefendant, paymentIntentionFromClaimant, paymentDateDeterminedFromDefendantFinancialStatement)
 
     return super.saveDraft(locals)
@@ -42,13 +41,11 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const claim: Claim = res.locals.claim
     const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
-    const externalId: string = req.params.externalId
-    const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
     const paymentDateProposedByDefendant: Moment = PaymentDeadlineHelper.getPaymentDeadlineFromAdmission(claim)
     const paymentDateProposedByClaimant: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-    const paymentDateDeterminedFromDefendantFinancialStatement: Moment = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(response.statementOfMeans, claim.totalAmountTillToday).calculateLastPaymentDate()
+    const paymentDateDeterminedFromDefendantFinancialStatement: Moment = PaymentPlanHelper.createPaymentPlanFromFinancialStatement(claim).calculateLastPaymentDate()
 
+    const externalId: string = req.params.externalId
     switch (CourtDetermination.determinePaymentDeadline(paymentDateProposedByDefendant, paymentDateProposedByClaimant, paymentDateDeterminedFromDefendantFinancialStatement).source) {
       case DecisionType.COURT:
       case DecisionType.DEFENDANT: {

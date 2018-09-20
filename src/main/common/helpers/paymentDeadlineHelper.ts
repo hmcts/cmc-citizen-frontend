@@ -7,6 +7,7 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
+import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 
 export class PaymentDeadlineHelper {
   static getPaymentDeadlineFromAdmission (claim: Claim): Moment {
@@ -26,13 +27,8 @@ export class PaymentDeadlineHelper {
       case PaymentOption.BY_SPECIFIED_DATE:
         return paymentIntention.paymentDate
       case PaymentOption.INSTALMENTS:
-        let amount: number = claim.totalAmountTillToday
-        if (response.responseType === ResponseType.PART_ADMISSION) {
-          amount = response.amount
-        }
-
         return PaymentPlan.create(
-          amount,
+          AdmissionHelper.getAdmittedAmount(claim),
           paymentIntention.repaymentPlan.instalmentAmount,
           Frequency.of(paymentIntention.repaymentPlan.paymentSchedule),
           paymentIntention.repaymentPlan.firstPaymentDate
