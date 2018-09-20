@@ -371,8 +371,8 @@ export class DefenceSteps {
     I.see('You’ve submitted your response')
   }
 
-  partialPaymentNotMade (defenceType: PartyType, paymentOption: PaymentOption): void {
-   // I.see('Have you paid the claimant the amount you admit you owe?')
+  partialPaymentNotMade (defendantType: PartyType, paymentOption: PaymentOption): void {
+    I.see('Have you paid the claimant the amount you admit you owe?')
     haveYouPaidTheClaimantPage.selectNoOption()
     defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
     defendantHowMuchYouOwePage.enterAmountOwed(10)
@@ -407,6 +407,8 @@ export class DefenceSteps {
     defendantTaskListPage.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseNo()
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
+    this.checkAndSendAndSubmit(defendantType)
+    I.see('You’ve submitted your response')
   }
 
   sendDefenceResponseHandOff (claimRef: string, defendant: Party, claimant: Party, defenceType: DefenceType): void {
