@@ -1,19 +1,18 @@
-import { RoutablePath } from 'shared/router/routablePath'
+import { RoutablePath } from 'main/common/router/routablePath'
 import { StatementOfMeansPaths } from 'response/paths'
 import * as express from 'express'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
+import { OptInFeatureToggleGuard } from 'main/app/guards/optInFeatureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Form } from 'forms/form'
-import { FormValidator } from 'forms/validation/formValidator'
-import { ErrorHandling } from 'shared/errorHandling'
-import { User } from 'idam/user'
+import { Form } from 'main/app/forms/form'
+import { FormValidator } from 'main/app/forms/validation/formValidator'
+import { ErrorHandling } from 'main/common/errorHandling'
+import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
-import { Cohabiting } from 'response/form/models/statement-of-means/cohabiting'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { PartnerPension } from 'response/form/models/statement-of-means/partnerPension'
 
-const page: RoutablePath = StatementOfMeansPaths.partnerPage
+const page: RoutablePath = StatementOfMeansPaths.partnerPensionPage
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -24,16 +23,16 @@ export default express.Router()
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       res.render(page.associatedView, {
-        form: new Form(draft.document.statementOfMeans.cohabiting)
+        form: new Form(draft.document.statementOfMeans.partnerPension)
       })
     })
   .post(
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(Cohabiting, Cohabiting.fromObject),
+    FormValidator.requestHandler(PartnerPension, PartnerPension.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<Cohabiting> = req.body
+      const form: Form<PartnerPension> = req.body
       const { externalId } = req.params
 
       if (form.hasErrors()) {
@@ -42,14 +41,10 @@ export default express.Router()
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
 
-        draft.document.statementOfMeans.cohabiting = form.model
+        draft.document.statementOfMeans.partnerPension = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.option.option === YesNoOption.YES) {
-          res.redirect(StatementOfMeansPaths.partnerAgePage.evaluateUri({ externalId: externalId }))
-        } else {
-          res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
-        }
+        res.redirect(StatementOfMeansPaths.partnerDisabilityPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
