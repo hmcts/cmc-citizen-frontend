@@ -67,7 +67,6 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
-# provision manually???
 data "azurerm_key_vault_secret" "means_allowances" {
   name = "means-allowances"
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
