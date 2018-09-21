@@ -11,15 +11,19 @@ import { BankAccount } from 'claims/models/response/statement-of-means/bankAccou
 import { FrequencyBasedAmount } from 'claims/models/response/statement-of-means/frequencyBasedAmount'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { Income } from 'claims/models/response/statement-of-means/income'
-import { Expense } from 'claims/models/response/statement-of-means/expense'
+import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
+import { Dependant } from 'claims/models/response/statement-of-means/dependant'
+import { Arrear } from 'claims/models/response/statement-of-means/arrear'
 
 const logger = Logger.getLogger('common/statement-of-means')
+const allowances: allowanceBlob = process.env.MEANS_ALLOWANCE_BLOB
 
 export class StatementOfMeansCalculations {
 
   static calculateTotalMonthlyDisposableIncome (statementOfMeans: StatementOfMeans): number {
     const totalMonthlyIncome: number = StatementOfMeansCalculations.calculateTotalMonthlyIncome(statementOfMeans)
     const totalMonthlyExpense: number = StatementOfMeansCalculations.calculateTotalMonthlyExpense(statementOfMeans)
+    const totalMonthlyAllowance: number = StatementOfMeansCalculations.calculateMonthlyAllowances(statementOfMeans)
 
     const totalMonthlyDisposableIncome = totalMonthlyIncome - totalMonthlyExpense
     logger.debug('Monthly disposable income calculation: ', totalMonthlyDisposableIncome)
@@ -28,12 +32,52 @@ export class StatementOfMeansCalculations {
 
   static calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
     const monthlyDebts: number = statementOfMeans.debts ? StatementOfMeansCalculations.calculateMonthlyDebts(statementOfMeans.debts) : 0
+    // Is this required or are they found in statementOfMeans.debt?
+    const monthlyDebtsInArrears: number = statementOfMeans.debts ? StatementOfMeansCalculations.calculateMonthlyDebtsInArrears(statementOfMeans.arrears) : 0
     const monthlyCourtOrders: number = statementOfMeans.courtOrders ? StatementOfMeansCalculations.calculateMonthlyCourtOrders(statementOfMeans.courtOrders) : 0
     const monthlyRegularExpense: number = statementOfMeans.expenses ? StatementOfMeansCalculations.calculateMonthlyRegularExpense(statementOfMeans.expenses) : 0
 
     const totalMonthlyExpense = monthlyDebts + monthlyCourtOrders + monthlyRegularExpense
     logger.debug('Monthly expense calculation: ', totalMonthlyExpense)
     return totalMonthlyExpense
+  }
+
+  static calculateMonthlyAllowances (statementOfMeans: StatementOfMeans): number {
+
+    const monthlyLivingAllowance: number = StatementOfMeansCalculations.calculateMonthlyLivingAllowance()
+    const monthlyDependantsAllowance: number = StatementOfMeansCalculations.calculateMonthlyDependantsAllowance(statementOfMeans.dependant)
+    const monthlyPensionerAllowance: number = StatementOfMeansCalculations.calculateMonthlyPensionerAllowance()
+    const monthlyDisabilityAllowance: number = StatementOfMeansCalculations.calculateMonthlyDisabilityAllowance()
+
+    const totalMonthlyAllowance = monthlyLivingAllowance + monthlyDependantsAllowance + monthlyPensionerAllowance + monthlyDisabilityAllowance
+    logger.debug('Monthly allowance calculation: ', totalMonthlyAllowance)
+    return totalMonthlyAllowance
+  }
+
+  static calculateMonthlyLivingAllowance (): number {
+    return 0
+  }
+
+  static calculateMonthlyDependantsAllowance (dependants: Dependant): number {
+
+    if (!dependants.children && !dependants.numberOfMaintainedChildren && !dependants.otherDependants) {
+      return 0
+    }
+
+    const dependantChildren: number = dependants.children ? dependants.children.length : 0
+    const maintainedChildren: number = dependants.numberOfMaintainedChildren
+    const otherDependants: number = dependants.otherDependants ? dependants.otherDependants.numberOfPeople : 0
+    const totalNumberOfDependants: number = dependantChildren + maintainedChildren + otherDependants
+
+    return 0
+  }
+
+  static calculateMonthlyPensionerAllowance (): number {
+    return 0
+  }
+
+  static calculateMonthlyDisabilityAllowance (): number {
+    return 0
   }
 
   static calculateMonthlyDebts (debts: Debt[]): number {
@@ -70,8 +114,18 @@ export class StatementOfMeansCalculations {
     return monthlyCourtOrders
   }
 
+  static calculateMonthlyDebtsInArrears (arrears: Arrear[]): number {
+    const monthlyArrears: number = StatementOfMeansCalculations.calculateMonthlyRegularIncomeOrExpense(arrears)
+    logger.debug('Monthly arrears calculation: ', monthlyArrears)
+    return monthlyArrears
+  }
+
   static calculateMonthlyRegularExpense (expenses: Expense[]): number {
-    const monthlyRegularExpense = StatementOfMeansCalculations.calculateMonthlyRegularIncomeOrExpense(expenses)
+    const monthlyRegularExpense = StatementOfMeansCalculations.calculateMonthlyRegularIncomeOrExpense(
+      expenses.filter(value => {
+        return value.type === ExpenseType.RENT || value.type === ExpenseType.MORTGAGE
+      })
+    )
     logger.debug('Monthly regular expense calculation: ', monthlyRegularExpense)
     return monthlyRegularExpense
   }
