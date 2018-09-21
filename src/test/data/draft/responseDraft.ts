@@ -279,9 +279,11 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
       balance: 1000
     }]
   },
+  disability: false,
   residence: {
     type: ResidenceType.OWN_HOME
   },
+  cohabiting: false,
   dependants: {
     declared: false
   },
@@ -291,6 +293,7 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
   otherDependants: {
     declared: false
   },
+  carer: false,
   employment: {
     declared: false
   },
@@ -328,6 +331,13 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
 
 export const statementOfMeansWithAllFieldsDraft = {
   ...statementOfMeansWithMandatoryFieldsDraft,
+  disability: true,
+  severeDisability: true,
+  cohabiting: true,
+  partnerAge: true,
+  partnerPension: true,
+  partnerDisability: true,
+  partnerSevereDisability: true,
   dependants: {
     declared: true,
     numberOfChildren: {
@@ -339,6 +349,7 @@ export const statementOfMeansWithAllFieldsDraft = {
   education: {
     value: 3
   },
+  dependantsDisability: true,
   maintenance: {
     declared: true,
     value: 4
@@ -350,6 +361,8 @@ export const statementOfMeansWithAllFieldsDraft = {
       details: 'Colleagues'
     }
   },
+  otherDependantsDisability: true,
+  carer: true,
   employment: {
     declared: true,
     employed: true,
