@@ -67,6 +67,11 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "means_allowances" {
+  name = "means-allowances"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
 module "citizen-frontend" {
   source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
   product = "${var.product}-${var.microservice}"
@@ -107,6 +112,9 @@ module "citizen-frontend" {
     IDAM_S2S_AUTH = "${local.s2sUrl}"
     IDAM_S2S_TOTP_SECRET = "${data.azurerm_key_vault_secret.s2s_secret.value}"
     OAUTH_CLIENT_SECRET = "${data.azurerm_key_vault_secret.oauth_client_secret.value}"
+
+    // Allowance calculations
+    MEANS_ALLOWANCE_BLOB = "${data.azurerm_key_vault_secret.means_allowances.value}"
 
     // Payments API
     PAY_URL = "${var.payments_api_url}"

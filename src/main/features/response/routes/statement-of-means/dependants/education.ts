@@ -69,7 +69,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        res.redirect(Paths.maintenancePage.evaluateUri({ externalId: externalId }))
+        res.redirect(Paths.dependantsDisabilityPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
