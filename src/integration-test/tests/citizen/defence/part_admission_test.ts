@@ -1,6 +1,7 @@
 import I = CodeceptJS.I
 import { createClaimData } from 'integration-test/data/test-data'
 import { PartyType } from 'integration-test/data/party-type'
+import { PaymentOption } from 'integration-test/data/payment-option'
 
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
@@ -26,4 +27,26 @@ Scenario('I can complete the journey when I partially admit the claim with payme
   await prepareClaim(I)
 
   defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
+  defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
+})
+
+Scenario('I can complete the journey when I partially admit the claim with immediate payment @citizen', async (I: I) => {
+  await prepareClaim(I)
+
+  defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
+  defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
+})
+
+Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen', async (I: I) => {
+  await prepareClaim(I)
+
+  defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
+  defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
+})
+
+Scenario('I can complete the journey when I partially admit the claim with instalments payment @citizen', async (I: I) => {
+  await prepareClaim(I)
+
+  defenceSteps.makePartialAdmission(PartyType.INDIVIDUAL)
+  defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
 })
