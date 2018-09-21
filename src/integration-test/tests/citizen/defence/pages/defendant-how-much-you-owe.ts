@@ -3,8 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  amount: 'input[id=amount]',
-  text: 'textarea[id=text]'
+  amount: 'input[id=amount]'
 }
 
 const buttons = {
@@ -13,9 +12,8 @@ const buttons = {
 
 export class DefendantHowMuchYouOwePage {
 
-  enterAmountOwedAndExplaination (amount: number, explaination: string): void {
+  enterAmountOwed (amount: number): void {
     I.fillField(fields.amount, amount.toString())
-    I.fillField(fields.text, explaination)
     I.click(buttons.submit)
   }
 }
