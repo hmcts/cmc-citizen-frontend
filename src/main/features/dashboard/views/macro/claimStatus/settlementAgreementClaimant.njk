@@ -1,5 +1,11 @@
+{% from "form.njk" import csrfProtection, submitButton %}
+
 {% macro settlementAgreementSignedByClaimantDashboard(claim) %}
     {{ t('You’ve signed a settlement agreement. The defendant can choose to sign it or not.') }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantDeadlinePassedDashboard(claim) %}
+  {{ t('The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.') }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
@@ -10,4 +16,17 @@
   <p>{{ t('They must respond before 4pm on {{ respondDate }}. We’ll email you when they respond.',
       { respondDate: claim.respondToResponseDeadline | date }) }}</p>
   <p>{{ t('If they do not respond you can request a County Court Judgment.') }}</p>
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-small">{{ t('The defendant has not responded to your settlement agreement') }}</h2>
+  <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan they offered.') }}</p>
+  <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay it.') }}</p>
+  <p>{{ t('{{ defendantName }} can still sign the settlement agreement until you request a CCJ.',
+      { defendantName: claim.claimData.defendant.name }) }}</p>
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+    {{ submitButton('Request a County Court Judgment') }}
+  </form>
 {% endmacro %}
