@@ -1,0 +1,13 @@
+{% macro settlementAgreementSignedByClaimantDashboard(claim) %}
+    {{ t('You’ve signed a settlement agreement. The defendant can choose to sign it or not.') }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-small">{{ t('You’ve signed a settlement agreement') }}</h2>
+  <p>{{ t('We’ve emailed {{ defendantName }} the repayment plan and the settlement agreement for them to sign.',
+      { defendantName: defendantName }) }}</p>
+  <p>{{ t('They must respond before 4pm on {{ respondDate }}. We’ll email you when they respond.',
+      { respondDate: claim.respondToResponseDeadline | date }) }}</p>
+  <p>{{ t('If they do not respond you can request a County Court Judgment.') }}</p>
+{% endmacro %}

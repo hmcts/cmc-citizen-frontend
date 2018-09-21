@@ -44,6 +44,9 @@
   offerRejectedForClaimantDashboard,
   offerRejectedForDefendantDashboard %}
 
+{% from "./claimStatus/settlementAgreementClaimant.njk" import
+  settlementAgreementSignedByClaimantDashboard %}
+
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
@@ -57,6 +60,8 @@
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
     {{ claimFullAdmissionForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+    {{ settlementAgreementSignedByClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
     {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
       {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
