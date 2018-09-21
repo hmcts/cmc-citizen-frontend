@@ -10,8 +10,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import { Disability } from 'response/form/models/statement-of-means/disability'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { Disability, DisabilityOption } from 'response/form/models/statement-of-means/disability'
 
 const page: RoutablePath = StatementOfMeansPaths.disabilityPage
 
@@ -31,7 +30,7 @@ export default express.Router()
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(Disability, Disability.fromObject),
+    FormValidator.requestHandler(Disability),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Disability> = req.body
       const { externalId } = req.params
@@ -45,7 +44,7 @@ export default express.Router()
         draft.document.statementOfMeans.disability = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.option.option === YesNoOption.YES) {
+        if (form.model.option === DisabilityOption.YES) {
           res.redirect(StatementOfMeansPaths.severeDisabilityPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(StatementOfMeansPaths.residencePage.evaluateUri({ externalId: externalId }))

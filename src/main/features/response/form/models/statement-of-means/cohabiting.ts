@@ -1,30 +1,27 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { YesNoOption } from 'models/yesNoOption'
 
-import { ValidationErrors } from 'forms/validation/validationErrors'
+export class ValidationErrors {
+  static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
+}
+
+export class CohabitingOption {
+  static readonly YES = 'yes'
+  static readonly NO = 'no'
+
+  static all (): string[] {
+    return [
+      CohabitingOption.YES,
+      CohabitingOption.NO
+    ]
+  }
+}
 
 export class Cohabiting {
-  @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
-  option?: YesNoOption
+  @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
+  @IsIn(CohabitingOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
+  option?: string
 
-  constructor (option?: YesNoOption) {
+  constructor (option?: string) {
     this.option = option
-  }
-
-  public static fromObject (input?: any): Cohabiting {
-    if (!input) {
-      return input
-    }
-
-    return new Cohabiting(YesNoOption.fromObject(input.option))
-  }
-
-  deserialize (input?: any): Cohabiting {
-    if (input && input.option) {
-      this.option = YesNoOption.fromObject(input.option)
-    }
-
-    return this
   }
 }

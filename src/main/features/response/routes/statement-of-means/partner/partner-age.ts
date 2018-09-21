@@ -10,8 +10,7 @@ import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
-import { PartnerAge } from 'response/form/models/statement-of-means/partnerAge'
-import { YesNoOption } from 'main/app/claims/models/response/core/yesNoOption'
+import { PartnerAge, PartnerAgeOption } from 'response/form/models/statement-of-means/partnerAge'
 
 const page: RoutablePath = StatementOfMeansPaths.partnerAgePage
 
@@ -31,7 +30,7 @@ export default express.Router()
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(PartnerAge, PartnerAge.fromObject),
+    FormValidator.requestHandler(PartnerAge),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<PartnerAge> = req.body
       const { externalId } = req.params
@@ -45,7 +44,7 @@ export default express.Router()
         draft.document.statementOfMeans.partnerAge = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.option.option === YesNoOption.YES) {
+        if (form.model.option === PartnerAgeOption.YES) {
           res.redirect(StatementOfMeansPaths.partnerPensionPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(StatementOfMeansPaths.partnerDisabilityPage.evaluateUri({ externalId: externalId }))

@@ -30,7 +30,7 @@ export default express.Router()
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(SevereDisability, SevereDisability.fromObject),
+    FormValidator.requestHandler(SevereDisability),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<SevereDisability> = req.body
       const { externalId } = req.params

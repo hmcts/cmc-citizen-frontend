@@ -10,8 +10,7 @@ import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
-import { Cohabiting } from 'response/form/models/statement-of-means/cohabiting'
-import { YesNoOption } from 'main/app/claims/models/response/core/yesNoOption'
+import { Cohabiting, CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 
 const page: RoutablePath = StatementOfMeansPaths.partnerPage
 
@@ -31,7 +30,7 @@ export default express.Router()
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(Cohabiting, Cohabiting.fromObject),
+    FormValidator.requestHandler(Cohabiting),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Cohabiting> = req.body
       const { externalId } = req.params
@@ -45,7 +44,7 @@ export default express.Router()
         draft.document.statementOfMeans.cohabiting = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.option.option === YesNoOption.YES) {
+        if (form.model.option === CohabitingOption.YES) {
           res.redirect(StatementOfMeansPaths.partnerAgePage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))

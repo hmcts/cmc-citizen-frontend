@@ -1,30 +1,27 @@
 import { IsDefined, IsIn } from 'class-validator'
-import { YesNoOption } from 'models/yesNoOption'
 
-import { ValidationErrors } from 'forms/validation/validationErrors'
+export class ValidationErrors {
+  static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
+}
+
+export class PartnerSevereDisabilityOption {
+  static readonly YES = 'yes'
+  static readonly NO = 'no'
+
+  static all (): string[] {
+    return [
+      PartnerSevereDisabilityOption.YES,
+      PartnerSevereDisabilityOption.NO
+    ]
+  }
+}
 
 export class PartnerSevereDisability {
-  @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
-  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
-  option?: YesNoOption
+  @IsDefined({ message: ValidationErrors.OPTION_REQUIRED })
+  @IsIn(PartnerSevereDisabilityOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
+  option?: string
 
-  constructor (option?: YesNoOption) {
+  constructor (option?: string) {
     this.option = option
-  }
-
-  public static fromObject (input?: any): PartnerSevereDisability {
-    if (!input) {
-      return input
-    }
-
-    return new PartnerSevereDisability(YesNoOption.fromObject(input.option))
-  }
-
-  deserialize (input?: any): PartnerSevereDisability {
-    if (input && input.option) {
-      this.option = YesNoOption.fromObject(input.option)
-    }
-
-    return this
   }
 }
