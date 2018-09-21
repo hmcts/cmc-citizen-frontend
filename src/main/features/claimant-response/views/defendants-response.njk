@@ -85,8 +85,9 @@
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-
-        {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
+        {% if not claim.claimData.defendant.isBusiness %}
+          {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
+        {% endif %}
       {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
@@ -135,7 +136,9 @@
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-          {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
+          {% if not claim.claimData.defendant.isBusiness %}
+            {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
+          {% endif %}
         {% endif %}
       {% endif %}
 
