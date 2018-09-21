@@ -46,14 +46,12 @@
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-
-  <p>{{ t('{{ defendantName }} has rejected your claim. You’ll have to go to a hearing to resolve it.',
-        { defendantName: claim.claimData.defendant.name }) }}</p>
+  <h2 class="heading-small">{{ t('The defendant has rejected your claim') }}</h2>
+  <p>{{ t('They said they dispute your claim.') }}</p>
 
   {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
 
-  <p>{{ t('Your claim will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
+  <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
 
   <p>
