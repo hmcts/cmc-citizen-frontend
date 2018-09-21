@@ -11,6 +11,7 @@ import { ErrorHandling } from 'main/common/errorHandling'
 import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
 import { PartnerAge, PartnerAgeOption } from 'response/form/models/statement-of-means/partnerAge'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 
 const page: RoutablePath = StatementOfMeansPaths.partnerAgePage
 
@@ -46,8 +47,10 @@ export default express.Router()
 
         if (form.model.option === PartnerAgeOption.YES) {
           res.redirect(StatementOfMeansPaths.partnerPensionPage.evaluateUri({ externalId: externalId }))
-        } else {
+        } else if (draft.document.statementOfMeans.disability === DisabilityOption.YES) {
           res.redirect(StatementOfMeansPaths.partnerDisabilityPage.evaluateUri({ externalId: externalId }))
+        } else {
+          res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
         }
       }
     })

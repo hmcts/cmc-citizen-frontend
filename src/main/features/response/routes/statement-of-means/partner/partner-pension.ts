@@ -11,6 +11,7 @@ import { ErrorHandling } from 'main/common/errorHandling'
 import { User } from 'main/app/idam/user'
 import { DraftService } from 'services/draftService'
 import { PartnerPension } from 'response/form/models/statement-of-means/partnerPension'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 
 const page: RoutablePath = StatementOfMeansPaths.partnerPensionPage
 
@@ -44,7 +45,11 @@ export default express.Router()
         draft.document.statementOfMeans.partnerPension = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(StatementOfMeansPaths.partnerDisabilityPage.evaluateUri({ externalId: externalId }))
+        if (draft.document.statementOfMeans.disability === DisabilityOption.YES) {
+          res.redirect(StatementOfMeansPaths.partnerDisabilityPage.evaluateUri({ externalId: externalId }))
+        } else {
+          res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
+        }
       }
     })
   )
