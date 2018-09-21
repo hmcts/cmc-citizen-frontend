@@ -44,7 +44,7 @@ export default express.Router()
         draft.document.statementOfMeans.otherDependantsDisability = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(StatementOfMeansPaths.employmentPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.carerPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
