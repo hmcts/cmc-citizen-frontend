@@ -21,10 +21,11 @@ import { Draft } from '@hmcts/draft-store-client'
 import { Moment } from 'moment'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
+import { DecisionType } from 'common/court-calculations/courtDetermination'
 import { Frequency } from 'common/frequency/frequency'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
+import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 
 class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   getView (): string {
@@ -40,9 +41,8 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-    const getCourtDecision: DecisionType = this.getCourtDecision(locals.claim, locals.draft)
+    const getCourtDecision: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
 
-    console.log('getCourtDecision----->',getCourtDecision)
     locals.draft.document.courtDecisionType = getCourtDecision
     locals.draft.document.courtOfferedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, getCourtDecision)
 
@@ -52,7 +52,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
     const draft: Draft<DraftClaimantResponse> = res.locals.draft
-    const courtDecision = this.getCourtDecision(claim, draft)
+    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
 
     const externalId: string = req.params.externalId
     switch (courtDecision) {
@@ -64,27 +64,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
         return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
       }
     }
-  }
-
-  getCourtDecision (claim: Claim, draft: Draft<DraftClaimantResponse>): DecisionType {
-    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-    const defendantPaymentPlanWhenInstalment: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-
-    const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const defendantInstalmentLastDate: Moment = defendantPaymentPlanWhenInstalment.calculateLastPaymentDate()
-
-    const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromForm(draft.document.alternatePaymentMethod.paymentPlan)
-
-    const courtOfferedLastDate: Moment = courtCalculatedPaymentPlan.calculateLastPaymentDate()
-    const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantInstalmentLastDate : defendantEnteredPayBySetDate
-    const claimantLastPaymentDate: Moment = claimantEnteredPaymentPlan.calculateLastPaymentDate()
-
-    return CourtDetermination.calculateDecision(
-      defendantLastPaymentDate,
-      claimantLastPaymentDate,
-      courtOfferedLastDate
-    )
   }
 
   generateCourtCalculatedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): PaymentIntention {

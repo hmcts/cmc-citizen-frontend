@@ -59,6 +59,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
         FormValidator.requestHandler(PaymentPlanModel, PaymentPlanModel.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {
+
             const form: Form<PaymentPlanModel> = req.body
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)

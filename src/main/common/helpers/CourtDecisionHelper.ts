@@ -12,18 +12,20 @@ export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: Draft<DraftClaimantResponse>): DecisionType {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-    const defendantPaymentPlanWhenInstalment: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
 
     const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const defendantInstalmentLastDate: Moment = defendantPaymentPlanWhenInstalment.calculateLastPaymentDate()
+    const defendantInstalmentLastDate: Moment = PaymentPlanHelper.createPaymentPlanFromClaim(claim).calculateLastPaymentDate()
+    const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantEnteredPayBySetDate : defendantInstalmentLastDate
 
+    const claimantEnteredPayBySetDate: Moment = draft.document.alternatePaymentMethod.paymentDate ? draft.document.alternatePaymentMethod.paymentDate.date.toMoment() : undefined
+    const claimantInstalmentLastDate: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromForm(draft.document.alternatePaymentMethod.paymentPlan)
+    const claimantLastPaymentDate: Moment = claimantEnteredPayBySetDate ? claimantEnteredPayBySetDate : claimantInstalmentLastDate.calculateLastPaymentDate()
+    
     const courtOfferedLastDate: Moment = courtCalculatedPaymentPlan.calculateLastPaymentDate()
-    const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantInstalmentLastDate : defendantEnteredPayBySetDate
-    const claimantEnteredPayBySetDate: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-
+    
     return CourtDetermination.calculateDecision(
       defendantLastPaymentDate,
-      claimantEnteredPayBySetDate,
+      claimantLastPaymentDate,
       courtOfferedLastDate
     )
   }
