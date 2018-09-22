@@ -98,8 +98,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           lengthOfPayment: claimantEnteredPaymentPlan.calculatePaymentLength()
         }
 
-        console.log('asdfsafasf----->', JSON.stringify(courtCalculatedPaymentIntention))
-
         return courtCalculatedPaymentIntention
       }
     }
