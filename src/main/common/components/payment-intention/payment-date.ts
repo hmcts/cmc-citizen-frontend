@@ -15,6 +15,7 @@ import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 export abstract class AbstractPaymentDatePage<Draft> {
 
@@ -26,7 +27,7 @@ export abstract class AbstractPaymentDatePage<Draft> {
     return 'components/payment-intention/payment-date'
   }
 
-  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft> }): Promise<void> {
+  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft>,claim: Claim }): Promise<void> {
     const user: User = locals.user
     await new DraftService().save(locals.draft, user.bearerToken)
   }

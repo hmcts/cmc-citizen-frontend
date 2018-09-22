@@ -61,13 +61,12 @@ export class PaymentPlanHelper {
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      // TODO: return value
       const instalmentAmount: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans) / Frequency.WEEKLY.monthlyRatio
-      PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+      return PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
     }
   }
 
-  static createPaymentPlanFromFinancialStatement (claim: Claim): PaymentPlan {
+  static createPaymentPlanFromDefendantFinancialStatement (claim: Claim): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     if (response === undefined) {
@@ -127,7 +126,7 @@ export class PaymentPlanHelper {
   }
 
   private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
-    if (!totalAmount || !instalmentAmount || !frequency) { // TODO: Kiran please fix `!instalmentAmount` to not return undefined if instalmentAmount is equal 0
+    if (!totalAmount || !instalmentAmount || !frequency) {
       return undefined
     }
 

@@ -60,7 +60,15 @@ describe('Claimant response: court offered set date page', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-        draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveFind('claimantResponse', {
+          courtOfferedPaymentIntention: {
+            paymentOption: 'BY_SPECIFIED_DATE',
+            paymentDate: {
+              year: 2018,
+              month: 11,
+              day: 1
+            },
+            repaymentPlan: undefined } })
 
         await request(app)
           .get(pagePath)
@@ -69,76 +77,82 @@ describe('Claimant response: court offered set date page', () => {
       })
     })
 
-    describe('on POST', () => {
-      const method = 'post'
-      checkAuthorizationGuards(app, method, pagePath)
-      checkNotClaimantInCaseGuard(app, method, pagePath)
+  })
 
-      context('when user authorised', () => {
-        beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+
+  describe('on POST', () => {
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+    checkNotClaimantInCaseGuard(app, method, pagePath)
+
+    context('when user authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+      })
+
+      context('when middleware failure', () => {
+        it('should return 500 when cannot retrieve claim by external id', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        context('when middleware failure', () => {
-          it('should return 500 when cannot retrieve claim by external id', async () => {
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+        it('should return 500 when cannot retrieve claimantResponse draft', async () => {
+          draftStoreServiceMock.rejectFind('Error')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+      })
 
-          it('should return 500 when cannot retrieve claimantResponse draft', async () => {
-            draftStoreServiceMock.rejectFind('Error')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+      context('when form is valid', async () => {
+        it('should redirect to task list page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+          draftStoreServiceMock.resolveFind('claimantResponse')
+          draftStoreServiceMock.resolveSave()
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
         })
 
-        context('when form is valid', async () => {
-          it('should redirect to task list page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-            draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.resolveSave()
+        it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+          draftStoreServiceMock.resolveFind('claimantResponse')
+          draftStoreServiceMock.rejectSave()
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(taskListPagePath))
-          })
-
-          it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-            draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.rejectSave()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(validFormData)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(validFormData)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
+      })
 
-        context('when form is invalid', async () => {
-          it('should render page', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-            draftStoreServiceMock.resolveFind('claimantResponse')
+      context('when form is invalid', async () => {
+        it.only('should render page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+          draftStoreServiceMock.resolveFind('claimantResponse', { acceptPaymentMethod: {
+            accept: {
+              option: 'no'
+            }
+            ,acceptCourtOffer: undefined })
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ accept: undefined })
-              .expect(res => expect(res).to.be.successful.withText('The defendant can’t pay by your proposed date', 'div class="error-summary"'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ accept: undefined })
+            .expect(res => expect(res).to.be.successful.withText('Please select yes or no'))
         })
       })
     })

@@ -9,9 +9,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { ErrorHandling } from 'shared/errorHandling'
-import { AdmissionHelper } from 'shared/helpers/admissionHelper'
-import { Frequency } from 'common/frequency/frequency'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -21,10 +20,15 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
-      const courtOfferedPaymentPlan: PaymentPlan = PaymentPlan.create(AdmissionHelper.getAdmittedAmount(claim), draft.document.courtOfferedPaymentIntention.repaymentPlan.instalmentAmount, Frequency.of(draft.document.courtOfferedPaymentIntention.repaymentPlan.paymentSchedule), draft.document.courtOfferedPaymentIntention.repaymentPlan.firstPaymentDate)
+      const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
+      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
-        courtOrderPaymentPlan: courtOfferedPaymentPlan.convertTo(Frequency.MONTHLY) })
+        isCourtOrderPaymentPlanConvertedByDefendantFrequency: defendantPaymentPlan.frequency ? false : claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency,
+        claimantPaymentPlan: claimantPaymentPlan,
+        defendantPaymentPlan: defendantPaymentPlan,
+        courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
+       })
     }))
   .post(
     Paths.counterOfferAcceptedPage.uri,

@@ -8,53 +8,19 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { YesNoOption } from 'models/yesNoOption'
 
 import { Claim } from 'claims/models/claim'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 
-import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Frequency } from 'common/frequency/frequency'
-
-import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
-import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
-import { Expense } from 'claims/models/response/statement-of-means/expense'
-import { Income } from 'claims/models/response/statement-of-means/income'
-import { AdmissionHelper } from 'shared/helpers/admissionHelper'
-
-function calculateTotalMonthlyIncome (incomes: Income[]): number {
-  if (incomes === undefined) {
-    return 0
-  }
-
-  const incomeSources = incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
-  return CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeSources)
-}
-
-function calculateTotalMonthlyExpense (expenses: Expense[]): number {
-  if (expenses === undefined) {
-    return 0
-  }
-
-  const expenseSources = expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
-  return CalculateMonthlyIncomeExpense.calculateTotalAmount(expenseSources)
-}
-
 function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const claim: Claim = res.locals.claim
-  const draft: DraftClaimantResponse = res.locals.draft.document
-  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
-  const courtOfferedPaymentPlan: PaymentPlan = PaymentPlan.create(AdmissionHelper.getAdmittedAmount(claim), draft.courtOfferedPaymentIntention.repaymentPlan.instalmentAmount, Frequency.of(draft.courtOfferedPaymentIntention.repaymentPlan.paymentSchedule), draft.courtOfferedPaymentIntention.repaymentPlan.firstPaymentDate)
+  const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
     claim: claim,
-    totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans.incomes),
-    totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans.expenses),
-    courtOrderPaymentPlan: courtOfferedPaymentPlan.convertTo(Frequency.MONTHLY)
+    courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
   })
 }
 

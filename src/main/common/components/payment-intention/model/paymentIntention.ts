@@ -23,6 +23,8 @@ export class PaymentIntention {
   @ValidateNested()
   paymentPlan?: PaymentPlan
 
+
+
   static deserialise (input: any): PaymentIntention {
     if (!input) {
       return input
@@ -50,7 +52,7 @@ export class PaymentIntention {
 
   toDomainInstance (): domain.PaymentIntention {
     const instance = new domain.PaymentIntention()
-    instance.paymentOption = this.paymentOption.option.value as any
+    instance.paymentOption = this.paymentOption.option as any
 
     switch (this.paymentOption.option) {
       case PaymentType.BY_SET_DATE:

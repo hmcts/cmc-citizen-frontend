@@ -9,6 +9,7 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { DecisionType } from 'common/court-calculations/courtDetermination';
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -20,6 +21,7 @@ export class DraftClaimantResponse extends DraftDocument {
   settlementAgreement?: SettlementAgreement
   alternatePaymentMethod?: DraftPaymentIntention
   courtOfferedPaymentIntention?: PaymentIntention
+  courtDecisionType?: DecisionType
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
@@ -64,6 +66,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.courtOfferedPaymentIntention) {
         this.courtOfferedPaymentIntention = PaymentIntention.deserialize(input.courtOfferedPaymentIntention)
+      }
+      if (input.courtDecisionType) {
+        this.courtDecisionType = input.courtDecisionType
       }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount

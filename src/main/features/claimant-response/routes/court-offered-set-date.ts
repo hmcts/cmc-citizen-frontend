@@ -31,6 +31,8 @@ export default express.Router()
     Paths.courtOfferedSetDatePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+
+      console.log('courtOfferedSetDatePageDraft----->', JSON.stringify(draft.document))
       renderView(new Form(draft.document.acceptCourtOffer), res)
     }))
 

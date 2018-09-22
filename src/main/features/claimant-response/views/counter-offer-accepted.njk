@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton %}
-{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
+{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
 
 {% set heading = 'Repayment plan accepted' %}
 
@@ -10,21 +10,29 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p> {{ t('The court has accepted your repayment amount, but the frequency will be set by the defendant.
-        We’ve converted the {{ claimantAmount }} payment {{ claimantFrequency }} to
-        {{ courtOrderAmount }} {{ courtOrderFrequency }}.', {
-            claimantAmount: courtOrderPaymentPlan.instalmentAmount | numeral,
-            claimantFrequency: courtOrderPaymentPlan.frequency | renderFrequencyViewType | lower,
-            courtOrderAmount: courtOrderPaymentPlan.instalmentAmount | numeral,
-            courtOrderFrequency: courtOrderPaymentPlan.frequency | renderFrequencyViewType | lower
-          }) }}</p>
+        {% if isCourtOrderPaymentPlanConvertedByDefendantFrequency %}
+          <p> {{ t('The court has accepted your repayment amount, but the frequency will be set by the defendant.
+          We’ve converted the {{ claimantAmount }} payment {{ claimantFrequency }} to
+          {{ courtOrderAmount }} {{ courtOrderFrequency }}.', {
+              claimantAmount: claimantPaymentPlan.instalmentAmount | numeral,
+              claimantFrequency: claimantPaymentPlan.frequency | renderFrequencyViewType | lower,
+              courtOrderAmount: courtOrderPaymentPlan.instalmentAmount | numeral,
+              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderFrequencyViewType | lower
+            }) }}</p>
 
-        {{
-        repaymentPlanBlock(
-          heading = 'The court’s proposed repayment plan',
-          paymentPlan = courtOrderPaymentPlan
-        )
-        }}
+            {{ paymentPlanTable(
+              id = 'payment-table',
+              instalmentAmount = courtOrderPaymentPlan.instalmentAmount,
+              paymentSchedule = courtOrderPaymentPlan.paymentSchedule,
+              firstPaymentDate = courtOrderPaymentPlan.firstPaymentDate,
+              lastPaymentOn = courtOrderPaymentPlan.completionDate,
+              lengthOfPayment = courtOrderPaymentPlan.lengthOfPayment
+              )
+            }}
+          
+        {% else %}
+          <p> {{ t('The court has accepted your repayment plan.') }} </p>
+        {% endif %}
         {{ submitButton() }}
       </form>
     </div>
