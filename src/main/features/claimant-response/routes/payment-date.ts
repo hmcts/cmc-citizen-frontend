@@ -1,23 +1,22 @@
 import * as express from 'express'
 
-import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
-import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
-import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import {AbstractPaymentDatePage} from 'shared/components/payment-intention/payment-date'
+import {AbstractModelAccessor, DefaultModelAccessor} from 'shared/components/model-accessor'
+import {PaymentIntention} from 'claims/models/response/core/paymentIntention'
 
-import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import {DraftClaimantResponse} from 'claimant-response/draft/draftClaimantResponse'
 
-import { claimantResponsePath, Paths } from 'claimant-response/paths'
-import { Claim } from 'claims/models/claim'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
-import { Moment } from 'moment'
-import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
-import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Frequency } from 'common/frequency/frequency'
-import { Draft } from '@hmcts/draft-store-client'
-import { User } from 'idam/user'
-import { PaymentOption } from 'claims/models/paymentOption'
+import {claimantResponsePath, Paths} from 'claimant-response/paths'
+import {Claim} from 'claims/models/claim'
+import {PaymentPlanHelper} from 'shared/helpers/paymentPlanHelper'
+import {Moment} from 'moment'
+import {DecisionType} from 'common/court-calculations/courtDetermination'
+import {PaymentPlan} from 'common/payment-plan/paymentPlan'
+import {Frequency} from 'common/frequency/frequency'
+import {Draft} from '@hmcts/draft-store-client'
+import {User} from 'idam/user'
+import {PaymentOption} from 'claims/models/paymentOption'
+import {CourtDecisionHelper} from 'shared/helpers/CourtDecisionHelper'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -33,7 +32,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
     const externalId: string = req.params.externalId
-    const courtDecision = this.getCourtDecision(claim, draft)
+    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
 
     switch (courtDecision) {
       case DecisionType.COURT:
@@ -46,32 +45,11 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     }
   }
 
-  getCourtDecision (claim: Claim, draft: Draft<DraftClaimantResponse>): DecisionType {
-    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-    const defendantPaymentPlanWhenInstalment: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-
-    const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const defendantInstalmentLastDate: Moment = defendantPaymentPlanWhenInstalment.calculateLastPaymentDate()
-
-    const courtOfferedLastDate: Moment = courtCalculatedPaymentPlan.calculateLastPaymentDate()
-    const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantInstalmentLastDate : defendantEnteredPayBySetDate
-    const claimantEnteredPayBySetDate: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-
-    return CourtDetermination.calculateDecision(
-      defendantLastPaymentDate,
-      claimantEnteredPayBySetDate,
-      courtOfferedLastDate
-    )
-  }
-
   generateCourtCalculatedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const courtCalculatedPaymentIntention = new PaymentIntention()
 
     if (decisionType === DecisionType.CLAIMANT) {
-      const claimantEnteredPayBySetDate: Moment = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-
-      courtCalculatedPaymentIntention.paymentDate = claimantEnteredPayBySetDate
+      courtCalculatedPaymentIntention.paymentDate = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
       courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
 
       return courtCalculatedPaymentIntention
@@ -99,7 +77,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-    const getCourtDecision: DecisionType = this.getCourtDecision(locals.claim, locals.draft)
+    const getCourtDecision: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
 
     locals.draft.document.courtDecisionType = getCourtDecision
     locals.draft.document.courtOfferedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, getCourtDecision)
