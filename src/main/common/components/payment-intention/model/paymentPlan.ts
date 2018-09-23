@@ -31,15 +31,19 @@ export class PaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED })
   paymentSchedule?: PaymentSchedule
 
+  completionDate?: LocalDate
+
   constructor (totalAmount?: number,
                instalmentAmount?: number,
                firstPaymentDate?: LocalDate,
-               paymentSchedule?: PaymentSchedule
+               paymentSchedule?: PaymentSchedule,
+               completionDate?: LocalDate
               ) {
     this.totalAmount = totalAmount
     this.instalmentAmount = instalmentAmount
     this.firstPaymentDate = firstPaymentDate
     this.paymentSchedule = paymentSchedule
+    this.completionDate = completionDate
   }
 
   static fromObject (value?: any): PaymentPlan {
@@ -51,7 +55,9 @@ export class PaymentPlan {
       toNumberOrUndefined(value.totalAmount),
       toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
-      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined)
+      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined,
+      LocalDate.fromObject(value.completionDate)
+    )
   }
 
   deserialize (input?: any): PaymentPlan {
@@ -60,6 +66,7 @@ export class PaymentPlan {
       this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
       this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined
+      this.completionDate = new LocalDate().deserialize(input.completionDate)
     }
     return this
   }

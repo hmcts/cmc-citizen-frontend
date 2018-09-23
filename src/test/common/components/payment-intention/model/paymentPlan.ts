@@ -14,6 +14,7 @@ const DEFAULT_PAYMENT_PLAN = {
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value,
+  completionDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   text: 'I owe nothing'
 }
 
@@ -22,14 +23,15 @@ const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue },
+  completionDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   text: 'I owe nothing'
 }
 
 function validPaymentPlan (): PaymentPlan {
-  return new PaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH)
+  return new PaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH, new LocalDate(FUTURE_YEAR, 10, 10))
 }
 
-describe('PaymentPlan', () => {
+describe.only('PaymentPlan', () => {
   describe('form object deserialization', () => {
     it('should return undefined when value is undefined', () => {
       expect(PaymentPlan.fromObject(undefined)).to.equal(undefined)
