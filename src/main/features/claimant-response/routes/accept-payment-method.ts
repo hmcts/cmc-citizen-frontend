@@ -16,8 +16,8 @@ import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import {PaymentPlan} from 'common/payment-plan/paymentPlan'
-import {Frequency} from 'common/frequency/frequency'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim

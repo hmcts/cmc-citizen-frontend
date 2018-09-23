@@ -20,9 +20,9 @@ export class CourtDecisionHelper {
     const claimantEnteredPayBySetDate: Moment = draft.document.alternatePaymentMethod.paymentDate ? draft.document.alternatePaymentMethod.paymentDate.date.toMoment() : undefined
     const claimantInstalmentLastDate: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromForm(draft.document.alternatePaymentMethod.paymentPlan)
     const claimantLastPaymentDate: Moment = claimantEnteredPayBySetDate ? claimantEnteredPayBySetDate : claimantInstalmentLastDate.calculateLastPaymentDate()
-    
+
     const courtOfferedLastDate: Moment = courtCalculatedPaymentPlan.calculateLastPaymentDate()
-    
+
     return CourtDetermination.calculateDecision(
       defendantLastPaymentDate,
       claimantLastPaymentDate,

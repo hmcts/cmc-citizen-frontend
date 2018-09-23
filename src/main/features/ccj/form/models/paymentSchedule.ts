@@ -1,5 +1,5 @@
 
-import { Frequency } from "common/frequency/frequency";
+import { Frequency } from 'common/frequency/frequency'
 import { PaymentSchedule as PS } from 'claims/models/response/core/paymentSchedule'
 
 export class PaymentSchedule {

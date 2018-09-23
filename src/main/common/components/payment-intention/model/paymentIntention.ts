@@ -23,8 +23,6 @@ export class PaymentIntention {
   @ValidateNested()
   paymentPlan?: PaymentPlan
 
-
-
   static deserialise (input: any): PaymentIntention {
     if (!input) {
       return input

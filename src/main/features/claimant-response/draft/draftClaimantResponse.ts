@@ -9,7 +9,7 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { DecisionType } from 'common/court-calculations/courtDetermination';
+import { DecisionType } from 'common/court-calculations/courtDetermination'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean

@@ -79,7 +79,6 @@ describe('Claimant response: court offered set date page', () => {
 
   })
 
-
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)

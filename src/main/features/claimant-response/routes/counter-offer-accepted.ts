@@ -28,7 +28,7 @@ export default express.Router()
         claimantPaymentPlan: claimantPaymentPlan,
         defendantPaymentPlan: defendantPaymentPlan,
         courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
-       })
+      })
     }))
   .post(
     Paths.counterOfferAcceptedPage.uri,
