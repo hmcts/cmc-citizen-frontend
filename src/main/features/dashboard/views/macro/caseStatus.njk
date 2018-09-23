@@ -28,7 +28,7 @@
   claimPartAdmittedAlreadyPaidForClaimantDashboard,
   claimPartAdmittedToOweForClaimantDashboard %}
 
-{% from "./claimStatus/claimFullyAdmitted.njk" import
+{% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
   claimFullAdmissionForDefendantDashboard %}
 
 {% from "./claimStatus/claimFullAdmissionForClaimant.njk" import
@@ -104,6 +104,8 @@
     {{ ccjEligibleForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
+      {{ claimFullAdmissionForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}

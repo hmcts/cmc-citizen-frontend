@@ -30,7 +30,7 @@ ccjRequestedForDefendantClaimDetails %}
   settlementAgreementSignedByClaimantClaimDetails,
   settlementAgreementSignedByClaimantDeadlinePassedClaimDetails %}
 
-{% from "./claimStatus/claimFullyAdmitted.njk" import
+{% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
   claimFullAdmissionForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimFullAdmissionForClaimant.njk" import
@@ -116,6 +116,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
+        {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
