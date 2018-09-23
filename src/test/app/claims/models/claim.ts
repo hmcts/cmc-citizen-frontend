@@ -16,6 +16,8 @@ import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
 import * as moment from 'moment'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -95,19 +97,6 @@ describe('Claim', () => {
       })
     })
 
-    it('should return OFFER_SUBMITTED if an offer has been submitted.', () => {
-      claim.settlement = new Settlement()
-      claim.response = {
-        responseType: ResponseType.FULL_DEFENCE,
-        defenceType: DefenceType.DISPUTE,
-        defence: 'defence reasoning',
-        freeMediation: FreeMediationOption.YES,
-        defendant: new Individual().deserialize(individual)
-      }
-
-      expect(claim.status).to.be.equal(ClaimStatus.OFFER_SUBMITTED)
-    })
-
     it('should return OFFER_SETTLEMENT_REACHED if an offer has been accepted', () => {
       claim.settlement = new Settlement()
       claim.settlementReachedAt = moment()
@@ -141,13 +130,39 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.NO_RESPONSE)
     })
 
-    it('should return OFFER_REJECTED when offer is rejected', () => {
-      claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
-      claim.settlement = new Settlement().deserialize({
-        partyStatements: [offer, offerRejection]
-      })
+    it('should return ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE when a defendant has not paid immediately', () => {
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().subtract(6, 'days'),
+          paymentOption: 'IMMEDIATELY'
+        },
+        defendant: new Individual().deserialize(individual)
+      }
 
-      expect(claim.status).to.be.equal(ClaimStatus.OFFER_REJECTED)
+      expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE)
+    })
+
+    it('should return CLAIMANT_ACCEPTED_ADMISSION when a claimant has signed a settlement agreement', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate()
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
+
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION)
+    })
+
+    it('should return CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED when a claimant has signed a settlement agreement but defendant has not', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate()
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(2, 'months')
+
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED)
     })
   })
 
@@ -189,12 +204,38 @@ describe('Claim', () => {
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
     })
 
+    it('should return OFFER_SUBMITTED and RESPONSE_SUBMITTED if an offer has been submitted.', () => {
+      claim.settlement = new Settlement()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        defence: 'defence reasoning',
+        freeMediation: FreeMediationOption.YES,
+        defendant: new Individual().deserialize(individual)
+      }
+
+      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+    })
+
+    it('should return OFFER_REJECTED when offer is rejected', () => {
+      claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+      claim.settlement = new Settlement().deserialize({
+        partyStatements: [offer, offerRejection]
+      })
+
+      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+    })
+
     it('should contain the claim status only if not responded to', () => {
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
     })
 
-    it('should contain the claim status only if response submited but no offer made', () => {
+    it('should contain the claim status only if response submitted but no offer made', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
 
@@ -202,15 +243,36 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
     })
 
-    it('should contain multiple statuses when response submited and offers exchanged', () => {
+    it('should contain multiple statuses when response submitted and offers exchanged', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
       claim.settlement = new Settlement()
       claim.settlementReachedAt = moment()
 
       expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
     })
   })
 })
+
+function prepareSettlement (paymentIntention: PaymentIntention): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2020-10-10',
+          paymentIntention: paymentIntention
+        }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}

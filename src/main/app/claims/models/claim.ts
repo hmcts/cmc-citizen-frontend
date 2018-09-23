@@ -156,12 +156,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (this.isOfferAccepted()) {
-      return ClaimStatus.OFFER_ACCEPTED
-    } else if (this.isOfferRejected()) {
-      return ClaimStatus.OFFER_REJECTED
-    } else if (this.isOfferSubmitted()) {
-      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isResponseSubmitted()) {
@@ -177,9 +171,13 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    // if (this.isResponseSubmitted() && statuses[0].status !== ClaimStatus.RESPONSE_SUBMITTED) {
-    //   statuses.push({ status: ClaimStatus.RESPONSE_SUBMITTED })
-    // }
+    if (this.isOfferRejected()) {
+      statuses.push({ status: ClaimStatus.OFFER_REJECTED })
+    } else if (this.isOfferAccepted()) {
+      statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
+    } else if (this.isOfferSubmitted()) {
+      statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
+    }
 
     return statuses
   }
