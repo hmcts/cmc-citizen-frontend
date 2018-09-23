@@ -17,7 +17,7 @@
               claimantAmount: claimantPaymentPlan.instalmentAmount | numeral,
               claimantFrequency: claimantPaymentPlan.frequency | renderFrequencyViewType | lower,
               courtOrderAmount: courtOrderPaymentPlan.instalmentAmount | numeral,
-              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderFrequencyViewType | lower
+              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule
             }) }}</p>
 
             {{ paymentPlanTable(
