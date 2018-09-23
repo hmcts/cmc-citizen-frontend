@@ -142,9 +142,11 @@ describe('Claimant response: court offered set date page', () => {
       context('when form is invalid', async () => {
         it.only('should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-          draftStoreServiceMock.resolveFind('claimantResponse', { acceptPaymentMethod: {
-            accept: {
-              option: 'no'
+          draftStoreServiceMock.resolveFind('claimantResponse',
+            { acceptPaymentMethod: {
+              accept: {
+                option: 'no'
+              }
             }
             ,acceptCourtOffer: undefined })
 
