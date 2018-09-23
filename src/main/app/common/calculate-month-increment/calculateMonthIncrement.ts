@@ -1,6 +1,6 @@
 import * as moment from 'moment'
 
-export function calculateMonthIncrement(startDate: moment.Moment) {
+export function calculateMonthIncrement (startDate: moment.Moment) {
   if (!startDate) {
     return startDate
   }
