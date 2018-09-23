@@ -22,9 +22,10 @@ export default express.Router()
 
       const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
       const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+      const differentPaymentFrequency: boolean = claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
-        isCourtOrderPaymentPlanConvertedByDefendantFrequency: defendantPaymentPlan.frequency ? false : claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency,
+        isCourtOrderPaymentPlanConvertedByDefendantFrequency: defendantPaymentPlan.frequency && differentPaymentFrequency,
         claimantPaymentPlan: claimantPaymentPlan,
         defendantPaymentPlan: defendantPaymentPlan,
         courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
