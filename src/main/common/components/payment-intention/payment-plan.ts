@@ -64,10 +64,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)
             } else {
-              this.createModelAccessor().patch(res.locals.draft.document, model => {
-                model.paymentPlan = form.model
-                model.paymentPlan.completionDate = PaymentPlanHelper.createPaymentPlanFromForm(form.model).calculateLastPaymentDate()
-              })
+              this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentPlan = form.model)
 
               await this.saveDraft(res.locals)
 

@@ -14,7 +14,6 @@ const DEFAULT_PAYMENT_PLAN = {
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: PaymentSchedule.EVERY_MONTH.value,
-  completionDate: MomentFactory.parse('2028-10-10'),
   text: 'I owe nothing'
 }
 
@@ -23,12 +22,11 @@ const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue },
-  completionDate: MomentFactory.parse('2028-10-10'),
   text: 'I owe nothing'
 }
 
 function validPaymentPlan (): PaymentPlan {
-  return new PaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH, MomentFactory.parse('2028-10-10'))
+  return new PaymentPlan(100, 50, new LocalDate(FUTURE_YEAR, 10, 10), PaymentSchedule.EVERY_MONTH)
 }
 
 describe('PaymentPlan', () => {

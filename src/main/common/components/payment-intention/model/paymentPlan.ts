@@ -5,7 +5,6 @@ import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { Moment } from 'moment'
 
 export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
@@ -32,19 +31,15 @@ export class PaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED })
   paymentSchedule?: PaymentSchedule
 
-  completionDate?: Moment
-
   constructor (totalAmount?: number,
                instalmentAmount?: number,
                firstPaymentDate?: LocalDate,
-               paymentSchedule?: PaymentSchedule,
-               completionDate?: Moment
+               paymentSchedule?: PaymentSchedule
               ) {
     this.totalAmount = totalAmount
     this.instalmentAmount = instalmentAmount
     this.firstPaymentDate = firstPaymentDate
     this.paymentSchedule = paymentSchedule
-    this.completionDate = completionDate
   }
 
   static fromObject (value?: any): PaymentPlan {
@@ -56,9 +51,7 @@ export class PaymentPlan {
       toNumberOrUndefined(value.totalAmount),
       toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
-      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined,
-      value.completionDate
-    )
+      value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined)
   }
 
   deserialize (input?: any): PaymentPlan {
@@ -67,7 +60,6 @@ export class PaymentPlan {
       this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
       this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined
-      this.completionDate = input.completionDate
     }
     return this
   }
