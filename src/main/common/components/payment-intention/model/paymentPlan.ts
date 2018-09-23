@@ -5,6 +5,7 @@ import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { Moment } from 'moment'
 
 export class ValidationErrors {
   static readonly INSTALMENTS_AMOUNT_INVALID: string = 'Enter a valid amount for equal instalments'
@@ -31,13 +32,13 @@ export class PaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED })
   paymentSchedule?: PaymentSchedule
 
-  completionDate?: LocalDate
+  completionDate?: Moment
 
   constructor (totalAmount?: number,
                instalmentAmount?: number,
                firstPaymentDate?: LocalDate,
                paymentSchedule?: PaymentSchedule,
-               completionDate?: LocalDate
+               completionDate?: Moment
               ) {
     this.totalAmount = totalAmount
     this.instalmentAmount = instalmentAmount
@@ -56,7 +57,7 @@ export class PaymentPlan {
       toNumberOrUndefined(value.instalmentAmount),
       LocalDate.fromObject(value.firstPaymentDate),
       value.paymentSchedule ? PaymentSchedule.of(value.paymentSchedule) : undefined,
-      LocalDate.fromObject(value.completionDate)
+      value.completionDate
     )
   }
 
@@ -66,7 +67,7 @@ export class PaymentPlan {
       this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
       this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined
-      this.completionDate = new LocalDate().deserialize(input.completionDate)
+      this.completionDate = input.completionDate
     }
     return this
   }
