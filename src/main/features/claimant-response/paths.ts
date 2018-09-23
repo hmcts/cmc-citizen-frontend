@@ -25,7 +25,7 @@ export class Paths {
   static readonly courtOfferPage = new RoutablePath(`${claimantResponsePath}/court-offer`)
   static readonly counterOfferAcceptedPage = new RoutablePath(`${claimantResponsePath}/counter-offer-accepted`)
   static readonly receiptReceiver = new RoutablePath(`${claimantResponsePath}/receipt`)
-  static readonly payBySetDateAcceptedPage = new RoutablePath(`${claimantResponsePath}/payBySetDate-accepted`)
+  static readonly payBySetDateAcceptedPage = new RoutablePath(`${claimantResponsePath}/pay-by-set-date-accepted`)
   static readonly courtOfferedSetDatePage = new RoutablePath(`${claimantResponsePath}/court-offered-set-date`)
 }
 
