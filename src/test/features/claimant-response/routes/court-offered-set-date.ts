@@ -14,6 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/claimant-response/routes/checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/routes/checks/not-claimant-in-case-check'
+import {MomentFactory} from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -138,16 +139,13 @@ describe('Claimant response: court offered set date page', () => {
         })
       })
 
-      context('when form is invalid', async () => {
+      context.only('when form is invalid', async () => {
         it.only('should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse',
-            { acceptPaymentMethod: {
-              accept: {
-                option: 'no'
-              }
-            }
-            ,acceptCourtOffer: undefined })
+            {
+              courtOfferedPaymentIntention: { paymentDate: MomentFactory.parse('2019-10-10') }
+            })
 
           await request(app)
             .post(pagePath)
