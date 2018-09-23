@@ -15,7 +15,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import {MomentFactory} from 'shared/momentFactory'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
