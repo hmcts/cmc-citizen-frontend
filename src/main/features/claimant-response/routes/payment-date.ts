@@ -3,6 +3,7 @@ import * as express from 'express'
 import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
@@ -23,7 +24,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     return 'What date do you want the defendant to pay by?'
   }
 
-  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, PaymentIntention> {
+  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {
     return new DefaultModelAccessor('alternatePaymentMethod')
   }
 
