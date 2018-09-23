@@ -140,7 +140,7 @@ describe('Claimant response: court offered set date page', () => {
       })
 
       context('when form is invalid', async () => {
-        it.only('should render page', async () => {
+        it('should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse',
             {
