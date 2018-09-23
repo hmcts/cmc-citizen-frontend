@@ -1,4 +1,5 @@
 {% from "externalLink.njk" import externalLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink, viewAndRespondOffer %}
 
 {% macro claimPartAdmittedAlreadyPaidForDefendantDashboard(claim) %}
   {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
@@ -16,7 +17,7 @@
       'settled, or they can proceed with it.') }}
   </p>
   <p>
-    {{ _downloadResponseLink(claim) }}
+    {{ downloadResponseLink(claim) }}
   </p>
 {% endmacro %}
 
@@ -47,6 +48,6 @@
     {{ t('We’ll contact you when they respond.') }}
   </p>
   <p>
-    {{ _downloadResponseLink(claim) }}
+    {{ downloadResponseLink(claim) }}
   </p>
 {% endmacro %}
