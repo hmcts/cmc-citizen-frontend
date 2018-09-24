@@ -1,25 +1,25 @@
 ///<reference path="../../../../../node_modules/@types/node/index.d.ts"/>
-import { Logger } from '@hmcts/nodejs-logging'
+import {Logger} from '@hmcts/nodejs-logging'
 
-import { FrequencyConversions } from 'common/frequency/frequencyConversions'
-import { Frequency } from 'common/frequency/frequency'
+import {FrequencyConversions} from 'common/frequency/frequencyConversions'
+import {Frequency} from 'common/frequency/frequency'
 
-import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
-import { Debt } from 'claims/models/response/statement-of-means/debt'
-import { CourtOrder } from 'claims/models/response/statement-of-means/courtOrder'
-import { Employment } from 'claims/models/response/statement-of-means/employment'
-import { BankAccount } from 'claims/models/response/statement-of-means/bankAccount'
-import { FrequencyBasedAmount } from 'claims/models/response/statement-of-means/frequencyBasedAmount'
-import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
-import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
-import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
-import { AgeGroupType, Child, Dependant } from 'claims/models/response/statement-of-means/dependant'
-import { Arrear } from 'claims/models/response/statement-of-means/arrear'
-import { Allowance, AllowanceItem } from 'claims/models/response/statement-of-means/allowance'
-import { AgeGroupType as PartnerAgeGroupType, Partner } from 'claims/models/response/statement-of-means/partner'
-import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import {StatementOfMeans} from 'claims/models/response/statement-of-means/statementOfMeans'
+import {Debt} from 'claims/models/response/statement-of-means/debt'
+import {CourtOrder} from 'claims/models/response/statement-of-means/courtOrder'
+import {Employment} from 'claims/models/response/statement-of-means/employment'
+import {BankAccount} from 'claims/models/response/statement-of-means/bankAccount'
+import {FrequencyBasedAmount} from 'claims/models/response/statement-of-means/frequencyBasedAmount'
+import {PaymentFrequency} from 'claims/models/response/core/paymentFrequency'
+import {Income, IncomeType} from 'claims/models/response/statement-of-means/income'
+import {Expense, ExpenseType} from 'claims/models/response/statement-of-means/expense'
+import {AgeGroupType, Child, Dependant} from 'claims/models/response/statement-of-means/dependant'
+import {Arrear} from 'claims/models/response/statement-of-means/arrear'
+import {Allowance, AllowanceItem} from 'claims/models/response/statement-of-means/allowance'
+import {AgeGroupType as PartnerAgeGroupType, Partner} from 'claims/models/response/statement-of-means/partner'
+import {DisabilityStatus} from 'claims/models/response/statement-of-means/disabilityStatus'
 import * as moment from 'moment'
-import { PartyType } from 'common/partyType'
+import {PartyType} from 'common/partyType'
 
 const logger = Logger.getLogger('common/statement-of-means')
 const allowancesLookup: Allowance = process.env.MEANS_ALLOWANCE_BLOB
@@ -61,33 +61,26 @@ export class StatementOfMeansCalculations {
   }
 
   static calculateMonthlyLivingAllowance (defendantDateOfBirth: moment.Moment, partner: Partner): number {
-    // defendant and partner must be over 18
-    // work out defendants age
-    // check what category partner falls into if there is a partner
-    let totalLivingAllowance = 0
-    const personalLookup = allowancesLookup.personal
     const defendantAge: number = moment().diff(moment(defendantDateOfBirth), 'years')
     if (defendantAge < 18) {
-      return totalLivingAllowance
+      return 0
     }
+    let filterOption = ''
+    const personalLookup = allowancesLookup.personal
     if (!partner) {
-      totalLivingAllowance = defendantAge < 25 ?
-        StatementOfMeansCalculations.getAllowanceAmount(personalLookup, 'SINGLE_18_TO_24') :
-        StatementOfMeansCalculations.getAllowanceAmount(personalLookup, 'SINGLE_OVER_25')
+      filterOption = defendantAge < 25 ? 'SINGLE_18_TO_24' : 'SINGLE_OVER_25'
     } else {
       switch (partner.ageGroupType) {
         case PartnerAgeGroupType.UNDER_18:
-          totalLivingAllowance = defendantAge < 25 ?
-            StatementOfMeansCalculations.getAllowanceAmount(personalLookup, 'COUPLES_UNDER_18_AND_UNDER_25') :
-            StatementOfMeansCalculations.getAllowanceAmount(personalLookup, 'COUPLES_UNDER_18_AND_OVER_25')
+          filterOption = defendantAge < 25 ? 'DEFENDANT_UNDER_25_PARTNER_UNDER_18' : 'DEFENDANT_OVER_25_PARTNER_UNDER_18'
           break
         case PartnerAgeGroupType.BETWEEN_18_AND_25:
         case PartnerAgeGroupType.OVER_25:
-          totalLivingAllowance = StatementOfMeansCalculations.getAllowanceAmount(personalLookup, 'COUPLES_OVER_18')
+          filterOption = 'DEFENDANT_AND_PARTNER_OVER_18'
           break
       }
     }
-    return totalLivingAllowance
+    return this.getMonthlyAllowanceAmount(personalLookup, filterOption)
   }
 
   static calculateMonthlyDependantsAllowance (dependants: Dependant): number {
@@ -110,10 +103,9 @@ export class StatementOfMeansCalculations {
     const dependantChildren = dependants.children.reduce(reducer, 0)
     const otherDependants: number = dependants.otherDependants ? dependants.otherDependants.numberOfPeople : 0
     const totalNumberOfDependants: number = dependantChildren + otherDependants
+    const allowancePerPerson = this.getMonthlyAllowanceAmount(allowancesLookup.personal, 'EACH')
 
-    const allowanceItem = allowancesLookup.dependant.filter(result => result.item.toLowerCase() === 'EACH').pop()
-
-    return allowanceItem.monthly !== undefined ? allowanceItem.monthly * totalNumberOfDependants : 0
+    return allowancePerPerson * totalNumberOfDependants
   }
 
   static calculateMonthlyPensionerAllowance (income: Income[], partner: Partner): number {
@@ -124,9 +116,9 @@ export class StatementOfMeansCalculations {
     const defendantIsPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() === undefined ? false : true
     if (defendantIsPensioner) {
       if (partner.pensioner) {
-        pensionAllowance = StatementOfMeansCalculations.getAllowanceAmount(allowancesLookup.pensioner, 'SINGLE')
+        pensionAllowance = StatementOfMeansCalculations.getMonthlyAllowanceAmount(allowancesLookup.pensioner, 'DEFENDANT_AND_PARTNER')
       } else {
-        pensionAllowance = StatementOfMeansCalculations.getAllowanceAmount(allowancesLookup.pensioner, 'COUPLE')
+        pensionAllowance = StatementOfMeansCalculations.getMonthlyAllowanceAmount(allowancesLookup.pensioner, 'DEFENDANT_ONLY')
       }
     }
     return pensionAllowance
@@ -136,30 +128,19 @@ export class StatementOfMeansCalculations {
     if (defendantDisability === DisabilityStatus.NO || defendantDisability === undefined) {
       return 0
     }
-    // check defendantDisability > YES/SEVERE/CARER/DISABLED DEPENDANT
-    // check partnerDisability
-    // assumption: DEF: YES, PART: SEVERE -> RETURNS SEVERE > taking max
-    // assumption: carer is boolean
-    // assumption: get disabilityOption list from Andy
-    const disabilityLookup = allowancesLookup.disability
-    let disabilityAmount = defendantDisability === DisabilityStatus.YES ?
-      StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup,'SINGLE') :
-      StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup,'SEVERE_SINGLE')
-
+    const disabilityLookup: AllowanceItem[] = allowancesLookup.disability
+    let filterOption: string = defendantDisability === DisabilityStatus.YES ? 'DEFENDANT_ONLY' : 'DEFENDANT_ONLY_SEVERE'
     if (partnerDisability !== DisabilityStatus.NO || !partnerDisability) {
       switch (partnerDisability) {
         case DisabilityStatus.YES:
-          disabilityAmount = defendantDisability === DisabilityStatus.YES ?
-            StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup,'COUPLE') :
-            StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup, 'SEVERE_SINGLE')
+          filterOption = defendantDisability === DisabilityStatus.YES ? 'DEFENDANT_AND_PARTNER' : 'DEFENDANT_ONLY_SEVERE'
           break
         case DisabilityStatus.SEVERE:
-          disabilityAmount = defendantDisability === DisabilityStatus.SEVERE ?
-            StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup,'SEVERE_COUPLE') :
-            StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup,'COUPLE')
+          filterOption = defendantDisability === DisabilityStatus.YES ? 'DEFENDANT_ONLY_SEVERE' : 'DEFENDANT_AND_PARTNER_SEVERE'
           break
       }
     }
+    let disabilityAmount = StatementOfMeansCalculations.getMonthlyAllowanceAmount(disabilityLookup,filterOption)
     let dependantDisabilityOrCarerAmount =
       StatementOfMeansCalculations.calculateMonthlyDisabilityDependantCarerAllowance(dependant, carer)
 
@@ -173,12 +154,12 @@ export class StatementOfMeansCalculations {
     }
     const disabilityLookup = allowancesLookup.disability
     const dependantAmount = dependant.anyDisabledChildren || dependant.otherDependants.anyDisabled ?
-      StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup,'DEPENDANT') : 0
-    const carerAmount = carer ? StatementOfMeansCalculations.getAllowanceAmount(disabilityLookup,'CARER') : 0
+      StatementOfMeansCalculations.getMonthlyAllowanceAmount(disabilityLookup,'DEPENDANT') : 0
+    const carerAmount = carer ? StatementOfMeansCalculations.getMonthlyAllowanceAmount(disabilityLookup,'CARER') : 0
     return dependantAmount > carerAmount ? dependantAmount : carerAmount
   }
 
-  private static getAllowanceAmount (searchArray: AllowanceItem[], filterOption: string): number {
+  private static getMonthlyAllowanceAmount (searchArray: AllowanceItem[], filterOption: string): number {
     return searchArray.filter(category => category.item === filterOption).pop().monthly
   }
 
