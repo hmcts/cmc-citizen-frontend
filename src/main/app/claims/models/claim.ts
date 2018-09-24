@@ -7,8 +7,7 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
-import { isPastPaymentDeadline } from 'claims/isPastPaymentDeadline'
+import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
 
@@ -121,7 +120,7 @@ export class Claim {
       || this.hasDefendantNotSignedSettlementAgreement()
       || (!this.countyCourtJudgmentRequestedAt
           && !this.respondedAt
-          && isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
+          && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
   }
 
   get eligibleForCCJAfterBreachedSettlement (): boolean {
@@ -130,13 +129,13 @@ export class Claim {
         case PaymentOption.BY_SPECIFIED_DATE :
           return !this.countyCourtJudgmentRequestedAt
             && this.isSettlementReached()
-            && isPastPaymentDeadline(MomentFactory.currentDateTime(),
+            && isPastDeadline(MomentFactory.currentDateTime(),
               (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
           break
         case PaymentOption.INSTALMENTS:
           return !this.countyCourtJudgmentRequestedAt
             && this.isSettlementReached()
-            && isPastPaymentDeadline(MomentFactory.currentDateTime(),
+            && isPastDeadline(MomentFactory.currentDateTime(),
               (this.response as FullAdmissionResponse).paymentIntention.repaymentPlan.firstPaymentDate)
       }
     }

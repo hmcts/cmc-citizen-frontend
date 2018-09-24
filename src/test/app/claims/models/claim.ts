@@ -164,6 +164,22 @@ describe('Claim', () => {
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED)
     })
+
+    it('should return ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT after date of payment', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+
+      expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
+    })
   })
 
   describe('respondToResponseDeadline', () => {
