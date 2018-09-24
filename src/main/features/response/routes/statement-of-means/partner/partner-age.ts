@@ -47,7 +47,7 @@ export default express.Router()
 
         if (form.model.option === PartnerAgeOption.YES) {
           res.redirect(StatementOfMeansPaths.partnerPensionPage.evaluateUri({ externalId: externalId }))
-        } else if (draft.document.statementOfMeans.disability === DisabilityOption.YES) {
+        } else if (draft.document.statementOfMeans.disability && draft.document.statementOfMeans.disability.option === DisabilityOption.YES) {
           res.redirect(StatementOfMeansPaths.partnerDisabilityPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))

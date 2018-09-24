@@ -45,7 +45,7 @@ export default express.Router()
         draft.document.statementOfMeans.partnerPension = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.statementOfMeans.disability === DisabilityOption.YES) {
+        if (draft.document.statementOfMeans.disability && draft.document.statementOfMeans.disability.option === DisabilityOption.YES) {
           res.redirect(StatementOfMeansPaths.partnerDisabilityPage.evaluateUri({ externalId: externalId }))
         } else {
           res.redirect(StatementOfMeansPaths.dependantsPage.evaluateUri({ externalId: externalId }))
