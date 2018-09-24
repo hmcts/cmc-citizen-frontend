@@ -23,4 +23,5 @@ export interface StatementOfMeans {
   reason?: string
   partner?: Partner
   disability?: DisabilityStatus
+  carer?: boolean
 }

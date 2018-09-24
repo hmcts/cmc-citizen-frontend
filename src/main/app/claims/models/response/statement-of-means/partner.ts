@@ -8,5 +8,6 @@ export enum AgeGroupType {
 
 export interface Partner {
   ageGroupType: AgeGroupType
-  disabilityStatus: DisabilityStatus
+  disability: DisabilityStatus
+  pensioner: boolean
 }
