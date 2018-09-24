@@ -3745,9 +3745,9 @@ husky@^0.14.3:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
-i18next-conv@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-6.0.1.tgz#d34f5d0378a7a504e4d0e057301129b3047f4ab1"
+i18next-conv@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-6.1.0.tgz#a04377b2b720763f61849dbeab01a640f51a3127"
   dependencies:
     bluebird "^3.5.1"
     chalk "^2.4.1"
