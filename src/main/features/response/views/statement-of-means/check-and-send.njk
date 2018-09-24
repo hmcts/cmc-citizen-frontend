@@ -195,6 +195,31 @@
   {% endfor %}
 {% endif %}
 
+{% set priorityDebt = draft.statementOfMeans.priorityDebt %}
+{{ row('Debts you are behind on', '', StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
+{% if priorityDebt.mortgage.populated %}
+  {{ row(PriorityDebtType.MORTGAGE.displayValue | capitalize, priorityDebt.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if priorityDebt.rent.populated %}
+  {{ row(PriorityDebtType.RENT.displayValue | capitalize, priorityDebt.rent.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if priorityDebt.councilTax.populated %}
+  {{ row(PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue | capitalize, priorityDebt.councilTax.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if priorityDebt.gas.populated %}
+  {{ row(PriorityDebtType.GAS.displayValue | capitalize, priorityDebt.gas.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if priorityDebt.electricity.populated %}
+  {{ row(PriorityDebtType.ELECTRICITY.displayValue | capitalize, priorityDebt.electricity.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if priorityDebt.water.populated %}
+  {{ row(PriorityDebtType.WATER.displayValue | capitalize, priorityDebt.water.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+{% if priorityDebt.maintenance.populated %}
+  {{ row(PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue | capitalize, priorityDebt.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+
+
 {{ row('Debts', '', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
 {{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', '', not draft.statementOfMeans.debts.declared, bold = true) }}
 {% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
