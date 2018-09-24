@@ -1,25 +1,26 @@
 ///<reference path="../../../../../node_modules/@types/node/index.d.ts"/>
-import {Logger} from '@hmcts/nodejs-logging'
+import { Logger } from '@hmcts/nodejs-logging'
 
-import {FrequencyConversions} from 'common/frequency/frequencyConversions'
-import {Frequency} from 'common/frequency/frequency'
+import { FrequencyConversions } from 'common/frequency/frequencyConversions'
+import { Frequency } from 'common/frequency/frequency'
 
-import {StatementOfMeans} from 'claims/models/response/statement-of-means/statementOfMeans'
-import {Debt} from 'claims/models/response/statement-of-means/debt'
-import {CourtOrder} from 'claims/models/response/statement-of-means/courtOrder'
-import {Employment} from 'claims/models/response/statement-of-means/employment'
-import {BankAccount} from 'claims/models/response/statement-of-means/bankAccount'
-import {FrequencyBasedAmount} from 'claims/models/response/statement-of-means/frequencyBasedAmount'
-import {PaymentFrequency} from 'claims/models/response/core/paymentFrequency'
-import {Income, IncomeType} from 'claims/models/response/statement-of-means/income'
-import {Expense, ExpenseType} from 'claims/models/response/statement-of-means/expense'
-import {AgeGroupType, Child, Dependant} from 'claims/models/response/statement-of-means/dependant'
-import {Arrear} from 'claims/models/response/statement-of-means/arrear'
-import {Allowance, AllowanceItem} from 'claims/models/response/statement-of-means/allowance'
-import {AgeGroupType as PartnerAgeGroupType, Partner} from 'claims/models/response/statement-of-means/partner'
-import {DisabilityStatus} from 'claims/models/response/statement-of-means/disabilityStatus'
+import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
+import { Debt } from 'claims/models/response/statement-of-means/debt'
+import { CourtOrder } from 'claims/models/response/statement-of-means/courtOrder'
+import { Employment } from 'claims/models/response/statement-of-means/employment'
+import { BankAccount } from 'claims/models/response/statement-of-means/bankAccount'
+import { FrequencyBasedAmount } from 'claims/models/response/statement-of-means/frequencyBasedAmount'
+import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
+import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
+import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
+import { AgeGroupType, Child, Dependant } from 'claims/models/response/statement-of-means/dependant'
+import { Arrear } from 'claims/models/response/statement-of-means/arrear'
+import { Allowance, AllowanceItem } from 'claims/models/response/statement-of-means/allowance'
+import { AgeGroupType as PartnerAgeGroupType, Partner } from 'claims/models/response/statement-of-means/partner'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { PartyType } from 'common/partyType'
 import * as moment from 'moment'
-import {PartyType} from 'common/partyType'
+import {Carer} from 'response/form/models/statement-of-means/carer'
 
 const logger = Logger.getLogger('common/statement-of-means')
 const allowancesLookup: Allowance = process.env.MEANS_ALLOWANCE_BLOB
@@ -124,7 +125,7 @@ export class StatementOfMeansCalculations {
     return pensionAllowance
   }
 
-  static calculateMonthlyDisabilityAllowance (dependant: Dependant, carer: boolean, defendantDisability: DisabilityStatus, partnerDisability: DisabilityStatus): number {
+  static calculateMonthlyDisabilityAllowance (dependant: Dependant, carer: Carer, defendantDisability: DisabilityStatus, partnerDisability: DisabilityStatus): number {
     if (defendantDisability === DisabilityStatus.NO || defendantDisability === undefined) {
       return 0
     }
