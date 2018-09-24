@@ -116,9 +116,6 @@ module "citizen-frontend" {
     IDAM_S2S_TOTP_SECRET = "${data.azurerm_key_vault_secret.s2s_secret.value}"
     OAUTH_CLIENT_SECRET = "${data.azurerm_key_vault_secret.oauth_client_secret.value}"
 
-    // Allowance calculations
-    MEANS_ALLOWANCE_BLOB = "${data.azurerm_key_vault_secret.means_allowances.value}"
-
     // Payments API
     PAY_URL = "${var.payments_api_url}"
 
