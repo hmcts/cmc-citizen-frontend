@@ -11,6 +11,9 @@ import { DraftService } from 'services/draftService'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { ErrorHandling } from 'shared/errorHandling'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -20,14 +23,20 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
+      const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
       const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
+      const defendantPaymentOption: PaymentOption = response.paymentIntention.paymentOption
       const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
       const differentPaymentFrequency: boolean = claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency
 
+      const isCourtOrderPaymentPlanConvertedByDefendantFrequency =
+        (defendantPaymentOption !== 'BY_SPECIFIED_DATE') ? defendantPaymentPlan.frequency && differentPaymentFrequency : false
+
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
-        isCourtOrderPaymentPlanConvertedByDefendantFrequency: defendantPaymentPlan.frequency && differentPaymentFrequency,
+        isCourtOrderPaymentPlanConvertedByDefendantFrequency: isCourtOrderPaymentPlanConvertedByDefendantFrequency,
         claimantPaymentPlan: claimantPaymentPlan,
-        defendantPaymentPlan: defendantPaymentPlan,
         courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
       })
     }))

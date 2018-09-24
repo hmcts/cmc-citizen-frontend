@@ -143,14 +143,6 @@ describe('Claimant response: payment date', () => {
             beforeEach(() => {
               draftStoreServiceMock.resolveSave()
             })
-
-            it.skip('should redirect to task list page', async () => {
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send(validFormData)
-                .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
-            })
           })
 
           context('when form is invalid', async () => {
