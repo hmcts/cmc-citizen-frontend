@@ -64,12 +64,16 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
 
-      if (draft.document.formaliseRepaymentPlan.option === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT) {
-        await CCJClient.issue(claim, draft, user)
-      } else {
-        const settlement: Settlement = prepareSettlement(claim, draft.document)
-
-        await OfferClient.signSettlementAgreement(claim.externalId, user, settlement)
+      if (draft.document.formaliseRepaymentPlan && draft.document.formaliseRepaymentPlan.option) {
+        switch (draft.document.formaliseRepaymentPlan.option) {
+          case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
+            await CCJClient.issue(claim, draft, user)
+            break
+          case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
+            const settlement: Settlement = prepareSettlement(claim, draft.document)
+            await OfferClient.signSettlementAgreement(claim.externalId, user, settlement)
+            break
+        }
       }
 
       await new DraftService().delete(draft.id, user.bearerToken)

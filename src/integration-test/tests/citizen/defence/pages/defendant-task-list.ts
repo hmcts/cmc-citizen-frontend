@@ -29,11 +29,11 @@ export class DefendantTaskListPage {
   }
 
   selectTaskHowMuchMoneyBelieveYouOwe (): void {
-    I.click('How much money do you believe you owe?')
+    I.click('How much money do you admit you owe?')
   }
 
   selectTaskDecideHowWillYouPay (): void {
-    I.click('Decide how you’ll pay')
+    I.click('When will you pay the')
   }
 
   selectTaskWhenDidYouPay (): void {
@@ -41,11 +41,15 @@ export class DefendantTaskListPage {
   }
 
   selectTaskWhyDoYouDisagreeWithTheClaim (): void {
-    I.click('Why do you disagree with the claim?')
+    I.click('Why do you disagree with the amount claimed?')
   }
 
   selectTaskWhyDoYouDisagreeWithTheAmountClaimed (): void {
     I.click('Why do you disagree with the amount claimed?')
+  }
+
+  selectTaskWhenWillYouPay (): void {
+    I.click('When will you pay')
   }
 
   selectYourRepaymentPlanTask (): void {

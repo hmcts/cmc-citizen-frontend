@@ -109,10 +109,12 @@
             }),
           bottomBorder = true, bold = true
         ) }}
-        {{ row(label = 'Completion date',
+        {% if courtOrderPaymentPlan %}
+          {{ row(label = 'Completion date',
           value = courtOrderPaymentPlan.calculateLastPaymentDate() | date,
           bottomBorder = true, bold = true
-        ) }}
+          ) }}
+        {% endif %}
       {% endif %}
 
       {{ tableEnd() }}
