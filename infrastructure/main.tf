@@ -96,6 +96,9 @@ module "citizen-frontend" {
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src"
 
+    // Allowance calculations
+    MEANS_ALLOWANCE_JSON_BLOB = "${data.azurerm_key_vault_secret.means_allowances.value}"
+
     // Logging vars
     REFORM_TEAM = "${var.product}"
     REFORM_SERVICE_NAME = "${var.microservice}"
