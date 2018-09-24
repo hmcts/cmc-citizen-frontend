@@ -53,6 +53,12 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { Claim } from 'claims/models/claim'
 import { DependantsDisabilityOption } from 'response/form/models/statement-of-means/dependantsDisability'
+import { OtherDependantsDisabilityOption } from 'response/form/models/statement-of-means/otherDependantsDisability'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { PartnerAgeOption } from 'response/form/models/statement-of-means/partnerAge'
+import { PartnerPensionOption } from 'response/form/models/statement-of-means/partnerPension'
+import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
+import { PartnerSevereDisabilityOption } from 'response/form/models/statement-of-means/partnerSevereDisability'
 
 export class ResponseModelConverter {
 
@@ -178,9 +184,24 @@ export class ResponseModelConverter {
       dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
         children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
         numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
-        otherDependants: draft.statementOfMeans.otherDependants.declared ? undefined : undefined,
+        otherDependants: {
+          numberOfPeople: draft.statementOfMeans.otherDependants.declared ? draft.statementOfMeans.otherDependants.numberOfPeople.value : 0,
+          details: draft.statementOfMeans.otherDependants.numberOfPeople.details || undefined,
+          anyDisabled: draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES
+        },
         anyDisabledChildren: draft.statementOfMeans.dependantsDisability && draft.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES
       } : undefined,
+      partner: {
+        over18: draft.statementOfMeans.partnerAge.option === PartnerAgeOption.YES,
+        disability: this.inferPartnerDisabilityType(draft),
+        pensioner: draft.statementOfMeans.partnerPension ? draft.statementOfMeans.partnerPension.option === PartnerPensionOption.YES : undefined
+      },
+      disability: !draft.statementOfMeans.disability.option
+        ? DisabilityStatus.NO
+        : (draft.statementOfMeans.severeDisability.option
+            ? DisabilityStatus.SEVERE
+            : DisabilityStatus.YES
+        ),
       employment: {
         employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
           return {
@@ -242,6 +263,15 @@ export class ResponseModelConverter {
     return draft.rejectAllOfClaim && draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
       ? DefenceType.ALREADY_PAID
       : DefenceType.DISPUTE
+  }
+
+  private static inferPartnerDisabilityType (draft: ResponseDraft): DisabilityStatus {
+    if (!draft.statementOfMeans.partnerDisability.option || draft.statementOfMeans.partnerDisability.option === PartnerDisabilityOption.NO) {
+      return DisabilityStatus.NO
+    }
+    return (draft.statementOfMeans.partnerSevereDisability.option && draft.statementOfMeans.partnerSevereDisability.option === PartnerSevereDisabilityOption.YES)
+      ? DisabilityStatus.SEVERE
+      : DisabilityStatus.YES
   }
 
   private static convertPartyDetails (defendant: Defendant): Party {

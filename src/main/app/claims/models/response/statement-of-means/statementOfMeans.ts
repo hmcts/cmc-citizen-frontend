@@ -6,6 +6,8 @@ import { Employment } from 'claims/models/response/statement-of-means/employment
 import { Expense } from 'claims/models/response/statement-of-means/expense'
 import { Income } from 'claims/models/response/statement-of-means/income'
 import { Residence } from 'claims/models/response/statement-of-means/residence'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { Partner } from 'claims/models/response/statement-of-means/partner'
 
 export interface StatementOfMeans {
   bankAccounts: BankAccount[]
@@ -16,5 +18,7 @@ export interface StatementOfMeans {
   expenses?: Expense[]
   debts?: Debt[]
   courtOrders?: CourtOrder[]
+  partner?: Partner
+  disability?: DisabilityStatus
   reason?: string
 }

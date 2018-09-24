@@ -6,10 +6,11 @@ import { ResidenceType } from 'claims/models/response/statement-of-means/residen
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 
 import { MomentFactory } from 'shared/momentFactory'
-import { individual, company } from 'test/data/entity/party'
+import { company, individual } from 'test/data/entity/party'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 
 const baseResponseData = {
   defendant: individual,
@@ -174,6 +175,7 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
       type: BankAccountType.CURRENT_ACCOUNT
     }
   ],
+  disability: DisabilityStatus.NO,
   residence: {
     type: ResidenceType.OWN_HOME
   },
@@ -187,6 +189,11 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
+  partner: {
+    disability: DisabilityStatus.NO,
+    over18: false,
+    pensioner: false
+  },
   expenses: [{
     amount: 100,
     frequency: PaymentFrequency.MONTH,
@@ -209,6 +216,11 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildrenLivingWithYou: 3
     }],
     numberOfMaintainedChildren: 4,
+    otherDependants: {
+      anyDisabled: false,
+      details: 'Colleagues',
+      numberOfPeople: 5
+    },
     anyDisabledChildren: false
   },
   employment: {

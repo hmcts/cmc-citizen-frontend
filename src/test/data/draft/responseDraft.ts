@@ -11,6 +11,9 @@ import { YesNoOption } from 'models/yesNoOption'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { CarerOption } from 'response/form/models/statement-of-means/carer'
 
 const baseResponseDraft = {
   defendantDetails: {
@@ -279,11 +282,11 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
       balance: 1000
     }]
   },
-  disability: false,
+  disability: DisabilityOption.NO,
   residence: {
     type: ResidenceType.OWN_HOME
   },
-  cohabiting: false,
+  cohabiting: CohabitingOption.NO,
   dependants: {
     declared: false
   },
@@ -293,7 +296,7 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
   otherDependants: {
     declared: false
   },
-  carer: false,
+  carer: CarerOption.NO,
   employment: {
     declared: false
   },
