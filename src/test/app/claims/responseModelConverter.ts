@@ -9,7 +9,7 @@ import {
   fullAdmissionWithImmediatePaymentDraft,
   fullAdmissionWithPaymentByInstalmentsDraft,
   fullAdmissionWithPaymentBySetDateDraft,
-  partialAdmissionAlreadyPaidDraft,
+  partialAdmissionAlreadyPaidDraft, partialAdmissionWithImmediatePaymentAndAlreadyPaidDraft,
   partialAdmissionWithImmediatePaymentDraft,
   partialAdmissionWithPaymentByInstalmentsDraft,
   partialAdmissionWithPaymentBySetDateDraft,
@@ -235,5 +235,14 @@ describe('ResponseModelConverter', () => {
       expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
         .to.deep.equal(convertObjectLiteralToJSON(responseData))
     })
+
+    it('should throw error when payment intention and already paid coexist', () => {
+      const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentAndAlreadyPaidDraft
+        , individualDetails)
+      const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+      expect(() => convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, claim)))
+        .to.throw(Error, 'Payment Intention and stating already paid cannot coexist')
+    })
+
   })
 })

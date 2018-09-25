@@ -11,6 +11,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
+import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 
 const baseResponseDraft = {
   defendantDetails: {
@@ -117,6 +118,15 @@ export const basePartialFuturePaymentDetails = {
   }
 }
 
+export const basePartialWithMoneyOwedPaymentDetails = {
+  howMuchDoYouOwe: {
+    amount: 3000
+  } as HowMuchDoYouOwe,
+  whyDoYouDisagree: {
+    text: 'i have paid more than enough'
+  }
+}
+
 export const basePartialAlreadyPaidDetails = {
   alreadyPaid: {
     option: YesNoOption.YES
@@ -164,7 +174,24 @@ export const partialAdmissionWithImmediatePaymentDraft = {
   ...baseResponseDraft,
   ...basePartialAdmissionDraft,
   partialAdmission: {
-    ...basePartialFuturePaymentDetails,
+    ...basePartialWithMoneyOwedPaymentDetails,
+    paymentIntention: {
+      paymentOption: {
+        option: PaymentType.IMMEDIATELY
+      }
+    },
+    ...partialTimelineAndEvidences
+  }
+}
+
+export const partialAdmissionWithImmediatePaymentAndAlreadyPaidDraft = {
+  ...baseResponseDraft,
+  ...basePartialAdmissionDraft,
+  partialAdmission: {
+    ...basePartialWithMoneyOwedPaymentDetails,
+    alreadyPaid: {
+      option: YesNoOption.YES
+    } as AlreadyPaid,
     paymentIntention: {
       paymentOption: {
         option: PaymentType.IMMEDIATELY
@@ -206,7 +233,7 @@ export const partialAdmissionWithPaymentBySetDateDraft = {
   ...baseResponseDraft,
   ...basePartialAdmissionDraft,
   partialAdmission: {
-    ...basePartialFuturePaymentDetails,
+    ...basePartialWithMoneyOwedPaymentDetails,
     paymentIntention: {
       paymentOption: {
         option: PaymentType.BY_SET_DATE
@@ -250,7 +277,7 @@ export const partialAdmissionWithPaymentByInstalmentsDraft = {
   ...baseResponseDraft,
   ...basePartialAdmissionDraft,
   partialAdmission: {
-    ...basePartialFuturePaymentDetails,
+    ...basePartialWithMoneyOwedPaymentDetails,
     paymentIntention: {
       paymentOption: {
         option: PaymentType.INSTALMENTS

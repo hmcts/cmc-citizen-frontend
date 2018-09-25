@@ -50,7 +50,6 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { Claim } from 'claims/models/claim'
 
 export class ResponseModelConverter {
@@ -121,7 +120,7 @@ export class ResponseModelConverter {
     return {
       responseType: ResponseType.FULL_ADMISSION,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
+      paymentIntention: this.convertPaymentIntention(draft),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -154,7 +153,7 @@ export class ResponseModelConverter {
         comment: draft.partialAdmission.evidence.comment
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
+      paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft),
       freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
@@ -284,16 +283,28 @@ export class ResponseModelConverter {
     return party
   }
 
-  private static convertPaymentIntention (paymentIntention: PaymentIntentionDraft): PaymentIntention {
-    return {
-      paymentOption: paymentIntention.paymentOption.option.value as PaymentOption,
-      paymentDate: this.convertPaymentDate(paymentIntention.paymentOption, paymentIntention.paymentDate),
-      repaymentPlan: paymentIntention.paymentPlan && {
-        instalmentAmount: paymentIntention.paymentPlan.instalmentAmount,
-        firstPaymentDate: paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-        paymentSchedule: paymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
-      }
-    } as PaymentIntention
+  private static convertPaymentIntention (draft: ResponseDraft): PaymentIntention {
+    let paymentIntention
+    if (draft.isResponsePartiallyAdmitted()) {
+      paymentIntention = draft.partialAdmission.paymentIntention
+    } else {
+      paymentIntention = draft.fullAdmission.paymentIntention
+    }
+
+    if (draft.isResponseFullyAdmitted()
+      || !draft.isResponsePartiallyAdmittedAndAlreadyPaidAndPaymentIntentionIsPresent()) {
+      return {
+        paymentOption: paymentIntention.paymentOption.option.value as PaymentOption,
+        paymentDate: this.convertPaymentDate(paymentIntention.paymentOption, paymentIntention.paymentDate),
+        repaymentPlan: paymentIntention.paymentPlan && {
+          instalmentAmount: paymentIntention.paymentPlan.instalmentAmount,
+          firstPaymentDate: paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
+          paymentSchedule: paymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
+        }
+      } as PaymentIntention
+    } else {
+      throw new Error('Payment Intention and stating already paid cannot coexist')
+    }
   }
 
   private static convertPaymentDate (paymentOption: PaymentOptionDraft, paymentDate: PaymentDate): Moment {
