@@ -1,4 +1,4 @@
-import { ExpenseSource } from './ExpenseSource'
+import { ExpenseSource } from './expenseSource'
 import { ValidateIf, ValidateNested } from 'class-validator'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 
