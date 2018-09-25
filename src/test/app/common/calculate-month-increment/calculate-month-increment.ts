@@ -85,18 +85,10 @@ describe('calculateMonthIncrement', () => {
   })
 
   it('should return error when given a null start date', () => {
-    try {
-      calculateMonthIncrement(null)
-    } catch (e) {
-      expect(e.message).to.equal(`Start Date is invalid`)
-    }
+    expect(() => { calculateMonthIncrement(null) }).to.throw(Error, 'Start Date is invalid')
   })
 
   it('should return undefined when given an undefined start date', () => {
-    try {
-      calculateMonthIncrement(undefined)
-    } catch (e) {
-      expect(e.message).to.equal(`Start Date is invalid`)
-    }
+    expect(() => { calculateMonthIncrement(undefined) }).to.throw(Error, 'Start Date is invalid')
   })
 })

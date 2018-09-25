@@ -59,8 +59,6 @@ export abstract class AbstractPaymentPlanPage<Draft> {
             const error: FormValidationError = this.postValidation(req, res)
 
             if (error) {
-              // tslint:disable-next-line:no-console
-              console.log('Here ')
               form = new Form<PaymentPlanModel>(form.model, [error, ...form.errors])
             }
 

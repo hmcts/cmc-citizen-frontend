@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import { addDaysFilter, dateFilter, dateInputFilter, addIncrementMonthFilter } from 'modules/nunjucks/filters/dateFilter'
+import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -98,7 +98,7 @@ export class Nunjucks {
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
     nunjucksEnv.addFilter('addDays', addDaysFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
-    nunjucksEnv.addFilter('monthIncrement', addIncrementMonthFilter)
+    nunjucksEnv.addFilter('monthIncrement', monthIncrementFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
     nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))

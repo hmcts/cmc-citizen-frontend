@@ -102,23 +102,17 @@ export function addDaysFilter (value: moment.Moment | string, num: number): mome
 }
 
 /* *
- * This filter should be used when you need to dynamically modify a date. The keyword 'now' may be given as
- * input to generate dates relative to the current date.
+ * This filter should be used when you need to return a monthly increment from a given date.
+ * The keyword 'now' may be given as input to generate dates relative to the current date.
  *
  * Usage (in njk):
  * Example 1:
- * {{ someMoment | addDays(1) }}
- *
- * output:
- *  a moment representing the day after that given
- *
- * Example 2:
- * {{ 'now' | addDays(-7) }}
+ * {{ someMoment | monthIncrementFilter('2018-01-01') }}
  *
  * output:
  *  a moment representing the date for a monthly increment
  */
-export function addIncrementMonthFilter (value: moment.Moment | string): moment.Moment {
+export function monthIncrementFilter (value: moment.Moment | string): moment.Moment {
   try {
     if (!value || !(typeof value === 'string' || value instanceof moment)) {
       throw new Error('Input should be moment or string, cannot be empty')
@@ -127,7 +121,7 @@ export function addIncrementMonthFilter (value: moment.Moment | string): moment.
     let date: moment.Moment
     if (typeof value === 'string') {
       if (value === 'now') {
-        date = MomentFactory.currentDate()
+        date = moment()
       } else {
         date = moment(value)
       }
