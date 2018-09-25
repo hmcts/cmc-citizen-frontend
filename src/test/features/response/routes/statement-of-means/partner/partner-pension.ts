@@ -57,7 +57,7 @@ describe('Statement of means', () => {
           await request(app)
             .get(partnerPensionPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Does your partner receive a state pension?'))
+            .expect(res => expect(res).to.be.successful.withText('Does your partner receive a pension?'))
         })
       })
     })

@@ -353,10 +353,6 @@ export const statementOfMeansWithAllFieldsDraft = {
     value: 3
   },
   dependantsDisability: true,
-  maintenance: {
-    declared: true,
-    value: 4
-  },
   otherDependants: {
     declared: true,
     numberOfPeople: {

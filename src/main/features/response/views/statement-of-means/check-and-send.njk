@@ -71,9 +71,6 @@
   {% endif %}
 {% endif %}
 
-{{ row('Maintenance', '', StatementOfMeansPaths.maintenancePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
-{{ row('Do you or your partner pay maintenance for any children?', 'Yes' if draft.statementOfMeans.maintenance.declared else 'No', '', not draft.statementOfMeans.maintenance.declared, bold = true) }}
-
 {% if draft.statementOfMeans.maintenance.declared %}
   {{ row('Number of children', draft.statementOfMeans.maintenance.value, '', bold = true) }}
 {% endif %}

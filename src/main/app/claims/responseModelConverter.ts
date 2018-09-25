@@ -181,9 +181,8 @@ export class ResponseModelConverter {
         type: draft.statementOfMeans.residence.type.value as ResidenceType,
         otherDetail: draft.statementOfMeans.residence.housingDetails
       },
-      dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
+      dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.otherDependants.declared ? {
         children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
-        numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
         otherDependants: {
           numberOfPeople: draft.statementOfMeans.otherDependants.declared ? draft.statementOfMeans.otherDependants.numberOfPeople.value : 0,
           details: draft.statementOfMeans.otherDependants.numberOfPeople.details || undefined,

@@ -5,7 +5,6 @@ import { Employers } from 'response/form/models/statement-of-means/employers'
 import { SelfEmployment } from 'response/form/models/statement-of-means/selfEmployment'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { Education } from 'response/form/models/statement-of-means/education'
-import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
 import { OtherDependants } from 'response/form/models/statement-of-means/otherDependants'
 import { Unemployment } from 'response/form/models/statement-of-means/unemployment'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
@@ -28,7 +27,6 @@ import { Carer } from 'response/form/models/statement-of-means/carer'
 export class StatementOfMeans {
   residence?: Residence
   dependants?: Dependants
-  maintenance?: Maintenance
   otherDependants?: OtherDependants
   education?: Education
   employment?: Employment
@@ -58,7 +56,6 @@ export class StatementOfMeans {
       this.residence = new Residence().deserialize(input.residence)
       this.dependants = new Dependants().deserialize(input.dependants)
       this.education = new Education().deserialize(input.education)
-      this.maintenance = new Maintenance().deserialize(input.maintenance)
       this.otherDependants = new OtherDependants().deserialize(input.otherDependants)
       this.employment = new Employment().deserialize(input.employment)
       this.employers = new Employers().deserialize(input.employers)

@@ -18,7 +18,6 @@ export interface OtherDependants {
 
 export interface Dependant {
   children: Child[]
-  numberOfMaintainedChildren: number
   otherDependants: OtherDependants
   anyDisabledChildren: boolean
 }

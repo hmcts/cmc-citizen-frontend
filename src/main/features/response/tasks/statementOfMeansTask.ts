@@ -2,6 +2,11 @@ import { Validator } from 'class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
+import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
+import { PartnerAgeOption } from 'response/form/models/statement-of-means/partnerAge'
 
 const validator = new Validator()
 
