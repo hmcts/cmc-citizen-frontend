@@ -14,6 +14,8 @@ function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
+  console.log('draft.document.courtOfferedPaymentIntention-->',draft.document.courtOfferedPaymentIntention)
+
   res.render(Paths.signSettlementAgreementPage.associatedView, {
     form: form,
     claim: claim,
