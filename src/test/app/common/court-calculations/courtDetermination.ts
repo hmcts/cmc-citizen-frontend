@@ -28,13 +28,13 @@ describe('CourtDetermination', () => {
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
     })
 
-    it('should return a claimant or defendant decision type when claimantPaymentDate and defendantPaymentDate are the same', () => {
+    it('should return a claimant decision type when claimantPaymentDate and defendantPaymentDate are the same', () => {
 
       let defendantPaymentDate = moment(new Date())
       let claimantPaymentDate = moment(new Date())
       let courtGeneratedPaymentDate = moment(new Date())
 
-      expect(Object.values(DecisionType).includes(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)))
+      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
     })
 
     it('should return a claimant decision type when claimantPaymentDate and courtGeneratedPaymentDate are the same', () => {
