@@ -67,19 +67,6 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
 
-      if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        const paymentPlanFromDefendant: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-
-        courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-        courtCalculatedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanFromDefendant.startDate,
-          instalmentAmount: paymentPlanFromDefendant.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendant.frequency),
-          completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendant.calculatePaymentLength()
-        }
-      }
-
       return courtCalculatedPaymentIntention
     }
 
