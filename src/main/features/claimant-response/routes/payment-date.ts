@@ -18,6 +18,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { User } from 'idam/user'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
+import {FullAdmissionResponse} from "claims/models/response/fullAdmissionResponse";
+import {PartialAdmissionResponse} from "claims/models/response/partialAdmissionResponse";
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -48,6 +50,8 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
   generateCourtCalculatedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const courtCalculatedPaymentIntention = new PaymentIntention()
+    const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+    draft.document.courtDecisionType = decisionType
 
     if (decisionType === DecisionType.CLAIMANT) {
       courtCalculatedPaymentIntention.paymentDate = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
@@ -56,7 +60,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
       return courtCalculatedPaymentIntention
     }
 
-    if (decisionType === DecisionType.COURT || decisionType === DecisionType.DEFENDANT) {
+    if (decisionType === DecisionType.COURT) {
       const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
       const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
 
@@ -65,13 +69,25 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
         courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
       }
 
+      return courtCalculatedPaymentIntention
+    }
+
+    if (decisionType === DecisionType.DEFENDANT) {
+      const defendantsPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+      const lastPaymentDate: Moment = defendantsPaymentPlan.calculateLastPaymentDate()
+
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+        courtCalculatedPaymentIntention.paymentDate = claimResponse.paymentIntention.paymentDate
+        courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
+      }
+
       if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
         courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
         courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
         courtCalculatedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanFromDefendantFinancialStatement.startDate,
-          instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency)
+          firstPaymentDate: defendantsPaymentPlan.startDate,
+          instalmentAmount: defendantsPaymentPlan.instalmentAmount,
+          paymentSchedule: Frequency.toPaymentSchedule(defendantsPaymentPlan.frequency)
         }
       }
       return courtCalculatedPaymentIntention

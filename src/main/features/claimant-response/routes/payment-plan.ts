@@ -70,6 +70,8 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtCalculatedPaymentIntention = new PaymentIntention()
 
+    draft.document.courtDecisionType = decisionType
+
     if (decisionType === DecisionType.CLAIMANT) {
       const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper
       .createPaymentPlanFromDraft(draft.document)
@@ -141,13 +143,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
         courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
         courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
-        courtCalculatedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanFromDefendantFinancialStatement.startDate,
-          instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
-          completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
-        }
       }
 
       return courtCalculatedPaymentIntention
