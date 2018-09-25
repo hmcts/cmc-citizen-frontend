@@ -18,6 +18,8 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { CCJClient } from 'claims/ccjClient'
 import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { CCJModelConverter } from 'claims/ccjModelConverter'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 
 function createCourtOrderPaymentPlan (draft: Draft<DraftClaimantResponse>, claim: Claim) {
   if (draft.document.alternatePaymentMethod
@@ -62,12 +64,13 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+      const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
       const user: User = res.locals.user
 
       if (draft.document.formaliseRepaymentPlan && draft.document.formaliseRepaymentPlan.option) {
         switch (draft.document.formaliseRepaymentPlan.option) {
           case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
-            await CCJClient.issue(claim, draft, user)
+            await CCJClient.request(claim.externalId, countyCourtJudgment, user)
             break
           case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
             const settlement: Settlement = prepareSettlement(claim, draft.document)
