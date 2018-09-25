@@ -14,6 +14,7 @@ import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
 import { AmountHelper } from 'claimant-response/helpers/amountHelper'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -50,7 +51,7 @@ export default express.Router()
             break
         }
       }
-
+      await new ClaimStoreClient().saveClaimantResponse(claim,draft,user)
       await new DraftService().delete(draft.id, user.bearerToken)
 
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
