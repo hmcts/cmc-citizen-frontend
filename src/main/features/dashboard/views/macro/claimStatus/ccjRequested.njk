@@ -17,26 +17,29 @@
 {% endmacro %}
 
 {% macro ccjRequestedForDefendantDashboard(claim) %}
-  {{ t('The claimant has requested a County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}.',
-    { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+  {{ t('{{ claimantName }} has requested a County Court Judgment against you.',
+    { claimantName : claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro ccjRequestedForDefendantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('The claimant has requested a CCJ against you') }}</h2>
+  <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
+
+  <p>{{ t('{{ claimantName }} accepted your repayment plan and requested a CCJ against you.',
+      { claimantName: claim.claimData.claimant.name }) }}</p>
+
+  <p>{{ t('If a defendant doesn’t pay immediately, claimants can request a CCJ even if they accept a repayment plan.') }}</p>
+
   <p>
-    {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
-      { responseDeadline: claim.responseDeadline | date }) }}
+    <a href="{{ DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) }}">{{
+      t('Contact {{ claimantName }}', { claimantName: claim.claimData.claimant.name }) }}</a>{{
+      t(' if you need their payment details. Make sure you get receipts for any payments.')
+    }}
   </p>
-  <p>
-    {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
-      + 'We’ll contact you within 14 days to tell you whether the claimant’s request for judgment has been successful.',
-      { claimantName : claim.claimData.claimant.name,
-      ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-  </p>
-  <p>
-    {{ t('You can no longer respond to the claim.') }}
-  </p>
-  <p>
-    {{ externalLink(t('Find out more about County Court Judgments'), 'https://www.gov.uk/county-court-judgments-ccj-for-debt') }}
-  </p>
+
+  <p>{{ t('The judgment sets out the terms of how you must pay.') }}</p>
+
+  <p>{{ t('View the judgment') }} {{ t(' (PDF)') }}</p>
+
+  <p>{{ t('If you repay the debt within 28 days you can <a href="{{ link }}">apply for a certificate of cancellation</a> to cancel the CCJ. This application costs £15.',
+      { link: 'https://hmctsformfinder.justice.gov.uk/HMCTS/GetForm.do?court_forms_id=1157' }) | safe }}</p>
 {% endmacro %}

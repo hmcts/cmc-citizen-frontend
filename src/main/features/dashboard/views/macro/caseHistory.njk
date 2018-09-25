@@ -90,8 +90,9 @@ ccjRequestedForDefendantClaimDetails %}
 {% endmacro %}
 
 {% macro caseHistoryForDefendantClaimDetails(claim) %}
-  {% for state in claim.stateHistory %}
+  {% if claim.stateHistory and claim.stateHistory[0] %}
     <div class="status-block">
+      {% set state = claim.stateHistory[0] %}
       {% if state.status === ClaimStatus.NO_RESPONSE %}
         {{ noResponseForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -137,7 +138,7 @@ ccjRequestedForDefendantClaimDetails %}
         </p>
       {% endif %}
     </div>
-  {% endfor %}
+  {% endif %}
 {% endmacro %}
 
 {% macro _settleOutOfCourtOption (claim) %}

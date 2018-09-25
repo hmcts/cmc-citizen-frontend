@@ -4,7 +4,50 @@
   {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
 {% endmacro %}
 
-{% macro offerSettlementReachedClaimDetails(claim) %}
+{% macro offerSettlementReachedForDefendantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+  {% if claim.response.paymentIntention.paymentOption == domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <p>
+      {{ t('The agreement says you’ll repay the full {{ amount }} by {{ date }}.',
+        { amount: claim.totalAmountTillToday | numeral, date: claim.response.paymentIntention.paymentDate | date }) }}
+    </p>
+    <p>
+      {{ t('The claimant can’t request a County Court Judgment against you if you pay by the agreed date.') }}
+    </p>
+  {% else %}
+    {% set paymentSchedule = claim.response.paymentIntention.repaymentPlan.paymentSchedule %}
+    {% if paymentSchedule == 'EVERY_MONTH' %}
+      {% set frequency = 'per month' %}
+    {% elseif paymentSchedule == 'EVERY_TWO_WEEKS' %}
+      {% set frequency = 'every two weeks' %}
+    {% elseif paymentSchedule == 'EACH_WEEK' %}
+      {% set frequency = 'each week' %}
+    {% else %}
+      {% set frequency = 'periodically' %}
+    {% endif %}
+    <p>
+      {{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ frequency }} starting {{ startDate }}.',
+        { instalmentAmount: claim.response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          frequency: frequency,
+          startDate: claim.response.paymentIntention.repaymentPlan.firstPaymentDate | date }) }}
+    </p>
+    <p>
+      {{ t('The claimant can’t request a County Court Judgment against you if you pay as agreed.') }}
+    </p>
+  {% endif %}
+  <p>
+    {{ _downloadAgreementLink(claim) }}
+  </p>
+  <p>
+    <a href="{{ DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) }}">
+      {{ t('Contact {{ claimantName }}', { claimantName: claim.claimData.claimant.name }) }}</a>
+    {{ t('if you need their payment details.') }}
+  </p>
+  <p>{{ t('Make sure you get receipts for any payments.') }}</p>
+  <p>{{ _downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro offerSettlementReachedForClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
   <p>
     {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
