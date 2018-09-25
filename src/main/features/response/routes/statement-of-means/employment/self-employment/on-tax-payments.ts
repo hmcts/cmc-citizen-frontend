@@ -58,7 +58,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        res.redirect(StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId }))
       }
     })
   )

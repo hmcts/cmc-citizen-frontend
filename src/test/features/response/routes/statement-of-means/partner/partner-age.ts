@@ -57,7 +57,7 @@ describe('Statement of means', () => {
           await request(app)
             .get(partnerAgePage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Is your partner over 18?'))
+            .expect(res => expect(res).to.be.successful.withText('Is your partner aged 18 or over?'))
         })
       })
     })

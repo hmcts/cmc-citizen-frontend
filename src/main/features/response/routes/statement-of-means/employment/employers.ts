@@ -81,7 +81,7 @@ export default express.Router()
         if (draft.document.statementOfMeans.employment.selfEmployed) {
           res.redirect(StatementOfMeansPaths.selfEmploymentPage.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: externalId }))
+          res.redirect(StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId }))
         }
       }
     })

@@ -57,7 +57,7 @@ describe('Statement of means', () => {
           await request(app)
             .get(severeDisabilityPage)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Is your disability considered a severe disability?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you severely disabled?'))
         })
       })
     })

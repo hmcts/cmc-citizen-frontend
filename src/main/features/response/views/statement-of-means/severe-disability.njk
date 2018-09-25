@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, yesNoRadio, saveAndContinueButton, errorSummary %}
 
-{% set heading = 'Is your disability considered a severe disability?' %}
+{% set heading = 'Are you severely disabled?' %}
 
 {% block content %}
 
@@ -10,12 +10,12 @@
 
       <form method="post" novalidate
             class="analytics-submit-event-trigger"
-            data-event-action="SoM: Is your disability considered a severe disability?"
+            data-event-action="SoM: Are you severely disabled?"
             data-event-label-from="option">
 
         {{ csrfProtection(csrf) }}
 
-        {{ yesNoRadio(t('Is your disability considered a severe disability?'), 'option', form) }}
+        {{ yesNoRadio(t('Are you severely disabled?'), 'option', form) }}
 
         {{ saveAndContinueButton() }}
 
