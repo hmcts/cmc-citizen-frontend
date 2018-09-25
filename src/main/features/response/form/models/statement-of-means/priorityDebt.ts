@@ -44,7 +44,7 @@ export class PriorityDebt {
     rentDeclared?: boolean, rent?: ExpenseSource,
     councilTaxDeclared?: boolean, councilTax?: ExpenseSource,
     gasDeclared?: boolean, gas?: ExpenseSource,
-    electricityDeclared?: boolean, electricigitty?: ExpenseSource,
+    electricityDeclared?: boolean, electricity?: ExpenseSource,
     waterDeclared?: boolean, water?: ExpenseSource,
     maintenanceDeclared?: boolean, maintenance?: ExpenseSource
   ) {
