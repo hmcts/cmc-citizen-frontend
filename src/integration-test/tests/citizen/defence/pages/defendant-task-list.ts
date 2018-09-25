@@ -33,7 +33,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskDecideHowWillYouPay (): void {
-    I.click('When will you pay the')
+    I.click('Decide how you’ll pay')
   }
 
   selectTaskWhenDidYouPay (): void {
@@ -41,7 +41,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskWhyDoYouDisagreeWithTheClaim (): void {
-    I.click('Why do you disagree with the amount claimed?')
+    I.click('Why do you disagree with the claim?')
   }
 
   selectTaskWhyDoYouDisagreeWithTheAmountClaimed (): void {

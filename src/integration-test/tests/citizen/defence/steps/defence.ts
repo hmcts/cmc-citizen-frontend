@@ -376,11 +376,11 @@ export class DefenceSteps {
     haveYouPaidTheClaimantPage.selectNoOption()
     defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
     defendantHowMuchYouOwePage.enterAmountOwed(10)
-    defendantTaskListPage.selectTaskWhyDoYouDisagreeWithTheClaim()
+    defendantTaskListPage.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
     defendantYourDefencePage.enterYourDefence('random text')
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
-    defendantTaskListPage.selectTaskDecideHowWillYouPay()
+    defendantTaskListPage.selectTaskWhenWillYouPay()
     switch (paymentOption) {
       case PaymentOption.IMMEDIATELY:
         defendantWhenWillYouPage.chooseImmediately()
