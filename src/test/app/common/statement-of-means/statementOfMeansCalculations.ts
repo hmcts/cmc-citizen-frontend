@@ -10,6 +10,38 @@ import { BankAccount, BankAccountType } from 'claims/models/response/statement-o
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
+import { PartyType } from 'common/partyType'
+import { MomentFactory } from 'shared/momentFactory'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { Partner } from 'claims/models/response/statement-of-means/partner'
+import { PriorityDebts, PriorityDebtType } from 'claims/models/response/statement-of-means/priorityDebts'
+import { AgeGroupType, Dependant } from 'claims/models/response/statement-of-means/dependant'
+
+const sampleDefendantDisability: DisabilityStatus = DisabilityStatus.YES
+const sampleDefendantOnPension: Income = {
+  type: IncomeType.PENSION,
+  frequency: PaymentFrequency.MONTH,
+  amount: 200
+}
+const samplePartnerDetails: Partner = { over18: true, disability: DisabilityStatus.SEVERE, pensioner: false }
+const sampleDependantDetails: Dependant = {
+  children: [
+    { ageGroupType: AgeGroupType.UNDER_11, numberOfChildren: 2 },
+    { ageGroupType: AgeGroupType.BETWEEN_11_AND_15, numberOfChildren: 1 },
+    { ageGroupType: AgeGroupType.BETWEEN_16_AND_19, numberOfChildren: 2, numberOfChildrenLivingWithYou: 1 }],
+  anyDisabledChildren: true,
+  numberOfMaintainedChildren: 1,
+  otherDependants: { numberOfPeople: 2, details: 'some string', anyDisabled: true }
+}
+
+const samplePriorityDebts: PriorityDebts[] = [
+  { type: PriorityDebtType.MAINTENANCE_PAYMENTS, frequency: PaymentFrequency.MONTH, amount: 200 },
+  { type: PriorityDebtType.WATER, frequency: PaymentFrequency.MONTH, amount: 155.55 }]
+
+// const sampleDefendantDateOfBirth = moment.Moment('1999-01-01')
+// function sampleDataDisabilityAllowance: number {
+//   return 0
+// }
 
 const sampleStatementOfMeans = {
   residence: {
@@ -26,6 +58,10 @@ const sampleStatementOfMeans = {
       }
     }
   },
+  disability: sampleDefendantDisability,
+  partner: samplePartnerDetails,
+  priorityDebts: samplePriorityDebts,
+  dependants: sampleDependantDetails,
   bankAccounts: [{
     type: BankAccountType.CURRENT_ACCOUNT,
     joint: false,
@@ -58,9 +94,20 @@ const sampleStatementOfMeans = {
       type: IncomeType.INCOME_SUPPORT,
       frequency: PaymentFrequency.WEEK,
       amount: 50
-    }
+    },
+    sampleDefendantOnPension
   ],
   expenses: [
+    {
+      type: ExpenseType.MORTGAGE,
+      frequency: PaymentFrequency.MONTH,
+      amount: 300
+    },
+    {
+      type: ExpenseType.RENT,
+      frequency: PaymentFrequency.MONTH,
+      amount: 200
+    },
     {
       type: ExpenseType.ELECTRICITY,
       frequency: PaymentFrequency.MONTH,
@@ -95,7 +142,8 @@ describe('StatementOfMeansCalculations', () => {
 
   describe('calculateTotalMonthlyDisposableIncome', () => {
     it('should calculate the total monthly disposable income', () => {
-      expect(StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(sampleStatementOfMeans)).to.equal(2052.0833333333335)
+      expect(StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(sampleStatementOfMeans,
+        PartyType.INDIVIDUAL, MomentFactory.parse('1999-01-01'))).to.equal(1454.696666666667)
     })
   })
 
@@ -103,10 +151,10 @@ describe('StatementOfMeansCalculations', () => {
   // EXPENSES
   //
 
-  describe('calculateTotalMontlyExpense', () => {
+  describe('calculateTotalMonthlyExpense', () => {
     describe('when valid debts, courtOrders and expenses are provided', () => {
-      it('should calculate the total monthly expense', () => {
-        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense(sampleStatementOfMeans)).to.equal(283.3333333333333)
+      it('should calculate the total monthly expense (mortgage and rent only)', () => {
+        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense(sampleStatementOfMeans)).to.equal(640)
       })
     })
 
@@ -176,9 +224,9 @@ describe('StatementOfMeansCalculations', () => {
 
   describe('calculateMonthlyRegularExpense', () => {
     describe('when valid amounts and frequencies are provided', () => {
-      it('should calculate the total of all regular expenses', () => {
+      it('should calculate the total mortgage and rent', () => {
         const expenses: Expense[] = sampleStatementOfMeans.expenses
-        expect(StatementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(143.33333333333331)
+        expect(StatementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(500)
       })
     })
 
