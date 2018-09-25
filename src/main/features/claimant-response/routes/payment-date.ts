@@ -62,7 +62,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     draft.document.courtDecisionType = decisionType
 
     if (decisionType === DecisionType.CLAIMANT) {
-      if (draft.document.alternatePaymentMethod.toDomainInstance().paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
         courtCalculatedPaymentIntention.paymentDate = draft.document.alternatePaymentMethod.toDomainInstance().paymentDate
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }

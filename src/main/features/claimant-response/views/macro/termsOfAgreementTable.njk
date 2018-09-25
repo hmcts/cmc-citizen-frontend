@@ -4,7 +4,6 @@
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
 
-    {{ courtOfferedPaymentIntention.paymentOption }}
     {% if courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
       {% set amountToPay = 'the full amount' %}
       {% if response.responseType == ResponseType.PART_ADMISSION.value %}
