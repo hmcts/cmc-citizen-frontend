@@ -62,9 +62,7 @@ export default express.Router()
             && draft.document.statementOfMeans.partnerDisability.option === PartnerDisabilityOption.YES
 
           // also skip if there aren't any children
-          const hasChildren: boolean = form.model.numberOfChildren
-            ? (form.model.numberOfChildren.under11 + form.model.numberOfChildren.between11and15 + form.model.numberOfChildren.between16and19) > 0
-            : false
+          const hasChildren: boolean = form.model.numberOfChildren && totalNumberOfChildren(form.model) > 0
 
           const skipDisabilityQuestion: boolean = !hasChildren || (defendantIsDisabled && partnerIsDisabled) || defendantIsSeverelyDisabled
 
@@ -77,3 +75,11 @@ export default express.Router()
       }
     })
   )
+
+function totalNumberOfChildren (dependants: Dependants): number {
+  let count: number = 0
+  count += dependants.numberOfChildren.under11 || 0
+  count += dependants.numberOfChildren.between11and15 || 0
+  count += dependants.numberOfChildren.between16and19 || 0
+  return count
+}
