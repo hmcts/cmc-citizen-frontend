@@ -50,6 +50,9 @@
 
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
+{% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantDashboard %}
+{% from "./claimStatus/admissionByCCJDefendant.njk" import admissionByCCJDefendantDashboard %}
+
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
@@ -59,6 +62,8 @@
     {{ ccjEligibleForClaimantDashboard() }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
+    {{ admissionByCCJClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
     {{ claimFullAdmissionForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
@@ -99,11 +104,13 @@
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
-    {{ moreTimeRequestedForDefendantDashboard(claim) }}
+      {{ moreTimeRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-    {{ ccjEligibleForDefendantDashboard(claim) }}
+      {{ ccjEligibleForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CCJ_REQUESTED %}
-    {{ ccjRequestedForDefendantDashboard(claim) }}
+      {{ ccjRequestedForDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
+      {{ admissionByCCJDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}

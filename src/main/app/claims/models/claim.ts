@@ -145,7 +145,11 @@ export class Claim {
 
   get status (): ClaimStatus {
     if (this.countyCourtJudgmentRequestedAt) {
-      return ClaimStatus.CCJ_REQUESTED
+      if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
+        return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
+      } else {
+        return ClaimStatus.CCJ_REQUESTED
+      }
     } else if (this.eligibleForCCJAfterBreachedSettlement) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT
     } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
@@ -217,5 +221,10 @@ export class Claim {
   private hasDefendantNotSignedSettlementAgreement (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
       this.respondToResponseDeadline.isBefore(MomentFactory.currentDate().hour(16))
+  }
+
+  private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
+    return this.countyCourtJudgment && this.response &&
+      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
   }
 }
