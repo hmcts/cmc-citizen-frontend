@@ -16,5 +16,4 @@
 !src/integration-test/**
 !default.conf.js
 !saucelabs.conf.js
-
 !server.js
