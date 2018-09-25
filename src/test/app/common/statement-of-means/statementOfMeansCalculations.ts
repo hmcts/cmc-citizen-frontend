@@ -16,6 +16,7 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 import { Partner } from 'claims/models/response/statement-of-means/partner'
 import { PriorityDebts, PriorityDebtType } from 'claims/models/response/statement-of-means/priorityDebts'
 import { AgeGroupType, Dependant } from 'claims/models/response/statement-of-means/dependant'
+import * as moment from 'moment'
 
 const sampleDefendantDisability: DisabilityStatus = DisabilityStatus.YES
 const sampleDefendantOnPension: Income = {
@@ -38,11 +39,36 @@ const samplePriorityDebts: PriorityDebts[] = [
   { type: PriorityDebtType.MAINTENANCE_PAYMENTS, frequency: PaymentFrequency.MONTH, amount: 200 },
   { type: PriorityDebtType.WATER, frequency: PaymentFrequency.MONTH, amount: 155.55 }]
 
-// const sampleDefendantDateOfBirth = moment.Moment('1999-01-01')
-// function sampleDataDisabilityAllowance: number {
-//   return 0
-// }
+const sampleDefendantDateOfBirth: moment.Moment = MomentFactory.parse('1999-01-01')
 
+function sampleDataLivingAllowanceAmount (): number {
+  // single under 25 / over 25
+  // couple over 18
+  // couple under 25 and over 25
+  return 0
+}
+
+function sampleDataDisabilityAllowanceAmount (): number {
+  // no disabilities
+  // def serve partner no, disabled dependant
+  // def yes partner server, carer yes
+  // has disabled dependant
+  // is carer only
+  return 0
+}
+
+function sampleDataPensionerAllowanceAmount (): number {
+  // no pensioners
+  // defendant pensioners
+  // partner pensioner only
+  return 0
+}
+
+function sampleDataDependantsAllowanceAmount (): number {
+  // 1 dependant
+  // 11 dependants
+  return 0
+}
 const sampleStatementOfMeans = {
   residence: {
     type: ResidenceType.OWN_HOME,
@@ -80,7 +106,7 @@ const sampleStatementOfMeans = {
     totalOwed: 3000,
     monthlyPayments: 30
   }, {
-    description: 'Somthing else',
+    description: 'Something else',
     totalOwed: 4000,
     monthlyPayments: 40
   }],
@@ -143,7 +169,7 @@ describe('StatementOfMeansCalculations', () => {
   describe('calculateTotalMonthlyDisposableIncome', () => {
     it('should calculate the total monthly disposable income', () => {
       expect(StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(sampleStatementOfMeans,
-        PartyType.INDIVIDUAL, MomentFactory.parse('1999-01-01'))).to.equal(1454.696666666667)
+        PartyType.INDIVIDUAL, sampleDefendantDateOfBirth)).to.equal(1454.696666666667)
     })
   })
 
