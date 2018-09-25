@@ -116,11 +116,12 @@ export class Claim {
   }
 
   get eligibleForCCJ (): boolean {
-    return this.isFullAdmissionPayImmediatelyPastPaymentDate()
-      || this.hasDefendantNotSignedSettlementAgreement()
-      || (!this.countyCourtJudgmentRequestedAt
-          && !this.respondedAt
-          && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
+    return !this.countyCourtJudgmentRequestedAt
+      && (this.isFullAdmissionPayImmediatelyPastPaymentDate()
+        || this.hasDefendantNotSignedSettlementAgreement()
+        || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+        )
+      )
   }
 
   get eligibleForCCJAfterBreachedSettlement (): boolean {
