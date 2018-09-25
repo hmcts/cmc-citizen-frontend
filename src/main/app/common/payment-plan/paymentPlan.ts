@@ -87,14 +87,4 @@ export class PaymentPlan {
     const plural: string = num < 2 ? '' : 's'
     return `${num} ${word}${plural}`
   }
-
-  deserialize (input?: any): PaymentPlan {
-    if (input) {
-      this.totalAmount = input.totalAmount
-      this.instalmentAmount = input.instalmentAmount
-      this.startDate = input.startDate
-      this.frequency = input.frequency
-    }
-    return this
-  }
 }
