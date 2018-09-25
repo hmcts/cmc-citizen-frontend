@@ -39,7 +39,6 @@ export class StatementOfMeansPaths {
   static readonly residencePage = new RoutablePath(`${statementOfMeansPath}/residence`)
   static readonly dependantsPage = new RoutablePath(`${statementOfMeansPath}/dependants`)
   static readonly educationPage = new RoutablePath(`${statementOfMeansPath}/dependants/education`)
-  static readonly maintenancePage = new RoutablePath(`${statementOfMeansPath}/maintenance`)
   static readonly otherDependantsPage = new RoutablePath(`${statementOfMeansPath}/other-dependants`)
   static readonly employmentPage = new RoutablePath(`${statementOfMeansPath}/employment`)
   static readonly employersPage = new RoutablePath(`${statementOfMeansPath}/employment/employers`)
@@ -59,7 +58,6 @@ export class StatementOfMeansPaths {
   static readonly partnerDisabilityPage = new RoutablePath(`${statementOfMeansPath}/partner/partner-disability`)
   static readonly partnerSevereDisabilityPage = new RoutablePath(`${statementOfMeansPath}/partner/partner-severe-disability`)
   static readonly dependantsDisabilityPage = new RoutablePath(`${statementOfMeansPath}/dependants/disability`)
-  static readonly otherDependantsDisabilityPage = new RoutablePath(`${statementOfMeansPath}/other-dependants-disability`)
   static readonly carerPage = new RoutablePath(`${statementOfMeansPath}/carer`)
 }
 

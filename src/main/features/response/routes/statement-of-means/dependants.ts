@@ -50,7 +50,7 @@ export default express.Router()
         if (form.model.numberOfChildren && form.model.numberOfChildren.between16and19) {
           res.redirect(Paths.educationPage.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(Paths.maintenancePage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.otherDependantsPage.evaluateUri({ externalId: externalId }))
         }
       }
     })

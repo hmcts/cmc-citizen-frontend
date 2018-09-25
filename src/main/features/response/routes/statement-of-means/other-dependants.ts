@@ -46,11 +46,7 @@ export default express.Router()
         draft.document.statementOfMeans.otherDependants = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.numberOfPeople && form.model.numberOfPeople.value > 0) {
-          res.redirect(Paths.otherDependantsDisabilityPage.evaluateUri({ externalId: externalId }))
-        } else {
-          res.redirect(Paths.carerPage.evaluateUri({ externalId: externalId }))
-        }
+        res.redirect(Paths.carerPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
