@@ -34,8 +34,10 @@ export class PaymentPlanHelper {
 
     switch (responseType) {
       case ResponseType.PART_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as PartialAdmissionResponse,
-          claim.claimData.amount.totalAmount())
+        let partialAdmissionResponse = response as PartialAdmissionResponse
+        return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(partialAdmissionResponse,
+          partialAdmissionResponse.amount
+        )
       case ResponseType.FULL_ADMISSION:
         return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as FullAdmissionResponse,
           claim.claimData.amount.totalAmount()
