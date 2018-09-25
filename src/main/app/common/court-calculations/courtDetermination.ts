@@ -9,8 +9,8 @@ export enum DecisionType {
 export class CourtDetermination {
 
   static calculateDecision (defendantPaymentDate: Moment,
-                             claimantPaymentDate: Moment,
-                             courtGeneratedPaymentDate: Moment): DecisionType {
+                            claimantPaymentDate: Moment,
+                            courtGeneratedPaymentDate: Moment): DecisionType {
 
     if (!defendantPaymentDate || !claimantPaymentDate || !courtGeneratedPaymentDate) {
       throw new Error('Input should be a moment, cannot be empty')
@@ -19,12 +19,9 @@ export class CourtDetermination {
     if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate) || claimantPaymentDate.isSameOrAfter(courtGeneratedPaymentDate)) {
       return DecisionType.CLAIMANT
     }
-    if (claimantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate)) {
-      if (defendantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate)) {
-        return DecisionType.DEFENDANT
-      } else {
-        return DecisionType.COURT
-      }
+    if (claimantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate) && defendantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate)) {
+      return DecisionType.DEFENDANT
     }
+    return DecisionType.COURT
   }
 }
