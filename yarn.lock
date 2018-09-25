@@ -317,8 +317,8 @@
     "@types/node" "*"
 
 "@types/node@*", "@types/node@<10.0.0":
-  version "9.6.31"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.31.tgz#4d1722987f8d808b4c194dceb8c213bd92f028e5"
+  version "9.6.32"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.32.tgz#1b64134f630b30c9cda4810aa4a94fc2d4141dbd"
 
 "@types/nunjucks@^3.1.0":
   version "3.1.0"
@@ -1418,9 +1418,9 @@ co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
 
-codacy-coverage@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/codacy-coverage/-/codacy-coverage-3.0.0.tgz#d4a0286b01aa0dfa10195b9bcff69c345de996b0"
+codacy-coverage@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/codacy-coverage/-/codacy-coverage-3.1.0.tgz#a49a75d962733dc0b524b3d5eb3b6367d5bece59"
   dependencies:
     bluebird "^3.5.x"
     commander "^2.x"
@@ -3745,9 +3745,9 @@ husky@^0.14.3:
     normalize-path "^1.0.0"
     strip-indent "^2.0.0"
 
-i18next-conv@^6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-6.0.1.tgz#d34f5d0378a7a504e4d0e057301129b3047f4ab1"
+i18next-conv@^6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-6.1.0.tgz#a04377b2b720763f61849dbeab01a640f51a3127"
   dependencies:
     bluebird "^3.5.1"
     chalk "^2.4.1"
