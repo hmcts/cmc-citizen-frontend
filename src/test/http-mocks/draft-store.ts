@@ -41,6 +41,7 @@ import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { MomentFactory } from 'shared/momentFactory'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -368,6 +369,31 @@ export const sampleClaimantResponseDraftObj = {
         value: 'INSTALMENTS',
         displayValue: 'By instalments'
       }
+    },
+    paymentPlan: {
+      totalAmount: 3326.59,
+      instalmentAmount: 10,
+      firstPaymentDate: {
+        year: 2019,
+        month: 1,
+        day: 1
+      },
+      paymentSchedule: {
+        value: 'EACH_WEEK',
+        displayValue: 'Each week'
+      }
+    }
+  },
+  courtOfferedPaymentIntention: {
+    paymentOption: {
+      value: 'INSTALMENTS'
+    },
+    repaymentPlan: {
+      instalmentAmount: 4.3333335,
+      firstPaymentDate: '2019-01-01T00:00:00.000',
+      paymentSchedule: 'EVERY_MONTH',
+      completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
+      lengthOfPayment: '20 years 5 months'
     }
   },
   formaliseRepaymentPlan: {

@@ -1,3 +1,5 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% macro offerSettlementReachedDashboard() %}
   {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
 {% endmacro %}
@@ -55,10 +57,129 @@
   </p>
 {% endmacro %}
 
-{% macro _downloadAgreementLink(claim) %}
-  <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download the settlement agreement') }}</a>{{ t(' (PDF)') }}
+{% macro offerSettlementReachedForDefendant(claim) %}
+  {% if claim.settlement.isThroughAdmissions() %}
+    {% set claimantName = claim.claimData.claimant.name %}
+    {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
+    {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+    {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({externalId:claim.externalId}) %}
+
+    <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+
+    {% set amountToPay = 'the full amount' %}
+    {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
+      {% set amountToPay = claim.response.amount | numeral %}
+    {% endif %}
+
+    {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+      <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
+          { amount: amountToPay,
+            paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date
+          }
+        )
+        }}</p>
+    {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS and paymentIntention.repaymentPlan is defined %}
+      <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
+          {
+            instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+            paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+            firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+          }
+        )
+      }}</p>
+    {% endif %}
+
+    <p>
+      {{ t('The claimant can’t request a County Court Judgment against you if you pay by the agreed date.') }}
+    </p>
+
+    <p>
+      {{ _downloadAgreementLink(claim) }}
+    </p>
+
+    <p>
+      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+      {{ t('if you need their payment details.') }}
+    </p>
+    <p>
+      {{ t('Make sure you get receipts for any payments.') }}
+    </p>
+
+  {% else %}
+    <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
+    <p>
+      {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
+    </p>
+    <p>
+      {{ _downloadAgreementLink(claim) }}
+    </p>
+  {% endif %}
 {% endmacro %}
 
-{% macro _downloadResponseLink(claim) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
+{% macro offerSettlementReachedForClaimant(claim) %}
+
+  {% if claim.settlement.isThroughAdmissions() %}
+    {% set claimantName = claim.claimData.claimant.name %}
+    {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
+    {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+    {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({ externalId:claim.externalId }) %}
+
+    <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+
+    {% set amountToPay = 'the full amount' %}
+    {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
+      {% set amountToPay = claim.response.amount | numeral %}
+    {% endif %}
+
+    {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+      <p>{{ t('The agreement says the defendant will repay {{ amount }} by {{ paymentDate }}.',
+          { amount: amountToPay,
+            paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date
+          }
+        )
+        }}</p>
+    {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS and paymentIntention.repaymentPlan is defined %}
+      <p>{{ t('The agreement says the defendant will pay you in installments of {{ instalmentAmount }} {{ paymentSchedule }}, starting {{ firstPaymentDate }}.',
+        {
+          instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+          firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+        }
+      )
+      }}</p>
+    {% endif %}
+
+    <p> {{ t('The agreement explains what you can do if the defendant breaks the terms.') }} </p>
+    <p>
+      {{ _downloadAgreementLink(claim) }}
+    </p>
+
+    <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
+    <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've been paid</a>
+    
+    {% if claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
+      <hr>
+      <p>
+      <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
+      {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
+      + internalLink('request a County Court Judgment. ', ccjRequest )) | safe }}
+      </p>
+
+    {% endif %}
+
+  {% else %}
+    <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
+    <p>
+      {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
+    </p>
+    <p>
+      {{ _downloadAgreementLink(claim) }}
+    </p>
+  {% endif %}
+
+{% endmacro %}
+
+{% macro _downloadAgreementLink(claim) %}
+  <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">
+    {{ t('Download the settlement agreement') }}</a> {{ t(' (PDF)') }}
 {% endmacro %}

@@ -8,9 +8,8 @@
   <div class="column-two-thirds">
 
     <div class="form-group">
-      <p>
-        {{ t('Judgment will be entered against the defendant for this amount.') }}
-      </p>
+      {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
+
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
         <thead>
@@ -20,13 +19,22 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">{{ t('Claim amount') }}</th>
-          <td class="numeric last">
-            <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
-          </td>
-        </tr>
-        {% if interestDetails %}
+        {% if not amountSettledFor %}
+          <tr>
+            <th scope="row">{{ t('Claim amount') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <th scope="row">{{ t('Amount you are settling for') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ amountSettledFor | numeral }}</span>
+            </td>
+          </tr>
+        {% endif %}
+        {% if not amountSettledFor and interestDetails %}
         <tr>
           <th scope="row">
             {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
@@ -44,21 +52,21 @@
           </td>
         </tr>
         {% if alreadyPaid %}
-        <tr>
-          <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
-          <td class="numeric last bold-small"><span id="sub-total">{{ claim.totalAmountTillToday | numeral }}</span></td>
-        </tr>
-        <tr>
-          <th scope="row">{{ t('Minus amount already paid') }}</th>
-          <td class="numeric last">
-            <span class="font-small">{{ alreadyPaid | numeral }}</span>
-          </td>
-        </tr>
+          <tr>
+            <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
+            <td class="numeric last bold-small"><span id="sub-total">{{ total | numeral }}</span></td>
+          </tr>
+          <tr>
+            <th scope="row">{{ t('Minus amount already paid') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ alreadyPaid | numeral }}</span>
+            </td>
+          </tr>
         {% endif %}
 
         <tr>
           <th scope="col" class="bold-medium">{{ t('Total') }}</th>
-          <td class="numeric last bold-medium"><span id="total">{{ (claim.totalAmountTillToday - alreadyPaid) | numeral }}</span></td>
+          <td class="numeric last bold-medium"><span id="total">{{ (total - alreadyPaid) | numeral }}</span></td>
         </tr>
         </tbody>
       </table>

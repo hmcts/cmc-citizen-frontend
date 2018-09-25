@@ -7,7 +7,7 @@
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
-{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set defendantName = claim.claimData.defendant.name %}
@@ -25,22 +25,9 @@
     {% else %}
       {{ t('They’ve offered to pay you this in instalments.') }}
     {% endif %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    {{ t('They’ve offered to pay you {{ amount }} immediately.', { amount: amount | numeral }) }}
   {% endif %}
-{% endmacro %}
-
-{% macro repaymentPlanBlock(heading = 'How they want to pay', repaymentPlan, paymentPlan) %}
-  {% if heading %}
-    <h2 class="heading-medium">{{ t(heading) }}</h2>
-  {% endif %}
-  <p>{{ t('The defendant suggested this repayment plan:') }}</p>
-  {{ paymentPlanTable(
-      id = 'payment-table',
-      instalmentAmount = repaymentPlan.instalmentAmount,
-      firstPaymentDate = repaymentPlan.firstPaymentDate,
-      lastPaymentOn = paymentPlan.getLastPaymentDate(),
-      lengthOfPayment = paymentPlan.getPaymentLength()
-    )
-  }}
 {% endmacro %}
 
 {% macro paymentDateExplanationBlock(reason) %}
@@ -91,8 +78,12 @@
         {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
           {{
             repaymentPlanBlock(
-              repaymentPlan = claim.response.paymentIntention.repaymentPlan,
-              paymentPlan = paymentPlan
+              heading = 'How they want to pay',
+              instalmentAmount = instalmentAmount,
+              paymentSchedule = paymentSchedule,
+              firstPaymentDate = firstPaymentDate,
+              lastPaymentOn = lastPaymentOn,
+              lengthOfPayment = lengthOfPayment
             )
           }}
         {% endif %}
@@ -108,7 +99,7 @@
           <p>
             {{
               paymentIntentionFragment(
-                amount = undefined,
+                amount = claim.response.amount,
                 paymentIntention = claim.response.paymentIntention
               )
             }}
@@ -133,8 +124,11 @@
             {{
               repaymentPlanBlock(
                 heading = '',
-                repaymentPlan = claim.response.paymentIntention.repaymentPlan,
-                paymentPlan = paymentPlan
+                instalmentAmount = instalmentAmount,
+                paymentSchedule = paymentSchedule,
+                firstPaymentDate = firstPaymentDate,
+                lastPaymentOn = lastPaymentOn,
+                lengthOfPayment = lengthOfPayment
               )
             }}
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -155,7 +149,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 %}
+        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
           <input type="hidden" name="action[showPage]" value="{{ page + 1 }}">
         {% endif %}
 

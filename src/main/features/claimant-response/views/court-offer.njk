@@ -1,0 +1,57 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "financialDetails.njk" import financialDetailsTable %}
+
+{% set heading = 'Your instalments are more than the defendant can afford' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Based on the financial details provided by the defendant, we do not believe they would be able to meet these requirements.') }}</p>
+
+      <p>{{ t('The court affordability calculator has proposed the below repayment plan as the maximum the defendant can repay.') }}</p>
+
+      {{ paymentPlanTable(
+              id = 'payment-table',
+              instalmentAmount = courtOrderPaymentPlan.instalmentAmount,
+              paymentSchedule = courtOrderPaymentPlan.paymentSchedule,
+              firstPaymentDate = courtOrderPaymentPlan.firstPaymentDate,
+              lastPaymentOn = courtOrderPaymentPlan.completionDate,
+              lengthOfPayment = courtOrderPaymentPlan.lengthOfPayment
+              )
+      }}
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = 'Do you want to accept the court’s proposed repayment plan?',
+          labelForScreenReadersOnly = false,
+          form = form,
+          name = 'accept',
+          options = [
+          {
+            label: 'Yes',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor('accept') === YesNoOption.YES),
+            bold: false
+          },
+          {
+            label: 'No - I want a judge to make a new repayment plan',
+            value:  YesNoOption.NO.option,
+            checked: (form.valueFor('accept') === YesNoOption.NO),
+            bold: false
+          }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

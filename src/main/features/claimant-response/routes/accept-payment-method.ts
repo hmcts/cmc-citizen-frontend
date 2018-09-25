@@ -15,16 +15,24 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
-import { getPaymentPlan } from 'claimant-response/helpers/paymentPlanHelper'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
+  const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
   res.render(Paths.acceptPaymentMethodPage.associatedView, {
     form: form,
     claim: claim,
     paymentOption: getPaymentOption(claim.response),
     paymentDate: getPaymentDate(claim.response),
-    paymentPlan: getPaymentPlan(claim)
+    instalmentAmount: paymentPlan.instalmentAmount,
+    paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
+    firstPaymentDate: paymentPlan.startDate,
+    lastPaymentOn: paymentPlan.calculateLastPaymentDate(),
+    lengthOfPayment: paymentPlan.calculatePaymentLength()
   })
 }
 
@@ -69,6 +77,8 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.acceptPaymentMethod = form.model
+        draft.document.alternatePaymentMethod = undefined
+        draft.document.formaliseRepaymentPlan = undefined
 
         await new DraftService().save(draft, user.bearerToken)
 

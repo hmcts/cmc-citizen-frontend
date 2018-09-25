@@ -6,13 +6,18 @@ import { ResidenceType } from 'claims/models/response/statement-of-means/residen
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 
 import { MomentFactory } from 'shared/momentFactory'
-import { individual } from 'test/data/entity/party'
+import { individual, company } from 'test/data/entity/party'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 
 const baseResponseData = {
   defendant: individual,
+  moreTimeNeeded: 'no'
+}
+
+const baseCompanyResponseData = {
+  defendant: company,
   moreTimeNeeded: 'no'
 }
 
@@ -203,7 +208,11 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildren: 3,
       numberOfChildrenLivingWithYou: 3
     }],
-    numberOfMaintainedChildren: 4
+    numberOfMaintainedChildren: 4,
+    otherDependants: {
+      numberOfPeople: 5,
+      details: 'Colleagues'
+    }
   },
   employment: {
     employers: [{
@@ -250,4 +259,44 @@ export const partialAdmissionWithSoMPaymentBySetDateData = {
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }
+}
+
+export const partialAdmissionWithImmediatePaymentCompanyData = {
+  ...baseCompanyResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().add(5, 'days')
+  },
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentBySetDateCompanyData = {
+  ...baseCompanyResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: '2050-12-31'
+  },
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentByInstalmentsCompanyData = {
+  ...baseCompanyResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31',
+      paymentSchedule: PaymentSchedule.EACH_WEEK
+    }
+  },
+  amount: 3000
 }

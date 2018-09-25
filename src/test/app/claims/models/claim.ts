@@ -16,6 +16,8 @@ import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
 import * as moment from 'moment'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -149,6 +151,22 @@ describe('Claim', () => {
 
       expect(claim.status).to.be.equal(ClaimStatus.OFFER_REJECTED)
     })
+
+    it('should return ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT after date of payment', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+
+      expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
+    })
   })
 
   describe('respondToResponseDeadline', () => {
@@ -214,3 +232,24 @@ describe('Claim', () => {
     })
   })
 })
+
+function prepareSettlement (paymentIntention: PaymentIntention): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2020-10-10',
+          paymentIntention: paymentIntention
+        }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}

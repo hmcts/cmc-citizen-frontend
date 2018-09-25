@@ -22,7 +22,11 @@ export class Paths {
   static readonly paymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentPlanPage.uri)
   static readonly confirmationPage = new RoutablePath(`${claimantResponsePath}/confirmation`)
   static readonly rejectionReasonPage = new RoutablePath(`${claimantResponsePath}/rejection-reason`)
+  static readonly courtOfferPage = new RoutablePath(`${claimantResponsePath}/court-offer`)
+  static readonly counterOfferAcceptedPage = new RoutablePath(`${claimantResponsePath}/counter-offer-accepted`)
   static readonly receiptReceiver = new RoutablePath(`${claimantResponsePath}/receipt`)
+  static readonly payBySetDateAcceptedPage = new RoutablePath(`${claimantResponsePath}/pay-by-set-date-accepted`)
+  static readonly courtOfferedSetDatePage = new RoutablePath(`${claimantResponsePath}/court-offered-set-date`)
 }
 
 export const claimantResponseCCJPath = '/case/:externalId/claimant-response/county-court-judgment'
