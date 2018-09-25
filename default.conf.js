@@ -5,7 +5,6 @@ const ProxySettings = require('./src/integration-test/config/proxy-settings').Pr
 
 exports.config = {
   name: 'citizen-integration-tests',
-  bootstrap: './src/integration-test/bootstrap/bootstrap.ts',
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
