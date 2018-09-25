@@ -137,6 +137,17 @@ describe('Claimant Response - Counter offer accepted', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment amount'))
       })
+
+      it('should render page when defendant payment option is pay by set date and claimant response is accepted', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await
+          request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Repayment plan accepted'))
+      })
     })
   })
 

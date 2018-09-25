@@ -28,7 +28,7 @@ describe('CourtDetermination', () => {
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
     })
 
-    it('should return a claimant or defendant decision type when claimantPaymentDate and defendantPaymentDate are the same', () => {
+    it('should return a claimant decision type when claimantPaymentDate and defendantPaymentDate are the same', () => {
 
       let defendantPaymentDate = moment(new Date())
       let claimantPaymentDate = moment(new Date())
@@ -55,7 +55,7 @@ describe('CourtDetermination', () => {
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
     })
 
-    it('should return a defendant decision type when claimantPaymentDate is before defendantPaymentDate and before the courtGeneratedPaymentDate', () => {
+    it('should return a court decision type when claimantPaymentDate is before defendantPaymentDate and before the courtGeneratedPaymentDate', () => {
 
       let defendantPaymentDate = moment(new Date()).add(5,'days')
       let claimantPaymentDate = moment(new Date()).add(1,'days')
@@ -64,7 +64,7 @@ describe('CourtDetermination', () => {
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.COURT)
     })
 
-    it('should return a court decision type when the claimantPaymentDate is before defendantPaymentDate and the defendantPaymentDate is before the courtGeneratedPaymentDate', () => {
+    it('should return a defendant decision type when the claimantPaymentDate is before defendantPaymentDate and the defendantPaymentDate is before the courtGeneratedPaymentDate', () => {
 
       let defendantPaymentDate = moment(new Date()).add(10,'days')
       let claimantPaymentDate = moment(new Date()).add(7,'days')
