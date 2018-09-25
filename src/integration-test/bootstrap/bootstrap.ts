@@ -1,8 +1,4 @@
-#!/usr/bin/env node
-
 /* tslint:disable:no-console */
-
-import './ts-paths-bootstrap'
 
 import * as fs from 'fs'
 import { request } from 'integration-test/helpers/clients/base/request'
@@ -99,7 +95,7 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
   }
 }
 
-async function run () {
+module.exports = async function (done: () => void) {
   try {
     await waitTillHealthy(citizenAppURL)
     if (process.env.IDAM_URL) {
@@ -110,6 +106,5 @@ async function run () {
   } catch (error) {
     handleError(error)
   }
+  done()
 }
-
-run()
