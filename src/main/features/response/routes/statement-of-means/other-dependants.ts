@@ -13,6 +13,12 @@ import { OtherDependants } from 'response/form/models/statement-of-means/otherDe
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
+import { DependantsDisabilityOption } from 'response/form/models/statement-of-means/dependantsDisability'
+import { OtherDependantsDisabilityOption } from 'response/form/models/statement-of-means/otherDependantsDisability'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
+import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 
 const page: RoutablePath = Paths.otherDependantsPage
 
@@ -46,7 +52,23 @@ export default express.Router()
         draft.document.statementOfMeans.otherDependants = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.carerPage.evaluateUri({ externalId: externalId }))
+        // skip if any dependants are disabled, or if defendant and partner are both disabled, or if defendant is severely disabled
+        const anyDisabledDependants: boolean =
+          (draft.document.statementOfMeans.dependantsDisability && draft.document.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES)
+          || (draft.document.statementOfMeans.otherDependantsDisability && draft.document.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES)
+        const defendantIsDisabled: boolean = draft.document.statementOfMeans.disability.option === DisabilityOption.YES
+        const partnerIsDisabled: boolean = draft.document.statementOfMeans.cohabiting.option === CohabitingOption.YES
+          && draft.document.statementOfMeans.partnerDisability.option === PartnerDisabilityOption.YES
+        const defendantIsSeverelyDisabled: boolean = draft.document.statementOfMeans.severeDisability
+          && draft.document.statementOfMeans.severeDisability.option === SevereDisabilityOption.YES
+
+        const skipCarerPage: boolean = anyDisabledDependants || (defendantIsDisabled && partnerIsDisabled) || defendantIsSeverelyDisabled
+
+        if (skipCarerPage) {
+          res.redirect(Paths.employmentPage.evaluateUri({ externalId: externalId }))
+        } else {
+          res.redirect(Paths.carerPage.evaluateUri({ externalId: externalId }))
+        }
       }
     })
   )
