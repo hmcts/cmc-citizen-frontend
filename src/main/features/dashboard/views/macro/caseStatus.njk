@@ -52,6 +52,7 @@
 
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantDashboard %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import admissionByCCJDefendantDashboard %}
+{% from "./claimStatus/settlementAgreementDefendant.njk" import settlementAgreementSignedByClaimantDefendantDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
@@ -111,6 +112,8 @@
       {{ ccjRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+      {{ settlementAgreementSignedByClaimantDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}

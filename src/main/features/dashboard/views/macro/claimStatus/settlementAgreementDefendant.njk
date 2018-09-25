@@ -1,0 +1,16 @@
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "./utilityMacros.njk" import downloadResponseLink %}
+
+{% macro settlementAgreementSignedByClaimantDefendantDashboard(claim) %}
+  {{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantDefendantClaimDetails(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-small">{{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}</h2>
+  <p>{{ t('They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.') }}</p>
+  <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
+  <p>{{ t('If you don’t sign or respond before 4pm on {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.responseDeadline | date) }}</p>
+
+  <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
