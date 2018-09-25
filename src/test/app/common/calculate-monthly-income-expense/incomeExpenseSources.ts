@@ -11,7 +11,12 @@ import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthly
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
-import { ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
+import {
+  ExpenseSource,
+  ExpenseSource as FormExpenseSource
+} from 'response/form/models/statement-of-means/expenseSource'
+import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
+import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 
 const SAMPLE_INCOME_EXPENSE_SOURCES_FROM_OBJECT = {
   incomeExpenseSources: [
@@ -196,6 +201,55 @@ describe('IncomeExpenseSources', () => {
             {
               'amount': 300,
               'schedule': IncomeExpenseSchedule.TWO_WEEKS
+            }
+          ]
+        )
+      )
+    })
+  })
+
+  describe('fromPriorityDebtModel', () => {
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const priorityDebt: PriorityDebt = new PriorityDebt(
+        true, new ExpenseSource(PriorityDebtType.MORTGAGE.displayValue, 100, FormIncomeExpenseSchedule.WEEK),
+        true, new ExpenseSource(PriorityDebtType.RENT.displayValue, 200, FormIncomeExpenseSchedule.WEEK),
+        true, new ExpenseSource(PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue, 300, FormIncomeExpenseSchedule.WEEK),
+        true, new ExpenseSource(PriorityDebtType.GAS.displayValue, 400, FormIncomeExpenseSchedule.WEEK),
+        true, new ExpenseSource(PriorityDebtType.ELECTRICITY.displayValue, 500, FormIncomeExpenseSchedule.WEEK),
+        true, new ExpenseSource(PriorityDebtType.WATER.displayValue, 600, FormIncomeExpenseSchedule.WEEK),
+        true, new ExpenseSource(PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue, 700, FormIncomeExpenseSchedule.WEEK)
+      )
+
+      expect(IncomeExpenseSources.fromPriorityDebtModel(priorityDebt)).to.deep.equal(
+        new IncomeExpenseSources(
+          [
+            {
+              'amount': 100,
+              'schedule': IncomeExpenseSchedule.WEEK
+            },
+            {
+              'amount': 200,
+              'schedule': IncomeExpenseSchedule.WEEK
+            },
+            {
+              'amount': 300,
+              'schedule': IncomeExpenseSchedule.WEEK
+            },
+            {
+              'amount': 400,
+              'schedule': IncomeExpenseSchedule.WEEK
+            },
+            {
+              'amount': 500,
+              'schedule': IncomeExpenseSchedule.WEEK
+            },
+            {
+              'amount': 600,
+              'schedule': IncomeExpenseSchedule.WEEK
+            },
+            {
+              'amount': 700,
+              'schedule': IncomeExpenseSchedule.WEEK
             }
           ]
         )
