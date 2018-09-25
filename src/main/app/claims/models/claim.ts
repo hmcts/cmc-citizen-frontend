@@ -171,11 +171,11 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.isOfferRejected()) {
+    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
-    } else if (this.isOfferAccepted()) {
+    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
-    } else if (this.isOfferSubmitted()) {
+    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
