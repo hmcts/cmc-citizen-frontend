@@ -5,37 +5,37 @@ import { PriorityDebtType } from 'response/form/models/statement-of-means/priori
 export class PriorityDebt {
 
   mortgageDeclared?: boolean
-  @ValidateIf((o: PriorityDebt) => o.mortgageDeclared || (o.mortgageDeclared && o.mortgage.populated))
+  @ValidateIf((o: PriorityDebt) => o.mortgageDeclared || (o.mortgage && o.mortgage.populated))
   @ValidateNested()
   mortgage?: ExpenseSource
 
   rentDeclared?: boolean
-  @ValidateIf((o: PriorityDebt) => o.rentDeclared || (o.rentDeclared && o.rent.populated))
+  @ValidateIf((o: PriorityDebt) => o.rentDeclared || (o.rent && o.rent.populated))
   @ValidateNested()
   rent?: ExpenseSource
 
   councilTaxDeclared?: boolean
-  @ValidateIf((o: PriorityDebt) => o.councilTaxDeclared || (o.councilTaxDeclared && o.councilTax.populated))
+  @ValidateIf((o: PriorityDebt) => o.councilTaxDeclared || (o.councilTax && o.councilTax.populated))
   @ValidateNested()
   councilTax?: ExpenseSource
 
   gasDeclared?: boolean
-  @ValidateIf((o: PriorityDebt) => o.gasDeclared || (o.gasDeclared && o.gas.populated))
+  @ValidateIf((o: PriorityDebt) => o.gasDeclared || (o.gas && o.gas.populated))
   @ValidateNested()
   gas?: ExpenseSource
 
   electricityDeclared?: boolean
-  @ValidateIf((o: PriorityDebt) => o.electricityDeclared || (o.electricityDeclared && o.electricity.populated))
+  @ValidateIf((o: PriorityDebt) => o.electricityDeclared || (o.electricity && o.electricity.populated))
   @ValidateNested()
   electricity?: ExpenseSource
 
   waterDeclared?: boolean
-  @ValidateIf((o: PriorityDebt) => o.waterDeclared || (o.waterDeclared && o.water.populated))
+  @ValidateIf((o: PriorityDebt) => o.waterDeclared || (o.water && o.water.populated))
   @ValidateNested()
   water?: ExpenseSource
 
   maintenanceDeclared?: boolean
-  @ValidateIf((o: PriorityDebt) => o.maintenanceDeclared || (o.maintenanceDeclared && o.maintenance.populated))
+  @ValidateIf((o: PriorityDebt) => o.maintenanceDeclared || (o.maintenance && o.maintenance.populated))
   @ValidateNested()
   maintenance?: ExpenseSource
 
@@ -44,7 +44,7 @@ export class PriorityDebt {
     rentDeclared?: boolean, rent?: ExpenseSource,
     councilTaxDeclared?: boolean, councilTax?: ExpenseSource,
     gasDeclared?: boolean, gas?: ExpenseSource,
-    electricityDeclared?: boolean, electricity?: ExpenseSource,
+    electricityDeclared?: boolean, electricigitty?: ExpenseSource,
     waterDeclared?: boolean, water?: ExpenseSource,
     maintenanceDeclared?: boolean, maintenance?: ExpenseSource
   ) {

@@ -13,9 +13,9 @@ import { Draft } from '@hmcts/draft-store-client'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { Validator } from 'class-validator'
-import { IncomeSource } from 'response/form/models/statement-of-means/incomeSource'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
+import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
 const page: RoutablePath = StatementOfMeansPaths.priorityDebtsPage
 
@@ -52,13 +52,14 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
   }
 
   if (req.body.action) {
+
     const actionName = extractPropertyName(req.body.action)
     const form: Form<PriorityDebt> = req.body
 
     switch (actionName) {
       case 'resetDebt':
         const propertyName = extractPropertyName(req.body.action[actionName])
-        const selectedForReset: IncomeSource = form.valueFor(propertyName)
+        const selectedForReset: ExpenseSource = form.valueFor(propertyName)
         form.model.resetIncome(propertyName, selectedForReset)
         break
     }
@@ -82,7 +83,8 @@ export default express.Router()
     page.uri,
     OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
-    FormValidator.requestHandler(PriorityDebt, PriorityDebt.fromObject, undefined, ['resetArrear']),
+    FormValidator.requestHandler(
+      PriorityDebt, PriorityDebt.fromObject, undefined, ['resetDebt']),
     actionHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<PriorityDebt> = req.body
