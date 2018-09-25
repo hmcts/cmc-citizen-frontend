@@ -53,12 +53,22 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     const claim: Claim = res.locals.claim
     const draft: Draft<DraftClaimantResponse> = res.locals.draft
     const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
+    const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
     switch (courtDecision) {
-      case DecisionType.COURT:
-      case DecisionType.DEFENDANT: {
+      case DecisionType.COURT: {
         return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+      }
+      case DecisionType.DEFENDANT: {
+        if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+        }
+
+        if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
+        }
+        break
       }
       case DecisionType.CLAIMANT: {
         return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
@@ -76,7 +86,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
       const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper
       .createPaymentPlanFromDraft(draft.document)
 
-      courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
+      courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS
          && PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule) !== claimantEnteredPaymentPlan.frequency) {
@@ -108,14 +118,24 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
       const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
       const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
 
-      courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
-      courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
-      courtCalculatedPaymentIntention.repaymentPlan = {
-        firstPaymentDate: paymentPlanFromDefendantFinancialStatement.startDate,
-        instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
-        paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
-        completionDate: paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate(),
-        lengthOfPayment: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
+      if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+        courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
+        courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        courtCalculatedPaymentIntention.repaymentPlan = {
+          firstPaymentDate: paymentPlanFromDefendantFinancialStatement.startDate,
+          instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
+          completionDate: paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate(),
+          lengthOfPayment: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
+        }
+      }
+
+      if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+        const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+        const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
+
+        courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
+        courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
 
       return courtCalculatedPaymentIntention
@@ -123,7 +143,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     if (decisionType === DecisionType.DEFENDANT) {
       const paymentPlanFromDefendant: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-      const lastPaymentDate: Moment = paymentPlanFromDefendant.calculateLastPaymentDate()
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
         courtCalculatedPaymentIntention.repaymentPlan = {
@@ -133,16 +152,12 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
           lengthOfPayment: paymentPlanFromDefendant.calculatePaymentLength()
         }
-        courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
-        courtCalculatedPaymentIntention.paymentOption = claimResponse.paymentIntention.paymentOption
+        courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-        const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-        const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
-
-        courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
-        courtCalculatedPaymentIntention.paymentOption = draft.document.alternatePaymentMethod.toDomainInstance().paymentOption
+        courtCalculatedPaymentIntention.paymentDate = claimResponse.paymentIntention.paymentDate
+        courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
 
       return courtCalculatedPaymentIntention

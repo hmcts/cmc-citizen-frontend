@@ -17,6 +17,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
+  console.log('repaymentPlan---->', JSON.stringify(draft.document))
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
     claim: claim,
