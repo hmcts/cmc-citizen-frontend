@@ -208,7 +208,11 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildren: 3,
       numberOfChildrenLivingWithYou: 3
     }],
-    numberOfMaintainedChildren: 4
+    numberOfMaintainedChildren: 4,
+    otherDependants: {
+      numberOfPeople: 5,
+      details: 'Colleagues'
+    }
   },
   employment: {
     employers: [{

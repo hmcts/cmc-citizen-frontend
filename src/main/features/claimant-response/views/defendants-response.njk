@@ -79,7 +79,11 @@
           {{
             repaymentPlanBlock(
               heading = 'How they want to pay',
-              paymentPlan = paymentPlan
+              instalmentAmount = instalmentAmount,
+              paymentSchedule = paymentSchedule,
+              firstPaymentDate = firstPaymentDate,
+              lastPaymentOn = lastPaymentOn,
+              lengthOfPayment = lengthOfPayment
             )
           }}
         {% endif %}
@@ -122,8 +126,11 @@
             {{
               repaymentPlanBlock(
                 heading = '',
-                repaymentPlan = claim.response.paymentIntention.repaymentPlan,
-                paymentPlan = paymentPlan
+                instalmentAmount = instalmentAmount,
+                paymentSchedule = paymentSchedule,
+                firstPaymentDate = firstPaymentDate,
+                lastPaymentOn = lastPaymentOn,
+                lengthOfPayment = lengthOfPayment
               )
             }}
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
