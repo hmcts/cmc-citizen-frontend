@@ -4,7 +4,6 @@ metadata:
   name: ${SERVICE_NAME}-config
   namespace: ${NAMESPACE}
 data:
-
   IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
   IDAM_AUTHENTICATION_WEB_URL: https://idam.preprod.ccidam.reform.hmcts.net
   IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
@@ -14,4 +13,4 @@ data:
   DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
   FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-aat.service.core-compute-aat.internal
   POSTCODE_LOOKUP_API_KEY: ${POSTCODE_LOOKUP_API_KEY}
-  UV_THREADPOOL_SIZE: 64
+  UV_THREADPOOL_SIZE: "64"
