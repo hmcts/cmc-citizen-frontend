@@ -13,4 +13,5 @@ data:
   DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
   FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-aat.service.core-compute-aat.internal
   POSTCODE_LOOKUP_API_KEY: ${POSTCODE_LOOKUP_API_KEY}
+  APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
   UV_THREADPOOL_SIZE: "64"
