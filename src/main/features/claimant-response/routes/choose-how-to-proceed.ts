@@ -43,6 +43,7 @@ export default express.Router()
         switch (form.model.option) {
           case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
             delete draft.document.paidAmount
+            delete draft.document.settlementAgreement
             break
           case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
             delete draft.document.settlementAgreement

@@ -16,15 +16,23 @@ import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Moment } from 'moment'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
+  const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+
   res.render(Paths.acceptPaymentMethodPage.associatedView, {
     form: form,
     claim: claim,
     paymentOption: getPaymentOption(claim.response),
     paymentDate: getPaymentDate(claim.response),
-    paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+    instalmentAmount: paymentPlan.instalmentAmount,
+    paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
+    firstPaymentDate: paymentPlan.startDate,
+    lastPaymentOn: paymentPlan.calculateLastPaymentDate(),
+    lengthOfPayment: paymentPlan.calculatePaymentLength()
   })
 }
 

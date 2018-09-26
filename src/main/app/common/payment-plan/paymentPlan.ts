@@ -9,10 +9,10 @@ export class PaymentPlan {
   private numberOfInstalments: number
 
   constructor (
-    public readonly totalAmount: number,
-    public readonly instalmentAmount: number,
-    public readonly frequency: Frequency,
-    public readonly startDate: moment.Moment) {
+    public totalAmount: number,
+    public instalmentAmount: number,
+    public frequency: Frequency,
+    public startDate: moment.Moment) {
     this.numberOfInstalments = Math.ceil(totalAmount / instalmentAmount)
   }
 
