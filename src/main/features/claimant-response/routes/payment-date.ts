@@ -20,7 +20,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import {PaymentSchedule} from 'ccj/form/models/paymentSchedule'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
