@@ -39,12 +39,12 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
       const user: User = res.locals.user
 
       if (draft.document.formaliseRepaymentPlan && draft.document.formaliseRepaymentPlan.option) {
         switch (draft.document.formaliseRepaymentPlan.option) {
           case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
+            const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
             await CCJClient.request(claim.externalId, countyCourtJudgment, user)
             break
           case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
