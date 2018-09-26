@@ -95,8 +95,10 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
+      const claim: Claim = res.locals.claim
+      const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
-      if (req.body.action && req.body.action.showPage) {
+      if (req.body.action && req.body.action.showPage && !alreadyPaid) {
         const page: number = +req.body.action.showPage
         return renderView(res, page)
       }
