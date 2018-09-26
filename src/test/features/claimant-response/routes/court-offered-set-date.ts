@@ -160,14 +160,16 @@ describe('Claimant response: court offered set date page', () => {
               courtOfferedPaymentIntention: {
                 paymentOption: 'BY_SPECIFIED_DATE',
                 paymentDate: MomentFactory.parse('2019-10-10'),
-                repaymentPlan: undefined } })
-        })
+                repaymentPlan: undefined
+              }
+            })
 
-        await request(app)
+          await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ accept: undefined })
             .expect(res => expect(res).to.be.successful.withText('Please select yes or no'))
+        })
       })
     })
   })
