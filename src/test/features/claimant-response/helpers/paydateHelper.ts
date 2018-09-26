@@ -7,7 +7,7 @@ import {
   partialAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth
 } from 'test/data/entity/responseData'
 import { Claim } from 'claims/models/claim'
-import { calculateMonthIncrement } from 'common/calculate-month-increment/calculate-month-increment'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import * as moment from 'moment'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { MomentFactory } from 'shared/momentFactory'

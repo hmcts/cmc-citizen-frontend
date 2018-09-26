@@ -1,4 +1,4 @@
-import { calculateMonthIncrement } from 'common/calculate-month-increment/calculate-month-increment'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import * as moment from 'moment'
 import { Claim } from 'claims/models/claim'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'

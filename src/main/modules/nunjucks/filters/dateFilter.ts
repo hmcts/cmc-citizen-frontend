@@ -2,7 +2,7 @@ import { MomentFormatter } from 'utils/momentFormatter'
 import * as moment from 'moment'
 import { Logger } from '@hmcts/nodejs-logging'
 import { MomentFactory } from 'shared/momentFactory'
-import { calculateMonthIncrement } from 'common/calculate-month-increment/calculate-month-increment'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 const logger = Logger.getLogger('modules/nunjucks/dateFilter')
 

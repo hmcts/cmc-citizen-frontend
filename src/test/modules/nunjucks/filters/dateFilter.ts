@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import * as moment from 'moment'
 
 import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
-import { calculateMonthIncrement } from 'common/calculate-month-increment/calculate-month-increment'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 describe('dateFilter', () => {
   it('formats date (moment object) properly', () => {
