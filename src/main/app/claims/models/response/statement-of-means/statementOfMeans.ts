@@ -20,5 +20,6 @@ export interface StatementOfMeans {
   courtOrders?: CourtOrder[]
   partner?: Partner
   disability?: DisabilityStatus
+  carer?: boolean
   reason?: string
 }

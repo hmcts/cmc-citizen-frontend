@@ -198,7 +198,8 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     amount: 100,
     frequency: PaymentFrequency.MONTH,
     type: ExpenseType.MORTGAGE
-  }] as Expense[]
+  }] as Expense[],
+  carer: false
 }
 
 export const statementOfMeansWithAllFieldsData = {
@@ -245,7 +246,8 @@ export const statementOfMeansWithAllFieldsData = {
     claimNumber: '000MC001',
     amountOwed: 100,
     monthlyInstalmentAmount: 10
-  }]
+  }],
+  carer: true
 }
 
 export const fullAdmissionWithSoMPaymentBySetDate = {

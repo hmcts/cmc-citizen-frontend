@@ -13,7 +13,7 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
-import { CarerOption } from 'response/form/models/statement-of-means/carer'
+import { Carer, CarerOption } from 'response/form/models/statement-of-means/carer'
 
 const baseResponseDraft = {
   defendantDetails: {
@@ -361,7 +361,7 @@ export const statementOfMeansWithAllFieldsDraft = {
     }
   },
   otherDependantsDisability: true,
-  carer: true,
+  carer: new Carer(CarerOption.YES),
   employment: {
     declared: true,
     employed: true,

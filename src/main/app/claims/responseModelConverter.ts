@@ -59,6 +59,7 @@ import { PartnerAgeOption } from 'response/form/models/statement-of-means/partne
 import { PartnerPensionOption } from 'response/form/models/statement-of-means/partnerPension'
 import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
 import { PartnerSevereDisabilityOption } from 'response/form/models/statement-of-means/partnerSevereDisability'
+import { CarerOption } from 'response/form/models/statement-of-means/carer'
 
 export class ResponseModelConverter {
 
@@ -241,7 +242,8 @@ export class ResponseModelConverter {
       }) : undefined,
       reason: draft.statementOfMeans.explanation.text,
       incomes: this.convertIncomes(draft.statementOfMeans.monthlyIncome),
-      expenses: this.convertExpenses(draft.statementOfMeans.monthlyExpenses)
+      expenses: this.convertExpenses(draft.statementOfMeans.monthlyExpenses),
+      carer: draft.statementOfMeans.carer.option === CarerOption.YES
     }
   }
 
