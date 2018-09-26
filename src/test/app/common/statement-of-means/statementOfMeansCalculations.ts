@@ -9,10 +9,13 @@ import { Income, IncomeType } from 'claims/models/response/statement-of-means/in
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { PartyType } from 'common/partyType'
-import { sampleDefendantDateOfBirth,
+import {
+  sampleDefendantDateOfBirth,
   sampleStatementOfMeans,
-  sampleAllowanceData
+  sampleStatementOfMeansWithMortgageAndRent,
+  sampleAllowanceData, samplePriorityDebts, samplePriorityDebtsNoFrequency, samplePriorityDebtsNoAmount
 } from 'test/data/entity/statementOfMeansData'
+
 
 // Tests - Living Allowance
 // single under 25 / over 25
@@ -35,50 +38,55 @@ import { sampleDefendantDateOfBirth,
 // 1 dependant
 // 11 dependants
 
-function sampleDataLivingAllowanceAmount (): number {
-  sampleAllowanceData.personal.filter(x => x.item === '')
-  return 0
-}
-
-function sampleDataDisabilityAllowanceAmount (): number {
-  return 0
-}
-
-function sampleDataPensionerAllowanceAmount (): number {
-  return 0
-}
-
-function sampleDataDependantsAllowanceAmount (): number {
-  return 0
-}
-
 describe('StatementOfMeansCalculations', () => {
 
   //
   // DISPOSABLE INCOMES
   //
+  let statementOfMeansCalculations: StatementOfMeansCalculations
 
   describe('calculateTotalMonthlyDisposableIncome', () => {
-    it('should calculate the total monthly disposable income', () => {
-      expect(StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(sampleStatementOfMeans,
-        PartyType.INDIVIDUAL, sampleDefendantDateOfBirth)).to.equal(1454.696666666667)
+    describe('when no allowance lookup is provided', () => {
+      beforeEach(() => {
+        statementOfMeansCalculations = new StatementOfMeansCalculations(PartyType.INDIVIDUAL, sampleDefendantDateOfBirth, undefined)
+      })
+      describe('when defendant has no mortgage or rent', () => {
+        it('should calculate the total monthly disposable', () => {
+          expect(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(sampleStatementOfMeans))
+            .to.equal(2195.416666666667)
+        })
+      })
+      describe('calculateTotalMonthlyDisposableIncome', () => {
+        it('when defendant has mortgage and rent', () => {
+          expect(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(sampleStatementOfMeansWithMortgageAndRent))
+            .to.equal(1695.416666666667)
+        })
+      })
+      describe('calculateTotalMonthlyDisposableIncome', () => {
+        it('when defendant has allowances', () => {
+          expect(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(sampleStatementOfMeans))
+            .to.equal(2195.416666666667)
+        })
+      })
     })
   })
 
   //
   // EXPENSES
   //
-
+  beforeEach(() => {
+    statementOfMeansCalculations = new StatementOfMeansCalculations(PartyType.INDIVIDUAL, sampleDefendantDateOfBirth, sampleAllowanceData)
+  })
   describe('calculateTotalMonthlyExpense', () => {
     describe('when valid debts, courtOrders and expenses are provided', () => {
       it('should calculate the total monthly expense (mortgage and rent only)', () => {
-        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense(sampleStatementOfMeans)).to.equal(640)
+        expect(statementOfMeansCalculations.calculateTotalMonthlyExpense(sampleStatementOfMeansWithMortgageAndRent)).to.equal(640)
       })
     })
 
     describe('when no debts, courtOrders and expenses are provided', () => {
       it('should calculate a total monthly expense of zero', () => {
-        expect(StatementOfMeansCalculations.calculateTotalMonthlyExpense({ bankAccounts: [] })).to.equal(0)
+        expect(statementOfMeansCalculations.calculateTotalMonthlyExpense({ bankAccounts: [] })).to.equal(0)
       })
     })
   })
@@ -87,7 +95,7 @@ describe('StatementOfMeansCalculations', () => {
     describe('when valid monthly payments are provided', () => {
       it('should calculate the monthly debts', () => {
         const debts: Debt[] = sampleStatementOfMeans.debts
-        expect(StatementOfMeansCalculations.calculateMonthlyDebts(debts)).to.equal(70)
+        expect(statementOfMeansCalculations.calculateMonthlyDebts(debts)).to.equal(70)
       })
     })
 
@@ -100,7 +108,7 @@ describe('StatementOfMeansCalculations', () => {
             monthlyPayments: undefined
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlyDebts(debts)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlyDebts(debts)).to.equal(0)
       })
     })
   })
@@ -109,7 +117,7 @@ describe('StatementOfMeansCalculations', () => {
     describe('when valid monthly instalment amounts are provided', () => {
       it('should calculate the monthly court orders', () => {
         const courtOrders: CourtOrder[] = sampleStatementOfMeans.courtOrders
-        expect(StatementOfMeansCalculations.calculateMonthlyCourtOrders(courtOrders)).to.equal(70)
+        expect(statementOfMeansCalculations.calculateMonthlyCourtOrders(courtOrders)).to.equal(70)
       })
     })
 
@@ -122,7 +130,7 @@ describe('StatementOfMeansCalculations', () => {
             monthlyInstalmentAmount: undefined
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlyCourtOrders(courtOrders)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlyCourtOrders(courtOrders)).to.equal(0)
       })
     })
 
@@ -135,7 +143,7 @@ describe('StatementOfMeansCalculations', () => {
             monthlyInstalmentAmount: -20
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlyCourtOrders(courtOrders)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlyCourtOrders(courtOrders)).to.equal(0)
       })
     })
   })
@@ -143,8 +151,8 @@ describe('StatementOfMeansCalculations', () => {
   describe('calculateMonthlyRegularExpense', () => {
     describe('when valid amounts and frequencies are provided', () => {
       it('should calculate the total mortgage and rent', () => {
-        const expenses: Expense[] = sampleStatementOfMeans.expenses
-        expect(StatementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(500)
+        const expenses: Expense[] = sampleStatementOfMeansWithMortgageAndRent.expenses
+        expect(statementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(500)
       })
     })
 
@@ -157,7 +165,7 @@ describe('StatementOfMeansCalculations', () => {
             amount: 100
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(0)
       })
     })
 
@@ -170,7 +178,25 @@ describe('StatementOfMeansCalculations', () => {
             amount: undefined
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlyRegularExpense(expenses)).to.equal(0)
+      })
+    })
+  })
+
+  describe('calculatePriorityDebts', () => {
+    describe('when valid amounts and frequencies are provided', () => {
+      it('should calculate the total of all priority debts', () => {
+        expect(statementOfMeansCalculations.calculateMonthlyPriorityDebts(samplePriorityDebts)).to.equal(398.8833333333333)
+      })
+    })
+    describe('when the frequency is unknown', () => {
+      it('should ignore the priority debts during the calculation', () => {
+        expect(statementOfMeansCalculations.calculateMonthlyPriorityDebts(samplePriorityDebtsNoFrequency)).to.equal(0)
+      })
+    })
+    describe('when the amount is unknown', () => {
+      it('should ignore the priority debts during the calculation', () => {
+        expect(statementOfMeansCalculations.calculateMonthlyPriorityDebts(samplePriorityDebtsNoAmount)).to.equal(0)
       })
     })
   })
@@ -182,13 +208,13 @@ describe('StatementOfMeansCalculations', () => {
   describe('calculateTotalMonthlyIncome', () => {
     describe('when valid bankAccounts, employment and incomes are provided', () => {
       it('should calculate the total monthly income', () => {
-        expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome(sampleStatementOfMeans)).to.equal(2335.416666666667)
+        expect(statementOfMeansCalculations.calculateTotalMonthlyIncome(sampleStatementOfMeans)).to.equal(2335.416666666667)
       })
     })
 
     describe('when no employment and incomes are provided', () => {
       it('should calculate a total monthly income of zero', () => {
-        expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome({ bankAccounts: [] })).to.equal(0)
+        expect(statementOfMeansCalculations.calculateTotalMonthlyIncome({ bankAccounts: [] })).to.equal(0)
       })
     })
   })
@@ -197,21 +223,21 @@ describe('StatementOfMeansCalculations', () => {
     describe('when self-employed', () => {
       it('should calculate the monthly turnover', () => {
         const employment: Employment = sampleStatementOfMeans.employment
-        expect(StatementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(employment)).to.equal(250)
+        expect(statementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(employment)).to.equal(250)
       })
     })
 
     describe('when self-employed but with no turnover', () => {
       it('should calculate the monthly turnover', () => {
         const employment: Employment = {}
-        expect(StatementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(employment)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(employment)).to.equal(0)
       })
     })
 
     describe('when not self-employed', () => {
       it('should calculate the monthly turnover', () => {
         const employment: Employment = {}
-        expect(StatementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(employment)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(employment)).to.equal(0)
       })
     })
   })
@@ -226,7 +252,7 @@ describe('StatementOfMeansCalculations', () => {
             balance: undefined
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 0)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 0)).to.equal(0)
       })
     })
 
@@ -239,21 +265,21 @@ describe('StatementOfMeansCalculations', () => {
             balance: -1000
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 0)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 0)).to.equal(0)
       })
     })
 
     describe('when there are no savings in excess', () => {
       it('should calculate a total savings amount of zero', () => {
         const bankAccounts: BankAccount[] = sampleStatementOfMeans.bankAccounts
-        expect(StatementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 4666.666666667)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 4666.666666667)).to.equal(0)
       })
     })
 
     describe('when there are savings in excess', () => {
       it('should calculate the total savings amount', () => {
         const bankAccounts: BankAccount[] = sampleStatementOfMeans.bankAccounts
-        expect(StatementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 3000)).to.equal(208.33333333333334)
+        expect(statementOfMeansCalculations.calculateMonthlySavings(bankAccounts, 3000)).to.equal(208.33333333333334)
       })
     })
   })
@@ -262,7 +288,7 @@ describe('StatementOfMeansCalculations', () => {
     describe('when valid amounts and frequencies are provided', () => {
       it('should calculate the total of all regular incomes', () => {
         const incomes: Income[] = sampleStatementOfMeans.incomes
-        expect(StatementOfMeansCalculations.calculateMonthlyRegularIncome(incomes)).to.equal(1716.66666666666666)
+        expect(statementOfMeansCalculations.calculateMonthlyRegularIncome(incomes)).to.equal(1716.66666666666666)
       })
     })
 
@@ -275,7 +301,7 @@ describe('StatementOfMeansCalculations', () => {
             amount: 100
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlyRegularIncome(incomes)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlyRegularIncome(incomes)).to.equal(0)
       })
     })
 
@@ -288,8 +314,32 @@ describe('StatementOfMeansCalculations', () => {
             amount: undefined
           }
         ]
-        expect(StatementOfMeansCalculations.calculateMonthlyRegularIncome(incomes)).to.equal(0)
+        expect(statementOfMeansCalculations.calculateMonthlyRegularIncome(incomes)).to.equal(0)
       })
     })
+  })
+
+  //
+  // ALLOWANCES
+  //
+
+  describe('calculateTotalMonthlyAllowance', () => {
+
+  })
+
+  describe('calculateMonthlyLivingAllowance', () => {
+
+  })
+
+  describe('calculateMonthlyDependantsAllowance', () => {
+
+  })
+
+  describe('calculateMonthlyPensionerAllowance', () => {
+
+  })
+
+  describe('calculateMonthlyDisabilityAllowance', () => {
+
   })
 })

@@ -1,5 +1,4 @@
 import { Allowance } from 'claims/models/response/statement-of-means/allowance'
-import * as config from 'config'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
@@ -12,7 +11,28 @@ import { ResidenceType } from 'claims/models/response/statement-of-means/residen
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 import { ExpenseType } from 'claims/models/response/statement-of-means/expense'
 
-export const sampleAllowanceData: Allowance = new Allowance().deserialize(JSON.parse(config.get<string>('meansAllowances')))
+const allowanceData = {
+  personal: [{ item: 'SINGLE_18_TO_24', weekly: 5, monthly: 25 },
+    { item: 'SINGLE_OVER_25', weekly: 10, monthly: 50 },
+    { item: 'DEFENDANT_UNDER_25_PARTNER_UNDER_18', weekly: 20, monthly: 100 },
+    { item: 'DEFENDANT_OVER_25_PARTNER_UNDER_18', weekly: 30, monthly: 150 },
+    { item: 'DEFENDANT_AND_PARTNER_OVER_18', weekly: 40, monthly: 200 }
+  ],
+  dependant: [{ item: 'EACH', weekly: 50, monthly: 100 }],
+  pensioner: [{ item: 'DEFENDANT_ONLY', weekly: 40, monthly: 50 },
+    { item: 'DEFENDANT_AND_PARTNER', weekly: 40, monthly: 50 }
+  ],
+  disability: [{ item: 'DEFENDANT_ONLY', weekly: 20, monthly: 100 },
+    { item: 'DEFENDANT_AND_PARTNER', weekly: 30, monthly: 150 },
+    { item: 'DEFENDANT_ONLY_SEVERE', weekly: 40, monthly: 200 },
+    { item: 'DEFENDANT_AND_PARTNER_SEVERE', weekly: 50, monthly: 250 },
+    { item: 'DEPENDANT', weekly: 35, monthly: 180 },
+    { item: 'CARER', weekly: 30, monthly: 90 }
+  ]
+
+}
+
+export const sampleAllowanceData: Allowance = new Allowance().deserialize(allowanceData)
 
 export const sampleDefendantOnPension: Income = {
   type: IncomeType.PENSION,
@@ -45,7 +65,14 @@ export const sampleElevenDependantDetails: Dependant = {
 
 export const samplePriorityDebts: PriorityDebts[] = [
   { type: PriorityDebtType.MAINTENANCE_PAYMENTS, frequency: PaymentFrequency.MONTH, amount: 200 },
-  { type: PriorityDebtType.WATER, frequency: PaymentFrequency.MONTH, amount: 155.55 }]
+  { type: PriorityDebtType.WATER, frequency: PaymentFrequency.MONTH, amount: 155.55 },
+  { type: PriorityDebtType.COUNCIL_TAX, frequency: PaymentFrequency.WEEK, amount: 10 }]
+
+export const samplePriorityDebtsNoFrequency: PriorityDebts[] = [
+{ type: PriorityDebtType.MAINTENANCE_PAYMENTS, frequency: undefined, amount: 200 }]
+
+export const samplePriorityDebtsNoAmount: PriorityDebts[] = [
+  { type: PriorityDebtType.MAINTENANCE_PAYMENTS, frequency: PaymentFrequency.WEEK, amount: undefined }]
 
 export const sampleDefendantDateOfBirth: moment.Moment = MomentFactory.parse('1999-01-01')
 
