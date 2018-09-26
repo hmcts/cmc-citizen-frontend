@@ -5,9 +5,6 @@ metadata:
   namespace: ${NAMESPACE}
 data:
 
-  # Ive calculated from application settings in existing citizen-frontend deployment to ASE
-  # there are more... that ive not included that I think we will need, e.g. DRAFT_STORE_SECRET_PRIMARY
-  # was going to try with minimal from docker-compose first and incrementally add
   IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
   IDAM_AUTHENTICATION_WEB_URL: https://idam.preprod.ccidam.reform.hmcts.net
   IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
