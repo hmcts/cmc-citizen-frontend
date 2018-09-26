@@ -37,8 +37,8 @@ spec:
               value: 'cmc'
             - name: REFORM_SERVICE_NAME
               value: 'citizen-frontend'
-            - name: ROOT_APPENDER
-              value: 'CMC'
+            - name: NODE_ENV
+              value: 'production'
           envFrom:
             - configMapRef:
                 name: ${SERVICE_NAME}-config
