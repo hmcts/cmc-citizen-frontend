@@ -28,7 +28,8 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/settlementAgreementClaimant.njk" import
   settlementAgreementSignedByClaimantClaimDetails,
-  settlementAgreementSignedByClaimantDeadlinePassedClaimDetails %}
+  settlementAgreementSignedByClaimantDeadlinePassedClaimDetails,
+  settlementAgreementSignedByBothClaimantClaimDetails %}
 
 {% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
   claimFullAdmissionForDefendantClaimDetails %}
@@ -52,7 +53,9 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import admissionByCCJDefendantClaimDetails %}
-{% from "./claimStatus/settlementAgreementDefendant.njk" import settlementAgreementSignedByClaimantDefendantClaimDetails %}
+{% from "./claimStatus/settlementAgreementDefendant.njk" import
+  settlementAgreementSignedByClaimantDefendantClaimDetails,
+  settlementAgreementSignedByBothDefendantClaimDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
@@ -73,6 +76,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
         {{ settlementAgreementSignedByClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
+        {{ settlementAgreementSignedByBothClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
@@ -128,6 +133,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ ccjRequestedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
         {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
+        {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}

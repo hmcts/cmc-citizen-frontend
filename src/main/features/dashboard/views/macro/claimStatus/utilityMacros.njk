@@ -5,3 +5,18 @@
 {% macro viewAndRespondOffer(claim, text = 'View and respond to the offer') %}
   <p><a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t(text) }}</a></p>
 {% endmacro %}
+
+{% macro signAgreementLink(claim, text = 'Sign the settlement agreement') %}
+  {% if claim.settlement.isThroughAdmissions() %}
+    <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}"
+       class="button button-secondary">{{ t(text) }}</a>
+  {% else %}
+    <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}"
+       class="button button-secondary">{{ t(text) }}</a>
+  {% endif %}
+{% endmacro %}
+
+{% macro downloadAgreementLink(claim) %}
+  <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">
+    {{ t('Download the settlement agreement') }}</a> {{ t(' (PDF)') }}
+{% endmacro %}
