@@ -19,17 +19,13 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse): Moment {
-
-  if (draft.document.courtDecisionType === DecisionType.DEFENDANT) {
-    return claimResponse.paymentIntention.paymentDate
-  }
-
-  if (draft.document.courtDecisionType === DecisionType.COURT) {
-    return draft.document.courtOfferedPaymentIntention.paymentDate
-  }
-
-  if (draft.document.courtDecisionType === DecisionType.CLAIMANT) {
-    return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+  switch (draft.document.courtDecisionType) {
+    case DecisionType.DEFENDANT:
+      return claimResponse.paymentIntention.paymentDate
+    case DecisionType.COURT:
+      return draft.document.courtOfferedPaymentIntention.paymentDate
+    case DecisionType.CLAIMANT:
+      return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
   }
 }
 
