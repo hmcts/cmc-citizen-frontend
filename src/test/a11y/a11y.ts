@@ -23,7 +23,7 @@ app.locals.csrf = 'dummy-token'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const agent = supertest.agent(app)
+const agent = supertest(app)
 
 interface Issue {
   type
@@ -94,7 +94,8 @@ const excludedPaths: DefendantResponsePaths[] = [
   DefendantResponsePaths.legacyDashboardRedirect,
   OfferPaths.agreementReceiver,
   DefendantFirstContactPaths.receiptReceiver,
-  ClaimantResponsePaths.receiptReceiver
+  ClaimantResponsePaths.receiptReceiver,
+  ClaimantResponsePaths.courtOfferedSetDatePage
 ]
 
 describe('Accessibility', () => {

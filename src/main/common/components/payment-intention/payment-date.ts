@@ -14,15 +14,22 @@ import { User } from 'idam/user'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 export abstract class AbstractPaymentDatePage<Draft> {
 
   abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
-  abstract buildTaskListUri (req: express.Request, res: express.Response): string
+  abstract buildPostSubmissionUri (req: express.Request, res: express.Response): string
 
   getView (): string {
     return 'components/payment-intention/payment-date'
+  }
+
+  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft>,claim: Claim }): Promise<void> {
+    const user: User = locals.user
+    await new DraftService().save(locals.draft, user.bearerToken)
   }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
@@ -55,10 +62,9 @@ export abstract class AbstractPaymentDatePage<Draft> {
           } else {
             this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentDate = form.model)
 
-            const user: User = res.locals.user
-            await new DraftService().save(res.locals.draft, user.bearerToken)
+            await this.saveDraft(res.locals)
 
-            res.redirect(this.buildTaskListUri(req, res))
+            res.redirect(this.buildPostSubmissionUri(req, res))
           }
         }))
   }

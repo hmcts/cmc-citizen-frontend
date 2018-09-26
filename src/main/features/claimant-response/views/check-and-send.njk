@@ -45,7 +45,7 @@
         {% if draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.IMMEDIATELY.value %}
           {% set alternatePaymentMethodResponse = t('Immediately') %}
         {% elseif draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.BY_SPECIFIED_DATE.value %}
-          {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: draft.alternatePaymentMethod.paymentDate.date.toMoment() | date }) %}
+          {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: draft.courtOfferedPaymentIntention.paymentDate | date }) %}
         {% elseif draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.INSTALMENTS.value %}
           {% set alternatePaymentMethodResponse = t('By instalments') %}
         {% endif %}
@@ -53,12 +53,12 @@
         {{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
           changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
-        {% if draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.INSTALMENTS.value %}
-          {{ row(label = 'Regular payments of', bold = true, value = courtOrderPaymentPlan.instalmentAmount | numeral,
+        {% if draft.courtOfferedPaymentIntention.paymentOption.value === PaymentType.INSTALMENTS.value %}
+          {{ row(label = 'Regular payments of', bold = true, value = draft.courtOfferedPaymentIntention.repaymentPlan.instalmentAmount | numeral,
             changeLink = ClaimantResponsePaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
-          {{ row(label = 'Frequency of payments', bold = true, value = courtOrderPaymentPlan.frequency | renderFrequencyViewType,
+          {{ row(label = 'Frequency of payments', bold = true, value = draft.courtOfferedPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
             bottomBorder = false) }}
-          {{ row(label = 'Date for first instalment', bold = true, value = courtOrderPaymentPlan.startDate | date,
+          {{ row(label = 'Date for first instalment', bold = true, value = draft.courtOfferedPaymentIntention.repaymentPlan.firstPaymentDate | date,
             bottomBorder = true) }}
         {% endif %}
       {% endif %}
@@ -80,7 +80,7 @@
     {%  if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
 
-      {% if claim.response.paymentIntention.paymentDate %}
+      {% if draft.courtOfferedPaymentIntention.paymentOption.value === PaymentType.BY_SPECIFIED_DATE.value %}
         {% set amountToPay = 'the full amount' %}
         {% if claim.response.responseType == ResponseType.PART_ADMISSION.value %}
           {% set amountToPay = claim.response.amount | numeral %}
@@ -90,27 +90,27 @@
           value = t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
             {
               defendantFullName: claim.response.defendant.name,
-              paymentDate: claim.response.paymentIntention.paymentDate | date
+              paymentDate: draft.courtOfferedPaymentIntention.paymentDate | date
             }
           ),
           bottomBorder = true, bold = true
         ) }}
         {{ row(label = 'Completion date',
-          value = claim.response.paymentIntention.paymentDate | date,
+          value = draft.courtOfferedPaymentIntention.paymentDate | date,
           bottomBorder = true, bold = true
         ) }}
-      {% elseif claim.response.paymentIntention.repaymentPlan %}
+      {% elseif draft.courtOfferedPaymentIntention.paymentOption.value === PaymentType.INSTALMENTS.value %}
         {{ row(label = 'The offer',
           value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
             { defendantFullName: claim.response.defendant.name,
-              instalmentAmount: claim.response.paymentIntention.repaymentPlan.instalmentAmount | numeral,
-              paymentSchedule: claim.response.paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
-              firstPaymentDate: claim.response.paymentIntention.repaymentPlan.firstPaymentDate | date
+              instalmentAmount: draft.courtOfferedPaymentIntention.repaymentPlan.instalmentAmount | numeral,
+              paymentSchedule: draft.courtOfferedPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+              firstPaymentDate: draft.courtOfferedPaymentIntention.repaymentPlan.firstPaymentDate | date
             }),
           bottomBorder = true, bold = true
         ) }}
         {{ row(label = 'Completion date',
-          value = courtOrderPaymentPlan.calculateLastPaymentDate() | date,
+          value = draft.courtOfferedPaymentIntention.repaymentPlan.completionDate | date,
           bottomBorder = true, bold = true
         ) }}
       {% endif %}

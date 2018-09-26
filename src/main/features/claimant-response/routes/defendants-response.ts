@@ -16,6 +16,8 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { ResponseType } from 'claims/models/response/responseType'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
@@ -46,12 +48,18 @@ function calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): numb
 
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
+
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+  const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
     totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans),
     totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans),
-    paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim),
+    instalmentAmount: paymentPlan.instalmentAmount,
+    paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
+    firstPaymentDate: paymentPlan.startDate,
+    lastPaymentOn: paymentPlan.calculateLastPaymentDate(),
+    lengthOfPayment: paymentPlan.calculatePaymentLength(),
     page: page
   })
 }

@@ -6,4 +6,6 @@ export interface RepaymentPlan {
   instalmentAmount: number
   firstPaymentDate: Moment
   paymentSchedule: PaymentSchedule
+  completionDate?: Moment
+  lengthOfPayment?: string
 }
