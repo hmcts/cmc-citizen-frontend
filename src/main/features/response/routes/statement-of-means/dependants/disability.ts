@@ -1,7 +1,6 @@
 import { RoutablePath } from 'shared/router/routablePath'
 import { StatementOfMeansPaths as Paths, StatementOfMeansPaths } from 'response/paths'
 import * as express from 'express'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -18,7 +17,6 @@ const page: RoutablePath = StatementOfMeansPaths.dependantsDisabilityPage
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -28,7 +26,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(DependantsDisability),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -16,7 +16,6 @@ import { NumberOfChildren } from 'response/form/models/statement-of-means/number
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
@@ -47,7 +46,6 @@ function renderView (form: Form<Education>, res: express.Response): void {
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
@@ -56,7 +54,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     FormValidator.requestHandler(Education, Education.fromObject),

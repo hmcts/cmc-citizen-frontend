@@ -12,7 +12,6 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
@@ -24,7 +23,6 @@ const page: RoutablePath = Paths.dependantsPage
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -32,7 +30,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Dependants, Dependants.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {

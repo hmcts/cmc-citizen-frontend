@@ -14,7 +14,6 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = StatementOfMeansPaths.employersPage
 
@@ -50,7 +49,6 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     async (req: express.Request, res: express.Response) => {
@@ -59,7 +57,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     FormValidator.requestHandler(Employers, Employers.fromObject, undefined, ['addRow']),
