@@ -20,6 +20,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import {PaymentSchedule} from 'ccj/form/models/paymentSchedule'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -79,14 +80,15 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-
+        const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
+        const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtCalculatedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanFromDefendantFinancialStatement.startDate,
-          instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
-          completionDate: paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
+          firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
+          instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
+          completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
+          lengthOfPayment: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
       }
 

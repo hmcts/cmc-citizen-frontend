@@ -116,17 +116,17 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     if (decisionType === DecisionType.COURT) {
       const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-      const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
+      const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
+      const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtCalculatedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanFromDefendantFinancialStatement.startDate,
-          instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
-          completionDate: paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
+          firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
+          instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
+          completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
+          lengthOfPayment: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
       }
 
