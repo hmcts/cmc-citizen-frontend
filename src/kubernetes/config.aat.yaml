@@ -8,15 +8,13 @@ data:
   # Ive calculated from application settings in existing citizen-frontend deployment to ASE
   # there are more... that ive not included that I think we will need, e.g. DRAFT_STORE_SECRET_PRIMARY
   # was going to try with minimal from docker-compose first and incrementally add
-
-  NODE_ENV: dev                 # im unsure here - this will depend I think? demo - if demo, dev - if PR
   IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
   IDAM_AUTHENTICATION_WEB_URL: https://idam.preprod.ccidam.reform.hmcts.net
   IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
   PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
-  CLAIM_STORE_URL: http://cmc.?  # k8s service - able to point to specific PR deployment
+  CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
   FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal        
   DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
   FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-aat.service.core-compute-aat.internal
-  POSTCODE_LOOKUP_API_KEY: f7aca590ce1da8c64c9ed11b9678265f86f81209
+  POSTCODE_LOOKUP_API_KEY: ${POSTCODE_LOOKUP_API_KEY}
   UV_THREADPOOL_SIZE: 64
