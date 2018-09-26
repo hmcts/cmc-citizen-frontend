@@ -40,6 +40,9 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.statementOfMeans.partnerAge = form.model
+        if (form.model.option === PartnerAgeOption.NO) {
+          draft.document.statementOfMeans.partnerPension = undefined
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === PartnerAgeOption.YES) {

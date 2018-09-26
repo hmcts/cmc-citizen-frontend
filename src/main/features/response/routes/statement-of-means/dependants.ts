@@ -42,32 +42,33 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.statementOfMeans.dependants = form.model
+        // skip if defendant and partner are both disabled, or if defendant is severely disabled
+        const defendantIsDisabled: boolean = draft.document.statementOfMeans.disability.option === DisabilityOption.YES
+        const defendantIsSeverelyDisabled: boolean = draft.document.statementOfMeans.severeDisability
+          && draft.document.statementOfMeans.severeDisability.option === SevereDisabilityOption.YES
+        const partnerIsDisabled: boolean = draft.document.statementOfMeans.cohabiting.option === CohabitingOption.YES
+          && draft.document.statementOfMeans.partnerDisability.option === PartnerDisabilityOption.YES
+
+        // also skip if there aren't any children
+        const hasChildren: boolean = form.model.numberOfChildren && totalNumberOfChildren(form.model) > 0
+
+        const skipDisabilityQuestion: boolean = !hasChildren || (defendantIsDisabled && partnerIsDisabled) || defendantIsSeverelyDisabled
+
         if (!form.model.numberOfChildren || !form.model.numberOfChildren.between16and19) {
           draft.document.statementOfMeans.education = undefined
+        }
+        if (skipDisabilityQuestion) {
+          draft.document.statementOfMeans.dependantsDisability = undefined
         }
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
         if (form.model.numberOfChildren && form.model.numberOfChildren.between16and19) {
           res.redirect(Paths.educationPage.evaluateUri({ externalId: externalId }))
+        } else if (skipDisabilityQuestion) {
+          res.redirect(Paths.otherDependantsPage.evaluateUri({ externalId: externalId }))
         } else {
-          // skip if defendant and partner are both disabled, or if defendant is severely disabled
-          const defendantIsDisabled: boolean = draft.document.statementOfMeans.disability.option === DisabilityOption.YES
-          const defendantIsSeverelyDisabled: boolean = draft.document.statementOfMeans.severeDisability
-            && draft.document.statementOfMeans.severeDisability.option === SevereDisabilityOption.YES
-          const partnerIsDisabled: boolean = draft.document.statementOfMeans.cohabiting.option === CohabitingOption.YES
-            && draft.document.statementOfMeans.partnerDisability.option === PartnerDisabilityOption.YES
-
-          // also skip if there aren't any children
-          const hasChildren: boolean = form.model.numberOfChildren && totalNumberOfChildren(form.model) > 0
-
-          const skipDisabilityQuestion: boolean = !hasChildren || (defendantIsDisabled && partnerIsDisabled) || defendantIsSeverelyDisabled
-
-          if (skipDisabilityQuestion) {
-            res.redirect(Paths.otherDependantsPage.evaluateUri({ externalId: externalId }))
-          } else {
-            res.redirect(Paths.dependantsDisabilityPage.evaluateUri({ externalId: externalId }))
-          }
+          res.redirect(Paths.dependantsDisabilityPage.evaluateUri({ externalId: externalId }))
         }
       }
     })

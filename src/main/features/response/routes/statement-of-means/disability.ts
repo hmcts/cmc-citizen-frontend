@@ -39,6 +39,9 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.statementOfMeans.disability = form.model
+        if (form.model.option === DisabilityOption.NO) {
+          draft.document.statementOfMeans.severeDisability = undefined
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === DisabilityOption.YES) {

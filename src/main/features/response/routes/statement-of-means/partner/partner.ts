@@ -39,6 +39,11 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.statementOfMeans.cohabiting = form.model
+        if (form.model.option === CohabitingOption.NO) {
+          draft.document.statementOfMeans.partnerAge = draft.document.statementOfMeans.partnerDisability =
+            draft.document.statementOfMeans.partnerSevereDisability = draft.document.statementOfMeans.partnerPension =
+              undefined
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.option === CohabitingOption.YES) {
