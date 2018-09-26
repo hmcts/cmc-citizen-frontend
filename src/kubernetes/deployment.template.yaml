@@ -45,14 +45,14 @@ spec:
            # These may be adjusted, but be mindful please
           resources:
             requests:
-              memory: "1024Mi"
-              cpu: "500m"
+              memory: "128Mi"
+              cpu: "0.1"
             limits:
-              memory: "2048Mi"
-              cpu: "2500m"
+              memory: "512Mi"
+              cpu: "1"
            # This is the port your process is listening on in the container
           ports:
-            - containerPort: 4400
+            - containerPort: 3000
               name: http
           imagePullPolicy: Always
  # Azure Internal Loadbalancer.
@@ -69,6 +69,6 @@ spec:
   ports:
     - port: 80
       # Make sure targetPort is the same as 'containerPort' above...
-      targetPort: 4400
+      targetPort: 3000
   selector:
     app: ${SERVICE_NAME}
