@@ -17,6 +17,8 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
@@ -59,12 +61,18 @@ function renderView (res: express.Response, page: number): void {
       partiallyPaid: partiallyPaid
     })
   } else {
+    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
     const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
     res.render(Paths.defendantsResponsePage.associatedView, {
       claim: claim,
       totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans),
       totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans),
-      paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim),
+      instalmentAmount: paymentPlan.instalmentAmount,
+      paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
+      firstPaymentDate: paymentPlan.startDate,
+      lastPaymentOn: paymentPlan.calculateLastPaymentDate(),
+      lengthOfPayment: paymentPlan.calculatePaymentLength(),
       page: page,
       alreadyPaid: alreadyPaid
     })
@@ -86,10 +94,9 @@ export default express.Router()
     stateGuardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      const claim: Claim = res.locals.claim
       const user: User = res.locals.user
 
-      if (req.body.action && req.body.action.showPage && !StatesPaidHelper.isResponseAlreadyPaid(claim)) {
+      if (req.body.action && req.body.action.showPage) {
         const page: number = +req.body.action.showPage
         return renderView(res, page)
       }

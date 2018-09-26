@@ -27,6 +27,8 @@ export class Paths {
   static readonly receiptReceiver = new RoutablePath(`${claimantResponsePath}/receipt`)
   static readonly partPaymentReceivedPage = new RoutablePath(`${claimantResponsePath}/part-payment-received`)
   static readonly settleClaimPage = new RoutablePath(`${claimantResponsePath}/settle-claim`)
+  static readonly payBySetDateAcceptedPage = new RoutablePath(`${claimantResponsePath}/pay-by-set-date-accepted`)
+  static readonly courtOfferedSetDatePage = new RoutablePath(`${claimantResponsePath}/court-offered-set-date`)
 }
 
 export const claimantResponseCCJPath = '/case/:externalId/claimant-response/county-court-judgment'
