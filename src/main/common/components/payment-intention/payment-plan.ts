@@ -19,6 +19,7 @@ import { DraftService } from 'services/draftService'
 
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
 
 export abstract class AbstractPaymentPlanPage<Draft> {
   abstract getHeading (): string
@@ -27,6 +28,11 @@ export abstract class AbstractPaymentPlanPage<Draft> {
 
   getView (): string {
     return 'components/payment-intention/payment-plan'
+  }
+
+  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft> }): Promise<void> {
+    const user: User = locals.user
+    await new DraftService().save(locals.draft, user.bearerToken)
   }
 
   buildRouter (path: string, ...guards: express.RequestHandler[]): express.Router {
@@ -53,14 +59,14 @@ export abstract class AbstractPaymentPlanPage<Draft> {
         FormValidator.requestHandler(PaymentPlanModel, PaymentPlanModel.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {
+
             const form: Form<PaymentPlanModel> = req.body
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)
             } else {
               this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentPlan = form.model)
 
-              const user: User = res.locals.user
-              await new DraftService().save(res.locals.draft, user.bearerToken)
+              await this.saveDraft(res.locals)
 
               res.redirect(this.buildPostSubmissionUri(req, res))
             }
