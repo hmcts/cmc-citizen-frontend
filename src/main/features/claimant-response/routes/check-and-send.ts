@@ -14,8 +14,6 @@ import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CCJClient } from 'claims/ccjClient'
 import { AmountHelper } from 'claimant-response/helpers/amountHelper'
-import {FullAdmissionResponse} from "claims/models/response/fullAdmissionResponse";
-import {PartialAdmissionResponse} from "claims/models/response/partialAdmissionResponse";
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -26,8 +24,6 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
 
-      console.log('claim---->', JSON.stringify(claim.response as FullAdmissionResponse | PartialAdmissionResponse))
-      console.log('draft---->', JSON.stringify(draft))
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,

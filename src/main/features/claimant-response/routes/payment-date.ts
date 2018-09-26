@@ -1,25 +1,25 @@
 import * as express from 'express'
 
-import {AbstractPaymentDatePage} from 'shared/components/payment-intention/payment-date'
-import {AbstractModelAccessor, DefaultModelAccessor} from 'shared/components/model-accessor'
-import {PaymentIntention} from 'claims/models/response/core/paymentIntention'
-import {PaymentIntention as DraftPaymentIntention} from 'shared/components/payment-intention/model/paymentIntention'
+import { AbstractPaymentDatePage } from 'shared/components/payment-intention/payment-date'
+import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
-import {DraftClaimantResponse} from 'claimant-response/draft/draftClaimantResponse'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
-import {claimantResponsePath, Paths} from 'claimant-response/paths'
-import {Claim} from 'claims/models/claim'
-import {PaymentPlanHelper} from 'shared/helpers/paymentPlanHelper'
-import {Moment} from 'moment'
-import {DecisionType} from 'common/court-calculations/courtDetermination'
-import {PaymentPlan} from 'common/payment-plan/paymentPlan'
-import {Frequency} from 'common/frequency/frequency'
-import {Draft} from '@hmcts/draft-store-client'
-import {User} from 'idam/user'
-import {PaymentOption} from 'claims/models/paymentOption'
-import {CourtDecisionHelper} from 'shared/helpers/CourtDecisionHelper'
-import {FullAdmissionResponse} from "claims/models/response/fullAdmissionResponse"
-import {PartialAdmissionResponse} from "claims/models/response/partialAdmissionResponse"
+import { claimantResponsePath, Paths } from 'claimant-response/paths'
+import { Claim } from 'claims/models/claim'
+import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
+import { Moment } from 'moment'
+import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { PaymentPlan } from 'common/payment-plan/paymentPlan'
+import { Frequency } from 'common/frequency/frequency'
+import { Draft } from '@hmcts/draft-store-client'
+import { User } from 'idam/user'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {

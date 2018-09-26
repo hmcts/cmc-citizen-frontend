@@ -62,13 +62,25 @@ describe('Claimant response: court offered set date page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse', {
+          courtDecisionType: 'DEFENDANT',
           courtOfferedPaymentIntention: {
             paymentOption: 'BY_SPECIFIED_DATE',
-            paymentDate: {
-              year: 2018,
-              month: 11,
-              day: 1
-            },
+            paymentDate: MomentFactory.parse('2018-11-01'),
+            repaymentPlan: undefined } })
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The defendant can’t pay by your proposed date'))
+      })
+
+      it('should render page when everything is fine and COURT date is accepted', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+        draftStoreServiceMock.resolveFind('claimantResponse', {
+          courtDecisionType: 'COURT',
+          courtOfferedPaymentIntention: {
+            paymentOption: 'BY_SPECIFIED_DATE',
+            paymentDate: MomentFactory.parse('2018-11-01'),
             repaymentPlan: undefined } })
 
         await request(app)
@@ -144,15 +156,18 @@ describe('Claimant response: court offered set date page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse',
             {
-              courtOfferedPaymentIntention: { paymentDate: MomentFactory.parse('2019-10-10') }
-            })
+              courtDecisionType: 'COURT',
+              courtOfferedPaymentIntention: {
+                paymentOption: 'BY_SPECIFIED_DATE',
+                paymentDate: MomentFactory.parse('2019-10-10'),
+                repaymentPlan: undefined } })
+        })
 
-          await request(app)
+        await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ accept: undefined })
             .expect(res => expect(res).to.be.successful.withText('Please select yes or no'))
-        })
       })
     })
   })

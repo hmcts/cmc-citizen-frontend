@@ -1,22 +1,22 @@
 import * as express from 'express'
 
-import {FormValidator} from 'main/app/forms/validation/formValidator'
-import {Form} from 'main/app/forms/form'
+import { FormValidator } from 'main/app/forms/validation/formValidator'
+import { Form } from 'main/app/forms/form'
 
-import {ErrorHandling} from 'main/common/errorHandling'
-import {User} from 'main/app/idam/user'
-import {DraftService} from 'services/draftService'
-import {Draft} from '@hmcts/draft-store-client'
-import {Paths} from 'claimant-response/paths'
-import {DraftClaimantResponse} from 'claimant-response/draft/draftClaimantResponse'
-import {Claim} from 'main/app/claims/models/claim'
-import {AcceptPaymentMethod} from 'claimant-response/form/models/acceptPaymentMethod'
-import {YesNoOption} from 'models/yesNoOption'
-import {AcceptCourtOffer} from 'claimant-response/form/models/acceptCourtOffer'
-import {DecisionType} from "common/court-calculations/courtDetermination";
-import {Moment} from "moment";
-import {FullAdmissionResponse} from "claims/models/response/fullAdmissionResponse";
-import {PartialAdmissionResponse} from "claims/models/response/partialAdmissionResponse";
+import { ErrorHandling } from 'main/common/errorHandling'
+import { User } from 'main/app/idam/user'
+import { DraftService } from 'services/draftService'
+import { Draft } from '@hmcts/draft-store-client'
+import { Paths } from 'claimant-response/paths'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { Claim } from 'main/app/claims/models/claim'
+import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
+import { YesNoOption } from 'models/yesNoOption'
+import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
+import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { Moment } from 'moment'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse): Moment {
 
@@ -26,6 +26,10 @@ function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse): M
 
   if (draft.document.courtDecisionType === DecisionType.COURT) {
     return draft.document.courtOfferedPaymentIntention.paymentDate
+  }
+
+  if (draft.document.courtDecisionType === DecisionType.CLAIMANT) {
+    return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
   }
 }
 
