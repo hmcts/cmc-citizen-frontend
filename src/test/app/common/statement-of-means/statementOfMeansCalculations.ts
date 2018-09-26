@@ -1,8 +1,6 @@
 import { expect } from 'chai'
 
 import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
-
-import { ResidenceType } from 'claims/models/response/statement-of-means/residence'
 import { Debt } from 'claims/models/response/statement-of-means/debt'
 import { CourtOrder } from 'claims/models/response/statement-of-means/courtOrder'
 import { Employment } from 'claims/models/response/statement-of-means/employment'
@@ -11,153 +9,47 @@ import { Income, IncomeType } from 'claims/models/response/statement-of-means/in
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { PartyType } from 'common/partyType'
-import { MomentFactory } from 'shared/momentFactory'
-import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
-import { Partner } from 'claims/models/response/statement-of-means/partner'
-import { PriorityDebts, PriorityDebtType } from 'claims/models/response/statement-of-means/priorityDebts'
-import { AgeGroupType, Dependant } from 'claims/models/response/statement-of-means/dependant'
-import * as moment from 'moment'
+import { sampleDefendantDateOfBirth,
+  sampleStatementOfMeans,
+  sampleAllowanceData
+} from 'test/data/entity/statementOfMeansData'
 
-const sampleDefendantDisability: DisabilityStatus = DisabilityStatus.YES
-const sampleDefendantOnPension: Income = {
-  type: IncomeType.PENSION,
-  frequency: PaymentFrequency.MONTH,
-  amount: 200
-}
-const samplePartnerDetails: Partner = { over18: true, disability: DisabilityStatus.SEVERE, pensioner: false }
-const sampleDependantDetails: Dependant = {
-  children: [
-    { ageGroupType: AgeGroupType.UNDER_11, numberOfChildren: 2 },
-    { ageGroupType: AgeGroupType.BETWEEN_11_AND_15, numberOfChildren: 1 },
-    { ageGroupType: AgeGroupType.BETWEEN_16_AND_19, numberOfChildren: 2, numberOfChildrenLivingWithYou: 1 }],
-  anyDisabledChildren: true,
-  numberOfMaintainedChildren: 1,
-  otherDependants: { numberOfPeople: 2, details: 'some string', anyDisabled: true }
-}
+// Tests - Living Allowance
+// single under 25 / over 25
+// couple over 18
+// couple under 25 and over 25
 
-const samplePriorityDebts: PriorityDebts[] = [
-  { type: PriorityDebtType.MAINTENANCE_PAYMENTS, frequency: PaymentFrequency.MONTH, amount: 200 },
-  { type: PriorityDebtType.WATER, frequency: PaymentFrequency.MONTH, amount: 155.55 }]
+// Tests - Disability
+// no disabilities
+// def serve partner no, disabled dependant
+// def yes partner server, carer yes
+// has disabled dependant
+// is carer only
 
-const sampleDefendantDateOfBirth: moment.Moment = MomentFactory.parse('1999-01-01')
+// Tests - Pensioner
+// no pensioners
+// defendant pensioners
+// partner pensioner only
+
+// Tests - Dependants
+// 1 dependant
+// 11 dependants
 
 function sampleDataLivingAllowanceAmount (): number {
-  // single under 25 / over 25
-  // couple over 18
-  // couple under 25 and over 25
+  sampleAllowanceData.personal.filter(x => x.item === '')
   return 0
 }
 
 function sampleDataDisabilityAllowanceAmount (): number {
-  // no disabilities
-  // def serve partner no, disabled dependant
-  // def yes partner server, carer yes
-  // has disabled dependant
-  // is carer only
   return 0
 }
 
 function sampleDataPensionerAllowanceAmount (): number {
-  // no pensioners
-  // defendant pensioners
-  // partner pensioner only
   return 0
 }
 
 function sampleDataDependantsAllowanceAmount (): number {
-  // 1 dependant
-  // 11 dependants
   return 0
-}
-const sampleStatementOfMeans = {
-  residence: {
-    type: ResidenceType.OWN_HOME,
-    otherDetail: ''
-  },
-  employment: {
-    selfEmployment: {
-      jobTitle: 'IT',
-      annualTurnover: 3000,
-      onTaxPayments: {
-        amountYouOwe: 0,
-        reason: ''
-      }
-    }
-  },
-  disability: sampleDefendantDisability,
-  partner: samplePartnerDetails,
-  priorityDebts: samplePriorityDebts,
-  dependants: sampleDependantDetails,
-  bankAccounts: [{
-    type: BankAccountType.CURRENT_ACCOUNT,
-    joint: false,
-    balance: 1000
-  }, {
-    type: BankAccountType.ISA,
-    joint: true,
-    balance: 2000
-  }, {
-    type: BankAccountType.OTHER,
-    joint: false,
-    balance: 4000
-  }],
-  debts: [{
-    description: 'Something',
-    totalOwed: 3000,
-    monthlyPayments: 30
-  }, {
-    description: 'Something else',
-    totalOwed: 4000,
-    monthlyPayments: 40
-  }],
-  incomes: [
-    {
-      type: IncomeType.JOB,
-      frequency: PaymentFrequency.MONTH,
-      amount: 1500
-    },
-    {
-      type: IncomeType.INCOME_SUPPORT,
-      frequency: PaymentFrequency.WEEK,
-      amount: 50
-    },
-    sampleDefendantOnPension
-  ],
-  expenses: [
-    {
-      type: ExpenseType.MORTGAGE,
-      frequency: PaymentFrequency.MONTH,
-      amount: 300
-    },
-    {
-      type: ExpenseType.RENT,
-      frequency: PaymentFrequency.MONTH,
-      amount: 200
-    },
-    {
-      type: ExpenseType.ELECTRICITY,
-      frequency: PaymentFrequency.MONTH,
-      amount: 100
-    },
-    {
-      type: ExpenseType.GAS,
-      frequency: PaymentFrequency.WEEK,
-      amount: 10
-    }
-  ],
-  courtOrders: [
-    {
-      claimNumber: '123',
-      amountOwed: 2000,
-      monthlyInstalmentAmount: 20
-    },
-    {
-      claimNumber: '456',
-      amountOwed: 5000,
-      monthlyInstalmentAmount: 50
-    }
-  ],
-  reason: 'Because'
 }
 
 describe('StatementOfMeansCalculations', () => {
@@ -287,7 +179,7 @@ describe('StatementOfMeansCalculations', () => {
   // INCOMES
   //
 
-  describe('calculateTotalMontlyIncome', () => {
+  describe('calculateTotalMonthlyIncome', () => {
     describe('when valid bankAccounts, employment and incomes are provided', () => {
       it('should calculate the total monthly income', () => {
         expect(StatementOfMeansCalculations.calculateTotalMonthlyIncome(sampleStatementOfMeans)).to.equal(2335.416666666667)
