@@ -52,8 +52,8 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
     const draft: Draft<DraftClaimantResponse> = res.locals.draft
-    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
-    const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+    const courtDecision: DecisionType = CourtDecisionHelper.createCourtDecision(claim, draft)
+    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
     switch (courtDecision) {
