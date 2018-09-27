@@ -57,7 +57,7 @@ export class TaskListBuilder {
     } else {
       if (StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)) {
         tasks.push(
-          new TaskListItem(`Have you been paid ${ NumberFormatter.formatMoney(response.amount) }?`,
+          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(response.amount) }?`,
             Paths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
             PartPaymentReceivedTask.isCompleted(draft)
           ))
@@ -78,14 +78,16 @@ export class TaskListBuilder {
       }
     }
 
-    if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
-      (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
-      tasks.push(
-        new TaskListItem(
-          'Consider free mediation',
-          Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
-          draft.freeMediation !== undefined
-        ))
+    if (claim.response.freeMediation === YesNoOption.YES) {
+      if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
+        (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
+        tasks.push(
+          new TaskListItem(
+            'Consider free mediation',
+            Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
+            draft.freeMediation !== undefined
+          ))
+      }
     }
 
     return new TaskList('Your response', tasks)

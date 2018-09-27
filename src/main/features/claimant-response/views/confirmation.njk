@@ -18,8 +18,6 @@
             {{ t('You’ve signed a settlement agreement') }}
           {% elseif claim.countyCourtJudgmentIssuedAt %}
             {{ t('County Court Judgment issued') }}
-          {% elseif claim.claimantResponse.freeMediation %}
-            {{ t('You’ve requested free mediation') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
             {{ t('You’ve rejected their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}

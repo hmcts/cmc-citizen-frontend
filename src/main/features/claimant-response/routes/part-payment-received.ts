@@ -54,15 +54,11 @@ export default express.Router()
 
         if (form.model.received.option === YesNoOption.NO.option) {
           draft.document.accepted = undefined
+          draft.document.rejectionReason = undefined
         }
 
         await new DraftService().save(draft, res.locals.user.bearerToken)
-
-        if (form.model.received.option === YesNoOption.NO.option) {
-          res.redirect(Paths.rejectionReasonPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-        } else {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-        }
+        res.redirect(Paths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
       }
     })
   )
