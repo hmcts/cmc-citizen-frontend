@@ -172,10 +172,10 @@ export default new PaymentPlanPage()
       const claim: Claim = res.locals.claim
       const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-      res.locals.monthlyIncomeAmount = response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+      res.locals.monthlyIncomeAmount = response.statementOfMeans && response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
         response.statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
       ) : 0
-      res.locals.monthlyExpensesAmount = response.statementOfMeans.expenses ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+      res.locals.monthlyExpensesAmount = response.statementOfMeans && response.statementOfMeans.expenses ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
         response.statementOfMeans.expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
       ) : 0
       res.locals.statementOfMeans = response.statementOfMeans
