@@ -10,6 +10,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { Redetermination } from 'ccj/form/models/redetermination'
 
 interface State {
   status: ClaimStatus
@@ -40,6 +41,8 @@ export class Claim {
   totalInterest: number
   features: string[]
   directionsQuestionnaireDeadline: Moment
+  redetermination: Redetermination
+  redeterminationRequestedAt: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -82,6 +85,14 @@ export class Claim {
       this.features = input.features
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
+      }
+
+      if(input.redetermination){
+        this.redetermination = new Redetermination().deserialize(input.redetermination)
+      }
+
+      if (input.redeterminationRequestedAt) {
+        this.redeterminationRequestedAt = MomentFactory.parse(input.redeterminationRequestedAt)
       }
     }
     return this

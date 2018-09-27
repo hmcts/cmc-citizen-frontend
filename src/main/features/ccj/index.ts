@@ -27,8 +27,8 @@ export class CCJFeature {
     app.all(allCCJ, requestHandler())
     app.all(allCCJ, ClaimMiddleware.retrieveByExternalId)
     app.all(allCCJ, OnlyClaimantLinkedToClaimCanDoIt.check())
-    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
-    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/,
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation|repayment-plan-summary|redetermination).*$/, CCJGuard.requestHandler)
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation|repayment-plan-summary|redetermination).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {
         return new DraftCCJ().deserialize(value)
       }),

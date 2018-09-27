@@ -7,6 +7,7 @@ import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { Redetermination } from 'ccj/form/models/redetermination'
 
 export class CCJClient {
 
@@ -23,6 +24,15 @@ export class CCJClient {
   private static async save (externalId: string, countyCourtJudgment: CountyCourtJudgment, user: User, issue: boolean = false): Promise<Claim> {
     return request.post(`${claimStoreApiUrl}/${externalId}/county-court-judgment?issue=${issue}`, {
       body: countyCourtJudgment,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    })
+  }
+
+  static redetermination (externalId: string, redetermination: Redetermination, user: User) {
+    return request.post(`${claimStoreApiUrl}/${externalId}/redetermination`, {
+      body: { explaination: redetermination.text },
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }

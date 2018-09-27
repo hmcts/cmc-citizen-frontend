@@ -10,9 +10,11 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
 
+      console.log(claim)
       res.render(Paths.confirmationPage.associatedView,
         {
           defendantName: claim.claimData.defendant.name,
-          ccjRequestedAt: claim.countyCourtJudgmentRequestedAt
+          ccjRequestedAt: claim.countyCourtJudgmentRequestedAt,
+          redetermination_requested_at: claim.redeterminationRequestedAt
         })
     }))
