@@ -77,6 +77,35 @@ describe('Claimant response: payment plan', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(heading))
         })
+
+        it(`Should render the page with heading ${heading} when given a claim with a business defendant`, async () => {
+          const claimObject = {
+            ...claimStoreServiceMock.sampleClaimObj,
+            ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj,
+            claim: {
+              ...claimStoreServiceMock.sampleClaimObj.claim,
+              defendants: [
+                {
+                  type: 'organisation',
+                  name: 'John Doe',
+                  address: {
+                    line1: 'line1',
+                    line2: 'line2',
+                    city: 'city',
+                    postcode: 'bb127nq'
+                  }
+                }
+              ]
+            }
+          }
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimObject)
+          draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText(heading))
+        })
       })
     })
 
