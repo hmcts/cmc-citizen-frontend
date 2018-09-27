@@ -52,6 +52,8 @@ import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { Claim } from 'claims/models/claim'
+import { PriorityDebt as PriorityDebtDraft } from 'response/form/models/statement-of-means/priorityDebt'
+import { PriorityDebts, PriorityDebtType } from 'claims/models/response/statement-of-means/priorityDebts'
 
 export class ResponseModelConverter {
 
@@ -219,7 +221,8 @@ export class ResponseModelConverter {
       }) : undefined,
       reason: draft.statementOfMeans.explanation.text,
       incomes: this.convertIncomes(draft.statementOfMeans.monthlyIncome),
-      expenses: this.convertExpenses(draft.statementOfMeans.monthlyExpenses)
+      expenses: this.convertExpenses(draft.statementOfMeans.monthlyExpenses),
+      priorityDebts: this.convertPriorityDebts(draft.statementOfMeans.priorityDebt)
     }
   }
 
@@ -333,6 +336,66 @@ export class ResponseModelConverter {
       })
     }
     return children
+  }
+
+  private static convertPriorityDebts (priorityDebt: PriorityDebtDraft | undefined): PriorityDebts[] {
+    if (!priorityDebt) {
+      return undefined
+    }
+
+    const priorityDebts: PriorityDebts[] = []
+    if (priorityDebt.mortgage && priorityDebt.mortgage.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.MORTGAGE,
+        frequency: priorityDebt.mortgage.schedule.value as PaymentFrequency,
+        amount: priorityDebt.mortgage.amount
+      })
+    }
+    if (priorityDebt.rent && priorityDebt.rent.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.RENT,
+        frequency: priorityDebt.rent.schedule.value as PaymentFrequency,
+        amount: priorityDebt.rent.amount
+      })
+    }
+    if (priorityDebt.councilTax && priorityDebt.councilTax.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.COUNCIL_TAX,
+        frequency: priorityDebt.councilTax.schedule.value as PaymentFrequency,
+        amount: priorityDebt.councilTax.amount
+      })
+    }
+    if (priorityDebt.gas && priorityDebt.gas.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.GAS,
+        frequency: priorityDebt.gas.schedule.value as PaymentFrequency,
+        amount: priorityDebt.gas.amount
+      })
+    }
+    if (priorityDebt.electricity && priorityDebt.electricity.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.ELECTRICITY,
+        frequency: priorityDebt.electricity.schedule.value as PaymentFrequency,
+        amount: priorityDebt.electricity.amount
+      })
+    }
+    if (priorityDebt.water && priorityDebt.water.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.WATER,
+        frequency: priorityDebt.water.schedule.value as PaymentFrequency,
+        amount: priorityDebt.water.amount
+      })
+    }
+    if (priorityDebt.maintenance && priorityDebt.maintenance.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.MAINTENANCE_PAYMENTS,
+        frequency: priorityDebt.maintenance.schedule.value as PaymentFrequency,
+        amount: priorityDebt.maintenance.amount
+      })
+    }
+
+    return priorityDebts
+
   }
 
   private static convertIncomes (income: MonthlyIncome | undefined): Income[] {
