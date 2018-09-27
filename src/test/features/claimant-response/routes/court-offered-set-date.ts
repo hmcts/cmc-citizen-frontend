@@ -15,6 +15,8 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/claimant-response/routes/checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/routes/checks/not-claimant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
+import { LocalDate } from 'forms/models/localDate'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -26,6 +28,7 @@ const validFormData = {
 }
 
 const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
+const defendantFullAdmissionResponse = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
 
 describe('Claimant response: court offered set date page', () => {
   attachDefaultHooks(app)
@@ -62,14 +65,52 @@ describe('Claimant response: court offered set date page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse', {
+          courtDecisionType: 'DEFENDANT',
           courtOfferedPaymentIntention: {
             paymentOption: 'BY_SPECIFIED_DATE',
-            paymentDate: {
-              year: 2018,
-              month: 11,
-              day: 1
-            },
+            paymentDate: MomentFactory.parse('2018-11-01'),
             repaymentPlan: undefined } })
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The defendant can’t pay by your proposed date'))
+      })
+
+      it('should render page when everything is fine and COURT date is accepted', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+        draftStoreServiceMock.resolveFind('claimantResponse', {
+          courtDecisionType: 'COURT',
+          courtOfferedPaymentIntention: {
+            paymentOption: 'BY_SPECIFIED_DATE',
+            paymentDate: MomentFactory.parse('2018-11-01'),
+            repaymentPlan: undefined } })
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The defendant can’t pay by your proposed date'))
+      })
+
+      it('should render page when everything is fine and CLAIMANT date is accepted', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
+        draftStoreServiceMock.resolveFind('claimantResponse', {
+          courtDecisionType: 'CLAIMANT',
+          courtOfferedPaymentIntention: {
+            paymentOption: 'BY_SPECIFIED_DATE',
+            paymentDate: MomentFactory.parse('2018-11-01'),
+            repaymentPlan: undefined },
+          alternatePaymentMethod: {
+            paymentOption: {
+              option: {
+                value: 'BY_SPECIFIED_DATE',
+                displayValue: 'By set date'
+              }
+            },
+            paymentDate: new PaymentDate(new LocalDate(2018,11,1)),
+            paymentPlan: undefined
+          }
+        })
 
         await request(app)
           .get(pagePath)
@@ -144,7 +185,12 @@ describe('Claimant response: court offered set date page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse',
             {
-              courtOfferedPaymentIntention: { paymentDate: MomentFactory.parse('2019-10-10') }
+              courtDecisionType: 'COURT',
+              courtOfferedPaymentIntention: {
+                paymentOption: 'BY_SPECIFIED_DATE',
+                paymentDate: MomentFactory.parse('2019-10-10'),
+                repaymentPlan: undefined
+              }
             })
 
           await request(app)
