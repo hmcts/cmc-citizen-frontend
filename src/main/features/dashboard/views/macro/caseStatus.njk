@@ -81,8 +81,6 @@
   {% endif %}
 {% endmacro %}
 
-
-
 {% macro caseStatusForDefendant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
