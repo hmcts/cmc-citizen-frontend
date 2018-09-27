@@ -197,6 +197,7 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
 export const statementOfMeansWithAllFieldsData = {
   ...statementOfMeansWithMandatoryFieldsOnlyData,
   dependant: {
+    anyDisabledChildren: false,
     children: [{
       ageGroupType: AgeGroupType.UNDER_11,
       numberOfChildren: 1
@@ -209,7 +210,11 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildrenLivingWithYou: 3
     }],
     numberOfMaintainedChildren: 4,
-    anyDisabledChildren: false
+    otherDependants: {
+      anyDisabled: false,
+      numberOfPeople: 5,
+      details: 'Colleagues'
+    }
   },
   employment: {
     employers: [{
