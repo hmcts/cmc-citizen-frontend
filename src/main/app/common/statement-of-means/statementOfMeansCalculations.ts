@@ -166,14 +166,17 @@ export class StatementOfMeansCalculations {
   }
 
   calculateMonthlyDisabilityDependantAllowance (dependant: Dependant): number {
-    if (!dependant) {
-      return 0
+    if (dependant) {
+      if (dependant.anyDisabledChildren) {
+        return this.getMonthlyAllowanceAmount(this.allowancesLookup.disability,'DEPENDANT')
+      }
+      if (dependant.otherDependants) {
+        if (dependant.otherDependants.anyDisabled) {
+          return this.getMonthlyAllowanceAmount(this.allowancesLookup.disability,'DEPENDANT')
+        }
+      }
     }
-    const disabilityLookup = this.allowancesLookup.disability
-    const dependantAmount = dependant.anyDisabledChildren || dependant.otherDependants.anyDisabled ?
-      this.getMonthlyAllowanceAmount(disabilityLookup,'DEPENDANT') : 0
-
-    return dependantAmount
+    return 0
   }
 
   calculateMonthlyCarerAllowance (carer: boolean): number {
