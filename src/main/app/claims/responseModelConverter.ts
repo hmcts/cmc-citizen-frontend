@@ -295,7 +295,7 @@ export class ResponseModelConverter {
     }
 
     if (draft.isResponseFullyAdmitted()
-      || !draft.isResponsePartiallyAdmittedAndAlreadyPaidAndPaymentIntentionIsPresent()) {
+      || !draft.isResponsePartiallyAdmittedAndAlreadyPaidAndPaymentIntentionPresent()) {
       return {
         paymentOption: paymentIntention.paymentOption.option.value as PaymentOption,
         paymentDate: this.convertPaymentDate(paymentIntention.paymentOption, paymentIntention.paymentDate),
