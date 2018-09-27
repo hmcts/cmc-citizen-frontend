@@ -18,7 +18,6 @@ import { claimantResponsePath, Paths } from 'claimant-response/paths'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { Moment } from 'moment'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { DecisionType } from 'common/court-calculations/courtDetermination'
@@ -116,29 +115,28 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     if (decisionType === DecisionType.COURT) {
       const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-      const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
-      const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
+      const claimantFrequency: Frequency = Frequency.of(draft.document.alternatePaymentMethod.paymentPlan.paymentSchedule.value)
+      const paymentPlanConvertedToClaimantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(claimantFrequency)
 
-      if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtCalculatedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
-          completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
+          firstPaymentDate: paymentPlanConvertedToClaimantFrequency.startDate,
+          instalmentAmount: paymentPlanConvertedToClaimantFrequency.instalmentAmount,
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToClaimantFrequency.frequency),
+          completionDate: paymentPlanConvertedToClaimantFrequency.calculateLastPaymentDate(),
+          lengthOfPayment: paymentPlanConvertedToClaimantFrequency.calculatePaymentLength()
         }
+        return courtCalculatedPaymentIntention
       }
 
-      if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
         const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-        const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
-
-        courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
+        courtCalculatedPaymentIntention.paymentDate = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
-      }
 
-      return courtCalculatedPaymentIntention
+        return courtCalculatedPaymentIntention
+      }
     }
 
     if (decisionType === DecisionType.DEFENDANT) {

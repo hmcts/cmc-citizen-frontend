@@ -40,7 +40,16 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
 
     switch (courtDecision) {
-      case DecisionType.COURT:
+      case DecisionType.COURT: {
+        if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
+        }
+
+        if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
+          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+        }
+        break
+      }
       case DecisionType.DEFENDANT: {
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
           return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
@@ -74,12 +83,12 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
       const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
       const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
 
-      if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
         courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
 
-      if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
         const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
         const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
