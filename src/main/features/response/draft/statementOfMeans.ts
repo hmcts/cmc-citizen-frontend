@@ -23,6 +23,7 @@ import { PartnerSevereDisability } from 'response/form/models/statement-of-means
 import { DependantsDisability } from 'response/form/models/statement-of-means/dependantsDisability'
 import { OtherDependantsDisability } from 'response/form/models/statement-of-means/otherDependantsDisability'
 import { Carer } from 'response/form/models/statement-of-means/carer'
+import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 
 export class StatementOfMeans {
   residence?: Residence
@@ -50,6 +51,7 @@ export class StatementOfMeans {
   dependantsDisability?: DependantsDisability
   otherDependantsDisability?: OtherDependantsDisability
   carer?: Carer
+  priorityDebt?: PriorityDebt
 
   deserialize (input: any): StatementOfMeans {
     if (input) {
@@ -78,6 +80,7 @@ export class StatementOfMeans {
       this.dependantsDisability = new DependantsDisability(input.dependantsDisability && input.dependantsDisability.option)
       this.otherDependantsDisability = new OtherDependantsDisability(input.otherDependantsDisability && input.otherDependantsDisability.option)
       this.carer = new Carer(input.carer && input.carer.option)
+      this.priorityDebt = new PriorityDebt().deserialize(input.priorityDebt)
     }
     return this
   }
