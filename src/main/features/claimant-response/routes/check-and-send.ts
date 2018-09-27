@@ -45,7 +45,7 @@ export default express.Router()
         switch (draft.document.formaliseRepaymentPlan.option) {
           case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
             const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
-            await CCJClient.request(claim.externalId, countyCourtJudgment, user)
+            await CCJClient.request(claim.externalId, countyCourtJudgment, user, true)
             break
           case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
             const settlement: Settlement = prepareSettlement(claim, draft.document)
