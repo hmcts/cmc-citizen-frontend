@@ -74,7 +74,7 @@ export class Settlement {
   }
 
   isThroughAdmissionsAndSettled (): boolean {
-    return this.partyStatements.some(statement => statement.type === 'COUNTERSIGNATURE') && this.isThroughAdmissions()
+    return this.partyStatements && this.partyStatements.some(statement => statement.type === 'COUNTERSIGNATURE') && this.isThroughAdmissions()
   }
 
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
