@@ -41,22 +41,15 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
     switch (courtDecision) {
       case DecisionType.COURT: {
-        if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
-          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
-        }
-
-        if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
-          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
-        }
-        break
+        return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
       }
       case DecisionType.DEFENDANT: {
-        if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
-        }
-
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
           return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+        }
+
+        if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
         }
         break
       }
