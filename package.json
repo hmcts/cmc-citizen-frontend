@@ -23,9 +23,7 @@
     "test:integration-debug": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
     "test:cross-browser": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run --verbose --config saucelabs.conf.js --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
-    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/**,src/main/features/claimant-response/routes/*  -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
-    "precommit": "yarn lint",
-    "prepush": "yarn test && yarn test:routes"
+    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/**,src/main/features/claimant-response/routes/*  -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info"
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.51.1",
@@ -104,7 +102,7 @@
     "@types/sinon-chai": "^3.2.0",
     "@types/supertest": "*",
     "HTML_CodeSniffer": "https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz",
-    "chai": "^4.1.1",
+    "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "^3.1.0",
     "codeceptjs": "^1.4.2",
@@ -156,5 +154,11 @@
     ],
     "report-dir": "coverage-report",
     "all": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint",
+      "pre-push": "yarn test && yarn test:routes"
+    }
   }
 }
