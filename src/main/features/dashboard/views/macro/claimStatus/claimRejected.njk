@@ -53,7 +53,7 @@
   {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
 
   <p>{{ t('Your claim will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
-        { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+        { deadline: claim.responseDeadline | date }) }}</p>
 
   <p>
     {{ _downloadResponseLink(claim, 'Download their response') }}
@@ -73,7 +73,7 @@
   {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
 
   <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
-        { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+        { deadline: claim.responseDeadline | date }) }}</p>
 
   <p>
     {{ _downloadResponseLink(claim, 'Download your response') }}

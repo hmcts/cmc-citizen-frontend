@@ -34,7 +34,7 @@
   <p>
     {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.', { respondDate: claim.respondToResponseDeadline | date}) }}
   </p>
-  {{ _respond(claim, 'Respond') }}
+  {{ _respond(claim, 'View and Respond') }}
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}

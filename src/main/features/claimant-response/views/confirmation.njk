@@ -41,7 +41,6 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-
       {% if claim.countyCourtJudgmentIssuedAt %}
         {% if paymentIntentionAccepted %}
           <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
@@ -51,7 +50,7 @@
       {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
         {% include "./confirmation/accepted-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
-        {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
+        {% include "./confirmation/proposed-alternateayment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
       {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
@@ -60,8 +59,12 @@
         <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
         <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
-        <p>{{ t('The court will review the case. You might have to go to a hearing.') }}</p>
-        <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+        <p>
+          {{ t('You need to')}}
+          <a href="{{ DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }}">
+             {{ t('complete a directions questionnaire form ')}}</a> {{ t('to tell us more about the claim.')}}
+        </p>
+        <p>{{ t('Your claim wont proceed if you dont complete and return the form before ') + claim.responseDeadline | date + '.' }}</p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}
