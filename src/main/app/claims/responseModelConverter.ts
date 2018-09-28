@@ -186,11 +186,11 @@ export class ResponseModelConverter {
       },
       dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.otherDependants.declared ? {
         children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
-        otherDependants: {
-          numberOfPeople: draft.statementOfMeans.otherDependants.declared ? draft.statementOfMeans.otherDependants.numberOfPeople.value : 0,
+        otherDependants: draft.statementOfMeans.otherDependants.declared ? {
+          numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople ? draft.statementOfMeans.otherDependants.numberOfPeople.value : 0,
           details: draft.statementOfMeans.otherDependants.numberOfPeople.details || undefined,
-          anyDisabled: draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES
-        },
+          anyDisabled: draft.statementOfMeans.otherDependantsDisability && draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES
+        } : undefined,
         anyDisabledChildren: draft.statementOfMeans.dependantsDisability && draft.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES
       } : undefined,
       partner: {
