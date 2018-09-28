@@ -2,13 +2,13 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 
-const buttons = {
+const button = {
   submit: 'input[type=submit]'
 }
 
 export class ClaimantDefendantResponsePage {
 
-  buttons (): void {
-    I.click(buttons.submit)
+  Submit (): void {
+    I.click(button.submit)
   }
 }

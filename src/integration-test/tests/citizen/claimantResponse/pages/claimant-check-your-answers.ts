@@ -2,14 +2,14 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 
-const SubmitResponseButton = {
+const submitResponseButton = {
   submit: 'input[type=submit]'
 }
 
 export class ClaimantCheckYourAnswersPage {
 
   submitResponse (): void {
-    I.click(SubmitResponseButton.submit)
+    I.click(submitResponseButton.submit)
   }
 
   verifyClaimantResponseToAcceptingPartAdmissionImmediatelyOffer (): void {

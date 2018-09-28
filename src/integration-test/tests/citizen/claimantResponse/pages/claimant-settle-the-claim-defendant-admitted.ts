@@ -2,9 +2,9 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 
-const fields = {
-  yes: 'input[id=admittedyes]',
-  no: 'input[id=admittedno]'
+const radioButtons = {
+  optionYes: 'input[id=admittedyes]',
+  optionNo: 'input[id=admittedno]'
 }
 
 const buttons = {
@@ -14,12 +14,12 @@ const buttons = {
 export class ClaimantSettleTheClaimDefendantAdmittedPage {
 
   selectAdmittedYes (): void {
-    I.checkOption(fields.yes)
+    I.checkOption(radioButtons.optionYes)
     I.click(buttons.submit)
   }
 
   selectAdmittedNo (): void {
-    I.checkOption(fields.no)
+    I.checkOption(radioButtons.optionNo)
     I.click(buttons.submit)
   }
 }
