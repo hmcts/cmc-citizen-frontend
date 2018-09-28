@@ -8,7 +8,7 @@ const viewAndRespondButton = {
 
 export class ClaimantClaimStatusPage {
 
-  buttons (): void {
+  viewAndRespondButton (): void {
     I.click(viewAndRespondButton.submit)
   }
 }
