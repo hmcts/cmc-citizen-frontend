@@ -19,7 +19,12 @@
         {% elseif paymentOption === domain.PaymentOption.INSTALMENTS and paymentPlan is defined %}
           {{
           repaymentPlanBlock(
-            paymentPlan = paymentPlan
+            heading = '',
+            instalmentAmount = instalmentAmount,
+            paymentSchedule = paymentSchedule,
+            firstPaymentDate = firstPaymentDate,
+            lastPaymentOn = lastPaymentOn,
+            lengthOfPayment = lengthOfPayment
           )
           }}
         {% endif %}

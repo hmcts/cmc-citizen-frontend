@@ -17,7 +17,7 @@ import { YourDetails } from 'response/tasks/yourDetails'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
-import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { isPastDeadline } from 'claims/isPastDeadline'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
@@ -41,7 +41,7 @@ export class TaskListBuilder {
       )
     )
 
-    if (!isPastResponseDeadline(now, claim.responseDeadline)) {
+    if (!isPastDeadline(now, claim.responseDeadline)) {
       tasks.push(
         new TaskListItem(
           'Do you want more time to respond?',
