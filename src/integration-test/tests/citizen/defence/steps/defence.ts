@@ -38,6 +38,7 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
 import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
 import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
+import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -70,7 +71,7 @@ const defendantSteps: DefendantSteps = new DefendantSteps()
 const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
 const defendantHowMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
 const haveYouPaidTheClaimantPage: DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage = new DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage()
-
+const defendantHowMuchYouOwePage: DefendantHowMuchYouOwePage = new DefendantHowMuchYouOwePage()
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'BS1 5TL' }
 
 const defendantRepaymentPlan: PaymentPlan = {
@@ -350,6 +351,9 @@ export class DefenceSteps {
 
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitPartOfMoneyClaim()
+  }
+
+  partialPaymentMade (defendantType: PartyType): void {
     I.see('Have you paid the claimant the amount you admit you owe?')
     haveYouPaidTheClaimantPage.selectYesOption()
     defendantSteps.selectTaskHowMuchHaveYouPaid()
@@ -364,6 +368,46 @@ export class DefenceSteps {
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
 
+    I.see('You’ve submitted your response')
+  }
+
+  partialPaymentNotMade (defendantType: PartyType, paymentOption: PaymentOption): void {
+    I.see('Have you paid the claimant the amount you admit you owe?')
+    haveYouPaidTheClaimantPage.selectNoOption()
+    defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
+    defendantHowMuchYouOwePage.enterAmountOwed(10)
+    defendantTaskListPage.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+    defendantYourDefencePage.enterYourDefence('random text')
+    this.addTimeLineOfEvents(defence.timeline)
+    this.enterEvidence('description', 'They do not have evidence')
+    defendantTaskListPage.selectTaskWhenWillYouPay()
+    switch (paymentOption) {
+      case PaymentOption.IMMEDIATELY:
+        defendantWhenWillYouPage.chooseImmediately()
+        break
+      case PaymentOption.BY_SET_DATE:
+        defendantWhenWillYouPage.chooseFullBySetDate()
+        defendantPaymentDatePage.enterDate('2025-01-01')
+        defendantPaymentDatePage.saveAndContinue()
+        defendantTaskListPage.selectShareYourFinancialDetailsTask()
+        statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
+        break
+      case PaymentOption.INSTALMENTS:
+        defendantWhenWillYouPage.chooseInstalments()
+        defendantTaskListPage.selectYourRepaymentPlanTask()
+        defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
+        defendantPaymentPlanPage.saveAndContinue()
+        defendantTaskListPage.selectShareYourFinancialDetailsTask()
+        statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+        break
+      default:
+        throw new Error(`Unknown payment option: ${paymentOption}`)
+    }
+
+    defendantTaskListPage.selectTaskFreeMediation()
+    defendantFreeMediationPage.chooseNo()
+    defendantTaskListPage.selectTaskCheckAndSendYourResponse()
+    this.checkAndSendAndSubmit(defendantType)
     I.see('You’ve submitted your response')
   }
 
