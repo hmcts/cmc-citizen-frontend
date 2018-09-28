@@ -13,6 +13,7 @@ import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
+import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { SevereDisability } from 'response/form/models/statement-of-means/severeDisability'
 import { Cohabiting } from 'response/form/models/statement-of-means/cohabiting'
@@ -40,6 +41,7 @@ export class StatementOfMeans {
   monthlyExpenses?: MonthlyExpenses
   courtOrders?: CourtOrders
   explanation?: Explanation
+  priorityDebt?: PriorityDebt
   disability?: Disability
   severeDisability?: SevereDisability
   cohabiting?: Cohabiting
@@ -68,6 +70,7 @@ export class StatementOfMeans {
       this.monthlyExpenses = new MonthlyExpenses().deserialize(input.monthlyExpenses)
       this.courtOrders = new CourtOrders().deserialize(input.courtOrders)
       this.explanation = new Explanation().deserialize(input.explanation)
+      this.priorityDebt = new PriorityDebt().deserialize(input.priorityDebt)
       this.disability = new Disability(input.disability && input.disability.option)
       this.severeDisability = new SevereDisability(input.severeDisability && input.severeDisability.option)
       this.cohabiting = new Cohabiting(input.cohabiting && input.cohabiting.option)

@@ -50,6 +50,7 @@ export class StatementOfMeansPaths {
   static readonly debtsPage = new RoutablePath(`${statementOfMeansPath}/debts`)
   static readonly courtOrdersPage = new RoutablePath(`${statementOfMeansPath}/court-orders`)
   static readonly explanationPage = new RoutablePath(`${statementOfMeansPath}/explanation`)
+  static readonly priorityDebtsPage = new RoutablePath(`${statementOfMeansPath}/priority-debts`)
   static readonly disabilityPage = new RoutablePath(`${statementOfMeansPath}/disability`)
   static readonly severeDisabilityPage = new RoutablePath(`${statementOfMeansPath}/severe-disability`)
   static readonly partnerPage = new RoutablePath(`${statementOfMeansPath}/partner/partner`)

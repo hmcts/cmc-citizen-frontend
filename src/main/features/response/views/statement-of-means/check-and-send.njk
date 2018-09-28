@@ -217,6 +217,61 @@
   {% endfor %}
 {% endif %}
 
+{% set priorityDebt = draft.statementOfMeans.priorityDebt %}
+{% set priorityDebtCount = 1 %}
+{{ row('Debts you are behind on', '', StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
+{% if priorityDebt.mortgage.populated %}
+  {{ row(priorityDebtCount + '. Debt Type', PriorityDebtType.MORTGAGE.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
+  {{ row('Arrears repayment', priorityDebt.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {% set priorityDebtCount = priorityDebtCount + 1 %}
+{% endif %}
+{% if priorityDebt.rent.populated %}
+  {{ row(priorityDebtCount + '. Debt Type', PriorityDebtType.RENT.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
+  {{ row('Arrears repayment', priorityDebt.rent.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {% set priorityDebtCount = priorityDebtCount + 1 %}
+{% endif %}
+{% if priorityDebt.councilTax.populated %}
+  {{ row(priorityDebtCount + '. Debt Type', PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
+  {{ row('Arrears repayment', priorityDebt.councilTax.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {% set priorityDebtCount = priorityDebtCount + 1 %}
+{% endif %}
+{% if priorityDebt.gas.populated %}
+  {{ row(priorityDebtCount + '. Debt Type', PriorityDebtType.GAS.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
+  {{ row('Arrears repayment', priorityDebt.gas.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {% set priorityDebtCount = priorityDebtCount + 1 %}
+{% endif %}
+{% if priorityDebt.electricity.populated %}
+  {{ row(priorityDebtCount + '. Debt Type', PriorityDebtType.ELECTRICITY.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
+  {{ row('Arrears repayment', priorityDebt.electricity.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {% set priorityDebtCount = priorityDebtCount + 1 %}
+{% endif %}
+{% if priorityDebt.water.populated %}
+  {{ row(priorityDebtCount + '. Debt Type', PriorityDebtType.WATER.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
+  {{ row('Arrears repayment', priorityDebt.water.amount | numeral, '', bottomBorder = false, bold = true) }}
+  {% set priorityDebtCount = priorityDebtCount + 1 %}
+{% endif %}
+{% if priorityDebt.maintenance.populated %}
+  {{ row(priorityDebtCount + '. Debt Type', PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue | capitalize, '', bottomBorder = false, bold = true) }}
+  {{ row('Arrears repayment', priorityDebt.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
+{% endif %}
+
+
+{{ row('Debts', '', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
+{{ row('Do you have any debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', '', not draft.statementOfMeans.debts.declared, bold = true) }}
+{% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
+{% set indexOfLastRow = debtRows.length - 1 %}
+
+{% for debtRow in debtRows %}
+    {% if debtRows.length === 1 %}
+      {{ row('Debt' , debtRow.debt, '', false, bold = true ) }}
+    {% else %}
+      {{ row(loop.index0 + 1 + '. Debt' , debtRow.debt, '', false, bold = true ) }}
+    {% endif %}
+
+  {{ row('Total owed', debtRow.totalOwed | numeral, '', false, bold = true) }}
+  {{ row('Monthly Payments', debtRow.monthlyPayments | numeral, '', loop.index0 === indexOfLastRow, bold = true ) }}
+{% endfor %}
+
 {% set income = draft.statementOfMeans.monthlyIncome %}
 {{ row('Monthly income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
 {% if income.salarySource.populated %}
