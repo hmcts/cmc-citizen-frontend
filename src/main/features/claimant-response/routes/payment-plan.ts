@@ -172,13 +172,5 @@ export default new PaymentPlanPage()
       }
 
       next()
-    },
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const claim: Claim = res.locals.claim
-      const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
-      res.locals.statementOfMeans = response.statementOfMeans
-
-      next()
     }
   )

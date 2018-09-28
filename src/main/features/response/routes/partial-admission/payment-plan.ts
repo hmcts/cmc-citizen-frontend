@@ -36,9 +36,4 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<ResponseDraft> {
 
 /* tslint:disable:no-default-export */
 export default new PaymentPlanPage()
-  .buildRouter(partialAdmissionPath,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
-    (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      next()
-    }
-  )
+  .buildRouter(partialAdmissionPath, OptInFeatureToggleGuard.featureEnabledGuard('admissions'))
