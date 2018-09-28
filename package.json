@@ -28,7 +28,7 @@
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.51.1",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
-    "@hmcts/cmc-validators": "^0.1.9",
+    "@hmcts/cmc-validators": "^0.2.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.4.5",
@@ -53,7 +53,7 @@
     "body-parser": "^1.18.3",
     "build-url": "^1.2.0",
     "class-transformer": "^0.1.7",
-    "class-validator": "^0.8.1",
+    "class-validator": "^0.9.1",
     "classlist-polyfill": "^1.2.0",
     "config": "^2.0.0",
     "cookie-encrypter": "^1.0.1",
