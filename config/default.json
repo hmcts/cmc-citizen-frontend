@@ -1,4 +1,5 @@
 {
+  "meansAllowances": "{\"dependant\":[{\"item\":\"EACH\",\"monthly\":53.47,\"weekly\":12.34}],\"disability\":[{\"item\":\"DEFENDANT_ONLY\",\"monthly\":187.24,\"weekly\":43.21},{\"item\":\"DEFENDANT_AND_PARTNER\",\"monthly\":374.48,\"weekly\":86.42},{\"item\":\"DEFENDANT_ONLY_SEVERE\",\"monthly\":246.05,\"weekly\":56.78},{\"item\":\"DEFENDANT_AND_PARTNER_SEVERE\",\"monthly\":492.09,\"weekly\":113.56},{\"item\":\"DEPENDANT\",\"monthly\":246.05,\"weekly\":56.78},{\"item\":\"CARER\",\"monthly\":144.43,\"weekly\":33.33}],\"pensioner\":[{\"item\":\"DEFENDANT_ONLY\",\"monthly\":433.33,\"weekly\":100},{\"item\":\"DEFENDANT_AND_PARTNER\",\"monthly\":650,\"weekly\":150}],\"personal\":[{\"item\":\"SINGLE_18_TO_24\",\"monthly\":240.72,\"weekly\":55.55},{\"item\":\"SINGLE_OVER_25\",\"monthly\":337,\"weekly\":77.77},{\"item\":\"DEFENDANT_UNDER_25_PARTNER_UNDER_18\",\"monthly\":288.86,\"weekly\":66.66},{\"item\":\"DEFENDANT_OVER_25_PARTNER_UNDER_18\",\"monthly\":334.14,\"weekly\":77.11},{\"item\":\"DEFENDANT_AND_PARTNER_OVER_18\",\"monthly\":534.95,\"weekly\":123.45}]}",
   "security": {
     "referrerPolicy": "origin"
   },

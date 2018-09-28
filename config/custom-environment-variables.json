@@ -1,4 +1,5 @@
 {
+  "meansAllowances": "MEANS_ALLOWANCE_JSON_BLOB",
   "security": {
     "referrerPolicy": "SECURITY_REFERRER_POLICY",
     "hpkp": {

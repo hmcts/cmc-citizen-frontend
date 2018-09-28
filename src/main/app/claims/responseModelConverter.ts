@@ -52,6 +52,8 @@ import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { Claim } from 'claims/models/claim'
+import { DependantsDisabilityOption } from 'response/form/models/statement-of-means/dependantsDisability'
+import { OtherDependantsDisabilityOption } from 'response/form/models/statement-of-means/otherDependantsDisability'
 
 export class ResponseModelConverter {
 
@@ -177,9 +179,11 @@ export class ResponseModelConverter {
       dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
         children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
         numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
+        anyDisabledChildren: draft.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES ? true : false,
         otherDependants: draft.statementOfMeans.otherDependants.declared ? {
           numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople.value,
-          details: draft.statementOfMeans.otherDependants.numberOfPeople.details
+          details: draft.statementOfMeans.otherDependants.numberOfPeople.details,
+          anyDisabled: draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES ? true : false
         } : undefined
       } : undefined,
       employment: {
