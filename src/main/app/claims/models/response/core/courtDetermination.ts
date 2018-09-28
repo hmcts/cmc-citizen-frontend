@@ -2,7 +2,8 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 export class CourtDetermination {
 
-  courtCalculatedPaymentIntention: PaymentIntention
+  courtDecision: PaymentIntention
   rejectionReason?: string
+  disposableIncome: number
 
 }

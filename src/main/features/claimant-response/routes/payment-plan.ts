@@ -85,7 +85,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
+          paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
 
         return courtCalculatedPaymentIntention
@@ -95,7 +95,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: claimantEnteredPaymentPlan.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(claimantEnteredPaymentPlan.frequency),
           completionDate: claimantEnteredPaymentPlan.calculateLastPaymentDate(),
-          lengthOfPayment: claimantEnteredPaymentPlan.calculatePaymentLength()
+          paymentLength: claimantEnteredPaymentPlan.calculatePaymentLength()
         }
 
         return courtCalculatedPaymentIntention
@@ -113,7 +113,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
         instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
         paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
         completionDate: paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate(),
-        lengthOfPayment: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
+        paymentLength: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
       }
 
       return courtCalculatedPaymentIntention
@@ -129,7 +129,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanFromDefendant.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendant.frequency),
           completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendant.calculatePaymentLength()
+          paymentLength: paymentPlanFromDefendant.calculatePaymentLength()
         }
         courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
         courtCalculatedPaymentIntention.paymentOption = claimResponse.paymentIntention.paymentOption
@@ -146,7 +146,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanFromDefendantFinancialStatement.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
           completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
+          paymentLength: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
         }
       }
 

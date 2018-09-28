@@ -1,7 +1,13 @@
+import { ClaimantResponse } from 'claims/models/response/core/claimantResponse'
 
-export class ResponseRejection {
-
+export class ResponseRejection implements ClaimantResponse {
+  type: string
+  amountPaid: number
   freeMediation: boolean
-  reason: string
+  reason?: string
+
+  constructor () {
+    this.type = 'rejection'
+  }
 
 }
