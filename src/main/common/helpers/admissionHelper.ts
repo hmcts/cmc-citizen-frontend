@@ -2,7 +2,6 @@ import { Claim } from 'claims/models/claim'
 import { ResponseType } from 'claims/models/response/responseType'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { Error } from 'tslint/lib/error'
 
 export class AdmissionHelper {
   static getAdmittedAmount (claim: Claim): number {
