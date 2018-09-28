@@ -39,7 +39,7 @@ export class ClaimantResponseConverter {
     } else throw new Error('Unknown state of draftClaimantResponse')
   }
 
-  public static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {
+  private static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {
     const respAcceptance: ResponseAcceptance = new ResponseAcceptance()
     if (draftClaimantResponse.paidAmount) {
       respAcceptance.amountPaid = draftClaimantResponse.paidAmount.amount
@@ -54,7 +54,7 @@ export class ClaimantResponseConverter {
     return respAcceptance
   }
 
-  public static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
+  private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
     const courtDetermination: CourtDetermination = new CourtDetermination()
     courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
     if (draftClaimantResponse.rejectionReason) {
@@ -64,7 +64,7 @@ export class ClaimantResponseConverter {
     return courtDetermination
   }
 
-  public static getFormaliseOption (repaymentPlan: FormaliseRepaymentPlan): string {
+  private static getFormaliseOption (repaymentPlan: FormaliseRepaymentPlan): string {
     switch (repaymentPlan.option) {
       case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT :
         return 'SETTLEMENT'
