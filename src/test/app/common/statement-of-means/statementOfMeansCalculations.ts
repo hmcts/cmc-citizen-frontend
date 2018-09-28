@@ -64,9 +64,6 @@ describe('StatementOfMeansCalculations', () => {
       })
     })
 
-    // debts
-    // priority debts
-    // expenses
     describe('when allowance lookup is provided', () => {
       beforeEach(() => {
         statementOfMeansCalculations = new StatementOfMeansCalculations(PartyType.INDIVIDUAL.value, MomentFactory.parse('1999-01-01'), sampleAllowanceData)
