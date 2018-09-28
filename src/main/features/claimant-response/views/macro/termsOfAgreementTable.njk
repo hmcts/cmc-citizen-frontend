@@ -4,7 +4,7 @@
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
 
-    {% if courtOfferedPaymentIntention.paymentOption.value === PaymentType.BY_SPECIFIED_DATE.value %}
+    {% if courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
       {% set amountToPay = 'the full amount' %}
       {% if response.responseType == ResponseType.PART_ADMISSION.value %}
         {% set amountToPay = totalAmount | numeral %}
@@ -13,7 +13,7 @@
         { defendantFullName: response.defendant.name, paymentDate: courtOfferedPaymentIntention.paymentDate | date }
       )) }}
       {{ row('Completion date', courtOfferedPaymentIntention.paymentDate | date) }}
-    {% elseif courtOfferedPaymentIntention.paymentOption.value === PaymentType.INSTALMENTS.value %}
+    {% elseif courtOfferedPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
       {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
         { defendantFullName: response.defendant.name,
           instalmentAmount: courtOfferedPaymentIntention.repaymentPlan.instalmentAmount | numeral,
