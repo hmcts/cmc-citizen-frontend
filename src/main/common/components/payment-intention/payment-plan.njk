@@ -14,14 +14,6 @@
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
-      {% if monthlyIncomeAmount and monthlyExpensesAmount %}
-        <h2 class="heading-small">Your finances</h2>
-        <p>{{ t('Your total monthly income is {{ monthlyIncomeAmount }}',
-            { monthlyIncomeAmount: monthlyIncomeAmount | numeral }) }}</p>
-        <p>{{ t('Your total monthly expenses is {{ monthlyExpensesAmount }}',
-            { monthlyExpensesAmount: monthlyExpensesAmount | numeral }) }}</p>
-      {% endif %}
-
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
 
       {{ poundInput('Regular payments of:', 'instalmentAmount', form, 'For example, £200', bold = true) }}

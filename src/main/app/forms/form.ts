@@ -33,7 +33,8 @@ export class FormValidationError extends ValidationError {
   message: string
 
   constructor (error: ValidationError, parentProperty?: string) {
-    super() && Object.assign(this, error)
+    super()
+    Object.assign(this, error)
 
     this.property = parentProperty ? `${parentProperty}.${this.property}` : this.property
     this.fieldName = Converter.asFieldName(this.property)

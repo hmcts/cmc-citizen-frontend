@@ -12,7 +12,6 @@ import { ResponseDraft } from 'features/response/draft/responseDraft'
 
 import { PaymentPlan as DraftPaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
 import { PaymentPlan as FormPaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
-import { Error } from 'tslint/lib/error'
 import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
