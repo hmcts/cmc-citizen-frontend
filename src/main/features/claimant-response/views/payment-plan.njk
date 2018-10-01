@@ -17,16 +17,6 @@
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
-      <h2 class="heading-small">{{ t('Their finances') }}</h2>
-      <p>{{ t('Their total monthly income is {{ monthlyIncomeAmount }}',
-          { monthlyIncomeAmount: monthlyIncomeAmount | numeral }) }}</p>
-      <p>{{ t('Their total monthly expenses are {{ monthlyExpensesAmount }}',
-          { monthlyExpensesAmount: monthlyExpensesAmount | numeral }) }}</p>
-
-      {% if not claim.claimData.defendant.isBusiness %}
-        {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
-      {% endif %}
-
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
       {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
 
