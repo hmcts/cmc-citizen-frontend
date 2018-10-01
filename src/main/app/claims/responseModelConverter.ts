@@ -287,7 +287,7 @@ export class ResponseModelConverter {
     return party
   }
 
-  public static convertPaymentIntention (paymentIntention: PaymentIntentionDraft): PaymentIntention {
+  private static convertPaymentIntention (paymentIntention: PaymentIntentionDraft): PaymentIntention {
     return {
       paymentOption: paymentIntention.paymentOption.option.value as PaymentOption,
       paymentDate: this.convertPaymentDate(paymentIntention.paymentOption, paymentIntention.paymentDate),

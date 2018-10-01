@@ -11,7 +11,11 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { DecisionType } from 'common/court-calculations/courtDetermination'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { intentionOfImmediatePayment, intentionOfPaymentByInstallments, intentionOfPaymentInFullBySetDate } from '../../../data/draft/paymentIntentionDraft'
+import {
+  intentionOfImmediatePayment,
+  intentionOfPaymentByInstallments,
+  intentionOfPaymentInFullBySetDate
+} from '../../../data/draft/paymentIntentionDraft'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
@@ -110,7 +114,7 @@ describe('claimant response converter ',() => {
         'type': 'acceptation',
         'amountPaid': 10,
         'formaliseOption': 'CCJ',
-        'determinationDecisionType': 'DEFENDANT'
+        'decisionType': 'DEFENDANT'
       })
 
     })
@@ -123,7 +127,7 @@ describe('claimant response converter ',() => {
         'type': 'acceptation',
         'amountPaid': 10,
         'formaliseOption': 'SETTLEMENT',
-        'determinationDecisionType': 'DEFENDANT'
+        'decisionType': 'DEFENDANT'
       })
 
     })
@@ -156,7 +160,7 @@ describe('claimant response converter ',() => {
             'disposableIncome': 200
           },
           'formaliseOption': 'CCJ',
-          'determinationDecisionType': 'COURT'
+          'decisionType': 'COURT'
         })
     })
 
@@ -174,7 +178,7 @@ describe('claimant response converter ',() => {
             'disposableIncome': 200
           },
           'formaliseOption': 'CCJ',
-          'determinationDecisionType': 'DEFENDANT'
+          'decisionType': 'DEFENDANT'
         })
     })
 
@@ -196,12 +200,12 @@ describe('claimant response converter ',() => {
             'disposableIncome': 200
           },
           'formaliseOption': 'CCJ',
-          'determinationDecisionType': 'CLAIMANT'
+          'decisionType': 'CLAIMANT'
         })
     })
 
     it(' Reject court decision and refer to judge ', () => {
-      const dcr = createDCRWithCourtDecisionType(intentionOfImmediatePayment,DecisionType.COURT,FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
+      const dcr = createDCRWithCourtDecisionType(intentionOfImmediatePayment,DecisionType.COURT,FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
       dcr.rejectionReason = new RejectionReason('rejected reason')
       expect(converter.covertToClaimantResponse(dcr)).to.deep.eq(
         {
@@ -215,8 +219,8 @@ describe('claimant response converter ',() => {
             'disposableIncome': 200,
             'rejectionReason': 'rejected reason'
           },
-          'formaliseOption': 'CCJ',
-          'determinationDecisionType': 'COURT'
+          'formaliseOption': 'REFER_TO_JUDGE',
+          'decisionType': 'COURT'
         })
     })
 

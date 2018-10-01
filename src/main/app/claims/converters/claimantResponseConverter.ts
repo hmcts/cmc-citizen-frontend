@@ -45,7 +45,7 @@ export class ClaimantResponseConverter {
       respAcceptance.amountPaid = draftClaimantResponse.paidAmount.amount
     }
     respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
-    respAcceptance.determinationDecisionType = draftClaimantResponse.courtDecisionType
+    respAcceptance.decisionType = draftClaimantResponse.courtDecisionType
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.YES) {
       return respAcceptance
     }
@@ -70,6 +70,8 @@ export class ClaimantResponseConverter {
         return 'SETTLEMENT'
       case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT :
         return 'CCJ'
+      case FormaliseRepaymentPlanOption.REFER_TO_JUDGE :
+        return 'REFER_TO_JUDGE'
       default:
         throw new Error(`Unknown formalise repayment option ${repaymentPlan.option.value}`)
     }
@@ -99,7 +101,7 @@ export class ClaimantResponseConverter {
       case PaymentType.BY_SET_DATE:
         return paymentDate.date.toMoment()
       default:
-        return undefined
+        throw new Error(`Unknown value in paymentOption ${paymentOption.option.value}`)
     }
   }
 

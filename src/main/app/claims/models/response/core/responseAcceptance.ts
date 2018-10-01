@@ -6,7 +6,7 @@ export class ResponseAcceptance implements ClaimantResponse {
   type: string
   amountPaid: number
   formaliseOption: string
-  determinationDecisionType: string
+  decisionType: string
   claimantPaymentIntention?: PaymentIntention
   courtDetermination?: CourtDetermination
 
