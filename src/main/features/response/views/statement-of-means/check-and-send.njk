@@ -192,6 +192,7 @@
 {% endif %}
 
 {{ row('Do you have loans or credit card debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = not draft.statementOfMeans.debts.declared, bold = true, topBorder = true) }}
+
 {% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = debtRows.length - 1 %}
 
