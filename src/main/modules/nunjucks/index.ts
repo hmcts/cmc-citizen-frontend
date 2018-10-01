@@ -41,8 +41,8 @@ import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
-import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 import { Disability } from 'response/form/models/statement-of-means/disability'
+import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 
 const packageDotJson = require('../../../../package.json')
 
