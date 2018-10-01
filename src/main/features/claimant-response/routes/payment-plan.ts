@@ -25,6 +25,7 @@ import { Frequency } from 'common/frequency/frequency'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
+import { Moment } from 'moment'
 
 class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   getView (): string {
