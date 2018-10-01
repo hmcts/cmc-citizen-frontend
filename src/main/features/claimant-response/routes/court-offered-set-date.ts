@@ -13,15 +13,33 @@ import { Claim } from 'main/app/claims/models/claim'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 import { YesNoOption } from 'models/yesNoOption'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
+import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { Moment } from 'moment'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+
+function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse): Moment {
+  switch (draft.document.courtDecisionType) {
+    case DecisionType.DEFENDANT:
+      return claimResponse.paymentIntention.paymentDate
+    case DecisionType.COURT:
+      return draft.document.courtOfferedPaymentIntention.paymentDate
+    case DecisionType.CLAIMANT:
+      return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+  }
+}
 
 function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
+  const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+  const payBySetDate = getPayBySetDate(draft, claimResponse)
 
   res.render(Paths.courtOfferedSetDatePage.associatedView, {
     form: form,
     claim: claim,
-    paymentDate: draft.document.courtOfferedPaymentIntention.paymentDate
+    paymentDate: payBySetDate
   })
 }
 
