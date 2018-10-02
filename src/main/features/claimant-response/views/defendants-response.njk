@@ -125,7 +125,6 @@
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-          {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
         {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
@@ -172,7 +171,6 @@
 
             {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-            {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
           {% endif %}
         {% endif %}
       {% endif %}
