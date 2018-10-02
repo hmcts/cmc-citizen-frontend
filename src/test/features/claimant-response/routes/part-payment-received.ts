@@ -124,13 +124,13 @@ describe('Claimant Response: part payment received page', () => {
 
         })
 
-        it('should redirect to the reject reason page when no is selected', async () => {
+        it('should redirect to the task list page when no is selected', async () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ received: 'no' })
             .expect(res => expect(res).to.be.redirect
-              .toLocation(Paths.rejectionReasonPage.evaluateUri({ externalId: externalId })))
+              .toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
         })
       })
     })

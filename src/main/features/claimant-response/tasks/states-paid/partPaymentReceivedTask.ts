@@ -5,6 +5,10 @@ const validator = new Validator()
 
 export class PartPaymentReceivedTask {
   static isCompleted (value: DraftClaimantResponse): boolean {
-    return value.partPaymentReceived && validator.validateSync(value.partPaymentReceived).length === 0
+    if (!value.partPaymentReceived) {
+      return false
+    }
+
+    return validator.validateSync(value.partPaymentReceived).length === 0
   }
 }

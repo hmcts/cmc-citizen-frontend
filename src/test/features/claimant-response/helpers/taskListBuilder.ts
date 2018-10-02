@@ -68,7 +68,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
           expect(taskList.tasks.find(
-            task => task.name === `Have you been paid ${ NumberFormatter.formatMoney(amount)}?`))
+            task => task.name === `Have you been paid the ${ NumberFormatter.formatMoney(amount)}?`))
             .to.not.be.undefined
         })
       })
@@ -121,7 +121,8 @@ describe('Claimant response task list builder', () => {
             ...claimStoreServiceMock.sampleClaimObj,
             response: {
               ...partialAdmissionAlreadyPaidData,
-              amount: amount
+              amount: amount,
+              freeMediation: 'yes'
             }
           })
           draft = new DraftClaimantResponse().deserialize({
@@ -141,7 +142,8 @@ describe('Claimant response task list builder', () => {
             ...claimStoreServiceMock.sampleClaimObj,
             response: {
               ...partialAdmissionAlreadyPaidData,
-              amount: amount
+              amount: amount,
+              freeMediation: 'yes'
             }
           })
           draft = new DraftClaimantResponse().deserialize({
@@ -162,7 +164,8 @@ describe('Claimant response task list builder', () => {
             ...claimStoreServiceMock.sampleClaimObj,
             response: {
               ...partialAdmissionAlreadyPaidData,
-              amount: amount
+              amount: amount,
+              freeMediation: 'yes'
             }
           })
 

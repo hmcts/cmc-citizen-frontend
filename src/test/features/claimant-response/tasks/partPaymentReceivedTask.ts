@@ -21,13 +21,12 @@ describe('AcceptPaymentMethodTask', () => {
     expect(PartPaymentReceivedTask.isCompleted(draft)).to.be.false
   })
 
-  it('should not be completed when partPaymentReceived is set to no but reason is undefined', () => {
+  it('should be completed when partPaymentReceived is set to no but reason is undefined', () => {
     const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize(
       {
         partPaymentReceived: new PartPaymentReceived(YesNoOption.NO),
-        rejectionReason: undefined
       })
-    expect(PartPaymentReceivedTask.isCompleted(draft)).to.be.false
+    expect(PartPaymentReceivedTask.isCompleted(draft)).to.be.true
   })
 
   it('should be completed when partPaymentReceived option is selected as yes', () => {
