@@ -24,7 +24,7 @@ describe('AcceptPaymentMethodTask', () => {
   it('should be completed when partPaymentReceived is set to no but reason is undefined', () => {
     const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize(
       {
-        partPaymentReceived: new PartPaymentReceived(YesNoOption.NO),
+        partPaymentReceived: new PartPaymentReceived(YesNoOption.NO)
       })
     expect(PartPaymentReceivedTask.isCompleted(draft)).to.be.true
   })
