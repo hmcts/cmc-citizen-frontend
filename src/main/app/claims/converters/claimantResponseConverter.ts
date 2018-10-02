@@ -11,7 +11,10 @@ import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/pay
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { PaymentOption as PaymentOptionDraft, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import {
+  PaymentOption as PaymentOptionDraft,
+  PaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -22,33 +25,42 @@ export class ClaimantResponseConverter {
   public static covertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
 
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
-      let reject: ResponseRejection = new ResponseRejection()
-      if (draftClaimantResponse.paidAmount) {
-        reject.amountPaid = draftClaimantResponse.paidAmount.amount
-      }
-      if (draftClaimantResponse.freeMediation) {
-        reject.freeMediation = draftClaimantResponse.freeMediation.option === FreeMediationOption.YES
-      }
-      if (draftClaimantResponse.rejectionReason) {
-        reject.reason = draftClaimantResponse.rejectionReason.text
-      }
-      return reject
-    }
-    else if (draftClaimantResponse.formaliseRepaymentPlan && this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)) {
+      return this.createResponseRejection(draftClaimantResponse)
+    } else if (draftClaimantResponse.formaliseRepaymentPlan && this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)) {
       return this.createResponseAcceptance(draftClaimantResponse)
-    } else throw new Error('Unknown state of draftClaimantResponse')
+    } else {
+      throw new Error('Unknown state of draftClaimantResponse')
+    }
+  }
+
+  private static createResponseRejection (draftClaimantResponse: DraftClaimantResponse) {
+    const reject: ResponseRejection = new ResponseRejection()
+    if (draftClaimantResponse.paidAmount) {
+      reject.amountPaid = draftClaimantResponse.paidAmount.amount
+    }
+    if (draftClaimantResponse.freeMediation) {
+      reject.freeMediation = draftClaimantResponse.freeMediation.option === FreeMediationOption.YES
+    }
+    if (draftClaimantResponse.rejectionReason) {
+      reject.reason = draftClaimantResponse.rejectionReason.text
+    }
+    return reject
   }
 
   private static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {
     const respAcceptance: ResponseAcceptance = new ResponseAcceptance()
+
     if (draftClaimantResponse.paidAmount) {
       respAcceptance.amountPaid = draftClaimantResponse.paidAmount.amount
     }
+
     respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     respAcceptance.decisionType = draftClaimantResponse.courtDecisionType
+
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.YES) {
       return respAcceptance
     }
+
     respAcceptance.claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod)
     respAcceptance.courtDetermination = this.createCourtDetermination(draftClaimantResponse)
     return respAcceptance
@@ -57,9 +69,11 @@ export class ClaimantResponseConverter {
   private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
     const courtDetermination: CourtDetermination = new CourtDetermination()
     courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
+
     if (draftClaimantResponse.rejectionReason) {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
+
     courtDetermination.disposableIncome = draftClaimantResponse.disposableIncome
     return courtDetermination
   }
@@ -80,16 +94,17 @@ export class ClaimantResponseConverter {
   private static convertPaymentIntention (draftPaymentIntention: PaymentIntentionDraft): PaymentIntention {
     const paymentIntention: PaymentIntention = new PaymentIntention()
     paymentIntention.paymentOption = draftPaymentIntention.paymentOption.option.value as PaymentOption
+
     if (draftPaymentIntention.paymentDate) {
       paymentIntention.paymentDate = this.convertPaymentDate(draftPaymentIntention.paymentOption,draftPaymentIntention.paymentDate)
     }
+
     if (draftPaymentIntention.paymentPlan) {
-      const repaymentPlan: RepaymentPlan = {
+      paymentIntention.repaymentPlan = {
         firstPaymentDate: draftPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
         instalmentAmount: draftPaymentIntention.paymentPlan.instalmentAmount,
         paymentSchedule: draftPaymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
       } as RepaymentPlan
-      paymentIntention.repaymentPlan = repaymentPlan
     }
     return paymentIntention
   }
