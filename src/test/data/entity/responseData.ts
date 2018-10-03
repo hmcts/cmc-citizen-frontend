@@ -221,7 +221,8 @@ export const statementOfMeansWithAllFieldsData = {
       anyDisabled: false,
       details: 'Colleagues',
       numberOfPeople: 5
-    }
+    },
+    anyDisabledChildren: false
   },
   employment: {
     employers: [{
