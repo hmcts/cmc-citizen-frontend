@@ -37,8 +37,8 @@ export class StatementOfMeansCalculations {
 
   calculateTotalMonthlyDisposableIncome (statementOfMeans: StatementOfMeans): number {
 
-    const totalMonthlyIncome: number = this.calculateTotalMonthlyIncome(statementOfMeans)
-    const totalMonthlyExpense: number = this.calculateTotalMonthlyExpense(statementOfMeans)
+    const totalMonthlyIncome: number = this.calculateTotalMonthlyIncome(statementOfMeans) || 0
+    const totalMonthlyExpense: number = this.calculateTotalMonthlyExpense(statementOfMeans) || 0
     let totalMonthlyAllowance: number = 0
     if (this.allowancesLookup) {
       totalMonthlyAllowance = this.defendantType === PartyType.INDIVIDUAL.value ?
@@ -126,7 +126,7 @@ export class StatementOfMeansCalculations {
     if (!income) {
       return pensionAllowance
     }
-    const defendantIsPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() === undefined ? false : true
+    const defendantIsPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() !== undefined
     if (defendantIsPensioner) {
       if (partner && partner.pensioner) {
         pensionAllowance = this.getMonthlyAllowanceAmount(this.allowancesLookup.pensioner, 'DEFENDANT_AND_PARTNER')

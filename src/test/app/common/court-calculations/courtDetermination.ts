@@ -19,6 +19,24 @@ describe('CourtDetermination', () => {
       }).to.throw(Error, 'Input should be a moment, cannot be empty')
     })
 
+    it('should return a claimant decision type when claimantPaymentDate is after the defendantPaymentDate and no court date is supplied', () => {
+
+      let defendantPaymentDate = moment(new Date())
+      let claimantPaymentDate = moment(new Date()).add(1,'days')
+      let courtGeneratedPaymentDate = undefined
+
+      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
+    })
+
+    it('should return a defendant decision type when claimantPaymentDate is after the defendantPaymentDate and no court date is supplied', () => {
+
+      let defendantPaymentDate = moment(new Date()).add(1,'days')
+      let claimantPaymentDate = moment(new Date())
+      let courtGeneratedPaymentDate = undefined
+
+      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
+    })
+
     it('should return a claimant decision type when claimantPaymentDate is after the defendantPaymentDate', () => {
 
       let defendantPaymentDate = moment(new Date())
