@@ -4,7 +4,7 @@
 
 properties([
   parameters([
-    string(name: 'LIB_VERSION', defaultValue: 'feature/AKS-setup', description: 'Branch name of pipeline library to use')
+    string(name: 'LIB_VERSION', defaultValue: 'master', description: 'Branch name of pipeline library to use')
   ])
 ])
 
