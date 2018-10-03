@@ -9,14 +9,15 @@ const logger = Logger.getLogger('applicationRunner')
 export class ApplicationRunner {
   static run (app: express.Application): void {
     const port = ApplicationRunner.applicationPort()
+    const appContext = process.env.APPLICATION_CONTEXT || ''
     if (app.locals.ENV === 'development' || app.locals.ENV === 'dockertests') {
       const server = https.createServer(ApplicationRunner.getSSLOptions(), app)
       server.listen(port, () => {
-        logger.info(`Listener started (PID ${process.pid}): https://localhost:${port}`)
+        logger.info(`Listener started (PID ${process.pid}): https://localhost:${port}/${appContext}`)
       })
     } else {
       app.listen(port, () => {
-        logger.info(`Listener started (PID ${process.pid}): http://localhost:${port}`)
+        logger.info(`Listener started (PID ${process.pid}): http://localhost:${port}/${appContext}`)
       })
     }
   }
