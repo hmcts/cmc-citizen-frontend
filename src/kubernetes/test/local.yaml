@@ -46,8 +46,6 @@ spec:
           value: 'fakekey'
         - name: UV_THREADPOOL_SIZE
           value: '64'
-        - name: APPLICATION_CONTEXT
-          value: 'cmc-citizen-frontend-pr-938'
         resources:
           requests:
             memory: "128Mi"

@@ -1,0 +1,47 @@
+#!groovy
+
+// THIS PIPELINE IS FOR TESTING SHARED PIPELINE CODE ONLY
+
+properties([
+  parameters([
+    string(name: 'LIB_VERSION', defaultValue: 'feature/AKS-setup', description: 'Branch name of pipeline library to use')
+  ])
+])
+
+library "Infrastructure@${params.LIB_VERSION}"
+
+String product = "cmc"
+String component = "citizen-frontend"
+
+List<LinkedHashMap<String, Object>> secrets = [
+  secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
+  secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
+  secret('citizen-oauth-client-secret', 'OAUTH2_CLIENT_SECRET'),
+  secret('postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
+  secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY')
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [ $class: 'AzureKeyVaultSecret',
+    secretType: 'Secret',
+    name: secretName,
+    version: '',
+    envVariable: envVar
+  ]
+}
+
+// Vars needed for AKS testing
+env.IDAM_API_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
+env.S2S_URL = 'http://rpe-service-auth-provider-aat.service.core-compute-aat.internal'
+
+withPipeline("nodejs", product, component) {
+
+  after('build') {
+    sh 'yarn setup'
+  }
+
+  loadVaultSecrets(secrets)
+  enableDockerBuild()
+  enableDeployToAKS()
+  setVaultName('cmc')
+}
