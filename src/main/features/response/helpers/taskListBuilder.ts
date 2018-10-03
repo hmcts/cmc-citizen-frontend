@@ -219,7 +219,7 @@ export class TaskListBuilder {
     return undefined
   }
 
-  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string,features: string[]): TaskList {
+  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string, features: string[]): TaskList {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()

@@ -47,10 +47,10 @@ import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIn
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { Claim } from 'claims/models/claim'
 
 export class ResponseModelConverter {
