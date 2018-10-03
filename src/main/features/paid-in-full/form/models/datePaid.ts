@@ -1,11 +1,8 @@
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
 import { ValidateNested } from 'class-validator'
 import { LocalDate } from 'forms/models/localDate'
 import { IsNotInFuture } from 'forms/validation/validators/notInFuture'
-export class ValidationErrors {
-  static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
-  static readonly DATE_IN_FUTURE = 'Please enter a date that is not in the future'
-}
 
 export class DatePaid {
 

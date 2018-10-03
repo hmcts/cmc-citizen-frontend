@@ -427,7 +427,7 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'ccj':
       documentDocument = { ...sampleCCJDraftObj, ...draftOverride }
       break
-    case 'paid-in-full':
+    case 'paidInFull':
       documentDocument = { ...samplePaidInFullDraftObj, ...draftOverride }
       break
     case 'claimantResponse':

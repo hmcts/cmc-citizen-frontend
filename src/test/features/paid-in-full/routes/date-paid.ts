@@ -12,8 +12,8 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { checkAuthorizationGuards } from 'test/features/paid-in-full/routes/checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from 'test/features/paid-in-full/routes/checks/not-claimant-in-case-check'
+import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -97,7 +97,6 @@ describe.only('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      // EXPECTING 500 BUT GETS 404: expects nothing but gets draft
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save paidInFull draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
