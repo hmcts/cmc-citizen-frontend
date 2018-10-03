@@ -37,8 +37,8 @@ export class StatementOfMeansCalculations {
 
   calculateTotalMonthlyDisposableIncome (statementOfMeans: StatementOfMeans): number {
 
-    const totalMonthlyIncome: number = this.calculateTotalMonthlyIncome(statementOfMeans)
-    const totalMonthlyExpense: number = this.calculateTotalMonthlyExpense(statementOfMeans)
+    const totalMonthlyIncome: number = this.calculateTotalMonthlyIncome(statementOfMeans) || 0
+    const totalMonthlyExpense: number = this.calculateTotalMonthlyExpense(statementOfMeans) || 0
     let totalMonthlyAllowance: number = 0
     if (this.allowancesLookup) {
       totalMonthlyAllowance = this.defendantType === PartyType.INDIVIDUAL.value ?
@@ -51,10 +51,11 @@ export class StatementOfMeansCalculations {
 
   calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
     const monthlyDebts: number = statementOfMeans.debts ? this.calculateMonthlyDebts(statementOfMeans.debts) : 0
-    const monthlyDebtsInArrears: number = statementOfMeans.priorityDebts ? this.calculateMonthlyPriorityDebts(statementOfMeans.priorityDebts) : 0
+    const monthlyPriorityDebts: number = statementOfMeans.priorityDebts ? this.calculateMonthlyPriorityDebts(statementOfMeans.priorityDebts) : 0
     const monthlyCourtOrders: number = statementOfMeans.courtOrders ? this.calculateMonthlyCourtOrders(statementOfMeans.courtOrders) : 0
     const monthlyRegularExpense: number = statementOfMeans.expenses ? this.calculateMonthlyRegularExpense(statementOfMeans.expenses) : 0
-    const totalMonthlyExpense = monthlyDebts + monthlyDebtsInArrears + monthlyCourtOrders + monthlyRegularExpense
+
+    const totalMonthlyExpense = monthlyDebts + monthlyPriorityDebts + monthlyCourtOrders + monthlyRegularExpense
     logger.debug('Monthly expense calculation: ', totalMonthlyExpense)
     return totalMonthlyExpense
   }
@@ -126,7 +127,7 @@ export class StatementOfMeansCalculations {
     if (!income) {
       return pensionAllowance
     }
-    const defendantIsPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() === undefined ? false : true
+    const defendantIsPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() !== undefined
     if (defendantIsPensioner) {
       if (partner && partner.pensioner) {
         pensionAllowance = this.getMonthlyAllowanceAmount(this.allowancesLookup.pensioner, 'DEFENDANT_AND_PARTNER')
