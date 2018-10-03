@@ -6,6 +6,7 @@ import { ClaimantResponseType } from 'claims/models/claimant-response/claimantRe
 import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class ClaimantResponseModelConverter {
   static convert (draft: DraftClaimantResponse, claim: Claim): ClaimantResponse {
@@ -27,8 +28,16 @@ export class ClaimantResponseModelConverter {
     return {
       type: ClaimantResponseType.REJECTION,
       amountPaid: StatesPaidHelper.getAlreadyPaidAmount(claim),
-      freeMediation: draft.freeMediation.option === YesNoOption.YES.option,
+      freeMediation: this.convertFreeMediation(draft.freeMediation),
       reason: draft.rejectionReason.text
     }
+  }
+
+  private static convertFreeMediation(freeMediation?: FreeMediation): boolean {
+    if (!freeMediation) {
+      return false
+    }
+
+    return freeMediation.option === YesNoOption.YES.option
   }
 }
