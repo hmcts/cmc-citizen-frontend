@@ -51,11 +51,13 @@ export class StatementOfMeansCalculations {
 
   calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
     const monthlyDebts: number = statementOfMeans.debts ? this.calculateMonthlyDebts(statementOfMeans.debts) : 0
+
     const monthlyPriorityDebts: number = statementOfMeans.priorityDebts ? this.calculateMonthlyPriorityDebts(statementOfMeans.priorityDebts) : 0
     const monthlyCourtOrders: number = statementOfMeans.courtOrders ? this.calculateMonthlyCourtOrders(statementOfMeans.courtOrders) : 0
     const monthlyRegularExpense: number = statementOfMeans.expenses ? this.calculateMonthlyRegularExpense(statementOfMeans.expenses) : 0
 
     const totalMonthlyExpense = monthlyDebts + monthlyPriorityDebts + monthlyCourtOrders + monthlyRegularExpense
+
     logger.debug('Monthly expense calculation: ', totalMonthlyExpense)
     return totalMonthlyExpense
   }
@@ -127,6 +129,7 @@ export class StatementOfMeansCalculations {
     if (!income) {
       return pensionAllowance
     }
+
     const defendantIsPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() !== undefined
     if (defendantIsPensioner) {
       if (partner && partner.pensioner) {

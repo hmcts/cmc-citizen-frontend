@@ -25,6 +25,7 @@ import { Party } from 'claims/models/details/yours/party'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
 
+
 export class PaymentPlanHelper {
 
   static createPaymentPlanFromClaim (claim: Claim): PaymentPlan {
@@ -67,7 +68,6 @@ export class PaymentPlanHelper {
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-
       const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(
         response.defendant.type,
         PaymentPlanHelper.getDateOfBirth(response.defendant),
@@ -156,5 +156,4 @@ export class PaymentPlanHelper {
     }
     return undefined
   }
-
 }

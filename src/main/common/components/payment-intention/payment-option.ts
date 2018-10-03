@@ -2,10 +2,7 @@ import * as express from 'express'
 
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import {
-  PaymentType,
-  PaymentOption
-} from 'shared/components/payment-intention/model/paymentOption'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Paths } from 'shared/components/payment-intention/paths'
 
 import { ErrorHandling } from 'main/common/errorHandling'
@@ -18,6 +15,7 @@ import { DraftService } from 'services/draftService'
 
 export abstract class AbstractPaymentOptionPage<Draft> {
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
+
   abstract buildTaskListUri (req: express.Request, res: express.Response): string
 
   getView (): string {
@@ -56,6 +54,7 @@ export abstract class AbstractPaymentOptionPage<Draft> {
               this.renderView(form, res)
             } else {
               this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentOption = form.model)
+              this.deleteRedundantData(res, req)
 
               const user: User = res.locals.user
               await new DraftService().save(res.locals.draft, user.bearerToken)
@@ -63,6 +62,22 @@ export abstract class AbstractPaymentOptionPage<Draft> {
               res.redirect(this.buildPostSubmissionUri(path, req, res))
             }
           }))
+  }
+
+  private deleteRedundantData (res: express.Response, req: express.Request) {
+    if (res.locals.draft.alternatePaymentMethod) {
+      switch (req.body.model.option) {
+        case PaymentType.IMMEDIATELY:
+          res.locals.draft.alternatePaymentMethod.paymentPlan = res.locals.draft.alternatePaymentMethod.paymentDate = undefined
+          break
+        case PaymentType.BY_SET_DATE:
+          res.locals.draft.alternatePaymentMethod.paymentPlan = undefined
+          break
+        case PaymentType.INSTALMENTS:
+          res.locals.draft.alternatePaymentMethod.paymentDate = undefined
+          break
+      }
+    }
   }
 
   private renderView (form: Form<PaymentOption>, res: express.Response) {
