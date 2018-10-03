@@ -205,7 +205,6 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
 export const statementOfMeansWithAllFieldsData = {
   ...statementOfMeansWithMandatoryFieldsOnlyData,
   dependant: {
-    anyDisabledChildren: false,
     children: [{
       ageGroupType: AgeGroupType.UNDER_11,
       numberOfChildren: 1
