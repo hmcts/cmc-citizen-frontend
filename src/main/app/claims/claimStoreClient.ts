@@ -10,6 +10,7 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
+import {DraftPaidInFull} from "paid-in-full/draft/draftPaidInFull";
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -41,6 +42,15 @@ export class ClaimStoreClient {
       }
     }).then(caseReference => {
       return caseReference.case_reference
+    })
+  }
+
+  savePaidInFull (externalId: string, submitter: User, draft: Draft<DraftPaidInFull>): Promise<void> {
+    const datePaid = draft.document.datePaid.date;
+    return this.request.put(`${claimStoreApiUrl}/${externalId}/paid-in-full/${datePaid}`, {
+      headers: {
+        Authorization: `Bearer ${submitter.bearerToken}`
+      }
     })
   }
 

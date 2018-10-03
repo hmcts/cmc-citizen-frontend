@@ -9,6 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { DatePaid } from 'paid-in-full/form/models/datePaid'
+import {ClaimStoreClient} from "claims/claimStoreClient";
 
 function renderView (form: Form<DatePaid>, res: express.Response): void {
   res.render(Paths.datePaidPage.associatedView, { form: form })
@@ -38,6 +39,9 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
+
+        await new ClaimStoreClient().savePaidInFull(externalId, user, draft)
+
         res.redirect(Paths.datePaidPage.uri.replace(':externalId', externalId))
       }
     }))
