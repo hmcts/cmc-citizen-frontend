@@ -11,7 +11,8 @@ import { Validator } from 'class-validator'
 
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
-import { DatePaid, ValidationErrors } from 'paid-in-full/form/models/datePaid'
+import { DatePaid } from 'paid-in-full/form/models/datePaid'
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 
 describe('DatePaid', () => {
