@@ -55,20 +55,43 @@ spec:
             - containerPort: 3000
               name: http
           imagePullPolicy: Always
- # Azure Internal Loadbalancer.
 ---
+#
+# Service
+#
 apiVersion: v1
 kind: Service
 metadata:
   name: ${SERVICE_NAME}
   namespace: ${NAMESPACE}
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+  labels:
+    app: ${SERVICE_NAME}
 spec:
-  type: LoadBalancer
   ports:
-    - port: 80
-      # Make sure targetPort is the same as 'containerPort' above...
-      targetPort: 3000
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 3000
   selector:
     app: ${SERVICE_NAME}
+---
+#
+# Ingress
+#
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ${SERVICE_NAME}
+  namespace: ${NAMESPACE}
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: ${AKS_DOMAIN}
+    http:
+      paths:
+      - path: /${SERVICE_NAME}
+        backend:
+          serviceName: ${SERVICE_NAME}
+          servicePort: 80
