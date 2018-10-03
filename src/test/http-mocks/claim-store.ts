@@ -373,7 +373,6 @@ export function rejectRetrieveUserRoles () {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }
 
-
 export function resolveClaimantResponse () {
   mock(`${serviceBaseURL}/responses`)
     .post(new RegExp('/.+/claimant/[0-9]+'))
