@@ -220,8 +220,8 @@ export const statementOfMeansWithAllFieldsData = {
     }],
     otherDependants: {
       anyDisabled: false,
-      details: 'Colleagues',
-      numberOfPeople: 5
+      numberOfPeople: 5,
+      details: 'Colleagues'
     }
   },
   employment: {
