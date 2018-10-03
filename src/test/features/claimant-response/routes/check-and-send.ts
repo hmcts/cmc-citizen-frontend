@@ -130,6 +130,7 @@ describe('Claimant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           claimStoreServiceMock.resolveSignSettlementAgreement()
           draftStoreServiceMock.rejectDelete()
+          claimStoreServiceMock.resolveClaimantResponse()
 
           await request(app)
             .post(pagePath)
@@ -144,6 +145,7 @@ describe('Claimant response: check and send page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
         claimStoreServiceMock.resolveSignSettlementAgreement()
         draftStoreServiceMock.resolveDelete()
+        claimStoreServiceMock.resolveClaimantResponse()
 
         await request(app)
           .post(pagePath)

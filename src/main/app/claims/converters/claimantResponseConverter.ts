@@ -33,8 +33,7 @@ export class ClaimantResponseConverter {
         reject.reason = draftClaimantResponse.rejectionReason.text
       }
       return reject
-    }
-    else if (draftClaimantResponse.formaliseRepaymentPlan && this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)) {
+    } else if (draftClaimantResponse.formaliseRepaymentPlan && this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)) {
       return this.createResponseAcceptance(draftClaimantResponse)
     } else throw new Error('Unknown state of draftClaimantResponse')
   }
