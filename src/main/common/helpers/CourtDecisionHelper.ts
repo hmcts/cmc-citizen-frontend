@@ -22,7 +22,7 @@ export class CourtDecisionHelper {
     const claimantLastPaymentDate: Moment = claimantEnteredPayBySetDate ? claimantEnteredPayBySetDate : claimantInstalmentPaymentPlan.calculateLastPaymentDate()
 
     let courtOfferedLastDate: Moment
-    if (!courtCalculatedPaymentPlan) {
+    if (courtCalculatedPaymentPlan) {
       courtOfferedLastDate = courtCalculatedPaymentPlan.calculateLastPaymentDate()
     }
 
