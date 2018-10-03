@@ -15,6 +15,8 @@
 
 ## Tips
 
+https://tools.hmcts.net/confluence/display/CNP/Using+Containers+in+the+Pipeline#UsingContainersinthePipeline-ManualDeleteScript
+
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 ```
