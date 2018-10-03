@@ -33,7 +33,7 @@ export class ClaimantResponseModelConverter {
     }
   }
 
-  private static convertFreeMediation(freeMediation?: FreeMediation): boolean {
+  private static convertFreeMediation (freeMediation?: FreeMediation): boolean {
     if (!freeMediation) {
       return false
     }
