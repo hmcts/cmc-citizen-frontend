@@ -122,7 +122,7 @@ describe('Defendant response: Statement of means: court orders', () => {
               .send({ declared: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.debtsPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -138,7 +138,7 @@ describe('Defendant response: Statement of means: court orders', () => {
               .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.debtsPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
