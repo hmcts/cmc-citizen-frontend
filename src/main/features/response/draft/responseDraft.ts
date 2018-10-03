@@ -173,10 +173,6 @@ export class ResponseDraft extends DraftDocument {
     return this.isResponsePartiallyAdmitted() && this.partialAdmission.alreadyPaid.option === YesNoOption.YES
   }
 
-  public isResponsePartiallyAdmittedAndAlreadyPaidAndPaymentIntentionPresent (): boolean {
-    return this.isResponsePartiallyAdmittedAndAlreadyPaid() && this.partialAdmission.paymentIntention !== undefined
-  }
-
   public isResponseRejectedFullyWithDispute (): boolean {
     if (!this.isResponsePopulated()) {
       return false

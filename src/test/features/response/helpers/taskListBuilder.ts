@@ -316,6 +316,26 @@ describe('Defendant response task list builder', () => {
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
         expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
       })
+
+      it('should be enabled when response is PART_ADMISSION and alreadyPaid is YES should clear payment intention', () => {
+        isResponseFullyAdmittedStub.returns(false)
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(false)
+        isResponsePartiallyAdmittedStub.returns(true)
+
+        const draft = new ResponseDraft()
+        draft.response = new Response(ResponseType.PART_ADMISSION)
+        draft.partialAdmission = new PartialAdmission()
+        draft.defendantDetails.partyDetails = new PartyDetails()
+        draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+        draft.partialAdmission.alreadyPaid = new AlreadyPaid(YesNoOption.YES)
+        draft.partialAdmission.paymentIntention = new PaymentIntention()
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
+        expect(draft.partialAdmission.paymentIntention).eq(undefined)
+      })
+
     })
 
     describe('"When will you pay the £xxx?" task', () => {

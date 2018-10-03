@@ -142,6 +142,9 @@ export class TaskListBuilder {
               ValidationUtils.isValid(draft.partialAdmission.howMuchHaveYouPaid)
             )
           )
+          if (draft.partialAdmission.paymentIntention !== undefined) {
+            draft.partialAdmission.paymentIntention = undefined
+          }
         } else {
           tasks.push(
             new TaskListItem(
@@ -216,7 +219,7 @@ export class TaskListBuilder {
     return undefined
   }
 
-  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string, features: string[]): TaskList {
+  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string,features: string[]): TaskList {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
