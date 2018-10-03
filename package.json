@@ -23,14 +23,12 @@
     "test:integration-debug": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
     "test:cross-browser": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run --verbose --config saucelabs.conf.js --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
-    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/**,src/main/features/claimant-response/routes/*  -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info",
-    "precommit": "yarn lint",
-    "prepush": "yarn test && yarn test:routes"
+    "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/**,src/main/features/claimant-response/routes/*  -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info"
   },
   "dependencies": {
     "@hmcts/cmc-common-frontend": "^1.51.1",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
-    "@hmcts/cmc-validators": "^0.1.9",
+    "@hmcts/cmc-validators": "^0.2.0",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.4.5",
@@ -42,7 +40,7 @@
     "@types/csurf": "^1.9.33",
     "@types/express": "^4.16.0",
     "@types/http-status-codes": "^1.0.29",
-    "@types/i18next": "^8.4.5",
+    "@types/i18next": "^11.9.0",
     "@types/i18next-express-middleware": "^0.0.33",
     "@types/i18next-sprintf-postprocessor": "^0.0.29",
     "@types/lodash": "^4.14.116",
@@ -55,7 +53,7 @@
     "body-parser": "^1.18.3",
     "build-url": "^1.2.0",
     "class-transformer": "^0.1.7",
-    "class-validator": "^0.8.1",
+    "class-validator": "^0.9.1",
     "classlist-polyfill": "^1.2.0",
     "config": "^2.0.0",
     "cookie-encrypter": "^1.0.1",
@@ -91,7 +89,7 @@
     "to-boolean": "^1.0.0",
     "ts-node": "^7.0.1",
     "tsconfig-paths": "^3.6.0",
-    "typescript": "^3.0.3",
+    "typescript": "^3.1.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -104,7 +102,7 @@
     "@types/sinon-chai": "^3.2.0",
     "@types/supertest": "*",
     "HTML_CodeSniffer": "https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz",
-    "chai": "^4.1.1",
+    "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "^3.1.0",
     "codeceptjs": "^1.4.2",
@@ -116,7 +114,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.0",
-    "husky": "^1.0.0",
+    "husky": "^1.1.0",
     "jsonwebtoken": "^8.3.0",
     "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.18.0",
@@ -156,5 +154,11 @@
     ],
     "report-dir": "coverage-report",
     "all": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint",
+      "pre-push": "yarn test && yarn test:routes"
+    }
   }
 }
