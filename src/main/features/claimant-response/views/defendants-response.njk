@@ -35,13 +35,6 @@
   <p>{{ t('"{{ reason }}"', { reason: reason }) }}</p>
 {% endmacro %}
 
-{% macro financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, statementOfMeans) %}
-  <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
-  <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
-  <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
-  {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
-{% endmacro %}
-
 {% macro timelineFragment(timeline) %}
   <table>
     <thead>
@@ -79,14 +72,17 @@
           {{
             repaymentPlanBlock(
               heading = 'How they want to pay',
-              paymentPlan = paymentPlan
+              instalmentAmount = instalmentAmount,
+              paymentSchedule = paymentSchedule,
+              firstPaymentDate = firstPaymentDate,
+              lastPaymentOn = lastPaymentOn,
+              lengthOfPayment = lengthOfPayment
             )
           }}
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-        {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
       {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
@@ -120,8 +116,11 @@
             {{
               repaymentPlanBlock(
                 heading = '',
-                repaymentPlan = claim.response.paymentIntention.repaymentPlan,
-                paymentPlan = paymentPlan
+                instalmentAmount = instalmentAmount,
+                paymentSchedule = paymentSchedule,
+                firstPaymentDate = firstPaymentDate,
+                lastPaymentOn = lastPaymentOn,
+                lengthOfPayment = lengthOfPayment
               )
             }}
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -135,7 +134,6 @@
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-          {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
         {% endif %}
       {% endif %}
 
