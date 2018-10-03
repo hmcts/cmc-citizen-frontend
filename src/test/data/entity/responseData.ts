@@ -176,7 +176,6 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     }
   ],
   disability: DisabilityStatus.NO,
-  priorityDebts: [],
   residence: {
     type: ResidenceType.OWN_HOME
   },
@@ -206,7 +205,6 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
 export const statementOfMeansWithAllFieldsData = {
   ...statementOfMeansWithMandatoryFieldsOnlyData,
   dependant: {
-    anyDisabledChildren: false,
     children: [{
       ageGroupType: AgeGroupType.UNDER_11,
       numberOfChildren: 1
@@ -222,7 +220,8 @@ export const statementOfMeansWithAllFieldsData = {
       anyDisabled: false,
       details: 'Colleagues',
       numberOfPeople: 5
-    }
+    },
+    anyDisabledChildren: false
   },
   employment: {
     employers: [{

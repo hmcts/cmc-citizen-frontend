@@ -67,6 +67,7 @@ export class PaymentPlanHelper {
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+
       const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(
         response.defendant.type,
         PaymentPlanHelper.getDateOfBirth(response.defendant),
@@ -155,4 +156,5 @@ export class PaymentPlanHelper {
     }
     return undefined
   }
+
 }
