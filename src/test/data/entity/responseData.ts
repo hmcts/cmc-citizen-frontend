@@ -176,7 +176,6 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     }
   ],
   disability: DisabilityStatus.NO,
-  priorityDebts: [],
   residence: {
     type: ResidenceType.OWN_HOME
   },
