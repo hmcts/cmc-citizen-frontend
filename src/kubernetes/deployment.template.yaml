@@ -85,13 +85,12 @@ metadata:
   namespace: ${NAMESPACE}
   annotations:
     kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-  - host: ${AKS_DOMAIN}
+  - host: ${SERVICE_FQDN}
     http:
       paths:
-      - path: /${SERVICE_NAME}
+      - path: /
         backend:
           serviceName: ${SERVICE_NAME}
           servicePort: 80
