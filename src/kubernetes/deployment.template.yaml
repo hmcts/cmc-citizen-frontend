@@ -24,6 +24,9 @@ spec:
       labels:
         app: ${SERVICE_NAME}
     spec:
+      dnsConfig:
+        options:
+        - name: use-vc
       containers:
         - image: ${IMAGE_NAME}
           name: ${SERVICE_NAME}
