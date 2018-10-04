@@ -62,6 +62,7 @@ export class ClaimantResponseConverter {
     }
     const courtDetermination: CourtDetermination = new CourtDetermination()
     courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
+    courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
     if (draftClaimantResponse.rejectionReason) {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
