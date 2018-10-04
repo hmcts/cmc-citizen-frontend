@@ -145,6 +145,9 @@ export class TaskListBuilder {
           if (draft.partialAdmission.paymentIntention !== undefined) {
             draft.partialAdmission.paymentIntention = undefined
           }
+          if (draft.statementOfMeans !== undefined) {
+            draft.statementOfMeans = undefined
+          }
         } else {
           tasks.push(
             new TaskListItem(
