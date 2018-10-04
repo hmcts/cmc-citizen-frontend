@@ -65,7 +65,7 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.rejectionReason) {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
-    courtDetermination.disposableIncome = draftClaimantResponse.disposableIncome
+    courtDetermination.disposableIncome = draftClaimantResponse.disposableIncome ? draftClaimantResponse.disposableIncome : 0
     return courtDetermination
   }
 
