@@ -141,6 +141,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PriorityDebtType', PriorityDebtType)
     nunjucksEnv.addGlobal('Service', Service)
     nunjucksEnv.addGlobal('DisabilityStatus', Disability)
+
     nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     nunjucksEnv.addGlobal('serviceName', `Money Claims`)
     nunjucksEnv.addGlobal('headingVisible', true)

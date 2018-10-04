@@ -25,7 +25,6 @@ import { Party } from 'claims/models/details/yours/party'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
 
-
 export class PaymentPlanHelper {
 
   static createPaymentPlanFromClaim (claim: Claim): PaymentPlan {
