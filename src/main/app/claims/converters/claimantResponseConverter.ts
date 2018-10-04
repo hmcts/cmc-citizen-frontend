@@ -16,6 +16,7 @@ import { PaymentDate } from 'shared/components/payment-intention/model/paymentDa
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
+import { DecisionType } from 'common/court-calculations/courtDetermination'
 
 export class ClaimantResponseConverter {
 
@@ -45,15 +46,20 @@ export class ClaimantResponseConverter {
     }
     respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     respAcceptance.decisionType = draftClaimantResponse.courtDecisionType
-    if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.YES) {
+    if (draftClaimantResponse.settleAdmitted
+      && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.YES
+      && draftClaimantResponse.acceptPaymentMethod.accept === YesNoOption.YES) {
       return respAcceptance
     }
-    respAcceptance.claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod)
+    respAcceptance.claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod,draftClaimantResponse.courtDecisionType)
     respAcceptance.courtDetermination = this.createCourtDetermination(draftClaimantResponse)
     return respAcceptance
   }
 
   private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
+    if (draftClaimantResponse.courtDecisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
+      throw new Error('court payment intention not found where decision type is COURT')
+    }
     const courtDetermination: CourtDetermination = new CourtDetermination()
     courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
     if (draftClaimantResponse.rejectionReason) {
@@ -76,21 +82,25 @@ export class ClaimantResponseConverter {
     }
   }
 
-  private static convertPaymentIntention (draftPaymentIntention: PaymentIntentionDraft): PaymentIntention {
-    const paymentIntention: PaymentIntention = new PaymentIntention()
-    paymentIntention.paymentOption = draftPaymentIntention.paymentOption.option.value as PaymentOption
-    if (draftPaymentIntention.paymentDate) {
-      paymentIntention.paymentDate = this.convertPaymentDate(draftPaymentIntention.paymentOption,draftPaymentIntention.paymentDate)
+  private static convertPaymentIntention (draftPaymentIntention: PaymentIntentionDraft, decisionType: DecisionType): PaymentIntention {
+    if (draftPaymentIntention) {
+      const paymentIntention: PaymentIntention = new PaymentIntention()
+      paymentIntention.paymentOption = draftPaymentIntention.paymentOption.option.value as PaymentOption
+      if (draftPaymentIntention.paymentDate) {
+        paymentIntention.paymentDate = this.convertPaymentDate(draftPaymentIntention.paymentOption, draftPaymentIntention.paymentDate)
+      }
+      if (draftPaymentIntention.paymentPlan) {
+        const repaymentPlan: RepaymentPlan = {
+          firstPaymentDate: draftPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
+          instalmentAmount: draftPaymentIntention.paymentPlan.instalmentAmount,
+          paymentSchedule: draftPaymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
+        } as RepaymentPlan
+        paymentIntention.repaymentPlan = repaymentPlan
+      }
+      return paymentIntention
+    } else {
+      if (decisionType === DecisionType.CLAIMANT) throw new Error('claimant payment intention not found where decision type is CLAIMANT')
     }
-    if (draftPaymentIntention.paymentPlan) {
-      const repaymentPlan: RepaymentPlan = {
-        firstPaymentDate: draftPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-        instalmentAmount: draftPaymentIntention.paymentPlan.instalmentAmount,
-        paymentSchedule: draftPaymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
-      } as RepaymentPlan
-      paymentIntention.repaymentPlan = repaymentPlan
-    }
-    return paymentIntention
   }
 
   private static convertPaymentDate (paymentOption: PaymentOptionDraft, paymentDate: PaymentDate): Moment {

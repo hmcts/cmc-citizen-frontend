@@ -21,6 +21,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
+import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 
 function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()
@@ -28,12 +29,14 @@ function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   draftResponse.paidAmount = new PaidAmount(PaidAmountOption.NO,10,100)
   return draftResponse
 }
-function createDCRBaseForAcceptance (): DraftClaimantResponse {
+function createDraftClaimantResponseBaseForAcceptance (accept: YesNoOption): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()
   draftResponse.settleAdmitted = new SettleAdmitted(YesNoOption.YES)
   draftResponse.paidAmount = new PaidAmount(PaidAmountOption.YES,10,100)
+  draftResponse.acceptPaymentMethod = new AcceptPaymentMethod(accept)
   return draftResponse
 }
+
 const courtPaymentIntention = {
   paymentOption: PaymentOption.INSTALMENTS,
   paymentDate: MomentFactory.currentDate().add(5, 'days'),
@@ -59,15 +62,16 @@ const courtDecisionInstalments = {
   }
 }
 
-function createDCRWithCourtDecisionType (claimantPI: any,decisionType: DecisionType,formaliseOption: FormaliseRepaymentPlanOption): DraftClaimantResponse {
-  const dcr: DraftClaimantResponse = new DraftClaimantResponse()
-  dcr.paidAmount = new PaidAmount(PaidAmountOption.YES,10,100)
-  dcr.formaliseRepaymentPlan = new FormaliseRepaymentPlan(formaliseOption)
-  dcr.courtDecisionType = decisionType
-  dcr.alternatePaymentMethod = DraftPaymentIntention.deserialise(claimantPI)
-  dcr.courtOfferedPaymentIntention = PaymentIntention.deserialize(courtPaymentIntention)
-  dcr.disposableIncome = 200
-  return dcr
+function createDraftClaimantResponseWithCourtDecisionType (claimantPI: any,decisionType: DecisionType,formaliseOption: FormaliseRepaymentPlanOption): DraftClaimantResponse {
+  const draftClaimantResponse: DraftClaimantResponse = new DraftClaimantResponse()
+  draftClaimantResponse.paidAmount = new PaidAmount(PaidAmountOption.YES,10,100)
+  draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(formaliseOption)
+  draftClaimantResponse.acceptPaymentMethod = new AcceptPaymentMethod(YesNoOption.NO)
+  draftClaimantResponse.courtDecisionType = decisionType
+  draftClaimantResponse.alternatePaymentMethod = DraftPaymentIntention.deserialise(claimantPI)
+  draftClaimantResponse.courtOfferedPaymentIntention = PaymentIntention.deserialize(courtPaymentIntention)
+  draftClaimantResponse.disposableIncome = 200
+  return draftClaimantResponse
 }
 describe('claimant response converter ',() => {
   describe('Claimant Rejection', () => {
@@ -80,9 +84,9 @@ describe('claimant response converter ',() => {
     })
 
     it('rejection with mediation ', () => {
-      const dcr = createDraftClaimantResponseForFullRejection()
-      dcr.freeMediation = new FreeMediation('yes')
-      expect(converter.covertToClaimantResponse(dcr)).to.deep.eq({
+      const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
+      expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'rejection',
         'amountPaid': 10,
         'freeMediation': true
@@ -91,10 +95,10 @@ describe('claimant response converter ',() => {
     })
 
     it('rejection with mediation ', () => {
-      const dcr = createDraftClaimantResponseForFullRejection()
-      dcr.freeMediation = new FreeMediation('yes')
-      dcr.rejectionReason = new RejectionReason('rejected')
-      expect(converter.covertToClaimantResponse(dcr)).to.deep.eq({
+      const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
+      draftClaimantResponse.rejectionReason = new RejectionReason('rejected')
+      expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'rejection',
         'amountPaid': 10,
         'freeMediation': true,
@@ -107,10 +111,10 @@ describe('claimant response converter ',() => {
   describe('Claimant Acceptance', () => {
 
     it(' Accept defendant offer with CCJ', () => {
-      const dcr = createDCRBaseForAcceptance()
-      dcr.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
-      dcr.courtDecisionType = DecisionType.DEFENDANT
-      expect(converter.covertToClaimantResponse(dcr)).to.deep.eq({
+      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.YES)
+      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
+      draftClaimantResponse.courtDecisionType = DecisionType.DEFENDANT
+      expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'acceptation',
         'amountPaid': 10,
         'formaliseOption': 'CCJ',
@@ -120,10 +124,10 @@ describe('claimant response converter ',() => {
     })
 
     it(' Accept defendant offer with settlement', () => {
-      const dcr = createDCRBaseForAcceptance()
-      dcr.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      dcr.courtDecisionType = DecisionType.DEFENDANT
-      expect(converter.covertToClaimantResponse(dcr)).to.deep.eq({
+      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.YES)
+      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
+      draftClaimantResponse.courtDecisionType = DecisionType.DEFENDANT
+      expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'acceptation',
         'amountPaid': 10,
         'formaliseOption': 'SETTLEMENT',
@@ -133,22 +137,22 @@ describe('claimant response converter ',() => {
     })
 
     it(' Accept defendant offer with no formalise option', () => {
-      const dcr = createDCRBaseForAcceptance()
-      dcr.courtDecisionType = DecisionType.DEFENDANT
+      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO)
+      draftClaimantResponse.courtDecisionType = DecisionType.DEFENDANT
       const errMsg = 'Unknown state of draftClaimantResponse'
-      expect(() => converter.covertToClaimantResponse(dcr)).to.throw(Error, errMsg)
+      expect(() => converter.covertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
 
     it(' Accept defendant offer with no unknown formalise option', () => {
-      const dcr = createDCRBaseForAcceptance()
-      dcr.courtDecisionType = DecisionType.DEFENDANT
-      dcr.formaliseRepaymentPlan = new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('xyz', 'xyz'))
+      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO)
+      draftClaimantResponse.courtDecisionType = DecisionType.DEFENDANT
+      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('xyz', 'xyz'))
       const errMsg = 'Unknown formalise repayment option xyz'
-      expect(() => converter.covertToClaimantResponse(dcr)).to.throw(Error, errMsg)
+      expect(() => converter.covertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
 
     it(' Accept court decision with ccj', () => {
-      expect(converter.covertToClaimantResponse(createDCRWithCourtDecisionType(intentionOfImmediatePayment,DecisionType.COURT,FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT))).to.deep.eq(
+      expect(converter.covertToClaimantResponse(createDraftClaimantResponseWithCourtDecisionType(intentionOfImmediatePayment,DecisionType.COURT,FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT))).to.deep.eq(
         {
           'type': 'acceptation',
           'amountPaid': 10,
@@ -165,7 +169,7 @@ describe('claimant response converter ',() => {
     })
 
     it(' Accept court decision favouring defendant payment intent ', () => {
-      expect(converter.covertToClaimantResponse(createDCRWithCourtDecisionType(intentionOfPaymentInFullBySetDate,DecisionType.DEFENDANT,FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT))).to.deep.eq(
+      expect(converter.covertToClaimantResponse(createDraftClaimantResponseWithCourtDecisionType(intentionOfPaymentInFullBySetDate,DecisionType.DEFENDANT,FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT))).to.deep.eq(
         {
           'type': 'acceptation',
           'amountPaid': 10,
@@ -183,7 +187,7 @@ describe('claimant response converter ',() => {
     })
 
     it(' Accept court decision favouring claimant payment intent ', () => {
-      expect(converter.covertToClaimantResponse(createDCRWithCourtDecisionType(intentionOfPaymentByInstallments,DecisionType.CLAIMANT,FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT))).to.deep.eq(
+      expect(converter.covertToClaimantResponse(createDraftClaimantResponseWithCourtDecisionType(intentionOfPaymentByInstallments,DecisionType.CLAIMANT,FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT))).to.deep.eq(
         {
           'type': 'acceptation',
           'amountPaid': 10,
@@ -205,9 +209,9 @@ describe('claimant response converter ',() => {
     })
 
     it(' Reject court decision and refer to judge ', () => {
-      const dcr = createDCRWithCourtDecisionType(intentionOfImmediatePayment,DecisionType.COURT,FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
-      dcr.rejectionReason = new RejectionReason('rejected reason')
-      expect(converter.covertToClaimantResponse(dcr)).to.deep.eq(
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(intentionOfImmediatePayment,DecisionType.COURT,FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
+      draftClaimantResponse.rejectionReason = new RejectionReason('rejected reason')
+      expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
         {
           'type': 'acceptation',
           'amountPaid': 10,
@@ -222,6 +226,22 @@ describe('claimant response converter ',() => {
           'formaliseOption': 'REFER_TO_JUDGE',
           'decisionType': 'COURT'
         })
+    })
+
+    it(' claimant payment intention missing where the decision type is CLAIMANT', () => {
+      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO)
+      draftClaimantResponse.courtDecisionType = DecisionType.CLAIMANT
+      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
+      const errMsg = 'claimant payment intention not found where decision type is CLAIMANT'
+      expect(() => converter.covertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
+    })
+
+    it(' Court payment intention missing where the decision type is COURT', () => {
+      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO)
+      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
+      draftClaimantResponse.courtDecisionType = DecisionType.COURT
+      const errMsg = 'court payment intention not found where decision type is COURT'
+      expect(() => converter.covertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
 
   })
