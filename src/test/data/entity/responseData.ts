@@ -193,11 +193,6 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
-  partner: {
-    disability: DisabilityStatus.NO,
-    over18: false,
-    pensioner: false
-  },
   expenses: [{
     amount: 100,
     frequency: PaymentFrequency.MONTH,

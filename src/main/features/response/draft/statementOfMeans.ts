@@ -13,7 +13,6 @@ import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
-import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { SevereDisability } from 'response/form/models/statement-of-means/severeDisability'
 import { Cohabiting } from 'response/form/models/statement-of-means/cohabiting'
