@@ -62,6 +62,9 @@ import { PartnerPensionOption } from 'response/form/models/statement-of-means/pa
 import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
 import { PartnerSevereDisabilityOption } from 'response/form/models/statement-of-means/partnerSevereDisability'
 import { CarerOption } from 'response/form/models/statement-of-means/carer'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 
 export class ResponseModelConverter {
 
@@ -194,16 +197,16 @@ export class ResponseModelConverter {
         } : undefined,
         anyDisabledChildren: draft.statementOfMeans.dependantsDisability && draft.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES
       } : undefined,
-      partner: {
+      partner: draft.statementOfMeans.cohabiting.option === CohabitingOption.YES ? {
         over18: draft.statementOfMeans.partnerAge.option === PartnerAgeOption.YES,
         disability: this.inferPartnerDisabilityType(draft),
         pensioner: draft.statementOfMeans.partnerPension ? draft.statementOfMeans.partnerPension.option === PartnerPensionOption.YES : undefined
-      },
-      disability: !draft.statementOfMeans.disability.option
+      } : undefined,
+      disability: !draft.statementOfMeans.disability.option || draft.statementOfMeans.disability.option === DisabilityOption.NO
         ? DisabilityStatus.NO
-        : (draft.statementOfMeans.severeDisability.option
-            ? DisabilityStatus.SEVERE
-            : DisabilityStatus.YES
+        : (!draft.statementOfMeans.severeDisability.option || draft.statementOfMeans.severeDisability.option === SevereDisabilityOption.NO
+            ? DisabilityStatus.YES
+            : DisabilityStatus.SEVERE
         ),
       employment: {
         employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
