@@ -22,7 +22,7 @@ export class PaymentIntention {
       firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
       paymentSchedule: input.repaymentPlan.paymentSchedule,
       completionDate: input.repaymentPlan.completionDate,
-      lengthOfPayment: input.repaymentPlan.lengthOfPayment
+      paymentLength: input.repaymentPlan.paymentLength
     }
 
     return instance
