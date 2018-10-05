@@ -58,8 +58,6 @@ spec:
               value: 'true'
             - name: FEATURE_ADMISSIONS
               value: 'true'
-            - name: FEATURE_FULL_ADMISSION
-              value: 'true'
             - name: FEATURE_FINE_PRINT
               value: 'true'
             - name: FEATURE_RETURN_ERROR_TO_USER
