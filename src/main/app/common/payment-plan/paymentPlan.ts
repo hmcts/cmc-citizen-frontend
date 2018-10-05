@@ -31,7 +31,7 @@ export class PaymentPlan {
         paymentLength.push(this.pluralize(this.numberOfInstalments, 'week'))
         break
       case (Frequency.TWO_WEEKLY):
-        paymentLength.push(this.pluralize(this.numberOfInstalments, 'forthnight'))
+        paymentLength.push(this.pluralize(2 * this.numberOfInstalments, 'week'))
         break
       default:
         paymentLength.push(this.pluralize(this.numberOfInstalments, 'month'))
