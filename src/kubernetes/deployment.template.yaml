@@ -44,6 +44,28 @@ spec:
               value: 'production'
             - name: UV_THREADPOOL_SIZE
               value: '64'
+            - name: GA_TRACKING_ID
+              value: 'UA-97111056-1'
+            - name: SERVICE_SURVEY_URL
+              value: 'http://www.smartsurvey.co.uk/s/CMCMVPT1/'
+            - name: FEEDBACK_SURVEY_URL
+              value: 'http://www.smartsurvey.co.uk/s/CMCMVPFB/'
+            - name: REPORT_PROBLEM_SURVEY_URL
+              value: 'http://www.smartsurvey.co.uk/s/CMCMVPPB/'
+            - name: FEATURE_TESTING_SUPPORT
+              value: 'true'
+            - name: FEATURE_NEW_FEATURES_CONSENT
+              value: 'true'
+            - name: FEATURE_ADMISSIONS
+              value: 'true'
+            - name: FEATURE_FULL_ADMISSION
+              value: 'true'
+            - name: FEATURE_FINE_PRINT
+              value: 'true'
+            - name: FEATURE_RETURN_ERROR_TO_USER
+              value: 'true'
+            - name: FEATURE_MOCK_PAY
+              value: 'true'
             - name: POSTCODE_LOOKUP_API_KEY
               value: ${POSTCODE_LOOKUP_API_KEY}
             - name: APPINSIGHTS_INSTRUMENTATIONKEY
@@ -58,6 +80,8 @@ spec:
               value: ${DRAFT_STORE_SECRET_SECONDARY}
             - name: COOKIE_ENCRYPTION_KEY
               value: ${COOKIE_ENCRYPTION_KEY}
+            - name: CONTACT_EMAIL
+              value: ${CONTACT_EMAIL}
           envFrom:
             - configMapRef:
                 name: ${SERVICE_NAME}-config
