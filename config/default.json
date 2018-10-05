@@ -88,6 +88,7 @@
     "testingSupport": false,
     "newFeaturesConsent": false,
     "admissions": false,
+    "paidInFull": false,
     "returnErrorToUser": false,
     "mockPay": false
   },
