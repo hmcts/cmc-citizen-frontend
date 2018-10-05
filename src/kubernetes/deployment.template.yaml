@@ -50,6 +50,14 @@ spec:
               value: ${APPINSIGHTS_INSTRUMENTATIONKEY}
             - name: OAUTH_CLIENT_SECRET
               value: ${OAUTH_CLIENT_SECRET}
+            - name: IDAM_S2S_TOTP_SECRET
+              value: ${IDAM_S2S_TOTP_SECRET}
+            - name: DRAFT_STORE_SECRET_PRIMARY
+              value: ${DRAFT_STORE_SECRET_PRIMARY}
+            - name: DRAFT_STORE_SECRET_SECONDARY
+              value: ${DRAFT_STORE_SECRET_SECONDARY}
+            - name: COOKIE_ENCRYPTION_KEY
+              value: ${COOKIE_ENCRYPTION_KEY}
           envFrom:
             - configMapRef:
                 name: ${SERVICE_NAME}-config
