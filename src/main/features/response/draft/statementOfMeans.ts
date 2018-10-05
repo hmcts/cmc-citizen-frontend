@@ -23,6 +23,7 @@ import { PartnerSevereDisability } from 'response/form/models/statement-of-means
 import { DependantsDisability } from 'response/form/models/statement-of-means/dependantsDisability'
 import { OtherDependantsDisability } from 'response/form/models/statement-of-means/otherDependantsDisability'
 import { Carer } from 'response/form/models/statement-of-means/carer'
+import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 
 export class StatementOfMeans {
   residence?: Residence
