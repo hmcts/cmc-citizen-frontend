@@ -1,7 +1,6 @@
 import { request } from 'integration-test/helpers/clients/base/request'
 import * as url from 'url'
 import * as urlencode from 'urlencode'
-
 import { Logger } from '@hmcts/nodejs-logging'
 
 const logger = Logger.getLogger('bootstrap')
