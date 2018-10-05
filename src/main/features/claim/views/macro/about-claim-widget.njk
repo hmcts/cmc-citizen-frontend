@@ -1,12 +1,12 @@
 {% from "internalLink.njk" import internalLink %}
 
-{% macro aboutClaimWidget(partyType, claim, showResponse = true) %}
+{% macro aboutClaimWidget(party, claim, showResponse = true) %}
 
-{% if partyType === 'defendant' %}
+{% if party === 'defendant' %}
   {% set otherPartyLabel = 'Defendant name:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set responseLabel = 'Your response:' %}
-{% elseif partyType === 'claimant' %}
+{% elseif party === 'claimant' %}
   {% set otherPartyLabel = 'Claimant name:' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
   {% set responseLabel = 'Defendant response:' %}
