@@ -39,6 +39,12 @@ spec:
               value: 'citizen-frontend'
             - name: NODE_ENV
               value: 'production'
+            - name: UV_THREADPOOL_SIZE
+              value: '64'
+            - name: POSTCODE_LOOKUP_API_KEY
+              value: ${POSTCODE_LOOKUP_API_KEY}
+            - name: APPINSIGHTS_INSTRUMENTATIONKEY
+              value: ${APPINSIGHTS_INSTRUMENTATIONKEY}
           envFrom:
             - configMapRef:
                 name: ${SERVICE_NAME}-config
