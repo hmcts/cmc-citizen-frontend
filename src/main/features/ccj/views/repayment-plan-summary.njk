@@ -4,39 +4,26 @@
 
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, errorSummary %}
+{% from "repaymentPlanBlock.njk" import repaymentPlanBlock %}
 
 
 {% block content %}
   {{ csrfProtection(csrf) }}
+  <div class="grid-row">
+    <div class="column-two-thirds">
 
-  <div class="repayment-plan-summary-table">
-    <div class="bottom-border">
-      <div class="column-half label">{{ t('Regular payments of') }}</div>
-      <div class="column-half">{{ claim.countyCourtJudgment.repaymentPlan.instalmentAmount | numeral }}</div>
-    </div>
-    <div class="bottom-border">
-      <div class="column-half label">{{ t('Frequency of payments') }}</div>
-      <div class="column-half">{{ claim.countyCourtJudgment.repaymentPlan.paymentSchedule.displayValue }}</div>
-    </div>
-    <div class="bottom-border">
-      <div class="column-half label">{{ t('Make the first payment on') }}</div>
-      <div class="column-half">{{ claim.countyCourtJudgment.repaymentPlan.firstPaymentDate | date }}</div>
-    </div>
-    {% if claim.countyCourtJudgment.repaymentPlan.completionDate %}
-    <div class="bottom-border">
-      <div class="column-half label">{{ t('Last payment on') }}</div>
-      <div class="column-half">{{ claim.countyCourtJudgment.repaymentPlan.completionDate | date }}</div>
-    </div>
-    {% endif %}
-    {% if claim.countyCourtJudgment.repaymentPlan.paymentLength %}
-    <div class="bottom-border">
-      <div class="column-half label">{{ t('Duration of payments') }}</div>
-      <div class="column-half">{{ claim.countyCourtJudgment.repaymentPlan.paymentLength }}</div>
-    </div>
-    {% endif %}
+      {{ repaymentPlanBlock(
+        heading = 'The repayment plan',
+        instalmentAmount = claim.countyCourtJudgment.repaymentPlan.instalmentAmount,
+        paymentSchedule = claim.countyCourtJudgment.repaymentPlan.paymentSchedule,
+        firstPaymentDate = claim.countyCourtJudgment.repaymentPlan.firstPaymentDate,
+        lastPaymentOn = claim.countyCourtJudgment.repaymentPlan.completionDate,
+        lengthOfPayment = claim.countyCourtJudgment.repaymentPlan.paymentLength
+      ) }}
 
-    <p>{{ t('If you think the defendant can repay you sooner, you can ') }} <a
-        href="{{ CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('ask a judge to make a new repayment plan.') }}</a>
-    </p>
+      <p>{{ t('If you think the defendant can repay you sooner, you can ') }} <a
+          href="{{ CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('ask a judge to make a new repayment plan.') }}</a>
+      </p>
+    </div>
   </div>
 {% endblock %}

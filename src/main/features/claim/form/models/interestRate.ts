@@ -48,7 +48,7 @@ export class InterestRate implements CompletableTask {
     switch (instance.type) {
       case InterestRateOption.STANDARD:
         instance.rate = getStandardInterestRate()
-        instance.text = undefined
+        instance.reason = undefined
         break
     }
 

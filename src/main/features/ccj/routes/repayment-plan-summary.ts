@@ -10,7 +10,6 @@ import { RepaymentPlan } from 'claims/models/repaymentPlan'
 function renderView (form: Form<PaidAmount>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const repaymentPlan: RepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-  console.log(repaymentPlan)
 
   res.render(Paths.repaymentPlanSummaryPage.associatedView, {
     form: form,

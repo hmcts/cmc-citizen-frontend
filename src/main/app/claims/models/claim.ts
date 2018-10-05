@@ -86,11 +86,9 @@ export class Claim {
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
       }
-
-      if(input.redetermination){
+      if (input.redetermination) {
         this.redetermination = new Redetermination().deserialize(input.redetermination)
       }
-
       if (input.redeterminationRequestedAt) {
         this.redeterminationRequestedAt = MomentFactory.parse(input.redeterminationRequestedAt)
       }
