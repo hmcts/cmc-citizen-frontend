@@ -60,7 +60,6 @@ export const samplePartnerPensioner = {
     pensioner: true
   }
 }
-
 export const sampleOneDependantDetails = {
   dependant: {
     children: [{ ageGroupType: AgeGroupType.UNDER_11, numberOfChildren: 1 }],

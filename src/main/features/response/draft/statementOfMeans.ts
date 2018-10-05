@@ -41,6 +41,7 @@ export class StatementOfMeans {
   monthlyExpenses?: MonthlyExpenses
   courtOrders?: CourtOrders
   explanation?: Explanation
+  priorityDebt?: PriorityDebt
   disability?: Disability
   severeDisability?: SevereDisability
   cohabiting?: Cohabiting
@@ -51,7 +52,6 @@ export class StatementOfMeans {
   dependantsDisability?: DependantsDisability
   otherDependantsDisability?: OtherDependantsDisability
   carer?: Carer
-  priorityDebt?: PriorityDebt
 
   deserialize (input: any): StatementOfMeans {
     if (input) {
@@ -70,6 +70,7 @@ export class StatementOfMeans {
       this.monthlyExpenses = new MonthlyExpenses().deserialize(input.monthlyExpenses)
       this.courtOrders = new CourtOrders().deserialize(input.courtOrders)
       this.explanation = new Explanation().deserialize(input.explanation)
+      this.priorityDebt = new PriorityDebt().deserialize(input.priorityDebt)
       this.disability = new Disability(input.disability && input.disability.option)
       this.severeDisability = new SevereDisability(input.severeDisability && input.severeDisability.option)
       this.cohabiting = new Cohabiting(input.cohabiting && input.cohabiting.option)
@@ -80,7 +81,6 @@ export class StatementOfMeans {
       this.dependantsDisability = new DependantsDisability(input.dependantsDisability && input.dependantsDisability.option)
       this.otherDependantsDisability = new OtherDependantsDisability(input.otherDependantsDisability && input.otherDependantsDisability.option)
       this.carer = new Carer(input.carer && input.carer.option)
-      this.priorityDebt = new PriorityDebt().deserialize(input.priorityDebt)
     }
     return this
   }
