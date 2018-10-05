@@ -137,7 +137,7 @@ describe('calculateBiWeeklyPaymentLength', () => {
 
   it('should return a payment length of 14 weeks / 3 months 1 week (where the last instalment is partial)', () => {
     const instalmentAmount = 250
-    const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT_2, instalmentAmount, Frequency.TWO_WEEKLY)
+    const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT_2, instalmentAmount, Frequency.TWO_WEEKLY, moment('2018-01-01'))
     expect(paymentPlan.calculatePaymentLength()).to.equal('3 months 1 week')
   })
 
