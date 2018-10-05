@@ -90,7 +90,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
+          paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
       }
 
@@ -113,7 +113,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanFromDefendant.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendant.frequency),
           completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendant.calculatePaymentLength()
+          paymentLength: paymentPlanFromDefendant.calculatePaymentLength()
         }
       }
       return courtCalculatedPaymentIntention
