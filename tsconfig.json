@@ -92,6 +92,9 @@
       "claimant-response/*": [
         "main/features/claimant-response/*"
       ],
+      "paid-in-full/*": [
+        "main/features/paid-in-full/*"
+      ],
       "offer/*": [
         "main/features/offer/*"
       ],

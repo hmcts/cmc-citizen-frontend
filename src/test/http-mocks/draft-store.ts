@@ -42,8 +42,13 @@ import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { MomentFactory } from 'shared/momentFactory'
+import * as moment from 'moment'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
+
+export const samplePaidInFullDraftObj = {
+  datePaid: moment()
+}
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -393,7 +398,7 @@ export const sampleClaimantResponseDraftObj = {
       firstPaymentDate: '2019-01-01T00:00:00.000',
       paymentSchedule: 'EVERY_MONTH',
       completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
-      lengthOfPayment: '20 years 5 months'
+      paymentLength: '20 years 5 months'
     }
   },
   formaliseRepaymentPlan: {
@@ -484,6 +489,12 @@ export function resolveFindAllDrafts (): mock.Scope {
         id: 204,
         type: 'claimantResponse',
         document: sampleClaimantResponseDraftObj,
+        created: '2017-10-03T12:00:00.000',
+        updated: '2017-10-03T12:01:00.000'
+      }, {
+        id: 205,
+        type: 'paid-in-full',
+        document: samplePaidInFullDraftObj,
         created: '2017-10-03T12:00:00.000',
         updated: '2017-10-03T12:01:00.000'
       }]
