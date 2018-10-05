@@ -19,11 +19,11 @@ import { PaymentIntention as PI } from 'claims/models/response/core/paymentInten
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { AdmissionHelper } from 'shared/helpers/admissionHelper'
-import { Allowance } from 'claims/models/response/statement-of-means/allowance'
-import * as config from 'config'
 import { Party } from 'claims/models/details/yours/party'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
+import { Allowance } from 'claims/models/response/statement-of-means/allowance'
+import * as config from 'config'
 
 export class PaymentPlanHelper {
 
