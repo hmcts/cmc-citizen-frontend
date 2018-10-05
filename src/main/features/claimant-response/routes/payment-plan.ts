@@ -83,12 +83,12 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     if (decisionType === DecisionType.CLAIMANT) {
       const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper
-      .createPaymentPlanFromDraft(draft.document)
+        .createPaymentPlanFromDraft(draft.document)
 
       courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
 
       if (draft.document.alternatePaymentMethod.toDomainInstance().paymentOption === PaymentOption.INSTALMENTS
-         && PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule) !== claimantEnteredPaymentPlan.frequency) {
+        && PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule) !== claimantEnteredPaymentPlan.frequency) {
         const paymentPlanConvertedToDefendantFrequency = claimantEnteredPaymentPlan.convertTo(PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule))
 
         courtCalculatedPaymentIntention.repaymentPlan = {
@@ -96,7 +96,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
+          paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
 
         return courtCalculatedPaymentIntention
@@ -106,7 +106,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: claimantEnteredPaymentPlan.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(claimantEnteredPaymentPlan.frequency),
           completionDate: claimantEnteredPaymentPlan.calculateLastPaymentDate(),
-          lengthOfPayment: claimantEnteredPaymentPlan.calculatePaymentLength()
+          paymentLength: claimantEnteredPaymentPlan.calculatePaymentLength()
         }
 
         return courtCalculatedPaymentIntention
@@ -125,7 +125,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanConvertedToClaimantFrequency.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToClaimantFrequency.frequency),
           completionDate: paymentPlanConvertedToClaimantFrequency.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanConvertedToClaimantFrequency.calculatePaymentLength()
+          paymentLength: paymentPlanConvertedToClaimantFrequency.calculatePaymentLength()
         }
         return courtCalculatedPaymentIntention
       }
@@ -148,7 +148,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
           instalmentAmount: paymentPlanFromDefendant.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendant.frequency),
           completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          lengthOfPayment: paymentPlanFromDefendant.calculatePaymentLength()
+          paymentLength: paymentPlanFromDefendant.calculatePaymentLength()
         }
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
       }
