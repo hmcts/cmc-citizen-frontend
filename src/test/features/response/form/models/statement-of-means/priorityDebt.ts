@@ -3,7 +3,7 @@ import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDe
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { expect } from 'chai'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors, ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
 function getSamplePriorityDebtObject () {

@@ -2,7 +2,10 @@ import * as express from 'express'
 
 import { AbstractModelAccessor } from 'shared/components/model-accessor'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import {
+  PaymentOption,
+  PaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 import { Paths } from 'shared/components/payment-intention/paths'
 
 import { ErrorHandling } from 'main/common/errorHandling'
@@ -15,7 +18,6 @@ import { DraftService } from 'services/draftService'
 
 export abstract class AbstractPaymentOptionPage<Draft> {
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
-
   abstract buildTaskListUri (req: express.Request, res: express.Response): string
 
   getView (): string {

@@ -11,10 +11,7 @@ import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthly
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 import { IncomeSource as FormIncomeSource } from 'response/form/models/statement-of-means/incomeSource'
-import {
-  ExpenseSource,
-  ExpenseSource as FormExpenseSource
-} from 'response/form/models/statement-of-means/expenseSource'
+import { ExpenseSource, ExpenseSource as FormExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 
