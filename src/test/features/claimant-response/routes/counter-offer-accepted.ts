@@ -79,7 +79,7 @@ describe('Claimant Response - Counter offer accepted', () => {
               firstPaymentDate: '2019-01-01T00:00:00.000',
               paymentSchedule: 'EVERY_MONTH',
               completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
-              lengthOfPayment: '20 years 5 months'
+              paymentLength: '20 years 5 months'
             }
           },
           courtDecisionType: 'CLAIMANT'
@@ -125,7 +125,7 @@ describe('Claimant Response - Counter offer accepted', () => {
               firstPaymentDate: '2019-01-01T00:00:00.000',
               paymentSchedule: 'EVERY_MONTH',
               completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
-              lengthOfPayment: '20 years 5 months'
+              paymentLength: '20 years 5 months'
             }
           },
           courtDecisionType: 'CLAIMANT'
