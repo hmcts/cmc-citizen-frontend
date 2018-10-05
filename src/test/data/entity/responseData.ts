@@ -146,7 +146,9 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
     repaymentPlan: {
       instalmentAmount: 100,
       firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2051-12-31',
+      paymentLength: '1'
     }
   }
 }
@@ -161,7 +163,9 @@ export const partialAdmissionWithPaymentByInstalmentsData = {
     repaymentPlan: {
       instalmentAmount: 100,
       firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2051-12-31',
+      paymentLength: '1'
     }
   },
   amount: 3000
