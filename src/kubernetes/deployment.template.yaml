@@ -24,6 +24,9 @@ spec:
       labels:
         app: ${SERVICE_NAME}
     spec:
+      dnsConfig:
+        options:
+        - name: single-request-reopen
       containers:
         - image: ${IMAGE_NAME}
           name: ${SERVICE_NAME}
