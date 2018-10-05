@@ -90,5 +90,22 @@ describe('CourtDetermination', () => {
 
       expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
     })
+
+    it('should return a defendant decision type when the claimantPaymentDate is before defendantPaymentDate and the claimantPaymentDate is the same as courtGeneratedPaymentDate', () => {
+
+      let defendantPaymentDate = moment(new Date()).add(10,'days')
+      let claimantPaymentDate = moment(new Date()).add(7,'days')
+      let courtGeneratedPaymentDate = claimantPaymentDate
+
+      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.COURT)
+    })
+    it('should return a defendant decision type when the claimantPaymentDate is before defendantPaymentDate and the defendantPaymentDate is the same as courtGeneratedPaymentDate', () => {
+
+      let defendantPaymentDate = moment(new Date()).add(10,'days')
+      let claimantPaymentDate = moment(new Date()).add(7,'days')
+      let courtGeneratedPaymentDate = defendantPaymentDate
+
+      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
+    })
   })
 })
