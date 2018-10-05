@@ -84,7 +84,7 @@ export class Claim {
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
       }
-      if(input.moneyReceivedOn) {
+      if (input.moneyReceivedOn) {
         this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
       }
     }

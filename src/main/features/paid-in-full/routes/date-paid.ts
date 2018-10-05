@@ -9,7 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { DatePaid } from 'paid-in-full/form/models/datePaid'
-import {ClaimStoreClient} from "claims/claimStoreClient";
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 
 function renderView (form: Form<DatePaid>, res: express.Response): void {
   res.render(Paths.datePaidPage.associatedView, { form: form })

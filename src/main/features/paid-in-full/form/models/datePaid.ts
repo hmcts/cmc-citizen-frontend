@@ -20,9 +20,7 @@ export class DatePaid {
       return input
     }
 
-    const datePaid = new DatePaid(LocalDate.fromObject(input.date))
-
-    return datePaid
+    return new DatePaid(LocalDate.fromObject(input.date))
   }
 
   deserialize (input: any): DatePaid {

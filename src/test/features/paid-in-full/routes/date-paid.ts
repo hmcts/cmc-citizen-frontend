@@ -20,7 +20,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = Paths.datePaidPage.evaluateUri({ externalId: externalId })
 
-describe.only('claim - date money was received', () => {
+describe('claim - date money was received', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
