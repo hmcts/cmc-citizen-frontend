@@ -45,6 +45,8 @@ spec:
               value: ${POSTCODE_LOOKUP_API_KEY}
             - name: APPINSIGHTS_INSTRUMENTATIONKEY
               value: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+            - name: OAUTH_CLIENT_SECRET
+              value: ${OAUTH_CLIENT_SECRET}
           envFrom:
             - configMapRef:
                 name: ${SERVICE_NAME}-config
