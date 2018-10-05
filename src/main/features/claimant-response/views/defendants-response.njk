@@ -82,6 +82,7 @@
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+
       {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
@@ -132,6 +133,7 @@
           {% endif %}
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+
         {% endif %}
       {% endif %}
 
