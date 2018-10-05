@@ -142,6 +142,12 @@ export class TaskListBuilder {
               ValidationUtils.isValid(draft.partialAdmission.howMuchHaveYouPaid)
             )
           )
+          if (draft.partialAdmission.paymentIntention !== undefined) {
+            draft.partialAdmission.paymentIntention = undefined
+          }
+          if (draft.statementOfMeans !== undefined) {
+            draft.statementOfMeans = undefined
+          }
         } else {
           tasks.push(
             new TaskListItem(
