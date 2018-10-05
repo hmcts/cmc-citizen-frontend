@@ -88,9 +88,14 @@ export class CCJModelConverter {
     const paymentIntention: PaymentIntention = defendantPaymentMethodAccepted ? getDefendantPaymentIntention(claim)
       : claimantResponse.alternatePaymentMethod
 
-    const repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(paymentIntention.paymentPlan.instalmentAmount,
+    console.log(paymentIntention)
+    const repaymentPlan = paymentIntention.paymentPlan && new RepaymentPlan(
+      paymentIntention.paymentPlan.instalmentAmount,
       paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-      paymentIntention.paymentPlan.paymentSchedule.value)
+      paymentIntention.paymentPlan.paymentSchedule.value,
+      paymentIntention.paymentPlan.completionDate.toMoment(),
+      paymentIntention.paymentPlan.paymentLength
+      )
 
     const paymentDate = paymentIntention.paymentDate && paymentIntention.paymentDate.date.toMoment()
     const paymentOption = paymentIntention.paymentOption.option.value as PaymentOption

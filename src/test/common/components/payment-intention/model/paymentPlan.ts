@@ -22,6 +22,8 @@ const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue },
+  completionDate:  { year: FUTURE_YEAR, month: 11, day: 10 },
+  paymentLength: '2 months',
   text: 'I owe nothing'
 }
 

@@ -5,8 +5,7 @@ import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { Moment } from 'moment'
-import { PaymentPlan as PP } from 'common/payment-plan/paymentPlan'
+import { PaymentPlan as PaymentPlanCalcs } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
 
 export class ValidationErrors {
@@ -34,7 +33,7 @@ export class PaymentPlan {
   @IsIn(PaymentSchedule.all(), { message: ValidationErrors.SCHEDULE_REQUIRED })
   paymentSchedule?: PaymentSchedule
 
-  completionDate?: Moment
+  completionDate?: LocalDate
   paymentLength?: string
 
   constructor (totalAmount?: number,
@@ -68,19 +67,20 @@ export class PaymentPlan {
       this.instalmentAmount = input.instalmentAmount
       this.firstPaymentDate = new LocalDate().deserialize(input.firstPaymentDate)
       this.paymentSchedule = input.paymentSchedule ? PaymentSchedule.of(input.paymentSchedule.value) : undefined
-      this.completionDate = input.completionDate
+      this.completionDate = new LocalDate().deserialize(input.completionDate)
       this.paymentLength = input.paymentLength
     }
     return this
   }
 
-  getCompletionDate (): Moment {
-    const paymentPlan = PP.create(this.totalAmount, this.instalmentAmount, Frequency.of(this.paymentSchedule.value), this.firstPaymentDate.toMoment())
-    return paymentPlan.calculateLastPaymentDate()
+  getCompletionDate (): LocalDate {
+    const paymentPlan: PaymentPlanCalcs = PaymentPlanCalcs.create(this.totalAmount, this.instalmentAmount, Frequency.of(this.paymentSchedule.value), this.firstPaymentDate.toMoment())
+    const lastPaymentDate = paymentPlan.calculateLastPaymentDate()
+    return new LocalDate(lastPaymentDate.year(), lastPaymentDate.month(), lastPaymentDate.date())
   }
 
   getPaymentLength (): string {
-    const paymentPlan = PP.create(this.totalAmount, this.instalmentAmount, Frequency.of(this.paymentSchedule.value), this.firstPaymentDate.toMoment())
+    const paymentPlan = PaymentPlanCalcs.create(this.totalAmount, this.instalmentAmount, Frequency.of(this.paymentSchedule.value), this.firstPaymentDate.toMoment())
     return paymentPlan.calculatePaymentLength()
   }
 }
