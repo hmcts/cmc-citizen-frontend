@@ -45,6 +45,10 @@ variable "feature_admissions" {
   default = "false"
 }
 
+variable "feature_paid_in_full" {
+  default = "false"
+}
+
 variable "feature_new_features_consent" {
   default = "false"
 }
