@@ -23,3 +23,26 @@ https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 kubectl config view                         # Show Merged kubeconfig settings.
 kubectl config current-context              # Display the current-context
 ```
+
+## To Configure Frontend to use Claim-Store Backend in Kubernetes
+
+Note: untested until some changes are made to claim-store
+
+```
+kubectl get ns | grep cmc-claim-store
+kubectl get ingress -n cmc-claim-store-pr-XXX  # value from above
+kubectl edit cm -n cmc-citizen-frontend-pr-XXX cmc-citizen-frontend-pr-XXX-config  # value from your frontend PR
+
+# this will open an editor - edit the CLAIM_STORE_URL to use domain given in ingress command above.
+# save and close - you should get no errors
+
+kubectl get po -n cmc-citizen-frontend-pr-XXX  
+kubectl delete po cmc-citizen-frontend-pr-XXX-????????-?????
+
+# wait to restart and new config should have taken effect
+
+```
+
+## Known Issues
+
+- Emails will include wrong domain - you can hack a fix in similar way above. Edit configmap and change FRONTEND_BASE_URL to ingress domain for your frontend.
