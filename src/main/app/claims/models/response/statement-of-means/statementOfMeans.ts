@@ -8,6 +8,7 @@ import { Income } from 'claims/models/response/statement-of-means/income'
 import { Residence } from 'claims/models/response/statement-of-means/residence'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 import { Partner } from 'claims/models/response/statement-of-means/partner'
+import { PriorityDebts } from 'claims/models/response/statement-of-means/priorityDebts'
 
 export interface StatementOfMeans {
   bankAccounts: BankAccount[]
@@ -21,5 +22,6 @@ export interface StatementOfMeans {
   partner?: Partner
   disability?: DisabilityStatus
   carer?: boolean
+  priorityDebts?: PriorityDebts[]
   reason?: string
 }
