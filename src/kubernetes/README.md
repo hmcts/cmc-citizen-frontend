@@ -45,4 +45,4 @@ kubectl delete po cmc-citizen-frontend-pr-XXX-????????-?????
 
 ## Known Issues
 
-- Emails will include wrong domain - you can hack a fix in similar way above. Edit configmap and change FRONTEND_BASE_URL to ingress domain for your frontend.
+- Emails will include wrong domain - unless claim-store used has correct FRONTEND_BASE_URL for your PR.
