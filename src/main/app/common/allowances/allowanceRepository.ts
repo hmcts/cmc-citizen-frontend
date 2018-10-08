@@ -1,0 +1,67 @@
+import { AllowanceItem } from 'common/allowances/allowanceItem'
+import { Allowance } from 'common/allowances/allowance'
+import * as config from 'config'
+
+const meansAllowance = JSON.parse(config.get<string>('meansAllowances'))
+
+export enum DependantAllowanceType {
+  PER_DEPENDANT = 'EACH'
+}
+export enum DisabilityAllowanceType {
+  DEFENDANT_ONLY = 'DEFENDANT_ONLY',
+  DEFENDANT_ONLY_SEVERE = 'DEFENDANT_ONLY_SEVERE',
+  DEFENDANT_AND_PARTNER = 'DEFENDANT_AND_PARTNER',
+  DEFENDANT_AND_PARTNER_SEVERE = 'DEFENDANT_AND_PARTNER_SEVERE',
+  DEPENDANT = 'DEPENDANT',
+  CARER = 'CARER'
+}
+export enum PensionAllowanceType {
+  DEFENDANT_ONLY = 'DEFENDANT_ONLY',
+  DEFENDANT_AND_PARTNER = 'DEFENDANT_AND_PARTNER'
+}
+
+export enum LivingAllowanceType {
+  SINGLE_18_TO_24 = 'SINGLE_18_TO_24',
+  SINGLE_OVER_25 = 'SINGLE_OVER_25',
+  DEFENDANT_AND_PARTNER_OVER_18 = 'DEFENDANT_AND_PARTNER_OVER_18',
+  DEFENDANT_UNDER_25_PARTNER_UNDER_18 = 'DEFENDANT_UNDER_25_PARTNER_UNDER_18',
+  DEFENDANT_OVER_25_PARTNER_UNDER_18 = 'DEFENDANT_OVER_25_PARTNER_UNDER_18'
+}
+
+export interface AllowanceRepository {
+
+  getDependantAllowance (dependantAllowanceType: DependantAllowanceType): AllowanceItem
+  getDisabilityAllowance (disabilityAllowanceType: DisabilityAllowanceType): AllowanceItem
+  getLivingAllowance (livingAllowanceType: LivingAllowanceType): AllowanceItem
+  getPensionAllowance (pensionAllowanceType: PensionAllowanceType): AllowanceItem
+
+}
+
+export class AllowanceRepositoryImpl implements AllowanceRepository {
+
+  constructor (private allowances?: Allowance) {
+    if (!allowances) {
+      this.allowances = new Allowance().deserialize(meansAllowance)
+    }
+  }
+
+  getDependantAllowance (dependantAllowanceType: DependantAllowanceType): AllowanceItem {
+    return this.getMonthlyAllowanceAmount(this.allowances.dependant, dependantAllowanceType)
+  }
+
+  getDisabilityAllowance (disabilityAllowanceType: DisabilityAllowanceType): AllowanceItem {
+    return this.getMonthlyAllowanceAmount(this.allowances.disability, disabilityAllowanceType)
+  }
+
+  getLivingAllowance (livingAllowanceType: LivingAllowanceType): AllowanceItem {
+    return this.getMonthlyAllowanceAmount(this.allowances.personal, livingAllowanceType)
+  }
+
+  getPensionAllowance (pensionAllowanceType: PensionAllowanceType): AllowanceItem {
+    return this.getMonthlyAllowanceAmount(this.allowances.pensioner, pensionAllowanceType)
+  }
+
+  private getMonthlyAllowanceAmount (searchArray: AllowanceItem[], filterOption: string): AllowanceItem {
+    return searchArray.filter(category => category.item === filterOption).pop()
+  }
+}

@@ -1,0 +1,132 @@
+import { Partner } from 'claims/models/response/statement-of-means/partner'
+import {
+  AllowanceRepository,
+  DependantAllowanceType,
+  DisabilityAllowanceType,
+  LivingAllowanceType,
+  PensionAllowanceType
+} from 'common/allowances/allowanceRepository'
+import { AgeGroupType, Child, Dependant } from 'claims/models/response/statement-of-means/dependant'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
+
+export interface AllowanceHelper {
+  getMonthlyPensionerAllowance (income: Income[], partner: Partner)
+  getMonthlyDependantsAllowance (dependants: Dependant)
+  getMonthlyLivingAllowance (defendantAge: number, partner: Partner)
+  getCarerDisableDependantAmount (dependant: Dependant, isCarer: boolean)
+  getDisabilityAllowance (defendantDisability: DisabilityStatus, partner: Partner)
+}
+
+export class AllowanceHelperImpl implements AllowanceHelper {
+
+  constructor (private allowances?: AllowanceRepository) {}
+
+  getMonthlyPensionerAllowance (income: Income[], partner: Partner): number {
+    if (!income) {
+      return 0
+    }
+    const isDefendantPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() !== undefined
+    if (isDefendantPensioner) {
+      if (partner && partner.pensioner) {
+        return this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_AND_PARTNER).monthly
+      } else {
+        return this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_ONLY).monthly
+      }
+    }
+    return 0
+  }
+
+  getMonthlyDependantsAllowance (dependants: Dependant): number {
+    if (!dependants) {
+      return 0
+    }
+    let numberOfDependants = 0
+    if (dependants.children) {
+      const reducer = (total: number, children: Child) => {
+        const numberOfDependants: number =
+          children.ageGroupType !== AgeGroupType.BETWEEN_16_AND_19 ?
+            children.numberOfChildren : children.numberOfChildrenLivingWithYou
+
+        if (!numberOfDependants) {
+          return total
+        }
+        return total + numberOfDependants
+      }
+      numberOfDependants = dependants.children.reduce(reducer, 0)
+    }
+
+    if (dependants.otherDependants) {
+      numberOfDependants += dependants.otherDependants.numberOfPeople
+    }
+    return (numberOfDependants * this.allowances.getDependantAllowance(DependantAllowanceType.PER_DEPENDANT).monthly) || 0
+  }
+
+  getMonthlyLivingAllowance (defendantAge: number, partner: Partner): number {
+    if (defendantAge < 18 || defendantAge === undefined) {
+      return 0
+    }
+    let cohabitationStatus: LivingAllowanceType
+    if (!partner) {
+      cohabitationStatus = defendantAge < 25 ? LivingAllowanceType.SINGLE_18_TO_24 : LivingAllowanceType.SINGLE_OVER_25
+    } else {
+      if (partner.over18) {
+        cohabitationStatus = LivingAllowanceType.DEFENDANT_AND_PARTNER_OVER_18
+      } else {
+        cohabitationStatus = defendantAge < 25 ? LivingAllowanceType.DEFENDANT_UNDER_25_PARTNER_UNDER_18 :
+          LivingAllowanceType.DEFENDANT_OVER_25_PARTNER_UNDER_18
+      }
+    }
+    return this.allowances.getLivingAllowance(cohabitationStatus).monthly || 0
+  }
+
+  getCarerDisableDependantAmount (dependant: Dependant, isCarer: boolean): number {
+    const disabledDependantAmount: number = this.getDisabledDependantAmount(dependant)
+    const carerAmount: number = this.getCarerAmount(isCarer)
+    return disabledDependantAmount > carerAmount ? disabledDependantAmount : carerAmount
+  }
+
+  getDisabilityAllowance (defendantDisability: DisabilityStatus, partner: Partner): number {
+
+    if (defendantDisability === DisabilityStatus.NO) {
+      return 0
+    }
+
+    let disabledStatus: DisabilityAllowanceType = defendantDisability === DisabilityStatus.YES ?
+      DisabilityAllowanceType.DEFENDANT_ONLY : DisabilityAllowanceType.DEFENDANT_ONLY_SEVERE
+
+    if (partner && partner.disability) {
+      switch (partner.disability) {
+        case DisabilityStatus.YES:
+          disabledStatus = defendantDisability === DisabilityStatus.YES ?
+            DisabilityAllowanceType.DEFENDANT_AND_PARTNER : DisabilityAllowanceType.DEFENDANT_ONLY_SEVERE
+          break
+        case DisabilityStatus.SEVERE:
+          disabledStatus = defendantDisability === DisabilityStatus.YES ?
+            DisabilityAllowanceType.DEFENDANT_ONLY_SEVERE : DisabilityAllowanceType.DEFENDANT_AND_PARTNER_SEVERE
+          break
+        default:
+          break
+      }
+    }
+    return this.allowances.getDisabilityAllowance(disabledStatus).monthly
+  }
+
+  private getDisabledDependantAmount (dependant: Dependant): number {
+    if (dependant) {
+      if (dependant.anyDisabledChildren) {
+        return this.allowances.getDisabilityAllowance(DisabilityAllowanceType.DEPENDANT).monthly
+      }
+      if (dependant.otherDependants) {
+        if (dependant.otherDependants.anyDisabled) {
+          return this.allowances.getDisabilityAllowance(DisabilityAllowanceType.DEPENDANT).monthly
+        }
+      }
+    }
+  }
+
+  private getCarerAmount (isCarer: boolean): number {
+    return isCarer ? this.allowances.getDisabilityAllowance(DisabilityAllowanceType.CARER).monthly : 0
+  }
+
+}

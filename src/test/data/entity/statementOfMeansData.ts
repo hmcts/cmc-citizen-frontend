@@ -1,4 +1,4 @@
-import { Allowance } from 'claims/models/response/statement-of-means/allowance'
+import { Allowance } from 'claims/../../../main/app/common/allowances/allowance'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
