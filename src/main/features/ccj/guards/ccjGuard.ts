@@ -11,6 +11,8 @@ export class CCJGuard {
     const claim: Claim = res.locals.claim
 
     if (!claim.eligibleForCCJ && !claim.eligibleForCCJAfterBreachedSettlement) {
+      // console.log("Elig CCJ: "+claim.eligibleForCCJ)
+      // console.log("Elig CCJ after settl breached"+claim.eligibleForCCJAfterBreachedSettlement)
       logger.warn(`Claim ${claim.claimNumber} not eligible for a CCJ - redirecting to dashboard page`)
       res.redirect(Paths.dashboardPage.uri)
     } else {

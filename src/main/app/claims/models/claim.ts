@@ -128,7 +128,14 @@ export class Claim {
   get eligibleForCCJAfterBreachedSettlement (): boolean {
     if (this.response && (this.response as FullAdmissionResponse).paymentIntention) {
       switch ((this.response as FullAdmissionResponse).paymentIntention.paymentOption) {
-        case PaymentOption.BY_SPECIFIED_DATE :
+        case PaymentOption.IMMEDIATELY:
+            // console.log("pay immediatlty returns: ")
+            // console.log(!!this.countyCourtJudgmentRequestedAt && isPastDeadline(MomentFactory.currentDateTime(), (this.response as FullAdmissionResponse).paymentIntention.paymentDate))
+          return !!this.countyCourtJudgmentRequestedAt
+            && isPastDeadline(MomentFactory.currentDateTime(),
+            (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
+          break
+        case PaymentOption.BY_SPECIFIED_DATE:
           return !this.countyCourtJudgmentRequestedAt
             && this.isSettlementReached()
             && isPastDeadline(MomentFactory.currentDateTime(),

@@ -3,6 +3,7 @@ import { Paths } from 'ccj/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Declaration } from 'ccj/form/models/declaration'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { CCJClient } from 'claims/ccjClient'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
@@ -85,16 +86,30 @@ export default express.Router()
         renderView(form, req, res)
       } else {
         const claim: Claim = res.locals.claim
-        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
         const user: User = res.locals.user
 
-        if (form.model.type === SignatureType.QUALIFIED) {
-          draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
-          await new DraftService().save(draft, user.bearerToken)
+        if (claim.respondedAt) {
+          // console.log("RESPONDED (CCJ Issue)")
+          const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+          if (form.model.type === SignatureType.QUALIFIED) {
+            // draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
+            await new DraftService().save(draft, user.bearerToken)
+          }
+          await CCJClient.issue(claim, draft, user)
+          await new DraftService().delete(draft.id, user.bearerToken)
+
+        } else {
+          // console.log("NOT responded (CCJ request)")
+          const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+          if (form.model.type === SignatureType.QUALIFIED) {
+            draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
+            await new DraftService().save(draft, user.bearerToken)
+          }
+          await CCJClient.request(claim.externalId, draft, user)
+          await new DraftService().delete(draft.id, user.bearerToken)
+
         }
 
-        await CCJClient.request(claim.externalId, draft, user)
-        await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))
