@@ -21,7 +21,6 @@ import { DecisionType } from 'common/court-calculations/courtDetermination'
 export class ClaimantResponseConverter {
 
   public static covertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
-
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
       let reject: ResponseRejection = new ResponseRejection()
       if (draftClaimantResponse.paidAmount) {
@@ -34,7 +33,7 @@ export class ClaimantResponseConverter {
         reject.reason = draftClaimantResponse.rejectionReason.text
       }
       return reject
-    } else if (draftClaimantResponse.formaliseRepaymentPlan && this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)) {
+    } else if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.YES) {
       return this.createResponseAcceptance(draftClaimantResponse)
     } else throw new Error('Unknown state of draftClaimantResponse')
   }
@@ -44,13 +43,13 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.paidAmount) {
       respAcceptance.amountPaid = draftClaimantResponse.paidAmount.amount
     }
-    respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
-    respAcceptance.decisionType = draftClaimantResponse.courtDecisionType
-    if (draftClaimantResponse.settleAdmitted
-      && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.YES
-      && draftClaimantResponse.acceptPaymentMethod.accept === YesNoOption.YES) {
+    if (draftClaimantResponse.formaliseRepaymentPlan) {
+      respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
+    }
+    if (!draftClaimantResponse.acceptPaymentMethod) {
       return respAcceptance
     }
+    respAcceptance.decisionType = draftClaimantResponse.courtDecisionType
     respAcceptance.claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod,draftClaimantResponse.courtDecisionType)
     respAcceptance.courtDetermination = this.createCourtDetermination(draftClaimantResponse)
     return respAcceptance
