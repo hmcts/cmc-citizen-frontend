@@ -55,7 +55,6 @@ describe('CCJModelConverter - full admission by individual - claimant accepts', 
     const claim = prepareClaim(fullAdmissionWithPaymentByInstalmentsData)
     const draft = prepareDraft(claimantResponseDraftWithPaymentMethodAccepted)
 
-    console.log(CCJModelConverter.convertForIssue(claim, draft))
     expect(convertObjectLiteralToJSON(CCJModelConverter.convertForIssue(claim, draft)))
       .to.be.deep.equal(convertObjectLiteralToJSON(ccjIssueRequestPayByInstalments))
   })

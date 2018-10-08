@@ -23,11 +23,7 @@ export const ccjIssueRequestPayByInstalments = {
     instalmentAmount: 100,
     firstPaymentDate: MomentFactory.parse('2050-12-31').utc(true),
     paymentSchedule: 'EACH_WEEK',
-    completionDate: {
-      year: 2051,
-      month: 12,
-      day: 31
-    },
+    completionDate: MomentFactory.parse('2051-12-31').utc(true),
     paymentLength: '1'
   },
   statementOfTruth: undefined
@@ -54,7 +50,9 @@ export const ccjIssueRequestPayByInstalmentsForCompany = {
   repaymentPlan: {
     instalmentAmount: 100,
     firstPaymentDate: MomentFactory.parse('2050-12-31').utc(true),
-    paymentSchedule: 'EACH_WEEK'
+    paymentSchedule: 'EACH_WEEK',
+    completionDate: MomentFactory.parse('2051-12-31').utc(true),
+    paymentLength: '1'
   },
   statementOfTruth: undefined
 }
