@@ -26,7 +26,7 @@ kubectl config current-context              # Display the current-context
 
 ## To Configure Frontend to use Claim-Store Backend in Kubernetes
 
-Note: untested until some changes are made to claim-store
+Note: untested until some changes are made to claim-store - TODO: automate linking FE & BE based on branch name or something...
 
 ```
 kubectl get ns | grep cmc-claim-store
