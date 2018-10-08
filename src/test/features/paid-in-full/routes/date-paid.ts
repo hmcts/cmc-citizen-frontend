@@ -13,7 +13,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkNotClaimantInCaseGuard } from 'test/features/paid-in-full/routes/checks/not-claimant-in-case-check'
-import { checkAuthorizationGuards } from 'test/routes/authorization-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
