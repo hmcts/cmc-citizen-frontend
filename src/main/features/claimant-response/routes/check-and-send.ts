@@ -9,7 +9,14 @@ import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { AmountHelper } from 'claimant-response/helpers/amountHelper'
+import { CCJModelConverter } from 'claims/ccjModelConverter'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
+import { Settlement } from 'claims/models/settlement'
+import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
+import { OfferClient } from 'claims/offerClient'
+import { CCJClient } from 'claims/ccjClient'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -34,6 +41,20 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
+
+      if (draft.document.formaliseRepaymentPlan && draft.document.formaliseRepaymentPlan.option) {
+        switch (draft.document.formaliseRepaymentPlan.option) {
+          case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
+            const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
+            await CCJClient.request(claim.externalId, countyCourtJudgment, user, true)
+            break
+          case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
+            const settlement: Settlement = prepareSettlement(claim, draft.document)
+            await OfferClient.signSettlementAgreement(claim.externalId, user, settlement)
+            break
+        }
+      }
+
       await new ClaimStoreClient().saveClaimantResponse(claim,draft,user)
       await new DraftService().delete(draft.id, user.bearerToken)
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))

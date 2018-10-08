@@ -116,6 +116,7 @@ describe('Claimant response: check and send page', () => {
         it('should return 500 and render error page when cannot save settlement', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
+          claimStoreServiceMock.resolveSettlement()
           claimStoreServiceMock.rejectSaveClaimantResponse('HTTP error')
 
           await request(app)
@@ -128,8 +129,9 @@ describe('Claimant response: check and send page', () => {
         it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
           draftStoreServiceMock.resolveFind(draftType)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
-          draftStoreServiceMock.rejectDelete()
+          claimStoreServiceMock.resolveSettlement()
           claimStoreServiceMock.resolveClaimantResponse()
+          draftStoreServiceMock.rejectDelete()
 
           await request(app)
             .post(pagePath)
@@ -144,6 +146,7 @@ describe('Claimant response: check and send page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
         draftStoreServiceMock.resolveDelete()
         claimStoreServiceMock.resolveClaimantResponse()
+        claimStoreServiceMock.resolveSettlement()
 
         await request(app)
           .post(pagePath)

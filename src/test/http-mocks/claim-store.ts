@@ -372,3 +372,15 @@ export function resolveClaimantResponse () {
     .post(new RegExp('/.+/claimant/[0-9]+'))
     .reply(HttpStatus.OK)
 }
+
+export function resolveSettlement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/settlement'))
+    .reply(HttpStatus.CREATED)
+}
+
+export function rejectSettlement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/settlement'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
+}
