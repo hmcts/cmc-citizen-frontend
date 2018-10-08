@@ -3,6 +3,7 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "admissions": true,
+    "paidInFull": true,
     "returnErrorToUser": true
   },
   "appInsights": {
