@@ -13,7 +13,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import { checkAuthorizationGuards } from 'test/routes/authorization-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.createClaimDraftPage.uri
