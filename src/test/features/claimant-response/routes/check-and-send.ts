@@ -116,8 +116,8 @@ describe('Claimant response: check and send page', () => {
         it('should return 500 and render error page when cannot save settlement', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
+          claimStoreServiceMock.resolveSettlement()
           claimStoreServiceMock.rejectSaveClaimantResponse('HTTP error')
-          claimStoreServiceMock.rejectSettlement()
 
           await request(app)
             .post(pagePath)
