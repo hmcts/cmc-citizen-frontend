@@ -29,7 +29,7 @@ export class ClaimantResponseModelConverter {
       type: ClaimantResponseType.REJECTION,
       amountPaid: StatesPaidHelper.getAlreadyPaidAmount(claim),
       freeMediation: this.convertFreeMediation(draft.freeMediation),
-      reason: draft.rejectionReason.text
+      reason: draft.rejectionReason ? draft.rejectionReason.text : undefined
     }
   }
 
