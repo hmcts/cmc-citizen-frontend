@@ -10,7 +10,7 @@ export class Shutter {
     const user: User = new User('','', '', '',[], '', '')
 
     app.all(/^((?!shutter).)*$/, (req, res, next) => {
-      featureTogglesService.isToggleFeatureEnabled(user, [], 'cmc_citizen_frontend_maintenance_unplanned').then(isFeatureToggleEnabled => {
+      featureTogglesService.isToggleFeatureEnabled(user, [], 'cmc_citizen_frontend_shutter_unplanned').then(isFeatureToggleEnabled => {
         if (isFeatureToggleEnabled) {
           return res.render(AppPaths.unplannedShutterPage.associatedView)
         } else {

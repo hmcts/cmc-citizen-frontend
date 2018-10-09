@@ -15,7 +15,7 @@ import { I18Next } from 'modules/i18n'
 import { Nunjucks } from 'modules/nunjucks'
 import * as moment from 'moment'
 
-import { Shutter as ShutterMiddleWare } from 'routes/shutter'
+import { Shutter as ShutterPageMiddleware } from 'routes/shutter'
 import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
@@ -61,7 +61,7 @@ app.use(express.static(path.join(__dirname, 'public')))
 if (env !== 'mocha') {
   new CsrfProtection().enableFor(app)
 }
-new ShutterMiddleWare().enableFor(app)
+new ShutterPageMiddleware().enableFor(app)
 new EligibilityFeature().enableFor(app)
 
 new DashboardFeature().enableFor(app)
