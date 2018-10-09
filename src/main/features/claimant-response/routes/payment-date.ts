@@ -53,7 +53,8 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
         }
         break
       }
-      case DecisionType.CLAIMANT: {
+      case DecisionType.CLAIMANT:
+      case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT: {
         return Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })
       }
     }

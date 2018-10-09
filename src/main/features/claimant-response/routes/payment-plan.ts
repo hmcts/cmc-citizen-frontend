@@ -67,7 +67,8 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
         }
         break
       }
-      case DecisionType.CLAIMANT: {
+      case DecisionType.CLAIMANT:
+      case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT: {
         return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
       }
     }
