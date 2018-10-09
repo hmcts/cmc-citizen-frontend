@@ -1061,11 +1061,6 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^2.9.34:
-  version "2.11.0"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-2.11.0.tgz#534b9033c022c9579c56ba3b3e5a5caafbb650e1"
-  integrity sha1-U0uQM8AiyVecVro7Plpcqvu2UOE=
-
 bluebird@^3.5.0, bluebird@^3.5.1, bluebird@^3.5.x:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
@@ -6060,14 +6055,6 @@ mocha-parallel-tests@^2.0.4:
     debug "3.1.0"
     yargs "12.0.1"
 
-mocha.parallel@^0.15.6:
-  version "0.15.6"
-  resolved "https://registry.yarnpkg.com/mocha.parallel/-/mocha.parallel-0.15.6.tgz#e6df27157c32c1b3c3a00b8703ee04a1f08fe7dc"
-  integrity sha512-pWph+QieKGjk7cHY2hB78wyKJDOQLyOMDuBLQLrFL7riJb8qbQBlCY3XztFHv0D1d4I1gCpiwFNjd4LhVOXPew==
-  dependencies:
-    bluebird "^2.9.34"
-    semaphore "^1.0.5"
-
 mocha@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/mocha/-/mocha-4.1.0.tgz#7d86cfbcf35cb829e2754c32e17355ec05338794"
@@ -8048,11 +8035,6 @@ seek-bzip@^1.0.5:
   integrity sha1-z+kXyz0nS8/6x5J1ivUxc+sfq9w=
   dependencies:
     commander "~2.8.1"
-
-semaphore@^1.0.5:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/semaphore/-/semaphore-1.1.0.tgz#aaad8b86b20fe8e9b32b16dc2ee682a8cd26a8aa"
-  integrity sha512-O4OZEaNtkMd/K0i6js9SL+gqy0ZCBMgUvlSqHKi4IBdjhe7wB8pwztUk1BbZ1fmrvpwFrPbHzqd2w5pTcJH6LA==
 
 semver-compare@^1.0.0:
   version "1.0.0"
