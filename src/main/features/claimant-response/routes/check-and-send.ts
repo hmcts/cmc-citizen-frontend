@@ -17,7 +17,6 @@ import { Settlement } from 'claims/models/settlement'
 import { prepareSettlement } from 'claimant-response/helpers/settlementHelper'
 import { OfferClient } from 'claims/offerClient'
 import { CCJClient } from 'claims/ccjClient'
-import { DraftCCJ } from 'ccj/draft/draftCCJ'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -42,12 +41,11 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
-      const draftCCJ: Draft<DraftCCJ> = res.locals.ccjDraft
 
       if (draft.document.formaliseRepaymentPlan && draft.document.formaliseRepaymentPlan.option) {
         switch (draft.document.formaliseRepaymentPlan.option) {
           case FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT:
-            const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draftCCJ.document)
+            const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
             await CCJClient.request(claim.externalId, countyCourtJudgment, user, true)
             break
           case FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT:
@@ -57,7 +55,7 @@ export default express.Router()
         }
       }
 
-      await new ClaimStoreClient().saveClaimantResponse(claim,draft,user)
+      await new ClaimStoreClient().saveClaimantResponse(claim, draft, user)
       await new DraftService().delete(draft.id, user.bearerToken)
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
     }))
