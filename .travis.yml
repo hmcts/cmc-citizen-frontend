@@ -7,8 +7,7 @@ script:
   - yarn lint
   - yarn test
   - yarn test:routes
-  - yarn test:routes-parallel-1
-  - yarn test:routes-parallel-2
+  - yarn test:routes-parallel
   - yarn test:a11y
   - yarn test:coverage-unit
 after_success:
