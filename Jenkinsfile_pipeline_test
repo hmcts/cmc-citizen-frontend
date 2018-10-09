@@ -1,13 +1,17 @@
 #!groovy
-//noinspection GroovyUnusedAssignment
-@Library("Infrastructure") _
 
-//noinspection GroovyAssignabilityCheck
+// THIS PIPELINE IS FOR TESTING SHARED PIPELINE CODE ONLY
+
 properties([
-		parameters([
-			choice(name: 'ENVIRONMENT', choices: 'saat\nsprod', description: 'Environment where code should be build and deployed')
-		])
+  parameters([
+    string(name: 'LIB_VERSION', defaultValue: 'master', description: 'Branch name of pipeline library to use')
+  ])
 ])
+
+library "Infrastructure@${params.LIB_VERSION}"
+
+String product = "cmc"
+String component = "citizen-frontend"
 
 List<LinkedHashMap<String, Object>> secrets = [
   secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
@@ -31,11 +35,18 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
+// Vars needed for AKS testing
+env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
+env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 
-withParameterizedPipeline('nodejs', 'cmc', 'citizen-frontend', params.ENVIRONMENT, 'sandbox') {
+withPipeline("nodejs", product, component) {
+
   after('build') {
     sh 'yarn setup'
   }
 
   loadVaultSecrets(secrets)
+  enableDockerBuild()
+  enableDeployToAKS()
+  setVaultName('cmc')
 }
