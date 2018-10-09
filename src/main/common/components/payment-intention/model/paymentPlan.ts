@@ -76,7 +76,7 @@ export class PaymentPlan {
   getCompletionDate (): LocalDate {
     const paymentPlan: PaymentPlanCalcs = PaymentPlanCalcs.create(this.totalAmount, this.instalmentAmount, Frequency.of(this.paymentSchedule.value), this.firstPaymentDate.toMoment())
     const lastPaymentDate = paymentPlan.calculateLastPaymentDate()
-    return new LocalDate(lastPaymentDate.year(), lastPaymentDate.month(), lastPaymentDate.date())
+    return LocalDate.fromMoment(lastPaymentDate)
   }
 
   getPaymentLength (): string {
