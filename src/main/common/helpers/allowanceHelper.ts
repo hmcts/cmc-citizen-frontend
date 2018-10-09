@@ -29,9 +29,9 @@ export class AllowanceHelperImpl implements AllowanceHelper {
     const isDefendantPensioner = income.filter(incomeType => incomeType.type === IncomeType.PENSION).pop() !== undefined
     if (isDefendantPensioner) {
       if (partner && partner.pensioner) {
-        return this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_AND_PARTNER).monthly
+        return this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_AND_PARTNER).monthly || 0
       } else {
-        return this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_ONLY).monthly
+        return this.allowances.getPensionAllowance(PensionAllowanceType.DEFENDANT_ONLY).monthly || 0
       }
     }
     return 0
@@ -59,7 +59,8 @@ export class AllowanceHelperImpl implements AllowanceHelper {
     if (dependants.otherDependants) {
       numberOfDependants += dependants.otherDependants.numberOfPeople
     }
-    return (numberOfDependants * this.allowances.getDependantAllowance(DependantAllowanceType.PER_DEPENDANT).monthly) || 0
+    const monthlyAmount: number = this.allowances.getDependantAllowance(DependantAllowanceType.PER_DEPENDANT).monthly || 0
+    return (numberOfDependants * monthlyAmount)
   }
 
   getMonthlyLivingAllowance (defendantAge: number, partner: Partner): number {
@@ -109,17 +110,17 @@ export class AllowanceHelperImpl implements AllowanceHelper {
           break
       }
     }
-    return this.allowances.getDisabilityAllowance(disabledStatus).monthly
+    return this.allowances.getDisabilityAllowance(disabledStatus).monthly || 0
   }
 
   private getDisabledDependantAmount (dependant: Dependant): number {
     if (dependant) {
       if (dependant.anyDisabledChildren) {
-        return this.allowances.getDisabilityAllowance(DisabilityAllowanceType.DEPENDANT).monthly
+        return this.allowances.getDisabilityAllowance(DisabilityAllowanceType.DEPENDANT).monthly || 0
       }
       if (dependant.otherDependants) {
         if (dependant.otherDependants.anyDisabled) {
-          return this.allowances.getDisabilityAllowance(DisabilityAllowanceType.DEPENDANT).monthly
+          return this.allowances.getDisabilityAllowance(DisabilityAllowanceType.DEPENDANT).monthly || 0
         }
       }
     }

@@ -67,10 +67,6 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "means_allowances" {
-  name = "means-allowances"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
-}
 
 module "citizen-frontend" {
   source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
@@ -95,9 +91,6 @@ module "citizen-frontend" {
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src"
-
-    // Allowance calculations
-    MEANS_ALLOWANCE_JSON_BLOB = "${data.azurerm_key_vault_secret.means_allowances.value}"
 
     // Logging vars
     REFORM_TEAM = "${var.product}"

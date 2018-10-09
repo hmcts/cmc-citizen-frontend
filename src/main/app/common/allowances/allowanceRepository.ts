@@ -1,8 +1,6 @@
 import { AllowanceItem } from 'common/allowances/allowanceItem'
 import { Allowance } from 'common/allowances/allowance'
-import * as config from 'config'
-
-const meansAllowance = JSON.parse(config.get<string>('meansAllowances'))
+import { join } from 'path'
 
 export enum DependantAllowanceType {
   PER_DEPENDANT = 'EACH'
@@ -40,25 +38,31 @@ export interface AllowanceRepository {
 export class AllowanceRepositoryImpl implements AllowanceRepository {
 
   constructor (private allowances?: Allowance) {
+
     if (!allowances) {
+      const meansAllowance = require(join(__dirname, '..', '..', '..','resources','meansAllowance.json'))
       this.allowances = new Allowance().deserialize(meansAllowance)
     }
   }
 
   getDependantAllowance (dependantAllowanceType: DependantAllowanceType): AllowanceItem {
-    return this.getMonthlyAllowanceAmount(this.allowances.dependant, dependantAllowanceType)
+    return this.allowances.dependant ?
+      this.getMonthlyAllowanceAmount(this.allowances.dependant, dependantAllowanceType) : undefined
   }
 
   getDisabilityAllowance (disabilityAllowanceType: DisabilityAllowanceType): AllowanceItem {
-    return this.getMonthlyAllowanceAmount(this.allowances.disability, disabilityAllowanceType)
+    return this.allowances.disability ?
+      this.getMonthlyAllowanceAmount(this.allowances.disability, disabilityAllowanceType) : undefined
   }
 
   getLivingAllowance (livingAllowanceType: LivingAllowanceType): AllowanceItem {
-    return this.getMonthlyAllowanceAmount(this.allowances.personal, livingAllowanceType)
+    return this.allowances.personal ?
+      this.getMonthlyAllowanceAmount(this.allowances.personal, livingAllowanceType) : undefined
   }
 
   getPensionAllowance (pensionAllowanceType: PensionAllowanceType): AllowanceItem {
-    return this.getMonthlyAllowanceAmount(this.allowances.pensioner, pensionAllowanceType)
+    return this.allowances.pensioner ?
+      this.getMonthlyAllowanceAmount(this.allowances.pensioner, pensionAllowanceType) : undefined
   }
 
   private getMonthlyAllowanceAmount (searchArray: AllowanceItem[], filterOption: string): AllowanceItem {
