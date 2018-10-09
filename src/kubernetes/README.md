@@ -27,4 +27,4 @@ kubectl config current-context              # Display the current-context
 
 ## Known Issues
 
-- Emails will include wrong domain - unless claim-store used has correct FRONTEND_BASE_URL for your PR.
+- Emails will include wrong domain - AAT claim-store is used as backend.
