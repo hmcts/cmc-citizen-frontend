@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { CourtOrder } from 'common/court-order/courtOrder'
+import { CourtOrder } from 'common/court-calculations/courtOrder'
 
 describe('CourtOrder', () => {
 

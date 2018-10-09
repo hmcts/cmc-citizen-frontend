@@ -16,10 +16,11 @@ export class OfferAcceptedGuard {
       const user: User = res.locals.user
 
       if (claim.settlementReachedAt) {
-        logger.debug('State guard: offer settlement reached, redirecting to dashboard')
+        logger.warn('State guard: offer settlement reached, redirecting to dashboard')
         return false
-      } else if (user.id === claim.claimantId && claim.settlement.isOfferResponded()) {
-        logger.debug('State guard: offer already accepted, redirecting to dashboard')
+      } else if (user.id === claim.claimantId && claim.claimantId !== claim.defendantId
+                && claim.settlement.isOfferResponded()) {
+        logger.warn('State guard: offer already accepted, redirecting to dashboard')
         return false
       } else {
         return true

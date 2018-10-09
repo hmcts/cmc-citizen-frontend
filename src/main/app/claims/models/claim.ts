@@ -7,7 +7,9 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { isPastDeadline } from 'claims/isPastDeadline'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 interface State {
   status: ClaimStatus
@@ -37,6 +39,8 @@ export class Claim {
   totalAmountTillDateOfIssue: number
   totalInterest: number
   features: string[]
+  directionsQuestionnaireDeadline: Moment
+  moneyReceivedOn: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -77,6 +81,12 @@ export class Claim {
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
       this.features = input.features
+      if (input.directionsQuestionnaireDeadline) {
+        this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
+      }
+      if (input.moneyReceivedOn) {
+        this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
+      }
     }
     return this
   }
@@ -110,15 +120,35 @@ export class Claim {
   }
 
   get eligibleForCCJ (): boolean {
-
     return !this.countyCourtJudgmentRequestedAt
       && !this.respondedAt
-      && isPastResponseDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+      && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+  }
+
+  get eligibleForCCJAfterBreachedSettlement (): boolean {
+    if (this.response && (this.response as FullAdmissionResponse).paymentIntention) {
+      switch ((this.response as FullAdmissionResponse).paymentIntention.paymentOption) {
+        case PaymentOption.BY_SPECIFIED_DATE :
+          return !this.countyCourtJudgmentRequestedAt
+            && this.isSettlementReached()
+            && isPastDeadline(MomentFactory.currentDateTime(),
+              (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
+          break
+        case PaymentOption.INSTALMENTS:
+          return !this.countyCourtJudgmentRequestedAt
+            && this.isSettlementReached()
+            && isPastDeadline(MomentFactory.currentDateTime(),
+              (this.response as FullAdmissionResponse).paymentIntention.repaymentPlan.firstPaymentDate)
+      }
+    }
+    return false
   }
 
   get status (): ClaimStatus {
     if (this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.CCJ_REQUESTED
+    } else if (this.eligibleForCCJAfterBreachedSettlement) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.isOfferAccepted()) {

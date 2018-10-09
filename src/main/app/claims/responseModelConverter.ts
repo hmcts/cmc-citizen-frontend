@@ -120,6 +120,7 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
+      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -177,7 +178,10 @@ export class ResponseModelConverter {
       dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
         children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
         numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
-        otherDependants: draft.statementOfMeans.otherDependants.declared ? undefined : undefined
+        otherDependants: draft.statementOfMeans.otherDependants.declared ? {
+          numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople.value,
+          details: draft.statementOfMeans.otherDependants.numberOfPeople.details
+        } : undefined
       } : undefined,
       employment: {
         employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {

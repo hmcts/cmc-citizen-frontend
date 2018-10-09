@@ -145,7 +145,9 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
     repaymentPlan: {
       instalmentAmount: 100,
       firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2051-12-31',
+      paymentLength: '1'
     }
   }
 }
@@ -160,7 +162,9 @@ export const partialAdmissionWithPaymentByInstalmentsData = {
     repaymentPlan: {
       instalmentAmount: 100,
       firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2051-12-31',
+      paymentLength: '1'
     }
   },
   amount: 3000
@@ -208,7 +212,11 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildren: 3,
       numberOfChildrenLivingWithYou: 3
     }],
-    numberOfMaintainedChildren: 4
+    numberOfMaintainedChildren: 4,
+    otherDependants: {
+      numberOfPeople: 5,
+      details: 'Colleagues'
+    }
   },
   employment: {
     employers: [{

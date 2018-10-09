@@ -15,6 +15,7 @@ import { FullAdmissionPaths, Paths as DefendantResponsePaths, StatementOfMeansPa
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
+import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -23,7 +24,7 @@ app.locals.csrf = 'dummy-token'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const agent = supertest.agent(app)
+const agent = supertest(app)
 
 interface Issue {
   type
@@ -94,7 +95,8 @@ const excludedPaths: DefendantResponsePaths[] = [
   DefendantResponsePaths.legacyDashboardRedirect,
   OfferPaths.agreementReceiver,
   DefendantFirstContactPaths.receiptReceiver,
-  ClaimantResponsePaths.receiptReceiver
+  ClaimantResponsePaths.receiptReceiver,
+  ClaimantResponsePaths.courtOfferedSetDatePage
 ]
 
 describe('Accessibility', () => {
@@ -122,4 +124,5 @@ describe('Accessibility', () => {
   checkPaths(StatementOfMeansPaths)
   checkPaths(FullAdmissionPaths)
   checkPaths(ClaimantResponsePaths)
+  checkPaths(PaidInFullPaths)
 })
