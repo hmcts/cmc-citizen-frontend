@@ -1,9 +1,6 @@
 import { request } from 'integration-test/helpers/clients/base/request'
 import * as url from 'url'
 import * as urlencode from 'urlencode'
-import { Logger } from '@hmcts/nodejs-logging'
-
-const logger = Logger.getLogger('bootstrap')
 
 const baseURL: string = process.env.IDAM_URL
 
@@ -58,8 +55,6 @@ export class IdamClient {
     const base64Authorisation: string = IdamClient.toBase64(`${username}:${password || defaultPassword}`)
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
 
-    logger.info('Calling: ' + `${baseURL}/oauth2/authorize?response_type=code&${oauth2Params}`)
-
     const authResponse = await request.post({
       url: `${baseURL}/oauth2/authorize?response_type=code&${oauth2Params}`,
       headers: {
@@ -67,9 +62,6 @@ export class IdamClient {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     })
-
-    logger.info(authResponse)
-    logger.info(authResponse['status'] + ' ::: ' + authResponse['body'])
 
     return IdamClient.exchangeCode(authResponse['code'])
   }
