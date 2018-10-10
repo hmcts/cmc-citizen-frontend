@@ -26,7 +26,9 @@ info see: /src/kubernetes/README.md
 
 Example URL using PR number from GitHub: `https://cmc-citizen-frontend-pr-XXX.service.core-compute-preview.internal/dashboard`
 
-*Note:* will only work through Proxy: proxyout.reform.hmcts.net:8080 (tip: use FoxyProxy browser plugin)
+*Notes:* 
+- will only work through Proxy: proxyout.reform.hmcts.net:8080 (tip: use FoxyProxy browser plugin)
+- any emails will include wrong domain because AAT claim-store is used as backend
 
 #### Kubernetes Namespace Format
 

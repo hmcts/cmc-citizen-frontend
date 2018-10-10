@@ -13,8 +13,7 @@
 
 - Set context: `kubectl config use-context cnp-aks-cluster`
 - Test by showing k8s nodes: `kubectl get nodes`
-- Show namespaces: `kubectl get ns`
-- Show deployments, pods, services, ingress (namespace from above): `kubectl get deploy,po,svc,ing -n cmc-citizen-frontend-pr-XXX`
+- You're good to go!
 
 ## Tips
 
@@ -26,7 +25,3 @@ https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 kubectl config view                         # Show Merged kubeconfig settings.
 kubectl config current-context              # Display the current-context
 ```
-
-## Known Issues
-
-- Emails will include wrong domain - AAT claim-store is used as backend.
