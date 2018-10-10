@@ -6,14 +6,8 @@ import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
-import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
 export class CCJClient {
-
-  static async issue (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<Claim> {
-    const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
-    return CCJClient.save(claim.externalId, countyCourtJudgment, user, true)
-  }
 
   static async request (externalId: string, draft: Draft<DraftCCJ>, user: User): Promise<Claim> {
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draft.document)
