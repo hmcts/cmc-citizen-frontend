@@ -10,9 +10,9 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
-import { ClaimantResponseModelConverter } from 'claims/claimantResponseModelConverter'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { ClaimantResponse } from 'claims/models/claimantResponse'
+import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
+import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -47,6 +47,15 @@ export class ClaimStoreClient {
     })
   }
 
+  savePaidInFull (externalId: string, submitter: User, draft: Draft<DraftPaidInFull>): Promise<void> {
+    const datePaid = draft.document.datePaid.date
+    return this.request.put(`${claimStoreApiUrl}/${externalId}/paid-in-full/${datePaid}`, {
+      headers: {
+        Authorization: `Bearer ${submitter.bearerToken}`
+      }
+    })
+  }
+
   saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
@@ -74,18 +83,6 @@ export class ClaimStoreClient {
 
     return this.request
       .post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
-        body: response,
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
-  }
-
-  saveClaimantResponseForUser (externalId: string, draft: DraftClaimantResponse, claim: Claim, user: User): Promise<void> {
-    const response: ClaimantResponse = ClaimantResponseModelConverter.convert(draft, claim)
-
-    return this.request
-      .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {
         body: response,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
@@ -225,6 +222,19 @@ export class ClaimStoreClient {
     return this.request
       .post(`${claimApiBaseUrl}/user/roles`, {
         body: { role: role },
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+  }
+
+  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<void> {
+    const response = ClaimantResponseConverter.covertToClaimantResponse(draft.document)
+    const externalId: string = claim.externalId
+
+    return this.request
+      .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {
+        body: response,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }

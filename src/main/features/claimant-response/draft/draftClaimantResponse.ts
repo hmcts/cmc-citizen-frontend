@@ -30,6 +30,7 @@ export class DraftClaimantResponse extends DraftDocument {
   partPaymentReceived?: PartPaymentReceived
   accepted?: ClaimSettled
   acceptCourtOffer?: AcceptCourtOffer
+  disposableIncome: number
 
   constructor () {
     super()
@@ -82,6 +83,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount
+      }
+      if (input.disposableIncome) {
+        this.disposableIncome = input.disposableIncome
       }
     }
     return this
