@@ -45,7 +45,7 @@ const paymentIntentionInInstallment = {
     instalmentAmount: 10,
     firstPaymentDate: MomentFactory.currentDate().add(30, 'days'),
     paymentSchedule: PaymentSchedule.EVERY_MONTH,
-    completionDate: MomentFactory.currentDate().add(300, 'days'),
+    completionDate: MomentFactory.currentDate().add(90, 'days'),
     paymentLength: '3 Months'
   }
 }
@@ -57,7 +57,7 @@ const installmentPaymentIntention = {
     'instalmentAmount': 10,
     'firstPaymentDate': MomentFactory.currentDate().add(30, 'days'),
     'paymentSchedule': 'EVERY_MONTH',
-    'completionDate': MomentFactory.currentDate().add(300, 'days'),
+    'completionDate': MomentFactory.currentDate().add(90, 'days'),
     'paymentLength': '3 Months'
   }
 }
@@ -278,7 +278,7 @@ describe('claimant response converter ', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
       draftClaimantResponse.courtDecisionType = DecisionType.COURT
-      const errMsg = 'court payment intention not found where decision type is COURT'
+      const errMsg = 'court offered payment intention not found where decision type is COURT'
       expect(() => converter.covertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
 
