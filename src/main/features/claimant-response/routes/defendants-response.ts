@@ -27,7 +27,7 @@ function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
 
   const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-  const c = {
+  res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
     instalmentAmount: paymentPlan ? paymentPlan.instalmentAmount : 0,
     paymentSchedule: paymentPlan ? Frequency.toPaymentSchedule(paymentPlan.frequency) : {},
@@ -35,8 +35,7 @@ function renderView (res: express.Response, page: number): void {
     completionDate: paymentPlan ? paymentPlan.calculateLastPaymentDate() : null,
     paymentLength: paymentPlan ? paymentPlan.calculatePaymentLength() : 0,
     page: page
-  }
-  res.render(Paths.defendantsResponsePage.associatedView, c)
+  })
 }
 
 /* tslint:disable:no-default-export */
