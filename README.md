@@ -122,7 +122,7 @@ warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_
 ## Preview Environment
 
 We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
-info see: /src/kubernetes/README.md
+info see: [K8S README](/src/kubernetes/README.md)
 
 Example URL using PR number from GitHub: `https://cmc-citizen-frontend-pr-XXX.service.core-compute-preview.internal/dashboard`
 
