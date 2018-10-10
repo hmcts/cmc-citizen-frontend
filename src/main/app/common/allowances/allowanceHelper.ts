@@ -18,7 +18,7 @@ export interface AllowanceHelper {
   getDisabilityAllowance (defendantDisability: DisabilityStatus, partner: Partner)
 }
 
-export class AllowanceHelperImpl implements AllowanceHelper {
+export class ResourceAllowanceHelper implements AllowanceHelper {
 
   constructor (private allowances?: AllowanceRepository) {}
 

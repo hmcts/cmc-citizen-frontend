@@ -10,7 +10,6 @@ import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { PartyType } from 'common/partyType'
 import {
-  sampleAllowanceData,
   sampleElevenDependantDetails,
   sampleIncomesData,
   sampleIncomesWithPensionData,
@@ -30,12 +29,14 @@ import {
 } from 'test/data/entity/statementOfMeansData'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 import * as moment from 'moment'
-import { AllowanceRepository, AllowanceRepositoryImpl } from 'common/allowances/allowanceRepository'
-import { AllowanceHelperImpl } from 'shared/helpers/allowanceHelper'
+import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
+import { AllowanceHelper, ResourceAllowanceHelper } from 'main/app/common/allowances/allowanceHelper'
+import { join } from 'path'
 
 let statementOfMeansCalculations: StatementOfMeansCalculations
-const repository: AllowanceRepository = new AllowanceRepositoryImpl(sampleAllowanceData)
-const allowanceHelper = new AllowanceHelperImpl(repository)
+let repository: AllowanceRepository
+let allowanceHelper: AllowanceHelper
+const sampleAllowanceDataLocation = join(__dirname,'..', '..', '..', 'data', 'entity','sampleAllowanceData.json')
 const partyType: string = PartyType.INDIVIDUAL.value
 const dateOfBirthOver18: moment.Moment = moment().subtract(24, 'year')
 
@@ -46,7 +47,10 @@ describe('StatementOfMeansCalculations', () => {
   //
 
   describe('calculateTotalMonthlyDisposableIncome', () => {
-
+    beforeEach(() => {
+      repository = new ResourceAllowanceRepository(sampleAllowanceDataLocation)
+      allowanceHelper = new ResourceAllowanceHelper(repository)
+    })
     describe('when no allowance lookup is provided', () => {
       beforeEach(() => {
         statementOfMeansCalculations = new StatementOfMeansCalculations(undefined)
@@ -71,9 +75,6 @@ describe('StatementOfMeansCalculations', () => {
       })
     })
 
-    // debts
-    // priority debts
-    // expenses
     describe('when allowance lookup is provided', () => {
       beforeEach(() => {
         statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
@@ -360,8 +361,6 @@ describe('StatementOfMeansCalculations', () => {
 
   describe('calculateTotalMonthlyAllowances', () => {
     beforeEach(() => {
-      const repository: AllowanceRepository = new AllowanceRepositoryImpl(sampleAllowanceData)
-      const allowanceHelper = new AllowanceHelperImpl(repository)
       statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
     })
     describe('when defendant is entitled to allowances', () => {
@@ -376,8 +375,6 @@ describe('StatementOfMeansCalculations', () => {
 
   describe('calculateMonthlyDisabilityAllowance', () => {
     beforeEach(() => {
-      const repository: AllowanceRepository = new AllowanceRepositoryImpl(sampleAllowanceData)
-      const allowanceHelper = new AllowanceHelperImpl(repository)
       statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
     })
     describe('when defendant is not disabled', () => {

@@ -35,14 +35,16 @@ export interface AllowanceRepository {
 
 }
 
-export class AllowanceRepositoryImpl implements AllowanceRepository {
+export class ResourceAllowanceRepository implements AllowanceRepository {
 
-  constructor (private allowances?: Allowance) {
+  private allowances: Allowance
 
-    if (!allowances) {
-      const meansAllowance = require(join(__dirname, '..', '..', '..','resources','meansAllowance.json'))
-      this.allowances = new Allowance().deserialize(meansAllowance)
+  constructor (public option?: string) {
+    let meansAllowance = option
+    if (!meansAllowance) {
+      meansAllowance = join(__dirname, '..', '..', '..','resources','meansAllowance.json')
     }
+    this.allowances = new Allowance().deserialize(require(meansAllowance))
   }
 
   getDependantAllowance (dependantAllowanceType: DependantAllowanceType): AllowanceItem {

@@ -22,8 +22,8 @@ import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 import { Party } from 'claims/models/details/yours/party'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
-import { AllowanceRepository, AllowanceRepositoryImpl } from 'common/allowances/allowanceRepository'
-import { AllowanceHelperImpl } from 'shared/helpers/allowanceHelper'
+import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
+import { ResourceAllowanceHelper } from 'common/allowances/allowanceHelper'
 
 export class PaymentPlanHelper {
 
@@ -67,8 +67,8 @@ export class PaymentPlanHelper {
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      const repository: AllowanceRepository = new AllowanceRepositoryImpl()
-      const allowanceHelper = new AllowanceHelperImpl(repository)
+      const repository: AllowanceRepository = new ResourceAllowanceRepository()
+      const allowanceHelper = new ResourceAllowanceHelper(repository)
       const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
 
       const instalmentAmount: number = statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
@@ -89,8 +89,8 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    const repository: AllowanceRepository = new AllowanceRepositoryImpl()
-    const allowanceHelper = new AllowanceHelperImpl(repository)
+    const repository: AllowanceRepository = new ResourceAllowanceRepository()
+    const allowanceHelper = new ResourceAllowanceHelper(repository)
     const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
 
     const instalmentAmount: number = Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(

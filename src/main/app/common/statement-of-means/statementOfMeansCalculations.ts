@@ -20,7 +20,7 @@ import { PriorityDebts } from 'claims/models/response/statement-of-means/priorit
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 import { PartyType } from 'common/partyType'
 import { Partner } from 'claims/models/response/statement-of-means/partner'
-import { AllowanceHelper } from 'shared/helpers/allowanceHelper'
+import { AllowanceHelper } from 'common/allowances/allowanceHelper'
 
 const logger = Logger.getLogger('common/statement-of-means')
 
