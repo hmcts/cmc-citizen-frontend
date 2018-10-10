@@ -19,33 +19,6 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
 
-### Preview Environment Per PR
-
-We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
-info see: /src/kubernetes/README.md
-
-Example URL using PR number from GitHub: `https://cmc-citizen-frontend-pr-XXX.service.core-compute-preview.internal/dashboard`
-
-*Notes:* 
-- will only work through Proxy: proxyout.reform.hmcts.net:8080 (tip: use FoxyProxy browser plugin)
-- any emails will include wrong domain because AAT claim-store is used as backend
-
-#### Kubernetes Namespace Format
-
-`cmc-citizen-frontend-pr-XXX` or `kubectl get ns`
-
-#### View Kubernetes Resources
-
-Get pods, service, ingress resources: `kubectl get po,svc,ing -n [namespace]`
-
-#### View Logs
-
-Get pod name: `kubectl get po -n [namespace]`
-
-View logs for pod: `kubectl logs [podname] -n [namespace]`
-
-*Note:* you can follow with `-f`
-
 ### Running the application
 
 Install dependencies by executing the following command:
@@ -145,6 +118,33 @@ Example:
 warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules shouldn't be copied twice in one bulk copy
 warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules\ansi-regex shouldn't be copied twice in one bulk copy
 ```
+
+## Preview Environment
+
+We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
+info see: /src/kubernetes/README.md
+
+Example URL using PR number from GitHub: `https://cmc-citizen-frontend-pr-XXX.service.core-compute-preview.internal/dashboard`
+
+*Notes:* 
+- will only work through Proxy: proxyout.reform.hmcts.net:8080 (tip: use FoxyProxy browser plugin)
+- any emails will include wrong domain because AAT claim-store is used as backend
+
+#### Kubernetes Namespace Format
+
+`cmc-citizen-frontend-pr-XXX` or `kubectl get ns`
+
+#### View Kubernetes Resources
+
+Get pods, service, ingress resources: `kubectl get po,svc,ing -n [namespace]`
+
+#### View Logs
+
+Get pod name: `kubectl get po -n [namespace]`
+
+View logs for pod: `kubectl logs [podname] -n [namespace]`
+
+*Note:* you can follow with `-f`
 
 ## License
 
