@@ -2,10 +2,12 @@
 
 ## Setup - run once
 
-- Install cli: `az acs kubernetes install-cli`
+- Install Azure cli: `brew install azure-cli`
+- Install Kubernetes (k8s) cli: `az acs kubernetes install-cli`
 - Login: `az login`
 - Set azure subscription:  `az account set --subscription DCD-CNP-DEV`
 - Add to k8s cli (kubectl): `az aks get-credentials -n cnp-aks-cluster -g cnp-aks-rg`
+- Optional: install kubectx: https://github.com/ahmetb/kubectx ::: this helps switching namespace and contexts
 
 ## Post-Setup
 
