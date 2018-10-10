@@ -122,7 +122,9 @@ warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_
 ## Preview Environment
 
 We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
-info see: [K8S README](/src/kubernetes/README.md)
+info see: [K8S README](/src/kubernetes/README.md). This environment points to AAT dependencies 
+(see [AAT config](/src/kubernetes/config.aat.yaml)), so any changes to AAT deployments (IDAM, claim-store, etc) 
+will take immediate effect.
 
 Example URL using PR number from GitHub: `https://cmc-citizen-frontend-pr-XXX.service.core-compute-preview.internal/dashboard`
 
@@ -144,7 +146,7 @@ Get pod name: `kubectl get po -n [namespace]`
 
 View logs for pod: `kubectl logs [podname] -n [namespace]`
 
-*Note:* you can follow with `-f`
+*Note:* you can follow logs with `-f`, i.e.: `kubectl logs -f [podname] -n [namespace]`
 
 ## License
 

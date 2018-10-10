@@ -12,7 +12,16 @@
 ## Post-Setup
 
 - Set context: `kubectl config use-context cnp-aks-cluster`
-- Test by showing k8s nodes: `kubectl get nodes`
+- Test by showing k8s nodes: `kubectl get nodes`. You should see something similar to: 
+``` 
+$ kubectl get nodes
+NAME                       STATUS    ROLES     AGE       VERSION
+aks-nodepool1-11596463-0   Ready     agent     9d        v1.11.2
+aks-nodepool1-11596463-1   Ready     agent     9d        v1.11.2
+aks-nodepool1-11596463-2   Ready     agent     9d        v1.11.2
+aks-nodepool1-11596463-3   Ready     agent     9d        v1.11.2
+aks-nodepool1-11596463-4   Ready     agent     9d        v1.11.2
+```
 - You're good to go!
 
 ## Tips
