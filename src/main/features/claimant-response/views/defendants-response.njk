@@ -75,8 +75,8 @@
               instalmentAmount = instalmentAmount,
               paymentSchedule = paymentSchedule,
               firstPaymentDate = firstPaymentDate,
-              lastPaymentOn = lastPaymentOn,
-              lengthOfPayment = lengthOfPayment
+              completionDate = completionDate,
+              paymentLength = paymentLength
             )
           }}
         {% endif %}
@@ -119,8 +119,8 @@
                 instalmentAmount = instalmentAmount,
                 paymentSchedule = paymentSchedule,
                 firstPaymentDate = firstPaymentDate,
-                lastPaymentOn = lastPaymentOn,
-                lengthOfPayment = lengthOfPayment
+                completionDate = completionDate,
+                paymentLength = paymentLength
               )
             }}
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}

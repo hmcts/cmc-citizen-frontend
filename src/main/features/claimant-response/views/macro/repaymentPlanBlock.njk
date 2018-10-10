@@ -1,6 +1,6 @@
 {% from "./paymentPlanTable.njk" import paymentPlanTable %}
 
-{% macro repaymentPlanBlock(heading, instalmentAmount, paymentSchedule, firstPaymentDate, lastPaymentOn, lengthOfPayment) %}
+{% macro repaymentPlanBlock(heading, instalmentAmount, paymentSchedule, firstPaymentDate, completionDate, paymentLength) %}
   {% if heading %}
     <h2 class="heading-medium">{{ t(heading) }}</h2>
   {% endif %}
@@ -10,8 +10,8 @@
     instalmentAmount = instalmentAmount,
     paymentSchedule = paymentSchedule,
     firstPaymentDate = firstPaymentDate,
-    lastPaymentOn = lastPaymentOn,
-    lengthOfPayment = lengthOfPayment
+    completionDate = completionDate,
+    paymentLength = paymentLength
   )
   }}
 {% endmacro %}

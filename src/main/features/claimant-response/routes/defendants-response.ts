@@ -27,15 +27,16 @@ function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
 
   const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
-  res.render(Paths.defendantsResponsePage.associatedView, {
+  const c = {
     claim: claim,
     instalmentAmount: paymentPlan ? paymentPlan.instalmentAmount : 0,
     paymentSchedule: paymentPlan ? Frequency.toPaymentSchedule(paymentPlan.frequency) : {},
     firstPaymentDate: paymentPlan ? paymentPlan.startDate : null,
-    lastPaymentOn: paymentPlan ? paymentPlan.calculateLastPaymentDate() : null,
-    lengthOfPayment: paymentPlan ? paymentPlan.calculatePaymentLength() : 0,
+    completionDate: paymentPlan ? paymentPlan.calculateLastPaymentDate() : null,
+    paymentLength: paymentPlan ? paymentPlan.calculatePaymentLength() : 0,
     page: page
-  })
+  }
+  res.render(Paths.defendantsResponsePage.associatedView, c)
 }
 
 /* tslint:disable:no-default-export */
