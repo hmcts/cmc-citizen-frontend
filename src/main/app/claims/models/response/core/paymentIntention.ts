@@ -21,7 +21,7 @@ export class PaymentIntention {
       instalmentAmount: input.repaymentPlan.instalmentAmount,
       firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
       paymentSchedule: input.repaymentPlan.paymentSchedule,
-      completionDate: input.repaymentPlan.completionDate,
+      completionDate: MomentFactory.parse(input.repaymentPlan.completionDate),
       paymentLength: input.repaymentPlan.paymentLength
     }
 
