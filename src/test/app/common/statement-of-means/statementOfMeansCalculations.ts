@@ -30,12 +30,15 @@ import {
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 import * as moment from 'moment'
 import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
-import { AllowanceHelper, ResourceAllowanceHelper } from 'main/app/common/allowances/allowanceHelper'
+import { AllowanceCalculations } from 'main/app/common/allowances/allowanceCalculations'
 import { join } from 'path'
+import { Allowance } from 'common/allowances/allowance'
+import { AllowanceItem } from 'common/allowances/allowanceItem'
 
 let statementOfMeansCalculations: StatementOfMeansCalculations
 let repository: AllowanceRepository
-let allowanceHelper: AllowanceHelper
+let allowanceCalculations: AllowanceCalculations
+
 const sampleAllowanceDataLocation = join(__dirname,'..', '..', '..', 'data', 'entity','sampleAllowanceData.json')
 const partyType: string = PartyType.INDIVIDUAL.value
 const dateOfBirthOver18: moment.Moment = moment().subtract(24, 'year')
@@ -49,7 +52,7 @@ describe('StatementOfMeansCalculations', () => {
   describe('calculateTotalMonthlyDisposableIncome', () => {
     beforeEach(() => {
       repository = new ResourceAllowanceRepository(sampleAllowanceDataLocation)
-      allowanceHelper = new ResourceAllowanceHelper(repository)
+      allowanceCalculations = new AllowanceCalculations(repository)
     })
     describe('when no allowance lookup is provided', () => {
       beforeEach(() => {
@@ -77,7 +80,7 @@ describe('StatementOfMeansCalculations', () => {
 
     describe('when allowance lookup is provided', () => {
       beforeEach(() => {
-        statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
+        statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceCalculations)
       })
       describe('when defendant has allowances', () => {
         it('should return disposable income minus allowances', () => {
@@ -361,7 +364,7 @@ describe('StatementOfMeansCalculations', () => {
 
   describe('calculateTotalMonthlyAllowances', () => {
     beforeEach(() => {
-      statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
+      statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceCalculations)
     })
     describe('when defendant is entitled to allowances', () => {
       it('should return a total for all the allowances when defendant under 25 ', () => {
@@ -375,7 +378,7 @@ describe('StatementOfMeansCalculations', () => {
 
   describe('calculateMonthlyDisabilityAllowance', () => {
     beforeEach(() => {
-      statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
+      statementOfMeansCalculations = new StatementOfMeansCalculations(allowanceCalculations)
     })
     describe('when defendant is not disabled', () => {
       describe('when the defendant is not disabled', () => {
@@ -447,32 +450,32 @@ describe('StatementOfMeansCalculations', () => {
   describe('getMonthlyLivingAllowance', () => {
     describe('when date of birth is an invalid date', () => {
       it('should return 0 amount', () => {
-        expect(allowanceHelper.getMonthlyLivingAllowance(0, samplePartnerDetails.partner)).to.equal(0)
+        expect(allowanceCalculations.getMonthlyLivingAllowance(0, samplePartnerDetails.partner)).to.equal(0)
       })
     })
     describe('when date of birth is undefined', () => {
       it('should return 0 amount', () => {
-        expect(allowanceHelper.getMonthlyLivingAllowance(undefined,samplePartnerDetails.partner)).to.equal(0)
+        expect(allowanceCalculations.getMonthlyLivingAllowance(undefined,samplePartnerDetails.partner)).to.equal(0)
       })
     })
     describe('when date of birth makes the defendant less than 18', () => {
       it('should return 0 amount', () => {
-        expect(allowanceHelper.getMonthlyLivingAllowance(17,samplePartnerDetails.partner)).to.equal(0)
+        expect(allowanceCalculations.getMonthlyLivingAllowance(17,samplePartnerDetails.partner)).to.equal(0)
       })
     })
     describe('when the defendant is over 18 and partner is over 18', () => {
       it('should return 0 amount', () => {
-        expect(allowanceHelper.getMonthlyLivingAllowance(20,samplePartnerDetails.partner)).to.equal(200)
+        expect(allowanceCalculations.getMonthlyLivingAllowance(20,samplePartnerDetails.partner)).to.equal(200)
       })
     })
     describe('when date of birth makes the defendant over 25  and partner is over 18', () => {
       it('should return 0 amount', () => {
-        expect(allowanceHelper.getMonthlyLivingAllowance(25,sampleUnder18PartnerDetails.partner)).to.equal(150)
+        expect(allowanceCalculations.getMonthlyLivingAllowance(25,sampleUnder18PartnerDetails.partner)).to.equal(150)
       })
     })
     describe('when date of birth makes the defendant over 18  and partner is over 18', () => {
       it('should return 0 amount', () => {
-        expect(allowanceHelper.getMonthlyLivingAllowance(19,sampleUnder18PartnerDetails.partner)).to.equal(100)
+        expect(allowanceCalculations.getMonthlyLivingAllowance(19,sampleUnder18PartnerDetails.partner)).to.equal(100)
       })
     })
   })
@@ -480,17 +483,17 @@ describe('StatementOfMeansCalculations', () => {
   describe('getMonthlyDependantsAllowance', () => {
     describe('when number of dependants is one', () => {
       it('should return the allowance amount from one dependant', () => {
-        expect(allowanceHelper.getMonthlyDependantsAllowance(sampleOneDependantDetails.dependant)).to.equal(100)
+        expect(allowanceCalculations.getMonthlyDependantsAllowance(sampleOneDependantDetails.dependant)).to.equal(100)
       })
     })
     describe('when number of dependants is eleven', () => {
       it('should return the allowance amount from eleven dependants includes other dependants and children in education', () => {
-        expect(allowanceHelper.getMonthlyDependantsAllowance(sampleElevenDependantDetails.dependant)).to.equal(1100)
+        expect(allowanceCalculations.getMonthlyDependantsAllowance(sampleElevenDependantDetails.dependant)).to.equal(1100)
       })
     })
     describe('when number of dependants is undefined', () => {
       it('should return the zero', () => {
-        expect(allowanceHelper.getMonthlyDependantsAllowance(undefined)).to.equal(0)
+        expect(allowanceCalculations.getMonthlyDependantsAllowance(undefined)).to.equal(0)
       })
     })
   })
@@ -498,22 +501,54 @@ describe('StatementOfMeansCalculations', () => {
   describe('getMonthlyPensionerAllowance', () => {
     describe('when defendant is single and a pensioner', () => {
       it('should return single pensioner allowance', () => {
-        expect(allowanceHelper.getMonthlyPensionerAllowance(sampleIncomesWithPensionData.incomes, undefined)).to.equal(50)
+        expect(allowanceCalculations.getMonthlyPensionerAllowance(sampleIncomesWithPensionData.incomes, undefined)).to.equal(50)
       })
     })
     describe('when defendant and partner are pensioner', () => {
       it('should return single pensioner allowance and partner is a pensioner', () => {
-        expect(allowanceHelper.getMonthlyPensionerAllowance(sampleIncomesWithPensionData.incomes, samplePartnerPensioner.partner)).to.equal(100)
+        expect(allowanceCalculations.getMonthlyPensionerAllowance(sampleIncomesWithPensionData.incomes, samplePartnerPensioner.partner)).to.equal(100)
       })
     })
     describe('when defendant is not a pensioner and partner is pensioner', () => {
       it('should return single pensioner allowance and partner is a pensioner', () => {
-        expect(allowanceHelper.getMonthlyPensionerAllowance(sampleIncomesData.incomes, samplePartnerPensioner.partner)).to.equal(0)
+        expect(allowanceCalculations.getMonthlyPensionerAllowance(sampleIncomesData.incomes, samplePartnerPensioner.partner)).to.equal(0)
       })
     })
     describe('when defendant is single and not a pensioner', () => {
       it('should return single pensioner allowance', () => {
-        expect(allowanceHelper.getMonthlyPensionerAllowance(sampleIncomesData.incomes, undefined)).to.equal(0)
+        expect(allowanceCalculations.getMonthlyPensionerAllowance(sampleIncomesData.incomes, undefined)).to.equal(0)
+      })
+    })
+  })
+
+  describe('allowance',() => {
+    describe('deserialize',() => {
+      describe('when a valid personal input is supplied ',() => {
+        it('should return valid data', () => {
+          const input = {
+            personal : [ { item: 'SINGLE_18_TO_24', weekly: 10, monthly: 50 } ]
+          }
+          const allowance: Allowance = new Allowance().deserialize(input)
+          expect(allowance.personal[0].monthly).to.equal(50)
+        })
+      })
+      describe('when a invalid personal input is supplied ',() => {
+        it('should return undefined allowance', () => {
+          const allowance: Allowance = new Allowance().deserialize(undefined)
+          expect(allowance).to.equal(undefined)
+        })
+      })
+    })
+  })
+
+  describe('allowanceItem',() => {
+    describe('deserialize',() => {
+      describe('when a valid personal input is supplied ',() => {
+        it('should return valid data', () => {
+          const input = { item: 'SINGLE_18_TO_24', weekly: 10, monthly: 50 }
+          const allowanceItem: AllowanceItem = new AllowanceItem().deserialize(input)
+          expect(allowanceItem.monthly).to.equal(50)
+        })
       })
     })
   })

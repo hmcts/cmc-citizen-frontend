@@ -23,7 +23,7 @@ import { Party } from 'claims/models/details/yours/party'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
 import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
-import { ResourceAllowanceHelper } from 'common/allowances/allowanceHelper'
+import { AllowanceCalculations } from 'common/allowances/allowanceCalculations'
 
 export class PaymentPlanHelper {
 
@@ -68,7 +68,7 @@ export class PaymentPlanHelper {
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
       const repository: AllowanceRepository = new ResourceAllowanceRepository()
-      const allowanceHelper = new ResourceAllowanceHelper(repository)
+      const allowanceHelper = new AllowanceCalculations(repository)
       const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
 
       const instalmentAmount: number = statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
@@ -90,7 +90,7 @@ export class PaymentPlanHelper {
     }
 
     const repository: AllowanceRepository = new ResourceAllowanceRepository()
-    const allowanceHelper = new ResourceAllowanceHelper(repository)
+    const allowanceHelper = new AllowanceCalculations(repository)
     const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
 
     const instalmentAmount: number = Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(

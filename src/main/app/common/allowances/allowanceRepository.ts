@@ -1,30 +1,10 @@
 import { AllowanceItem } from 'common/allowances/allowanceItem'
-import { Allowance } from 'common/allowances/allowance'
+import { Allowance,
+  DependantAllowanceType,
+  DisabilityAllowanceType,
+  LivingAllowanceType,
+  PensionAllowanceType } from 'common/allowances/allowance'
 import { join } from 'path'
-
-export enum DependantAllowanceType {
-  PER_DEPENDANT = 'EACH'
-}
-export enum DisabilityAllowanceType {
-  DEFENDANT_ONLY = 'DEFENDANT_ONLY',
-  DEFENDANT_ONLY_SEVERE = 'DEFENDANT_ONLY_SEVERE',
-  DEFENDANT_AND_PARTNER = 'DEFENDANT_AND_PARTNER',
-  DEFENDANT_AND_PARTNER_SEVERE = 'DEFENDANT_AND_PARTNER_SEVERE',
-  DEPENDANT = 'DEPENDANT',
-  CARER = 'CARER'
-}
-export enum PensionAllowanceType {
-  DEFENDANT_ONLY = 'DEFENDANT_ONLY',
-  DEFENDANT_AND_PARTNER = 'DEFENDANT_AND_PARTNER'
-}
-
-export enum LivingAllowanceType {
-  SINGLE_18_TO_24 = 'SINGLE_18_TO_24',
-  SINGLE_OVER_25 = 'SINGLE_OVER_25',
-  DEFENDANT_AND_PARTNER_OVER_18 = 'DEFENDANT_AND_PARTNER_OVER_18',
-  DEFENDANT_UNDER_25_PARTNER_UNDER_18 = 'DEFENDANT_UNDER_25_PARTNER_UNDER_18',
-  DEFENDANT_OVER_25_PARTNER_UNDER_18 = 'DEFENDANT_OVER_25_PARTNER_UNDER_18'
-}
 
 export interface AllowanceRepository {
 
@@ -39,12 +19,9 @@ export class ResourceAllowanceRepository implements AllowanceRepository {
 
   private allowances: Allowance
 
-  constructor (public option?: string) {
-    let meansAllowance = option
-    if (!meansAllowance) {
-      meansAllowance = join(__dirname, '..', '..', '..','resources','meansAllowance.json')
-    }
-    this.allowances = new Allowance().deserialize(require(meansAllowance))
+  constructor (public path?: string) {
+    const resourcePath = path || join(__dirname, '..', '..', '..','resources','meansAllowance.json')
+    this.allowances = new Allowance().deserialize(require(resourcePath))
   }
 
   getDependantAllowance (dependantAllowanceType: DependantAllowanceType): AllowanceItem {

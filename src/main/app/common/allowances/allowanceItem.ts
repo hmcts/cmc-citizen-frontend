@@ -1,24 +1,6 @@
 export class AllowanceItem {
-  item?: string
-  weekly?: number
-  monthly?: number
 
-  constructor (item?: string, weekly?: number, monthly?: number) {
-    this.item = item
-    this.weekly = weekly
-    this.monthly = monthly
-  }
-
-  static fromObject (value?: any): AllowanceItem {
-    if (!value) {
-      return value
-    }
-
-    return new AllowanceItem(
-      value.item,
-      value.weekly,
-      value.monthly
-    )
+  constructor (public item?: string, public weekly?: number, public monthly?: number) {
   }
 
   deserialize (input?: any): AllowanceItem {
