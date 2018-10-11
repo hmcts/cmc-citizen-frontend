@@ -10,9 +10,6 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { ResponseType } from 'claims/models/response/responseType'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Frequency } from 'common/frequency/frequency'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
@@ -26,14 +23,8 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
 
-  const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
-    instalmentAmount: paymentPlan ? paymentPlan.instalmentAmount : 0,
-    paymentSchedule: paymentPlan ? Frequency.toPaymentSchedule(paymentPlan.frequency) : {},
-    firstPaymentDate: paymentPlan ? paymentPlan.startDate : null,
-    completionDate: paymentPlan ? paymentPlan.calculateLastPaymentDate() : null,
-    paymentLength: paymentPlan ? paymentPlan.calculatePaymentLength() : 0,
     page: page
   })
 }

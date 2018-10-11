@@ -49,7 +49,6 @@ export class ClaimantResponseConverter {
     if (!draftClaimantResponse.acceptPaymentMethod) {
       return respAcceptance
     }
-    respAcceptance.decisionType = draftClaimantResponse.courtDecisionType
     respAcceptance.claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod,draftClaimantResponse.courtDecisionType)
     respAcceptance.courtDetermination = this.createCourtDetermination(draftClaimantResponse)
     return respAcceptance
@@ -57,9 +56,16 @@ export class ClaimantResponseConverter {
 
   private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
     if (draftClaimantResponse.courtDecisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
-      throw new Error('court payment intention not found where decision type is COURT')
+      throw new Error('court offered payment intention not found where decision type is COURT')
     }
+    if (draftClaimantResponse.courtDecisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && !draftClaimantResponse.courtCalculatedPaymentIntention) {
+      return undefined
+    }
+
     const courtDetermination: CourtDetermination = new CourtDetermination()
+    if (draftClaimantResponse.courtCalculatedPaymentIntention) {
+      courtDetermination.courtPaymentIntention = draftClaimantResponse.courtCalculatedPaymentIntention
+    }
     courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
     if (courtDetermination.courtDecision.repaymentPlan) {
       courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
@@ -68,6 +74,7 @@ export class ClaimantResponseConverter {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
     courtDetermination.disposableIncome = draftClaimantResponse.disposableIncome ? draftClaimantResponse.disposableIncome : 0
+    courtDetermination.decisionType = draftClaimantResponse.courtDecisionType
     return courtDetermination
   }
 
@@ -101,7 +108,9 @@ export class ClaimantResponseConverter {
       }
       return paymentIntention
     } else {
-      if (decisionType === DecisionType.CLAIMANT) throw new Error('claimant payment intention not found where decision type is CLAIMANT')
+      if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+        throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
+      }
     }
   }
 
