@@ -33,9 +33,7 @@ export class ClaimantResponseConverter {
         reject.reason = draftClaimantResponse.rejectionReason.text
       }
       return reject
-    } else if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.YES) {
-      return this.createResponseAcceptance(draftClaimantResponse)
-    } else throw new Error('Unknown state of draftClaimantResponse')
+    } else return this.createResponseAcceptance(draftClaimantResponse)
   }
 
   private static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {
@@ -46,11 +44,14 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
-    if (!draftClaimantResponse.acceptPaymentMethod) {
-      return respAcceptance
+    const courtDetermination = this.createCourtDetermination(draftClaimantResponse)
+    if (courtDetermination) {
+      respAcceptance.courtDetermination = courtDetermination
     }
-    respAcceptance.claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod,draftClaimantResponse.courtDecisionType)
-    respAcceptance.courtDetermination = this.createCourtDetermination(draftClaimantResponse)
+    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod,draftClaimantResponse.courtDecisionType)
+    if (claimantPaymentIntention) {
+      respAcceptance.claimantPaymentIntention = claimantPaymentIntention
+    }
     return respAcceptance
   }
 
@@ -59,16 +60,20 @@ export class ClaimantResponseConverter {
       throw new Error('court offered payment intention not found where decision type is COURT')
     }
     if (draftClaimantResponse.courtDecisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && !draftClaimantResponse.courtCalculatedPaymentIntention) {
+      throw new Error('court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT')
+    }
+    if (!draftClaimantResponse.courtCalculatedPaymentIntention && ! draftClaimantResponse.courtOfferedPaymentIntention) {
       return undefined
     }
-
     const courtDetermination: CourtDetermination = new CourtDetermination()
     if (draftClaimantResponse.courtCalculatedPaymentIntention) {
       courtDetermination.courtPaymentIntention = draftClaimantResponse.courtCalculatedPaymentIntention
     }
-    courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
-    if (courtDetermination.courtDecision.repaymentPlan) {
-      courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
+    if (draftClaimantResponse.courtOfferedPaymentIntention) {
+      courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
+      if (courtDetermination.courtDecision.repaymentPlan) {
+        courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
+      }
     }
     if (draftClaimantResponse.rejectionReason) {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
@@ -110,6 +115,8 @@ export class ClaimantResponseConverter {
     } else {
       if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
         throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
+      } else {
+        return undefined
       }
     }
   }
