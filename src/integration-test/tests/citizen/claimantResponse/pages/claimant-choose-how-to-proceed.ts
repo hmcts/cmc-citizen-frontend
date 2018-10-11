@@ -4,20 +4,23 @@ const I: I = actor()
 
 const fields = {
   radioSettlement: 'input[id=optionsignSettlementAgreement]',
-  radioCcj: 'input[id=optionrequestCCJ]',
-  submit: 'input[id=saveAndContinue]'
+  radioRequestCcj: 'input[id=optionrequestCCJ]'
+}
+
+const buttons = {
+  saveAndContinue: 'input[id=saveAndContinue]'
 }
 
 export class ClaimantChooseHowToProceed {
 
   chooseSettlement (): void {
     I.checkOption(fields.radioSettlement)
-    I.click(fields.submit)
+    I.click(buttons.saveAndContinue)
   }
 
-  chooseCcj (): void {
-    I.checkOption(fields.radioCcj)
-    I.click(fields.submit)
+  chooseRequestCcj (): void {
+    I.checkOption(fields.radioRequestCcj)
+    I.click(buttons.saveAndContinue)
   }
 
 }

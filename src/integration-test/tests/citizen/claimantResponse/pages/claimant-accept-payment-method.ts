@@ -4,20 +4,23 @@ const I: I = actor()
 
 const fields = {
   radioYes: 'input[id=acceptyes]',
-  radioNo: 'input[id=acceptNo]',
-  submit: 'input[id=saveAndContinue]'
+  radioNo: 'input[id=acceptNo]'
+}
+
+const buttons = {
+  saveAndContinue: 'input[id=saveAndContinue]'
 }
 
 export class ClaimantAcceptPaymentMethod {
 
   chooseYes (): void {
     I.checkOption(fields.radioYes)
-    I.click(fields.submit)
+    I.click(buttons.saveAndContinue)
   }
 
   chooseNo (): void {
     I.checkOption(fields.radioNo)
-    I.click(fields.submit)
+    I.click(buttons.saveAndContinue)
   }
 
 }

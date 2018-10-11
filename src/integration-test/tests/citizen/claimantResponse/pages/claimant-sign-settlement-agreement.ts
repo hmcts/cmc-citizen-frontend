@@ -3,15 +3,18 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  checkboxConfirm: 'input[id=signedTrue]',
-  submit: 'input[id=saveAndContinue]'
+  checkboxConfirm: 'input[id=signedTrue]'
+}
+
+const buttons = {
+  saveAndContinue: 'input[id=saveAndContinue]'
 }
 
 export class ClaimantSignSettlementAgreement {
 
   confirm (): void {
     I.checkOption(fields.checkboxConfirm)
-    I.click(fields.submit)
+    I.click(buttons.saveAndContinue)
   }
 
 }
