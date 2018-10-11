@@ -15,7 +15,7 @@ import { I18Next } from 'modules/i18n'
 import { Nunjucks } from 'modules/nunjucks'
 import * as moment from 'moment'
 
-import { Shutter as ShutterPageMiddleware } from 'routes/shutter'
+import { ShutterPageMiddleware } from 'routes/shutterPageMiddleware'
 import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'

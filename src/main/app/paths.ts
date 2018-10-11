@@ -17,7 +17,7 @@ export class Paths {
   static readonly paymentPlanCalculation = new RoutablePath('/payment-plan-calculation', false)
   static readonly totalIncomeOrExpensesCalculation = new RoutablePath('/total-income-expense-calculation',false)
 
-  // gov.uk entrypoints - these can't change without updating gov.uk content as well
+  // gov.uk entry points - these can't change without updating gov.uk content as well
   static readonly makeClaimReceiver = new RoutablePath('/make-claim', false)
   static readonly respondToClaimReceiver = new RoutablePath('/respond-to-claim', false)
   static readonly returnToClaimReceiver = new RoutablePath('/return-to-claim', false)
