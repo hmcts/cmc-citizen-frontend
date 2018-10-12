@@ -3,6 +3,9 @@
 {% from "date.njk" import dateInput %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
+{% set defendantType = claim.claimData.defendant.type %}
+{% set defendantIsBusiness = defendantType === PartyType.COMPANY.value or defendantType === PartyType.ORGANISATION.value %}
+
 {% block additional_scripts %}
   {% include "payment-plan-calculation-scripts.njk" %}
 {% endblock %}
@@ -16,6 +19,11 @@
 
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
+
+      {% if not defendantIsBusiness %}
+        <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
+        {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = claim.response.statementOfMeans, classes = 'form-group') }}
+      {% endif %}
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
       {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
