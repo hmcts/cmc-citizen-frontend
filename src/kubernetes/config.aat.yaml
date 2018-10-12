@@ -11,4 +11,3 @@ data:
   CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
   FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
   DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
-  FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-aat.service.core-compute-aat.internal
