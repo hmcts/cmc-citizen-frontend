@@ -6,12 +6,11 @@ export class ResponseAcceptance implements ClaimantResponse {
   type: string
   amountPaid: number
   formaliseOption: string
-  decisionType: string
   claimantPaymentIntention?: PaymentIntention
   courtDetermination?: CourtDetermination
 
   constructor () {
-    this.type = 'acceptation'
+    this.type = 'ACCEPTATION'
   }
 
 }
