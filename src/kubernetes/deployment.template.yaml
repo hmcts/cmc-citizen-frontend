@@ -206,7 +206,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: feature-toggle-api
-  namespace: ccd
+  namespace: ${NAMESPACE}
   labels:
     app: feature-toggle-api
 spec:
@@ -255,7 +255,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: smtp-server
-  namespace: ccd
+  namespace: ${NAMESPACE}
   labels:
     app: smtp-server
 spec:
@@ -356,7 +356,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: claim-store-api
-  namespace: ccd
+  namespace: ${NAMESPACE}
   labels:
     app: claim-store-api
 spec:
@@ -427,7 +427,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: shared-database
-  namespace: ccd
+  namespace: ${NAMESPACE}
   labels:
     app: shared-database
 spec:
