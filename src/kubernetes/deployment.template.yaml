@@ -199,10 +199,22 @@ spec:
         - containerPort: 8580
           name: http
         imagePullPolicy: Always
+
 ---
 #
 # SHARED-DATABASE
 #
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-database-initdb
+  namespace: ${NAMESPACE}
+data:
+  initdb.sql: |
+    CREATE USER features WITH PASSWORD 'features';
+    CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -219,7 +231,7 @@ spec:
         app: shared-database
     spec:
       containers:
-      - image: hmctssandbox.azurecr.io/hmcts/ccd-postgres:10.5-alpine-v0.1
+      - image: postgres:10.5-alpine
         name: shared-database
         resources:
           requests:
@@ -232,3 +244,11 @@ spec:
         ports:
         - containerPort: 5432
           name: postgres
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d
+          name: initdb
+          readOnly: true
+      volumes:
+      - name: initdb
+        configMap:
+          name: shared-database-initdb
