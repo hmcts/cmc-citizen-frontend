@@ -4,7 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkOnlyClaimantHasAccess } from 'test/routes/checks/claimant-in-case-check'
+import { checkOnlyClaimantHasAccess } from 'test/features/response/routes/checks/claimant-in-case-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
