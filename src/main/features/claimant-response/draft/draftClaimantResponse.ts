@@ -20,12 +20,14 @@ export class DraftClaimantResponse extends DraftDocument {
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
   settlementAgreement?: SettlementAgreement
   alternatePaymentMethod?: DraftPaymentIntention
+  courtCalculatedPaymentIntention?: PaymentIntention
   courtOfferedPaymentIntention?: PaymentIntention
   courtDecisionType?: DecisionType
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
   acceptCourtOffer?: AcceptCourtOffer
+  disposableIncome: number
 
   constructor () {
     super()
@@ -67,11 +69,17 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.courtOfferedPaymentIntention) {
         this.courtOfferedPaymentIntention = PaymentIntention.deserialize(input.courtOfferedPaymentIntention)
       }
+      if (input.courtCalculatedPaymentIntention) {
+        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtCalculatedPaymentIntention)
+      }
       if (input.courtDecisionType) {
         this.courtDecisionType = input.courtDecisionType
       }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount
+      }
+      if (input.disposableIncome) {
+        this.disposableIncome = input.disposableIncome
       }
     }
     return this
