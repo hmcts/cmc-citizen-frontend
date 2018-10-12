@@ -78,7 +78,7 @@
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-        {{ financialDetailsBlock(claim.claimData.defendant.isBusiness(), claim.response.statementOfMeans) }}
+        {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
 
       {% endif %}
 
@@ -126,7 +126,7 @@
           {% endif %}
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-          {{ financialDetailsBlock(claim.claimData.defendant.isBusiness(), claim.response.statementOfMeans) }}
+          {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
 
         {% endif %}
       {% endif %}
