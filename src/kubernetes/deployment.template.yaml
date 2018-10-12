@@ -202,6 +202,20 @@ spec:
           name: http
         imagePullPolicy: Always
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: feature-toggle-api
+  namespace: ccd
+  labels:
+    app: feature-toggle-api
+spec:
+  ports:
+  - port: 8580
+  selector:
+    app: feature-toggle-api
+  clusterIP: None
+---
 #
 # SMTP-SERVER
 #
@@ -236,6 +250,20 @@ spec:
         - containerPort: 8025
           name: smtp-ui
         imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smtp-server
+  namespace: ccd
+  labels:
+    app: smtp-server
+spec:
+  ports:
+  - port: 1025
+  selector:
+    app: smtp-server
+  clusterIP: None
 ---
 #
 # CLAIM-STORE CONFIG
@@ -320,9 +348,22 @@ spec:
             memory: "1024Mi"
             cpu: "2500m"
         ports:
-        - containerPort: 8580
+        - containerPort: 4400
           name: http
         imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: claim-store-api
+  namespace: ccd
+  labels:
+    app: claim-store-api
+spec:
+  ports:
+  - port: 4400
+  selector:
+    app: claim-store-api
 ---
 #
 # SHARED-DATABASE
@@ -381,3 +422,17 @@ spec:
       - name: initdb
         configMap:
           name: shared-database-initdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shared-database
+  namespace: ccd
+  labels:
+    app: shared-database
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: shared-database
+  clusterIP: None
