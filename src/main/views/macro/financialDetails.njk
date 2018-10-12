@@ -186,3 +186,10 @@
     </div>
   </details>
 {% endmacro %}
+
+{% macro financialDetailsBlock(isBusinessType, statementOfMeans) %}
+  {% if not isBusinessType %}
+    <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
+    {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
+  {% endif %}
+{% endmacro %}

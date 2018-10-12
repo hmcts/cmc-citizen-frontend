@@ -8,7 +8,7 @@
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 {% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
-{% from "financialDetails.njk" import financialDetailsTable %}
+{% from "financialDetails.njk" import financialDetailsTable, financialDetailsBlock %}
 
 {% set defendantName = claim.claimData.defendant.name %}
 
@@ -54,13 +54,6 @@
   </table>
 {% endmacro %}
 
-{% macro financialDetailsBlock(statementOfMeans) %}
-  {% if not claim.claimData.defendant.isBusiness() %}
-    <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
-    {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
-  {% endif %}
-{% endmacro %}
-
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -85,7 +78,7 @@
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-        {{ financialDetailsBlock(claim.response.statementOfMeans) }}
+        {{ financialDetailsBlock(claim.claimData.defendant.isBusiness(), claim.response.statementOfMeans) }}
 
       {% endif %}
 
@@ -133,7 +126,7 @@
           {% endif %}
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-          {{ financialDetailsBlock(claim.response.statementOfMeans) }}
+          {{ financialDetailsBlock(claim.claimData.defendant.isBusiness(), claim.response.statementOfMeans) }}
 
         {% endif %}
       {% endif %}
