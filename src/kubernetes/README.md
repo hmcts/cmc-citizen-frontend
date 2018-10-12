@@ -1,5 +1,9 @@
 # AKS : Azure Managed Kubernetes
 
+## CNP Confluence Page
+
+Should definitely read through this page first: https://tools.hmcts.net/confluence/display/CNP/Using+Containers+in+the+Pipeline
+
 ## Setup - run once
 
 - Install Azure cli: `brew install azure-cli`
@@ -7,7 +11,6 @@
 - Login: `az login`
 - Set azure subscription:  `az account set --subscription DCD-CNP-DEV`
 - Add to k8s cli (kubectl): `az aks get-credentials -n cnp-aks-cluster -g cnp-aks-rg`
-- Optional: install kubectx: https://github.com/ahmetb/kubectx ::: this helps switching namespace and contexts
 
 ## Post-Setup
 
@@ -24,9 +27,18 @@ aks-nodepool1-11596463-4   Ready     agent     9d        v1.11.2
 ```
 - You're good to go!
 
+## Using the Kubernetes Dashboard
+
+You will probably find `kubectl` the easiest way to interact with Kubernetes but there
+is a dashboard available too:
+
+https://tools.hmcts.net/confluence/display/CNP/Using+Containers+in+the+Pipeline#UsingContainersinthePipeline-UsingtheKubernetesDashboard
+
+This does give you some resource metrics you won't get using `kubectl` i.e. memory, cpu
+
 ## Tips
 
-https://tools.hmcts.net/confluence/display/CNP/Using+Containers+in+the+Pipeline#UsingContainersinthePipeline-ManualDeleteScript
+Install kubectx: https://github.com/ahmetb/kubectx ::: this helps switching namespace and contexts
 
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
