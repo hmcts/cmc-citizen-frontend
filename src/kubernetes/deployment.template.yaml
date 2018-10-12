@@ -28,76 +28,78 @@ spec:
         options:
         - name: single-request-reopen
       containers:
-        - image: ${IMAGE_NAME}
-          name: ${SERVICE_NAME}
-           # These are obtained from environment variables.  If it's
-          # an environment variable, it can be used here.  Projects
-          # would usually source custom values from:
-          #   - Jenkins Azure Keyvault plugin (e.g. secrets)
-          #   - Your project's Jenkinsfile
-          env:
-            - name: REFORM_TEAM
-              value: 'cmc'
-            - name: REFORM_SERVICE_NAME
-              value: 'citizen-frontend'
-            - name: NODE_ENV
-              value: 'production'
-            - name: UV_THREADPOOL_SIZE
-              value: '64'
-            - name: GA_TRACKING_ID
-              value: 'UA-97111056-1'
-            - name: SERVICE_SURVEY_URL
-              value: 'http://www.smartsurvey.co.uk/s/CMCMVPT1/'
-            - name: FEEDBACK_SURVEY_URL
-              value: 'http://www.smartsurvey.co.uk/s/CMCMVPFB/'
-            - name: REPORT_PROBLEM_SURVEY_URL
-              value: 'http://www.smartsurvey.co.uk/s/CMCMVPPB/'
-            - name: FEATURE_TOGGLES_API_URL
-              value: 'http://rpe-feature-toggle-api-demo.service.core-compute-demo.internal'
-            - name: FEATURE_TESTING_SUPPORT
-              value: 'true'
-            - name: FEATURE_NEW_FEATURES_CONSENT
-              value: 'true'
-            - name: FEATURE_ADMISSIONS
-              value: 'true'
-            - name: FEATURE_FINE_PRINT
-              value: 'true'
-            - name: FEATURE_RETURN_ERROR_TO_USER
-              value: 'true'
-            - name: FEATURE_MOCK_PAY
-              value: 'false'
-            - name: POSTCODE_LOOKUP_API_KEY
-              value: ${POSTCODE_LOOKUP_API_KEY}
-            - name: APPINSIGHTS_INSTRUMENTATIONKEY
-              value: ${APPINSIGHTS_INSTRUMENTATIONKEY}
-            - name: OAUTH_CLIENT_SECRET
-              value: ${OAUTH_CLIENT_SECRET}
-            - name: IDAM_S2S_TOTP_SECRET
-              value: ${IDAM_S2S_TOTP_SECRET}
-            - name: DRAFT_STORE_SECRET_PRIMARY
-              value: ${DRAFT_STORE_SECRET_PRIMARY}
-            - name: DRAFT_STORE_SECRET_SECONDARY
-              value: ${DRAFT_STORE_SECRET_SECONDARY}
-            - name: COOKIE_ENCRYPTION_KEY
-              value: ${COOKIE_ENCRYPTION_KEY}
-            - name: CONTACT_EMAIL
-              value: ${CONTACT_EMAIL}
-          envFrom:
-            - configMapRef:
-                name: ${SERVICE_NAME}-config
-           # These may be adjusted, but be mindful please
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "0.2"
-            limits:
-              memory: "512Mi"
-              cpu: "1"
-           # This is the port your process is listening on in the container
-          ports:
-            - containerPort: 3000
-              name: http
-          imagePullPolicy: Always
+      - image: ${IMAGE_NAME}
+        name: ${SERVICE_NAME}
+        # These are obtained from environment variables.  If it's
+        # an environment variable, it can be used here.  Projects
+        # would usually source custom values from:
+        #   - Jenkins Azure Keyvault plugin (e.g. secrets)
+        #   - Your project's Jenkinsfile
+        env:
+        - name: REFORM_TEAM
+          value: 'cmc'
+        - name: REFORM_SERVICE_NAME
+          value: 'citizen-frontend'
+        - name: NODE_ENV
+          value: 'production'
+        - name: UV_THREADPOOL_SIZE
+          value: '64'
+        - name: GA_TRACKING_ID
+          value: 'UA-97111056-1'
+        - name: SERVICE_SURVEY_URL
+          value: 'http://www.smartsurvey.co.uk/s/CMCMVPT1/'
+        - name: FEEDBACK_SURVEY_URL
+          value: 'http://www.smartsurvey.co.uk/s/CMCMVPFB/'
+        - name: REPORT_PROBLEM_SURVEY_URL
+          value: 'http://www.smartsurvey.co.uk/s/CMCMVPPB/'
+        - name: CLAIM_STORE_URL
+          value: 'http://claim-store-api:4400'
+        - name: FEATURE_TOGGLES_API_URL
+          value: 'http://feature-toggle-api:8580'
+        - name: FEATURE_TESTING_SUPPORT
+          value: 'true'
+        - name: FEATURE_NEW_FEATURES_CONSENT
+          value: 'true'
+        - name: FEATURE_ADMISSIONS
+          value: 'true'
+        - name: FEATURE_FINE_PRINT
+          value: 'true'
+        - name: FEATURE_RETURN_ERROR_TO_USER
+          value: 'true'
+        - name: FEATURE_MOCK_PAY
+          value: 'false'
+        - name: POSTCODE_LOOKUP_API_KEY
+          value: ${POSTCODE_LOOKUP_API_KEY}
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          value: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+        - name: OAUTH_CLIENT_SECRET
+          value: ${OAUTH_CLIENT_SECRET}
+        - name: IDAM_S2S_TOTP_SECRET
+          value: ${IDAM_S2S_TOTP_SECRET}
+        - name: DRAFT_STORE_SECRET_PRIMARY
+          value: ${DRAFT_STORE_SECRET_PRIMARY}
+        - name: DRAFT_STORE_SECRET_SECONDARY
+          value: ${DRAFT_STORE_SECRET_SECONDARY}
+        - name: COOKIE_ENCRYPTION_KEY
+          value: ${COOKIE_ENCRYPTION_KEY}
+        - name: CONTACT_EMAIL
+          value: ${CONTACT_EMAIL}
+        envFrom:
+        - configMapRef:
+            name: ${SERVICE_NAME}-config
+        # These may be adjusted, but be mindful please
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "0.2"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+          # This is the port your process is listening on in the container
+        ports:
+        - containerPort: 3000
+          name: http
+        imagePullPolicy: Always
 ---
 #
 # Service
@@ -137,3 +139,245 @@ spec:
         backend:
           serviceName: ${SERVICE_NAME}
           servicePort: 80
+---
+#
+# FEATURE-TOGGLES CONFIG
+#
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feature-toggle-api
+  namespace: ${NAMESPACE}
+data:
+  JAVA_OPTS: -Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+  APPINSIGHTS_INSTRUMENTATIONKEY: 'fake-key'
+  FLYWAY_ENABLED: 'true'
+  FLYWAY_NOOP_STRATEGY: 'false'
+  FEATURES_DB_HOST: 'shared-database'
+  FEATURES_DB_CONN_OPTIONS: ''
+  FEATURES_DB_USER_NAME: 'features'
+  FEATURES_DB_PASSWORD: 'features'
+  TEST_ADMIN_USERNAME: 'admin@example.com'
+  TEST_ADMIN_PASSWORD: 'Password12'
+  TEST_EDITOR_USERNAME: 'editor@example.com'
+  TEST_EDITOR_PASSWORD: 'Password12'
+  ROOT_LOGGING_LEVEL: ''
+  LOGBACK_REQUIRE_THREAD: 'false'
+  LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
+  LOGBACK_REQUIRE_ERROR_CODE: 'false'
+---
+#
+# FEATURE-TOGGLES
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feature-toggle-api
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feature-toggle-api
+  template:
+    metadata:
+      labels:
+        app: feature-toggle-api
+    spec:
+      containers:
+      - image: hmcts/feature-toggle-api
+        name: feature-toggle-api
+        envFrom:
+        - configMapRef:
+            name: feature-toggle-api
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "2500m"
+        ports:
+        - containerPort: 8580
+          name: http
+        imagePullPolicy: Always
+---
+#
+# SMTP-SERVER
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smtp-server
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smtp-server
+  template:
+    metadata:
+      labels:
+        app: smtp-server
+    spec:
+      containers:
+      - image: mailhog/mailhog
+        name: smtp-server
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "0.1"
+          limits:
+            memory: "256Mi"
+            cpu: "0.5"
+        ports:
+        - containerPort: 1025
+          name: smtp
+        - containerPort: 8025
+          name: smtp-ui
+        imagePullPolicy: Always
+---
+#
+# CLAIM-STORE CONFIG
+#
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: claim-store-api
+  namespace: ${NAMESPACE}
+data:
+  JAVA_OPTS: '-Xms256m -Xmx512m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m'
+  CMC_DB_HOST: 'shared-database'
+  CMC_DB_PORT: '5432'
+  CMC_DB_USERNAME: 'cmc'
+  CMC_DB_PASSWORD: 'cmc'
+  CLAIM_STORE_DB_HOST: 'shared-database'
+  CLAIM_STORE_DB_PORT: '5432'
+  CLAIM_STORE_DB_USERNAME: 'claimstore'
+  CLAIM_STORE_DB_PASSWORD: 'claimstore'
+  FRONTEND_BASE_URL: 'https://${SERVICE_FQDN}'
+  CLAIM_STORE_TEST_SUPPORT_ENABLED: 'true'
+  STAFF_NOTIFICATIONS_SENDER: 'no-reply@example.com'
+  STAFF_NOTIFICATIONS_RECIPIENT: 'civilmoneyclaims+staff-int-tests@gmail.com'
+  RPA_NOTIFICATIONS_SENDER: 'no-reply@example.com'
+  RPA_NOTIFICATIONS_SEALEDCLAIMRECIPIENT: 'civilmoneyclaims+rpa-claim-issued@gmail.com'
+  RPA_NOTIFICATIONS_MORETIMEREQUESTEDRECIPIENT: 'civilmoneyclaims+rpa-more-time-requested@gmail.com'
+  RPA_NOTIFICATIONS_RESPONSERECIPIENT: 'civilmoneyclaims+rpa-defence-response@gmail.com'
+  RPA_NOTIFICATIONS_COUNTYCOURTJUDGEMENTRECIPIENT: 'civilmoneyclaims+rpa-county-court-judgement@gmail.com'
+  SPRING_MAIL_HOST: 'smtp-server'
+  SPRING_MAIL_PORT: '1025'
+  DOCUMENT_MANAGEMENT_URL: 'false'
+  CORE_CASE_DATA_API_URL: 'false'
+  FEATURE_TOGGLE_CORE_CASE_DATA: 'true'
+  ROOT_APPENDER: 'CMC'
+  JSON_CONSOLE_PRETTY_PRINT: ''
+  ROOT_LOGGING_LEVEL: ''
+  REFORM_SERVICE_NAME: 'claim-store'
+  REFORM_TEAM: ''
+  REFORM_ENVIRONMENT: ''
+  IDAM_CASEWORKER_ANONYMOUS_USERNAME: 'civilmoneyclaims+anonymouscitizen@gmail.com'
+  IDAM_CASEWORKER_ANONYMOUS_PASSWORD: 'Password12'
+  IDAM_CASEWORKER_SYSTEM_USERNAME: 'civilmoneyclaims+systemupdate@gmail.com'
+  IDAM_CASEWORKER_SYSTEM_PASSWORD: 'Password12'
+  SEND_LETTER_URL: 'false'
+  APPINSIGHTS_INSTRUMENTATIONKEY: 'fake-key'
+  OAUTH2_CLIENT_SECRET: '123456'
+  FEATURE_TOGGLES_API_URL: 'http://feature-toggle-api:8580'
+  RESPOND_TO_CLAIM_URL: 'https://${SERVICE_FQDN}/first-contact/start'
+  GOV_NOTIFY_API_KEY: ${GOV_NOTIFY_API_KEY}
+---
+#
+# CLAIM-STORE
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: claim-store-api
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: claim-store-api
+  template:
+    metadata:
+      labels:
+        app: claim-store-api
+    spec:
+      containers:
+      - image: hmcts/cmc-claim-store
+        name: claim-store-api
+        envFrom:
+        - configMapRef:
+            name: claim-store-api
+        - configMapRef:
+            name: ${SERVICE_NAME}-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "2500m"
+        ports:
+        - containerPort: 8580
+          name: http
+        imagePullPolicy: Always
+---
+#
+# SHARED-DATABASE
+#
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-database-initdb
+  namespace: ${NAMESPACE}
+data:
+  initdb.sql: |
+    CREATE USER features WITH PASSWORD 'features';
+    CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+
+    CREATE USER claimstore WITH PASSWORD 'claimstore';
+    CREATE DATABASE idam WITH OWNER = claimstore ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+
+    CREATE USER cmc WITH PASSWORD 'cmc';
+    CREATE DATABASE cmc WITH OWNER = cmc ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shared-database
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shared-database
+  template:
+    metadata:
+      labels:
+        app: shared-database
+    spec:
+      containers:
+      - image: postgres:10.5-alpine
+        name: shared-database
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d
+          name: initdb
+          readOnly: true
+      volumes:
+      - name: initdb
+        configMap:
+          name: shared-database-initdb
