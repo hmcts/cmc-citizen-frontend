@@ -12,6 +12,18 @@ export class ClaimantTaskListPage {
     I.click('Accept or reject')
   }
 
+  selectTaskAcceptOrRejectTheirRepaymentPlan (): void {
+    I.click('Accept or reject their repayment plan')
+  }
+
+  selectTaskFormaliseTheRepaymentPlan (): void {
+    I.click('Formalise the repayment plan')
+  }
+
+  selectTaskSignASettlementAgreement (): void {
+    I.click('Sign a settlement agreement')
+  }
+
   selectTaskCheckandSubmitYourResponse (): void {
     I.click('Check and submit your response')
   }
