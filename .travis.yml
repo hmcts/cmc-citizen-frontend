@@ -6,7 +6,6 @@ script:
   - yarn setup
   - yarn lint
   - yarn test
-  - yarn test:routes
   - yarn test:routes-parallel
   - yarn test:a11y
   - yarn test:coverage-unit
