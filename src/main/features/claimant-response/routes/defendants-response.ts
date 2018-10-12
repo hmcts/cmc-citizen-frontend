@@ -9,15 +9,7 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
-import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
-import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
-import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { ResponseType } from 'claims/models/response/responseType'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
-import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Frequency } from 'common/frequency/frequency'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
@@ -28,38 +20,11 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
   throw new NotFoundError(req.path)
 })
 
-function calculateTotalMonthlyIncome (statementOfMeans: StatementOfMeans): number {
-  if (statementOfMeans === undefined || statementOfMeans.incomes === undefined) {
-    return 0
-  }
-
-  const incomeSources = statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
-  return CalculateMonthlyIncomeExpense.calculateTotalAmount(incomeSources)
-}
-
-function calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
-  if (statementOfMeans === undefined || statementOfMeans.expenses === undefined) {
-    return 0
-  }
-
-  const expenseSources = statementOfMeans.expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
-  return CalculateMonthlyIncomeExpense.calculateTotalAmount(expenseSources)
-}
-
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
 
-  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-  const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
   res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
-    totalMonthlyIncome: calculateTotalMonthlyIncome(response.statementOfMeans),
-    totalMonthlyExpenses: calculateTotalMonthlyExpense(response.statementOfMeans),
-    instalmentAmount: paymentPlan.instalmentAmount,
-    paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
-    firstPaymentDate: paymentPlan.startDate,
-    lastPaymentOn: paymentPlan.calculateLastPaymentDate(),
-    lengthOfPayment: paymentPlan.calculatePaymentLength(),
     page: page
   })
 }

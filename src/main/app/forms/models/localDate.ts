@@ -50,6 +50,10 @@ export class LocalDate {
     return instance
   }
 
+  static fromMoment (date: moment.Moment): LocalDate {
+    return new LocalDate(date.year(), date.month() + 1, date.date())
+  }
+
   deserialize (input?: any): LocalDate {
     if (input) {
       this.day = input.day
