@@ -3,8 +3,6 @@
 {% from "date.njk" import dateInput %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
-{% set defendantType = claim.claimData.defendant.type %}
-
 {% block additional_scripts %}
   {% include "payment-plan-calculation-scripts.njk" %}
 {% endblock %}
