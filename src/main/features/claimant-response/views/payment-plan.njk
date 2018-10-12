@@ -4,7 +4,6 @@
 {% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set defendantType = claim.claimData.defendant.type %}
-{% set defendantIsBusiness = defendantType === PartyType.COMPANY.value or defendantType === PartyType.ORGANISATION.value %}
 
 {% block additional_scripts %}
   {% include "payment-plan-calculation-scripts.njk" %}
@@ -20,7 +19,7 @@
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
-      {% if not defendantIsBusiness %}
+      {% if not claim.claimData.defendant.isBusiness() %}
         <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
         {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = claim.response.statementOfMeans, classes = 'form-group') }}
       {% endif %}

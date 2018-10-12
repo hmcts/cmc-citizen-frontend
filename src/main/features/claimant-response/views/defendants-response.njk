@@ -11,8 +11,6 @@
 {% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set defendantName = claim.claimData.defendant.name %}
-{% set defendantType = claim.claimData.defendant.type %}
-{% set defendantIsBusiness = defendantType === PartyType.COMPANY.value or defendantType === PartyType.ORGANISATION.value %}
 
 {% macro paymentIntentionFragment(amount, paymentIntention) %}
   {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -56,8 +54,8 @@
   </table>
 {% endmacro %}
 
-{% macro financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, statementOfMeans) %}
-  {% if not defendantIsBusiness %}
+{% macro financialDetailsBlock(statementOfMeans) %}
+  {% if not claim.claimData.defendant.isBusiness() %}
     <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
     {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
   {% endif %}
@@ -87,7 +85,7 @@
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-        {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
+        {{ financialDetailsBlock(claim.response.statementOfMeans) }}
 
       {% endif %}
 
@@ -135,18 +133,7 @@
           {% endif %}
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-
-          <p>this section works as expected...</p>
-          {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
-
-          <p>this is broken - as it doesnt calculate the isBusiness logic</p>
-          {% set isBusiness = claim.claimData.defendant.isBusiness %}
-          <p>type = {{ claim.claimData.defendant.type }} </p>
-          <p>isBusiness = {{ isBusiness }} </p>
-          <p>claim.claimData.defendant.isBusiness = {{ claim.claimData.defendant.isBusiness }} </p>
-          {% if not claim.claimData.defendant.isBusiness %}
-            {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
-          {% endif %}
+          {{ financialDetailsBlock(claim.response.statementOfMeans) }}
 
         {% endif %}
       {% endif %}
