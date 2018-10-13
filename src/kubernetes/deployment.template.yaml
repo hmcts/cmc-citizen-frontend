@@ -52,6 +52,10 @@ spec:
           value: 'http://www.smartsurvey.co.uk/s/CMCMVPFB/'
         - name: REPORT_PROBLEM_SURVEY_URL
           value: 'http://www.smartsurvey.co.uk/s/CMCMVPPB/'
+        - name: DRAFT_STORE_URL
+          value: 'http://draft-store-api:8800'
+        - name: PDF_SERVICE_URL
+          value: 'http://pdf-service-api:5500'
         - name: CLAIM_STORE_URL
           value: 'http://claim-store-api:4400'
         - name: FEATURE_TOGGLES_API_URL
@@ -309,10 +313,11 @@ data:
   IDAM_CASEWORKER_SYSTEM_PASSWORD: 'Password12'
   SEND_LETTER_URL: 'false'
   APPINSIGHTS_INSTRUMENTATIONKEY: 'fake-key'
-  OAUTH2_CLIENT_SECRET: '123456'
+  OAUTH2_CLIENT_SECRET: '${OAUTH_CLIENT_SECRET}',
   FEATURE_TOGGLES_API_URL: 'http://feature-toggle-api:8580'
   RESPOND_TO_CLAIM_URL: 'https://${SERVICE_FQDN}/first-contact/start'
-  GOV_NOTIFY_API_KEY: ${GOV_NOTIFY_API_KEY}
+  GOV_NOTIFY_API_KEY: '${GOV_NOTIFY_API_KEY}'
+  CLAIM_STORE_S2S_SECRET: '${CLAIM_STORE_S2S_SECRET}'
 ---
 #
 # CLAIM-STORE
@@ -364,6 +369,7 @@ spec:
   - port: 4400
   selector:
     app: claim-store-api
+  clusterIP: None
 ---
 #
 # SHARED-DATABASE
@@ -378,12 +384,12 @@ data:
   initdb.sql: |
     CREATE USER features WITH PASSWORD 'features';
     CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-
     CREATE USER claimstore WITH PASSWORD 'claimstore';
-    CREATE DATABASE idam WITH OWNER = claimstore ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-
+    CREATE DATABASE claimstore WITH OWNER = claimstore ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
     CREATE USER cmc WITH PASSWORD 'cmc';
     CREATE DATABASE cmc WITH OWNER = cmc ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+    CREATE USER draftstore WITH PASSWORD 'draftstore';
+    CREATE DATABASE draftstore WITH OWNER = draftstore ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -435,4 +441,124 @@ spec:
   - port: 5432
   selector:
     app: shared-database
+  clusterIP: None
+---
+#
+# DRAFT-STORE
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: draft-store-api
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: draft-store-api
+  template:
+    metadata:
+      labels:
+        app: draft-store-api
+    spec:
+      containers:
+      - image: docker.artifactory.reform.hmcts.net/reform/draft-store-api
+        name: draft-store-api
+        env:
+        - name: JAVA_OPTS
+          value: '-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m'
+        - name: ROOT_APPENDER
+          value: 'CONSOLE'
+        - name: DRAFT_STORE_DB_HOST
+          value: 'shared-database'
+        - name: DRAFT_STORE_DB_PASSWORD
+          value: 'draftstore'
+        envFrom:
+        - configMapRef:
+            name: ${SERVICE_NAME}-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "2500m"
+        ports:
+        - containerPort: 8800
+          name: http
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: draft-store-api
+  namespace: ${NAMESPACE}
+  labels:
+    app: draft-store-api
+spec:
+  ports:
+  - port: 8800
+  selector:
+    app: draft-store-api
+  clusterIP: None
+---
+#
+# PDF-SERVICE-STORE
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdf-service-api
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdf-service-api
+  template:
+    metadata:
+      labels:
+        app: pdf-service-api
+    spec:
+      containers:
+      - image: docker.artifactory.reform.hmcts.net/reform/pdf-service-api
+        name: pdf-service-api
+        env:
+        - name: JAVA_OPTS
+          value: '-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m'
+        - name: ROOT_APPENDER
+          value: 'CONSOLE'
+        - name: REFORM_SERVICE_NAME
+          value: 'pdf-service'
+        - name: REFORM_TEAM
+          value: 'cmc'
+        - name: REFORM_ENVIRONMENT
+          value: 'aat'
+        envFrom:
+        - configMapRef:
+            name: ${SERVICE_NAME}-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "2500m"
+        ports:
+        - containerPort: 5500
+          name: http
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pdf-service-api
+  namespace: ${NAMESPACE}
+  labels:
+    app: pdf-service-api
+spec:
+  ports:
+  - port: 5500
+  selector:
+    app: pdf-service-api
   clusterIP: None
