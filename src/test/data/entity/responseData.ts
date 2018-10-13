@@ -10,6 +10,7 @@ import { individual, company } from 'test/data/entity/party'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 
 const baseResponseData = {
   defendant: individual,
@@ -178,6 +179,7 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
       type: BankAccountType.CURRENT_ACCOUNT
     }
   ],
+  disability: DisabilityStatus.NO,
   residence: {
     type: ResidenceType.OWN_HOME
   },
@@ -191,11 +193,17 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
+  partner: {
+    disability: DisabilityStatus.NO,
+    over18: false,
+    pensioner: false
+  },
   expenses: [{
     amount: 100,
     frequency: PaymentFrequency.MONTH,
     type: ExpenseType.MORTGAGE
-  }] as Expense[]
+  }] as Expense[],
+  carer: false
 }
 
 export const statementOfMeansWithAllFieldsData = {
@@ -212,11 +220,12 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildren: 3,
       numberOfChildrenLivingWithYou: 3
     }],
-    numberOfMaintainedChildren: 4,
     otherDependants: {
-      numberOfPeople: 5,
-      details: 'Colleagues'
-    }
+      anyDisabled: false,
+      details: 'Colleagues',
+      numberOfPeople: 5
+    },
+    anyDisabledChildren: false
   },
   employment: {
     employers: [{
@@ -241,7 +250,8 @@ export const statementOfMeansWithAllFieldsData = {
     claimNumber: '000MC001',
     amountOwed: 100,
     monthlyInstalmentAmount: 10
-  }]
+  }],
+  carer: true
 }
 
 export const fullAdmissionWithSoMPaymentBySetDate = {
