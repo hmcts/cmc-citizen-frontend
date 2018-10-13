@@ -208,7 +208,7 @@ spec:
         app: feature-toggle-importer
     spec:
       initContainers:
-      - name: init-wait-db
+      - name: init-wait-feature-toggle-api
         image: alpine
         command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 feature-toggle-api 8580 && exit 0 || sleep 3; done; exit 1"]
       containers:
@@ -342,6 +342,9 @@ spec:
       - name: init-wait-db
         image: alpine
         command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 shared-database 5432 && exit 0 || sleep 3; done; exit 1"]
+      - name: init-wait-smtp
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 smtp-server 1025 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: hmcts/cmc-claim-store
         name: claim-store-api
