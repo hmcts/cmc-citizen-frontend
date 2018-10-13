@@ -152,7 +152,8 @@ describe('monthIncrementFilter', () => {
   })
   it('adds monthly increment to "now"', () => {
     const monthlyIncrement = calculateMonthIncrement(moment())
-    expect(monthIncrementFilter('now').toJSON()).to.eq(monthlyIncrement.toJSON())
+    expect(monthIncrementFilter('now').format(moment.HTML5_FMT.DATETIME_LOCAL))
+      .to.eq(monthlyIncrement.format(moment.HTML5_FMT.DATETIME_LOCAL))
   })
 
   describe('throws exception when', () => {
