@@ -207,6 +207,10 @@ spec:
       labels:
         app: feature-toggle-importer
     spec:
+      initContainers:
+      - name: init-wait-db
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 feature-toggle-api 8580 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: hmcts/cmc-feature-toggle-importer
         name: feature-toggle-importer
@@ -334,6 +338,10 @@ spec:
       labels:
         app: claim-store-api
     spec:
+      initContainers:
+      - name: init-wait-db
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 shared-database 5432 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: hmcts/cmc-claim-store
         name: claim-store-api
@@ -458,6 +466,10 @@ spec:
       labels:
         app: draft-store-api
     spec:
+      initContainers:
+      - name: init-wait-db
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 shared-database 5432 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: docker.artifactory.reform.hmcts.net/reform/draft-store-api
         name: draft-store-api
@@ -472,7 +484,7 @@ spec:
           value: 'draftstore'
         envFrom:
         - configMapRef:
-            name: ${SERVICE_NAME}-config
+            name: aat-config
         resources:
           requests:
             memory: "256Mi"
@@ -517,6 +529,10 @@ spec:
       labels:
         app: pdf-service-api
     spec:
+      initContainers:
+      - name: init-wait-db
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 shared-database 5432 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: docker.artifactory.reform.hmcts.net/reform/pdf-service-api
         name: pdf-service-api
@@ -533,7 +549,7 @@ spec:
           value: 'preview'
         envFrom:
         - configMapRef:
-            name: ${SERVICE_NAME}-config
+            name: aat-config
         resources:
           requests:
             memory: "256Mi"
