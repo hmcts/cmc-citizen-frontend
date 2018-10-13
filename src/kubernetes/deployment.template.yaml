@@ -5,24 +5,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${SERVICE_NAME}
+  name: citizen-frontend
   namespace: ${NAMESPACE}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${SERVICE_NAME}
+      app: citizen-frontend
   template:
     metadata:
       labels:
-        app: ${SERVICE_NAME}
+        app: citizen-frontend
     spec:
       dnsConfig:
         options:
         - name: single-request-reopen
       containers:
       - image: ${IMAGE_NAME}
-        name: ${SERVICE_NAME}
+        name: citizen-frontend
         env:
         - name: REFORM_TEAM
           value: 'cmc'
@@ -78,7 +78,7 @@ spec:
           value: ${CONTACT_EMAIL}
         envFrom:
         - configMapRef:
-            name: ${SERVICE_NAME}-config
+            name: aat-config
         resources:
           requests:
             memory: "256Mi"
@@ -94,10 +94,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${SERVICE_NAME}
+  name: citizen-frontend
   namespace: ${NAMESPACE}
   labels:
-    app: ${SERVICE_NAME}
+    app: citizen-frontend
 spec:
   ports:
   - name: http
@@ -105,12 +105,12 @@ spec:
     port: 80
     targetPort: 3000
   selector:
-    app: ${SERVICE_NAME}
+    app: citizen-frontend
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ${SERVICE_NAME}
+  name: citizen-frontend
   namespace: ${NAMESPACE}
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -121,7 +121,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: ${SERVICE_NAME}
+          serviceName: citizen-frontend
           servicePort: 80
 ---
 #
@@ -341,7 +341,7 @@ spec:
         - configMapRef:
             name: claim-store-api
         - configMapRef:
-            name: ${SERVICE_NAME}-config
+            name: aat-config
         resources:
           requests:
             memory: "256Mi"

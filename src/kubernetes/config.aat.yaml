@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ${SERVICE_NAME}-config
+  name: aat-config
   namespace: ${NAMESPACE}
 data:
   IDAM_API_URL: 'https://preprod-idamapi.reform.hmcts.net:3511'
