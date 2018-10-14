@@ -295,7 +295,9 @@ export class ResponseModelConverter {
       repaymentPlan: paymentIntention.paymentPlan && {
         instalmentAmount: paymentIntention.paymentPlan.instalmentAmount,
         firstPaymentDate: paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-        paymentSchedule: paymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
+        paymentSchedule: paymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule,
+        completionDate: paymentIntention.paymentPlan.completionDate.toMoment(),
+        paymentLength: paymentIntention.paymentPlan.paymentLength
       }
     } as PaymentIntention
   }
