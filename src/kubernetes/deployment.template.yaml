@@ -72,7 +72,7 @@ spec:
           value: ${CONTACT_EMAIL}
         envFrom:
         - configMapRef:
-            name: aat-config
+            name: ${SERVICE_NAME}-config
         resources:
           requests:
             memory: "256Mi"
