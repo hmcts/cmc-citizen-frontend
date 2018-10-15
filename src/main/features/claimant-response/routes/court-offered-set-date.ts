@@ -25,6 +25,7 @@ function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse): M
     case DecisionType.COURT:
       return draft.document.courtOfferedPaymentIntention.paymentDate
     case DecisionType.CLAIMANT:
+    case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT:
       return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
   }
 }

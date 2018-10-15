@@ -20,11 +20,7 @@
           {{
           repaymentPlanBlock(
             heading = '',
-            instalmentAmount = instalmentAmount,
-            paymentSchedule = paymentSchedule,
-            firstPaymentDate = firstPaymentDate,
-            lastPaymentOn = lastPaymentOn,
-            lengthOfPayment = lengthOfPayment
+            repaymentPlan = claim.response.paymentIntention.repaymentPlan
           )
           }}
         {% endif %}

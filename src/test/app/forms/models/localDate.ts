@@ -4,6 +4,7 @@ import { Validator } from 'class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { LocalDate, ValidationErrors } from 'forms/models/localDate'
+import moment = require('moment')
 
 describe('LocalDate', () => {
 
@@ -66,6 +67,13 @@ describe('LocalDate', () => {
 
     it('should accept valid date', () => {
       expect(validator.validateSync(new LocalDate(2017, 12, 31)).length).to.equal(0)
+    })
+  })
+
+  describe('fromMoment', () => {
+    it('should return LocalDate from moment object', () => {
+      expect(LocalDate.fromMoment(moment('2018-01-01'))).to.deep.equal(new LocalDate(2018,1,1))
+      expect(LocalDate.fromMoment(moment('2018-12-01'))).to.deep.equal(new LocalDate(2018,12,1))
     })
   })
 
