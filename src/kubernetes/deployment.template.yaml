@@ -158,6 +158,10 @@ spec:
       labels:
         app: feature-toggle-api
     spec:
+      initContainers:
+      - name: init-wait-db
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 shared-database 5432 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: hmcts/feature-toggle-api
         name: feature-toggle-api
