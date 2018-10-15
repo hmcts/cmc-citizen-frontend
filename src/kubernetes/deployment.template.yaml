@@ -588,7 +588,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: idam-authentication-web
-  namespace: ccd
+  namespace: ${NAMESPACE}
 spec:
   replicas: 1
   selector:
@@ -627,7 +627,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: idam-authentication-web
-  namespace: ccd
+  namespace: ${NAMESPACE}
   labels:
     app: idam-authentication-web
 spec:
@@ -646,7 +646,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: idam-api
-  namespace: ccd
+  namespace: ${NAMESPACE}
 spec:
   replicas: 1
   selector:
@@ -669,51 +669,51 @@ spec:
         name: idam-api
         env:
         - name: IDAM_SUPERUSER_EMAIL
-        - value: 'cmc-int-test@cmc.reform.hmcts.net'
+          value: 'cmc-int-test@cmc.reform.hmcts.net'
         - name: SPRING_DATASOURCE_URL
-        - value: 'jdbc:postgresql://shared-database:5432/idam'
+          value: 'jdbc:postgresql://shared-database:5432/idam'
         - name: IDAM_TESTING_SUPPORT_ENABLED
-        - value: 'true'
+          value: 'true'
         - name: NOTIFY_API_KEY
-        - value: '${GOV_NOTIFY_API_KEY}'
+          value: '${GOV_NOTIFY_API_KEY}'
         - name: NOTIFY_CMC_ACTIVATE_USER_TEMPLATE
-        - value: '76aa8695-64e8-4afd-ae13-bc8385302b1f'
+          value: '76aa8695-64e8-4afd-ae13-bc8385302b1f'
         - name: NOTIFY_CMC_SOLICITOR_ACTIVATE_USER_TEMPLATE
-        - value: '76aa8695-64e8-4afd-ae13-bc8385302b1f'
+          value: '76aa8695-64e8-4afd-ae13-bc8385302b1f'
         - name: IDAM_SECRET
-        - value: 'cmc_it_test_secret_key'
+          value: 'cmc_it_test_secret_key'
         - name: NOTIFY
-        - value: 'true'
+          value: 'true'
         - name: NOTIFY_CMC_WELCOME_USER_TEMPLATE
-        - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_DIVORCE_WELCOME_USER_TEMPLATE
-        - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_SSCS_WELCOME_USER_TEMPLATE
-        - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_RESET_PASSWORD_TEMPLATE
-        - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_PROBATE_ACTIVATE_USER_TEMPLATE
-        - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_DIVORCE_ACTIVATE_USER_TEMPLATE
-        - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE
-        - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_CCD_ACTIVATE_USER_TEMPLATE
-          - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_BAR_ACTIVATE_USER_TEMPLATE
-          - value: 'fake'
+          value: 'fake'
         - name: NOTIFY_FREG_ACTIVATE_USER_TEMPLATE
-          - value: 'fake'
+          value: 'fake'
         - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CMC_CITIZEN
-          - value: '123456'
+          value: '123456'
         - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CMC_LEGAL
-          - value: '123456'
+          value: '123456'
         - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY
-          - value: '123456'
+          value: '123456'
         - name: REFORM_ENVIRONMENT
           value: 'preview'
         - name: IDAM_CMC_ANONYMOUSCITIZEN_USER
-            value: 'civilmoneyclaims+anonymouscitizen@gmail.com'
+          value: 'civilmoneyclaims+anonymouscitizen@gmail.com'
         - name: IDAM_CMC_ANONYMOUSCITIZEN_PASSWORD
             value: 'Password12'
         - name: IDAM_CMC_SYSTEMUPDATE_USER
@@ -742,7 +742,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: idam-api
-  namespace: ccd
+  namespace: ${NAMESPACE}
   labels:
     app: idam-api
 spec:
@@ -761,7 +761,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: service-auth-provider-api
-  namespace: ccd
+  namespace: ${NAMESPACE}
 spec:
   replicas: 1
   selector:
@@ -777,23 +777,23 @@ spec:
         name: service-auth-provider-api
         env:
         - name: SERVER_PORT
-        - value: '8080'
+          value: '8080'
         - name: JAVA_OPTS
-        - value: '-Xms128m -Xmx768m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m'
+          value: '-Xms128m -Xmx768m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m'
         - name: JWT_KEY
-        - value: 'wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA=='
+          value: 'wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA=='
         - name: MICROSERVICE_KEYS_BULK_SCAN_ORCHESTRATOR
-        - value: 'AAAAAAAAAAAAAAAA'
+          value: 'AAAAAAAAAAAAAAAA'
         - name: MICROSERVICE_KEYS_EM_GW
-        - value: 'AAAAAAAAAAAAAAAA'
+          value: 'AAAAAAAAAAAAAAAA'
         - name: MICROSERVICE_KEYS_CCD_DATA
-        - value: 'AAAAAAAAAAAAAAAA'
+          value: 'AAAAAAAAAAAAAAAA'
         - name: MICROSERVICE_KEYS_CCD_DEFINITION
-        - value: 'AAAAAAAAAAAAAAAA'
+          value: 'AAAAAAAAAAAAAAAA'
         - name: MICROSERVICE_KEYS_CCD_GW
-        - value: 'AAAAAAAAAAAAAAAA'
+          value: 'AAAAAAAAAAAAAAAA'
         - name: TESTING_SUPPORT_ENABLED
-        - value: 'true'
+          value: 'true'
         resources:
           requests:
             memory: "256Mi"
@@ -810,7 +810,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: service-auth-provider-api
-  namespace: ccd
+  namespace: ${NAMESPACE}
   labels:
     app: service-auth-provider-api
 spec:
