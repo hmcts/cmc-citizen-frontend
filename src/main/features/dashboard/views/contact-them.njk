@@ -7,6 +7,7 @@
 {% set headingVisible = false %}
 
 {% if user.id === claim.claimantId %}
+  {% set party = 'claimant' %}
   {% set otherParty = 'defendant' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
   {% set phone = claim.response.defendant.mobilePhone %}
@@ -17,6 +18,7 @@
   {% set contactPerson = claim.response.defendant.contactPerson %}
 
 {% elif user.id === claim.defendantId %}
+  {% set party = 'defendant' %}
   {% set otherParty = 'claimant' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
   {% set phone = claim.claimData.claimant.mobilePhone %}
@@ -94,7 +96,7 @@
 
     {% if claim %}
       <div class="column-one-third">
-        {{ aboutClaimWidget(user, claim) }}
+        {{ aboutClaimWidget(party, claim) }}
       </div>
     {% endif %}
   </div>

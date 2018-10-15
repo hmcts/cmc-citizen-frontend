@@ -115,13 +115,10 @@
           {{
             repaymentPlanBlock(
               heading = 'How they want to pay',
-              instalmentAmount = instalmentAmount,
-              paymentSchedule = paymentSchedule,
-              firstPaymentDate = firstPaymentDate,
-              lastPaymentOn = lastPaymentOn,
-              lengthOfPayment = lengthOfPayment
-            ) }}
-          {% endif %}
+              repaymentPlan = claim.response.paymentIntention.repaymentPlan
+            )
+          }}
+        {% endif %}
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
@@ -148,22 +145,21 @@
               {{ timelineFragment(claim.response.timeline) }}
             {% endif %}
 
-            {% if claim.response.evidence and claim.response.evidence.comment %}
-              <h3 class="heading-small form-group-related">{{ t('They disagree with your evidence') }}</h3>
-              <p>{{ t('"{{ comment }}"', { comment: claim.response.evidence.comment }) }}</p>
-            {% endif %}
-          {% elseif page === 1 %}
-            {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-              {{ repaymentPlanBlock(
-                heading = '',
-                instalmentAmount = instalmentAmount,
-                paymentSchedule = paymentSchedule,
-                firstPaymentDate = firstPaymentDate,
-                lastPaymentOn = lastPaymentOn,
-                lengthOfPayment = lengthOfPayment
-              ) }}
-            {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-              {{ paymentIntentionFragment(
+          {% if claim.response.evidence and claim.response.evidence.comment %}
+            <h3 class="heading-small form-group-related">{{ t('They disagree with your evidence') }}</h3>
+            <p>{{ t('"{{ comment }}"', { comment: claim.response.evidence.comment }) }}</p>
+          {% endif %}
+        {% elseif page === 1 %}
+          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+            {{
+              repaymentPlanBlock(
+                heading = 'How they want to pay',
+                repaymentPlan = claim.response.paymentIntention.repaymentPlan
+              )}}
+
+          {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+
+              {{paymentIntentionFragment(
                 amount = claim.response.amount,
                 paymentIntention = claim.response.paymentIntention
               ) }}

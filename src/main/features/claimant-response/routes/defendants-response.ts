@@ -11,9 +11,6 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { ResponseType } from 'claims/models/response/responseType'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Frequency } from 'common/frequency/frequency'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
@@ -38,14 +35,8 @@ function renderView (res: express.Response, page: number): void {
       partiallyPaid: partiallyPaid
     })
   } else {
-    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
     res.render(Paths.defendantsResponsePage.associatedView, {
       claim: claim,
-      instalmentAmount: paymentPlan.instalmentAmount,
-      paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
-      firstPaymentDate: paymentPlan.startDate,
-      lastPaymentOn: paymentPlan.calculateLastPaymentDate(),
-      lengthOfPayment: paymentPlan.calculatePaymentLength(),
       page: page
     })
   }
