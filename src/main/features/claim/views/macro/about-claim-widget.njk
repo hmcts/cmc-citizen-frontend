@@ -1,15 +1,15 @@
 {% from "internalLink.njk" import internalLink %}
 
-{% macro aboutClaimWidget(user, claim, showResponse = true) %}
+{% macro aboutClaimWidget(party, claim, showResponse = true) %}
 
-{% if user.id === claim.claimantId %}
+{% if party === 'defendant' %}
   {% set otherPartyLabel = 'Defendant name:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
-  {% set responseLabel = 'Defendant’s response:' %}
-{% elif user.id === claim.defendantId %}
+  {% set responseLabel = 'Your response:' %}
+{% elseif party === 'claimant' %}
   {% set otherPartyLabel = 'Claimant name:' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
-  {% set responseLabel = 'Your response:' %}
+  {% set responseLabel = 'Defendant response:' %}
 {% endif %}
 
 <div class="about-claim-widget">
