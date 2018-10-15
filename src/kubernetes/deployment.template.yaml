@@ -715,17 +715,17 @@ spec:
         - name: IDAM_CMC_ANONYMOUSCITIZEN_USER
           value: 'civilmoneyclaims+anonymouscitizen@gmail.com'
         - name: IDAM_CMC_ANONYMOUSCITIZEN_PASSWORD
-            value: 'Password12'
+          value: 'Password12'
         - name: IDAM_CMC_SYSTEMUPDATE_USER
-            value: 'civilmoneyclaims+systemupdate@gmail.com'
+          value: 'civilmoneyclaims+systemupdate@gmail.com'
         - name: IDAM_CMC_SYSTEMUPDATE_PASSWORD
-            value: 'Password12'
+          value: 'Password12'
         - name: IDAM_CMC_URL
-            value: '${SERVICE_FQDN}'
+          value: '${SERVICE_FQDN}'
         - name: IDAM_CMC_WHITELIST
-            value: '${SERVICE_FQDN}/receiver;'
+          value: '${SERVICE_FQDN}/receiver;'
         - name: IDAM_CMC_SOLICITOR_WHITELIST
-            value: ''
+          value: ''
         resources:
           requests:
             memory: "256Mi"
