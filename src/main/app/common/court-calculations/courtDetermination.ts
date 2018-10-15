@@ -1,6 +1,7 @@
 import { Moment } from 'moment'
 
 export enum DecisionType {
+  CLAIMANT_IN_FAVOUR_OF_DEFENDANT = 'CLAIMANT_IN_FAVOUR_OF_DEFENDANT',
   CLAIMANT = 'CLAIMANT',
   DEFENDANT = 'DEFENDANT',
   COURT = 'COURT'
