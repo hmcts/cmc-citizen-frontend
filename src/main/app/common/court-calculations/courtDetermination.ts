@@ -1,6 +1,7 @@
 import { Moment } from 'moment'
 
 export enum DecisionType {
+  CLAIMANT_IN_FAVOUR_OF_DEFENDANT = 'CLAIMANT_IN_FAVOUR_OF_DEFENDANT',
   CLAIMANT = 'CLAIMANT',
   DEFENDANT = 'DEFENDANT',
   COURT = 'COURT'
@@ -17,7 +18,7 @@ export class CourtDetermination {
     }
 
     if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate)) {
-      return DecisionType.CLAIMANT
+      return DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT
     }
 
     if (!courtGeneratedPaymentDate) {

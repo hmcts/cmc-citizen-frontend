@@ -39,6 +39,12 @@ export const intentionOfPaymentByInstallments = {
       year: 2018,
       month: 12,
       day: 31
-    }
+    },
+    completionDate: {
+      year: 2019,
+      month: 12,
+      day: 30
+    },
+    paymentLength: ''
   }
 }
