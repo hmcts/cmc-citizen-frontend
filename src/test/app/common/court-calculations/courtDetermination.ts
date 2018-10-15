@@ -25,7 +25,7 @@ describe('CourtDetermination', () => {
       let claimantPaymentDate = moment(new Date()).add(1,'days')
       let courtGeneratedPaymentDate = undefined
 
-      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT)
+      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT)
     })
 
     it('should return a defendant decision type when claimantPaymentDate is after the defendantPaymentDate and no court date is supplied', () => {
