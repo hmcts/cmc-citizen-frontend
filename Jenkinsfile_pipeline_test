@@ -23,8 +23,7 @@ List<LinkedHashMap<String, Object>> secrets = [
   secret('citizen-draft-store-primary', 'DRAFT_STORE_SECRET_PRIMARY'),
   secret('citizen-draft-store-secondary', 'DRAFT_STORE_SECRET_SECONDARY'),
   secret('citizen-cookie-encryption-key', 'COOKIE_ENCRYPTION_KEY'),
-  secret('staff-email', 'CONTACT_EMAIL'),
-  secret('notify-api-key', 'GOV_NOTIFY_API_KEY')
+  secret('staff-email', 'CONTACT_EMAIL')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
