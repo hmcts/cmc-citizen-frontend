@@ -27,10 +27,6 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 import { PaidInFullFeature } from 'paid-in-full/index'
 
-import { Logger } from '@hmcts/nodejs-logging'
-
-const logger = Logger.getLogger('app')
-
 export const app: express.Express = express()
 
 const env = process.env.NODE_ENV || 'development'
@@ -73,21 +69,15 @@ new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 
-logger.info('Features: paidInFull...')
 if (FeatureToggles.isEnabled('paidInFull')) {
-  logger.info('Enabled')
   new PaidInFullFeature().enableFor(app)
 }
 
-logger.info('Features: testingSupport...')
 if (FeatureToggles.isEnabled('testingSupport')) {
-  logger.info('Enabled')
   new TestingSupportFeature().enableFor(app)
 }
 
-logger.info('Features: admissions...')
 if (FeatureToggles.isEnabled('admissions')) {
-  logger.info('Enabled')
   new ClaimantResponseFeature().enableFor(app)
 }
 // Below method overrides the moment's toISOString method, which is used by RequestPromise

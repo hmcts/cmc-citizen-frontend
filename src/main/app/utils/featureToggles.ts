@@ -1,8 +1,5 @@
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
-import { Logger } from '@hmcts/nodejs-logging'
-
-const logger = Logger.getLogger('FeatureToggles')
 
 export class FeatureToggles {
   static isEnabled (featureName: string): boolean {
@@ -13,11 +10,10 @@ export class FeatureToggles {
     if (features.length === 0) {
       throw new Error('At least one feature name has to be provided')
     }
-    const result = features
+
+    return features
       .some((feature) => FeatureToggles.isEnabled(feature)
         && authorisedFeatures !== undefined && authorisedFeatures.includes(feature))
-    logger.info('hasAnyAuthorisedFeature(' + features + '): ' + result)
-    return result
 
   }
 
@@ -25,8 +21,7 @@ export class FeatureToggles {
     if (featureNames.length === 0) {
       throw new Error('At least one feature name has to be provided')
     }
-    const result = featureNames.some((featureName) => toBoolean(config.get<boolean>(`featureToggles.${featureName}`)))
-    logger.info('isAnyEnabled(' + featureNames + '):' + result)
-    return result
+    return featureNames
+      .some((featureName) => toBoolean(config.get<boolean>(`featureToggles.${featureName}`)))
   }
 }
