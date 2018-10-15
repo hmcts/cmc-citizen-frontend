@@ -30,7 +30,7 @@
 
     {% if claim %}
       <div class="column-one-third">
-        {{ aboutClaimWidget(user, claim) }}
+        {{ aboutClaimWidget(claim = claim, party = 'defendant') }}
       </div>
     {% endif %}
   </div>

@@ -21,7 +21,6 @@ import { DecisionType } from 'common/court-calculations/courtDetermination'
 export class ClaimantResponseConverter {
 
   public static covertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
-
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
       let reject: ResponseRejection = new ResponseRejection()
       if (draftClaimantResponse.paidAmount) {
@@ -34,9 +33,7 @@ export class ClaimantResponseConverter {
         reject.reason = draftClaimantResponse.rejectionReason.text
       }
       return reject
-    } else if (draftClaimantResponse.formaliseRepaymentPlan && this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)) {
-      return this.createResponseAcceptance(draftClaimantResponse)
-    } else throw new Error('Unknown state of draftClaimantResponse')
+    } else return this.createResponseAcceptance(draftClaimantResponse)
   }
 
   private static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {
@@ -62,9 +59,7 @@ export class ClaimantResponseConverter {
     }
     const courtDetermination: CourtDetermination = new CourtDetermination()
     courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
-    if (courtDetermination.courtDecision.repaymentPlan) {
-      courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
-    }
+    courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
     if (draftClaimantResponse.rejectionReason) {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
@@ -102,7 +97,11 @@ export class ClaimantResponseConverter {
       }
       return paymentIntention
     } else {
-      if (decisionType === DecisionType.CLAIMANT) throw new Error('claimant payment intention not found where decision type is CLAIMANT')
+      if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+        throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
+      } else {
+        return undefined
+      }
     }
   }
 

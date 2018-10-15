@@ -115,7 +115,8 @@ export class CCJModelConverter {
       convertPaidAmount(draft),
       convertRepaymentPlan(draft.repaymentPlan),
       convertPayBySetDate(draft),
-      statementOfTruth
+      statementOfTruth,
+      'DEFAULT'
     )
   }
 }
