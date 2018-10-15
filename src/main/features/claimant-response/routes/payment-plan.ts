@@ -90,7 +90,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
       courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
 
       if (draft.document.alternatePaymentMethod.toDomainInstance().paymentOption === PaymentOption.INSTALMENTS
-        && PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule) !== claimantEnteredPaymentPlan.frequency) {
+        && claimResponse.paymentIntention.repaymentPlan.paymentSchedule !== draft.document.alternatePaymentMethod.toDomainInstance().repaymentPlan.paymentSchedule) {
         const paymentPlanConvertedToDefendantFrequency = claimantEnteredPaymentPlan.convertTo(PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule))
 
         courtOfferedPaymentIntention.repaymentPlan = {
@@ -103,13 +103,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
         return courtOfferedPaymentIntention
       } else {
-        courtOfferedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: claimantEnteredPaymentPlan.startDate,
-          instalmentAmount: claimantEnteredPaymentPlan.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(claimantEnteredPaymentPlan.frequency),
-          completionDate: claimantEnteredPaymentPlan.calculateLastPaymentDate(),
-          paymentLength: claimantEnteredPaymentPlan.calculatePaymentLength()
-        }
+        courtOfferedPaymentIntention.repaymentPlan = draft.document.alternatePaymentMethod.toDomainInstance().repaymentPlan
 
         return courtOfferedPaymentIntention
       }
@@ -142,16 +136,9 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     }
 
     if (decisionType === DecisionType.DEFENDANT) {
-      const paymentPlanFromDefendant: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        courtOfferedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanFromDefendant.startDate,
-          instalmentAmount: paymentPlanFromDefendant.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendant.frequency),
-          completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          paymentLength: paymentPlanFromDefendant.calculatePaymentLength()
-        }
+        courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
       }
 
