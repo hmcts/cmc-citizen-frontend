@@ -216,7 +216,7 @@ spec:
         env:
         - name: WAIT_HOSTS
           value: 'feature-toggle-api:8580'
-        - name: VERBOSEfinao
+        - name: VERBOSE
           value: 'true'
         - name: WAIT_HOSTS_TIMEOUT
           value: '300'
