@@ -14,10 +14,10 @@
     {% if alreadyPaid %}
 
       {% if draft.partPaymentReceived %}
-        {% set paymentReceivedResponse = 'Yes' if draft.partPaymentReceived.received.option === 'yes' else 'no' %}
+        {% set paymentReceivedResponse = 'Yes' if draft.partPaymentReceived.received.option === 'yes' else 'No' %}
 
         {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
-          value = 'Yes' if draft.partPaymentReceived.received.option === 'yes' else 'no',
+          value = 'Yes' if draft.partPaymentReceived.received.option === 'yes' else 'No',
           changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 

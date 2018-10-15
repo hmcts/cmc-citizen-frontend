@@ -22,6 +22,8 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
+import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'
+import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/partPaymentReceived'
 
 function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()
@@ -133,6 +135,24 @@ describe('claimant response converter ', () => {
         'reason': 'rejected'
       })
 
+    })
+
+    it('rejection from non acceptance of states paid', () => {
+      const draftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
+
+      expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
+        'type': 'REJECTION'
+      })
+    })
+
+    it('rejection from no in part payment recieved', () => {
+      const draftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
+
+      expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
+        'type': 'REJECTION'
+      })
     })
   })
 

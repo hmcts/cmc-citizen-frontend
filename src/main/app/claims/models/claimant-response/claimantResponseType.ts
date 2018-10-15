@@ -1,4 +1,4 @@
 export enum ClaimantResponseType {
-  REJECTION = 'rejection',
-  ACCEPTATION = 'acceptation'
+  REJECTION = 'REJECTION',
+  ACCEPTATION = 'ACCEPTATION'
 }
