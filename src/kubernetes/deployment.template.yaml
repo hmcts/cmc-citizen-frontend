@@ -398,6 +398,8 @@ data:
     CREATE DATABASE cmc WITH OWNER = cmc ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
     CREATE USER draftstore WITH PASSWORD 'draftstore';
     CREATE DATABASE draftstore WITH OWNER = draftstore ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+    CREATE USER idam WITH PASSWORD 'idam';
+    CREATE DATABASE idam WITH OWNER = idam ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -578,3 +580,244 @@ spec:
   selector:
     app: pdf-service-api
   clusterIP: None
+---
+#
+# IDAM-AUTHENTICATION-WEB
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idam-authentication-web
+  namespace: ccd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: idam-authentication-web
+  template:
+    metadata:
+      labels:
+        app: idam-authentication-web
+    spec:
+      containers:
+      - image: docker.artifactory.reform.hmcts.net/auth/authentication-web:latest
+        name: idam-authentication-web
+        env:
+        - name: IDAM_API_URL
+          value: 'http://idam-api'
+        - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_BULK_SCAN_ORCHESTRATOR
+          value: '123456'
+        - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY
+          value: '123456'
+        - name: IDAM_CONTINUE_URL_VALIDATOR_ENFORCE_TLS
+          value: 'false'
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "256Mi"
+            cpu: "1000m"
+        ports:
+        - containerPort: 8000
+          name: http
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idam-authentication-web
+  namespace: ccd
+  labels:
+    app: idam-authentication-web
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8000
+  selector:
+    app: idam-authentication-web
+---
+#
+# IDAM-API
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idam-api
+  namespace: ccd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: idam-api
+  template:
+    metadata:
+      labels:
+        app: idam-api
+    spec:
+      initContainers:
+      - name: init-wait-db
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 shared-database 5432 && exit 0 || sleep 3; done; exit 1"]
+      - name: init-wait-smtp
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 smtp-server 1025 && exit 0 || sleep 3; done; exit 1"]
+      containers:
+      - image: docker.artifactory.reform.hmcts.net/auth/idam-api
+        name: idam-api
+        env:
+        - name: IDAM_SUPERUSER_EMAIL
+        - value: 'cmc-int-test@cmc.reform.hmcts.net'
+        - name: SPRING_DATASOURCE_URL
+        - value: 'jdbc:postgresql://shared-database:5432/idam'
+        - name: IDAM_TESTING_SUPPORT_ENABLED
+        - value: 'true'
+        - name: NOTIFY_API_KEY
+        - value: '${GOV_NOTIFY_API_KEY}'
+        - name: NOTIFY_CMC_ACTIVATE_USER_TEMPLATE
+        - value: '76aa8695-64e8-4afd-ae13-bc8385302b1f'
+        - name: NOTIFY_CMC_SOLICITOR_ACTIVATE_USER_TEMPLATE
+        - value: '76aa8695-64e8-4afd-ae13-bc8385302b1f'
+        - name: IDAM_SECRET
+        - value: 'cmc_it_test_secret_key'
+        - name: NOTIFY
+        - value: 'true'
+        - name: NOTIFY_CMC_WELCOME_USER_TEMPLATE
+        - value: 'fake'
+        - name: NOTIFY_DIVORCE_WELCOME_USER_TEMPLATE
+        - value: 'fake'
+        - name: NOTIFY_SSCS_WELCOME_USER_TEMPLATE
+        - value: 'fake'
+        - name: NOTIFY_RESET_PASSWORD_TEMPLATE
+        - value: 'fake'
+        - name: NOTIFY_PROBATE_ACTIVATE_USER_TEMPLATE
+        - value: 'fake'
+        - name: NOTIFY_DIVORCE_ACTIVATE_USER_TEMPLATE
+        - value: 'fake'
+        - name: NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE
+        - value: 'fake'
+        - name: NOTIFY_CCD_ACTIVATE_USER_TEMPLATE
+          - value: 'fake'
+        - name: NOTIFY_BAR_ACTIVATE_USER_TEMPLATE
+          - value: 'fake'
+        - name: NOTIFY_FREG_ACTIVATE_USER_TEMPLATE
+          - value: 'fake'
+        - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CMC_CITIZEN
+          - value: '123456'
+        - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CMC_LEGAL
+          - value: '123456'
+        - name: IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY
+          - value: '123456'
+        - name: REFORM_ENVIRONMENT
+          value: 'preview'
+        - name: IDAM_CMC_ANONYMOUSCITIZEN_USER
+            value: 'civilmoneyclaims+anonymouscitizen@gmail.com'
+        - name: IDAM_CMC_ANONYMOUSCITIZEN_PASSWORD
+            value: 'Password12'
+        - name: IDAM_CMC_SYSTEMUPDATE_USER
+            value: 'civilmoneyclaims+systemupdate@gmail.com'
+        - name: IDAM_CMC_SYSTEMUPDATE_PASSWORD
+            value: 'Password12'
+        - name: IDAM_CMC_URL
+            value: '${SERVICE_FQDN}'
+        - name: IDAM_CMC_WHITELIST
+            value: '${SERVICE_FQDN}/receiver;'
+        - name: IDAM_CMC_SOLICITOR_WHITELIST
+            value: ''
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "2000m"
+        ports:
+        - containerPort: 8080
+          name: http
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: idam-api
+  namespace: ccd
+  labels:
+    app: idam-api
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  selector:
+    app: idam-api
+---
+#
+# SERVICE-AUTH-PROVIDER-API
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-auth-provider-api
+  namespace: ccd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-auth-provider-api
+  template:
+    metadata:
+      labels:
+        app: service-auth-provider-api
+    spec:
+      containers:
+      - image: hmcts/service-auth-provider-app
+        name: service-auth-provider-api
+        env:
+        - name: SERVER_PORT
+        - value: '8080'
+        - name: JAVA_OPTS
+        - value: '-Xms128m -Xmx768m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m'
+        - name: JWT_KEY
+        - value: 'wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA=='
+        - name: MICROSERVICE_KEYS_BULK_SCAN_ORCHESTRATOR
+        - value: 'AAAAAAAAAAAAAAAA'
+        - name: MICROSERVICE_KEYS_EM_GW
+        - value: 'AAAAAAAAAAAAAAAA'
+        - name: MICROSERVICE_KEYS_CCD_DATA
+        - value: 'AAAAAAAAAAAAAAAA'
+        - name: MICROSERVICE_KEYS_CCD_DEFINITION
+        - value: 'AAAAAAAAAAAAAAAA'
+        - name: MICROSERVICE_KEYS_CCD_GW
+        - value: 'AAAAAAAAAAAAAAAA'
+        - name: TESTING_SUPPORT_ENABLED
+        - value: 'true'
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "2500m"
+        ports:
+        - containerPort: 8080
+          name: http
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-auth-provider-api
+  namespace: ccd
+  labels:
+    app: service-auth-provider-api
+spec:
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+  selector:
+    app: service-auth-provider-api
