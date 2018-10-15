@@ -1,112 +1,97 @@
-# Example Kubernetes resource template
 #
-# All variables are replaced at deployment time with environment variables.
-#
-# The following variables are derived as follows by the pipeline. DO NOT CHANGE:
-#
-#   - NAMESPACE:    product
-#   - SERVICE_NAME: product-component-branch
-#   - IMAGE_NAME:   registry-name/hmcts/product-component:branch
+# CMC-FRONTEND
 #
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ${SERVICE_NAME}
+  name: citizen-frontend
   namespace: ${NAMESPACE}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ${SERVICE_NAME}
+      app: citizen-frontend
   template:
     metadata:
       labels:
-        app: ${SERVICE_NAME}
+        app: citizen-frontend
     spec:
       dnsConfig:
         options:
         - name: single-request-reopen
       containers:
-        - image: ${IMAGE_NAME}
-          name: ${SERVICE_NAME}
-           # These are obtained from environment variables.  If it's
-          # an environment variable, it can be used here.  Projects
-          # would usually source custom values from:
-          #   - Jenkins Azure Keyvault plugin (e.g. secrets)
-          #   - Your project's Jenkinsfile
-          env:
-            - name: REFORM_TEAM
-              value: 'cmc'
-            - name: REFORM_SERVICE_NAME
-              value: 'citizen-frontend'
-            - name: NODE_ENV
-              value: 'production'
-            - name: UV_THREADPOOL_SIZE
-              value: '64'
-            - name: GA_TRACKING_ID
-              value: 'UA-97111056-1'
-            - name: SERVICE_SURVEY_URL
-              value: 'http://www.smartsurvey.co.uk/s/CMCMVPT1/'
-            - name: FEEDBACK_SURVEY_URL
-              value: 'http://www.smartsurvey.co.uk/s/CMCMVPFB/'
-            - name: REPORT_PROBLEM_SURVEY_URL
-              value: 'http://www.smartsurvey.co.uk/s/CMCMVPPB/'
-            - name: FEATURE_TESTING_SUPPORT
-              value: 'true'
-            - name: FEATURE_NEW_FEATURES_CONSENT
-              value: 'true'
-            - name: FEATURE_ADMISSIONS
-              value: 'true'
-            - name: FEATURE_FINE_PRINT
-              value: 'true'
-            - name: FEATURE_RETURN_ERROR_TO_USER
-              value: 'true'
-            - name: FEATURE_MOCK_PAY
-              value: 'false'
-            - name: POSTCODE_LOOKUP_API_KEY
-              value: ${POSTCODE_LOOKUP_API_KEY}
-            - name: APPINSIGHTS_INSTRUMENTATIONKEY
-              value: ${APPINSIGHTS_INSTRUMENTATIONKEY}
-            - name: OAUTH_CLIENT_SECRET
-              value: ${OAUTH_CLIENT_SECRET}
-            - name: IDAM_S2S_TOTP_SECRET
-              value: ${IDAM_S2S_TOTP_SECRET}
-            - name: DRAFT_STORE_SECRET_PRIMARY
-              value: ${DRAFT_STORE_SECRET_PRIMARY}
-            - name: DRAFT_STORE_SECRET_SECONDARY
-              value: ${DRAFT_STORE_SECRET_SECONDARY}
-            - name: COOKIE_ENCRYPTION_KEY
-              value: ${COOKIE_ENCRYPTION_KEY}
-            - name: CONTACT_EMAIL
-              value: ${CONTACT_EMAIL}
-          envFrom:
-            - configMapRef:
-                name: ${SERVICE_NAME}-config
-           # These may be adjusted, but be mindful please
-          resources:
-            requests:
-              memory: "256Mi"
-              cpu: "0.2"
-            limits:
-              memory: "512Mi"
-              cpu: "1"
-           # This is the port your process is listening on in the container
-          ports:
-            - containerPort: 3000
-              name: http
-          imagePullPolicy: Always
+      - image: ${IMAGE_NAME}
+        name: citizen-frontend
+        env:
+        - name: REFORM_TEAM
+          value: 'cmc'
+        - name: REFORM_SERVICE_NAME
+          value: 'citizen-frontend'
+        - name: NODE_ENV
+          value: 'production'
+        - name: UV_THREADPOOL_SIZE
+          value: '64'
+        - name: GA_TRACKING_ID
+          value: 'UA-97111056-1'
+        - name: SERVICE_SURVEY_URL
+          value: 'http://www.smartsurvey.co.uk/s/CMCMVPT1/'
+        - name: FEEDBACK_SURVEY_URL
+          value: 'http://www.smartsurvey.co.uk/s/CMCMVPFB/'
+        - name: REPORT_PROBLEM_SURVEY_URL
+          value: 'http://www.smartsurvey.co.uk/s/CMCMVPPB/'
+        - name: FEATURE_TOGGLES_API_URL
+          value: 'http://feature-toggle-api:8580'
+        - name: FEATURE_TESTING_SUPPORT
+          value: 'true'
+        - name: FEATURE_NEW_FEATURES_CONSENT
+          value: 'true'
+        - name: FEATURE_ADMISSIONS
+          value: 'true'
+        - name: FEATURE_FINE_PRINT
+          value: 'true'
+        - name: FEATURE_RETURN_ERROR_TO_USER
+          value: 'true'
+        - name: FEATURE_MOCK_PAY
+          value: 'false'
+        - name: POSTCODE_LOOKUP_API_KEY
+          value: ${POSTCODE_LOOKUP_API_KEY}
+        - name: APPINSIGHTS_INSTRUMENTATIONKEY
+          value: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+        - name: OAUTH_CLIENT_SECRET
+          value: ${OAUTH_CLIENT_SECRET}
+        - name: IDAM_S2S_TOTP_SECRET
+          value: ${IDAM_S2S_TOTP_SECRET}
+        - name: DRAFT_STORE_SECRET_PRIMARY
+          value: ${DRAFT_STORE_SECRET_PRIMARY}
+        - name: DRAFT_STORE_SECRET_SECONDARY
+          value: ${DRAFT_STORE_SECRET_SECONDARY}
+        - name: COOKIE_ENCRYPTION_KEY
+          value: ${COOKIE_ENCRYPTION_KEY}
+        - name: CONTACT_EMAIL
+          value: ${CONTACT_EMAIL}
+        envFrom:
+        - configMapRef:
+            name: aat-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "0.2"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        ports:
+        - containerPort: 3000
+          name: http
+        imagePullPolicy: Always
 ---
-#
-# Service
-#
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${SERVICE_NAME}
+  name: citizen-frontend
   namespace: ${NAMESPACE}
   labels:
-    app: ${SERVICE_NAME}
+    app: citizen-frontend
 spec:
   ports:
   - name: http
@@ -114,15 +99,12 @@ spec:
     port: 80
     targetPort: 3000
   selector:
-    app: ${SERVICE_NAME}
+    app: citizen-frontend
 ---
-#
-# Ingress
-#
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ${SERVICE_NAME}
+  name: citizen-frontend
   namespace: ${NAMESPACE}
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -133,5 +115,172 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: ${SERVICE_NAME}
+          serviceName: citizen-frontend
           servicePort: 80
+---
+#
+# FEATURE-TOGGLES
+#
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feature-toggle-api
+  namespace: ${NAMESPACE}
+data:
+  JAVA_OPTS: -Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+  APPINSIGHTS_INSTRUMENTATIONKEY: 'fake-key'
+  FLYWAY_ENABLED: 'true'
+  FLYWAY_NOOP_STRATEGY: 'false'
+  FEATURES_DB_HOST: 'shared-database'
+  FEATURES_DB_CONN_OPTIONS: ''
+  FEATURES_DB_USER_NAME: 'features'
+  FEATURES_DB_PASSWORD: 'features'
+  TEST_ADMIN_USERNAME: 'admin@example.com'
+  TEST_ADMIN_PASSWORD: 'Password12'
+  TEST_EDITOR_USERNAME: 'editor@example.com'
+  TEST_EDITOR_PASSWORD: 'Password12'
+  LOGBACK_REQUIRE_THREAD: 'false'
+  LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
+  LOGBACK_REQUIRE_ERROR_CODE: 'false'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feature-toggle-api
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feature-toggle-api
+  template:
+    metadata:
+      labels:
+        app: feature-toggle-api
+    spec:
+      containers:
+      - image: hmcts/feature-toggle-api
+        name: feature-toggle-api
+        envFrom:
+        - configMapRef:
+            name: feature-toggle-api
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "2500m"
+        ports:
+        - containerPort: 8580
+          name: http
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: feature-toggle-api
+  namespace: ${NAMESPACE}
+  labels:
+    app: feature-toggle-api
+spec:
+  ports:
+  - port: 8580
+  selector:
+    app: feature-toggle-api
+  clusterIP: None
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: feature-toggle-importer
+  namespace: ${NAMESPACE}
+spec:
+  template:
+    metadata:
+      labels:
+        app: feature-toggle-importer
+    spec:
+      initContainers:
+      - name: init-wait-feature-toggle-api
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 feature-toggle-api 8580 && exit 0 || sleep 3; done; exit 1"]
+      containers:
+      - image: hmcts/cmc-feature-toggle-importer
+        name: feature-toggle-importer
+        imagePullPolicy: Always
+        env:
+        - name: WAIT_HOSTS
+          value: 'feature-toggle-api:8580'
+        - name: VERBOSEfinao
+          value: 'true'
+        - name: WAIT_HOSTS_TIMEOUT
+          value: '300'
+      restartPolicy: Never
+  backoffLimit: 4
+---
+#
+# SHARED-DATABASE
+#
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-database-initdb
+  namespace: ${NAMESPACE}
+data:
+  initdb.sql: |
+    CREATE USER features WITH PASSWORD 'features';
+    CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shared-database
+  namespace: ${NAMESPACE}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shared-database
+  template:
+    metadata:
+      labels:
+        app: shared-database
+    spec:
+      containers:
+      - image: postgres:10.5-alpine
+        name: shared-database
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "200m"
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - mountPath: /docker-entrypoint-initdb.d
+          name: initdb
+          readOnly: true
+      volumes:
+      - name: initdb
+        configMap:
+          name: shared-database-initdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shared-database
+  namespace: ${NAMESPACE}
+  labels:
+    app: shared-database
+spec:
+  ports:
+  - port: 5432
+  selector:
+    app: shared-database
+  clusterIP: None

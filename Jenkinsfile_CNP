@@ -11,11 +11,13 @@ List<LinkedHashMap<String, Object>> secrets = [
   secret('postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
   secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
   secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
+  secret('claim-store-s2s-secret', 'CLAIM_STORE_S2S_SECRET'),
   secret('cmc-s2s-secret', 'IDAM_S2S_TOTP_SECRET'),
   secret('citizen-draft-store-primary', 'DRAFT_STORE_SECRET_PRIMARY'),
   secret('citizen-draft-store-secondary', 'DRAFT_STORE_SECRET_SECONDARY'),
   secret('citizen-cookie-encryption-key', 'COOKIE_ENCRYPTION_KEY'),
-  secret('staff-email', 'CONTACT_EMAIL')
+  secret('staff-email', 'CONTACT_EMAIL'),
+  secret('notify-api-key', 'GOV_NOTIFY_API_KEY')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -37,7 +39,7 @@ withPipeline("nodejs", product, component) {
   afterCheckout {
     onMaster {
       try {
-       sh """
+        sh """
           git fetch origin demo:demo
           git push --force origin HEAD:demo
         """
