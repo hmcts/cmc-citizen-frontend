@@ -189,7 +189,6 @@
 
 {% macro financialDetailsBlock(claim, headingContent, labelContent, classes = undefined) %}
   {% if not claim.claimData.defendant.isBusiness() %}
-    <h3 class="heading-small form-group-related">{{ t(headingContent) }}</h3>
     {{ financialDetailsTable(label = labelContent, statementOfMeans = claim.response.statementOfMeans, classes = classes) }}
   {% endif %}
 {% endmacro %}
