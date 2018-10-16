@@ -11,12 +11,12 @@
       <form method="post" novalidate
             class="analytics-submit-event-trigger"
             data-event-action="SoM: Do you live with a partner"
-            data-event-label-from="cohabiting">
+            data-event-label-from="option">
 
         {{ csrfProtection(csrf) }}
 
         <p>{{ t('For example, a boyfriend, girlfriend, husband, wife or civil partner.') }}</p>
-        {{ yesNoRadio(t('Do you live with a partner?'), 'cohabiting', form) }}
+        {{ yesNoRadio(t('Do you live with a partner'), 'option', form) }}
 
         {{ saveAndContinueButton() }}
 

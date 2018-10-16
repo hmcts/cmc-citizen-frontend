@@ -11,11 +11,11 @@
       <form method="post" novalidate
             class="analytics-submit-event-trigger"
             data-event-action="SoM: Is your partner aged 18 or over?"
-            data-event-label-from="partnerAge">
+            data-event-label-from="option">
 
         {{ csrfProtection(csrf) }}
 
-        {{ yesNoRadio(t('Is your partner aged 18 or over?'), 'partnerAge', form) }}
+        {{ yesNoRadio(t('Is your partner aged 18 or over?'), 'option', form) }}
 
         {{ saveAndContinueButton() }}
 
