@@ -5,17 +5,17 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: citizen-frontend
+  name: ${SERVICE_NAME}
   namespace: ${NAMESPACE}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: citizen-frontend
+      app: ${SERVICE_NAME}
   template:
     metadata:
       labels:
-        app: citizen-frontend
+        app: ${SERVICE_NAME}
     spec:
       dnsConfig:
         options:
@@ -88,10 +88,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: citizen-frontend
+  name: ${SERVICE_NAME}
   namespace: ${NAMESPACE}
   labels:
-    app: citizen-frontend
+    app: ${SERVICE_NAME}
 spec:
   ports:
   - name: http
@@ -99,12 +99,12 @@ spec:
     port: 80
     targetPort: 3000
   selector:
-    app: citizen-frontend
+    app: ${SERVICE_NAME}
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: citizen-frontend
+  name: ${SERVICE_NAME}
   namespace: ${NAMESPACE}
   annotations:
     kubernetes.io/ingress.class: traefik
@@ -115,7 +115,7 @@ spec:
       paths:
       - path: /
         backend:
-          serviceName: citizen-frontend
+          serviceName: ${SERVICE_NAME}
           servicePort: 80
 ---
 #
