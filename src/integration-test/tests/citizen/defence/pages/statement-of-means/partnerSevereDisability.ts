@@ -3,8 +3,8 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  yes: 'input[id=partnerSeverelyDisabledyes]',
-  no: 'input[id=partnerSeverelyDisabledno]'
+  yes: 'input[id=optionyes]',
+  no: 'input[id=optionno]'
 }
 
 const buttons = {

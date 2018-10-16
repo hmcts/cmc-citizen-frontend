@@ -11,11 +11,11 @@
       <form method="post" novalidate
             class="analytics-submit-event-trigger"
             data-event-action="SoM: Do you claim Carer’s Allowance or Carer’s Credit?"
-            data-event-label-from="carer">
+            data-event-label-from="option">
 
         {{ csrfProtection(csrf) }}
 
-        {{ yesNoRadio(t('Do you claim Carer’s Allowance or Carer’s Credit?'), 'carer', form) }}
+        {{ yesNoRadio(t('Do you claim Carer’s Allowance or Carer’s Credit?'), 'option', form) }}
 
         {{ saveAndContinueButton() }}
 
