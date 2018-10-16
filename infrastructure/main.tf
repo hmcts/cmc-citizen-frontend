@@ -67,7 +67,6 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
-
 module "citizen-frontend" {
   source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
   product = "${var.product}-${var.microservice}"

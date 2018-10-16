@@ -1,14 +1,14 @@
-import { RoutablePath } from 'shared/router/routablePath'
-import { StatementOfMeansPaths as Paths, StatementOfMeansPaths } from 'response/paths'
 import * as express from 'express'
+import { StatementOfMeansPaths as Paths, StatementOfMeansPaths } from 'response/paths'
 import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
-import { Draft } from '@hmcts/draft-store-client'
-import { ResponseDraft } from 'response/draft/responseDraft'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { RoutablePath } from 'shared/router/routablePath'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { Draft } from '@hmcts/draft-store-client'
 import { DependantsDisability } from 'response/form/models/statement-of-means/dependantsDisability'
 
 const page: RoutablePath = StatementOfMeansPaths.dependantsDisabilityPage
@@ -20,9 +20,7 @@ export default express.Router()
     StatementOfMeansStateGuard.requestHandler(),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      res.render(page.associatedView, {
-        form: new Form(draft.document.statementOfMeans.dependantsDisability)
-      })
+      res.render(page.associatedView, { form: new Form(draft.document.statementOfMeans.dependantsDisability) })
     })
   .post(
     page.uri,

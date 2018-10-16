@@ -217,9 +217,9 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildrenLivingWithYou: 3
     }],
     otherDependants: {
-      anyDisabled: false,
+      numberOfPeople: 5,
       details: 'Colleagues',
-      numberOfPeople: 5
+      anyDisabled: false
     },
     anyDisabledChildren: false
   },

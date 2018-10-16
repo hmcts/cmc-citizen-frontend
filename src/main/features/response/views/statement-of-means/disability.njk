@@ -11,11 +11,11 @@
       <form method="post" novalidate
             class="analytics-submit-event-trigger"
             data-event-action="SoM: Are you disabled?"
-            data-event-label-from="option">
+            data-event-label-from="disabled">
 
         {{ csrfProtection(csrf) }}
 
-        {{ yesNoRadio(t('Are you disabled?'), 'option', form) }}
+        {{ yesNoRadio(t('Are you disabled?'), 'disabled', form) }}
 
         {{ saveAndContinueButton() }}
 

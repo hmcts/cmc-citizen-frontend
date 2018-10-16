@@ -190,8 +190,8 @@ export class ResponseModelConverter {
       },
       dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.otherDependants.declared ? {
         children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
-        otherDependants: draft.statementOfMeans.otherDependants.declared ? {
-          numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople ? draft.statementOfMeans.otherDependants.numberOfPeople.value : 0,
+        otherDependants: draft.statementOfMeans.otherDependants && draft.statementOfMeans.otherDependants.declared ? {
+          numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople.value,
           details: draft.statementOfMeans.otherDependants.numberOfPeople.details || undefined,
           anyDisabled: draft.statementOfMeans.otherDependantsDisability && draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES
         } : undefined,
