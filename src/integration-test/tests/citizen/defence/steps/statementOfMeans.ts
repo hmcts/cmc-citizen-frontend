@@ -21,10 +21,12 @@ import { PartnerAgePage } from 'integration-test/tests/citizen/defence/pages/sta
 import { PartnerPensionPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/partnerPension'
 import { PartnerDisabilityPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/partnerDisability'
 import { PartnerSevereDisabilityPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/partnerSevereDisability'
+import { SevereDisabilityPage } from '../pages/statement-of-means/severeDisability'
 
 const startPage: StartPage = new StartPage()
 const bankAccountsPage: BankAccountsPage = new BankAccountsPage()
 const disabilityPage: DisabilityPage = new DisabilityPage()
+const severeDisabilityPage: SevereDisabilityPage = new SevereDisabilityPage()
 const residencePage: ResidencePage = new ResidencePage()
 const cohabitingPage: PartnerPage = new PartnerPage()
 const partnerAgePage: PartnerAgePage = new PartnerAgePage()
@@ -82,6 +84,7 @@ export class StatementOfMeansSteps {
     bankAccountsPage.enterBankAccount('Saving account', true, 10000)
     bankAccountsPage.clickContinue()
     disabilityPage.selectYesOption()
+    severeDisabilityPage.selectYesOption()
     residencePage.selectOther('Special home')
     residencePage.clickContinue()
     cohabitingPage.selectYesOption()
