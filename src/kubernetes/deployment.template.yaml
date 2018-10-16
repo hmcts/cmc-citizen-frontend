@@ -22,7 +22,7 @@ spec:
         - name: single-request-reopen
       containers:
       - image: ${IMAGE_NAME}
-        name: citizen-frontend
+        name: ${SERVICE_NAME}
         env:
         - name: REFORM_TEAM
           value: 'cmc'
@@ -72,7 +72,7 @@ spec:
           value: ${CONTACT_EMAIL}
         envFrom:
         - configMapRef:
-            name: aat-config
+            name: ${SERVICE_NAME}-config
         resources:
           requests:
             memory: "256Mi"
@@ -160,7 +160,7 @@ spec:
     spec:
       initContainers:
       - name: init-wait-db
-        image: alpine
+        image: busybox
         command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 shared-database 5432 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: hmcts/feature-toggle-api
@@ -207,7 +207,7 @@ spec:
     spec:
       initContainers:
       - name: init-wait-feature-toggle-api
-        image: alpine
+        image: busybox
         command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 feature-toggle-api 8580 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - image: hmcts/cmc-feature-toggle-importer
@@ -216,7 +216,7 @@ spec:
         env:
         - name: WAIT_HOSTS
           value: 'feature-toggle-api:8580'
-        - name: VERBOSEfinao
+        - name: VERBOSE
           value: 'true'
         - name: WAIT_HOSTS_TIMEOUT
           value: '300'
