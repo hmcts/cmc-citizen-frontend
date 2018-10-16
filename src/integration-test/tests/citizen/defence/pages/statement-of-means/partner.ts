@@ -3,8 +3,8 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  isCohabiting: 'input[id=cohabitingyes]',
-  notCohabiting: 'input[id=cohabitingno]'
+  isCohabiting: 'input[id=optionyes]',
+  notCohabiting: 'input[id=optionno]'
 }
 
 const buttons = {
@@ -20,10 +20,6 @@ export class PartnerPage {
 
   selectNoOption (): void {
     I.checkOption(fields.notCohabiting)
-    I.click(buttons.submit)
-  }
-
-  clickContinue (): void {
     I.click(buttons.submit)
   }
 }

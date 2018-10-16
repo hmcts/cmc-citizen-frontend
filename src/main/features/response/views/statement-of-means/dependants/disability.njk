@@ -11,11 +11,11 @@
       <form method="post" novalidate
             class="analytics-submit-event-trigger"
             data-event-action="SoM: Are any of the children that live with you disabled?"
-            data-event-label-from="dependantDisabled">
+            data-event-label-from="option">
 
         {{ csrfProtection(csrf) }}
 
-        {{ yesNoRadio(t('Are any of the children that live with you disabled?'), 'dependantDisabled', form) }}
+        {{ yesNoRadio(t('Are any of the children that live with you disabled?'), 'option', form) }}
 
         {{ saveAndContinueButton() }}
 
