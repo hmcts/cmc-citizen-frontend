@@ -22,8 +22,4 @@ export class PartnerPensionPage {
     I.checkOption(fields.partnerNoPension)
     I.click(buttons.submit)
   }
-
-  clickContinue (): void {
-    I.click(buttons.submit)
-  }
 }

@@ -22,8 +22,4 @@ export class SevereDisabilityPage {
     I.checkOption(fields.notSeverelyDisabled)
     I.click(buttons.submit)
   }
-
-  clickContinue (): void {
-    I.click(buttons.submit)
-  }
 }

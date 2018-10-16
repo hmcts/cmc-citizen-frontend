@@ -22,8 +22,4 @@ export class PartnerPage {
     I.checkOption(fields.notCohabiting)
     I.click(buttons.submit)
   }
-
-  clickContinue (): void {
-    I.click(buttons.submit)
-  }
 }

@@ -22,8 +22,4 @@ export class PartnerSevereDisabilityPage {
     I.checkOption(fields.partnerNotSeverelyDisabled)
     I.click(buttons.submit)
   }
-
-  clickContinue (): void {
-    I.click(buttons.submit)
-  }
 }
