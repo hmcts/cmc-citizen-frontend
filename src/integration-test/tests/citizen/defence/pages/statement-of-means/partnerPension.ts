@@ -3,8 +3,8 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  partnerHasPension: 'input[id=partnerPensionyes]',
-  partnerNoPension: 'input[id=partnerPensionno]'
+  yes: 'input[id=partnerPensionyes]',
+  no: 'input[id=partnerPensionno]'
 }
 
 const buttons = {
@@ -14,12 +14,12 @@ const buttons = {
 export class PartnerPensionPage {
 
   selectYesOption (): void {
-    I.checkOption(fields.partnerHasPension)
+    I.checkOption(fields.yes)
     I.click(buttons.submit)
   }
 
   selectNoOption (): void {
-    I.checkOption(fields.partnerNoPension)
+    I.checkOption(fields.no)
     I.click(buttons.submit)
   }
 }
