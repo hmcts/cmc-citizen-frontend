@@ -22,8 +22,4 @@ export class CarerPage {
     I.checkOption(fields.notCarer)
     I.click(buttons.submit)
   }
-
-  clickContinue (): void {
-    I.click(buttons.submit)
-  }
 }
