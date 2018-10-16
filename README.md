@@ -130,7 +130,7 @@ Example URL using PR number from GitHub: `https://cmc-citizen-frontend-pr-XXX.se
 
 *Notes:* 
 - will only work through Proxy: proxyout.reform.hmcts.net:8080 (tip: use FoxyProxy browser plugin)
-- each preview environment will include a local `feature-toggle-importer` svc
+- each preview environment will include a local `feature-toggle-importer` service (initialised as per docker-compose)
 - any emails will include wrong domain because AAT claim-store is used as backend
 
 #### Kubernetes Namespace Format
