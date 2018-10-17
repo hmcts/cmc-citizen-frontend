@@ -1,6 +1,7 @@
 import { Moment } from 'moment'
 
 export enum DecisionType {
+  CLAIMANT_IN_FAVOUR_OF_DEFENDANT = 'CLAIMANT_IN_FAVOUR_OF_DEFENDANT',
   CLAIMANT = 'CLAIMANT',
   DEFENDANT = 'DEFENDANT',
   COURT = 'COURT'
@@ -12,16 +13,26 @@ export class CourtDetermination {
                             claimantPaymentDate: Moment,
                             courtGeneratedPaymentDate: Moment): DecisionType {
 
-    if (!defendantPaymentDate || !claimantPaymentDate || !courtGeneratedPaymentDate) {
+    if (!defendantPaymentDate || !claimantPaymentDate) {
       throw new Error('Input should be a moment, cannot be empty')
     }
 
-    if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate) || claimantPaymentDate.isSameOrAfter(courtGeneratedPaymentDate)) {
-      return DecisionType.CLAIMANT
+    if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate)) {
+      return DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT
     }
-    if (claimantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate) && defendantPaymentDate.isSameOrBefore(courtGeneratedPaymentDate)) {
+
+    if (!courtGeneratedPaymentDate) {
       return DecisionType.DEFENDANT
     }
-    return DecisionType.COURT
+
+    if (courtGeneratedPaymentDate.isBefore(claimantPaymentDate)) {
+      return DecisionType.CLAIMANT
+    }
+
+    if (courtGeneratedPaymentDate.isBefore(defendantPaymentDate)) {
+      return DecisionType.COURT
+    }
+
+    return DecisionType.DEFENDANT
   }
 }

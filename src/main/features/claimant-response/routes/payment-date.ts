@@ -53,18 +53,19 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
         }
         break
       }
-      case DecisionType.CLAIMANT: {
+      case DecisionType.CLAIMANT:
+      case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT: {
         return Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })
       }
     }
   }
 
-  generateCourtCalculatedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): PaymentIntention {
+  generateCourtOfferedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     draft.document.courtDecisionType = decisionType
 
-    if (decisionType === DecisionType.CLAIMANT) {
+    if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
         courtCalculatedPaymentIntention.paymentDate = draft.document.alternatePaymentMethod.toDomainInstance().paymentDate
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
@@ -105,29 +106,38 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        const paymentPlanFromDefendant: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
 
         courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-        courtCalculatedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanFromDefendant.startDate,
-          instalmentAmount: paymentPlanFromDefendant.instalmentAmount,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendant.frequency),
-          completionDate: paymentPlanFromDefendant.calculateLastPaymentDate(),
-          paymentLength: paymentPlanFromDefendant.calculatePaymentLength()
-        }
+        courtCalculatedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
       }
       return courtCalculatedPaymentIntention
     }
   }
 
-  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-    const getCourtDecision: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
+  generateCourtCalculatedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType) {
+    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+      return undefined
+    }
 
-    locals.draft.document.courtDecisionType = getCourtDecision
-    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, getCourtDecision)
+    const courtCalculatedPaymentIntention = new PaymentIntention()
+    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+    const lastPaymentDate: Moment = paymentPlan.calculateLastPaymentDate()
+
+    courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
+    courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
+    return courtCalculatedPaymentIntention
+  }
+
+  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
+
+    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
+    locals.draft.document.courtDecisionType = decisionType
+    locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
+    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
 
     return super.saveDraft(locals)
   }
+
 }
 
 /* tslint:disable:no-default-export */

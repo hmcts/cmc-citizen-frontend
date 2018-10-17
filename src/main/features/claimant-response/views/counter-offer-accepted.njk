@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton %}
-{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 
 {% set heading = 'Repayment plan accepted' %}
 
@@ -20,15 +20,12 @@
               courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule
             }) }}</p>
 
-            {{ paymentPlanTable(
-              id = 'payment-table',
-              instalmentAmount = courtOrderPaymentPlan.instalmentAmount,
-              paymentSchedule = courtOrderPaymentPlan.paymentSchedule,
-              firstPaymentDate = courtOrderPaymentPlan.firstPaymentDate,
-              lastPaymentOn = courtOrderPaymentPlan.completionDate,
-              lengthOfPayment = courtOrderPaymentPlan.paymentLength
-              )
-            }}
+          {{
+          repaymentPlanBlock(
+            heading = '',
+            repaymentPlan = courtOrderPaymentPlan
+          )
+          }}
           
         {% else %}
           <p> {{ t('The court has accepted your repayment plan.') }} </p>
