@@ -1,6 +1,5 @@
 import { DecisionType } from 'common/court-calculations/courtDecision'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { PaymentIntention as PaymentIntentionModel } from 'shared/components/payment-intention/model/paymentIntention'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 
 export class CourtDetermination {
@@ -26,8 +25,8 @@ export class CourtDetermination {
 
   deserialize (input?: any): CourtDetermination {
     if (input) {
-      this.courtDecision = PaymentIntentionModel.deserialise(input.courtDecision).toDomainInstance()
-      this.courtPaymentIntention = PaymentIntentionModel.deserialise(input.courtPaymentIntention).toDomainInstance()
+      this.courtDecision = PaymentIntention.deserialize(input.courtDecision)
+      this.courtPaymentIntention = PaymentIntention.deserialize(input.courtPaymentIntention)
       this.rejectionReason = input.rejectionReason
       this.disposableIncome = input.disposableIncome
       this.decisionType = input.decisionType
