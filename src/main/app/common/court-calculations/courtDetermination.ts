@@ -34,6 +34,4 @@ export class CourtDetermination {
     }
     return this
   }
-
-
 }

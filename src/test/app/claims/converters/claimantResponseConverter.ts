@@ -92,7 +92,7 @@ function createDraftClaimantResponseWithCourtDecisionType (
   draftClaimantResponse.paidAmount = new PaidAmount(PaidAmountOption.YES, 10, 100)
   draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(formaliseOption)
   draftClaimantResponse.acceptPaymentMethod = new AcceptPaymentMethod(YesNoOption.NO)
-  draftClaimantResponse.courtDecisionType = decisionType
+  draftClaimantResponse.decisionType = decisionType
   draftClaimantResponse.alternatePaymentMethod = DraftPaymentIntention.deserialise(claimantPI)
   draftClaimantResponse.courtOfferedPaymentIntention = PaymentIntention.deserialize(paymentIntentionInInstallment)
   draftClaimantResponse.courtCalculatedPaymentIntention = PaymentIntention.deserialize(courtCalculatedPaymentIntention)
@@ -141,7 +141,7 @@ describe('claimant response converter ', () => {
     it(' Accept defendant offer with CCJ', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
-      draftClaimantResponse.courtDecisionType = DecisionType.DEFENDANT
+      draftClaimantResponse.decisionType = DecisionType.DEFENDANT
       expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,
@@ -153,7 +153,7 @@ describe('claimant response converter ', () => {
     it(' Accept defendant offer with settlement', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      draftClaimantResponse.courtDecisionType = DecisionType.DEFENDANT
+      draftClaimantResponse.decisionType = DecisionType.DEFENDANT
       expect(converter.covertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,

@@ -23,7 +23,7 @@ export class DraftClaimantResponse extends DraftDocument {
   alternatePaymentMethod?: DraftPaymentIntention
   courtCalculatedPaymentIntention?: PaymentIntention
   courtOfferedPaymentIntention?: PaymentIntention
-  courtDecisionType?: DecisionType
+  decisionType?: DecisionType
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
@@ -75,7 +75,7 @@ export class DraftClaimantResponse extends DraftDocument {
         this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtPaymentIntention)
       }
       if (input.decisionType) {
-        this.courtDecisionType = input.decisionType
+        this.decisionType = input.decisionType
       }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount

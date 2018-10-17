@@ -74,7 +74,7 @@ describe('DraftClaimantResponse', () => {
       expect(draft.paidAmount.option).to.be.equal(PaidAmountOption.YES)
       expect(draft.paidAmount.amount).to.be.equal(999)
       expect(draft.paidAmount.claimedAmount).to.be.equal(1000)
-      expect(draft.courtDetermiantion).to.be.instanceOf(CourtDetermination)
+      expect(draft.courtDetermination).to.be.instanceOf(CourtDetermination)
     })
   })
 })
