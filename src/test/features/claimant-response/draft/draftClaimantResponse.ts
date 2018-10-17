@@ -14,7 +14,7 @@ import {
   intentionOfImmediatePayment,
   intentionOfPaymentByInstallments
 } from 'test/data/draft/paymentIntentionDraft'
-import { CourtDetermination } from 'common/court-calculations/courtDetermination'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 describe('DraftClaimantResponse', () => {
   describe('deserialization', () => {
@@ -53,8 +53,8 @@ describe('DraftClaimantResponse', () => {
           claimedAmount: 1000
         },
         courtDetermination: new CourtDetermination(
-          PaymentIntention.deserialise(intentionOfImmediatePayment).toDomainInstance(),
-          PaymentIntention.deserialise(intentionOfPaymentByInstallments).toDomainInstance(),
+          PaymentIntention.deserialize(intentionOfImmediatePayment),
+          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
           undefined,
           1000,
           DecisionType.COURT)

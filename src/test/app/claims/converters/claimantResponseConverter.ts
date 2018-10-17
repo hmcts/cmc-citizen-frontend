@@ -93,7 +93,7 @@ function createDraftClaimantResponseWithCourtDecisionType (
   draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(formaliseOption)
   draftClaimantResponse.acceptPaymentMethod = new AcceptPaymentMethod(YesNoOption.NO)
   draftClaimantResponse.decisionType = decisionType
-  draftClaimantResponse.alternatePaymentMethod = DraftPaymentIntention.deserialise(claimantPI)
+  draftClaimantResponse.alternatePaymentMethod = DraftPaymentIntention.deserialize(claimantPI)
   draftClaimantResponse.courtOfferedPaymentIntention = PaymentIntention.deserialize(paymentIntentionInInstallment)
   draftClaimantResponse.courtCalculatedPaymentIntention = PaymentIntention.deserialize(courtCalculatedPaymentIntention)
   draftClaimantResponse.disposableIncome = 200

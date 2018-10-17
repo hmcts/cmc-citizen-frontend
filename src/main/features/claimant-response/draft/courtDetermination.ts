@@ -1,6 +1,7 @@
-import { DecisionType } from 'common/court-calculations/courtDecision'
-import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import { DecisionType } from 'claimant-response/draft/courtDecision'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
 export class CourtDetermination {
   courtDecision?: PaymentIntention

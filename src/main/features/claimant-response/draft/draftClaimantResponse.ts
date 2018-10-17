@@ -10,7 +10,7 @@ import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { DecisionType } from 'common/court-calculations/courtDecision'
-import { CourtDetermination } from 'claims/models/response/core/courtDetermination'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -66,7 +66,7 @@ export class DraftClaimantResponse extends DraftDocument {
         this.acceptCourtOffer = new AcceptCourtOffer().deserialize(input.acceptCourtOffer)
       }
       if (input.alternatePaymentMethod) {
-        this.alternatePaymentMethod = DraftPaymentIntention.deserialise(input.alternatePaymentMethod)
+        this.alternatePaymentMethod = DraftPaymentIntention.deserialize(input.alternatePaymentMethod)
       }
       if (input.courtOfferedPaymentIntention) {
         this.courtOfferedPaymentIntention = PaymentIntention.deserialize(input.courtOfferedPaymentIntention)
