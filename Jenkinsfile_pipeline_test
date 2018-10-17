@@ -1,6 +1,14 @@
 #!groovy
 
-@Library("Infrastructure")
+// THIS PIPELINE IS FOR TESTING SHARED PIPELINE CODE ONLY
+
+properties([
+  parameters([
+    string(name: 'LIB_VERSION', defaultValue: 'master', description: 'Branch name of pipeline library to use')
+  ])
+])
+
+library "Infrastructure@${params.LIB_VERSION}"
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -31,28 +39,13 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 
-String notificationsChannel = '#cmc-tech-notification'
-
 withPipeline("nodejs", product, component) {
-  afterCheckout {
-    onMaster {
-      try {
-        sh """
-          git fetch origin demo:demo
-          git push --force origin HEAD:demo
-        """
-      } catch (err) {
-        notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
-      }
-    }
-  }
 
   after('build') {
     sh 'yarn setup'
   }
 
   loadVaultSecrets(secrets)
-  enableSlackNotifications(notificationsChannel)
   enableDockerBuild()
   enableDeployToAKS()
   setVaultName('cmc')

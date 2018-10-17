@@ -11,7 +11,7 @@ export class ResponseAcceptance implements ClaimantResponse {
   courtDetermination?: CourtDetermination
 
   constructor () {
-    this.type = 'acceptation'
+    this.type = 'ACCEPTATION'
   }
 
 }

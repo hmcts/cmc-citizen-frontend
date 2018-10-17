@@ -240,7 +240,13 @@ export const fullAdmissionWithPaymentByInstalmentsDraft = {
         },
         paymentSchedule: {
           value: PaymentSchedule.EACH_WEEK
-        }
+        },
+        completionDate: {
+          year: 2051,
+          month: 12,
+          day: 31
+        },
+        paymentLength: '1'
       }
     }
   }
@@ -264,7 +270,13 @@ export const partialAdmissionWithPaymentByInstalmentsDraft = {
         },
         paymentSchedule: {
           value: PaymentSchedule.EACH_WEEK
-        }
+        },
+        completionDate: {
+          year: 2051,
+          month: 12,
+          day: 31
+        },
+        paymentLength: '1'
       }
     },
     ...partialTimelineAndEvidences
