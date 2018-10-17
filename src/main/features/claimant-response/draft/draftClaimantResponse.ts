@@ -9,7 +9,8 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { DecisionType } from 'common/court-calculations/courtDecision'
+import { CourtDetermination } from 'claims/models/response/core/courtDetermination'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -28,6 +29,7 @@ export class DraftClaimantResponse extends DraftDocument {
   rejectionReason?: RejectionReason
   acceptCourtOffer?: AcceptCourtOffer
   disposableIncome: number
+  courtDetermination?: CourtDetermination
 
   constructor () {
     super()
@@ -69,17 +71,20 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.courtOfferedPaymentIntention) {
         this.courtOfferedPaymentIntention = PaymentIntention.deserialize(input.courtOfferedPaymentIntention)
       }
-      if (input.courtCalculatedPaymentIntention) {
-        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtCalculatedPaymentIntention)
+      if (input.courtPaymentIntention) {
+        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtPaymentIntention)
       }
-      if (input.courtDecisionType) {
-        this.courtDecisionType = input.courtDecisionType
+      if (input.decisionType) {
+        this.courtDecisionType = input.decisionType
       }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount
       }
       if (input.disposableIncome) {
         this.disposableIncome = input.disposableIncome
+      }
+      if (input.courtDetermination) {
+        this.courtDetermination = input.courtDetermination
       }
     }
     return this

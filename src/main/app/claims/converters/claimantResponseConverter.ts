@@ -16,7 +16,7 @@ import { PaymentDate } from 'shared/components/payment-intention/model/paymentDa
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { DecisionType } from 'common/court-calculations/courtDecision'
 
 export class ClaimantResponseConverter {
 
