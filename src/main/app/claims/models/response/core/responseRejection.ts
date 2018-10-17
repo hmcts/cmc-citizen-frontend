@@ -7,7 +7,6 @@ export class ResponseRejection implements ClaimantResponse {
   reason?: string
 
   constructor () {
-    this.type = 'rejection'
+    this.type = 'REJECTION'
   }
-
 }
