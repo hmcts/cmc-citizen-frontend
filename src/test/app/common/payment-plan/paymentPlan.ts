@@ -157,6 +157,24 @@ describe('calculateBiWeeklyPaymentLength', () => {
     expect(paymentPlan.calculatePaymentLength()).to.equal('8 weeks')
   })
 
+  it('should return a payment length of 14 weeks (where the last instalment is partial)', () => {
+    const instalmentAmount = 250
+    const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT_2, instalmentAmount, Frequency.TWO_WEEKLY, moment('2018-01-01'))
+    expect(paymentPlan.calculatePaymentLength()).to.equal('14 weeks')
+  })
+
+  it('should return a payment length of 66 weeks (where the last instalment is partial)', () => {
+    const instalmentAmount = 50
+    const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT_2, instalmentAmount, Frequency.TWO_WEEKLY)
+    expect(paymentPlan.calculatePaymentLength()).to.equal('66 weeks')
+  })
+
+  it('should return a payment length of 330 weeks (where the last instalment is partial)', () => {
+    const instalmentAmount = 10
+    const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT_2, instalmentAmount, Frequency.TWO_WEEKLY)
+    expect(paymentPlan.calculatePaymentLength()).to.equal('330 weeks')
+  })
+
 })
 
 describe('PaymentPlan', () => {
