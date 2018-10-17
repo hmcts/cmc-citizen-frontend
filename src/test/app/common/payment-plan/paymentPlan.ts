@@ -8,7 +8,41 @@ const TOTAL_AMOUNT = 1000
 const TOTAL_AMOUNT_2 = 1643.20
 const TOTAL_AMOUNT_3 = 20
 
-describe.only('calculatePaymentLength', () => {
+const frequencies = ['WEEK', 'TWO_WEEK', 'MONTH']
+
+const TESTS = [
+  {
+    desc: 'return the correct value when instalment amount is reasonably high',
+    claimAmount: 1600,
+    instalmentAmount: 200,
+    expected: { WEEK: '8 weeks', TWO_WEEK: '16 weeks', MONTH: '8 months' }
+  },
+  {
+    desc: 'return lowest denomination when instalment amount is equal to claim amount',
+    claimAmount: 100,
+    instalmentAmount: 100,
+    expected: { WEEK: '1 week', TWO_WEEK: '2 weeks', MONTH: '1 month' }
+  },
+  {
+    desc: 'return the correct value when instalment amount is very low',
+    claimAmount: 100,
+    instalmentAmount: 1,
+    expected: { WEEK: '100 weeks', TWO_WEEK: '200 weeks', MONTH: '100 months' }
+  }
+]
+
+frequencies.forEach(frequency => {
+  describe.only(`when the frequency is ${frequency}`, () => {
+    TESTS.forEach(test => {
+      it(test.desc, () => {
+        const paymentPlan = PaymentPlan.create(test.claimAmount, test.instalmentAmount, Frequency.of(frequency))
+        expect(paymentPlan.calculatePaymentLength()).to.equal(test.expected[frequency])
+      })
+    })
+  })
+})
+
+describe('calculatePaymentLength', () => {
 
   it('should return the correct payment plan length with installment amount < 1£', () => {
     const instalmentAmount = 0.50
@@ -42,7 +76,7 @@ describe.only('calculatePaymentLength', () => {
 
 })
 
-describe.only('calculateMonthlyPaymentLength', () => {
+describe('calculateMonthlyPaymentLength', () => {
 
   it('should return payment length in month(s) when selecting the MONTHLY option', () => {
     const instalmentAmount = 1000
@@ -75,7 +109,7 @@ describe.only('calculateMonthlyPaymentLength', () => {
   })
 })
 
-describe.only('calculateWeeklyPaymentLength', () => {
+describe('calculateWeeklyPaymentLength', () => {
 
   it('should return a payment length in week(s) when option WEEKLY is selected', () => {
     const instalmentAmount = 1000
