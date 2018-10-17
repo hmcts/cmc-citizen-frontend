@@ -21,7 +21,8 @@ import { PartnerAgePage } from 'integration-test/tests/citizen/defence/pages/sta
 import { PartnerPensionPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/partnerPension'
 import { PartnerDisabilityPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/partnerDisability'
 import { PartnerSevereDisabilityPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/partnerSevereDisability'
-import { SevereDisabilityPage } from '../pages/statement-of-means/severeDisability'
+import { SevereDisabilityPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/severeDisability'
+import { PriorityDebtsPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/priorityDebts'
 
 const startPage: StartPage = new StartPage()
 const bankAccountsPage: BankAccountsPage = new BankAccountsPage()
@@ -45,6 +46,7 @@ const unemploymentPage: UnemploymentPage = new UnemploymentPage()
 const incomePage: MonthlyIncomePage = new MonthlyIncomePage()
 const expensesPage: MonthlyExpensesPage = new MonthlyExpensesPage()
 const debtsPage: DebtsPage = new DebtsPage()
+const priorityDebtsPage: PriorityDebtsPage = new PriorityDebtsPage()
 const courtOrdersPage: CourtOrdersPage = new CourtOrdersPage()
 const explanationPage: ExplanationPage = new ExplanationPage()
 
@@ -69,6 +71,7 @@ export class StatementOfMeansSteps {
     unemploymentPage.clickContinue()
     courtOrdersPage.selectNotDeclared()
     courtOrdersPage.clickContinue()
+    priorityDebtsPage.clickContinue()
     debtsPage.selectNotDeclared()
     debtsPage.clickContinue()
     expensesPage.fillOutSomeFields()
@@ -116,6 +119,9 @@ export class StatementOfMeansSteps {
     courtOrdersPage.selectDeclared()
     courtOrdersPage.enterCourtOrder('000MC001', 100, 10)
     courtOrdersPage.clickContinue()
+    priorityDebtsPage.declareMortgage(500)
+    priorityDebtsPage.declareMaintenance(200)
+    priorityDebtsPage.clickContinue()
     debtsPage.selectDeclared()
     debtsPage.enterDebt('Wife\'s debt', 100, 10)
     debtsPage.clickContinue()
