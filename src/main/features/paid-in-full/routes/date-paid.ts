@@ -42,6 +42,6 @@ export default express.Router()
 
         await new ClaimStoreClient().savePaidInFull(externalId, user, draft)
 
-        res.redirect(Paths.datePaidPage.uri.replace(':externalId', externalId))
+        res.redirect(Paths.claimantConfirmationPage.uri.replace(':externalId', externalId))
       }
     }))
