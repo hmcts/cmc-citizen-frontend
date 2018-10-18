@@ -8,6 +8,13 @@ import { SettlementAgreement } from 'claimant-response/form/models/settlementAgr
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
+import { DecisionType } from 'common/court-calculations/courtDecision'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import {
+  intentionOfImmediatePayment,
+  intentionOfPaymentByInstallments
+} from 'test/data/draft/paymentIntentionDraft'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 describe('DraftClaimantResponse', () => {
   describe('deserialization', () => {
@@ -44,7 +51,13 @@ describe('DraftClaimantResponse', () => {
           option: PaidAmountOption.YES,
           amount: 999,
           claimedAmount: 1000
-        }
+        },
+        courtDetermination: new CourtDetermination(
+          PaymentIntention.deserialize(intentionOfImmediatePayment),
+          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
+          undefined,
+          1000,
+          DecisionType.COURT)
       })
       expect(draft.externalId).to.eql(myExternalId)
       expect(draft).to.be.instanceof(DraftClaimantResponse)
@@ -61,7 +74,21 @@ describe('DraftClaimantResponse', () => {
       expect(draft.paidAmount.option).to.be.equal(PaidAmountOption.YES)
       expect(draft.paidAmount.amount).to.be.equal(999)
       expect(draft.paidAmount.claimedAmount).to.be.equal(1000)
+      expect(draft.courtDetermination).to.be.instanceOf(CourtDetermination)
+    })
 
+    it('should return a DraftClaimantResponse instance initialised with partial valid data', () => {
+      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+        externalId: myExternalId,
+        courtDetermination: new CourtDetermination(
+          PaymentIntention.deserialize(intentionOfImmediatePayment),
+          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
+          undefined,
+          1000,
+          DecisionType.COURT)
+      })
+      expect(draft.courtDetermination).to.be.instanceOf(CourtDetermination)
     })
   })
 })
