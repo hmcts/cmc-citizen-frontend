@@ -1,4 +1,4 @@
-import { CourtDetermination, DecisionType } from 'common/court-calculations/courtDetermination'
+import { CourtDecision, DecisionType } from 'common/court-calculations/courtDecision'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
@@ -23,7 +23,7 @@ export class CourtDecisionHelper {
 
     const courtOfferedLastDate: Moment = courtCalculatedPaymentPlan.calculateLastPaymentDate()
 
-    return CourtDetermination.calculateDecision(
+    return CourtDecision.calculateDecision(
       defendantLastPaymentDate,
       claimantLastPaymentDate,
       courtOfferedLastDate

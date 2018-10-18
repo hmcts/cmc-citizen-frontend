@@ -29,7 +29,7 @@ export class FullAdmission {
 
   deserialize (input: any): FullAdmission {
     if (input) {
-      this.paymentIntention = PaymentIntention.deserialise(input.paymentIntention)
+      this.paymentIntention = PaymentIntention.deserialize(input.paymentIntention)
       return this
     }
   }
@@ -54,7 +54,7 @@ export class PartialAdmission {
       this.timeline = new DefendantTimeline().deserialize(input.timeline)
       this.evidence = new DefendantEvidence().deserialize(input.evidence)
       if (input.paymentIntention) {
-        this.paymentIntention = PaymentIntention.deserialise(input.paymentIntention)
+        this.paymentIntention = PaymentIntention.deserialize(input.paymentIntention)
       }
     }
 
