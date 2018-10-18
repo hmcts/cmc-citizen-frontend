@@ -78,8 +78,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtOfferedPaymentIntention = new PaymentIntention()
 
-    draft.document.decisionType = decisionType
-
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper
         .createPaymentPlanFromDraft(draft.document)
