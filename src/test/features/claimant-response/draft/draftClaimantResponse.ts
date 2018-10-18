@@ -76,5 +76,19 @@ describe('DraftClaimantResponse', () => {
       expect(draft.paidAmount.claimedAmount).to.be.equal(1000)
       expect(draft.courtDetermination).to.be.instanceOf(CourtDetermination)
     })
+
+    it('should return a DraftClaimantResponse instance initialised with partial valid data', () => {
+      const myExternalId: String = 'b17af4d2-273f-4999-9895-bce382fa24c8'
+      const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
+        externalId: myExternalId,
+        courtDetermination: new CourtDetermination(
+          PaymentIntention.deserialize(intentionOfImmediatePayment),
+          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
+          undefined,
+          1000,
+          DecisionType.COURT)
+      })
+      expect(draft.courtDetermination).to.be.instanceOf(CourtDetermination)
+    })
   })
 })
