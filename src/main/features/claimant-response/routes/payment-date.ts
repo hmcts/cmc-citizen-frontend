@@ -11,7 +11,7 @@ import { claimantResponsePath, Paths } from 'claimant-response/paths'
 import { Claim } from 'claims/models/claim'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { Moment } from 'moment'
-import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { DecisionType } from 'common/court-calculations/courtDecision'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
 import { Draft } from '@hmcts/draft-store-client'
@@ -63,7 +63,6 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   generateCourtOfferedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    draft.document.courtDecisionType = decisionType
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
@@ -131,7 +130,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
-    locals.draft.document.courtDecisionType = decisionType
+    locals.draft.document.decisionType = decisionType
     locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
     locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
 
