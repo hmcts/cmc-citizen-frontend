@@ -7,7 +7,7 @@ export enum DecisionType {
   COURT = 'COURT'
 }
 
-export class CourtDetermination {
+export class CourtDecision {
 
   static calculateDecision (defendantPaymentDate: Moment,
                             claimantPaymentDate: Moment,
