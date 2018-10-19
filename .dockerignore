@@ -11,9 +11,11 @@
 !tsconfig.json
 
 !src/main/**
+!src/test/**
 !config/**
 !types/**
 !src/integration-test/**
 !default.conf.js
 !saucelabs.conf.js
 !server.js
+!mocha.opts

@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@cmc-yarn-withdocker")
 
 String product = "cmc"
 String component = "citizen-frontend"
