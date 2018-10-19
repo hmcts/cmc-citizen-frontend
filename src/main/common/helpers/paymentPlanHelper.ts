@@ -9,11 +9,16 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 
 import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse'
 import { ResponseDraft } from 'features/response/draft/responseDraft'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 
-import { RepaymentPlan as ClaimPaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { PaymentPlan as DraftPaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
 import { PaymentPlan as FormPaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
+import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
+import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { PaymentIntention as PI } from 'claims/models/response/core/paymentIntention'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { MomentFactory } from 'shared/momentFactory'
+import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 
 export class PaymentPlanHelper {
 
@@ -28,15 +33,52 @@ export class PaymentPlanHelper {
 
     switch (responseType) {
       case ResponseType.PART_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromClaimPartialAdmission(response as PartialAdmissionResponse)
+        let partialAdmissionResponse = response as PartialAdmissionResponse
+        return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(partialAdmissionResponse,
+          partialAdmissionResponse.amount
+        )
       case ResponseType.FULL_ADMISSION:
-        return PaymentPlanHelper.createPaymentPlanFromClaimFullAdmission(
-          response as FullAdmissionResponse,
+        return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as FullAdmissionResponse,
           claim.claimData.amount.totalAmount()
         )
       default:
         throw new Error(`Incompatible response type: ${responseType}`)
     }
+  }
+
+  private static createPaymentPlanFromClaimAdmission (response: FullAdmissionResponse | PartialAdmissionResponse, totalAmount: number): PaymentPlan {
+    const paymentIntention: PI = response.paymentIntention
+    if (!paymentIntention) {
+      return undefined
+    }
+
+    if (paymentIntention.repaymentPlan) {
+      return PaymentPlanHelper.createPaymentPlan(
+        totalAmount,
+        paymentIntention.repaymentPlan.instalmentAmount,
+        Frequency.of(paymentIntention.repaymentPlan.paymentSchedule),
+        paymentIntention.repaymentPlan.firstPaymentDate
+      )
+    }
+
+    if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      const instalmentAmount: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans) / Frequency.WEEKLY.monthlyRatio
+      return PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+    }
+  }
+
+  static createPaymentPlanFromDefendantFinancialStatement (claim: Claim): PaymentPlan {
+    const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    if (response === undefined) {
+      throw new Error('Claim does not have response attached')
+    }
+    if (response.statementOfMeans === undefined) {
+      throw new Error(`Claim response does not have financial statement attached`)
+    }
+
+    const instalmentAmount: number = Math.max(StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans), 0) / Frequency.WEEKLY.monthlyRatio
+    return PaymentPlanHelper.createPaymentPlan(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
   static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {
@@ -58,34 +100,8 @@ export class PaymentPlanHelper {
     return PaymentPlanHelper.createPaymentPlan(
       paymentPlanForm.totalAmount,
       paymentPlanForm.instalmentAmount,
-      paymentPlanForm.paymentSchedule ? paymentPlanForm.paymentSchedule.value : undefined,
+      paymentPlanForm.paymentSchedule ? Frequency.of(paymentPlanForm.paymentSchedule.value) : undefined,
       undefined)
-  }
-
-  private static createPaymentPlanFromClaimPartialAdmission (response: PartialAdmissionResponse): PaymentPlan {
-    const paymentPlan: ClaimPaymentPlan = response.paymentIntention.repaymentPlan
-    if (!paymentPlan) {
-      return undefined
-    }
-    return PaymentPlanHelper.createPaymentPlan(
-      response.amount,
-      paymentPlan.instalmentAmount,
-      paymentPlan.paymentSchedule,
-      paymentPlan.firstPaymentDate
-    )
-  }
-
-  private static createPaymentPlanFromClaimFullAdmission (response: FullAdmissionResponse, totalAmount: number): PaymentPlan {
-    const paymentPlan: ClaimPaymentPlan = response.paymentIntention.repaymentPlan
-    if (!paymentPlan) {
-      return undefined
-    }
-    return PaymentPlanHelper.createPaymentPlan(
-      totalAmount,
-      paymentPlan.instalmentAmount,
-      paymentPlan.paymentSchedule,
-      paymentPlan.firstPaymentDate
-    )
   }
 
   private static createPaymentPlanFromDraftDraftClaimantResponse (draft: DraftClaimantResponse): PaymentPlan {
@@ -105,16 +121,16 @@ export class PaymentPlanHelper {
     return PaymentPlanHelper.createPaymentPlan(
       paymentPlan.totalAmount,
       paymentPlan.instalmentAmount,
-      paymentPlan.paymentSchedule ? paymentPlan.paymentSchedule.value : undefined,
+      paymentPlan.paymentSchedule ? Frequency.of(paymentPlan.paymentSchedule.value) : undefined,
       paymentPlan.firstPaymentDate ? paymentPlan.firstPaymentDate.toMoment() : undefined
     )
   }
 
-  private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: string, firstPaymentDate: Moment): PaymentPlan {
+  private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
     if (!totalAmount || !instalmentAmount || !frequency) {
       return undefined
     }
 
-    return PaymentPlan.create(totalAmount, instalmentAmount, Frequency.of(frequency), firstPaymentDate)
+    return PaymentPlan.create(totalAmount, instalmentAmount, frequency, firstPaymentDate)
   }
 }

@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import { Frequency } from 'common/frequency/frequency'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 describe('Frequency', () => {
   describe('of', () => {
@@ -52,6 +53,20 @@ describe('Frequency', () => {
         } catch (e) {
           expect(e.message).to.equal(`There is no Frequency for weekly value: '0'`)
         }
+      })
+    })
+
+    describe('toPaymentSchedule', () => {
+      it('should pass when frequency is converted to paymentSchedule for EVERY_TWO_WEEKS', () => {
+        expect(Frequency.toPaymentSchedule(Frequency.of('EVERY_TWO_WEEKS'))).to.deep.equal(PaymentSchedule.EVERY_TWO_WEEKS)
+      })
+
+      it('should pass when frequency is converted to paymentSchedule for EACH_WEEK', () => {
+        expect(Frequency.toPaymentSchedule(Frequency.of('EACH_WEEK'))).to.deep.equal(PaymentSchedule.EACH_WEEK)
+      })
+
+      it('should pass when frequency is converted to paymentSchedule for EVERY_MONTH', () => {
+        expect(Frequency.toPaymentSchedule(Frequency.of('EVERY_MONTH'))).to.deep.equal(PaymentSchedule.EVERY_MONTH)
       })
     })
   })

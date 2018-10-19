@@ -25,6 +25,7 @@ import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
+import { PaidInFullFeature } from 'paid-in-full/index'
 
 const env: string = process.env.NODE_ENV || 'development'
 const developmentMode: boolean = env === 'development'
@@ -67,7 +68,9 @@ export function createApp (): express.Express {
   new CCJFeature().enableFor(app)
   new OfferFeature().enableFor(app)
 
-  if (FeatureToggles.isEnabled('testingSupport')) {
+  if (FeatureToggles.isEnabled('paidInFull')) {
+  new PaidInFullFeature().enableFor(app)
+}if (FeatureToggles.isEnabled('testingSupport')) {
     new TestingSupportFeature().enableFor(app)
   }
 

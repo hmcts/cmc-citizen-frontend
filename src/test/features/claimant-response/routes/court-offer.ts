@@ -14,6 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -69,7 +70,20 @@ describe('Claimant Response - Court offer', () => {
 
       it('should render page with courts proposed repayment plan', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
-        draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveFind('claimantResponse', {
+          courtOfferedPaymentIntention: {
+            paymentOption: {
+              value: 'INSTALMENTS'
+            },
+            repaymentPlan: {
+              instalmentAmount: 4.3333335,
+              firstPaymentDate: '2019-01-01T00:00:00.000',
+              paymentSchedule: 'EVERY_MONTH',
+              completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
+              paymentLength: '20 years 5 months'
+            }
+          }
+        })
 
         await request(app)
           .get(pagePath)

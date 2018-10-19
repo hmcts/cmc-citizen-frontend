@@ -26,6 +26,8 @@ export class ClaimantResponseTestSuite extends FeatureTestSuite {
   }
 
   getRoutablePaths () {
-    return Object.values(ClaimantResponsePaths).filter(path => path !== ClaimantResponsePaths.receiptReceiver)
+    return Object.values(ClaimantResponsePaths)
+      .filter(path => path !== ClaimantResponsePaths.receiptReceiver)
+      .filter(path => path !== ClaimantResponsePaths.courtOfferedSetDatePage)
   }
 }
