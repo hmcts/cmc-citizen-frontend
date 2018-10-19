@@ -11,11 +11,11 @@
     <div class="column-two-thirds">
       <p>{{ t('Based on the financial details provided by the defendant, we don’t believe they would be able to make these repayments.') }}</p>
 
-      <p>{{ t('The court affordability calculator has proposed the below repayment plan as the maximum the defendant can repay.') }}</p>
+      <p>{{ t('The court affordability calculator has determined a new repayment plan as the most the defendant can repay.') }}</p>
 
       {{
       repaymentPlanBlock(
-        heading = '',
+        heading = 'The court’s proposed repayment plan',
         repaymentPlan = courtOrderPaymentPlan
       )
       }}
@@ -25,7 +25,7 @@
 
         {{
         radioGroup(
-          label = 'Do you want to accept the court’s proposed repayment plan?',
+          label = 'Do you accept the court’s proposed repayment plan?',
           labelForScreenReadersOnly = false,
           form = form,
           name = 'accept',
