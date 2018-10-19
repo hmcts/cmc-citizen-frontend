@@ -25,7 +25,7 @@ describe('CourtDecision', () => {
       let claimantPaymentDate = moment(new Date()).add(1,'days')
       let courtGeneratedPaymentDate = undefined
 
-      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT)
+      expect(CourtDecision.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT)
     })
 
     it('should return a defendant decision type when claimantPaymentDate is after the defendantPaymentDate and no court date is supplied', () => {
@@ -34,7 +34,7 @@ describe('CourtDecision', () => {
       let claimantPaymentDate = moment(new Date())
       let courtGeneratedPaymentDate = undefined
 
-      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
+      expect(CourtDecision.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
     })
 
     it('should return a claimant decision type when claimantPaymentDate is after the defendantPaymentDate', () => {
@@ -97,7 +97,7 @@ describe('CourtDecision', () => {
       let claimantPaymentDate = moment(new Date()).add(7,'days')
       let courtGeneratedPaymentDate = claimantPaymentDate
 
-      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.COURT)
+      expect(CourtDecision.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.COURT)
     })
     it('should return a defendant decision type when the claimantPaymentDate is before defendantPaymentDate and the defendantPaymentDate is the same as courtGeneratedPaymentDate', () => {
 
@@ -105,7 +105,7 @@ describe('CourtDecision', () => {
       let claimantPaymentDate = moment(new Date()).add(7,'days')
       let courtGeneratedPaymentDate = defendantPaymentDate
 
-      expect(CourtDetermination.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
+      expect(CourtDecision.calculateDecision(defendantPaymentDate, claimantPaymentDate, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
     })
   })
 })
