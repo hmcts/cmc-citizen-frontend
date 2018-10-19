@@ -19,7 +19,7 @@ import { PaymentDate } from 'shared/components/payment-intention/model/paymentDa
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { DecisionType } from 'common/court-calculations/courtDecision'
 
 export class ClaimantResponseConverter {
 
@@ -64,7 +64,7 @@ export class ClaimantResponseConverter {
     if (courtDetermination) {
       respAcceptance.courtDetermination = courtDetermination
     }
-    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod, draftClaimantResponse.courtDecisionType)
+    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod, draftClaimantResponse.decisionType)
     if (claimantPaymentIntention) {
       respAcceptance.claimantPaymentIntention = claimantPaymentIntention
     }
@@ -72,10 +72,10 @@ export class ClaimantResponseConverter {
   }
 
   private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
-    if (draftClaimantResponse.courtDecisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
+    if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
       throw new Error('court offered payment intention not found where decision type is COURT')
     }
-    if (draftClaimantResponse.courtDecisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && !draftClaimantResponse.courtCalculatedPaymentIntention) {
+    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && !draftClaimantResponse.courtCalculatedPaymentIntention) {
       throw new Error('court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT')
     }
     if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
@@ -95,7 +95,7 @@ export class ClaimantResponseConverter {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
     courtDetermination.disposableIncome = draftClaimantResponse.disposableIncome ? draftClaimantResponse.disposableIncome : 0
-    courtDetermination.decisionType = draftClaimantResponse.courtDecisionType
+    courtDetermination.decisionType = draftClaimantResponse.decisionType
     return courtDetermination
   }
 

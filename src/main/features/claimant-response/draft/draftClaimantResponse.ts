@@ -11,7 +11,8 @@ import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/p
 import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { DecisionType } from 'common/court-calculations/courtDetermination'
+import { DecisionType } from 'common/court-calculations/courtDecision'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -24,7 +25,7 @@ export class DraftClaimantResponse extends DraftDocument {
   alternatePaymentMethod?: DraftPaymentIntention
   courtCalculatedPaymentIntention?: PaymentIntention
   courtOfferedPaymentIntention?: PaymentIntention
-  courtDecisionType?: DecisionType
+  decisionType?: DecisionType
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
   rejectionReason?: RejectionReason
@@ -32,6 +33,7 @@ export class DraftClaimantResponse extends DraftDocument {
   accepted?: ClaimSettled
   acceptCourtOffer?: AcceptCourtOffer
   disposableIncome: number
+  courtDetermination?: CourtDetermination
 
   constructor () {
     super()
@@ -74,22 +76,25 @@ export class DraftClaimantResponse extends DraftDocument {
         this.acceptCourtOffer = new AcceptCourtOffer().deserialize(input.acceptCourtOffer)
       }
       if (input.alternatePaymentMethod) {
-        this.alternatePaymentMethod = DraftPaymentIntention.deserialise(input.alternatePaymentMethod)
+        this.alternatePaymentMethod = DraftPaymentIntention.deserialize(input.alternatePaymentMethod)
       }
       if (input.courtOfferedPaymentIntention) {
         this.courtOfferedPaymentIntention = PaymentIntention.deserialize(input.courtOfferedPaymentIntention)
       }
-      if (input.courtCalculatedPaymentIntention) {
-        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtCalculatedPaymentIntention)
+      if (input.courtPaymentIntention) {
+        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtPaymentIntention)
       }
-      if (input.courtDecisionType) {
-        this.courtDecisionType = input.courtDecisionType
+      if (input.decisionType) {
+        this.decisionType = input.decisionType
       }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount
       }
       if (input.disposableIncome) {
         this.disposableIncome = input.disposableIncome
+      }
+      if (input.courtDetermination) {
+        this.courtDetermination = input.courtDetermination
       }
     }
     return this
