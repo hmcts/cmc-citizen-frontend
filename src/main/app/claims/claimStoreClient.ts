@@ -51,7 +51,7 @@ export class ClaimStoreClient {
     return this.request
       .put(`${claimStoreApiUrl}/${externalId}/paid-in-full`, {
         body: {
-          'moneyReceivedOn': draft.datePaid.date
+          'moneyReceivedOn': draft.datePaid.date.toMoment()
         },
         headers: {
           Authorization: `Bearer ${submitter.bearerToken}`
