@@ -10,6 +10,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 interface State {
   status: ClaimStatus
@@ -165,6 +166,16 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else if (this.moneyReceivedOn) {
+      if (!this.countyCourtJudgment) {
+        return ClaimStatus.PAID_IN_FULL
+      } else if (this.countyCourtJudgment) {
+        if (this.isCCJPaidWithinMonth()) {
+          return ClaimStatus.PAID_IN_FULL_CCJ_WITHIN_MONTH
+        } else if (!this.isCCJPaidWithinMonth()) {
+          return ClaimStatus.PAID_IN_FULL_CCJ_AFTER_MONTH
+        }
+      }
     } else {
       throw new Error('Unknown Status')
     }
@@ -197,5 +208,16 @@ export class Claim {
 
   private isSettlementReached (): boolean {
     return this.settlement && !!this.settlementReachedAt
+  }
+
+  private isCCJPaidWithinMonth (): boolean {
+
+    const futureMonth = calculateMonthIncrement(this.countyCourtJudgmentIssuedAt)
+
+    if (this.moneyReceivedOn.isSameOrBefore(futureMonth)) {
+      return true
+    } else if (this.moneyReceivedOn.isAfter(futureMonth)) {
+      return false
+    }
   }
 }
