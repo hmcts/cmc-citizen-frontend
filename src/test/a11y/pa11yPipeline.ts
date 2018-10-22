@@ -33,7 +33,6 @@ export class Pa11yPipeline {
             await sleep(100)
           }
           // verify
-          console.log(JSON.stringify(pa11yTest.headingResults.issues))
           expect(pa11yTest.headingResults.issues, JSON.stringify(pa11yTest.headingResults.issues)).to.be.empty
         })
 

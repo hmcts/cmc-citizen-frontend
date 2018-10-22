@@ -67,8 +67,6 @@ export class Pa11yTest {
       }
     }).catch(errors => Pa11yTestResults.withIssues(errors))
 
-    console.log(JSON.stringify(result))
-
     if (result.issues && result.issues.length > 0) {
       return Pa11yTestResults.withIssues(result.issues)
     }

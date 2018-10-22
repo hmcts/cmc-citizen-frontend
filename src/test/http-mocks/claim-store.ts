@@ -144,7 +144,6 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
 }
 
 export function resolveRetrieveClaimByFixedExternalId (externalId: string, claimOverride?: object): mock.Scope {
-  console.log(`Mocking: ${serviceBaseURL}/claims/${externalId}`)
   return mock(`${serviceBaseURL}`)
     .get(`/claims/${externalId}`)
     .reply(HttpStatus.OK, { ...sampleClaimObj, externalId: externalId, ...claimOverride })

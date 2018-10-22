@@ -13,7 +13,6 @@ export class CCJTestSuite extends FeatureTestSuite {
 
   constructor (pa11yPipeline: Pa11yPipeline, eventEmitter: EventEmitter, agentSupplier: () => supertest.SuperTest<supertest.Test>) {
     super(pa11yPipeline, eventEmitter, agentSupplier, '91e1c70f-7d2c-4c1e-0001-cbb02c0e64d6')
-    console.log(`created CCJTestSuite with uuid ${this.uuid}`)
   }
 
   trainMocks () {
