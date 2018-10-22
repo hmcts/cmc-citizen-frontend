@@ -19,10 +19,11 @@ import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentPlan as PaymentPlanModel } from 'shared/components/payment-intention/model/paymentPlan'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
@@ -69,7 +70,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.BY_SET_DATE) {
         courtDecidedPaymentIntention.paymentDate = draft.document.alternatePaymentMethod.paymentDate
-        courtDecidedPaymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
+        courtDecidedPaymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
       }
       return courtDecidedPaymentIntention
     }
@@ -78,15 +79,15 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
       const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
       const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
 
-      if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.BY_SET_DATE) {
-        courtDecidedPaymentIntention.paymentDate = LocalDate.fromMoment(lastPaymentDate)
-        courtDecidedPaymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentType.BY_SET_DATE.value) {
+        courtDecidedPaymentIntention.paymentDate = new PaymentDate(LocalDate.fromMoment(lastPaymentDate))
+        courtDecidedPaymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
       }
 
-      if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.INSTALMENTS) {
+      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentType.INSTALMENTS.value) {
         const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
         const paymentPlanConvertedToDefendantFrequency: PaymentPlanModel = PaymentPlanModel.fromObject(paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency))
-        courtDecidedPaymentIntention.paymentOption.option = PaymentType.INSTALMENTS
+        courtDecidedPaymentIntention.paymentOption = new PaymentOption(PaymentType.INSTALMENTS)
         courtDecidedPaymentIntention.paymentPlan = paymentPlanConvertedToDefendantFrequency
       }
       return courtDecidedPaymentIntention
@@ -95,12 +96,12 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     if (decisionType === DecisionType.DEFENDANT) {
 
       if (claimResponse.paymentIntention.paymentOption === PaymentType.BY_SET_DATE.value) {
-        courtDecidedPaymentIntention.paymentDate = LocalDate.fromMoment(claimResponse.paymentIntention.paymentDate)
-        courtDecidedPaymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
+        courtDecidedPaymentIntention.paymentDate = new PaymentDate(LocalDate.fromMoment(claimResponse.paymentIntention.paymentDate))
+        courtDecidedPaymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentType.INSTALMENTS.value) {
-        courtDecidedPaymentIntention.paymentOption.option = PaymentType.INSTALMENTS
+        courtDecidedPaymentIntention.paymentOption = new PaymentOption(PaymentType.INSTALMENTS)
         courtDecidedPaymentIntention.paymentPlan = DraftPaymentIntention.deserialize(claimResponse.paymentIntention).paymentPlan
       }
       return courtDecidedPaymentIntention
@@ -109,7 +110,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
   generateCourtCalculatedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): DraftPaymentIntention {
     if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT
-      && draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.BY_SET_DATE) {
+      && draft.document.alternatePaymentMethod.paymentOption === new PaymentOption(PaymentType.BY_SET_DATE)) {
       return undefined
     }
 
@@ -117,8 +118,8 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
     const lastPaymentDate: Moment = paymentPlan.calculateLastPaymentDate()
 
-    courtCalculatedPaymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
-    courtCalculatedPaymentIntention.paymentDate = LocalDate.fromMoment(lastPaymentDate)
+    courtCalculatedPaymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
+    courtCalculatedPaymentIntention.paymentDate = new PaymentDate(LocalDate.fromMoment(lastPaymentDate))
     return courtCalculatedPaymentIntention
   }
 

@@ -14,28 +14,31 @@ import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPayment
 import { YesNoOption } from 'models/yesNoOption'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { DecisionType } from 'common/court-calculations/courtDecision'
-import { Moment } from 'moment'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { Moment } from 'moment'
+import { LocalDate } from 'forms/models/localDate'
 
-function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse): Moment {
-  switch (draft.document.decisionType) {
+function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse: FullAdmissionResponse | PartialAdmissionResponse): Moment {
+
+  switch (draft.document.courtDetermination.decisionType) {
     case DecisionType.DEFENDANT:
       return claimResponse.paymentIntention.paymentDate
     case DecisionType.COURT:
-      return draft.document.courtOfferedPaymentIntention.paymentDate
+      return LocalDate.fromObject(draft.document.courtDetermination.courtDecision.paymentDate.date).toMoment()
     case DecisionType.CLAIMANT:
     case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT:
-      return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+      return LocalDate.fromObject(draft.document.alternatePaymentMethod.paymentDate.date).toMoment()
+    default:
+      throw new Error('Invalid decision type')
   }
 }
 
-function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
+function renderView(form: Form<AcceptPaymentMethod>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
   const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
-  const payBySetDate = getPayBySetDate(draft, claimResponse)
+  const payBySetDate: Moment = getPayBySetDate(draft, claimResponse)
 
   res.render(Paths.courtOfferedSetDatePage.associatedView, {
     form: form,
