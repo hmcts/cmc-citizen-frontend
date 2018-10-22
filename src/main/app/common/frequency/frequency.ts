@@ -1,4 +1,5 @@
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+
 
 export class Frequency {
   static readonly WEEKLY = new Frequency(['WEEK', 'EACH_WEEK'], 52 / 12, 1, 'Each week')
@@ -50,13 +51,13 @@ export class Frequency {
   static toPaymentSchedule (frequency: Frequency): PaymentSchedule {
     for (const value of frequency.values) {
       switch (value) {
-        case PaymentSchedule.EACH_WEEK: {
+        case PaymentSchedule.EACH_WEEK.value: {
           return PaymentSchedule.EACH_WEEK
         }
-        case PaymentSchedule.EVERY_TWO_WEEKS: {
+        case PaymentSchedule.EVERY_TWO_WEEKS.value: {
           return PaymentSchedule.EVERY_TWO_WEEKS
         }
-        case PaymentSchedule.EVERY_MONTH: {
+        case PaymentSchedule.EVERY_MONTH.value: {
           return PaymentSchedule.EVERY_MONTH
         }
       }
