@@ -1,27 +1,27 @@
-{% macro termsOfAgreement(id, response, courtOfferedPaymentIntention, totalAmount) %}
+{% macro termsOfAgreement(id, response, paymentIntention, totalAmount) %}
   <fieldset id="{{ id }}" class="form-group">
     <legend>
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
 
-    {% if courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+    {% if paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
       {% set amountToPay = 'the full amount' %}
       {% if response.responseType == ResponseType.PART_ADMISSION.value %}
         {% set amountToPay = totalAmount | numeral %}
       {% endif %}
       {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
-        { defendantFullName: response.defendant.name, paymentDate: courtOfferedPaymentIntention.paymentDate | date }
+        { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
       )) }}
-      {{ row('Completion date', courtOfferedPaymentIntention.paymentDate | date) }}
-    {% elseif courtOfferedPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+      {{ row('Completion date', paymentIntention.paymentDate | date) }}
+    {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
       {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
         { defendantFullName: response.defendant.name,
-          instalmentAmount: courtOfferedPaymentIntention.repaymentPlan.instalmentAmount | numeral,
-          paymentSchedule: courtOfferedPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
-          firstPaymentDate: courtOfferedPaymentIntention.repaymentPlan.firstPaymentDate | date
+          instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+          firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
         }
       )) }}
-      {{ row('Completion date', courtOfferedPaymentIntention.repaymentPlan.completionDate | date) }}
+      {{ row('Completion date', paymentIntention.repaymentPlan.completionDate | date) }}
     {% endif %}
 
   </fieldset>
