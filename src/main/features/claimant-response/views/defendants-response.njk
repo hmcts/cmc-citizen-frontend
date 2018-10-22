@@ -83,7 +83,7 @@
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
         {% if page === 0 %}
-          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
           <p>
             {{
               paymentIntentionFragment(
