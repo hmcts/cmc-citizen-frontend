@@ -6,8 +6,8 @@ import { Claim } from 'claims/models/claim'
 
 export class CCJClient {
 
-  static async request (externalId: string, countyCourtJudgment: CountyCourtJudgment, user: User, issue: boolean): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${externalId}/county-court-judgment?issue=${issue}`, {
+  static async request (externalId: string, countyCourtJudgment: CountyCourtJudgment, user: User): Promise<Claim> {
+    return request.post(`${claimStoreApiUrl}/${externalId}/county-court-judgment`, {
       body: countyCourtJudgment,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
