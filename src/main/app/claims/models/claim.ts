@@ -10,7 +10,9 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { Logger } from '@hmcts/nodejs-logging'
 
+const logger = Logger.getLogger('claims/models/claim.ts')
 interface State {
   status: ClaimStatus
 }
@@ -128,13 +130,11 @@ export class Claim {
   get eligibleForCCJAfterBreachedSettlement (): boolean {
     if (this.response && (this.response as FullAdmissionResponse).paymentIntention) {
       switch ((this.response as FullAdmissionResponse).paymentIntention.paymentOption) {
-        case PaymentOption.IMMEDIATELY:
-            // console.log("pay immediatlty returns: ")
-            // console.log(!!this.countyCourtJudgmentRequestedAt && isPastDeadline(MomentFactory.currentDateTime(), (this.response as FullAdmissionResponse).paymentIntention.paymentDate))
-          return !!this.countyCourtJudgmentRequestedAt
-            && isPastDeadline(MomentFactory.currentDateTime(),
-            (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
-          break
+        // case PaymentOption.IMMEDIATELY:
+        //   return !this.countyCourtJudgmentRequestedAt
+        //     && isPastDeadline(MomentFactory.currentDateTime(),
+        //     (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
+        //   break
         case PaymentOption.BY_SPECIFIED_DATE:
           return !this.countyCourtJudgmentRequestedAt
             && this.isSettlementReached()
@@ -146,6 +146,8 @@ export class Claim {
             && this.isSettlementReached()
             && isPastDeadline(MomentFactory.currentDateTime(),
               (this.response as FullAdmissionResponse).paymentIntention.repaymentPlan.firstPaymentDate)
+          break
+        default: logger.warn('Default case: Paid Immediatly not implemented yet')
       }
     }
     return false
