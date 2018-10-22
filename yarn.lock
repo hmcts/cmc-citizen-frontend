@@ -226,7 +226,7 @@
   dependencies:
     "@types/chai" "*"
 
-"@types/chai@*", "@types/chai@^4.1.6":
+"@types/chai@*", "@types/chai@4", "@types/chai@^4.1.6":
   version "4.1.6"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.6.tgz#1eb26c040e3a84205b1008ad55c800e5e8a94e34"
   integrity sha512-CBk7KTZt3FhPsEkYioG6kuCIpWISw+YI8o+3op4+NXwTpvAPxE1ES8+PY8zfaK2L98b1z5oq03UHa4VYpeUxnw==
@@ -242,6 +242,11 @@
   integrity sha512-OPSxsP6XqA3984KWDUXq/u05Hu8VWa/2rUVlw/aDUOx87BptIep6xb3NdCxCpKLfLdjZcCE5jR+gouTul3gjdA==
   dependencies:
     "@types/node" "*"
+
+"@types/cookiejar@*":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/cookiejar/-/cookiejar-2.1.0.tgz#4b7daf2c51696cfc70b942c11690528229d1a1ce"
+  integrity sha512-EIjmpvnHj+T4nMcKwHwxZKUfDmphIKJc2qnEMhSoOvr1lYEQpuRKRz8orWr//krYIIArS/KGGLfL2YGVUYXmIA==
 
 "@types/cookies@^0.7.1":
   version "0.7.1"
@@ -417,6 +422,14 @@
   resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.5.6.tgz#9cf2632c075ba9e601f6a610aadc23992d02394c"
   integrity sha512-yGiVkRbB1qtIkRCpEJIxlHazBoILmu33xbbu4IiwxTJjwDi/EudiPYAD7QwWe035jkE40yQgTVXZsAePFtleww==
   dependencies:
+    "@types/node" "*"
+
+"@types/superagent@^3.8.3":
+  version "3.8.4"
+  resolved "https://registry.yarnpkg.com/@types/superagent/-/superagent-3.8.4.tgz#24a5973c7d1a9c024b4bbda742a79267c33fb86a"
+  integrity sha512-Dnh0Iw6NO55z1beXvlsvUrfk4cd9eL2nuTmUk+rAhSVCk10PGGFbqCCTwbau9D0d2W3DITiXl4z8VCqppGkMPQ==
+  dependencies:
+    "@types/cookiejar" "*"
     "@types/node" "*"
 
 "@types/supertest@*":
@@ -1392,6 +1405,19 @@ chai-as-promised@^7.1.1:
   dependencies:
     check-error "^1.0.2"
 
+chai-http@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/chai-http/-/chai-http-4.2.0.tgz#25dc0c0cf9560802f069092ca834a81f04c673bc"
+  integrity sha512-5j9LC1pl9jaPanux+wDm9D/V6R2xLfpixsRQhoJHxCR0E5KaiT0aL4544pVtYXN/wTUVSDTmwye5mCXkO/8b3w==
+  dependencies:
+    "@types/chai" "4"
+    "@types/superagent" "^3.8.3"
+    cookiejar "^2.1.1"
+    is-ip "^2.0.0"
+    methods "^1.1.2"
+    qs "^6.5.1"
+    superagent "^3.7.0"
+
 chai@^4.1.2, chai@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/chai/-/chai-4.2.0.tgz#760aa72cf20e3795e84b12877ce0e83737aa29e5"
@@ -1947,6 +1973,11 @@ cookiejar@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.1.tgz#41ad57b1b555951ec171412a81942b1e8200d34a"
   integrity sha1-Qa1XsbVVlR7BcUEqgZQrHoIA00o=
+
+cookiejar@^2.1.1:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.2.tgz#dd8a235530752f988f9a0844f3fc589e3111125c"
+  integrity sha512-Mw+adcfzPxcPeI+0WlvRrr/3lGVO0bD75SxX6811cxSh1Wbxx7xZBGK1eVtDf6si8rg2lhnUjsVLMFMfbRIuwA==
 
 cookies@0.7.1:
   version "0.7.1"
@@ -4593,6 +4624,11 @@ invert-kv@^1.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
   integrity sha1-EEqOSqym09jNFXqO+L+rLXo//bY=
 
+ip-regex@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/ip-regex/-/ip-regex-2.1.0.tgz#fa78bf5d2e6913c911ce9f819ee5146bb6d844e9"
+  integrity sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=
+
 ipaddr.js@1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.8.0.tgz#eaa33d6ddd7ace8f7f6fe0c9ca0440e706738b1e"
@@ -4777,6 +4813,13 @@ is-installed-globally@^0.1.0:
   dependencies:
     global-dirs "^0.1.0"
     is-path-inside "^1.0.0"
+
+is-ip@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/is-ip/-/is-ip-2.0.0.tgz#68eea07e8a0a0a94c2d080dd674c731ab2a461ab"
+  integrity sha1-aO6gfooKCpTC0IDdZ0xzGrKkYas=
+  dependencies:
+    ip-regex "^2.0.0"
 
 is-my-json-valid@^2.10.0, is-my-json-valid@^2.12.4:
   version "2.16.1"
@@ -8657,7 +8700,7 @@ superagent@^3.5.1:
     qs "^6.5.1"
     readable-stream "^2.0.5"
 
-superagent@^3.8.3:
+superagent@^3.7.0, superagent@^3.8.3:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/superagent/-/superagent-3.8.3.tgz#460ea0dbdb7d5b11bc4f78deba565f86a178e128"
   integrity sha512-GLQtLMCoEIK4eDv6OGtkOoSMt3D+oq0y3dsxMuYuDvaNUvuT8eFBuLmfR0iYYzHC1e8hpzC6ZsxbuP6DIalMFA==
