@@ -57,6 +57,24 @@ export class Pa11yTest {
     this.trainMocks = trainMocks
   }
 
+  static async runPa11y (url: string): Promise<Pa11yTestResults> {
+    const result = await pa11y(url, {
+      headers: {
+        Cookie: `${cookieName}=ABC;state=000MC000`
+      },
+      chromeLaunchConfig: {
+        args: ['--no-sandbox']
+      }
+    }).catch(errors => Pa11yTestResults.withIssues(errors))
+
+    console.log(JSON.stringify(result))
+
+    if (result.issues && result.issues.length > 0) {
+      return Pa11yTestResults.withIssues(result.issues)
+    }
+    return Pa11yTestResults.okay()
+  }
+
   headingResultsEventName (): string {
     return `heading results: ${this.uri}`
   }
@@ -103,21 +121,5 @@ export class Pa11yTest {
     } else {
       return Pa11yTestResults.expectedNotToBe(' - Money Claims', title)
     }
-  }
-
-  static async runPa11y (url: string): Promise<Pa11yTestResults> {
-    const result = await pa11y(url, {
-      headers: {
-        Cookie: `${cookieName}=ABC`
-      },
-      chromeLaunchConfig: {
-        args: ['--no-sandbox']
-      }
-    }).catch(errors => Pa11yTestResults.withIssues(errors))
-
-    if (result.issues && result.issues.length > 0) {
-      return Pa11yTestResults.withIssues(result.issues)
-    }
-    return Pa11yTestResults.okay()
   }
 }

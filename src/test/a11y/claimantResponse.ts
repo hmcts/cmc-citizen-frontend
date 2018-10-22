@@ -7,10 +7,15 @@ import {
   partialAdmissionWithPaymentByInstalmentsData,
   statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
+import supertest = require('supertest')
+import { EventEmitter } from 'events'
+import { Pa11yPipeline } from './pa11yPipeline'
 
 export class ClaimantResponseTestSuite extends FeatureTestSuite {
 
-  protected uuid = '91e1c70f-7d2c-4c1e-0002-cbb02c0e64d6'
+  constructor (pa11yPipeline: Pa11yPipeline, eventEmitter: EventEmitter, agentSupplier: () => supertest.SuperTest<supertest.Test>) {
+    super(pa11yPipeline, eventEmitter, agentSupplier, '91e1c70f-7d2c-4c1e-0002-cbb02c0e64d6')
+  }
 
   trainMocks () {
     common.mockIdamService()

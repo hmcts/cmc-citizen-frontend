@@ -6,7 +6,7 @@ export function mockIdamService () {
   idamServiceMock.resolveRetrieveServiceToken().persist()
 }
 
-export function mockFees() {
+export function mockFees () {
   feesMock.resolveGetHearingFeeRangeGroup().persist()
   feesMock.resolveCalculateIssueFee().persist()
   feesMock.resolveCalculateHearingFee().persist()

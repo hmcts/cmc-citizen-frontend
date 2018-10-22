@@ -69,8 +69,9 @@ export function createApp (): express.Express {
   new OfferFeature().enableFor(app)
 
   if (FeatureToggles.isEnabled('paidInFull')) {
-  new PaidInFullFeature().enableFor(app)
-}if (FeatureToggles.isEnabled('testingSupport')) {
+    new PaidInFullFeature().enableFor(app)
+  }
+  if (FeatureToggles.isEnabled('testingSupport')) {
     new TestingSupportFeature().enableFor(app)
   }
 

@@ -29,15 +29,16 @@ export class Pa11yPipeline {
         this.eventEmitter.on(pa11yTest.a11yResultsEventName(), results => pa11yTest.a11yResults = results)
 
         it('should have the correct heading', async () => {
-          while (pa11yTest.headingResults == null) {
+          while (!pa11yTest.headingResults) {
             await sleep(100)
           }
           // verify
+          console.log(JSON.stringify(pa11yTest.headingResults.issues))
           expect(pa11yTest.headingResults.issues, JSON.stringify(pa11yTest.headingResults.issues)).to.be.empty
         })
 
         it('should have no a11y errors', async () => {
-          while (pa11yTest.a11yResults == null) {
+          while (!pa11yTest.a11yResults) {
             await sleep(100)
           }
           // verify

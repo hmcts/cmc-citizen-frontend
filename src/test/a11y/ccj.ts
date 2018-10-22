@@ -4,9 +4,17 @@ import * as draftStoreMock from 'test/http-mocks/draft-store'
 import { FeatureTestSuite } from './featureTestSuite'
 import * as common from './commonMocks'
 import { fullAdmissionWithPaymentByInstalmentsData } from 'test/data/entity/responseData'
+import { RoutablePath } from 'shared/router/routablePath'
+import supertest = require('supertest')
+import { EventEmitter } from 'events'
+import { Pa11yPipeline } from './pa11yPipeline'
 
 export class CCJTestSuite extends FeatureTestSuite {
-  protected uuid: string = '91e1c70f-7d2c-4c1e-0001-cbb02c0e64d6'
+
+  constructor (pa11yPipeline: Pa11yPipeline, eventEmitter: EventEmitter, agentSupplier: () => supertest.SuperTest<supertest.Test>) {
+    super(pa11yPipeline, eventEmitter, agentSupplier, '91e1c70f-7d2c-4c1e-0001-cbb02c0e64d6')
+    console.log(`created CCJTestSuite with uuid ${this.uuid}`)
+  }
 
   trainMocks () {
     common.mockIdamService()
@@ -20,7 +28,7 @@ export class CCJTestSuite extends FeatureTestSuite {
     claimStoreMock.resolveRetrieveByLetterHolderId('000MC000').persist()
   }
 
-  getRoutablePaths () {
+  getRoutablePaths (): RoutablePath[] {
     return Object.values(CCJPaths)
   }
 }

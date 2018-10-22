@@ -16,13 +16,6 @@ import * as express from 'express'
 import './guardmocks'
 import { createApp } from 'main/app'
 
-function ifIncluded (feature: string, testSuiteSupplier: () => FeatureTestSuite): FeatureTestSuite {
-  if (a11yFilter === 'ALL' || a11yFilter === feature.toUpperCase()) {
-    return testSuiteSupplier()
-  }
-  return null
-}
-
 function makeAgent (): SuperTest<Test> {
   const app: express.Express = createApp()
   app.locals.csrf = 'dummy-token'
@@ -35,6 +28,13 @@ const parallel: boolean = (process.env.PARALLA11Y || 'FALSE') === 'TRUE'
 const eventEmitter = new EventEmitter()
 const pa11yPipeline: Pa11yPipeline = new Pa11yPipeline(eventEmitter, parallel ? os.cpus().length : 1)
 const agentSupplier = () => makeAgent()
+
+function ifIncluded (feature: string, testSuiteSupplier: () => FeatureTestSuite): FeatureTestSuite {
+  if (a11yFilter === 'ALL' || a11yFilter === feature.toUpperCase()) {
+    return testSuiteSupplier()
+  }
+  return null
+}
 
 describe('Accessibility', async () => {
 
