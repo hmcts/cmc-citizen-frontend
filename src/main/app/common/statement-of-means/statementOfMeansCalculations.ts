@@ -1,4 +1,3 @@
-///<reference path="../../../../../node_modules/@types/node/index.d.ts"/>
 import { Logger } from '@hmcts/nodejs-logging'
 
 import * as moment from 'moment'
