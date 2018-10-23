@@ -13,7 +13,6 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { Explanation } from 'response/form/models/statement-of-means/explanation'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 function renderView (form: Form<Explanation>, res: express.Response) {
   res.render(StatementOfMeansPaths.explanationPage.associatedView, {
@@ -24,7 +23,6 @@ function renderView (form: Form<Explanation>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(StatementOfMeansPaths.explanationPage.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -32,7 +30,6 @@ export default express.Router()
     }))
   .post(
     StatementOfMeansPaths.explanationPage.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Explanation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
