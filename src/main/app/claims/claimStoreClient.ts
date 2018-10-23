@@ -235,7 +235,7 @@ export class ClaimStoreClient {
   }
 
   saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<void> {
-    const response = ClaimantResponseConverter.covertToClaimantResponse(draft.document)
+    const response = ClaimantResponseConverter.convertToClaimantResponse(draft.document)
     const externalId: string = claim.externalId
 
     return this.request
