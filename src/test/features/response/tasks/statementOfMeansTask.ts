@@ -19,7 +19,6 @@ import { IndividualDetails } from 'forms/models/individualDetails'
 import { Defendant } from 'drafts/models/defendant'
 import { ResponseType } from 'response/form/models/responseType'
 import { Response } from 'response/form/models/response'
-import { Maintenance } from 'response/form/models/statement-of-means/maintenance'
 import { Employment } from 'response/form/models/statement-of-means/employment'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
@@ -43,6 +42,8 @@ import { IncomeSource } from 'response/form/models/statement-of-means/incomeSour
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { Disability, DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { Cohabiting, CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 
 function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -67,9 +68,10 @@ function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   responseDraft.defendantDetails = new Defendant(new IndividualDetails())
   responseDraft.statementOfMeans = new StatementOfMeans()
   // this is the simplest valid structure
-  responseDraft.statementOfMeans.residence = new Residence(ResidenceType.OWN_HOME)
+  responseDraft.statementOfMeans.residence = new Residence(ResidenceType.OWN_HOME, 'description')
+  responseDraft.statementOfMeans.disability = new Disability(DisabilityOption.NO)
+  responseDraft.statementOfMeans.cohabiting = new Cohabiting(CohabitingOption.NO)
   responseDraft.statementOfMeans.dependants = new Dependants(false)
-  responseDraft.statementOfMeans.maintenance = new Maintenance(false)
   responseDraft.statementOfMeans.otherDependants = new OtherDependants(false)
   responseDraft.statementOfMeans.employment = new Employment(false)
   responseDraft.statementOfMeans.unemployment = new Unemployment(UnemploymentType.RETIRED)
@@ -144,24 +146,15 @@ describe('StatementOfMeansTask', () => {
 
         context('is completed when', () => {
 
-          it('no children, no maintenance, no one supported', () => {
+          it('no children, no one supported', () => {
             responseDraft.statementOfMeans.dependants.declared = false
-            responseDraft.statementOfMeans.maintenance.declared = false
             responseDraft.statementOfMeans.otherDependants.declared = false
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
           })
 
-          it('no children, but maintenance', () => {
+          it('no children, but supported', () => {
             responseDraft.statementOfMeans.dependants.declared = false
-            responseDraft.statementOfMeans.maintenance = new Maintenance(true, 1)
-
-            expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
-          })
-
-          it('no children and maintenance, but supported', () => {
-            responseDraft.statementOfMeans.dependants.declared = false
-            responseDraft.statementOfMeans.maintenance.declared = false
             responseDraft.statementOfMeans.otherDependants = new OtherDependants(true, new NumberOfPeople(3, 'story'))
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
@@ -224,12 +217,6 @@ describe('StatementOfMeansTask', () => {
           it('dependants submitted with children between 16 and 19 and education section not submitted', () => {
             responseDraft.statementOfMeans.dependants = new Dependants(true, new NumberOfChildren(0, 0, 1))
             responseDraft.statementOfMeans.education = undefined
-
-            expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
-          })
-
-          it('maintenance not submitted', () => {
-            responseDraft.statementOfMeans.maintenance = undefined
 
             expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
           })
