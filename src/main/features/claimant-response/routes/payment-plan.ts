@@ -40,11 +40,14 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
-    locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
     locals.draft.document.decisionType = decisionType
-    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
+
+    const courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
+    if (courtCalculatedPaymentIntention) {
+      locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
+      locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
+    }
 
     return super.saveDraft(locals)
   }
@@ -156,6 +159,9 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+    if (!paymentPlan) {
+      return undefined
+    }
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
     courtCalculatedPaymentIntention.repaymentPlan = {
       firstPaymentDate: paymentPlan.startDate,

@@ -120,10 +120,12 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-    const lastPaymentDate: Moment = paymentPlan.calculateLastPaymentDate()
+    if (!paymentPlan) {
+      return undefined
+    }
 
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
-    courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
+    courtCalculatedPaymentIntention.paymentDate = paymentPlan.calculateLastPaymentDate()
     return courtCalculatedPaymentIntention
   }
 
