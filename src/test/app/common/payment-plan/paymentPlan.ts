@@ -68,7 +68,7 @@ const TESTS = [
 ]
 
 frequencies.forEach(frequency => {
-  describe.only(`when the frequency is ${frequency}`, () => {
+  describe(`when the frequency is ${frequency}`, () => {
     TESTS.forEach(test => {
       it(test.desc, () => {
         const paymentPlan = PaymentPlan.create(test.claimAmount, test.instalmentAmount, Frequency.of(frequency))
