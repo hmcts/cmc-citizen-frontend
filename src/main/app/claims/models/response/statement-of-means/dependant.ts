@@ -13,10 +13,11 @@ export interface Child {
 export interface OtherDependants {
   numberOfPeople: number
   details: string
+  anyDisabled: boolean
 }
 
 export interface Dependant {
   children: Child[]
-  numberOfMaintainedChildren: number
   otherDependants: OtherDependants
+  anyDisabledChildren: boolean
 }
