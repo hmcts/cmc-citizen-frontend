@@ -81,8 +81,8 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.courtOfferedPaymentIntention) {
         this.courtOfferedPaymentIntention = PaymentIntention.deserialize(input.courtOfferedPaymentIntention)
       }
-      if (input.courtPaymentIntention) {
-        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtPaymentIntention)
+      if (input.courtCalculatedPaymentIntention) {
+        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtCalculatedPaymentIntention)
       }
       if (input.decisionType) {
         this.decisionType = input.decisionType

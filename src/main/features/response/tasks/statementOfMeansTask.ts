@@ -2,6 +2,11 @@ import { Validator } from 'class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
+import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
+import { PartnerAgeOption } from 'response/form/models/statement-of-means/partnerAge'
 
 const validator = new Validator()
 
@@ -17,7 +22,6 @@ export class StatementOfMeansTask {
       && isValid(statementOfMeans.bankAccounts)
       && isValid(statementOfMeans.residence)
       && StatementOfMeansTask.isDependantsCompleted(statementOfMeans)
-      && isValid(statementOfMeans.maintenance)
       && isValid(statementOfMeans.otherDependants)
       && StatementOfMeansTask.isEmploymentCompleted(statementOfMeans)
       && isValid(statementOfMeans.monthlyIncome)
@@ -25,7 +29,8 @@ export class StatementOfMeansTask {
       && isValid(statementOfMeans.debts)
       && isValid(statementOfMeans.courtOrders)
       && isValid(statementOfMeans.explanation)
-
+      && StatementOfMeansTask.isDisabilityCompleted(statementOfMeans)
+      && StatementOfMeansTask.isPartnerCompleted(statementOfMeans)
   }
 
   private static isDependantsCompleted (statementOfMeans: StatementOfMeans): boolean {
@@ -59,4 +64,47 @@ export class StatementOfMeansTask {
 
     return valid
   }
+
+  private static isDisabilityCompleted (statementOfMeans: StatementOfMeans): boolean {
+    if (!isValid(statementOfMeans.disability)) {
+      return false
+    }
+
+    return statementOfMeans.disability.option === DisabilityOption.NO || isValid(statementOfMeans.severeDisability)
+  }
+
+  private static isPartnerCompleted (statementOfMeans: StatementOfMeans): boolean {
+    if (!isValid(statementOfMeans.cohabiting)) {
+      return false
+    }
+
+    const hasPartner: boolean = statementOfMeans.cohabiting.option === CohabitingOption.YES
+    if (hasPartner) {
+      if (!isValid(statementOfMeans.partnerAge)) {
+        return false
+      }
+
+      const partnerIsAdult: boolean = statementOfMeans.partnerAge.option === PartnerAgeOption.YES
+      if (partnerIsAdult && !isValid(statementOfMeans.partnerPension)) {
+        return false
+      }
+
+      const defendantIsDisabled: boolean = statementOfMeans.disability.option === DisabilityOption.YES
+      const defendantIsSeverelyDisabled: boolean = defendantIsDisabled && statementOfMeans.severeDisability === SevereDisabilityOption.YES
+
+      if (defendantIsDisabled && !isValid(statementOfMeans.partnerDisability)) {
+        return false
+      }
+
+      const partnerIsDisabled: boolean = statementOfMeans.partnerDisability.option === PartnerDisabilityOption.YES
+
+      if (defendantIsSeverelyDisabled && partnerIsDisabled && !isValid(statementOfMeans.partnerSevereDisability)) {
+        return false
+      }
+
+    }
+
+    return true
+  }
+
 }

@@ -132,7 +132,7 @@ describe('Defendant response: Statement of means: education', () => {
             .send({ value: '1', maxValue: '2' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.dependantsDisabilityPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
