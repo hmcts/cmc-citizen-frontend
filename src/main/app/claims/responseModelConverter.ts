@@ -52,6 +52,19 @@ import { YesNoOption as DraftYesNoOption } from 'models/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
 import { Claim } from 'claims/models/claim'
+import { PriorityDebt as PriorityDebtDraft } from 'response/form/models/statement-of-means/priorityDebt'
+import { PriorityDebts, PriorityDebtType } from 'claims/models/response/statement-of-means/priorityDebts'
+import { DependantsDisabilityOption } from 'response/form/models/statement-of-means/dependantsDisability'
+import { OtherDependantsDisabilityOption } from 'response/form/models/statement-of-means/otherDependantsDisability'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { PartnerAgeOption } from 'response/form/models/statement-of-means/partnerAge'
+import { PartnerPensionOption } from 'response/form/models/statement-of-means/partnerPension'
+import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
+import { PartnerSevereDisabilityOption } from 'response/form/models/statement-of-means/partnerSevereDisability'
+import { CarerOption } from 'response/form/models/statement-of-means/carer'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 
 export class ResponseModelConverter {
 
@@ -175,14 +188,26 @@ export class ResponseModelConverter {
         type: draft.statementOfMeans.residence.type.value as ResidenceType,
         otherDetail: draft.statementOfMeans.residence.housingDetails
       },
-      dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.maintenance.declared || draft.statementOfMeans.otherDependants.declared ? {
+      dependant: draft.statementOfMeans.dependants.declared || draft.statementOfMeans.otherDependants.declared ? {
         children: draft.statementOfMeans.dependants.declared ? this.convertStatementOfMeansChildren(draft) : undefined,
-        numberOfMaintainedChildren: draft.statementOfMeans.maintenance.declared ? draft.statementOfMeans.maintenance.value : undefined,
-        otherDependants: draft.statementOfMeans.otherDependants.declared ? {
+        otherDependants: draft.statementOfMeans.otherDependants && draft.statementOfMeans.otherDependants.declared ? {
           numberOfPeople: draft.statementOfMeans.otherDependants.numberOfPeople.value,
-          details: draft.statementOfMeans.otherDependants.numberOfPeople.details
-        } : undefined
+          details: draft.statementOfMeans.otherDependants.numberOfPeople.details || undefined,
+          anyDisabled: draft.statementOfMeans.otherDependantsDisability && draft.statementOfMeans.otherDependantsDisability.option === OtherDependantsDisabilityOption.YES
+        } : undefined,
+        anyDisabledChildren: draft.statementOfMeans.dependantsDisability && draft.statementOfMeans.dependantsDisability.option === DependantsDisabilityOption.YES
       } : undefined,
+      partner: draft.statementOfMeans.cohabiting.option === CohabitingOption.YES ? {
+        over18: draft.statementOfMeans.partnerAge.option === PartnerAgeOption.YES,
+        disability: this.inferPartnerDisabilityType(draft),
+        pensioner: draft.statementOfMeans.partnerPension ? draft.statementOfMeans.partnerPension.option === PartnerPensionOption.YES : undefined
+      } : undefined,
+      disability: !draft.statementOfMeans.disability.option || draft.statementOfMeans.disability.option === DisabilityOption.NO
+        ? DisabilityStatus.NO
+        : (!draft.statementOfMeans.severeDisability.option || draft.statementOfMeans.severeDisability.option === SevereDisabilityOption.NO
+            ? DisabilityStatus.YES
+            : DisabilityStatus.SEVERE
+        ),
       employment: {
         employers: draft.statementOfMeans.employment.employed ? draft.statementOfMeans.employers.getPopulatedRowsOnly().map((employer: EmployerRow) => {
           return {
@@ -223,7 +248,9 @@ export class ResponseModelConverter {
       }) : undefined,
       reason: draft.statementOfMeans.explanation.text,
       incomes: this.convertIncomes(draft.statementOfMeans.monthlyIncome),
-      expenses: this.convertExpenses(draft.statementOfMeans.monthlyExpenses)
+      expenses: this.convertExpenses(draft.statementOfMeans.monthlyExpenses),
+      carer: draft.statementOfMeans.carer.option === CarerOption.YES,
+      priorityDebts: this.convertPriorityDebts(draft.statementOfMeans.priorityDebt)
     }
   }
 
@@ -244,6 +271,15 @@ export class ResponseModelConverter {
     return draft.rejectAllOfClaim && draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID
       ? DefenceType.ALREADY_PAID
       : DefenceType.DISPUTE
+  }
+
+  private static inferPartnerDisabilityType (draft: ResponseDraft): DisabilityStatus {
+    if (!draft.statementOfMeans.partnerDisability.option || draft.statementOfMeans.partnerDisability.option === PartnerDisabilityOption.NO) {
+      return DisabilityStatus.NO
+    }
+    return (draft.statementOfMeans.partnerSevereDisability.option && draft.statementOfMeans.partnerSevereDisability.option === PartnerSevereDisabilityOption.YES)
+      ? DisabilityStatus.SEVERE
+      : DisabilityStatus.YES
   }
 
   private static convertPartyDetails (defendant: Defendant): Party {
@@ -339,6 +375,66 @@ export class ResponseModelConverter {
       })
     }
     return children
+  }
+
+  private static convertPriorityDebts (priorityDebt: PriorityDebtDraft | undefined): PriorityDebts[] {
+    if (!priorityDebt) {
+      return undefined
+    }
+
+    const priorityDebts: PriorityDebts[] = []
+    if (priorityDebt.mortgage && priorityDebt.mortgage.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.MORTGAGE,
+        frequency: priorityDebt.mortgage.schedule.value as PaymentFrequency,
+        amount: priorityDebt.mortgage.amount
+      })
+    }
+    if (priorityDebt.rent && priorityDebt.rent.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.RENT,
+        frequency: priorityDebt.rent.schedule.value as PaymentFrequency,
+        amount: priorityDebt.rent.amount
+      })
+    }
+    if (priorityDebt.councilTax && priorityDebt.councilTax.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.COUNCIL_TAX,
+        frequency: priorityDebt.councilTax.schedule.value as PaymentFrequency,
+        amount: priorityDebt.councilTax.amount
+      })
+    }
+    if (priorityDebt.gas && priorityDebt.gas.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.GAS,
+        frequency: priorityDebt.gas.schedule.value as PaymentFrequency,
+        amount: priorityDebt.gas.amount
+      })
+    }
+    if (priorityDebt.electricity && priorityDebt.electricity.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.ELECTRICITY,
+        frequency: priorityDebt.electricity.schedule.value as PaymentFrequency,
+        amount: priorityDebt.electricity.amount
+      })
+    }
+    if (priorityDebt.water && priorityDebt.water.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.WATER,
+        frequency: priorityDebt.water.schedule.value as PaymentFrequency,
+        amount: priorityDebt.water.amount
+      })
+    }
+    if (priorityDebt.maintenance && priorityDebt.maintenance.populated) {
+      priorityDebts.push({
+        type: PriorityDebtType.MAINTENANCE_PAYMENTS,
+        frequency: priorityDebt.maintenance.schedule.value as PaymentFrequency,
+        amount: priorityDebt.maintenance.amount
+      })
+    }
+
+    return priorityDebts
+
   }
 
   private static convertIncomes (income: MonthlyIncome | undefined): Income[] {
