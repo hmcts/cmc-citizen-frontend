@@ -11,6 +11,9 @@ import { YesNoOption } from 'models/yesNoOption'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { Carer, CarerOption } from 'response/form/models/statement-of-means/carer'
 
 const baseResponseDraft = {
   defendantDetails: {
@@ -291,9 +294,11 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
       balance: 1000
     }]
   },
+  disability: DisabilityOption.NO,
   residence: {
     type: ResidenceType.OWN_HOME
   },
+  cohabiting: CohabitingOption.NO,
   dependants: {
     declared: false
   },
@@ -303,6 +308,7 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
   otherDependants: {
     declared: false
   },
+  carer: CarerOption.NO,
   employment: {
     declared: false
   },
@@ -340,6 +346,13 @@ export const statementOfMeansWithMandatoryFieldsDraft = {
 
 export const statementOfMeansWithAllFieldsDraft = {
   ...statementOfMeansWithMandatoryFieldsDraft,
+  disability: true,
+  severeDisability: true,
+  cohabiting: true,
+  partnerAge: true,
+  partnerPension: true,
+  partnerDisability: true,
+  partnerSevereDisability: true,
   dependants: {
     declared: true,
     numberOfChildren: {
@@ -351,10 +364,7 @@ export const statementOfMeansWithAllFieldsDraft = {
   education: {
     value: 3
   },
-  maintenance: {
-    declared: true,
-    value: 4
-  },
+  dependantsDisability: true,
   otherDependants: {
     declared: true,
     numberOfPeople: {
@@ -362,6 +372,8 @@ export const statementOfMeansWithAllFieldsDraft = {
       details: 'Colleagues'
     }
   },
+  otherDependantsDisability: true,
+  carer: new Carer(CarerOption.YES),
   employment: {
     declared: true,
     employed: true,

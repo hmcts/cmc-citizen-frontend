@@ -130,7 +130,7 @@ describe('Defendant response: Statement of means: employers', () => {
             .send({ rows: [{ employerName: 'Comp1', jobTitle: 'BA' }, { employerName: 'Comp2', jobTitle: 'UX' }] })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.debtsPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.courtOrdersPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
