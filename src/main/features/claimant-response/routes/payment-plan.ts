@@ -10,6 +10,9 @@ import { Claim } from 'claims/models/claim'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
+import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
+
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
 import { FormValidationError } from 'forms/form'
@@ -198,6 +201,20 @@ export default new PaymentPlanPage()
       if (response.statementOfMeans === undefined) {
         return next(new Error('Page cannot be rendered because response does not have statement of means'))
       }
+
+      next()
+    },
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const claim: Claim = res.locals.claim
+      const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+      res.locals.monthlyIncomeAmount = response.statementOfMeans && response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+        response.statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
+      ) : 0
+      res.locals.monthlyExpensesAmount = response.statementOfMeans && response.statementOfMeans.expenses ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+        response.statementOfMeans.expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
+      ) : 0
+      res.locals.statementOfMeans = response.statementOfMeans
 
       next()
     }
