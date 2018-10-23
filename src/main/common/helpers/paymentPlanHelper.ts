@@ -93,10 +93,11 @@ export class PaymentPlanHelper {
     const allowanceHelper = new AllowanceCalculations(repository)
     const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
 
-    const instalmentAmount: number = Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
+    const calculatedMonthlyDisposableIncome = Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
       response.statementOfMeans,
       response.defendant.type,
-      PaymentPlanHelper.getDateOfBirth(response.defendant)), 0) / Frequency.WEEKLY.monthlyRatio
+      PaymentPlanHelper.getDateOfBirth(response.defendant)), 0)
+    const instalmentAmount: number = Math.min(calculatedMonthlyDisposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
     return PaymentPlanHelper.createPaymentPlan(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
