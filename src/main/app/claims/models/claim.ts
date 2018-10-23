@@ -41,6 +41,7 @@ export class Claim {
   totalInterest: number
   features: string[]
   directionsQuestionnaireDeadline: Moment
+  moneyReceivedOn: Moment
   redetermination: Redetermination
   redeterminationRequestedAt: Moment
 
@@ -85,6 +86,9 @@ export class Claim {
       this.features = input.features
       if (input.directionsQuestionnaireDeadline) {
         this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
+      }
+      if (input.moneyReceivedOn) {
+        this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
       }
       if (input.redetermination) {
         this.redetermination = new Redetermination().deserialize(input.redetermination)

@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
-{% from "./macro/paymentPlanTable.njk" import paymentPlanTable %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "financialDetails.njk" import financialDetailsTable %}
 
 {% set heading = 'Your instalments are more than the defendant can afford' %}
@@ -9,18 +9,15 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('Based on the financial details provided by the defendant, we do not believe they would be able to meet these requirements.') }}</p>
+      <p>{{ t('Based on the financial details provided by the defendant, we don’t believe they would be able to make these repayments.') }}</p>
 
       <p>{{ t('The court affordability calculator has proposed the below repayment plan as the maximum the defendant can repay.') }}</p>
 
-      {{ paymentPlanTable(
-              id = 'payment-table',
-              instalmentAmount = courtOrderPaymentPlan.instalmentAmount,
-              paymentSchedule = courtOrderPaymentPlan.paymentSchedule,
-              firstPaymentDate = courtOrderPaymentPlan.firstPaymentDate,
-              lastPaymentOn = courtOrderPaymentPlan.completionDate,
-              lengthOfPayment = courtOrderPaymentPlan.lengthOfPayment
-              )
+      {{
+      repaymentPlanBlock(
+        heading = '',
+        repaymentPlan = courtOrderPaymentPlan
+      )
       }}
 
       <form novalidate method="post">

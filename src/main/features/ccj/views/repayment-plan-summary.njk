@@ -1,9 +1,7 @@
 {% extends "layout.njk" %}
 {% set heading = 'The repayment plan' %}
-{% from "support.njk" import supportWidget %}
 
-{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
-{% from "form.njk" import csrfProtection, errorSummary %}
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 {% from "repaymentPlanBlock.njk" import repaymentPlanBlock %}
 
 
@@ -14,11 +12,7 @@
 
       {{ repaymentPlanBlock(
         heading = 'The repayment plan',
-        instalmentAmount = claim.countyCourtJudgment.repaymentPlan.instalmentAmount,
-        paymentSchedule = claim.countyCourtJudgment.repaymentPlan.paymentSchedule,
-        firstPaymentDate = claim.countyCourtJudgment.repaymentPlan.firstPaymentDate,
-        lastPaymentOn = claim.countyCourtJudgment.repaymentPlan.completionDate,
-        lengthOfPayment = claim.countyCourtJudgment.repaymentPlan.paymentLength
+        repaymentPlan = repaymentPlan
       ) }}
 
       <p>{{ t('If you think the defendant can repay you sooner, you can ') }} <a

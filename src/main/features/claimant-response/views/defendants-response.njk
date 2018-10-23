@@ -72,11 +72,7 @@
           {{
             repaymentPlanBlock(
               heading = 'How they want to pay',
-              instalmentAmount = instalmentAmount,
-              paymentSchedule = paymentSchedule,
-              firstPaymentDate = firstPaymentDate,
-              lastPaymentOn = lastPaymentOn,
-              lengthOfPayment = lengthOfPayment
+              repaymentPlan = claim.response.paymentIntention.repaymentPlan
             )
           }}
         {% endif %}
@@ -87,7 +83,7 @@
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
         {% if page === 0 %}
-          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
           <p>
             {{
               paymentIntentionFragment(
@@ -114,14 +110,10 @@
         {% elseif page === 1 %}
           {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
             {{
-              repaymentPlanBlock(
-                heading = '',
-                instalmentAmount = instalmentAmount,
-                paymentSchedule = paymentSchedule,
-                firstPaymentDate = firstPaymentDate,
-                lastPaymentOn = lastPaymentOn,
-                lengthOfPayment = lengthOfPayment
-              )
+            repaymentPlanBlock(
+              heading = 'How they want to pay',
+              repaymentPlan = claim.response.paymentIntention.repaymentPlan
+            )
             }}
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
             {{

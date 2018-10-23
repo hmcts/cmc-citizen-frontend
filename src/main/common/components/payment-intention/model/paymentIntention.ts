@@ -23,7 +23,7 @@ export class PaymentIntention {
   @ValidateNested()
   paymentPlan?: PaymentPlan
 
-  static deserialise (input: any): PaymentIntention {
+  static deserialize (input: any): PaymentIntention {
     if (!input) {
       return input
     }
@@ -60,7 +60,9 @@ export class PaymentIntention {
         instance.repaymentPlan = {
           instalmentAmount: this.paymentPlan.instalmentAmount,
           paymentSchedule: this.paymentPlan.paymentSchedule.value as any,
-          firstPaymentDate: this.paymentPlan.firstPaymentDate.toMoment()
+          firstPaymentDate: this.paymentPlan.firstPaymentDate.toMoment(),
+          completionDate: this.paymentPlan.completionDate.toMoment(),
+          paymentLength: this.paymentPlan.paymentLength
         }
         break
     }

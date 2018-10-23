@@ -120,6 +120,7 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
+      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -294,7 +295,9 @@ export class ResponseModelConverter {
       repaymentPlan: paymentIntention.paymentPlan && {
         instalmentAmount: paymentIntention.paymentPlan.instalmentAmount,
         firstPaymentDate: paymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-        paymentSchedule: paymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
+        paymentSchedule: paymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule,
+        completionDate: paymentIntention.paymentPlan.completionDate.toMoment(),
+        paymentLength: paymentIntention.paymentPlan.paymentLength
       }
     } as PaymentIntention
   }

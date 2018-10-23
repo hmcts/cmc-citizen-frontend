@@ -98,11 +98,11 @@ $(document).ready(function () {
     var mapFrequencyInWeeks = function(frequency) {
       switch (frequency) {
         case 'EACH_WEEK':
-          return 1;
+          return 1.0;
         case 'EVERY_TWO_WEEKS':
-          return 2;
+          return 2.0;
         case 'EVERY_MONTH':
-          return 4;
+          return 52/12;
         default:
           return undefined;
       }
