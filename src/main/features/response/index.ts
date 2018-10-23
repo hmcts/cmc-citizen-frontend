@@ -23,6 +23,7 @@ import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJu
 import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -75,6 +76,7 @@ export class Feature {
     )
     app.all('/case/*/response/summary', OnlyClaimantLinkedToClaimCanDoIt.check(), ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.*\/response\/(?!claim-details).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
+    app.all(/^\/case\/.*\/response\/statement-of-means\/.*/, OptInFeatureToggleGuard.featureEnabledGuard('admissions'))
     app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)

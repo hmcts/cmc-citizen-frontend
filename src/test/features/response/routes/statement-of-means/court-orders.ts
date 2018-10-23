@@ -112,7 +112,7 @@ describe('Defendant response: Statement of means: court orders', () => {
 
         context('should update draft store and redirect', () => {
 
-          it('when valid debt provided', async () => {
+          it('when valid court order provided', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
             draftStoreServiceMock.resolveSave()
@@ -122,7 +122,7 @@ describe('Defendant response: Statement of means: court orders', () => {
               .send({ declared: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -138,7 +138,7 @@ describe('Defendant response: Statement of means: court orders', () => {
               .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
