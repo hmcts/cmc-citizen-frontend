@@ -19,6 +19,11 @@ import { PaymentIntention as PI } from 'claims/models/response/core/paymentInten
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { AdmissionHelper } from 'shared/helpers/admissionHelper'
+import { Party } from 'claims/models/details/yours/party'
+import { PartyType } from 'common/partyType'
+import { Individual } from 'claims/models/details/theirs/individual'
+import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
+import { AllowanceCalculations } from 'common/allowances/allowanceCalculations'
 
 export class PaymentPlanHelper {
 
@@ -62,7 +67,14 @@ export class PaymentPlanHelper {
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      const instalmentAmount: number = StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans) / Frequency.WEEKLY.monthlyRatio
+      const repository: AllowanceRepository = new ResourceAllowanceRepository()
+      const allowanceHelper = new AllowanceCalculations(repository)
+      const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
+
+      const instalmentAmount: number = statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
+        response.statementOfMeans,
+        response.defendant.type,
+        PaymentPlanHelper.getDateOfBirth(response.defendant)) / Frequency.WEEKLY.monthlyRatio
       return PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
     }
   }
@@ -77,7 +89,15 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    const instalmentAmount: number = Math.max(StatementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(response.statementOfMeans), 0) / Frequency.WEEKLY.monthlyRatio
+    const repository: AllowanceRepository = new ResourceAllowanceRepository()
+    const allowanceHelper = new AllowanceCalculations(repository)
+    const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
+
+    const calculatedMonthlyDisposableIncome = Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
+      response.statementOfMeans,
+      response.defendant.type,
+      PaymentPlanHelper.getDateOfBirth(response.defendant)), 0)
+    const instalmentAmount: number = Math.min(calculatedMonthlyDisposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
     return PaymentPlanHelper.createPaymentPlan(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
@@ -132,5 +152,12 @@ export class PaymentPlanHelper {
     }
 
     return PaymentPlan.create(totalAmount, instalmentAmount, frequency, firstPaymentDate)
+  }
+
+  private static getDateOfBirth (defendant: Party): Moment {
+    if (defendant.type === PartyType.INDIVIDUAL.value) {
+      return MomentFactory.parse((defendant as Individual).dateOfBirth)
+    }
+    return undefined
   }
 }
