@@ -10,6 +10,9 @@ import { Claim } from 'claims/models/claim'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
+import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
+import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
+
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
@@ -37,11 +40,14 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
-    locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
     locals.draft.document.decisionType = decisionType
-    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
+
+    const courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
+    if (courtCalculatedPaymentIntention) {
+      locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
+      locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
+    }
 
     return super.saveDraft(locals)
   }
@@ -153,6 +159,9 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+    if (!paymentPlan) {
+      return undefined
+    }
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
     courtCalculatedPaymentIntention.repaymentPlan = {
       firstPaymentDate: paymentPlan.startDate,
@@ -176,6 +185,20 @@ export default new PaymentPlanPage()
       if (response.statementOfMeans === undefined) {
         return next(new Error('Page cannot be rendered because response does not have statement of means'))
       }
+
+      next()
+    },
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const claim: Claim = res.locals.claim
+      const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+      res.locals.monthlyIncomeAmount = response.statementOfMeans && response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+        response.statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
+      ) : 0
+      res.locals.monthlyExpensesAmount = response.statementOfMeans && response.statementOfMeans.expenses ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
+        response.statementOfMeans.expenses.map(expense => IncomeExpenseSource.fromClaimExpense(expense))
+      ) : 0
+      res.locals.statementOfMeans = response.statementOfMeans
 
       next()
     }
