@@ -120,7 +120,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
             .send({ declared: 'false' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.employmentPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.carerPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
@@ -139,7 +139,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.employmentPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.carerPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

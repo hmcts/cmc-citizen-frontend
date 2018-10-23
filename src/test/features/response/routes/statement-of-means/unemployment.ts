@@ -17,7 +17,7 @@ import { UnemploymentType } from 'response/form/models/statement-of-means/unempl
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.unemployedPage.evaluateUri({ externalId: externalId })
-const nextPagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: externalId })
+const nextPagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId })
 
 describe('Defendant response: Statement of means: unemployment page', () => {
 
