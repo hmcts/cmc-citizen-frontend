@@ -35,7 +35,6 @@ function renderView (form: Form<AcceptPaymentMethod>, res: express.Response) {
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
   const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-  console.log('draft---->',JSON.stringify(draft.document))
   const payBySetDate = getPayBySetDate(draft, claimResponse)
 
   res.render(Paths.courtOfferedSetDatePage.associatedView, {
