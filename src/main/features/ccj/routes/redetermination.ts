@@ -8,6 +8,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { CCJClient } from 'claims/ccjClient'
 import { Redetermination } from 'ccj/form/models/redetermination'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 function renderView (form: Form<Redetermination>, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -36,7 +37,7 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
 
-        await CCJClient.redetermination(claim.externalId, form.model, user)
+        await CCJClient.redetermination(claim.externalId, form.model, user, MadeBy.CLAIMANT)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

@@ -11,7 +11,10 @@ import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/pay
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { PaymentOption as PaymentOptionDraft, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import {
+  PaymentOption as PaymentOptionDraft,
+  PaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -48,7 +51,7 @@ export class ClaimantResponseConverter {
     if (courtDetermination) {
       respAcceptance.courtDetermination = courtDetermination
     }
-    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod,draftClaimantResponse.decisionType)
+    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod, draftClaimantResponse.decisionType)
     if (claimantPaymentIntention) {
       respAcceptance.claimantPaymentIntention = claimantPaymentIntention
     }
@@ -59,10 +62,10 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
       throw new Error('court offered payment intention not found where decision type is COURT')
     }
-    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && !draftClaimantResponse.courtCalculatedPaymentIntention) {
-      throw new Error('court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT')
+    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+      return undefined
     }
-    if (!draftClaimantResponse.courtCalculatedPaymentIntention && ! draftClaimantResponse.courtOfferedPaymentIntention) {
+    if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
       return undefined
     }
     const courtDetermination: CourtDetermination = new CourtDetermination()
@@ -107,7 +110,9 @@ export class ClaimantResponseConverter {
         const repaymentPlan: RepaymentPlan = {
           firstPaymentDate: draftPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
           instalmentAmount: draftPaymentIntention.paymentPlan.instalmentAmount,
-          paymentSchedule: draftPaymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule
+          paymentSchedule: draftPaymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule,
+          completionDate: draftPaymentIntention.paymentPlan.completionDate.toMoment(),
+          paymentLength: draftPaymentIntention.paymentPlan.paymentLength
         } as RepaymentPlan
         paymentIntention.repaymentPlan = repaymentPlan
       }
