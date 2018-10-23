@@ -110,7 +110,7 @@ describe('Defendant response: Statement of means: dependants', () => {
 
       describe('should update draft store and redirect to ', () => {
 
-        it('maintenance page when no children', async () => {
+        it('other dependants page when no children', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
@@ -120,13 +120,13 @@ describe('Defendant response: Statement of means: dependants', () => {
             .send({ declared: 'false' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.otherDependantsPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })
 
-        it('maintenance page when 0 children between 16 and 19', async () => {
+        it('dependants disability page when some children but 0 between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveSave()
@@ -139,7 +139,7 @@ describe('Defendant response: Statement of means: dependants', () => {
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.dependantsDisabilityPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

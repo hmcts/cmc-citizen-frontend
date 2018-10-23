@@ -237,7 +237,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
               } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

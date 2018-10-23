@@ -2,6 +2,7 @@ import { IsArray, ValidateNested } from 'class-validator'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
+import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 
 export class IncomeExpenseSources {
 
@@ -147,6 +148,44 @@ export class IncomeExpenseSources {
         .filter(source => source.populated)
         .map(source => IncomeExpenseSource.fromFormIncomeSource(source)))
     }
+    return new IncomeExpenseSources(incomeExpenseSources)
+  }
+
+  static fromPriorityDebtModel (priorityDebt: PriorityDebt): IncomeExpenseSources {
+    if (!priorityDebt) {
+      return undefined
+    }
+
+    const incomeExpenseSources = []
+
+    if (priorityDebt.mortgage && priorityDebt.mortgage.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(priorityDebt.mortgage))
+    }
+
+    if (priorityDebt.rent && priorityDebt.rent.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(priorityDebt.rent))
+    }
+
+    if (priorityDebt.councilTax && priorityDebt.councilTax.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(priorityDebt.councilTax))
+    }
+
+    if (priorityDebt.gas && priorityDebt.gas.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(priorityDebt.gas))
+    }
+
+    if (priorityDebt.electricity && priorityDebt.electricity.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(priorityDebt.electricity))
+    }
+
+    if (priorityDebt.water && priorityDebt.water.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(priorityDebt.water))
+    }
+
+    if (priorityDebt.maintenance && priorityDebt.maintenance.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(priorityDebt.maintenance))
+    }
+
     return new IncomeExpenseSources(incomeExpenseSources)
   }
 }

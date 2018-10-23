@@ -12,7 +12,6 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 function renderView (form: Form<Residence>, res: express.Response): void {
   res.render(Paths.residencePage.associatedView, {
@@ -24,7 +23,6 @@ function renderView (form: Form<Residence>, res: express.Response): void {
 export default express.Router()
   .get(
     Paths.residencePage.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -32,7 +30,6 @@ export default express.Router()
     })
   .post(
     Paths.residencePage.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Residence, Residence.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
@@ -47,7 +44,7 @@ export default express.Router()
         draft.document.statementOfMeans.residence = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.dependantsPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.partnerPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )
