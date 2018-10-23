@@ -1,0 +1,21 @@
+{% macro paidInFull(claim) %}
+<h2 class="heading-small">This claim is settled</h2>
+
+<p>
+  {{ t('{{ defendantName }} paid you £{{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
+    { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday, moneyReceivedOn: claim.moneyReceivedOn | trim }) | safe }}
+</p>
+
+  {% if claim.isCCJPaidWithinMonth() %}
+    <p>
+      {{ t('The defendant''s County Court Judgment has been cancelled.') }}
+    </p>
+  {% endif %}
+
+  {% if not claim.isCCJPaidWithinMonth() %}
+    <p>
+      {{ t('The defendant''s County Court Judgment has been marked as paid.') }}
+    </p>
+  {% endif %}
+{% endmacro %}
+

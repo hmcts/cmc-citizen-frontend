@@ -167,15 +167,9 @@ export class Claim {
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else if (this.moneyReceivedOn) {
-      if (!this.countyCourtJudgment) {
-        return ClaimStatus.PAID_IN_FULL
-      } else if (this.countyCourtJudgment) {
-        if (this.isCCJPaidWithinMonth()) {
-          return ClaimStatus.PAID_IN_FULL_CCJ_WITHIN_MONTH
-        } else if (!this.isCCJPaidWithinMonth()) {
-          return ClaimStatus.PAID_IN_FULL_CCJ_AFTER_MONTH
-        }
-      }
+      return ClaimStatus.PAID_IN_FULL
+      // [WIP] isCCJPaidWithinMonth() call needed to prevent lint error
+      this.isCCJPaidWithinMonth()
     } else {
       throw new Error('Unknown Status')
     }
@@ -211,8 +205,13 @@ export class Claim {
   }
 
   private isCCJPaidWithinMonth (): boolean {
+    let futureMonth
 
-    const futureMonth = calculateMonthIncrement(this.countyCourtJudgmentIssuedAt)
+    if (this.countyCourtJudgmentIssuedAt) {
+      futureMonth = calculateMonthIncrement(this.countyCourtJudgmentIssuedAt)
+    } else if (this.countyCourtJudgmentRequestedAt) {
+      futureMonth = calculateMonthIncrement(this.countyCourtJudgmentRequestedAt)
+    }
 
     if (this.moneyReceivedOn.isSameOrBefore(futureMonth)) {
       return true
