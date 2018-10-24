@@ -117,22 +117,26 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
       return undefined
     }
+    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+    if (!paymentPlan) {
+      return undefined
+    }
 
     const courtCalculatedPaymentIntention = new PaymentIntention()
-    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-    const lastPaymentDate: Moment = paymentPlan.calculateLastPaymentDate()
-
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
-    courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
+    courtCalculatedPaymentIntention.paymentDate = paymentPlan.calculateLastPaymentDate()
     return courtCalculatedPaymentIntention
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
     locals.draft.document.decisionType = decisionType
-    locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
-    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
+
+    const courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
+    if (courtCalculatedPaymentIntention) {
+      locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
+      locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
+    }
 
     return super.saveDraft(locals)
   }
