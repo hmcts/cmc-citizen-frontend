@@ -1,5 +1,7 @@
 import { Logger } from '@hmcts/nodejs-logging'
 
+import * as moment from 'moment'
+
 import { FrequencyConversions } from 'common/frequency/frequencyConversions'
 import { Frequency } from 'common/frequency/frequency'
 
@@ -11,32 +13,76 @@ import { BankAccount } from 'claims/models/response/statement-of-means/bankAccou
 import { FrequencyBasedAmount } from 'claims/models/response/statement-of-means/frequencyBasedAmount'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { Income } from 'claims/models/response/statement-of-means/income'
-import { Expense } from 'claims/models/response/statement-of-means/expense'
+import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
+import { Dependant } from 'claims/models/response/statement-of-means/dependant'
+import { PriorityDebts } from 'claims/models/response/statement-of-means/priorityDebts'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { PartyType } from 'common/partyType'
+import { Partner } from 'claims/models/response/statement-of-means/partner'
+import { AllowanceCalculations } from 'common/allowances/allowanceCalculations'
 
 const logger = Logger.getLogger('common/statement-of-means')
 
 export class StatementOfMeansCalculations {
 
-  static calculateTotalMonthlyDisposableIncome (statementOfMeans: StatementOfMeans): number {
-    const totalMonthlyIncome: number = StatementOfMeansCalculations.calculateTotalMonthlyIncome(statementOfMeans)
-    const totalMonthlyExpense: number = StatementOfMeansCalculations.calculateTotalMonthlyExpense(statementOfMeans)
+  constructor (public allowanceCalculations?: AllowanceCalculations) {}
 
-    const totalMonthlyDisposableIncome = totalMonthlyIncome - totalMonthlyExpense
-    logger.debug('Monthly disposable income calculation: ', totalMonthlyDisposableIncome)
+  calculateTotalMonthlyDisposableIncome (statementOfMeans: StatementOfMeans,
+                                         defendantType: string,
+                                         defendantDateOfBirth: moment.Moment): number {
+
+    const defendantAge = moment().diff(moment(defendantDateOfBirth), 'years')
+    const totalMonthlyIncome: number = this.calculateTotalMonthlyIncome(statementOfMeans) || 0
+    const totalMonthlyExpense: number = this.calculateTotalMonthlyExpense(statementOfMeans) || 0
+
+    let totalMonthlyAllowance: number = 0
+    if (this.allowanceCalculations) {
+      totalMonthlyAllowance = defendantType === PartyType.INDIVIDUAL.value ?
+        this.calculateTotalMonthlyAllowances(statementOfMeans, defendantAge) || 0 : 0
+    }
+
+    const totalMonthlyDisposableIncome = (totalMonthlyIncome - totalMonthlyExpense) - totalMonthlyAllowance
+    logger.info('Monthly disposable income calculation: ', totalMonthlyDisposableIncome)
     return totalMonthlyDisposableIncome
   }
 
-  static calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
-    const monthlyDebts: number = statementOfMeans.debts ? StatementOfMeansCalculations.calculateMonthlyDebts(statementOfMeans.debts) : 0
-    const monthlyCourtOrders: number = statementOfMeans.courtOrders ? StatementOfMeansCalculations.calculateMonthlyCourtOrders(statementOfMeans.courtOrders) : 0
-    const monthlyRegularExpense: number = statementOfMeans.expenses ? StatementOfMeansCalculations.calculateMonthlyRegularExpense(statementOfMeans.expenses) : 0
+  calculateTotalMonthlyExpense (statementOfMeans: StatementOfMeans): number {
+    const monthlyDebts: number = statementOfMeans.debts ? this.calculateMonthlyDebts(statementOfMeans.debts) : 0
 
-    const totalMonthlyExpense = monthlyDebts + monthlyCourtOrders + monthlyRegularExpense
+    const monthlyPriorityDebts: number = statementOfMeans.priorityDebts ? this.calculateMonthlyPriorityDebts(statementOfMeans.priorityDebts) : 0
+    const monthlyCourtOrders: number = statementOfMeans.courtOrders ? this.calculateMonthlyCourtOrders(statementOfMeans.courtOrders) : 0
+    const monthlyRegularExpense: number = statementOfMeans.expenses ? this.calculateMonthlyRegularExpense(statementOfMeans.expenses) : 0
+
+    const totalMonthlyExpense = monthlyDebts + monthlyPriorityDebts + monthlyCourtOrders + monthlyRegularExpense
+
     logger.debug('Monthly expense calculation: ', totalMonthlyExpense)
     return totalMonthlyExpense
   }
 
-  static calculateMonthlyDebts (debts: Debt[]): number {
+  calculateTotalMonthlyAllowances (statementOfMeans: StatementOfMeans, defendantAge: number): number {
+
+    const monthlyLivingAllowance: number = this.allowanceCalculations.getMonthlyLivingAllowance(defendantAge,
+      statementOfMeans.partner)
+    const monthlyDependantsAllowance: number = this.allowanceCalculations.getMonthlyDependantsAllowance(statementOfMeans.dependant)
+    const monthlyPensionerAllowance: number = this.allowanceCalculations.getMonthlyPensionerAllowance(statementOfMeans.incomes,
+      statementOfMeans.partner)
+    const monthlyDisabilityAllowance: number = this.calculateMonthlyDisabilityAllowance(statementOfMeans.dependant,
+      statementOfMeans.carer, statementOfMeans.disability, statementOfMeans.partner)
+    const totalMonthlyAllowance = monthlyLivingAllowance + monthlyDependantsAllowance + monthlyPensionerAllowance +
+      monthlyDisabilityAllowance
+    logger.debug('Monthly allowance calculation: ', totalMonthlyAllowance)
+    return totalMonthlyAllowance
+  }
+
+  calculateMonthlyDisabilityAllowance (dependant: Dependant, carer: boolean, defendantDisability: DisabilityStatus,
+                                       partner: Partner): number {
+    if (defendantDisability === DisabilityStatus.NO || defendantDisability === undefined) {
+      return this.allowanceCalculations.getCarerDisableDependantAmount(dependant, carer)
+    }
+    return this.allowanceCalculations.getDisabilityAllowance(defendantDisability, partner)
+  }
+
+  calculateMonthlyDebts (debts: Debt[]): number {
 
     const reducer = (total: number, debt: Debt) => {
       const monthlyPayments: number = debt.monthlyPayments
@@ -53,7 +99,7 @@ export class StatementOfMeansCalculations {
     return monthlyDebts
   }
 
-  static calculateMonthlyCourtOrders (courtOrders: CourtOrder[]): number {
+  calculateMonthlyCourtOrders (courtOrders: CourtOrder[]): number {
 
     const reducer = (total: number, courtOrder: CourtOrder) => {
       const monthlyInstalmentAmount: number = courtOrder.monthlyInstalmentAmount
@@ -70,23 +116,32 @@ export class StatementOfMeansCalculations {
     return monthlyCourtOrders
   }
 
-  static calculateMonthlyRegularExpense (expenses: Expense[]): number {
-    const monthlyRegularExpense = StatementOfMeansCalculations.calculateMonthlyRegularIncomeOrExpense(expenses)
+  calculateMonthlyPriorityDebts (priorityDebts: PriorityDebts[]): number {
+    const monthlyPriorityDebts: number = this.calculateMonthlyRegularIncomesExpensesOrDebts(priorityDebts)
+    logger.debug('Monthly priority debts calculation: ', monthlyPriorityDebts)
+    return monthlyPriorityDebts
+  }
+
+  calculateMonthlyRegularExpense (expenses: Expense[]): number {
+    const monthlyRegularExpense = this.calculateMonthlyRegularIncomesExpensesOrDebts(
+      expenses.filter(value => {
+        return value.type === ExpenseType.RENT || value.type === ExpenseType.MORTGAGE
+      })
+    )
     logger.debug('Monthly regular expense calculation: ', monthlyRegularExpense)
     return monthlyRegularExpense
   }
 
-  static calculateTotalMonthlyIncome (statementOfMeans: StatementOfMeans): number {
-    const monthlyRegularIncome = statementOfMeans.incomes ? StatementOfMeansCalculations.calculateMonthlyRegularIncome(statementOfMeans.incomes) : 0
-    const monthlySelfEmployedTurnover = statementOfMeans.employment ? StatementOfMeansCalculations.calculateMonthlySelfEmployedTurnover(statementOfMeans.employment) : 0
-    const monthlySavings = StatementOfMeansCalculations.calculateMonthlySavings(statementOfMeans.bankAccounts, monthlyRegularIncome)
-
+  calculateTotalMonthlyIncome (statementOfMeans: StatementOfMeans): number {
+    const monthlyRegularIncome = statementOfMeans.incomes ? this.calculateMonthlyRegularIncome(statementOfMeans.incomes) : 0
+    const monthlySelfEmployedTurnover = statementOfMeans.employment ? this.calculateMonthlySelfEmployedTurnover(statementOfMeans.employment) : 0
+    const monthlySavings = this.calculateMonthlySavings(statementOfMeans.bankAccounts, monthlyRegularIncome)
     const totalMonthlyIncome = monthlySelfEmployedTurnover + monthlySavings + monthlyRegularIncome
     logger.debug('Monthly income calculation: ', totalMonthlyIncome)
     return totalMonthlyIncome
   }
 
-  static calculateMonthlySelfEmployedTurnover (employment: Employment): number {
+  calculateMonthlySelfEmployedTurnover (employment: Employment): number {
     if (!employment.selfEmployment || !employment.selfEmployment.annualTurnover) {
       return 0
     }
@@ -96,7 +151,7 @@ export class StatementOfMeansCalculations {
     return monthlySelfEmployedTurnover
   }
 
-  static calculateMonthlySavings (bankAccounts: BankAccount[], monthlyRegularIncome: number): number {
+  calculateMonthlySavings (bankAccounts: BankAccount[], monthlyRegularIncome: number): number {
 
     const reducer = (total: number, bankAccount: BankAccount) => {
       const balance: number = bankAccount.balance
@@ -120,17 +175,17 @@ export class StatementOfMeansCalculations {
     return monthlySavings
   }
 
-  static calculateMonthlyRegularIncome (incomes: Income[]): number {
-    const monthlyRegularIncome = StatementOfMeansCalculations.calculateMonthlyRegularIncomeOrExpense(incomes)
+  calculateMonthlyRegularIncome (incomes: Income[]): number {
+    const monthlyRegularIncome = this.calculateMonthlyRegularIncomesExpensesOrDebts(incomes)
     logger.debug('Monthly regular income calculation: ', monthlyRegularIncome)
     return monthlyRegularIncome
   }
 
-  private static calculateMonthlyRegularIncomeOrExpense (incomesOrExpenses: FrequencyBasedAmount[]): number {
+  private calculateMonthlyRegularIncomesExpensesOrDebts (incomesExpensesOrDebts: FrequencyBasedAmount[]): number {
 
-    const reducer = (total: number, incomeOrExpense: FrequencyBasedAmount) => {
-      const frequency: Frequency = StatementOfMeansCalculations.toFrequency(incomeOrExpense.frequency)
-      const amount: number = incomeOrExpense.amount
+    const reducer = (total: number, incomeExpenseOrDebt: FrequencyBasedAmount) => {
+      const frequency: Frequency = this.toFrequency(incomeExpenseOrDebt.frequency)
+      const amount: number = incomeExpenseOrDebt.amount
 
       if (!frequency || !amount) {
         return total
@@ -139,10 +194,10 @@ export class StatementOfMeansCalculations {
       return total + FrequencyConversions.convertAmountToMonthly(amount, frequency)
     }
 
-    return incomesOrExpenses.reduce(reducer, 0)
+    return incomesExpensesOrDebts.reduce(reducer, 0)
   }
 
-  private static toFrequency (paymentFrequency: PaymentFrequency): Frequency {
+  private toFrequency (paymentFrequency: PaymentFrequency): Frequency {
     try {
       return Frequency.of(paymentFrequency)
     } catch (error) {
