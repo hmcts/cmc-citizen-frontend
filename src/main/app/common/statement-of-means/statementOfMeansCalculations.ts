@@ -42,7 +42,7 @@ export class StatementOfMeansCalculations {
     }
 
     const totalMonthlyDisposableIncome = (totalMonthlyIncome - totalMonthlyExpense) - totalMonthlyAllowance
-    logger.debug('Monthly disposable income calculation: ', totalMonthlyDisposableIncome)
+    logger.info('Monthly disposable income calculation: ', totalMonthlyDisposableIncome)
     return totalMonthlyDisposableIncome
   }
 
