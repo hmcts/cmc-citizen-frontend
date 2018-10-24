@@ -20,7 +20,7 @@ const buttons = {
   submit: 'input[id="saveAndContinue"]'
 }
 
-interface GenericMonthyExpenseField {
+interface GenericMonthlyExpenseField {
   radio: string
   input: string
   everyWeek: string
@@ -37,7 +37,7 @@ export class MonthlyExpensesPage {
     I.click(buttons.submit)
   }
 
-  private fillGenericField (field: GenericMonthyExpenseField, amount: string): void {
+  private fillGenericField (field: GenericMonthlyExpenseField, amount: string): void {
     I.click(field.radio)
     I.fillField(field.input, amount)
     I.click(field.everyWeek)
