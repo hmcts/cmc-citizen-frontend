@@ -21,6 +21,7 @@ import { Moment } from 'moment'
 import { Frequency } from 'common/frequency/frequency'
 import { User } from 'idam/user'
 import { MomentFactory } from 'shared/momentFactory'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
 class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse> {
 
@@ -38,7 +39,8 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
-    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
+
+    const courtDecision = this.getCourtDecision(draft, claim)
 
     switch (courtDecision) {
       case DecisionType.COURT:
@@ -125,9 +127,16 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
     return courtCalculatedPaymentIntention
   }
 
+  getCourtDecision (draft: Draft<DraftClaimantResponse>, claim: Claim): DecisionType {
+    if (draft.document.alternatePaymentMethod.paymentOption.option !== PaymentType.IMMEDIATELY) {
+      return undefined
+    }
+    return CourtDecisionHelper.createCourtDecision(claim, draft)
+  }
+
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
-    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft)
+    const decisionType: DecisionType = this.getCourtDecision(locals.draft, locals.claim)
     locals.draft.document.decisionType = decisionType
     locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
     locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)

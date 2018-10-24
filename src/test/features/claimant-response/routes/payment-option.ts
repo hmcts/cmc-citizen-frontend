@@ -96,7 +96,7 @@ describe('Claimant response: payment options', () => {
           })
 
           it('should return 500 and render error page when cannot retrieve draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.rejectFind('Error')
 
             await request(app)
@@ -107,7 +107,7 @@ describe('Claimant response: payment options', () => {
           })
 
           it('should return 500 and render error page when cannot save draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
@@ -121,7 +121,7 @@ describe('Claimant response: payment options', () => {
 
         context('when service is healthy', () => {
           beforeEach(() => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse')
           })
 
@@ -141,7 +141,7 @@ describe('Claimant response: payment options', () => {
             it('should redirect to task list page for "IMMEDIATELY" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: PaymentType.IMMEDIATELY.value },
-                Paths.taskListPage.evaluateUri({ externalId: externalId }))
+                Paths.courtOfferPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
