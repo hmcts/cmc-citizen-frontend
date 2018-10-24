@@ -26,11 +26,12 @@
   {% endif %}
 
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    <h2 class="heading-small">{{ t('The defendant will pay you immediately') }}</h2>
-    <p> {{ t('The defendant said they’ll pay you immediately. They must make sure you have the money by 4pm on {{ paymentDate }}.',
+    <h2 class="heading-small">{{ t('The defendant said they’ll pay you immediately') }}</h2>
+    <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
         { paymentDate: paymentDate }) }} </p>
-    <h2 class="heading-small"> {{ t('If the defendant pays you') }} </h2>
-    <p> {{ t('You need to email {{ supportMail }} to let us know. Include the date you were paid.', { supportMail: supportEmailAddress }) }} </p>
+    <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
+    <p>{{ t('You can settle for less than the full claim amount.') }}</p>
+    <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've settled</a>
     {% if claim.response.paymentIntention.isPastPaymentDeadline %}
       <h2 class="heading-small">{{ t('What to do if they haven’t paid') }}</h2>
       <p>{{ t('If the defendant doesn’t pay you, you can ' + internalLink('request a County Court Judgment', CCJPaths.paidAmountPage.evaluateUri({ externalId: claim.externalId }))
