@@ -140,6 +140,7 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
     return super.saveDraft(locals)
   }
+
 }
 
 /* tslint:disable:no-default-export */
