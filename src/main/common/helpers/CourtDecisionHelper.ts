@@ -19,7 +19,7 @@ export class CourtDecisionHelper {
     const defendantInstalmentLastDate: Moment = PaymentPlanHelper.createPaymentPlanFromClaim(claim).calculateLastPaymentDate()
     const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantEnteredPayBySetDate : defendantInstalmentLastDate
 
-    const claimantLastPaymentDate: Moment = getClaimantLastPaymentDate(draft)
+    const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
 
     let courtOfferedLastDate: Moment
     if (courtCalculatedPaymentPlan) {
@@ -32,17 +32,17 @@ export class CourtDecisionHelper {
       courtOfferedLastDate
     )
   }
-}
 
-function getClaimantLastPaymentDate (draft: Draft<DraftClaimantResponse>): Moment {
-  switch (draft.document.alternatePaymentMethod.paymentOption.option) {
-    case PaymentType.IMMEDIATELY:
-      return MomentFactory.currentDate().add(5,'days')
-    case PaymentType.BY_SET_DATE:
-      return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
-    case PaymentType.INSTALMENTS:
-      return PaymentPlanHelper.createPaymentPlanFromForm(draft.document.alternatePaymentMethod.paymentPlan).calculateLastPaymentDate()
-    default:
-      throw new Error('Unknown claimant payment option!')
+  private static getClaimantLastPaymentDate (draft: Draft<DraftClaimantResponse>): Moment {
+    switch (draft.document.alternatePaymentMethod.paymentOption.option) {
+      case PaymentType.IMMEDIATELY:
+        return MomentFactory.currentDate().add(5,'days')
+      case PaymentType.BY_SET_DATE:
+        return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+      case PaymentType.INSTALMENTS:
+        return PaymentPlanHelper.createPaymentPlanFromForm(draft.document.alternatePaymentMethod.paymentPlan).calculateLastPaymentDate()
+      default:
+        throw new Error('Unknown claimant payment option!')
+    }
   }
 }
