@@ -138,7 +138,7 @@ describe('Claimant response: payment options', () => {
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
             }
 
-            it('should redirect to task list page for "IMMEDIATELY" option selected', async () => {
+            it('should redirect to court offer page for "IMMEDIATELY" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: PaymentType.IMMEDIATELY.value },
                 Paths.courtOfferPage.evaluateUri({ externalId: externalId }))
