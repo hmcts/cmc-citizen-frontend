@@ -167,6 +167,21 @@ describe('Claimant response: payment options', () => {
             })
           })
         })
+
+        context('when service is healthy with different test date for pay by set date scenario', () => {
+
+          it('should redirect to court offer set date page for "IMMEDIATELY" option selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+            draftStoreServiceMock.resolveFind('claimantResponse')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: PaymentType.IMMEDIATELY.value })
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
+          })
+        })
       })
     })
   })
