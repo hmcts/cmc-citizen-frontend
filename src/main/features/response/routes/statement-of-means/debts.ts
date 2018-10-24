@@ -14,7 +14,6 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { makeSureThereIsAtLeastOneRow } from 'forms/utils/multiRowFormUtils'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = StatementOfMeansPaths.debtsPage
 
@@ -38,7 +37,6 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -46,7 +44,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Debts, Debts.fromObject, undefined, ['addRow']),
     actionHandler,
@@ -64,7 +61,7 @@ export default express.Router()
         draft.document.statementOfMeans.debts = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, yesNoRadio, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'Is your partner disabled?' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate
+            class="analytics-submit-event-trigger"
+            data-event-action="SoM: Is your partner disabled?"
+            data-event-label-from="option">
+
+        {{ csrfProtection(csrf) }}
+
+        {{ yesNoRadio(t('Is your partner disabled?'), 'option', form) }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

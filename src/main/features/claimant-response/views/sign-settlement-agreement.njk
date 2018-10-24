@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, checkboxSingle, saveAndContinueButton, errorSummary %}
 {% from "./macro/termsOfAgreementTable.njk" import termsOfAgreement %}
 
-{% set heading = 'Sign a settlement agreement' %}
+{% set heading = 'Terms of the agreement' %}
 
 {% block content %}
   <div class="grid-row">
@@ -18,7 +18,7 @@
         {{ termsOfAgreement (
           id = 'termsOfAgreement',
           response = claim.response,
-          courtOfferedPaymentIntention = courtOfferedPaymentIntention,
+          paymentIntention = paymentIntention,
           totalAmount = totalAmount
         ) }}
 
