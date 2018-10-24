@@ -28,4 +28,12 @@ export class ClaimantTaskListPage {
     I.click('Check and submit your response')
   }
 
+  selectTaskRequestCountyCourtJudgment (): void {
+    I.click('Request a County Court Judgment')
+  }
+
+  selectProposeAnAlternativeRepaymentPlan (): void {
+    I.click('Propose an alternative repayment plan')
+  }
+
 }

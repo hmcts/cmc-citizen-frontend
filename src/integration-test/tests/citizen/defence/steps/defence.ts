@@ -243,8 +243,7 @@ export class DefenceSteps {
     }
   }
 
-  async makeDefenceAndSubmit (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType): Promise<void> {
-    I.click('Respond to claim')
+  makeDefenceAndSubmit (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType): void {
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')

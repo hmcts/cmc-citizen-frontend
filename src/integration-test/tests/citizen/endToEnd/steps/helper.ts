@@ -2,6 +2,7 @@ import I = CodeceptJS.I
 import { PartyType } from 'integration-test/data/party-type'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
 import { DefenceType } from 'integration-test/data/defence-type'
+import { PaymentOption } from 'integration-test/data/payment-option'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 const I: I = actor()
@@ -32,13 +33,29 @@ export class Helper {
     claimRef: string,
     defendantEmail: string,
     defendantType: PartyType,
-    defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
+    defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): void {
 
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
     I.click(claimRef)
-    return defenceSteps.makeDefenceAndSubmit(defendantEmail, defendantType, defenceType)
+    I.click('Respond to claim')
+    defenceSteps.makeDefenceAndSubmit(defendantEmail, defendantType, defenceType)
+  }
+
+  // TODO: refactor with above ^^^
+  finishResponseWithFullAdmission (
+    claimRef: string,
+    defendantEmail: string,
+    defendantType: PartyType,
+    paymentOption: PaymentOption = PaymentOption.IMMEDIATELY): void {
+
+    I.waitForText(claimDetailsHeading)
+    defenceSteps.respondToClaim()
+    defenceSteps.loginAsDefendant(defendantEmail)
+    I.click(claimRef)
+    I.click('Respond to claim')
+    defenceSteps.makeFullAdmission(defendantType, paymentOption)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {
