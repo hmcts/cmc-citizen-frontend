@@ -9,7 +9,9 @@
       {% if response.responseType == ResponseType.PART_ADMISSION.value %}
         {% set amountToPay = totalAmount | numeral %}
       {% endif %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
+      {{ row('The agreement', t('{{ defendantFullName }} will pay ' + amountToPay + ', immediately.
+      {{ defendantFullName }} will receive the moment no later than {{ paymentDate }}.
+      Any cheques or transfers will be clear in {{ defendantFullName }} account by this date.',
         { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
@@ -18,12 +20,12 @@
       {% if response.responseType == ResponseType.PART_ADMISSION.value %}
         {% set amountToPay = totalAmount | numeral %}
       {% endif %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
+      {{ row('The agreement', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
         { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+      {{ row('The agreement', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
         { defendantFullName: response.defendant.name,
           instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
           paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
