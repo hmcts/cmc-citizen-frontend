@@ -33,7 +33,7 @@
       {% if redetermination_requested_at !== undefined %}
         <p>{{ t('A judge will decide what the defendant can afford to pay based on their financial details.') }}</p>
 
-        <P>{{ t('We’ll contact both you and {{ defendantName }} to tell you what to do next.') }}</P>
+        <P>{{ t('We’ll contact both you and {{ defendantName }} to tell you what to do next.', { defendantName: defendantName }) }}</P>
 
       {% else %}
 
@@ -43,10 +43,12 @@
         <p>{{ t('{{ defendantName }} can no longer respond to the claim using this service - they may have responded by post.', { defendantName: defendantName }) }}</p>
 
       {% endif %}
-      <p>{{ t('View your claim status on <a href="{{ url }}">your money claims account</a>.', { url: '/dashboard' }) | safe }}</p>
-      {{ supportWidget() }}
 
       {% include "includes/service_survey_link.njk" %}
+
+      <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
+      {{ supportWidget() }}
+
 
     </div>
   </div>

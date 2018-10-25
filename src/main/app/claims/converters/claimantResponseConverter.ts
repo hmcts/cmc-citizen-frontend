@@ -23,7 +23,7 @@ import { DecisionType } from 'common/court-calculations/courtDecision'
 
 export class ClaimantResponseConverter {
 
-  public static covertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
+  public static convertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
       let reject: ResponseRejection = new ResponseRejection()
       if (draftClaimantResponse.paidAmount) {
@@ -62,21 +62,15 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
       throw new Error('court offered payment intention not found where decision type is COURT')
     }
-    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      return undefined
-    }
     if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
       return undefined
     }
+
     const courtDetermination: CourtDetermination = new CourtDetermination()
-    if (draftClaimantResponse.courtCalculatedPaymentIntention) {
-      courtDetermination.courtPaymentIntention = draftClaimantResponse.courtCalculatedPaymentIntention
-    }
-    if (draftClaimantResponse.courtOfferedPaymentIntention) {
-      courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
-      if (courtDetermination.courtDecision.repaymentPlan) {
-        courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
-      }
+    courtDetermination.courtPaymentIntention = draftClaimantResponse.courtCalculatedPaymentIntention
+    courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
+    if (courtDetermination.courtDecision.repaymentPlan) {
+      courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
     }
     if (draftClaimantResponse.rejectionReason) {
       courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text

@@ -16,6 +16,7 @@ import { DraftService } from 'services/draftService'
 function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
+  console.log(JSON.stringify(draft.document.courtOfferedPaymentIntention))
 
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
