@@ -23,7 +23,7 @@ import { DecisionType } from 'common/court-calculations/courtDecision'
 
 export class ClaimantResponseConverter {
 
-  public static covertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
+  public static convertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
       let reject: ResponseRejection = new ResponseRejection()
       if (draftClaimantResponse.paidAmount) {
@@ -61,9 +61,6 @@ export class ClaimantResponseConverter {
   private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
     if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
       throw new Error('court offered payment intention not found where decision type is COURT')
-    }
-    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && !draftClaimantResponse.courtCalculatedPaymentIntention) {
-      throw new Error('court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT')
     }
     if (!draftClaimantResponse.courtCalculatedPaymentIntention || !draftClaimantResponse.courtOfferedPaymentIntention) {
       return undefined
