@@ -212,11 +212,6 @@ export class Claim {
     } else if (this.countyCourtJudgmentRequestedAt) {
       futureMonth = calculateMonthIncrement(this.countyCourtJudgmentRequestedAt)
     }
-
-    if (this.moneyReceivedOn.isSameOrBefore(futureMonth)) {
-      return true
-    } else if (this.moneyReceivedOn.isAfter(futureMonth)) {
-      return false
-    }
+    return this.moneyReceivedOn.isSameOrBefore(futureMonth)
   }
 }

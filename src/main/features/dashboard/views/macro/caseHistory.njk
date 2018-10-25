@@ -87,7 +87,7 @@ ccjRequestedForDefendantClaimDetails %}
           {{ caseStatusForClaimant(state.status, claim) }}
         </p>
       {% endif %}
-      {% if state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or PAID_IN_FULL_CCJ_SATISFIED %}
+      {% if state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or state.status === PAID_IN_FULL_CCJ_SATISFIED %}
         {{ paidInFullClaimant(claim) }}
       {% endif %}
     </div>
