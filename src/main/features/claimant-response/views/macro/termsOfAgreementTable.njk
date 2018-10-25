@@ -5,10 +5,7 @@
     </legend>
 
     {% if paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-      {% set amountToPay = 'the full amount' %}
-      {% if response.responseType == ResponseType.PART_ADMISSION.value %}
-        {% set amountToPay = totalAmount | numeral %}
-      {% endif %}
+      {% set amountToPay = totalAmount | numeral %}
       {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
         { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
       )) }}

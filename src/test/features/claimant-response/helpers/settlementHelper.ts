@@ -49,7 +49,7 @@ describe('settlementHelper', () => {
       expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
       expect(partyStatement.type).to.be.eql('OFFER')
       expect(partyStatement.offer).is.not.undefined
-      expect(partyStatement.offer.content).to.be.eql('John Smith will pay the full amount, no later than 31 December 2050')
+      expect(partyStatement.offer.content).to.be.eql('John Smith will pay £200, no later than 31 December 2050')
       expect(partyStatement.offer.completionDate).to.be.eql(MomentFactory.parse('2050-12-31'))
       expect(partyStatement.offer.paymentIntention).is.not.undefined
       expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('BY_SPECIFIED_DATE')

@@ -46,7 +46,7 @@ export function prepareDefendantOffer (claim: Claim): Offer {
 
   if (response.paymentIntention.paymentDate) {
     const completionDate: Moment = response.paymentIntention.paymentDate
-    const amount = response.responseType === ResponseType.PART_ADMISSION ? NumberFormatter.formatMoney(response.amount) : 'the full amount'
+    const amount = response.responseType === ResponseType.PART_ADMISSION ? NumberFormatter.formatMoney(response.amount) : NumberFormatter.formatMoney(claim.totalAmountTillToday)
     const content: string = `${response.defendant.name} will pay ${amount}, no later than ${MomentFormatter.formatLongDate(completionDate)}`
     return new Offer(content, completionDate, response.paymentIntention)
   } else if (response.paymentIntention.repaymentPlan) {
