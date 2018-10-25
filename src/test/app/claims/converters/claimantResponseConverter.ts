@@ -288,13 +288,5 @@ describe('claimant response converter ', () => {
       expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
 
-    it('court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT', () => {
-      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
-      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      draftClaimantResponse.decisionType = DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT
-      const errMsg = 'court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT'
-      expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
-    })
-
   })
 })
