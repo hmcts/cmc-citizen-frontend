@@ -87,9 +87,9 @@
       {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       {% if claim.response.paymentDeclaration %}
-        {{ claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) }}
-      {% else %}
         {{ claimPartAdmittedToOweForClaimantDashboard(claim) }}
+      {% else %}
+        {{ claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) }}
       {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       {{ claimFullAdmissionForClaimantDashboard(claim) }}
