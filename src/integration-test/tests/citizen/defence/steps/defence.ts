@@ -15,7 +15,6 @@ import { DefendantFreeMediationPage } from 'integration-test/tests/citizen/defen
 import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
 import { DefendantImpactOfDisputePage } from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
 import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
-import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
 import { DefendantMoreTimeRequestPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-request'
 import { DefendantNameAndAddressPage } from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
 import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
@@ -28,6 +27,7 @@ import { DefendantTimelineEventsPage } from 'integration-test/tests/citizen/defe
 import { DefendantViewClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-view-claim'
 import { DefendantWhenWillYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
 import { DefendantYourDefencePage } from 'integration-test/tests/citizen/defence/pages/defendant-your-defence'
+import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
 import { StatementOfMeansSteps } from 'integration-test/tests/citizen/defence/steps/statementOfMeans'
 import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defendant'
@@ -51,7 +51,6 @@ const defendantNameAndAddressPage: DefendantNameAndAddressPage = new DefendantNa
 const defendantDobPage: DefendantDobPage = new DefendantDobPage()
 const defendantMobilePage: DefendantMobilePage = new DefendantMobilePage()
 const defendantMoreTimeRequestPage: DefendantMoreTimeRequestPage = new DefendantMoreTimeRequestPage()
-const defendantMoreTimeConfirmationPage: DefendantMoreTimeConfirmationPage = new DefendantMoreTimeConfirmationPage()
 const defendantDefenceTypePage: DefendantDefenceTypePage = new DefendantDefenceTypePage()
 const defendantRejectAllOfClaimPage: DefendantRejectAllOfClaimPage = new DefendantRejectAllOfClaimPage()
 const defendantYourDefencePage: DefendantYourDefencePage = new DefendantYourDefencePage()
@@ -62,6 +61,7 @@ const defendantHowMuchHaveYouPaidTheClaimant: DefendantHowMuchHaveYouPaidPage = 
 const defendantTimelineOfEventsPage: DefendantTimelineEventsPage = new DefendantTimelineEventsPage()
 const defendantEvidencePage: DefendantEvidencePage = new DefendantEvidencePage()
 const defendantImpactOfDisputePage: DefendantImpactOfDisputePage = new DefendantImpactOfDisputePage()
+const defendantMoreTimeConfirmationPage: DefendantMoreTimeConfirmationPage = new DefendantMoreTimeConfirmationPage()
 const loginPage: LoginPage = new LoginPage()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const defendantPaymentDatePage: DefendantPaymentDatePage = new DefendantPaymentDatePage()
@@ -122,6 +122,11 @@ export class DefenceSteps {
       defendantDobPage.enterDOB(defendant.dateOfBirth)
     }
     defendantMobilePage.enterMobile(defendant.mobilePhone)
+  }
+
+  requestNoExtraTimeToRespond (): void {
+    defendantSteps.selectTaskMoreTimeNeededToRespond()
+    defendantMoreTimeRequestPage.chooseNo()
   }
 
   requestMoreTimeToRespond (): void {

@@ -44,12 +44,6 @@ const claimantRepaymentPlan: PaymentPlan = {
 
 export class ClaimantResponseSteps {
 
-  viewImmmediatePaymentOfferFromDashboard (claimRef: string): void {
-    this.viewClaimFromDashboard(claimRef, false)
-    I.see(claimRef)
-    I.see('The defendant will pay you immediately')
-  }
-
   acceptSettlementFromDashboardWhenRejectPaymentMethod (claimRef: string, paymentOption: PaymentOption): void {
     this.viewClaimFromDashboard(claimRef, true)
     this.acceptSettlement(false, paymentOption)
@@ -114,11 +108,8 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskSignASettlementAgreement()
     signSettlementAgreementPage.confirm()
     taskListPage.selectTaskCheckandSubmitYourResponse()
-    I.wait(5)
     checkAndSendPage.verifyFactsForSettlement()
-    I.wait(5)
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.wait(5)
     I.see('You’ve accepted the repayment plan')
     confirmationPage.clickGoToYourAccount()
   }

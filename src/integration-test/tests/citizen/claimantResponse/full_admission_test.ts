@@ -35,7 +35,9 @@ Scenario('I can as a claimant view the defendants full admission with immediate 
   I.click('Sign out')
   // as claimant
   userSteps.login(claim.claimantEmail)
-  claimantResponseSteps.viewImmmediatePaymentOfferFromDashboard(claim.claimRef)
+  claimantResponseSteps.viewClaimFromDashboard(claim.claimRef, false)
+  I.see(claim.claimRef)
+  I.see('The defendant will pay you immediately')
   I.click('My account')
   I.see(claim.claimRef)
   I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
