@@ -4,7 +4,16 @@
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
 
-    {% if paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+    {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+      {% set amountToPay = 'the full amount' %}
+      {% if response.responseType == ResponseType.PART_ADMISSION.value %}
+        {% set amountToPay = totalAmount | numeral %}
+      {% endif %}
+      {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
+        { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
+      )) }}
+      {{ row('Completion date', paymentIntention.paymentDate | date) }}
+    {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
       {% set amountToPay = 'the full amount' %}
       {% if response.responseType == ResponseType.PART_ADMISSION.value %}
         {% set amountToPay = totalAmount | numeral %}
