@@ -12,17 +12,12 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { DecisionType } from 'common/court-calculations/courtDecision'
 
 function getPaymentIntention (response: FullAdmissionResponse | PartialAdmissionResponse, draft: DraftClaimantResponse) {
   if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
     return response.paymentIntention
   } else {
-    if (draft.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      return draft.courtCalculatedPaymentIntention
-    } else {
-      return draft.courtOfferedPaymentIntention
-    }
+    return draft.courtOfferedPaymentIntention
   }
 }
 
@@ -30,6 +25,8 @@ function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as (FullAdmissionResponse | PartialAdmissionResponse)
+
+  console.log('draft--->',JSON.stringify(draft))
   res.render(Paths.signSettlementAgreementPage.associatedView, {
     form: form,
     claim: claim,
