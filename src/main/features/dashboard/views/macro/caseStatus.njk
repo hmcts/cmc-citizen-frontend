@@ -86,10 +86,10 @@
         {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
       {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      {% if claim.response.paymentDeclaration %}
-        {{ claimPartAdmittedToOweForClaimantDashboard(claim) }}
-      {% else %}
+      {% if claim.response.paymentDeclaration and claim.totalAmountTillToday < claim.response.amount %}
         {{ claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) }}
+      {% else %}
+        {{ claimPartAdmittedToOweForClaimantDashboard(claim) }}
       {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       {{ claimFullAdmissionForClaimantDashboard(claim) }}
