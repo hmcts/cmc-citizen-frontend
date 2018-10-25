@@ -11,7 +11,7 @@ import { Partner } from 'claims/models/response/statement-of-means/partner'
 import { PriorityDebts } from 'claims/models/response/statement-of-means/priorityDebts'
 
 export interface StatementOfMeans {
-  bankAccounts: BankAccount[]
+  bankAccounts?: BankAccount[]
   residence?: Residence
   dependant?: Dependant
   employment?: Employment
