@@ -2,13 +2,9 @@
 
 {% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 
-{% set heading = 'Choose how to proceed' %}
+{% set heading = 'Choose how to formalise repayment' %}
 
 {% block content %}
-
-  <p>
-    {{ t('There are two ways to formalise the repayment plan:') }}
-  </p>
 
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -32,10 +28,10 @@
               value: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value,
               checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value),
               bold: true,
-              hint: 'This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment.'
+              hint: 'This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment (CCJ). We’ll show you a suggested format for the agreement.'
             },
             {
-              label: 'Request a County Court Judgment (CCJ)',
+              label: 'Request a CCJ',
               value:  FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value,
               checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value),
               bold: true,
