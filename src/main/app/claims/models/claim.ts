@@ -166,10 +166,10 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-    } else if (this.moneyReceivedOn) {
-      return ClaimStatus.PAID_IN_FULL
-      // [WIP] isCCJPaidWithinMonth() call needed to prevent lint error
-      this.isCCJPaidWithinMonth()
+    } else if (this.isCCJPaidWithinMonth()) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (!this.isCCJPaidWithinMonth()) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else {
       throw new Error('Unknown Status')
     }
