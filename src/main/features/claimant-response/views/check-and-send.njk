@@ -80,7 +80,18 @@
     {%  if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
 
-      {% if draft.courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+      {% if draft.courtOfferedPaymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+        {% set amountToPay = 'the full amount' %}
+        {% if claim.response.responseType == ResponseType.PART_ADMISSION.value %}
+          {% set amountToPay = claim.response.amount | numeral %}
+        {% endif %}
+        {{ row('The agreement', t('{{ defendantFullName }} will pay ' + amountToPay + ', immediately.
+        {{ defendantFullName }} will receive the moment no later than {{ paymentDate }}.
+        Any cheques or transfers will be clear in {{ defendantFullName }} account by this date.',
+          { defendantFullName: claim.response.defendant.name, paymentDate: draft.courtOfferedPaymentIntention.paymentDate | date }
+        )) }}
+        {{ row('Completion date', draft.courtOfferedPaymentIntention.paymentDate | date) }}
+      {% elseif draft.courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
         {% set amountToPay = 'the full amount' %}
         {% if claim.response.responseType == ResponseType.PART_ADMISSION.value %}
           {% set amountToPay = claim.response.amount | numeral %}
