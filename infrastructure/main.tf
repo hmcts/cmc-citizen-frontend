@@ -22,11 +22,19 @@ locals {
   claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
   featureTogglesApiUrl = "http://rpe-feature-toggle-api-${local.local_env}.service.${local.local_ase}.internal"
   draftStoreUrl = "http://draft-store-service-${local.local_env}.service.${local.local_ase}.internal"
+
+  sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
+  asp_name = "${var.env == "prod" ? "cmc-citizen-frontend-prod" : "${var.product}-${var.env}"}"
 }
 
 data "azurerm_key_vault" "cmc_key_vault" {
   name = "${local.vaultName}"
   resource_group_name = "${local.vaultName}"
+}
+
+data "azurerm_key_vault_secret" "cookie_encryption_key" {
+  name = "citizen-cookie-encryption-key"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
 data "azurerm_key_vault_secret" "s2s_secret" {
@@ -72,6 +80,9 @@ module "citizen-frontend" {
   https_only = "true"
   capacity = "${var.capacity}"
   common_tags = "${var.common_tags}"
+  asp_name = "${local.asp_name}"
+  asp_rg = "${local.asp_name}"
+  instance_size = "${local.sku_size}"
 
   app_settings = {
     // Node specific vars
@@ -88,6 +99,7 @@ module "citizen-frontend" {
     // Application vars
     GA_TRACKING_ID = "${var.ga_tracking_id}"
     POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.postcode_lookup_api_key.value}"
+    COOKIE_ENCRYPTION_KEY = "${data.azurerm_key_vault_secret.cookie_encryption_key.value}"
 
     // IDAM
     IDAM_API_URL = "${var.idam_api_url}"
@@ -121,6 +133,7 @@ module "citizen-frontend" {
     // Enabled everywhere except prod
     FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
+    FEATURE_PAID_IN_FULL = "${var.feature_paid_in_full}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"

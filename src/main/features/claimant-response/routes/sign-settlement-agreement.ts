@@ -8,16 +8,27 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { SettlementAgreement } from 'features/claimant-response/form/models/settlementAgreement'
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
-import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { ResponseType } from 'claims/models/response/responseType'
+import { YesNoOption } from 'models/yesNoOption'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+
+function getPaymentIntention (response: FullAdmissionResponse | PartialAdmissionResponse, draft: DraftClaimantResponse) {
+  if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
+    return response.paymentIntention
+  } else {
+    return draft.courtOfferedPaymentIntention
+  }
+}
 
 function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   const claim: Claim = res.locals.claim
-
+  const draft: Draft<DraftClaimantResponse> = res.locals.draft
+  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as (FullAdmissionResponse | PartialAdmissionResponse)
   res.render(Paths.signSettlementAgreementPage.associatedView, {
     form: form,
     claim: claim,
-    paymentPlan: PaymentPlanHelper.createPaymentPlanFromClaim(claim),
+    paymentIntention: getPaymentIntention(response, draft.document),
     totalAmount: claim.response.responseType === ResponseType.PART_ADMISSION ? claim.response.amount : claim.totalAmountTillToday
   })
 }

@@ -9,7 +9,7 @@ const defaultPassword = 'Password12'
 const oauth2 = {
   client_id: 'cmc_citizen',
   redirect_uri: `${process.env.CITIZEN_APP_URL}/receiver`,
-  client_secret: process.env.OAUTH2_CLIENT_SECRET
+  client_secret: process.env.OAUTH_CLIENT_SECRET
 }
 
 const strategicIdam: boolean = baseURL.includes('core-compute') ||
@@ -54,6 +54,7 @@ export class IdamClient {
 
     const base64Authorisation: string = IdamClient.toBase64(`${username}:${password || defaultPassword}`)
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
+
     const authResponse = await request.post({
       url: `${baseURL}/oauth2/authorize?response_type=code&${oauth2Params}`,
       headers: {

@@ -9,18 +9,16 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('Based on the financial details provided by the defendant, we do not believe they would be able to meet these requirements.') }}</p>
+      <p>{{ t('Based on the financial details provided by the defendant, we don’t believe they would be able to make these repayments.') }}</p>
 
       <p>{{ t('The court affordability calculator has proposed the below repayment plan as the maximum the defendant can repay.') }}</p>
 
-      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-        {{
-        repaymentPlanBlock(
-          heading = 'The court’s proposed repayment plan',
-          paymentPlan = courtOrderPaymentPlan
-        )
-        }}
-      {% endif %}
+      {{
+      repaymentPlanBlock(
+        heading = '',
+        repaymentPlan = courtOrderPaymentPlan
+      )
+      }}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}

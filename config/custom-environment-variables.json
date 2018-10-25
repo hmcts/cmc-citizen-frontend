@@ -36,7 +36,8 @@
     "gaTrackingId": "GA_TRACKING_ID"
   },
   "session": {
-    "cookieName": "JWT_COOKIE_NAME"
+    "cookieName": "JWT_COOKIE_NAME",
+    "encryptionKey": "COOKIE_ENCRYPTION_KEY"
   },
   "fees": {
     "url": "FEES_URL",
@@ -80,6 +81,7 @@
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "newFeaturesConsent": "FEATURE_NEW_FEATURES_CONSENT",
     "admissions": "FEATURE_ADMISSIONS",
+    "paidInFull": "FEATURE_PAID_IN_FULL",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY"
   },

@@ -3,6 +3,8 @@ import * as config from 'config'
 import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
+import * as cookieEncrypter from 'cookie-encrypter'
+
 import * as bodyParser from 'body-parser'
 import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
@@ -23,6 +25,7 @@ import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
+import { PaidInFullFeature } from 'paid-in-full/index'
 
 export const app: express.Express = express()
 
@@ -45,6 +48,11 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(cookieParser())
+app.use(cookieEncrypter(config.get('session.encryptionKey'), {
+  options: {
+    algorithm: 'aes128'
+  }
+}))
 
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -53,12 +61,17 @@ if (env !== 'mocha') {
 }
 
 new EligibilityFeature().enableFor(app)
+
 new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
+
+if (FeatureToggles.isEnabled('paidInFull')) {
+  new PaidInFullFeature().enableFor(app)
+}
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   new TestingSupportFeature().enableFor(app)

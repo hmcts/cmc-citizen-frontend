@@ -97,7 +97,8 @@
       <h2 class="heading-small">{{ t('What to do if they don’t pay') }}</h2>
       <p> {{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', { paymentDate: paymentDate}) }} </p>
     {% endif %}
-  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE
+          and (not claim.settlement or claim.settlement and not claim.settlement.isOfferResponded()) %}
     <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
     <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in full by {{ paymentDate }}.',
         { defendantName: defendantName, paymentDate: paymentDate }) }} </p>
@@ -105,7 +106,8 @@
       {{ t('You can accept or reject their offer.') }}
     </p>
     {{ _viewAndRespondOffer(claim) }}
-  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS
+        and (not claim.settlement or claim.settlement and not claim.settlement.isOfferResponded()) %}
     <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
     <p> {{ t('{{ defendantName }} admits they owe all the money. They’ve offered to pay you in instalments.',
         { defendantName: defendantName }) }} </p>

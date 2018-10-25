@@ -47,7 +47,7 @@ describe('Claim eligibility guard', () => {
   context('when draft is marked as eligible', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = true
-      req.headers = {}
+      req.cookies = {}
     })
 
     it('should pass request through', async () => {
@@ -61,12 +61,9 @@ describe('Claim eligibility guard', () => {
   context('when draft is not marked as eligible but eligibility cookie exists', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
-      req.protocol = 'https'
-      req.headers = {
-        cookie: `${eligibilityCookieName}=${JSON.stringify(eligibleCookie)}`
+      req.cookies = {
+        [eligibilityCookieName]: eligibleCookie
       }
-      res.getHeader = () => { return void 0 }
-      res.setHeader = () => { return void 0 }
       idamServiceMock.resolveRetrieveServiceToken()
       draftStoreServiceMock.resolveSave()
     })
@@ -88,7 +85,7 @@ describe('Claim eligibility guard', () => {
   context('when draft is not marked as eligible and eligibility cookie does not exist', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
-      req.headers = {}
+      req.cookies = {}
     })
 
     it('should redirect to eligibility page', async () => {

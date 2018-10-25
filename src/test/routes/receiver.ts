@@ -3,6 +3,7 @@ import { expect } from 'chai'
 import { Paths as ClaimPaths } from 'claim/paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import * as config from 'config'
+import * as cookieEncrypter from 'cookie-encrypter'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
@@ -102,9 +103,11 @@ describe('Login receiver', async () => {
         it('should redirect to task list', async () => {
           claimStoreServiceMock.resolveLinkDefendant()
 
+          const encryptedEligibilityCookie = cookieEncrypter.encryptCookie('j:' + JSON.stringify(eligibleCookie), { key: config.get('session.encryptionKey') })
+
           await request(app)
             .get(AppPaths.receiver.uri)
-            .set('Cookie', `${cookieName}=ABC;${eligibilityCookieName}=${JSON.stringify(eligibleCookie)}`)
+            .set('Cookie', `${cookieName}=ABC;${eligibilityCookieName}=e:${encryptedEligibilityCookie}`)
             .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
         })
       })

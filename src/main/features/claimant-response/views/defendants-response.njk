@@ -35,13 +35,6 @@
   <p>{{ t('"{{ reason }}"', { reason: reason }) }}</p>
 {% endmacro %}
 
-{% macro financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, statementOfMeans) %}
-  <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
-  <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
-  <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
-  {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
-{% endmacro %}
-
 {% macro timelineFragment(timeline) %}
   <table>
     <thead>
@@ -79,19 +72,18 @@
           {{
             repaymentPlanBlock(
               heading = 'How they want to pay',
-              paymentPlan = paymentPlan
+              repaymentPlan = claim.response.paymentIntention.repaymentPlan
             )
           }}
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-        {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
       {% endif %}
 
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
         {% if page === 0 %}
-          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. However they don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
           <p>
             {{
               paymentIntentionFragment(
@@ -118,11 +110,10 @@
         {% elseif page === 1 %}
           {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
             {{
-              repaymentPlanBlock(
-                heading = '',
-                repaymentPlan = claim.response.paymentIntention.repaymentPlan,
-                paymentPlan = paymentPlan
-              )
+            repaymentPlanBlock(
+              heading = 'How they want to pay',
+              repaymentPlan = claim.response.paymentIntention.repaymentPlan
+            )
             }}
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
             {{
@@ -135,7 +126,6 @@
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
 
-          {{ financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, claim.response.statementOfMeans) }}
         {% endif %}
       {% endif %}
 

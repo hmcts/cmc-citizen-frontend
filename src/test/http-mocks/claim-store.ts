@@ -300,15 +300,9 @@ export function resolveRejectOffer (by: string = 'claimant') {
     .reply(HttpStatus.CREATED)
 }
 
-export function resolveSignSettlementAgreement () {
-  mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp(`/.+/settlement`))
-    .reply(HttpStatus.CREATED)
-}
-
-export function rejectSignSettlementAgreement (reason: string = 'HTTP error') {
-  mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp(`/.+/settlement`))
+export function rejectSaveClaimantResponse (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/responses`)
+    .post(new RegExp('/.+/claimant/[0-9]+'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
@@ -370,5 +364,23 @@ export function resolveRetrieveUserRoles (...userRoles: string[]): mock.Scope {
 export function rejectRetrieveUserRoles () {
   mock(`${serviceBaseURL}/user`)
     .get('/roles')
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
+}
+
+export function resolveClaimantResponse () {
+  mock(`${serviceBaseURL}/responses`)
+    .post(new RegExp('/.+/claimant/[0-9]+'))
+    .reply(HttpStatus.OK)
+}
+
+export function resolveSettlement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/settlement'))
+    .reply(HttpStatus.CREATED)
+}
+
+export function rejectSettlement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/settlement'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }

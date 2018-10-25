@@ -17,6 +17,7 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
+import { CCJModelConverter } from 'claims/ccjModelConverter'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -93,7 +94,8 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
         }
 
-        await CCJClient.request(claim.externalId, draft, user)
+        const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document)
+        await CCJClient.request(claim.externalId, countyCourtJudgment, user, true)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }

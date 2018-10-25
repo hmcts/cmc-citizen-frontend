@@ -121,7 +121,7 @@ describe('Defendant response: Statement of means: debts', () => {
               .send({ declared: 'true', rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -137,7 +137,7 @@ describe('Defendant response: Statement of means: debts', () => {
               .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
