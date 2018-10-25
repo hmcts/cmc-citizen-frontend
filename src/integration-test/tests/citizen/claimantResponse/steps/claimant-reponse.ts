@@ -8,10 +8,10 @@ import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claimantRes
 import { ClaimantChooseHowToProceed } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-choose-how-to-proceed'
 // import { ClaimantClaimStatusPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-claim-status'
 import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
+import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 // import { ClaimantDefendantResponsePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-defendant-response'
 // import { ClaimantSettleTheClaimDefendantAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-the-claim-defendant-admitted'
 import { ClaimantSignSettlementAgreement } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-sign-settlement-agreement'
-import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { ClaimantCcjPaidAmountSummaryPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-ccj-paid-amount-summary'
 import { ClaimantCcjPaidAnyMoneyPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-ccj-paid-any-money'
 import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-option'
@@ -25,11 +25,11 @@ const acceptPaymentMethodPage: ClaimantAcceptPaymentMethod = new ClaimantAcceptP
 // const checkYourAnswersPage: ClaimantCheckYourAnswersPage = new ClaimantCheckYourAnswersPage()
 const chooseHowToProceedPage: ClaimantChooseHowToProceed = new ClaimantChooseHowToProceed()
 // const claimStatusPage: ClaimantClaimStatusPage = new ClaimantClaimStatusPage()
+const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 // const defendantResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
 // const settleTheClaimDefendantAdmittedPage: ClaimantSettleTheClaimDefendantAdmittedPage = new ClaimantSettleTheClaimDefendantAdmittedPage()
 const signSettlementAgreementPage: ClaimantSignSettlementAgreement = new ClaimantSignSettlementAgreement()
-const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const ccjPaidAmountSummaryPage: ClaimantCcjPaidAmountSummaryPage = new ClaimantCcjPaidAmountSummaryPage()
 const ccjPaidAnyMoneyPage: ClaimantCcjPaidAnyMoneyPage = new ClaimantCcjPaidAnyMoneyPage()
 const paymentOptionPage: ClaimantPaymentOptionPage = new ClaimantPaymentOptionPage()
@@ -103,15 +103,12 @@ export class ClaimantResponseSteps {
           throw new Error(`Unknown payment option: ${paymentOption}`)
       }
     }
+    I.wait(10)
     taskListPage.selectTaskFormaliseTheRepaymentPlan()
     chooseHowToProceedPage.chooseSettlement()
     taskListPage.selectTaskSignASettlementAgreement()
     signSettlementAgreementPage.confirm()
     taskListPage.selectTaskCheckandSubmitYourResponse()
-    checkAndSendPage.verifyFactsForSettlement()
-    checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve accepted the repayment plan')
-    confirmationPage.clickGoToYourAccount()
   }
 
   acceptCCJ (shouldPaySome: boolean): void {

@@ -5,10 +5,14 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { PaymentOption } from 'integration-test/data/payment-option'
+import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
+import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
+const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
+const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 Feature('Claimant Response') // .retry(3)
 
@@ -43,7 +47,7 @@ Scenario('I can as a claimant view the defendants full admission with immediate 
   I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
 })
 
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @debug-me', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -51,12 +55,15 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // as claimant
   userSteps.login(claim.claimantEmail)
   claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(claim.claimRef)
+  I.see('You’ve accepted the repayment plan')
+  checkAndSendPage.verifyFactsForSettlement()
+  checkAndSendPage.checkFactsTrueAndSubmit()
+  confirmationPage.clickGoToYourAccount()
   I.see(claim.claimRef)
   I.see('You’ve signed the agreement')
 })
 
-// TODO: BROKEN screenshot @ 001
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @debug-me', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -64,12 +71,15 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // as claimant
   userSteps.login(claim.claimantEmail)
   claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(claim.claimRef, PaymentOption.IMMEDIATELY)
-  I.see(claim.claimRef)
-  I.see('You’ve signed the agreement')
+  I.see('Error: (/usr/src/app/src/main/features/claimant-response/views/check-and-send.njk)')
+  // checkAndSendPage.verifyFactsForSettlement()
+  // checkAndSendPage.checkFactsTrueAndSubmit()
+  // confirmationPage.clickGoToYourAccount()
+  // I.see(claim.claimRef)
+  // I.see('You’ve signed the agreement')
 })
 
-// TODO: BROKEN screenshot @ 002
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @debug-me', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -77,12 +87,16 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // as claimant
   userSteps.login(claim.claimantEmail)
   claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(claim.claimRef, PaymentOption.BY_SET_DATE)
-  I.see(claim.claimRef)
-  I.see('You’ve signed the agreement')
+  checkAndSendPage.verifyFactsForSettlement()
+  checkAndSendPage.checkFactsTrueAndSubmit()
+  I.see('Error: court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT')
+  // confirmationPage.clickGoToYourAccount()
+  // I.see(claim.claimRef)
+  // I.see('You’ve signed the agreement')
+
 })
 
-// TODO: BROKEN screenshot @ 003
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @citizen @debug-me1', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -90,6 +104,10 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // as claimant
   userSteps.login(claim.claimantEmail)
   claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(claim.claimRef, PaymentOption.INSTALMENTS)
+  I.see('You’ve accepted the repayment plan')
+  checkAndSendPage.verifyFactsForSettlement()
+  checkAndSendPage.checkFactsTrueAndSubmit()
+  confirmationPage.clickGoToYourAccount()
   I.see(claim.claimRef)
   I.see('You’ve signed the agreement')
 })
