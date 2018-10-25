@@ -1,0 +1,3 @@
+ignore:
+- "src/main/server.ts"
+- "src/main/ts-paths-bootstrap.ts"
