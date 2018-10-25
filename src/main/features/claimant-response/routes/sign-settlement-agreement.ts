@@ -26,7 +26,6 @@ function renderView (form: Form<SettlementAgreement>, res: express.Response) {
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as (FullAdmissionResponse | PartialAdmissionResponse)
 
-  console.log('draft--->',JSON.stringify(draft))
   res.render(Paths.signSettlementAgreementPage.associatedView, {
     form: form,
     claim: claim,
