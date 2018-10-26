@@ -5,13 +5,12 @@ import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { Moment } from 'moment'
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 
 export class CourtDecisionHelper {
-  static createCourtDecision (claim: Claim, draft: Draft<DraftClaimantResponse>): DecisionType {
+  static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
 
@@ -33,14 +32,14 @@ export class CourtDecisionHelper {
     )
   }
 
-  private static getClaimantLastPaymentDate (draft: Draft<DraftClaimantResponse>): Moment {
-    switch (draft.document.alternatePaymentMethod.paymentOption.option) {
+  private static getClaimantLastPaymentDate (draft: DraftClaimantResponse): Moment {
+    switch (draft.alternatePaymentMethod.paymentOption.option) {
       case PaymentType.IMMEDIATELY:
         return MomentFactory.currentDate().add(5,'days')
       case PaymentType.BY_SET_DATE:
-        return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+        return draft.alternatePaymentMethod.paymentDate.date.toMoment()
       case PaymentType.INSTALMENTS:
-        return PaymentPlanHelper.createPaymentPlanFromForm(draft.document.alternatePaymentMethod.paymentPlan).calculateLastPaymentDate()
+        return PaymentPlanHelper.createPaymentPlanFromForm(draft.alternatePaymentMethod.paymentPlan).calculateLastPaymentDate()
       default:
         throw new Error('Unknown claimant payment option!')
     }

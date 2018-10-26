@@ -9,7 +9,6 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 import { Claim } from 'claims/models/claim'
-import { Draft } from '@hmcts/draft-store-client'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
@@ -22,6 +21,7 @@ import { Frequency } from 'common/frequency/frequency'
 import { User } from 'idam/user'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { Draft } from '@hmcts/draft-store-client'
 
 class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse> {
 
@@ -35,7 +35,7 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
 
   buildTaskListUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
-    const draft: Draft<DraftClaimantResponse> = res.locals.draft
+    const draft: DraftClaimantResponse = res.locals.draft.document
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
@@ -61,12 +61,12 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
     }
   }
 
-  generateCourtOfferedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType): PaymentIntention {
+  generateCourtOfferedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const courtOfferedPaymentIntention = new PaymentIntention()
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
+      if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
         courtOfferedPaymentIntention.paymentOption = PaymentOption.IMMEDIATELY
         courtOfferedPaymentIntention.paymentDate = MomentFactory.currentDate().add(5,'days')
       }
@@ -113,8 +113,8 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
     }
   }
 
-  generateCourtCalculatedPaymentIntention (draft: Draft<DraftClaimantResponse>, claim: Claim, decisionType: DecisionType) {
-    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+  generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType) {
+    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
       return undefined
     }
 
@@ -127,8 +127,8 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
     return courtCalculatedPaymentIntention
   }
 
-  getCourtDecision (draft: Draft<DraftClaimantResponse>, claim: Claim): DecisionType {
-    if (draft.document.alternatePaymentMethod.paymentOption.option !== PaymentType.IMMEDIATELY) {
+  getCourtDecision (draft: DraftClaimantResponse, claim: Claim): DecisionType {
+    if (draft.alternatePaymentMethod.paymentOption.option !== PaymentType.IMMEDIATELY) {
       return undefined
     }
     return CourtDecisionHelper.createCourtDecision(claim, draft)
@@ -136,10 +136,10 @@ class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse>
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
-    const decisionType: DecisionType = this.getCourtDecision(locals.draft, locals.claim)
+    const decisionType: DecisionType = this.getCourtDecision(locals.draft.document, locals.claim)
     locals.draft.document.decisionType = decisionType
-    locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft, locals.claim, decisionType)
-    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft, locals.claim, decisionType)
+    locals.draft.document.courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
 
     return super.saveDraft(locals)
   }

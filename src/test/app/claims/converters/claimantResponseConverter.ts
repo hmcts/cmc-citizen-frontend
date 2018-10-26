@@ -191,7 +191,8 @@ describe('claimant response converter ', () => {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
           'claimantPaymentIntention': {
-            'paymentOption': 'IMMEDIATELY'
+            'paymentOption': 'IMMEDIATELY',
+            'paymentDate': MomentFactory.currentDate().add(5,'days')
           },
           'courtDetermination': {
             ...courtDecisionInstalments,
@@ -259,7 +260,8 @@ describe('claimant response converter ', () => {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
           'claimantPaymentIntention': {
-            'paymentOption': 'IMMEDIATELY'
+            'paymentOption': 'IMMEDIATELY',
+            'paymentDate': MomentFactory.currentDate().add(5,'days')
           },
           'courtDetermination': {
             ...courtDecisionInstalments,
