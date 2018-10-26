@@ -12,7 +12,10 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Dependants } from 'response/form/models/statement-of-means/dependants'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
+import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
+import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
+import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { PartnerDisabilityOption } from 'response/form/models/statement-of-means/partnerDisability'
 
 const page: RoutablePath = Paths.dependantsPage
 
@@ -20,7 +23,6 @@ const page: RoutablePath = Paths.dependantsPage
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -28,7 +30,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Dependants, Dependants.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
@@ -41,17 +42,42 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.statementOfMeans.dependants = form.model
+        // skip if defendant and partner are both disabled, or if defendant is severely disabled
+        const defendantIsDisabled: boolean = draft.document.statementOfMeans.disability.option === DisabilityOption.YES
+        const defendantIsSeverelyDisabled: boolean = draft.document.statementOfMeans.severeDisability
+          && draft.document.statementOfMeans.severeDisability.option === SevereDisabilityOption.YES
+        const partnerIsDisabled: boolean = draft.document.statementOfMeans.cohabiting.option === CohabitingOption.YES
+          && draft.document.statementOfMeans.partnerDisability.option === PartnerDisabilityOption.YES
+
+        // also skip if there aren't any children
+        const hasChildren: boolean = form.model.numberOfChildren && totalNumberOfChildren(form.model) > 0
+
+        const skipDisabilityQuestion: boolean = !hasChildren || (defendantIsDisabled && partnerIsDisabled) || defendantIsSeverelyDisabled
+
         if (!form.model.numberOfChildren || !form.model.numberOfChildren.between16and19) {
           draft.document.statementOfMeans.education = undefined
+        }
+        if (skipDisabilityQuestion) {
+          draft.document.statementOfMeans.dependantsDisability = undefined
         }
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
         if (form.model.numberOfChildren && form.model.numberOfChildren.between16and19) {
           res.redirect(Paths.educationPage.evaluateUri({ externalId: externalId }))
+        } else if (skipDisabilityQuestion) {
+          res.redirect(Paths.otherDependantsPage.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(Paths.maintenancePage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.dependantsDisabilityPage.evaluateUri({ externalId: externalId }))
         }
       }
     })
   )
+
+function totalNumberOfChildren (dependants: Dependants): number {
+  let count: number = 0
+  count += dependants.numberOfChildren.under11 || 0
+  count += dependants.numberOfChildren.between11and15 || 0
+  count += dependants.numberOfChildren.between16and19 || 0
+  return count
+}

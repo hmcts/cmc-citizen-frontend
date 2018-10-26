@@ -14,7 +14,6 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { UUIDUtils } from 'shared/utils/uuidUtils'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = StatementOfMeansPaths.onTaxPaymentsPage
 
@@ -32,7 +31,6 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
@@ -41,7 +39,6 @@ export default express.Router()
     })
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     stateGuardRequestHandler,
     FormValidator.requestHandler(OnTaxPayments, OnTaxPayments.fromObject),
@@ -58,7 +55,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
-        res.redirect(StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId }))
       }
     })
   )
