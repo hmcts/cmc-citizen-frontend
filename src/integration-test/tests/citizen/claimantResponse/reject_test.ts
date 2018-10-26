@@ -105,7 +105,7 @@ Scenario(
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid the amount claimed incl any fees @citizen',
+  'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen',
   async (I: I) => {
 
     const claimantName = createClaimant(PartyType.INDIVIDUAL).name

@@ -18,6 +18,8 @@ import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claima
 import { ClaimantPaymentDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-date'
 import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-plan'
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
+import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
+import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -35,11 +37,13 @@ const ccjPaidAnyMoneyPage: ClaimantCcjPaidAnyMoneyPage = new ClaimantCcjPaidAnyM
 const paymentOptionPage: ClaimantPaymentOptionPage = new ClaimantPaymentOptionPage()
 const paymentDatePage: ClaimantPaymentDatePage = new ClaimantPaymentDatePage()
 const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
+const courtOfferedSetDatPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
+const rejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
 const payBySetDateAcceptedPage: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
 const claimantRepaymentPlan: PaymentPlan = {
-  equalInstalment: 20.00,
+  equalInstalment: 5.00,
   firstPaymentDate: '2025-01-01',
-  frequency: 'everyWeek'
+  frequency: 'everyMonth'
 }
 
 export class ClaimantResponseSteps {
@@ -81,33 +85,42 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     if (shouldAcceptPaymentMethod) {
       acceptPaymentMethodPage.chooseYes()
+      taskListPage.selectTaskFormaliseTheRepaymentPlan()
+      chooseHowToProceedPage.chooseSettlement()
+      taskListPage.selectTaskSignASettlementAgreement()
+      signSettlementAgreementPage.confirm()
     } else {
       acceptPaymentMethodPage.chooseNo()
       taskListPage.selectProposeAnAlternativeRepaymentPlan()
       switch (paymentOption) {
         case PaymentOption.IMMEDIATELY:
           paymentOptionPage.chooseImmediately()
+          taskListPage.selectTaskFormaliseTheRepaymentPlan()
+          chooseHowToProceedPage.chooseSettlement()
+          taskListPage.selectTaskSignASettlementAgreement()
+          signSettlementAgreementPage.confirm()
           break
         case PaymentOption.BY_SET_DATE:
           paymentOptionPage.chooseFullBySetDate()
           paymentDatePage.enterDate('2025-01-01')
           paymentDatePage.saveAndContinue()
           payBySetDateAcceptedPage.continue()
+          taskListPage.selectTaskFormaliseTheRepaymentPlan()
+          chooseHowToProceedPage.chooseSettlement()
+          taskListPage.selectTaskSignASettlementAgreement()
+          signSettlementAgreementPage.confirm()
           break
         case PaymentOption.INSTALMENTS:
           paymentOptionPage.chooseInstalments()
           paymentPlanPage.enterRepaymentPlan(claimantRepaymentPlan)
           paymentPlanPage.saveAndContinue()
+          courtOfferedSetDatPage.reject()
+          rejectionReasonPage.enterReason('My rejection reason')
           break
         default:
           throw new Error(`Unknown payment option: ${paymentOption}`)
       }
     }
-    I.wait(10)
-    taskListPage.selectTaskFormaliseTheRepaymentPlan()
-    chooseHowToProceedPage.chooseSettlement()
-    taskListPage.selectTaskSignASettlementAgreement()
-    signSettlementAgreementPage.confirm()
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
