@@ -65,9 +65,8 @@
           installmentAmount: installmentAmount, paymentSchedule: paymentSchedule, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
     {% endif %}
   </p>
-  <p>
-    {{ t('We’ll contact you when they respond.') }}
-  </p>
+  <p>{{ t('We’ve also sent them your explanation of why you don’t believe you owe the amount claimed.') }}</p>
+  <p>{{ t('We’ll contact you when they respond.') }}</p>
   <p>
     {{ _downloadResponseLink(claim) }}
   </p>
