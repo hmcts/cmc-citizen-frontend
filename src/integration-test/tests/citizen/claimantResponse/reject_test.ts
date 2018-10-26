@@ -11,7 +11,7 @@ const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
-Feature('Claimant Response') // .retry(3)
+Feature('Claimant Response').retry(3)
 
 // TODO: reuse - similar to a few places
 async function prepareClaim (I: I, claimData: ClaimData) {

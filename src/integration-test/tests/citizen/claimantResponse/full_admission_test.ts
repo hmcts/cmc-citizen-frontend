@@ -14,7 +14,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
-Feature('Claimant Response') // .retry(3)
+Feature('Claimant Response').retry(3)
 
 // TODO: reuse - similar to defence: full-admission-test
 async function prepareClaim (I: I) {
