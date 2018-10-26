@@ -2,6 +2,7 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
@@ -137,7 +138,7 @@ describe('Defendant: payment page', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ instalmentAmount: undefined })
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid amount for equal instalments'))
+            .expect(res => expect(res).to.be.successful.withText(ValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND))
         })
       })
     })
