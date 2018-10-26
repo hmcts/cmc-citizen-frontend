@@ -20,7 +20,7 @@ export class CourtOrderRow extends MultiRowFormItem {
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(0.01, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(1.00, { message: GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND })
   amount?: number
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
