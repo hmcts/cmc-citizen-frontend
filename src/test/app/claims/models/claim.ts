@@ -242,24 +242,24 @@ describe('Claim', () => {
 
     it('should return true when CCJ is paid within month of countyCourtJudgmentIssuedAt', () => {
       claim.countyCourtJudgmentIssuedAt = MomentFactory.currentDate().add(1, 'month')
-      expect(claim.isCCJPaidWithinMonth()).to.be.true
+      expect(claim.isCCJPaidWithinMonth()).to.be.equal(true)
     })
 
     it('should return true when CCJ is paid within month of countyCourtJudgmentRequestedAt', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().add(1, 'month')
-      expect(claim.isCCJPaidWithinMonth()).to.be.true
+      expect(claim.isCCJPaidWithinMonth()).to.be.equal(true)
     })
 
     it('should return false when CCJ is paid 2 months after countyCourtJudgmentIssuedAt', () => {
       claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
       claim.countyCourtJudgmentIssuedAtedAt = MomentFactory.currentDate()
-      expect(claim.isCCJPaidWithinMonth()).to.be.false
+      expect(claim.isCCJPaidWithinMonth()).to.be.equal(false)
     })
 
     it('should return false when CCJ is paid 2 months after countyCourtJudgmentRequestedAt', () => {
       claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
-      expect(claim.isCCJPaidWithinMonth()).to.be.false
+      expect(claim.isCCJPaidWithinMonth()).to.be.equal(false)
     })
   })
 })
