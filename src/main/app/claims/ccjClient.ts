@@ -6,7 +6,7 @@ import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
-import { Redetermination } from 'ccj/form/models/redetermination'
+import { ReDetermination } from 'ccj/form/models/redetermination'
 import { MadeBy } from 'offer/form/models/madeBy'
 
 export class CCJClient {
@@ -25,9 +25,9 @@ export class CCJClient {
     })
   }
 
-  static redetermination (externalId: string, redetermination: Redetermination, user: User, madeBy: MadeBy) {
+  static redetermination (externalId: string, redetermination: ReDetermination, user: User, madeBy: MadeBy) {
     return request.post(`${claimStoreApiUrl}/${externalId}/redetermination`, {
-      body: { explaination: redetermination.text, partyType: madeBy.value },
+      body: { explanation: redetermination.text, partyType: madeBy.value },
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }

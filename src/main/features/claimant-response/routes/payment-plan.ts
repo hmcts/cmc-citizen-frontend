@@ -115,9 +115,6 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
       const claimantFrequency: Frequency = Frequency.of(draft.document.alternatePaymentMethod.paymentPlan.paymentSchedule.value)
       const paymentPlanConvertedToClaimantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(claimantFrequency)
 
-      console.log(paymentPlanConvertedToClaimantFrequency)
-      console.log(claimantFrequency)
-      console.log(paymentPlanFromDefendantFinancialStatement)
       if (draft.document.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtOfferedPaymentIntention.repaymentPlan = {

@@ -4,7 +4,7 @@ export class ValidationErrors {
   static readonly TYPE_REQUIRED: string = 'Enter a valid reason'
 }
 
-export class Redetermination {
+export class ReDetermination {
   @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
   text?: string
 
@@ -12,15 +12,15 @@ export class Redetermination {
     this.text = text
   }
 
-  static fromObject (value?: any): Redetermination {
+  static fromObject (value?: any): ReDetermination {
     if (value == null) {
       return value
     }
 
-    return new Redetermination(value.text)
+    return new ReDetermination(value.text)
   }
 
-  deserialize (input?: any): Redetermination {
+  deserialize (input?: any): ReDetermination {
     if (input) {
       this.text = input.text
     }

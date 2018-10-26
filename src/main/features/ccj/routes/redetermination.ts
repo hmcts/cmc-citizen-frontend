@@ -7,10 +7,10 @@ import { Claim } from 'claims/models/claim'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
 import { CCJClient } from 'claims/ccjClient'
-import { Redetermination } from 'ccj/form/models/redetermination'
+import { ReDetermination } from 'ccj/form/models/redetermination'
 import { MadeBy } from 'offer/form/models/madeBy'
 
-function renderView (form: Form<Redetermination>, res: express.Response): void {
+function renderView (form: Form<ReDetermination>, res: express.Response): void {
   const claim: Claim = res.locals.claim
 
   res.render(Paths.redeterminationPage.associatedView, {
@@ -23,13 +23,13 @@ function renderView (form: Form<Redetermination>, res: express.Response): void {
 export default express.Router()
   .get(Paths.redeterminationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      renderView(new Form(new Redetermination()), res)
+      renderView(new Form(new ReDetermination()), res)
     }))
   .post(
     Paths.redeterminationPage.uri,
-    FormValidator.requestHandler(Redetermination, Redetermination.fromObject),
+    FormValidator.requestHandler(ReDetermination, ReDetermination.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const form: Form<Redetermination> = req.body
+      const form: Form<ReDetermination> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)

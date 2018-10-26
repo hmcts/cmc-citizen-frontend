@@ -11,7 +11,7 @@
     <div class="column-two-thirds">
 
       <div class="govuk-box-highlight">
-        {% if redetermination_requested_at !== undefined %}
+        {% if reDetermination_requested_at !== undefined %}
           <h1 class="bold-large">
             {{ t('You’ve asked for a judge to decide a repayment plan') }}
           </h1>
@@ -22,7 +22,7 @@
           </div>
           </p>
           <p>
-            <span class="bold">{{ redetermination_requested_at | date }}</span>
+            <span class="bold">{{ reDetermination_requested_at | date }}</span>
           </p>
         {% else %}
           <h1 class="bold-large">{{ t('County Court Judgment requested') }}</h1>
@@ -30,7 +30,7 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      {% if redetermination_requested_at !== undefined %}
+      {% if reDetermination_requested_at !== undefined %}
         <p>{{ t('A judge will decide what the defendant can afford to pay based on their financial details.') }}</p>
 
         <P>{{ t('We’ll contact both you and {{ defendantName }} to tell you what to do next.', { defendantName: defendantName }) }}</P>
