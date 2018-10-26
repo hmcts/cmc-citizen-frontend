@@ -50,7 +50,6 @@ export class Claim {
   reDeterminationRequestedAt: Moment
 
   deserialize (input: any): Claim {
-    console.log('>>>>', JSON.stringify(input))
     if (input) {
       this.id = input.id
       this.claimantId = input.submitterId
@@ -109,7 +108,6 @@ export class Claim {
       }
     }
 
-    console.log('------->', JSON.stringify(this))
     return this
   }
 
