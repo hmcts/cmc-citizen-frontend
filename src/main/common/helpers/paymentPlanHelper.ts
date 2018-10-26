@@ -121,7 +121,7 @@ export class PaymentPlanHelper {
       paymentPlanForm.totalAmount,
       paymentPlanForm.instalmentAmount,
       paymentPlanForm.paymentSchedule ? Frequency.of(paymentPlanForm.paymentSchedule.value) : undefined,
-      undefined)
+      paymentPlanForm.firstPaymentDate ? paymentPlanForm.firstPaymentDate.toMoment() : undefined)
   }
 
   private static createPaymentPlanFromDraftDraftClaimantResponse (draft: DraftClaimantResponse): PaymentPlan {
