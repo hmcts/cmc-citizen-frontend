@@ -11,6 +11,7 @@ import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
   fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
@@ -128,6 +129,11 @@ export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
