@@ -236,7 +236,9 @@ describe('claimant response converter ', () => {
             'repaymentPlan': {
               'firstPaymentDate': new LocalDate(2018, 12, 31).toMoment(),
               'instalmentAmount': 100,
-              'paymentSchedule': 'EVERY_MONTH'
+              'paymentSchedule': 'EVERY_MONTH',
+              'paymentLength': '',
+              'completionDate': new LocalDate(2019, 12, 30).toMoment()
             }
           },
           'courtDetermination': {
