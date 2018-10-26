@@ -1,9 +1,10 @@
 import { Moment } from 'moment'
 import { ClaimData } from 'claims/models/claimData'
 import { MomentFactory } from 'shared/momentFactory'
-import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { ClaimantResponse } from 'claims/models/claimantResponse'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
@@ -29,14 +30,16 @@ export class Claim {
   claimData: ClaimData
   moreTimeRequested: boolean
   respondedAt: Moment
+  response: Response
   claimantEmail: string
   countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
   countyCourtJudgmentIssuedAt: Moment
-  response: Response
   defendantEmail: string
   settlement: Settlement
   settlementReachedAt: Moment
+  claimantResponse: ClaimantResponse
+  claimantRespondedAt: Moment
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
@@ -47,6 +50,7 @@ export class Claim {
   reDeterminationRequestedAt: Moment
 
   deserialize (input: any): Claim {
+    console.log('>>>>', JSON.stringify(input))
     if (input) {
       this.id = input.id
       this.claimantId = input.submitterId
@@ -81,6 +85,12 @@ export class Claim {
       if (input.settlementReachedAt) {
         this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
       }
+      if (input.claimantResponse) {
+        this.claimantResponse = ClaimantResponse.deserialize(input.claimantResponse)
+      }
+      if (input.claimantRespondedAt) {
+        this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
+      }
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
@@ -98,6 +108,8 @@ export class Claim {
         this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
       }
     }
+
+    console.log('------->', JSON.stringify(this))
     return this
   }
 
