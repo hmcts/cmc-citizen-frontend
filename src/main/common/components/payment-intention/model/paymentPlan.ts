@@ -1,9 +1,12 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { Fractions, IsLessThan, IsValidLocalDate } from '@hmcts/cmc-validators'
-import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
+import { IsDefined, IsIn, Min, ValidateNested } from 'class-validator'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
-import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
+import {
+  ValidationErrors as GlobalValidationErrors,
+  ValidationErrors as CommonValidationErrors
+} from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { PaymentPlan as PaymentPlanCalcs } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
@@ -19,9 +22,18 @@ export class PaymentPlan {
 
   totalAmount?: number
 
-  @IsPositive({ message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID, groups: ['default', 'claimant-suggestion'] })
-  @IsLessThan('totalAmount', { message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID, groups: ['default', 'claimant-suggestion'] })
-  @Fractions(0, 2, { message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS, groups: ['default', 'claimant-suggestion'] })
+  @Min(1.00, {
+    message: GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND,
+    groups: ['default', 'claimant-suggestion']
+  })
+  @IsLessThan('totalAmount', {
+    message: ValidationErrors.INSTALMENTS_AMOUNT_INVALID,
+    groups: ['default', 'claimant-suggestion']
+  })
+  @Fractions(0, 2, {
+    message: CommonValidationErrors.AMOUNT_INVALID_DECIMALS,
+    groups: ['default', 'claimant-suggestion']
+  })
   instalmentAmount?: number
 
   @ValidateNested({ groups: ['default', 'claimant-suggestion'] })
@@ -40,7 +52,7 @@ export class PaymentPlan {
                instalmentAmount?: number,
                firstPaymentDate?: LocalDate,
                paymentSchedule?: PaymentSchedule
-              ) {
+  ) {
     this.totalAmount = totalAmount
     this.instalmentAmount = instalmentAmount
     this.firstPaymentDate = firstPaymentDate
