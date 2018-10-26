@@ -46,8 +46,8 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     const courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     if (courtCalculatedPaymentIntention) {
       locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
-      locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
+    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
 
     return super.saveDraft(locals)
   }
