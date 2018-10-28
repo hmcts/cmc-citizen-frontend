@@ -47,7 +47,7 @@
         {% if draft.response.type === ResponseType.DEFENCE %}
           {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
             <li>{{ t('Print and complete the form') }}</li>
-          {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
+          {% elseif draft.rejectAllOfClaim.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
             <li>{{ t('Print and complete the forms (ignore section 4 of the defence form unless you’re making a counterclaim).') }}</li>
           {% endif %}
         {% endif %}
@@ -78,7 +78,7 @@
       {% if draft.response.type === ResponseType.DEFENCE %}
         {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
           <p>{{ t(externalLink('Download defence and counterclaim form ', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
-        {% elseif draft.howMuchPaidClaimant.option === HowMuchPaidClaimantOption.LESS_THAN_AMOUNT_CLAIMED %}
+        {% elseif draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
           <p>{{ t(externalLink('Download admission form', asset_paths["pdf"] + '/OCON9A.pdf') + ' (PDF, 102 KB).') | safe }}</p>
           <p>{{ t(externalLink('Download defence form', asset_paths["pdf"] + '/OCON9B.pdf') + ' (PDF, 76 KB).') | safe }}</p>
         {% endif %}
