@@ -9,6 +9,7 @@ export class ValidationErrors {
   static readonly NUMBER_REQUIRED: string = 'Enter a valid number'
   static readonly VALID_OWED_AMOUNT_REQUIRED: string = 'Enter a valid amount owed'
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
+  static readonly AMOUNT_INVALID_LESS_THAN_ONE_POUND: string = 'Enter an amount of £1 or more'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
   static readonly NON_NEGATIVE_NUMBER_REQUIRED: string = 'Don’t enter a negative number'
   static readonly POSITIVE_NUMBER_REQUIRED: string = 'Enter a number higher than 0'
@@ -17,7 +18,7 @@ export class ValidationErrors {
 
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly DATE_NOT_VALID: string = 'Enter a valid date'
-  static readonly DATE_IN_FUTURE: string = 'Correct the date. You can\'t use a future date'
+  static readonly DATE_IN_FUTURE: string = 'Correct the date. You can’t use a future date'
 
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly AMOUNT_NOT_VALID: string = 'Enter a valid amount'
