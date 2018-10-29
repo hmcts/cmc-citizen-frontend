@@ -1,0 +1,21 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set headingVisible = false %}
+{% set heading = 'Confirmation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <div class="govuk-box-highlight">
+        <h1 class="bold-large">{{ t('The claim is now settled') }}</h1>
+      </div>
+      {% include "includes/service_survey_link.njk" %}
+
+      <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
+
+      {{ supportWidget() }}
+    </div>
+  </div>
+{% endblock %}

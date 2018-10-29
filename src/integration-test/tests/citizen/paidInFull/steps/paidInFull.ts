@@ -1,4 +1,4 @@
-import { DatePaidPage } from '../../paidInFull/pages/date-paid'
+import { DatePaidPage } from 'integration-test/tests/citizen/paidInFull/pages/date-paid'
 
 const paidInFullDatePaidPage: DatePaidPage = new DatePaidPage()
 
