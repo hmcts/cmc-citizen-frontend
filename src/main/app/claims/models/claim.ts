@@ -220,7 +220,9 @@ export class Claim {
     if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
       const response: FullAdmissionResponse = this.response
       return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-        response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+        response.paymentIntention && response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+    } else {
+      return false
     }
   }
 
