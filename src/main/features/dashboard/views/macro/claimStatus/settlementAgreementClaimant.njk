@@ -1,0 +1,56 @@
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "./utilityMacros.njk" import downloadAgreementLink %}
+
+{% macro settlementAgreementSignedByClaimantDashboard(claim) %}
+    {{ t('You’ve signed a settlement agreement. The defendant can choose to sign it or not.') }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantDeadlinePassedDashboard(claim) %}
+  {{ t('The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.') }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByBothClaimantDashboard(claim) %}
+  {{ t('You’ve both signed a settlement agreement') }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-small">{{ t('You’ve signed a settlement agreement') }}</h2>
+  <p>{{ t('We’ve emailed {{ defendantName }} the repayment plan and the settlement agreement for them to sign.',
+      { defendantName: defendantName }) }}</p>
+  <p>{{ t('They must respond before 4pm on {{ respondDate }}. We’ll email you when they respond.',
+      { respondDate: claim.respondToResponseDeadline | date }) }}</p>
+  <p>{{ t('If they do not respond you can request a County Court Judgment.') }}</p>
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  <h2 class="heading-small">{{ t('The defendant has not responded to your settlement agreement') }}</h2>
+  <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan they offered.') }}</p>
+  <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay it.') }}</p>
+  <p>{{ t('{{ defendantName }} can still sign the settlement agreement until you request a CCJ.',
+      { defendantName: claim.claimData.defendant.name }) }}</p>
+  <form novalidate method="post">
+    {{ csrfProtection(csrf) }}
+    {{ submitButton('Request a County Court Judgment') }}
+  </form>
+{% endmacro %}
+
+{% macro settlementAgreementSignedByBothClaimantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <p>{{ t('The agreement says the defendant will pay you in full by {{ paymentDate }}.',
+        { paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date }) }}</p>
+    {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    <p>{{ t('The agreement says the defendant will pay you in instalments of {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
+        {
+          instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+          firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+        }) }}</p>
+  {% endif %}
+  <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
+  <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
+  <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
+  <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've been paid</a>
+{% endmacro %}
