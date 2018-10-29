@@ -26,7 +26,7 @@ export class CCJClient {
   }
 
   static redetermination (externalId: string, redetermination: ReDetermination, user: User, madeBy: MadeBy) {
-    return request.post(`${claimStoreApiUrl}/${externalId}/redetermination`, {
+    return request.post(`${claimStoreApiUrl}/${externalId}/re-determination`, {
       body: { explanation: redetermination.text, partyType: madeBy.value },
       headers: {
         Authorization: `Bearer ${user.bearerToken}`

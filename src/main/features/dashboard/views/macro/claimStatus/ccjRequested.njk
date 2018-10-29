@@ -6,24 +6,13 @@
 {% endmacro %}
 
 {% macro ccjRequestedForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('A County Court Judgment has been issued') }}</h2>
+  <h2 class="heading-small">{{ t('You’ve requested a County Court Judgment (CCJ)') }}</h2>
   <p>
-    {{ t('We’ll post a copy of the judgment to you and to {{ defendantName }}.',{ defendantName: claim.claimData.defendant.name }) }}
+    {{ t('We’ll contact you within 14 days to tell you whether the judgment has been entered.') }}
   </p>
-  {% if claim.countyCourtJudgment.ccjType === 'DETERMINATION' %}
-    <p>
-      <a
-        href="{{ CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View the repayment plan') }}
-      </a>
-    </p>
-  {% endif %}
-
-  <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-
   <p>
-    <a href="{{ StatePaidPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }) }}"
-       class="button button-secondary">{{ t('Tell us you’ve been paid') }}
-    </a>
+    {{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
+      { defendantName: claim.claimData.defendant.name }) }}
   </p>
 {% endmacro %}
 
@@ -42,7 +31,7 @@
     {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
       + 'We’ll contact you within 14 days to tell you whether the claimant’s request for judgment has been successful.',
       { claimantName : claim.claimData.claimant.name,
-        ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+      ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
   </p>
   <p>
     {{ t('You can no longer respond to the claim.') }}
