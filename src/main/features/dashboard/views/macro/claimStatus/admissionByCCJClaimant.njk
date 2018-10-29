@@ -1,0 +1,15 @@
+{% from "internalLink.njk" import internalLink %}
+{% from "form.njk" import linkButton %}
+
+{% macro admissionByCCJClaimantDashboard(claim) %}
+  {{ t('A County Court Judgment has been issued.') }}
+{% endmacro %}
+
+{% macro admissionByCCJClaimantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('A County Court Judgment has been issued') }}</h2>
+  <p>{{ t('We’ll post a copy of the judgment to you and to {{ defendantName }}',
+      { defendantName: claim.claimData.defendant.name }) }}</p>
+  <p>{{ internalLink('View the repayment plan', DashboardPaths.dashboardPage.uri) }}</p>
+  <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
+  <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've been paid</a>
+{% endmacro %}
