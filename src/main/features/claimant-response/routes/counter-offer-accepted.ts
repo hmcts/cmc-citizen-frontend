@@ -34,16 +34,10 @@ export default express.Router()
       const isCourtOrderPaymentPlanConvertedByDefendantFrequency =
         (defendantPaymentOption !== 'BY_SPECIFIED_DATE') ? defendantPaymentPlan.frequency && differentPaymentFrequency : false
 
-      let courtOrderPaymentPlan
-
-      if (draft.document.courtOfferedPaymentIntention !== undefined) {
-        courtOrderPaymentPlan = draft.document.courtOfferedPaymentIntention.repaymentPlan
-      }
-
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
         isCourtOrderPaymentPlanConvertedByDefendantFrequency: isCourtOrderPaymentPlanConvertedByDefendantFrequency,
         claimantPaymentPlan: claimantPaymentPlan,
-        courtOrderPaymentPlan: courtOrderPaymentPlan
+        courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention ? draft.document.courtOfferedPaymentIntention.repaymentPlan : undefined
       })
     }))
   .post(
