@@ -101,7 +101,9 @@
 
           {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
             <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
-            {{ timelineFragment(claim.response.timeline) }}
+            <div class="form-group">
+              {{ timelineFragment(claim.response.timeline) }}
+            </div>
           {% endif %}
 
           {% if claim.response.evidence and claim.response.evidence.comment %}
