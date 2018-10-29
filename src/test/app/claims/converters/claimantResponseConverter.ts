@@ -236,7 +236,9 @@ describe('claimant response converter ', () => {
             'repaymentPlan': {
               'firstPaymentDate': new LocalDate(2018, 12, 31).toMoment(),
               'instalmentAmount': 100,
-              'paymentSchedule': 'EVERY_MONTH'
+              'paymentSchedule': 'EVERY_MONTH',
+              'paymentLength': '',
+              'completionDate': new LocalDate(2019, 12, 30).toMoment()
             }
           },
           'courtDetermination': {
@@ -285,14 +287,6 @@ describe('claimant response converter ', () => {
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
       draftClaimantResponse.decisionType = DecisionType.COURT
       const errMsg = 'court offered payment intention not found where decision type is COURT'
-      expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
-    })
-
-    it('court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT', () => {
-      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
-      draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      draftClaimantResponse.decisionType = DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT
-      const errMsg = 'court calculated payment intention not found where decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT'
       expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
 
