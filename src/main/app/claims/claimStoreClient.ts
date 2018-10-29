@@ -47,13 +47,19 @@ export class ClaimStoreClient {
     })
   }
 
-  savePaidInFull (externalId: string, submitter: User, draft: Draft<DraftPaidInFull>): Promise<void> {
-    const datePaid = draft.document.datePaid.date
-    return this.request.put(`${claimStoreApiUrl}/${externalId}/paid-in-full/${datePaid}`, {
-      headers: {
-        Authorization: `Bearer ${submitter.bearerToken}`
-      }
-    })
+  savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
+    return this.request
+      .put(`${claimStoreApiUrl}/${externalId}/paid-in-full`, {
+        body: {
+          'moneyReceivedOn': draft.datePaid.date.toMoment()
+        },
+        headers: {
+          Authorization: `Bearer ${submitter.bearerToken}`
+        }
+      })
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
   }
 
   saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
