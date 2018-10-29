@@ -26,61 +26,9 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 
-class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
-  getView (): string {
-    return 'claimant-response/views/payment-plan'
-  }
+export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
-  getHeading (): string {
-    return 'Suggest instalments for the defendant'
-  }
-
-  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {
-    return new DefaultModelAccessor('alternatePaymentMethod')
-  }
-
-  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
-    locals.draft.document.decisionType = decisionType
-
-    const courtCalculatedPaymentIntention = this.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-    if (courtCalculatedPaymentIntention) {
-      locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
-    }
-    locals.draft.document.courtOfferedPaymentIntention = this.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-
-    return super.saveDraft(locals)
-  }
-
-  buildPostSubmissionUri (req: express.Request, res: express.Response): string {
-    const claim: Claim = res.locals.claim
-    const draft: DraftClaimantResponse = res.locals.draft.document
-    const courtDecision: DecisionType = CourtDecisionHelper.createCourtDecision(claim, draft)
-    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
-    const externalId: string = req.params.externalId
-    switch (courtDecision) {
-      case DecisionType.COURT: {
-        return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
-      }
-      case DecisionType.DEFENDANT: {
-        if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
-        }
-
-        if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
-        }
-        break
-      }
-      case DecisionType.CLAIMANT:
-      case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT: {
-        return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
-      }
-    }
-  }
-
-  generateCourtOfferedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
+  static generateCourtOfferedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtOfferedPaymentIntention = new PaymentIntention()
 
@@ -152,7 +100,7 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
     }
   }
 
-  generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType) {
+  static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType) {
     if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
       return undefined
     }
@@ -173,6 +121,61 @@ class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
     return courtCalculatedPaymentIntention
   }
+
+  getView (): string {
+    return 'claimant-response/views/payment-plan'
+  }
+
+  getHeading (): string {
+    return 'Suggest instalments for the defendant'
+  }
+
+  createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {
+    return new DefaultModelAccessor('alternatePaymentMethod')
+  }
+
+  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
+    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
+    locals.draft.document.decisionType = decisionType
+
+    const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    if (courtCalculatedPaymentIntention) {
+      locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
+    }
+    locals.draft.document.courtOfferedPaymentIntention = PaymentPlanPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+
+    return super.saveDraft(locals)
+  }
+
+  buildPostSubmissionUri (req: express.Request, res: express.Response): string {
+    const claim: Claim = res.locals.claim
+    const draft: DraftClaimantResponse = res.locals.draft.document
+    const courtDecision: DecisionType = CourtDecisionHelper.createCourtDecision(claim, draft)
+    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    const externalId: string = req.params.externalId
+    switch (courtDecision) {
+      case DecisionType.COURT: {
+        return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+      }
+      case DecisionType.DEFENDANT: {
+        if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+        }
+
+        if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
+        }
+        break
+      }
+      case DecisionType.CLAIMANT:
+      case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT: {
+        return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
+      }
+    }
+  }
+
+
 }
 
 /* tslint:disable:no-default-export */
