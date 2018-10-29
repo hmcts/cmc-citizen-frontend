@@ -174,8 +174,6 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
       }
     }
   }
-
-
 }
 
 /* tslint:disable:no-default-export */
