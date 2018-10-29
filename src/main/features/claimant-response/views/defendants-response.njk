@@ -8,7 +8,7 @@
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 {% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
-{% from "financialDetails.njk" import financialDetailsTable %}
+{% from "financialDetails.njk" import financialDetailsTable, financialDetailsBlock %}
 
 {% set defendantName = claim.claimData.defendant.name %}
 
@@ -78,6 +78,7 @@
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+        {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
 
       {% endif %}
 
@@ -127,6 +128,7 @@
           {% endif %}
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+          {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
 
         {% endif %}
       {% endif %}
