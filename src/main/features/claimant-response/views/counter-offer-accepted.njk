@@ -20,13 +20,15 @@
               courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule
             }) }}</p>
 
-          {{
-          repaymentPlanBlock(
+          {% if courtOrderPaymentPlan %}
+            {{
+            repaymentPlanBlock(
             heading = '',
             repaymentPlan = courtOrderPaymentPlan
-          )
-          }}
-          
+            )
+            }}
+          {% endif %}
+
         {% else %}
           <p> {{ t('The court has accepted your repayment plan.') }} </p>
         {% endif %}
