@@ -13,12 +13,14 @@
 
       <p>{{ t('The court affordability calculator has determined a new repayment plan as the most the defendant can repay.') }}</p>
 
-      {{
-      repaymentPlanBlock(
+      {% if courtOrderPaymentPlan %}
+        {{
+        repaymentPlanBlock(
         heading = '',
         repaymentPlan = courtOrderPaymentPlan
-      )
-      }}
+        )
+        }}
+      {% endif %}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}

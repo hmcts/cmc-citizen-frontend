@@ -20,7 +20,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
     claim: claim,
-    courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
+    courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention ? draft.document.courtOfferedPaymentIntention.repaymentPlan : undefined
   })
 }
 
