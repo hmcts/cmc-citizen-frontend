@@ -22,13 +22,13 @@
       <form method="post" novalidate class="income-expense-calculation">
         {{ csrfProtection(csrf) }}
 
-        {{ priorityDebt(form, name = 'mortgage', label = PriorityDebtType.MORTGAGE.displayValue | capitalize) }}
-        {{ priorityDebt(form, name = 'rent', label = PriorityDebtType.RENT.displayValue | capitalize) }}
-        {{ priorityDebt(form, name = 'councilTax', label = PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue | capitalize) }}
-        {{ priorityDebt(form, name = 'gas', label = PriorityDebtType.GAS.displayValue | capitalize) }}
-        {{ priorityDebt(form, name = 'electricity', label = PriorityDebtType.ELECTRICITY.displayValue | capitalize) }}
-        {{ priorityDebt(form, name = 'water', label = PriorityDebtType.WATER.displayValue | capitalize) }}
-        {{ priorityDebt(form, name = 'maintenance', label = PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue | capitalize) }}
+        {{ priorityDebt(form, name = 'mortgage', label = PriorityDebtType.MORTGAGE.displayValue) }}
+        {{ priorityDebt(form, name = 'rent', label = PriorityDebtType.RENT.displayValue) }}
+        {{ priorityDebt(form, name = 'councilTax', label = PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue) }}
+        {{ priorityDebt(form, name = 'gas', label = PriorityDebtType.GAS.displayValue) }}
+        {{ priorityDebt(form, name = 'electricity', label = PriorityDebtType.ELECTRICITY.displayValue) }}
+        {{ priorityDebt(form, name = 'water', label = PriorityDebtType.WATER.displayValue) }}
+        {{ priorityDebt(form, name = 'maintenance', label = PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue) }}
 
 
         {{ linkButton('Recalculate total monthly repayments', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
