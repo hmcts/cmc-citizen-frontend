@@ -46,14 +46,12 @@
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-
-  <p>{{ t('{{ defendantName }} has rejected your claim. You’ll have to go to a hearing to resolve it.',
-        { defendantName: claim.claimData.defendant.name }) }}</p>
+  <h2 class="heading-small">{{ t('The defendant has rejected your claim') }}</h2>
+  <p>{{ t('They said they dispute your claim.') }}</p>
 
   {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
 
-  <p>{{ t('Your claim will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
+  <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
 
   <p>
@@ -82,7 +80,7 @@
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('{{ defendantName }} has rejected the claim. But they’ve suggested a mediation session to help resolve this dispute.',
+  {{ t('{{ defendantName }} has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.',
     { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
@@ -93,10 +91,10 @@
       { defendantName: claim.claimData.defendant.name }) }}
   </p>
 
-  <p>{{ externalLink('Find out how mediation works (PDF, 399KB)', 'https://formfinder.hmctsformfinder.justice.gov.uk/ex730-eng.pdf') }}</p>
+  <p>{{ t(externalLink('Find out how mediation works', 'https://formfinder.hmctsformfinder.justice.gov.uk/ex730-eng.pdf') + ' (PDF, 399KB)') | safe }}</p>
 
   <p>
-    {{ t('You need to email {{ emailAddress }} before {{ respondToMediationDeadline }} to tell us if you agree to mediation or not.',
+    {{ t('You need to email {{ emailAddress }} before before 4pm on {{ respondToMediationDeadline }} to tell us if you agree to mediation or not.',
       { emailAddress: supportEmailAddress, respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}
   </p>
   <p>
