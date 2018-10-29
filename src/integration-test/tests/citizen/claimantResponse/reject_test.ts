@@ -28,7 +28,7 @@ async function prepareClaim (I: I, claimData: ClaimData) {
   }
 }
 
-Scenario('As a claimant I can reject the claim @citizen',
+Scenario('As a claimant I can reject the claim @citizen @debug',
   async (I: I) => {
 
     const defendantName = createDefendant(PartyType.INDIVIDUAL).name
@@ -65,7 +65,7 @@ Scenario('As a claimant I can reject the claim @citizen',
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen',
+  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @debug',
   async (I: I) => {
 
     const claimantName = createClaimant(PartyType.INDIVIDUAL).name
@@ -105,7 +105,7 @@ Scenario(
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen',
+  'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @debug',
   async (I: I) => {
 
     const claimantName = createClaimant(PartyType.INDIVIDUAL).name

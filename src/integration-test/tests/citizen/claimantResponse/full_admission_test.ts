@@ -32,7 +32,7 @@ async function prepareClaim (I: I) {
   }
 }
 
-Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen', async (I: I) => {
+Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @debug', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
@@ -47,7 +47,7 @@ Scenario('I can as a claimant view the defendants full admission with immediate 
   I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
 })
 
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @debug', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -63,7 +63,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.see('You’ve signed the agreement')
 })
 
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @debug', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -79,7 +79,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // I.see('You’ve signed the agreement')
 })
 
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @debug', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -97,7 +97,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
 })
 
 // TODO: confirm this journey
-Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @citizen @debug', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -113,7 +113,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // I.see('You’ve signed the agreement')
 })
 
-Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @citizen @debug', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
@@ -125,7 +125,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.see('You requested a County Court Judgment')
 })
 
-Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @citizen', async (I: I) => {
+Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @citizen @debug', async (I: I) => {
   const claim = await prepareClaim(I)
   // as defendant
   helperSteps.finishResponseWithFullAdmission(claim.claimRef, claim.defendantEmail, PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
