@@ -101,23 +101,20 @@ export class ClaimantResponseConverter {
         paymentIntention.paymentDate = this.convertPaymentDate(draftPaymentIntention.paymentOption, draftPaymentIntention.paymentDate)
       }
       if (draftPaymentIntention.paymentPlan) {
-        const repaymentPlan: RepaymentPlan = {
+        paymentIntention.repaymentPlan = {
           firstPaymentDate: draftPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
           instalmentAmount: draftPaymentIntention.paymentPlan.instalmentAmount,
           paymentSchedule: draftPaymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule,
           completionDate: draftPaymentIntention.paymentPlan.completionDate.toMoment(),
           paymentLength: draftPaymentIntention.paymentPlan.paymentLength
         } as RepaymentPlan
-        paymentIntention.repaymentPlan = repaymentPlan
       }
       return paymentIntention
-    } else {
-      if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-        throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
-      } else {
-        return undefined
-      }
     }
+    if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+      throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
+    }
+    return undefined
   }
 
   private static convertPaymentDate (paymentOption: PaymentOptionDraft, paymentDate: PaymentDate): Moment {
