@@ -138,6 +138,6 @@ Scenario(
     I.see(claim.claimRef)
     I.see('Claim status')
     I.see('The defendant’s response')
-    I.see(`${defendantName} believes that they’ve paid the claim in full. Email i-am-configurable@example.com if you want to proceed with the claim.`)
+    I.see(`${defendantName} believes that they’ve paid the claim in full.`)
     I.click('Sign out')
   })

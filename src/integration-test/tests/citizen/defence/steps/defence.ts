@@ -148,9 +148,12 @@ export class DefenceSteps {
   }
 
   addTimeLineOfEvents (timeline: Timeline): void {
+    I.wait(5)
     I.see('Add your timeline of events')
     defendantTimelineOfEventsPage.enterTimelineEvent(0, timeline.events[0].date, timeline.events[0].description)
+    I.wait(5)
     defendantTimelineOfEventsPage.enterTimelineEvent(1, timeline.events[1].date, timeline.events[1].description)
+    I.wait(5)
     defendantTimelineOfEventsPage.submitForm()
   }
 
@@ -264,7 +267,7 @@ export class DefenceSteps {
         this.rejectAllOfClaimAsDisputeClaim()
         I.see('Why do you disagree with the claim?')
         this.submitDefenceText('I fully dispute this claim')
-        this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent] } as Timeline)
+        this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent, { date: 'june', description: 'ok' } as TimelineEvent] } as Timeline)
         this.enterEvidence('description', 'comment')
         this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
