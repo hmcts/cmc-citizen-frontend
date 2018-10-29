@@ -28,7 +28,7 @@ async function prepareClaim (I: I, claimData: ClaimData) {
   }
 }
 
-Scenario('As a claimant I can reject the claim @citizen @debug',
+Scenario('As a claimant I can reject the claim @citizen',
   async (I: I) => {
 
     const defendantName = createDefendant(PartyType.INDIVIDUAL).name
@@ -59,13 +59,13 @@ Scenario('As a claimant I can reject the claim @citizen @debug',
     I.click(claim.claimRef)
     I.see(claim.claimRef)
     I.see('Claim status')
-    I.see('The defendant’s response')
-    I.see(`${defendantName} has rejected your claim. You’ll have to go to a hearing to resolve it.`)
+    I.see('The defendant has rejected your claim')
+    I.see(`They said they dispute your claim.`)
     I.click('Sign out')
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @debug',
+  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @not-complete',
   async (I: I) => {
 
     const claimantName = createClaimant(PartyType.INDIVIDUAL).name
@@ -93,7 +93,7 @@ Scenario(
     // check dashboard
     I.click('My account')
     I.see(claim.claimRef)
-    I.see(`The defendant believes that they’ve paid the claim in full.`) // TODO IS THIS WRONG? should be defendants name
+    I.see(`The defendant believes they owe you £50. You can accept or reject that this is the amount owed.`) // TODO IS THIS WRONG? should be defendants name
     // check status
     I.click(claim.claimRef)
     I.see(claim.claimRef)
@@ -105,7 +105,7 @@ Scenario(
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @debug',
+  'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen',
   async (I: I) => {
 
     const claimantName = createClaimant(PartyType.INDIVIDUAL).name

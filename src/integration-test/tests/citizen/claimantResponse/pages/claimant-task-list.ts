@@ -16,8 +16,8 @@ export class ClaimantTaskListPage {
     I.click('Accept or reject their repayment plan')
   }
 
-  selectTaskFormaliseTheRepaymentPlan (): void {
-    I.click('Formalise the repayment plan')
+  selectTaskChooseHowToFormaliseRepayment (): void {
+    I.click('Choose how to formalise repayment')
   }
 
   selectTaskSignASettlementAgreement (): void {

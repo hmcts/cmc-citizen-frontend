@@ -4,13 +4,9 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 
 import { ClaimantAcceptPaymentMethod } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-accept-payment-method'
 import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-task-list'
-// import { ClaimantCheckYourAnswersPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-your-answers'
 import { ClaimantChooseHowToProceed } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-choose-how-to-proceed'
-// import { ClaimantClaimStatusPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-claim-status'
 import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
-// import { ClaimantDefendantResponsePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-defendant-response'
-// import { ClaimantSettleTheClaimDefendantAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-the-claim-defendant-admitted'
 import { ClaimantSignSettlementAgreement } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-sign-settlement-agreement'
 import { ClaimantCcjPaidAmountSummaryPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-ccj-paid-amount-summary'
 import { ClaimantCcjPaidAnyMoneyPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-ccj-paid-any-money'
@@ -18,27 +14,21 @@ import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claima
 import { ClaimantPaymentDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-date'
 import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-plan'
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
-import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
-import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
+import { ClaimantCounterOfferAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-counter-offer-accepted'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
 const acceptPaymentMethodPage: ClaimantAcceptPaymentMethod = new ClaimantAcceptPaymentMethod()
-// const checkYourAnswersPage: ClaimantCheckYourAnswersPage = new ClaimantCheckYourAnswersPage()
 const chooseHowToProceedPage: ClaimantChooseHowToProceed = new ClaimantChooseHowToProceed()
-// const claimStatusPage: ClaimantClaimStatusPage = new ClaimantClaimStatusPage()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
-// const defendantResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
-// const settleTheClaimDefendantAdmittedPage: ClaimantSettleTheClaimDefendantAdmittedPage = new ClaimantSettleTheClaimDefendantAdmittedPage()
 const signSettlementAgreementPage: ClaimantSignSettlementAgreement = new ClaimantSignSettlementAgreement()
 const ccjPaidAmountSummaryPage: ClaimantCcjPaidAmountSummaryPage = new ClaimantCcjPaidAmountSummaryPage()
 const ccjPaidAnyMoneyPage: ClaimantCcjPaidAnyMoneyPage = new ClaimantCcjPaidAnyMoneyPage()
 const paymentOptionPage: ClaimantPaymentOptionPage = new ClaimantPaymentOptionPage()
 const paymentDatePage: ClaimantPaymentDatePage = new ClaimantPaymentDatePage()
 const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
-const courtOfferedSetDatPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
-const rejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
+const counterOfferAcceptedPage: ClaimantCounterOfferAcceptedPage = new ClaimantCounterOfferAcceptedPage()
 const payBySetDateAcceptedPage: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
 const claimantRepaymentPlan: PaymentPlan = {
   equalInstalment: 5.00,
@@ -85,7 +75,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     if (shouldAcceptPaymentMethod) {
       acceptPaymentMethodPage.chooseYes()
-      taskListPage.selectTaskFormaliseTheRepaymentPlan()
+      taskListPage.selectTaskChooseHowToFormaliseRepayment()
       chooseHowToProceedPage.chooseSettlement()
       taskListPage.selectTaskSignASettlementAgreement()
       signSettlementAgreementPage.confirm()
@@ -95,32 +85,27 @@ export class ClaimantResponseSteps {
       switch (paymentOption) {
         case PaymentOption.IMMEDIATELY:
           paymentOptionPage.chooseImmediately()
-          taskListPage.selectTaskFormaliseTheRepaymentPlan()
-          chooseHowToProceedPage.chooseSettlement()
-          taskListPage.selectTaskSignASettlementAgreement()
-          signSettlementAgreementPage.confirm()
           break
         case PaymentOption.BY_SET_DATE:
           paymentOptionPage.chooseFullBySetDate()
           paymentDatePage.enterDate('2025-01-01')
           paymentDatePage.saveAndContinue()
           payBySetDateAcceptedPage.continue()
-          taskListPage.selectTaskFormaliseTheRepaymentPlan()
-          chooseHowToProceedPage.chooseSettlement()
-          taskListPage.selectTaskSignASettlementAgreement()
-          signSettlementAgreementPage.confirm()
           break
         case PaymentOption.INSTALMENTS:
           paymentOptionPage.chooseInstalments()
           paymentPlanPage.enterRepaymentPlan(claimantRepaymentPlan)
           paymentPlanPage.saveAndContinue()
-          courtOfferedSetDatPage.reject()
-          rejectionReasonPage.enterReason('My rejection reason')
+          counterOfferAcceptedPage.continue()
           break
         default:
           throw new Error(`Unknown payment option: ${paymentOption}`)
       }
     }
+    taskListPage.selectTaskChooseHowToFormaliseRepayment()
+    chooseHowToProceedPage.chooseSettlement()
+    taskListPage.selectTaskSignASettlementAgreement()
+    signSettlementAgreementPage.confirm()
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
@@ -131,7 +116,7 @@ export class ClaimantResponseSteps {
     I.see('COMPLETED')
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseYes()  // no is covered in settlement journey
-    taskListPage.selectTaskFormaliseTheRepaymentPlan()
+    taskListPage.selectTaskChooseHowToFormaliseRepayment()
     chooseHowToProceedPage.chooseRequestCcj()
     taskListPage.selectTaskRequestCountyCourtJudgment()
     if (shouldPaySome) {
