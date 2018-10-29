@@ -40,8 +40,8 @@ export default express.Router()
 
         const { externalId } = req.params
 
-        await new ClaimStoreClient().savePaidInFull(externalId, user, draft)
-
-        res.redirect(Paths.datePaidPage.uri.replace(':externalId', externalId))
+        await new ClaimStoreClient().savePaidInFull(externalId, user, draft.document)
+        await new DraftService().delete(draft.id, user.bearerToken)
+        res.redirect(Paths.confirmationPage.uri.replace(':externalId', externalId))
       }
     }))
