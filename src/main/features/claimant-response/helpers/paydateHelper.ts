@@ -14,7 +14,7 @@ export function getEarliestPaymentDateForAlternatePaymentInstalments (claim: Cla
   const defendantPaymentDate: moment.Moment = defendantPaymentOption === PaymentOption.INSTALMENTS ?
     response.paymentIntention.repaymentPlan.firstPaymentDate : response.paymentIntention.paymentDate
 
-  if (defendantPaymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+  if (defendantPaymentOption === PaymentOption.IMMEDIATELY || defendantPaymentOption === PaymentOption.BY_SPECIFIED_DATE) {
     return earliestPermittedDate
   }
 
