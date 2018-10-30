@@ -62,11 +62,11 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
       throw new Error('court offered payment intention not found where decision type is COURT')
     }
-    if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
+    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       return undefined
     }
 
-    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+    if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
       return undefined
     }
 
@@ -116,7 +116,7 @@ export class ClaimantResponseConverter {
       return paymentIntention
     }
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      throw new Error(` vb payment intention not found where decision type is ${decisionType}`)
+      throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
     }
     return undefined
   }

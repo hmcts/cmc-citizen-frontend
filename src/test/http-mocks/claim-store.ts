@@ -276,6 +276,20 @@ export function resolveSaveCcjForExternalId () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
+export function resolveSaveReDeterminationForExternalId (explanation: string) {
+
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
+      '/re-determination'))
+    .reply(HttpStatus.OK, { explanation: explanation, partyType: MadeBy.CLAIMANT })
+}
+
+export function rejectSaveReDeterminationForExternalId (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/.+/re-determination'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
 export function rejectSaveOfferForDefendant (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/offers/defendant'))
