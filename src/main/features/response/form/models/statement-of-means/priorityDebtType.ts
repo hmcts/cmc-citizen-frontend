@@ -8,7 +8,7 @@ export class PriorityDebtType {
   static readonly ELECTRICITY = new PriorityDebtType('ELECTRICITY', 'Electricity')
   static readonly WATER = new PriorityDebtType('WATER', 'Water')
   static readonly MAINTENANCE_PAYMENTS =
-    new PriorityDebtType('MAINTENANCE_PAYMENTS', 'Maintenance Payments')
+    new PriorityDebtType('MAINTENANCE_PAYMENTS', 'Maintenance payments')
 
   readonly value: string
   readonly displayValue: string
