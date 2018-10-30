@@ -93,7 +93,7 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
   }
 
   getHeading (): string {
-    return 'What date do you want the defendant to pay by?'
+    return 'When do you want the defendant to pay?'
   }
 
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {
