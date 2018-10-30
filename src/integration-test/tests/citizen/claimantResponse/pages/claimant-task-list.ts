@@ -5,7 +5,7 @@ const I: I = actor()
 export class ClaimantTaskListPage {
 
   selectTaskViewDefendantResponse (): void {
-    I.click('View the defendant’s full response')
+    I.click('View the defendant’s response')
   }
 
   selectTaskAcceptOrRejectPartAdmit (): void {
