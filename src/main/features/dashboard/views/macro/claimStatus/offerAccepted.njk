@@ -1,3 +1,5 @@
+{% from "./utilityMacros.njk" import signAgreementLink %}
+
 {% macro offerAcceptedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <p>
@@ -63,16 +65,6 @@
     </p>
     <p>
   {% endif %}
-  {{ _signAgreementLink(claim) }}
+  {{ signAgreementLink(claim) }}
   </p>
-{% endmacro %}
-
-{% macro _signAgreementLink(claim) %}
-  {% if claim.settlement.isThroughAdmissions() %}
-    <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}"
-       class="button button-secondary">{{ t('Sign the settlement agreement') }}</a>
-  {% else %}
-    <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}"
-       class="button button-secondary">{{ t('Sign the settlement agreement') }}</a>
-  {% endif %}
 {% endmacro %}
