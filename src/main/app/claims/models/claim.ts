@@ -10,7 +10,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { ReDetermination } from 'ccj/form/models/redetermination'
+import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 interface State {
