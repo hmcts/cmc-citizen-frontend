@@ -11,7 +11,7 @@ describe('CourtDecisionHelper', () => {
   let claim: Claim
   let draft: DraftClaimantResponse
 
-  it('should create COURT decision', () => {
+  it('should create COURT decision when court calculated payment intention is most reasonable', () => {
     claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
     draft = new DraftClaimantResponse().deserialize({ alternatePaymentMethod: {
       paymentOption: new PaymentOption(PaymentType.IMMEDIATELY)
@@ -19,13 +19,13 @@ describe('CourtDecisionHelper', () => {
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.COURT)
   })
 
-  it('should create CLAIMANT decision', () => {
+  it('should create CLAIMANT decision when claimant payment intention is most reasonable', () => {
     claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
     draft = new DraftClaimantResponse().deserialize(sampleClaimantResponseDraftObj)
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.CLAIMANT)
   })
 
-  it('should create CLAIMANT_IN_FAVOUR_OF_DEFENDANT decision', () => {
+  it('should create CLAIMANT_IN_FAVOUR_OF_DEFENDANT decision when claimant is more lenient than defendant', () => {
     claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj,
       ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule })
     draft = new DraftClaimantResponse().deserialize({
@@ -54,7 +54,7 @@ describe('CourtDecisionHelper', () => {
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT)
   })
 
-  it('should create DEFENDANT decision', () => {
+  it('should create DEFENDANT decision when defendant payment intention is most reasonable', () => {
     claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj,
       ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule })
     draft = new DraftClaimantResponse().deserialize({
