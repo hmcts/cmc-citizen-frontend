@@ -148,12 +148,9 @@ export class DefenceSteps {
   }
 
   addTimeLineOfEvents (timeline: Timeline): void {
-    I.wait(5)
     I.see('Add your timeline of events')
     defendantTimelineOfEventsPage.enterTimelineEvent(0, timeline.events[0].date, timeline.events[0].description)
-    I.wait(5)
     defendantTimelineOfEventsPage.enterTimelineEvent(1, timeline.events[1].date, timeline.events[1].description)
-    I.wait(5)
     defendantTimelineOfEventsPage.submitForm()
   }
 
