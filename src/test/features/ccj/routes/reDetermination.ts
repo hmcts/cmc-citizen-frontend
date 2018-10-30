@@ -15,6 +15,7 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -62,7 +63,7 @@ describe('CCJ - re-determination page', () => {
               completionDate: '2019-11-11',
               paymentLength: '12 months'
             },
-            ccjType: 'DETERMINATION'
+            ccjType: CountyCourtJudgmentType.DETERMINATION
           }
         })
 
@@ -111,7 +112,7 @@ describe('CCJ - re-determination page', () => {
                   completionDate: '2019-11-11',
                   paymentLength: '12 months'
                 },
-                ccjType: 'DETERMINATION'
+                ccjType: CountyCourtJudgmentType.DETERMINATION
               }
             })
           })
@@ -153,7 +154,7 @@ describe('CCJ - re-determination page', () => {
                   completionDate: '2019-11-11',
                   paymentLength: '12 months'
                 },
-                ccjType: 'DETERMINATION'
+                ccjType: CountyCourtJudgmentType.DETERMINATION
               }
             })
 

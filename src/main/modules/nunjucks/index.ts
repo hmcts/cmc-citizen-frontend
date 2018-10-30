@@ -26,6 +26,7 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as CCJPaths } from 'features/ccj/paths'
@@ -116,6 +117,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestRateOption', InterestRateOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
+    nunjucksEnv.addGlobal('CountyCourtJudgmentType', CountyCourtJudgmentType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)

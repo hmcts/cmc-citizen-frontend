@@ -11,6 +11,7 @@ import * as config from 'config'
 import { expect } from 'chai'
 import { MomentFactory } from 'shared/momentFactory'
 import { RoutablePath } from 'shared/router/routablePath'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -69,7 +70,7 @@ describe('CCJ guard', () => {
               completionDate: '2019-11-11',
               paymentLength: '12 months'
             },
-            ccjType: 'DETERMINATION'
+            ccjType: CountyCourtJudgmentType.DETERMINATION
           }
         })
 
@@ -95,7 +96,7 @@ describe('CCJ guard', () => {
               completionDate: '2019-11-11',
               paymentLength: '12 months'
             },
-            ccjType: 'DETERMINATION'
+            ccjType: CountyCourtJudgmentType.DETERMINATION
           }
         })
 

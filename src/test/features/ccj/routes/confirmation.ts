@@ -14,6 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -72,7 +73,7 @@ describe('CCJ: confirmation page', () => {
                 completionDate: '2019-11-11',
                 paymentLength: '12 months'
               },
-              ccjType: 'DETERMINATION'
+              ccjType: CountyCourtJudgmentType.DETERMINATION
             },
             reDetermination: {
               text: 'I feel Defendant can pay earlier and I need money sooner'

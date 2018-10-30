@@ -19,6 +19,7 @@ import * as moment from 'moment'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -219,7 +220,7 @@ describe('Claim', () => {
       const claim = new Claim()
       claim.countyCourtJudgment = {
         paymentOption: PaymentOption.IMMEDIATELY,
-        ccjType: 'DETERMINATION'
+        ccjType: CountyCourtJudgmentType.DETERMINATION
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(18, 'days')
 
@@ -230,7 +231,7 @@ describe('Claim', () => {
       const claim = new Claim()
       claim.countyCourtJudgment = {
         paymentOption: PaymentOption.IMMEDIATELY,
-        ccjType: 'DETERMINATION'
+        ccjType: CountyCourtJudgmentType.DETERMINATION
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
 
@@ -241,7 +242,7 @@ describe('Claim', () => {
       const claim = new Claim()
       claim.countyCourtJudgment = {
         paymentOption: PaymentOption.IMMEDIATELY,
-        ccjType: 'DETERMINATION'
+        ccjType: CountyCourtJudgmentType.DETERMINATION
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
@@ -253,7 +254,7 @@ describe('Claim', () => {
       const claim = new Claim()
       claim.countyCourtJudgment = {
         paymentOption: PaymentOption.IMMEDIATELY,
-        ccjType: 'ADMISSIONS'
+        ccjType: CountyCourtJudgmentType.ADMISSIONS
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
@@ -265,7 +266,7 @@ describe('Claim', () => {
       const claim = new Claim()
       claim.countyCourtJudgment = {
         paymentOption: PaymentOption.IMMEDIATELY,
-        ccjType: 'DEFAULT'
+        ccjType: CountyCourtJudgmentType.DEFAULT
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
