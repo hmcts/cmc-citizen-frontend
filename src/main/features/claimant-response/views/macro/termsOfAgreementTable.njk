@@ -9,19 +9,17 @@
       {% if response.responseType == ResponseType.PART_ADMISSION.value %}
         {% set amountToPay = totalAmount | numeral %}
       {% endif %}
-      {{ row('The agreement', t('{{ defendantFullName }} will pay ' + amountToPay + ', immediately.
-      {{ defendantFullName }} will receive the moment no later than {{ paymentDate }}.
+      {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
+      {{ defendantFullName }} will receive the money no later than {{ paymentDate }}.
       Any cheques or transfers will be clear in {{ defendantFullName }} account by this date.',
-        { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
+        { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date,
+          totalAmount: totalAmount | numeral}
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-      {% set amountToPay = 'the full amount' %}
-      {% if response.responseType == ResponseType.PART_ADMISSION.value %}
-        {% set amountToPay = totalAmount | numeral %}
-      {% endif %}
-      {{ row('The agreement', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
-        { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
+      {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }}, no later than {{ paymentDate }}',
+        { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date,
+          totalAmount: totalAmount | numeral}
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
