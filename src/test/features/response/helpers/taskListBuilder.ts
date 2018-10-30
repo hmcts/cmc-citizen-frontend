@@ -29,7 +29,7 @@ import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import {TaskListItem} from "drafts/tasks/taskListItem";
+import { TaskListItem } from 'drafts/tasks/taskListItem'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
