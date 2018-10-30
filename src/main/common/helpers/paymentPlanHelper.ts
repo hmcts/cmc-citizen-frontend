@@ -147,7 +147,7 @@ export class PaymentPlanHelper {
   }
 
   private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
-    if (!totalAmount || !instalmentAmount || !frequency) {
+    if (!totalAmount || !instalmentAmount || !frequency || instalmentAmount < 1) {
       return undefined
     }
 
