@@ -65,7 +65,7 @@ Scenario('As a claimant I can reject the claim @citizen',
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @not-complete',
+  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @error',
   async (I: I) => {
 
     const claimantName = createClaimant(PartyType.INDIVIDUAL).name
