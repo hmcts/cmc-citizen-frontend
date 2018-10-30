@@ -66,6 +66,10 @@ export class ClaimantResponseConverter {
       return undefined
     }
 
+    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+      return undefined
+    }
+
     const courtDetermination: CourtDetermination = new CourtDetermination()
     courtDetermination.courtPaymentIntention = draftClaimantResponse.courtCalculatedPaymentIntention
     courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
@@ -112,7 +116,7 @@ export class ClaimantResponseConverter {
       return paymentIntention
     }
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
+      throw new Error(` vb payment intention not found where decision type is ${decisionType}`)
     }
     return undefined
   }

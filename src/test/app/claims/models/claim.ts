@@ -18,6 +18,7 @@ import { PartyStatement } from 'claims/models/partyStatement'
 import * as moment from 'moment'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -209,6 +210,67 @@ describe('Claim', () => {
     it('should return undefined if claim is not responded to', () => {
       const claim = new Claim()
       expect(claim.respondToMediationDeadline).to.equal(undefined)
+    })
+  })
+
+  describe('isEligibleForReDetermination', () => {
+
+    it('should be eligible', () => {
+      const claim = new Claim()
+      claim.countyCourtJudgment = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        ccjType: 'DETERMINATION'
+      } as CountyCourtJudgment
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(18, 'days')
+
+      expect(claim.isEligibleForReDetermination()).to.equal(true)
+    })
+
+    it('should not be eligible when ccj requested date is 20 days before', () => {
+      const claim = new Claim()
+      claim.countyCourtJudgment = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        ccjType: 'DETERMINATION'
+      } as CountyCourtJudgment
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
+
+      expect(claim.isEligibleForReDetermination()).to.equal(false)
+    })
+
+    it('should not be eligible when reDetermination already requested', () => {
+      const claim = new Claim()
+      claim.countyCourtJudgment = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        ccjType: 'DETERMINATION'
+      } as CountyCourtJudgment
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
+      claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
+
+      expect(claim.isEligibleForReDetermination()).to.equal(false)
+    })
+
+    it('should not be eligible when ccjType is Admissions', () => {
+      const claim = new Claim()
+      claim.countyCourtJudgment = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        ccjType: 'ADMISSIONS'
+      } as CountyCourtJudgment
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
+      claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
+
+      expect(claim.isEligibleForReDetermination()).to.equal(false)
+    })
+
+    it('should not be eligible when ccjType is Default', () => {
+      const claim = new Claim()
+      claim.countyCourtJudgment = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        ccjType: 'DEFAULT'
+      } as CountyCourtJudgment
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
+      claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
+
+      expect(claim.isEligibleForReDetermination()).to.equal(false)
     })
   })
 

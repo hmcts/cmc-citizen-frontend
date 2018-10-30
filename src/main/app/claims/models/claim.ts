@@ -246,4 +246,11 @@ export class Claim {
     return this.countyCourtJudgment && this.response &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
   }
+
+  isEligibleForReDetermination (): boolean {
+    const dateAfter19Days = this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
+    return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === 'DETERMINATION'
+      && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
+      && this.reDeterminationRequestedAt === undefined
+  }
 }
