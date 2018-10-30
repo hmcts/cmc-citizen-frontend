@@ -7,6 +7,7 @@ import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
+import { ClaimantResponseTest } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTest'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -25,11 +26,11 @@ async function prepareClaim (I: I) {
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
-  return {
-    'defendantEmail': defendantEmail,
-    'claimantEmail': claimantEmail,
-    'claimRef': claimRef
-  }
+  const test = new ClaimantResponseTest()
+  test.claimRef = claimRef
+  test.claimantEmail = claimantEmail
+  test.defendantEmail = defendantEmail
+  return test
 }
 
 Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen', async (I: I) => {
