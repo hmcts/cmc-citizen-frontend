@@ -1,11 +1,11 @@
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { Claim } from 'claims/models/claim'
-import * as claimStoreServiceMock from '../../http-mocks/claim-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { expect } from 'chai'
 import { DecisionType } from 'common/court-calculations/courtDecision'
 import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { sampleClaimantResponseDraftObj } from '../../http-mocks/draft-store'
+import { sampleClaimantResponseDraftObj } from 'test/http-mocks/draft-store'
 
 describe('CourtDecisionHelper', () => {
   let claim: Claim
