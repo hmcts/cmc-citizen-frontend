@@ -231,7 +231,7 @@ export const statementOfMeansWithAllFieldsData = {
     }],
     selfEmployment: {
       jobTitle: 'Director',
-      annualTurnover: 10000,
+      annualTurnover: 100000,
       onTaxPayments: {
         amountYouOwe: 100,
         reason: 'Various taxes'
