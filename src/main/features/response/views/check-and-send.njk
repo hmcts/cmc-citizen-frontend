@@ -32,7 +32,7 @@
     {{ tableStart('moneyOwed', 'Your response to the claim') }}
 
     {{ row(
-        label = 'How do you respond to the claim?',
+        label = 'Do you owe the money claimed?',
         value = t(draft.response.type.displayValue) | capitalize,
         changeLink = ResponsePaths.responseTypePage.evaluateUri({ externalId: claim.externalId }),
         bold = true
