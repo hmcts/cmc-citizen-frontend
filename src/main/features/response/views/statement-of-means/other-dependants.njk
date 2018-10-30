@@ -28,14 +28,6 @@
           <div class="form-group panel panel-border-narrow js-hidden {% if atLeastOfNumberShouldBeEnteredError %} form-group-error {% endif %}"
                id="declared-true" aria-hidden="false">
 
-          {% if atLeastOfNumberShouldBeEnteredError %}
-            <p id="numberOfPeople[label]" class="error-message">
-              {{ t(atLeastOfNumberShouldBeEnteredError) }}
-            </p>
-          {% else %}
-            <p>{{ t('Enter number for each age group.') }}</p>
-          {% endif %}
-
             {{ numericInput(label = 'Number of people', name = 'numberOfPeople[value]', form = form) }}
             {{ textArea(label = 'Give details', name = 'numberOfPeople[details]', form = form) }}
 

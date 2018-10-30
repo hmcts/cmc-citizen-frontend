@@ -122,8 +122,11 @@ export class Claim {
 
   get eligibleForCCJ (): boolean {
     return !this.countyCourtJudgmentRequestedAt
-      && !this.respondedAt
-      && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+      && (this.isFullAdmissionPayImmediatelyPastPaymentDate()
+        || this.hasDefendantNotSignedSettlementAgreement()
+        || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+        )
+      )
   }
 
   get eligibleForCCJAfterBreachedSettlement (): boolean {
@@ -147,17 +150,23 @@ export class Claim {
 
   get status (): ClaimStatus {
     if (this.countyCourtJudgmentRequestedAt) {
-      return ClaimStatus.CCJ_REQUESTED
+      if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
+        return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
+      } else {
+        return ClaimStatus.CCJ_REQUESTED
+      }
+    } else if (this.isSettlementReachedThroughAdmission()) {
+      return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.eligibleForCCJAfterBreachedSettlement) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT
+    } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
+    } else if (this.hasDefendantNotSignedSettlementAgreement()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
+    } else if (this.hasClaimantSignedSettlementAgreement()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (this.isOfferAccepted()) {
-      return ClaimStatus.OFFER_ACCEPTED
-    } else if (this.isOfferRejected()) {
-      return ClaimStatus.OFFER_REJECTED
-    } else if (this.isOfferSubmitted()) {
-      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isResponseSubmitted()) {
@@ -177,8 +186,12 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.isResponseSubmitted() && statuses[0].status !== ClaimStatus.RESPONSE_SUBMITTED) {
-      statuses.push({ status: ClaimStatus.RESPONSE_SUBMITTED })
+    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions()) {
+      statuses.push({ status: ClaimStatus.OFFER_REJECTED })
+    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions()) {
+      statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
+    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
+      statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
     return statuses
@@ -213,5 +226,31 @@ export class Claim {
       futureMonth = calculateMonthIncrement(this.countyCourtJudgmentRequestedAt)
     }
     return this.moneyReceivedOn.isSameOrBefore(futureMonth)
+  }
+
+  private isSettlementReachedThroughAdmission (): boolean {
+    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+  }
+
+  private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
+    if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
+      const response: FullAdmissionResponse = this.response
+      return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+        response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+    }
+  }
+
+  private hasClaimantSignedSettlementAgreement (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions()
+  }
+
+  private hasDefendantNotSignedSettlementAgreement (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
+      this.respondToResponseDeadline.isBefore(MomentFactory.currentDate().hour(16))
+  }
+
+  private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
+    return this.countyCourtJudgment && this.response &&
+      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
   }
 }

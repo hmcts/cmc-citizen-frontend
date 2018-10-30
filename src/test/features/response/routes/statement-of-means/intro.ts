@@ -63,7 +63,7 @@ describe('Statement of means', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(
-              'Explain why you can’t pay immediately'
+              'your financial detail'
             ))
         })
       })

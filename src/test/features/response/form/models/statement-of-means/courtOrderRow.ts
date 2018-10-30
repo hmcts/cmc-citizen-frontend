@@ -99,8 +99,8 @@ describe('CourtOrderRow', () => {
         expect(errors.length).to.equal(0)
       })
 
-      it('when amount has minimal value of 1 penny', () => {
-        const errors = validator.validateSync(new CourtOrderRow(0.01, 0, 'abc'))
+      it('when amount has minimal value of £1 pound', () => {
+        const errors = validator.validateSync(new CourtOrderRow(1.00, 0, 'abc'))
 
         expect(errors.length).to.equal(0)
       })
@@ -119,21 +119,28 @@ describe('CourtOrderRow', () => {
         const errors = validator.validateSync(new CourtOrderRow(-10, -10, 'abc'))
 
         expect(errors.length).to.equal(2)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
       })
 
-      it('when amount equal 0', () => {
+      it('when amount equal £0', () => {
         const errors = validator.validateSync(new CourtOrderRow(0, 0, 'abc'))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
+      })
+
+      it('when amount equal £0.99', () => {
+        const errors = validator.validateSync(new CourtOrderRow(0.99, 0, 'abc'))
+
+        expect(errors.length).to.equal(1)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
       })
 
       it('when empty amount and instalmentAmount', () => {
         const errors = validator.validateSync(new CourtOrderRow(undefined, undefined, 'abc'))
 
         expect(errors.length).to.equal(2)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
       })
     })
   })

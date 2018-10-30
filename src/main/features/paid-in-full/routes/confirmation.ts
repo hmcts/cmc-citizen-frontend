@@ -1,4 +1,5 @@
 import * as express from 'express'
+
 import { Paths } from 'paid-in-full/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 
@@ -6,7 +7,5 @@ import { ErrorHandling } from 'shared/errorHandling'
 export default express.Router()
   .get(Paths.confirmationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-
-      // staff and defendant emails
-
+      res.render(Paths.confirmationPage.associatedView, {})
     }))
