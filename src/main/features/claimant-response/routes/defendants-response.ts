@@ -26,20 +26,12 @@ function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
-  if (alreadyPaid) {
-    const partiallyPaid: boolean = StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)
-    res.render(Paths.defendantsResponsePage.associatedView, {
-      claim: claim,
-      page: page,
-      alreadyPaid: alreadyPaid,
-      partiallyPaid: partiallyPaid
-    })
-  } else {
-    res.render(Paths.defendantsResponsePage.associatedView, {
-      claim: claim,
-      page: page
-    })
-  }
+  res.render(Paths.defendantsResponsePage.associatedView, {
+    claim: claim,
+    page: page,
+    alreadyPaid: alreadyPaid,
+    partiallyPaid: alreadyPaid ? StatesPaidHelper.isAlreadyPaidLessThanAmount(claim) : undefined
+  })
 }
 
 /* tslint:disable:no-default-export */

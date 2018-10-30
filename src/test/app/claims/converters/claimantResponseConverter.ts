@@ -146,7 +146,7 @@ describe('claimant response converter ', () => {
       })
     })
 
-    it('rejection from no in part payment recieved', () => {
+    it('Should convert to rejection when given a no option in part payment recieved', () => {
       const draftClaimantResponse = new DraftClaimantResponse()
       draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
 

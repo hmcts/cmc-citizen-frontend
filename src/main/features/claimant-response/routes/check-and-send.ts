@@ -27,7 +27,7 @@ export default express.Router()
         claim: claim,
         totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
         alreadyPaid: alreadyPaid,
-        amount: StatesPaidHelper.isResponseAlreadyPaid(claim) ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined
+        amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined
       })
     })
   )

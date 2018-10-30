@@ -38,7 +38,7 @@
 {% macro financialDetailsBlock(totalMonthlyIncome, totalMonthlyExpenses, statementOfMeans) %}
   <h3 class="heading-small form-group-related">{{ t('Their finances') }}</h3>
   <p>{{ t('Their total monthly income is {{ totalMonthlyIncome }}', { totalMonthlyIncome: totalMonthlyIncome | numeral }) }}</p>
-  <p>{{ t('Their total monthly expenses is {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
+  <p>{{ t('Their total monthly expenses are {{ totalMonthlyExpenses }}', { totalMonthlyExpenses: totalMonthlyExpenses | numeral }) }}</p>
   {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
 {% endmacro %}
 
@@ -61,6 +61,14 @@
   </table>
 {% endmacro %}
 
+{% macro paymentInformationFragment(paymentDeclaration) %}
+  <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
+  <p>{{ claim.response.paymentDeclaration.paidDate | date }}</p>
+
+  <h3 class="heading-small">{{ t('How they say they paid') }}</h3>
+  <p>{{ claim.response.paymentDeclaration.explanation }}</p>
+{% endmacro %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -71,11 +79,7 @@
         {% if partiallyPaid %}
           <p>{{ t('{{ defendantName }} said they paid you {{ amount }}. They said this is all they owe, not the amount you claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
 
-          <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
-          <p>{{ claim.response.paymentDeclaration.paidDate | date }}</p>
-
-          <h3 class="heading-small">{{ t('How they say they paid') }}</h3>
-          <p>{{ claim.response.paymentDeclaration.explanation }}</p>
+          {{ paymentInformationFragment(paymentDeclaration = claim.response.paymentDeclaration) }}
 
           <h3
             class="heading-small form-group-related">{{ t('Why they say they don’t owe the amount you claimed') }}</h3>
@@ -93,11 +97,7 @@
         {% else %}
           {{ t('{{ defendantName }} states they paid you {{ amount }}.', { defendantName: defendantName, amount: claim.totalAmountTillToday | numeral }) }}
 
-          <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
-          <p>{{ claim.response.paymentDeclaration.paidDate | date }}</p>
-
-          <h3 class="heading-small">{{ t('How they say they paid') }}</h3>
-          <p>{{ claim.response.paymentDeclaration.explanation }}</p>
+          {{ paymentInformationFragment(paymentDeclaration = claim.response.paymentDeclaration) }}
 
         {% endif %}
 
