@@ -16,7 +16,6 @@ import { DecisionType } from 'common/court-calculations/courtDecision'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { Moment } from 'moment'
 import { Frequency } from 'common/frequency/frequency'
 import { User } from 'idam/user'
 import { MomentFactory } from 'shared/momentFactory'
@@ -77,17 +76,19 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     }
   }
 
-  static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType) {
+  static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
     if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
       return undefined
     }
 
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
-    const lastPaymentDate: Moment = paymentPlan.calculateLastPaymentDate()
+    if (!paymentPlan) {
+      return undefined
+    }
 
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
-    courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
+    courtCalculatedPaymentIntention.paymentDate = paymentPlan.calculateLastPaymentDate()
     return courtCalculatedPaymentIntention
   }
 
