@@ -45,7 +45,7 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
       completionDate: '2019-11-11',
       paymentLength: '12 months'
     },
-    ccjType: CountyCourtJudgmentType.DETERMINATION,
+    ccjType: CountyCourtJudgmentType.DETERMINATION
   },
   settlementReachedAt: '2017-08-10T15:27:32.917'
 }).persist()
