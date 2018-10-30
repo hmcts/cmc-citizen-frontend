@@ -1,8 +1,8 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, saveAndContinueButton %}
+{% from "form.njk" import csrfProtection, submitButton %}
 
-{% set heading = 'Explain why you can’t pay immediately' %}
 {% set claimantFullName = claim.claimData.claimant.name %}
+{% set heading = 'Send ' + claimantFullName + ' your financial details' %}
 
 {% block content %}
   <div class="grid-row">
@@ -13,7 +13,7 @@
         <p>{{ t('We’ll ask you for the details then we’ll send them to {{ claimantName }} to review.', { claimantName: claimantFullName }) }}</p>
         <p>{{ t('They can reject your proposal if they believe you can pay sooner.') }}</p>
         <p>{{ t('If they reject your proposal, the court will make a new plan using your financial details.') }}</p>
-        {{ saveAndContinueButton() }}
+        {{ submitButton('Continue') }}
       </form>
     </div>
   </div>

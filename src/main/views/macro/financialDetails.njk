@@ -190,3 +190,9 @@
     </div>
   </details>
 {% endmacro %}
+
+{% macro financialDetailsBlock(claim, headingContent, labelContent, classes = undefined) %}
+  {% if not claim.claimData.defendant.isBusiness() %}
+    {{ financialDetailsTable(label = labelContent, statementOfMeans = claim.response.statementOfMeans, classes = classes) }}
+  {% endif %}
+{% endmacro %}
