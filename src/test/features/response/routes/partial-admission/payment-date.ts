@@ -8,7 +8,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
 
-import { Paths, FullAdmissionPaths } from 'response/paths'
+import { Paths, PartAdmissionPaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -22,10 +22,10 @@ import { ValidationErrors } from 'shared/components/payment-intention/model/paym
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = FullAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-const draft = _.cloneDeep(draftStoreServiceMock.sampleFullAdmissionResponseDraftObj)
-draft.fullAdmission.paymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
+const draft = _.cloneDeep(draftStoreServiceMock.samplePartialAdmissionResponseDraftObj)
+draft.partialAdmission.paymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
 
 function nextDay () {
   const nextDay: moment.Moment = moment().add(1, 'days')
@@ -69,7 +69,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response:full-admission', draft)
+          draftStoreServiceMock.resolveFind('response:partial-admission', draft)
 
           await request(app)
             .get(pagePath)
@@ -109,7 +109,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should render error page when unable to save draft', async () => {
-          draftStoreServiceMock.resolveFind('response:full-admission', draft)
+          draftStoreServiceMock.resolveFind('response:partial-admission', draft)
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -120,7 +120,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should trigger validation when invalid data is given', async () => {
-          draftStoreServiceMock.resolveFind('response:full-admission', draft)
+          draftStoreServiceMock.resolveFind('response:partial-admission', draft)
 
           await request(app)
             .post(pagePath)
@@ -130,7 +130,7 @@ describe('Pay by set date: payment date', () => {
         })
 
         it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
-          draftStoreServiceMock.resolveFind('response:full-admission', draft)
+          draftStoreServiceMock.resolveFind('response:partial-admission', draft)
           draftStoreServiceMock.resolveSave()
 
           await request(app)
