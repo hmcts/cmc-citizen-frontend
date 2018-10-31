@@ -14,6 +14,23 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const ccjWithDeterminationType = {
+  respondedAt: MomentFactory.currentDateTime(),
+  countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
+  countyCourtJudgment: {
+    defendantDateOfBirth: '1990-11-01',
+    paidAmount: 2,
+    paymentOption: 'INSTALMENTS',
+    repaymentPlan: {
+      instalmentAmount: 30,
+      firstPaymentDate: '2018-11-11',
+      paymentSchedule: 'EVERY_MONTH',
+      completionDate: '2019-11-11',
+      paymentLength: '12 months'
+    },
+    ccjType: CountyCourtJudgmentType.DETERMINATION
+  }
+}
 
 describe('CCJ guard', () => {
   attachDefaultHooks(app)
@@ -56,23 +73,7 @@ describe('CCJ guard', () => {
 
       it('should NOT redirect to dashboard when claim not eligible for CCJ on re determination page', async () => {
         const route: string = Paths.redeterminationPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-          respondedAt: MomentFactory.currentDateTime(),
-          countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
-          countyCourtJudgment: {
-            defendantDateOfBirth: '1990-11-01',
-            paidAmount: 2,
-            paymentOption: 'INSTALMENTS',
-            repaymentPlan: {
-              instalmentAmount: 30,
-              firstPaymentDate: '2018-11-11',
-              paymentSchedule: 'EVERY_MONTH',
-              completionDate: '2019-11-11',
-              paymentLength: '12 months'
-            },
-            ccjType: CountyCourtJudgmentType.DETERMINATION
-          }
-        })
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(ccjWithDeterminationType)
 
         await request(app)
           .get(route)
@@ -82,23 +83,7 @@ describe('CCJ guard', () => {
 
       it('should NOT redirect to dashboard when claim not eligible for CCJ on repayment plan summary page', async () => {
         const route: string = Paths.repaymentPlanSummaryPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-          respondedAt: MomentFactory.currentDateTime(),
-          countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
-          countyCourtJudgment: {
-            defendantDateOfBirth: '1990-11-01',
-            paidAmount: 2,
-            paymentOption: 'INSTALMENTS',
-            repaymentPlan: {
-              instalmentAmount: 30,
-              firstPaymentDate: '2018-11-11',
-              paymentSchedule: 'EVERY_MONTH',
-              completionDate: '2019-11-11',
-              paymentLength: '12 months'
-            },
-            ccjType: CountyCourtJudgmentType.DETERMINATION
-          }
-        })
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(ccjWithDeterminationType)
 
         await request(app)
           .get(route)

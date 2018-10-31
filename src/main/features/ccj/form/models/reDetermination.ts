@@ -1,11 +1,11 @@
 import { IsDefined } from 'class-validator'
 
 export class ValidationErrors {
-  static readonly TYPE_REQUIRED: string = 'Enter a valid reason'
+  static readonly REASON_REQUIRED: string = 'Enter a valid reason'
 }
 
 export class ReDetermination {
-  @IsDefined({ message: ValidationErrors.TYPE_REQUIRED })
+  @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   text?: string
 
   constructor (text?: string) {
