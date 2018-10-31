@@ -38,7 +38,7 @@ export class Helper {
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.makeDefenceAndSubmit(testData.defendantEmail, testData.defendantPartyType, testData.defenceType)
+    defenceSteps.makeDefenceAndSubmit(testData.defendant, testData.defendantEmail, testData.defendantPartyType, testData.defenceType)
   }
 
   // TODO: refactor with above ^^^
@@ -51,7 +51,7 @@ export class Helper {
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.makeFullAdmission(testData.defendantPartyType, testData.paymentOption)
+    defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {

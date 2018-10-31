@@ -10,11 +10,13 @@ const helperSteps: Helper = new Helper()
 export class EndToEndTestData {
 
   claimRef: string
+  defendant: Party
   defendantName: string
   defendantEmail: string
   defendantPartyType: PartyType
   paymentOption: PaymentOption
   defenceType: DefenceType
+  claimant: Party
   claimantName: string
   claimantEmail: string
   claimantPartyType: PartyType
@@ -34,7 +36,9 @@ export class EndToEndTestData {
 
     const testData = new EndToEndTestData()
     testData.defendantName = claimData.defendants[0].name
+    testData.defendant = claimData.defendants[0]
     testData.claimantName = claimData.claimants[0].name
+    testData.claimant = claimData.claimants[0]
     testData.claimRef = claimRef
     testData.claimantEmail = claimantEmail
     testData.defendantEmail = defendantEmail

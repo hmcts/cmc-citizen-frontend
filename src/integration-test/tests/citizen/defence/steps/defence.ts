@@ -1,8 +1,6 @@
 import { PaymentOption } from 'integration-test/data/payment-option'
 import {
   claimAmount,
-  createClaimant,
-  createDefendant,
   DEFAULT_PASSWORD,
   defence
 } from 'integration-test/data/test-data'
@@ -248,13 +246,18 @@ export class DefenceSteps {
     }
   }
 
-  makeDefenceAndSubmit (defendantEmail: string, defendantType: PartyType, defenceType: DefenceType): void {
+  makeDefenceAndSubmit (
+    defendantParty: Party,
+    defendantEmail: string,
+    defendantType: PartyType,
+    defenceType: DefenceType
+  ): void {
     I.see('Confirm your details')
     I.see('Do you want more time to respond?')
     I.see('Choose a response')
     I.dontSee('COMPLETE')
 
-    this.confirmYourDetails(createDefendant(defendantType))
+    this.confirmYourDetails(defendantParty)
     I.see('COMPLETED')
 
     this.requestMoreTimeToRespond()
@@ -292,10 +295,15 @@ export class DefenceSteps {
     }
   }
 
-  makeFullAdmission (defendantType: PartyType, paymentOption: PaymentOption): void {
+  makeFullAdmission (
+    defendantParty: Party,
+    defendantType: PartyType,
+    paymentOption: PaymentOption,
+    claimantName: string
+  ): void {
     I.dontSee('COMPLETE')
 
-    this.confirmYourDetails(createDefendant(defendantType))
+    this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
 
@@ -333,23 +341,23 @@ export class DefenceSteps {
 
     switch (paymentOption) {
       case PaymentOption.IMMEDIATELY:
-        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ll pay immediately.`)
+        I.see(`We’ve emailed ${claimantName} to tell them you’ll pay immediately.`)
         break
       case PaymentOption.BY_SET_DATE:
-        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
+        I.see(`We’ve emailed ${claimantName} your offer to pay by 1 January 2025 and your explanation of why you can’t pay before then.`)
         break
       case PaymentOption.INSTALMENTS:
-        I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} to tell them you’ve suggested paying by instalments.`)
+        I.see(`We’ve emailed ${claimantName} to tell them you’ve suggested paying by instalments.`)
         break
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
   }
 
-  makePartialAdmission (defendantType: PartyType): void {
+  makePartialAdmission (defendantParty: Party): void {
     I.dontSee('COMPLETE')
 
-    this.confirmYourDetails(createDefendant(defendantType))
+    this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
 
