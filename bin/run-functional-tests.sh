@@ -21,6 +21,7 @@ if [[ "${1}" != "--no-build" ]]; then
   docker-compose -f ${ADDITIONAL_COMPOSE_FILE} build citizen-integration-tests
 fi
 docker-compose -f ${ADDITIONAL_COMPOSE_FILE} up --no-color -d remote-webdriver
-docker-compose -f ${ADDITIONAL_COMPOSE_FILE} run -u `id -u $USER` citizen-integration-tests
+# run non-admissions tagged tests ONLY
+docker-compose -f ${ADDITIONAL_COMPOSE_FILE} run -u `id -u $USER` citizen-integration-tests --grep '(?=.*)^(?!.*@admissions)'
 docker-compose -f ${ADDITIONAL_COMPOSE_FILE} down
 
