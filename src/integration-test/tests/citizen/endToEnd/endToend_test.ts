@@ -13,7 +13,7 @@ Scenario('I can as an Individual make a claim against an Individual Without a de
   helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as Sole Trader make a claim against an Individual and are able to pay on the Gov Pay page @citizen', async (I: I) => {
+Scenario('I can as Sole Trader make a claim against an Individual and are able to pay on the Gov Pay page @citizen @debug', async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.SOLE_TRADER, PartyType.INDIVIDUAL)
   helperSteps.finishResponse(testData)
 })

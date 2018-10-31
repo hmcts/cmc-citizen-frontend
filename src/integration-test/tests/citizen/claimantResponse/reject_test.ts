@@ -12,7 +12,7 @@ const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseStep
 
 Feature('Claimant Response').retry(3)
 
-Scenario('As a claimant I can reject the claim @citizen',
+Scenario('As a claimant I can reject the claim @citizen @admissions',
   async (I: I) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -48,7 +48,7 @@ Scenario('As a claimant I can reject the claim @citizen',
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @error',
+  'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @admissions @error',
   async (I: I) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -89,7 +89,7 @@ Scenario(
   })
 
 Scenario(
-  'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen',
+  'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions',
   async (I: I) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)

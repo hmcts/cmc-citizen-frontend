@@ -21,7 +21,7 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
   helperSteps.finishResponse(testData)
   I.click('My account')
   I.see(testData.claimRef)
-  I.see(`We’ve emailed ${testData.defendantName} telling them when and how you said you paid the claim`)
+  I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim`)
 })
 
 Scenario('I can fill out forms for I admit part of the claim @citizen @admissions', async (I: I) => {
