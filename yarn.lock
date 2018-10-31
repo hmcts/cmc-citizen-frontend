@@ -1512,10 +1512,10 @@ circular-json@^0.5.4:
   resolved "https://registry.yarnpkg.com/circular-json/-/circular-json-0.5.7.tgz#b8be478d72ea58c7eeda26bf1cf1fba43d188842"
   integrity sha512-/pXoV1JA847qRKPrHbBK6YIBGFF8GOP4wzSgUOA7q0ew0vAv0iJswP+2/nZQ9uzA3Azi7eTrg9L2yzXc/7ZMIA==
 
-class-transformer@^0.1.7:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.1.9.tgz#29977c528233ca014e6fd9523327ebd31d11ca54"
-  integrity sha512-KV0IteiRl95OZ9UzbuPj8RhckuHA4JTC+Q+ZbKTYPsmvB0GgPRG7JBEXiVhBq/U050OVRku4N5t0rSMHw8vDWw==
+class-transformer@^0.1.10:
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/class-transformer/-/class-transformer-0.1.10.tgz#350f168ebb4c1f87edb18b98dd973681fc20fff7"
+  integrity sha512-QiNdUxEvTBiUtc0KiapGVHhgaqGQVEhOfL9UEBnb9xRfcwmDJT5ijIDwcwJUTwXaT/kGvZZB4JCGsiuR5adX6g==
 
 class-utils@^0.3.5:
   version "0.3.6"

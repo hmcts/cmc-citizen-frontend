@@ -53,7 +53,7 @@
     "applicationinsights": "^1.0.6",
     "body-parser": "^1.18.3",
     "build-url": "^1.2.0",
-    "class-transformer": "^0.1.7",
+    "class-transformer": "^0.1.10",
     "class-validator": "^0.9.1",
     "classlist-polyfill": "^1.2.0",
     "config": "^2.0.0",
