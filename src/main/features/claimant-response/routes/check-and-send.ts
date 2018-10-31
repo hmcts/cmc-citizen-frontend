@@ -34,7 +34,6 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
 
-      console.log('getPaymentIntention(draft.document, claim)---->',getPaymentIntention(draft.document, claim))
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
