@@ -16,13 +16,13 @@ Scenario('I can see send your response by email page when I reject all of the cl
   const defendant: Party = claimData.defendants[0]
   const claimant: Party = claimData.claimants[0]
 
-  const claimRef: string = await I.createClaim(claimData, claimantEmail)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail, [])
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM)
 })
 
-Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @citizen @debug', async (I: I) => {
+Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @citizen', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
@@ -30,11 +30,10 @@ Scenario('I can see send your response by email page when I reject all of the cl
   const defendant: Party = claimData.defendants[0]
   const claimant: Party = claimData.claimants[0]
 
-  const claimRef: string = await I.createClaim(claimData, claimantEmail)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail, [])
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant,
     defendantEmail, DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT
   )
-  I.wait(10)
 })
