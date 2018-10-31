@@ -81,7 +81,7 @@
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
 
       {% if draft.courtOfferedPaymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
-        {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }}, immediately.
+        {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
         {{ claimantName }} will receive the moment no later than {{ paymentDate }}.
         Any cheques or transfers will be clear in {{ defendantFullName }} account by this date.',
           { defendantFullName: claim.response.defendant.name,
@@ -91,7 +91,7 @@
         )) }}
         {{ row('Completion date', draft.courtOfferedPaymentIntention.paymentDate | date) }}
       {% elseif draft.courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-        {{ row(label = 'The offer',
+        {{ row(label = 'The agreement',
           value = t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
             {
               defendantFullName: claim.response.defendant.name,
@@ -105,7 +105,7 @@
           bottomBorder = true, bold = true
         ) }}
       {% elseif draft.courtOfferedPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-        {{ row(label = 'The offer',
+        {{ row(label = 'The agreement',
           value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
             { defendantFullName: claim.response.defendant.name,
               instalmentAmount: draft.courtOfferedPaymentIntention.repaymentPlan.instalmentAmount | numeral,
