@@ -387,7 +387,7 @@ export const statementOfMeansWithAllFieldsDraft = {
   },
   selfEmployment: {
     jobTitle: 'Director',
-    annualTurnover: 10000
+    annualTurnover: 100000
   },
   onTaxPayments: {
     declared: true,

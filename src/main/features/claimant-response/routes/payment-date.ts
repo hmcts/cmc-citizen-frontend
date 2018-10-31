@@ -24,7 +24,7 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
-    return 'What date do you want the defendant to pay by?'
+    return 'When do you want the defendant to pay?'
   }
 
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {

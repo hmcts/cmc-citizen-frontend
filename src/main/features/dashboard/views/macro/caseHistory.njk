@@ -20,12 +20,21 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
-  claimPartAdmittedToOweForClaimantClaimDetails,
-  claimPartAdmittedAlreadyPaidForDefendantClaimDetails,
-  claimPartAdmittedAlreadyPaidForClaimantClaimDetails%}
+  claimPartAdmittedAlreadyPaidForDefendantClaimDetails %}
 
-{% from "./claimStatus/claimFullyAdmitted.njk" import
-  claimFullAdmissionForDefendantClaimDetails,
+{% from "./claimStatus/claimPartAdmissionClaimant.njk" import
+  claimPartAdmittedToOweForClaimantClaimDetails,
+  claimPartAdmittedAlreadyPaidForClaimantClaimDetails %}
+
+{% from "./claimStatus/settlementAgreementClaimant.njk" import
+  settlementAgreementSignedByClaimantClaimDetails,
+  settlementAgreementSignedByClaimantDeadlinePassedClaimDetails,
+  settlementAgreementSignedByBothClaimantClaimDetails %}
+
+{% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
+  claimFullAdmissionForDefendantClaimDetails %}
+
+{% from "./claimStatus/claimFullAdmissionForClaimant.njk" import
   claimFullAdmissionForClaimantClaimDetails %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
@@ -42,6 +51,12 @@ ccjRequestedForDefendantClaimDetails %}
   offerSettlementReachedForDefendant,
   offerSettlementReachedForClaimant %}
 
+{% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
+{% from "./claimStatus/admissionByCCJDefendant.njk" import admissionByCCJDefendantClaimDetails %}
+{% from "./claimStatus/settlementAgreementDefendant.njk" import
+  settlementAgreementSignedByClaimantDefendantClaimDetails,
+  settlementAgreementSignedByBothDefendantClaimDetails %}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
@@ -50,7 +65,19 @@ ccjRequestedForDefendantClaimDetails %}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-        {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
+        {% if not claim.isFullAdmissionPastPaymentDate %}
+          {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
+        {% endif %}
+      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
+        {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
+        {{ admissionByCCJClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
+        {{ settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+        {{ settlementAgreementSignedByClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
+        {{ settlementAgreementSignedByBothClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
@@ -77,7 +104,7 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerRejectedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED 
+      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED
               or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
         {{ offerSettlementReachedForClaimant(claim) }}
       {% else %}
@@ -98,8 +125,16 @@ ccjRequestedForDefendantClaimDetails %}
         {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
         {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
+        {{ admissionByCCJDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+        {{ settlementAgreementSignedByClaimantDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
         {{ ccjRequestedForDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
+        {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
+        {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
@@ -128,7 +163,7 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerRejectedForDefendantClaimDetails() }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED 
+      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED
               or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
           {{ offerSettlementReachedForDefendant(claim) }}
       {% else %}
