@@ -31,6 +31,10 @@ class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
     return new DefaultModelAccessor('alternatePaymentMethod')
   }
 
+  getNotice (): string {
+    return 'The court will review your suggestion and may reject it if it’s sooner than the defendant can afford to repay the money.'
+  }
+
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
     const draft: Draft<DraftClaimantResponse> = res.locals.draft
