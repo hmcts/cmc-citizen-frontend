@@ -312,10 +312,10 @@
   dependencies:
     "@types/i18next" "^2"
 
-"@types/i18next@*", "@types/i18next@^11.9.1":
-  version "11.9.1"
-  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-11.9.1.tgz#af62e232007dd20e636f03e271af0b1dd1e57129"
-  integrity sha512-AgSgGHD2IiPVzoeCSU9lEVadKc23WzxWioB6weks/KRQqdA5y6bjYMKt2tZzaypKs5XM46s7fDAFwfxdaYZ5Ow==
+"@types/i18next@*", "@types/i18next@^11.9.3":
+  version "11.9.3"
+  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-11.9.3.tgz#04d84c6539908ad69665d26d8967f942d1638550"
+  integrity sha512-snM7bMKy6gt7UYdpjsxycqSCAy0fr2JVPY0B8tJ2vp9bN58cE7C880k20PWFM4KXxQ3KsstKM8DLCawGCIH0tg==
 
 "@types/i18next@^2":
   version "2.3.40"
