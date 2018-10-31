@@ -3,15 +3,15 @@
     <legend>
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
-
+    {% set amountToPay = totalAmount | numeral %}
     {% if paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-      {% set amountToPay = totalAmount | numeral %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
+
+      {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ' no later than {{ paymentDate }}',
         { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+      {{ row('The offer', t('{{ defendantFullName }} will repay ' + amountToPay + ' in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
         { defendantFullName: response.defendant.name,
           instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
           paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,

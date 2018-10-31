@@ -80,12 +80,11 @@
     {%  if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
 
-      {% if draft.courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-        {% set amountToPay = 'the full amount' %}
+      {% set amountToPay = claim.totalAmountTillToday %}
         {% if claim.response.responseType == ResponseType.PART_ADMISSION.value %}
           {% set amountToPay = claim.response.amount | numeral %}
         {% endif %}
-
+      {% if draft.courtOfferedPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
         {{ row(label = 'The offer',
           value = t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
             {
@@ -101,7 +100,7 @@
         ) }}
       {% elseif draft.courtOfferedPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
         {{ row(label = 'The offer',
-          value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+          value = t('{{ defendantFullName }} will pay ' + amountToPay + ' in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
             { defendantFullName: claim.response.defendant.name,
               instalmentAmount: draft.courtOfferedPaymentIntention.repaymentPlan.instalmentAmount | numeral,
               paymentSchedule: draft.courtOfferedPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
