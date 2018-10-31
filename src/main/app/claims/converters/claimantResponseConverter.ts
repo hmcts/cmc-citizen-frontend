@@ -101,7 +101,7 @@ export class ClaimantResponseConverter {
     if (draftPaymentIntention) {
       const paymentIntention: PaymentIntention = new PaymentIntention()
       paymentIntention.paymentOption = draftPaymentIntention.paymentOption.option.value as PaymentOption
-      if (draftPaymentIntention.paymentDate) {
+      if (draftPaymentIntention.paymentDate || draftPaymentIntention.paymentOption.option === PaymentType.IMMEDIATELY) {
         paymentIntention.paymentDate = this.convertPaymentDate(draftPaymentIntention.paymentOption, draftPaymentIntention.paymentDate)
       }
       if (draftPaymentIntention.paymentPlan) {
