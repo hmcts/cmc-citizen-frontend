@@ -220,7 +220,7 @@ export class TaskListBuilder {
         && (draft.rejectionReason === undefined))))) {
       tasks.push(
         new TaskListItem(
-          'Formalise the repayment plan',
+          'Choose how to formalise repayment',
           Paths.chooseHowToProceedPage.evaluateUri({ externalId: externalId }),
           ChooseHowToProceedTask.isCompleted(draft.formaliseRepaymentPlan)
         )

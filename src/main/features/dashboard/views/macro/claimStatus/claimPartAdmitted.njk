@@ -1,12 +1,9 @@
 {% from "externalLink.njk" import externalLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink, viewAndRespondOffer %}
 
 {% macro claimPartAdmittedAlreadyPaidForDefendantDashboard(claim) %}
   {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
     { claimantName: claim.claimData.claimant.name }) }}
-{% endmacro %}
-
-{% macro claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) %}
-  {{ t('The defendant believes that they’ve paid the claim in full.') }}
 {% endmacro %}
 
 {% macro claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) %}
@@ -20,30 +17,12 @@
       'settled, or they can proceed with it.') }}
   </p>
   <p>
-    {{ _downloadResponseLink(claim) }}
+    {{ downloadResponseLink(claim) }}
   </p>
-{% endmacro %}
-
-{% macro claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
-      { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral, paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}
-  </p>
-  <p> {{ t('You can accept or reject this response.') }}</p>
-  <p>
-    {{ t('You need to respond before 4pm on {{ respondDate }} or your claim won’t proceed.', { respondDate: claim.respondToResponseDeadline | date}) }}
-  </p>
-  {{ _respond(claim, 'View and Respond') }}
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}
   {{ t('You’ve admitted part of the claim.') }}
-{% endmacro %}
-
-{% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
-  {{ t('The defendant believes they owe you {{ amount }}. You can accept or reject that this is the amount owed.',
-    { amount: claim.response.amount | numeral }) }}
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForDefendantClaimDetails(claim) %}
@@ -69,26 +48,6 @@
     {{ t('We’ll contact you when they respond.') }}
   </p>
   <p>
-    {{ _downloadResponseLink(claim) }}
+    {{ downloadResponseLink(claim) }}
   </p>
-{% endmacro %}
-
-{% macro claimPartAdmittedToOweForClaimantClaimDetails(claim) %}
-
-  <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-  <p>{{ t('{{ defendantName }} admits they owe you {{ amount }} - they said they don’t owe the full amount you claimed.',
-      { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral }) }} </p>
-  <p>
-    {{ t('You need to accept or reject the defendant’s admission of {{ amount }}.',
-      { amount: claim.response.amount | numeral }) }}
-  </p>
-  {{ _respond(claim, 'View and respond to the offer') }}
-{% endmacro %}
-
-{% macro _downloadResponseLink(claim) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
-{% endmacro %}
-
-{% macro _respond(claim, text) %}
-  <p><a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t(text) }}</a></p>
 {% endmacro %}

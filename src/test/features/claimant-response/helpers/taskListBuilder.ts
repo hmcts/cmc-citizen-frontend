@@ -634,7 +634,7 @@ describe('Claimant response task list builder', () => {
     })
 
     describe('"Formalise Repayment Plan task"', () => {
-      const taskName = 'Formalise the repayment plan'
+      const taskName = 'Choose how to formalise repayment'
 
       it('should render page with Formalise repayment plan task', () => {
         claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
