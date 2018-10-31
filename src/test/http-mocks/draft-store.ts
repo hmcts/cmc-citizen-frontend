@@ -307,7 +307,27 @@ export const samplePartialAdmissionResponseDraftObj = {
   },
   partialAdmission: {
     alreadyPaid: new AlreadyPaid().deserialize({ alreadyPaid: new AlreadyPaid(YesNoOption.YES) }),
-    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100, date: '2018-02-01', text: 'by Cash' })
+    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100, date: '2018-02-01', text: 'by Cash' }),
+    paymentIntention: {
+      paymentOption: {
+        option: {
+          value: 'INSTALMENTS'
+        }
+      },
+      paymentPlan: {
+        totalAmount: 3685,
+        instalmentAmount: 100,
+        firstPaymentDate: {
+          year: 2019,
+          month: 1,
+          day: 1
+        },
+        paymentSchedule: {
+          value: 'EVERY_MONTH',
+          displayValue: 'every month'
+        }
+      }
+    }
   }
 }
 
