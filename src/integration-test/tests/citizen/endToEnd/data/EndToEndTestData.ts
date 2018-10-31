@@ -1,0 +1,69 @@
+import I = CodeceptJS.I
+import { PartyType } from 'integration-test/data/party-type'
+import { createClaimData } from 'integration-test/data/test-data'
+import { PaymentOption } from 'integration-test/data/payment-option'
+import { DefenceType } from 'integration-test/data/defence-type'
+import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
+
+const helperSteps: Helper = new Helper()
+
+export class EndToEndTestData {
+
+  claimRef: string
+  defendantName: string
+  defendantEmail: string
+  defendantPartyType: PartyType
+  paymentOption: PaymentOption
+  defenceType: DefenceType
+  claimantName: string
+  claimantEmail: string
+  claimantPartyType: PartyType
+  claimantPaymentOption: PaymentOption
+
+  public static async prepareData (
+    I: I,
+    defendantPartyType: PartyType,
+    claimantPartyType: PartyType
+  ) {
+    const claimantEmail: string = await I.createCitizenUser()
+    const defendantEmail: string = await I.createCitizenUser()
+    const claimData: ClaimData = createClaimData(defendantPartyType, claimantPartyType)
+    const claimRef: string = await I.createClaim(claimData, claimantEmail)
+
+    await helperSteps.enterPinNumber(claimRef, claimantEmail)
+
+    const testData = new EndToEndTestData()
+    testData.defendantName = claimData.defendants[0].name
+    testData.claimantName = claimData.claimants[0].name
+    testData.claimRef = claimRef
+    testData.claimantEmail = claimantEmail
+    testData.defendantEmail = defendantEmail
+    testData.defendantPartyType = defendantPartyType
+    testData.claimantPartyType = claimantPartyType
+    return testData
+  }
+
+  public static async prepareDataWithNoDefendantEmail (
+    I: I,
+    defendantPartyType: PartyType,
+    claimantPartyType: PartyType
+  ) {
+    const claimantEmail: string = await I.createCitizenUser()
+    const defendantEmail: string = await I.createCitizenUser()
+    const claimData: ClaimData = createClaimData(defendantPartyType, claimantPartyType, false)
+    const claimRef: string = await I.createClaim(claimData, claimantEmail)
+
+    await helperSteps.enterPinNumber(claimRef, claimantEmail)
+
+    const testData = new EndToEndTestData()
+    testData.defendantName = claimData.defendants[0].name
+    testData.claimantName = claimData.claimants[0].name
+    testData.claimRef = claimRef
+    testData.claimantEmail = claimantEmail
+    testData.defendantEmail = defendantEmail
+    testData.defendantPartyType = defendantPartyType
+    testData.claimantPartyType = claimantPartyType
+    return testData
+  }
+
+}
