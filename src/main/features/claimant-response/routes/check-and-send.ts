@@ -10,6 +10,20 @@ import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
 import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+
+function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
+  const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+  if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+    return response.paymentIntention
+  } else {
+    return draft.courtOfferedPaymentIntention
+  }
+}
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -20,10 +34,12 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const claim: Claim = res.locals.claim
 
+      console.log('getPaymentIntention(draft.document, claim)---->',getPaymentIntention(draft.document, claim))
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
-        totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document)
+        totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
+        paymentIntention: getPaymentIntention(draft.document, claim)
       })
     })
   )

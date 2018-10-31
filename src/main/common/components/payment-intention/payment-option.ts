@@ -26,7 +26,7 @@ export abstract class AbstractPaymentOptionPage<Draft> {
     return 'components/payment-intention/payment-option'
   }
 
-  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft>,claim: Claim }): Promise<void> {
+  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft>, claim: Claim }): Promise<void> {
     const user: User = locals.user
     await new DraftService().save(locals.draft, user.bearerToken)
   }
