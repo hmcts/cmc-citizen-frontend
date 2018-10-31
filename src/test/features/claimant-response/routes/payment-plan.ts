@@ -198,8 +198,4 @@ describe('Claimant response: payment plan', () => {
       })
     })
   })
-
-  describe('saveDraft', () => {
-
-  })
 })
