@@ -1,5 +1,5 @@
 import { Claim } from 'claims/models/claim'
-import * as claimStoreServiceMock from '../../http-mocks/claim-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { expect } from 'chai'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'

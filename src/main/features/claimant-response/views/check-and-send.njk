@@ -83,8 +83,8 @@
       {% if draft.courtOfferedPaymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
         {{ row(label = 'The agreement',
           value = t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
-        {{ claimantName }} will receive the moment no later than {{ paymentDate }}.
-        Any cheques or transfers will be clear in {{ defendantFullName }} account by this date.',
+        {{ claimantName }} will receive the money no later than {{ paymentDate }}.
+        Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
           { defendantFullName: claim.response.defendant.name,
             claimantName: claim.claimData.claimant.name,
             paymentDate: draft.courtOfferedPaymentIntention.paymentDate | date ,
@@ -103,7 +103,8 @@
               defendantFullName: claim.response.defendant.name,
               paymentDate: draft.courtOfferedPaymentIntention.paymentDate | date
             }),
-          bottomBorder = true, bold = true
+          bottomBorder = true, bold = true,
+          changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
         ) }}
         {{ row(label = 'Completion date',
           value = draft.courtOfferedPaymentIntention.paymentDate | date,
@@ -117,7 +118,8 @@
               paymentSchedule: draft.courtOfferedPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
               firstPaymentDate: draft.courtOfferedPaymentIntention.repaymentPlan.firstPaymentDate | date
             }),
-          bottomBorder = true, bold = true
+          bottomBorder = true, bold = true,
+          changeLink = ClaimantResponsePaths.signSettlementAgreementPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
         ) }}
         {{ row(label = 'Completion date',
           value = draft.courtOfferedPaymentIntention.repaymentPlan.completionDate | date,
