@@ -96,6 +96,10 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
     return 'When do you want the defendant to pay?'
   }
 
+  getNotice (): string {
+    return 'The court will review your suggestion and may reject it if it’s sooner than the defendant can afford to repay the money.'
+  }
+
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {
     return new DefaultModelAccessor('alternatePaymentMethod')
   }
