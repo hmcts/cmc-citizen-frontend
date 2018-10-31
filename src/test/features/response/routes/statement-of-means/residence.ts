@@ -116,7 +116,7 @@ describe('Statement of means', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(Paths.dependantsPage
+              .toLocation(Paths.partnerPage
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 

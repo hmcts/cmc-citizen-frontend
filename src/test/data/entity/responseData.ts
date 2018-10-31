@@ -10,6 +10,7 @@ import { individual, company } from 'test/data/entity/party'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 
 const baseResponseData = {
   defendant: individual,
@@ -152,6 +153,21 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
   }
 }
 
+export const fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2018-10-01',
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2019-02-01',
+      paymentLength: '1'
+    }
+  }
+}
+
 export const partialAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
@@ -178,6 +194,8 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
       type: BankAccountType.CURRENT_ACCOUNT
     }
   ],
+  disability: DisabilityStatus.NO,
+  priorityDebts: [],
   residence: {
     type: ResidenceType.OWN_HOME
   },
@@ -195,7 +213,8 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
     amount: 100,
     frequency: PaymentFrequency.MONTH,
     type: ExpenseType.MORTGAGE
-  }] as Expense[]
+  }] as Expense[],
+  carer: false
 }
 
 export const statementOfMeansWithAllFieldsData = {
@@ -212,11 +231,12 @@ export const statementOfMeansWithAllFieldsData = {
       numberOfChildren: 3,
       numberOfChildrenLivingWithYou: 3
     }],
-    numberOfMaintainedChildren: 4,
     otherDependants: {
       numberOfPeople: 5,
-      details: 'Colleagues'
-    }
+      details: 'Colleagues',
+      anyDisabled: false
+    },
+    anyDisabledChildren: false
   },
   employment: {
     employers: [{
@@ -225,7 +245,7 @@ export const statementOfMeansWithAllFieldsData = {
     }],
     selfEmployment: {
       jobTitle: 'Director',
-      annualTurnover: 10000,
+      annualTurnover: 100000,
       onTaxPayments: {
         amountYouOwe: 100,
         reason: 'Various taxes'
@@ -241,7 +261,8 @@ export const statementOfMeansWithAllFieldsData = {
     claimNumber: '000MC001',
     amountOwed: 100,
     monthlyInstalmentAmount: 10
-  }]
+  }],
+  carer: true
 }
 
 export const fullAdmissionWithSoMPaymentBySetDate = {
@@ -255,6 +276,13 @@ export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   ...fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsOnlyData
   }
 }
 

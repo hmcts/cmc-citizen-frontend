@@ -16,7 +16,6 @@ import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/in
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
 import { Validator } from 'class-validator'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
-import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 const page: RoutablePath = StatementOfMeansPaths.monthlyExpensesPage
 
@@ -80,7 +79,6 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
@@ -88,7 +86,6 @@ export default express.Router()
     }))
   .post(
     page.uri,
-    OptInFeatureToggleGuard.featureEnabledGuard('admissions'),
     StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(MonthlyExpenses, MonthlyExpenses.fromObject, undefined, ['addOther', 'removeOther', 'reset']),
     actionHandler,
@@ -105,7 +102,7 @@ export default express.Router()
         draft.document.statementOfMeans.monthlyExpenses = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: externalId }))
+        res.redirect(StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: externalId }))
       }
     })
   )

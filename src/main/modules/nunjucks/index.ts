@@ -26,9 +26,11 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
 import { ClaimStatus } from 'claims/models/claimStatus'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Paths as AppPaths } from 'paths'
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as CCJPaths } from 'features/ccj/paths'
+import { Paths as StatePaidPaths } from 'features/paid-in-full/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
@@ -41,6 +43,8 @@ import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
+import { Disability } from 'response/form/models/statement-of-means/disability'
+import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -113,6 +117,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestRateOption', InterestRateOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
+    nunjucksEnv.addGlobal('CountyCourtJudgmentType', CountyCourtJudgmentType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
     nunjucksEnv.addGlobal('StatementType', StatementType)
@@ -130,13 +135,16 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ClaimantResponsePaths', ClaimantResponsePaths)
     nunjucksEnv.addGlobal('DashboardPaths', DashboardPaths)
     nunjucksEnv.addGlobal('CCJPaths', CCJPaths)
+    nunjucksEnv.addGlobal('StatePaidPaths', StatePaidPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('MonthlyIncomeType', MonthlyIncomeType)
     nunjucksEnv.addGlobal('MonthlyExpenseType', MonthlyExpenseType)
+    nunjucksEnv.addGlobal('PriorityDebtType', PriorityDebtType)
     nunjucksEnv.addGlobal('Service', Service)
+    nunjucksEnv.addGlobal('DisabilityStatus', Disability)
     nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     nunjucksEnv.addGlobal('serviceName', `Money Claims`)
     nunjucksEnv.addGlobal('headingVisible', true)
