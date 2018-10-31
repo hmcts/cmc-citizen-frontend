@@ -24,11 +24,15 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
 class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
   getHeading (): string {
-    return 'What date do you want the defendant to pay by?'
+    return 'When do you want the defendant to pay?'
   }
 
   createModelAccessor (): AbstractModelAccessor<DraftClaimantResponse, DraftPaymentIntention> {
     return new DefaultModelAccessor('alternatePaymentMethod')
+  }
+
+  getNotice (): string {
+    return 'The court will review your suggestion and may reject it if it’s sooner than the defendant can afford to repay the money.'
   }
 
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {

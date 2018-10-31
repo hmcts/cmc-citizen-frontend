@@ -42,7 +42,7 @@
     <form method="post" novalidate class="income-expense-calculation">
       {{ csrfProtection(csrf) }}
 
-      <p>{{ t('Select all that apply. The information you enter must be truthful and accurate.') }}</p>
+      <p>{{ t('Select all that apply. The information you enter must be truthful and accurate. Do not include any arrears repayments.') }}</p>
 
       {{ expenseSource(form, name = 'mortgage', label = MonthlyExpenseType.MORTGAGE.displayValue | capitalize, hint = 'Include all mortgages') }}
       {{ expenseSource(form, name = 'rent', label = MonthlyExpenseType.RENT.displayValue | capitalize) }}
