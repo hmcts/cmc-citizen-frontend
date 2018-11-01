@@ -16,7 +16,7 @@ export class BankAccounts extends MultiRowForm<BankAccountRow> {
     if (!value) {
       return value
     }
-    return new BankAccounts(value.rows ? value.rows.map(BankAccountRow.fromObject) : undefined)
+    return new BankAccounts(value.rows ? value.rows.map(BankAccountRow.fromObject) : [])
   }
 
   createEmptyRow (): BankAccountRow {

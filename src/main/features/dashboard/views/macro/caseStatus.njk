@@ -21,14 +21,18 @@
   claimRejectedFreeMediationYESForDefendantDashboard %}
 
 {% from "./claimStatus/claimPartAdmitted.njk" import
-  claimPartAdmittedAlreadyPaidForClaimantDashboard,
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
-  claimPartAdmittedToOweForDefendantDashboard,
+  claimPartAdmittedToOweForDefendantDashboard %}
+
+{% from "./claimStatus/claimPartAdmissionClaimant.njk" import
+  claimPartAdmittedAlreadyPaidForClaimantDashboard,
   claimPartAdmittedToOweForClaimantDashboard %}
 
-{% from "./claimStatus/claimFullyAdmitted.njk" import
-  claimFullAdmissionForClaimantDashboard,
+{% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
   claimFullAdmissionForDefendantDashboard %}
+
+{% from "./claimStatus/claimFullAdmissionForClaimant.njk" import
+  claimFullAdmissionForClaimantDashboard %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
   offerSubmittedForClaimantDashboard,
@@ -40,7 +44,18 @@
   offerRejectedForClaimantDashboard,
   offerRejectedForDefendantDashboard %}
 
+{% from "./claimStatus/settlementAgreementClaimant.njk" import
+  settlementAgreementSignedByClaimantDashboard,
+  settlementAgreementSignedByClaimantDeadlinePassedDashboard,
+  settlementAgreementSignedByBothClaimantDashboard %}
+
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
+
+{% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantDashboard %}
+{% from "./claimStatus/admissionByCCJDefendant.njk" import admissionByCCJDefendantDashboard %}
+{% from "./claimStatus/settlementAgreementDefendant.njk" import
+  settlementAgreementSignedByClaimantDefendantDashboard,
+  settlementAgreementSignedByBothDefendantDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
@@ -51,6 +66,16 @@
     {{ ccjEligibleForClaimantDashboard() }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
+    {{ admissionByCCJClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
+    {{ claimFullAdmissionForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
+    {{ settlementAgreementSignedByClaimantDeadlinePassedDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+    {{ settlementAgreementSignedByClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
+    {{ settlementAgreementSignedByBothClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
     {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
       {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
@@ -61,7 +86,7 @@
         {{ claimRejectedFreeMediationYESForClaimantDashboard(claim) }}
       {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      {% if claim.response.paymentDeclaration %}
+      {% if claim.response.paymentDeclaration and claim.totalAmountTillToday < claim.response.amount %}
         {{ claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) }}
       {% else %}
         {{ claimPartAdmittedToOweForClaimantDashboard(claim) }}
@@ -85,11 +110,19 @@
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
-    {{ moreTimeRequestedForDefendantDashboard(claim) }}
+      {{ moreTimeRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-    {{ ccjEligibleForDefendantDashboard(claim) }}
+      {{ ccjEligibleForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CCJ_REQUESTED %}
-    {{ ccjRequestedForDefendantDashboard(claim) }}
+      {{ ccjRequestedForDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
+      {{ admissionByCCJDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+      {{ settlementAgreementSignedByClaimantDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
+      {{ claimFullAdmissionForDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
+      {{ settlementAgreementSignedByBothDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.RESPONSE_SUBMITTED %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
