@@ -176,8 +176,6 @@ export class Claim {
       }
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
-    } else if (this.eligibleForCCJAfterBreachedSettlement) {
-      return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT
     } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.hasDefendantNotSignedSettlementAgreement()) {
@@ -207,6 +205,10 @@ export class Claim {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
     } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
+    }
+
+    if (this.eligibleForCCJAfterBreachedSettlement) {
+      statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
 
     return statuses
