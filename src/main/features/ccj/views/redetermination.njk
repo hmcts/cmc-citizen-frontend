@@ -1,0 +1,19 @@
+{% extends "layout.njk" %}
+
+{% set heading = 'Why do you believe the defendant can repay you sooner?' %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, errorSummary, textArea %}
+
+{% block content %}
+  <div class="column-two-thirds">
+
+    <form method="post" >
+      {{ csrfProtection(csrf) }}
+
+      {{ textArea(name = 'text', form = form, rows = 5, columns=18) }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+{% endblock %}

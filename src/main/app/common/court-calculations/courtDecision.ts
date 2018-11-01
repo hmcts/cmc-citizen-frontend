@@ -12,17 +12,16 @@ export class CourtDecision {
   static calculateDecision (defendantPaymentDate: Moment,
                             claimantPaymentDate: Moment,
                             courtGeneratedPaymentDate: Moment): DecisionType {
+    if (!courtGeneratedPaymentDate) {
+      return DecisionType.DEFENDANT
+    }
 
     if (!defendantPaymentDate || !claimantPaymentDate) {
       throw new Error('Input should be a moment, cannot be empty')
-    }
 
+    }
     if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate)) {
       return DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT
-    }
-
-    if (!courtGeneratedPaymentDate) {
-      return DecisionType.DEFENDANT
     }
 
     if (courtGeneratedPaymentDate.isBefore(claimantPaymentDate)) {
