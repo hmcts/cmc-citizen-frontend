@@ -98,6 +98,7 @@ export class PaymentPlanHelper {
       response.defendant.type,
       PaymentPlanHelper.getDateOfBirth(response.defendant)), 0)
 
+    // No Payment plan when calculated disposable income is negative / zero
     if (calculatedMonthlyDisposableIncome === 0) {
       return undefined
     }

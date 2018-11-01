@@ -18,8 +18,8 @@ export class CourtDecision {
 
     if (!defendantPaymentDate || !claimantPaymentDate) {
       throw new Error('Input should be a moment, cannot be empty')
-
     }
+
     if (claimantPaymentDate.isSameOrAfter(defendantPaymentDate)) {
       return DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT
     }
