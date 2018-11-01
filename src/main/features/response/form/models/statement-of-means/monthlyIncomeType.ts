@@ -9,8 +9,8 @@ export class MonthlyIncomeType {
   static readonly CHILD_TAX_CREDIT = new MonthlyIncomeType('CHILD_TAX_CREDIT', 'Child Tax Credit')
   static readonly CHILD_BENEFIT = new MonthlyIncomeType('CHILD_BENEFIT', 'Child Benefit')
   static readonly COUNCIL_TAX_SUPPORT = new MonthlyIncomeType('COUNCIL_TAX_SUPPORT', 'Council Tax Support')
-  static readonly PENSION = new MonthlyIncomeType('PENSION', 'pension payments')
-  static readonly OTHER = new MonthlyIncomeType('OTHER', 'other income')
+  static readonly PENSION = new MonthlyIncomeType('PENSION', 'pension')
+  static readonly OTHER = new MonthlyIncomeType('OTHER', 'other')
 
   readonly value: string
   readonly displayValue: string

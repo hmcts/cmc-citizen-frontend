@@ -24,10 +24,12 @@ async function renderView (form: Form<MoreTimeNeeded>, res: express.Response, ne
     const postponedDeadline: Moment = await DeadlineCalculatorClient.calculatePostponedDeadline(claim.issuedOn)
 
     const moreTimeDeadline: string = 'You’ll have to respond before 4pm on ' + postponedDeadline.format('LL')
+    const responseDeadline: string = 'You’ll have to respond before 4pm on ' + claim.responseDeadline.format('LL')
 
     res.render(Paths.moreTimeRequestPage.associatedView, {
       form: form,
-      moreTimeDeadline: moreTimeDeadline
+      moreTimeDeadline: moreTimeDeadline,
+      responseDeadline: responseDeadline
     })
   } catch (err) {
     next(err)

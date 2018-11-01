@@ -15,4 +15,12 @@ export class CCJClient {
     })
   }
 
+  static async redetermination (externalId: string, reDetermination: ReDetermination, user: User, madeBy: MadeBy) {
+    return request.post(`${claimStoreApiUrl}/${externalId}/re-determination`, {
+      body: { explanation: reDetermination.text, partyType: madeBy.value },
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    })
+  }
 }
