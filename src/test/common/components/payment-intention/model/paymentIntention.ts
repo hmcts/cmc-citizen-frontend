@@ -7,7 +7,7 @@ import { MomentFactory } from 'shared/momentFactory'
 
 import {
   intentionOfImmediatePayment,
-  intentionOfPaymentByInstallments,
+  intentionOfPaymentByInstalments,
   intentionOfPaymentInFullBySetDate
 } from 'test/data/draft/paymentIntentionDraft'
 
@@ -32,7 +32,7 @@ describe('PaymentIntention', () => {
     })
 
     it('should convert payment by installments', () => {
-      const paymentIntention = PaymentIntention.deserialize(intentionOfPaymentByInstallments)
+      const paymentIntention = PaymentIntention.deserialize(intentionOfPaymentByInstalments)
 
       const result = paymentIntention.toDomainInstance()
       expect(result.paymentOption).to.be.equal(PaymentType.INSTALMENTS)
