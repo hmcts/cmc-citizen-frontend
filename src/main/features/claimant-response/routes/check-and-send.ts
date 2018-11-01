@@ -17,7 +17,6 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
   if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
     return response.paymentIntention
   } else {
@@ -49,7 +48,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
-      await new ClaimStoreClient().saveClaimantResponse(claim,draft,user)
+      await new ClaimStoreClient().saveClaimantResponse(claim, draft, user)
       await new DraftService().delete(draft.id, user.bearerToken)
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
     }))
