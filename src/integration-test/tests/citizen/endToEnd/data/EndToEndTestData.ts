@@ -27,9 +27,27 @@ export class EndToEndTestData {
     defendantPartyType: PartyType,
     claimantPartyType: PartyType
   ) {
+    const claimData: ClaimData = createClaimData(claimantPartyType, defendantPartyType)
+    return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
+  }
+
+  public static async prepareDataWithNoDefendantEmail (
+    I: I,
+    defendantPartyType: PartyType,
+    claimantPartyType: PartyType
+  ) {
+    const claimData: ClaimData = createClaimData(defendantPartyType, claimantPartyType, false)
+    return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
+  }
+
+  private static async prepare (
+    I: I,
+    defendantPartyType: PartyType,
+    claimantPartyType: PartyType,
+    claimData: ClaimData
+  ) {
     const claimantEmail: string = await I.createCitizenUser()
     const defendantEmail: string = await I.createCitizenUser()
-    const claimData: ClaimData = createClaimData(defendantPartyType, claimantPartyType)
     const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
@@ -39,29 +57,6 @@ export class EndToEndTestData {
     testData.defendant = claimData.defendants[0]
     testData.claimantName = claimData.claimants[0].name
     testData.claimant = claimData.claimants[0]
-    testData.claimRef = claimRef
-    testData.claimantEmail = claimantEmail
-    testData.defendantEmail = defendantEmail
-    testData.defendantPartyType = defendantPartyType
-    testData.claimantPartyType = claimantPartyType
-    return testData
-  }
-
-  public static async prepareDataWithNoDefendantEmail (
-    I: I,
-    defendantPartyType: PartyType,
-    claimantPartyType: PartyType
-  ) {
-    const claimantEmail: string = await I.createCitizenUser()
-    const defendantEmail: string = await I.createCitizenUser()
-    const claimData: ClaimData = createClaimData(defendantPartyType, claimantPartyType, false)
-    const claimRef: string = await I.createClaim(claimData, claimantEmail)
-
-    await helperSteps.enterPinNumber(claimRef, claimantEmail)
-
-    const testData = new EndToEndTestData()
-    testData.defendantName = claimData.defendants[0].name
-    testData.claimantName = claimData.claimants[0].name
     testData.claimRef = claimRef
     testData.claimantEmail = claimantEmail
     testData.defendantEmail = defendantEmail

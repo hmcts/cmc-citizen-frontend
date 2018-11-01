@@ -16,6 +16,7 @@ import { ClaimantPaymentDatePage } from 'integration-test/tests/citizen/claimant
 import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-plan'
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
 import { ClaimantCounterOfferAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-counter-offer-accepted'
+import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -31,6 +32,7 @@ const paymentDatePage: ClaimantPaymentDatePage = new ClaimantPaymentDatePage()
 const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
 const counterOfferAcceptedPage: ClaimantCounterOfferAcceptedPage = new ClaimantCounterOfferAcceptedPage()
 const payBySetDateAcceptedPage: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
+const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
 
 export class ClaimantResponseSteps {
 
@@ -98,6 +100,7 @@ export class ClaimantResponseSteps {
     switch (testData.claimantPaymentOption) {
       case PaymentOption.IMMEDIATELY:
         paymentOptionPage.chooseImmediately()
+        courtOfferedSetDataPage.accept()
         break
       case PaymentOption.BY_SET_DATE:
         paymentOptionPage.chooseFullBySetDate()

@@ -287,6 +287,7 @@ export class DefenceSteps {
         throw new Error('Unknown DefenceType')
     }
 
+    I.wait(10)
     this.checkAndSendAndSubmit(defendantType)
     if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
       I.see('You’ve submitted your response')

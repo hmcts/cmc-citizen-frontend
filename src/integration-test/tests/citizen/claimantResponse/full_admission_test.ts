@@ -61,12 +61,12 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // as claimant
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
-  I.see('Error: (/usr/src/app/src/main/features/claimant-response/views/check-and-send.njk)')
-  // checkAndSendPage.verifyFactsForSettlement()
-  // checkAndSendPage.checkFactsTrueAndSubmit()
+  checkAndSendPage.verifyFactsForSettlement()
+  checkAndSendPage.checkFactsTrueAndSubmit()
+  I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
   // confirmationPage.clickGoToYourAccount()
-  // I.see(claim.claimRef)
-  // I.see('You’ve signed the agreement')
+  // I.see(testData.claimRef)
+  // I.see('You’ve signed a settlement agreement')
 })
 
 Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions @error', async (I: I) => {
@@ -85,7 +85,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   // checkAndSendPage.checkFactsTrueAndSubmit()
   // confirmationPage.clickGoToYourAccount()
   // I.see(claim.claimRef)
-  // I.see('You’ve signed the agreement')
+  // I.see('You’ve signed a settlement agreement')
 
 })
 

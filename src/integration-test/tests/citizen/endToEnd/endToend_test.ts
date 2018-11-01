@@ -18,13 +18,8 @@ Scenario('I can as Sole Trader make a claim against an Individual and are able t
   helperSteps.finishResponse(testData)
 })
 
-Scenario('I can as a Company make a claim against an Individual and are able to pay on the Gov Pay page @citizen', async (I: I) => {
-  const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
-  helperSteps.finishResponse(testData)
-})
-
 Scenario('I can as a Individual make a claim against a Company and are able to pay on the Gov Pay page @citizen @quick', async (I: I) => {
-  const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.COMPANY)
+  const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
   helperSteps.finishResponse(testData)
 })
 
