@@ -153,6 +153,21 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
   }
 }
 
+export const fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2018-10-01',
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2019-02-01',
+      paymentLength: '1'
+    }
+  }
+}
+
 export const partialAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
@@ -261,6 +276,13 @@ export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   ...fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsOnlyData
   }
 }
 
