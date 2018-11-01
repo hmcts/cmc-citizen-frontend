@@ -29,7 +29,8 @@ ccjRequestedForDefendantClaimDetails %}
 {% from "./claimStatus/settlementAgreementClaimant.njk" import
   settlementAgreementSignedByClaimantClaimDetails,
   settlementAgreementSignedByClaimantDeadlinePassedClaimDetails,
-  settlementAgreementSignedByBothClaimantClaimDetails %}
+  settlementAgreementSignedByBothClaimantClaimDetails,
+  requestCCJ %}
 
 {% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
   claimFullAdmissionForDefendantClaimDetails %}
@@ -104,13 +105,10 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerRejectedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED
-              or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
+      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReachedForClaimant(claim) }}
-      {% else %}
-        <p>
-          {{ caseStatusForClaimant(state.status, claim) }}
-        </p>
+      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
+        {{ requestCCJ(claim) }}
       {% endif %}
     </div>
   {% endfor %}
@@ -118,7 +116,6 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% macro caseHistoryForDefendantClaimDetails(claim) %}
   {% for state in claim.stateHistory %}
-    <div class="status-block">
       {% if state.status === ClaimStatus.NO_RESPONSE %}
         {{ noResponseForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -163,15 +160,9 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerRejectedForDefendantClaimDetails() }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED
-              or state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
+      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
           {{ offerSettlementReachedForDefendant(claim) }}
-      {% else %}
-        <p>
-          {{ caseStatusForDefendant(claim.status, claim) }}
-        </p>
       {% endif %}
-    </div>
   {% endfor %}
 {% endmacro %}
 
