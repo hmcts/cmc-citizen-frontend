@@ -21,6 +21,7 @@ import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
@@ -134,15 +135,18 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
+    const courtDetermination: CourtDetermination = new CourtDetermination()
+
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
-    locals.draft.document.decisionType = decisionType
+    courtDetermination.decisionType = decisionType
 
     const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     if (courtCalculatedPaymentIntention) {
-      locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
+      courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
     }
 
-    locals.draft.document.courtOfferedPaymentIntention = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    courtDetermination.courtDecision = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    locals.draft.document.courtDetermination = courtDetermination
     return super.saveDraft(locals)
   }
 

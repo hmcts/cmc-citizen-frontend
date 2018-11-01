@@ -37,7 +37,7 @@ export default express.Router()
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
         isCourtOrderPaymentPlanConvertedByDefendantFrequency: isCourtOrderPaymentPlanConvertedByDefendantFrequency,
         claimantPaymentPlan: claimantPaymentPlan,
-        courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
+        courtOrderPaymentPlan: draft.document.courtDetermination.courtDecision.repaymentPlan
       })
     }))
   .post(
@@ -49,7 +49,7 @@ export default express.Router()
 
       draft.document.settlementAgreement = undefined
       draft.document.formaliseRepaymentPlan = undefined
-      draft.document.rejectionReason = undefined
+      draft.document.courtDetermination.rejectionReason = undefined
 
       await new DraftService().save(draft, user.bearerToken)
 

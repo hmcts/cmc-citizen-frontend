@@ -17,7 +17,7 @@ function getPaymentIntention (response: FullAdmissionResponse | PartialAdmission
   if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
     return response.paymentIntention
   } else {
-    return draft.courtOfferedPaymentIntention
+    return draft.courtDetermination.courtDecision
   }
 }
 

@@ -21,6 +21,7 @@ import { User } from 'idam/user'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Draft } from '@hmcts/draft-store-client'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse> {
 
@@ -141,13 +142,16 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
+    const courtDetermination: CourtDetermination = new CourtDetermination()
+
     if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
       const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
-      locals.draft.document.decisionType = decisionType
-      locals.draft.document.courtCalculatedPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-      locals.draft.document.courtOfferedPaymentIntention = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-    }
 
+      courtDetermination.decisionType = decisionType
+      courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+      courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    }
+    locals.draft.document.courtDetermination = courtDetermination
     return super.saveDraft(locals)
   }
 }
