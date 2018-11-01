@@ -5,8 +5,8 @@
     </legend>
     {{ row('Regular payments of', instalmentAmount | numeral) }}
     {{ row('Frequency of payments', paymentSchedule | renderPaymentSchedule) }}
-    {{ row('First payment date', firstPaymentDate | date) }}
-    {{ row('Final payment date', completionDate | date) }}
+    {{ row('Make the first payment on', firstPaymentDate | date) }}
+    {{ row('Last payment on', completionDate | date) }}
     {{ row('Length of repayment plan', paymentLength) }}
   </fieldset>
 {% endmacro %}

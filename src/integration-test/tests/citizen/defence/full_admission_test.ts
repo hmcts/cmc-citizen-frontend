@@ -24,19 +24,19 @@ async function prepareClaim (I: I) {
   helperSteps.startResponseFromDashboard(claimRef)
 }
 
-Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen', async (I: I) => {
+Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen @admissions', async (I: I) => {
   await prepareClaim(I)
 
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen', async (I: I) => {
+Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen @admissions', async (I: I) => {
   await prepareClaim(I)
 
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
 })
 
-Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen', async (I: I) => {
+Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen @admissions', async (I: I) => {
   await prepareClaim(I)
 
   defenceSteps.makeFullAdmission(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)

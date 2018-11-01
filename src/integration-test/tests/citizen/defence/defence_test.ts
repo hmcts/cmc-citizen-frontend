@@ -19,7 +19,7 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
   helperSteps.finishResponse(claimRef, defendantEmail, PartyType.INDIVIDUAL, DefenceType.FULL_REJECTION_WITH_DISPUTE)
 })
 
-Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen', async (I: I) => {
+Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
   const claimModel: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -34,7 +34,7 @@ Scenario('I can complete the journey when I fully reject the claim as I have alr
   I.see(`We’ve emailed ${claimModel.claimants[0].name} telling them when and how you said you paid the claim`)
 })
 
-Scenario('I can fill out forms for I admit part of the claim @citizen', async (I: I) => {
+Scenario('I can fill out forms for I admit part of the claim @citizen @admissions', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 

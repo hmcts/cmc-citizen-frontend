@@ -1,21 +1,29 @@
-{% macro termsOfAgreement(id, response, paymentIntention, totalAmount) %}
+{% macro termsOfAgreement(id, claim, paymentIntention, totalAmount) %}
   <fieldset id="{{ id }}" class="form-group">
     <legend>
       <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
     </legend>
 
-    {% if paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-      {% set amountToPay = 'the full amount' %}
-      {% if response.responseType == ResponseType.PART_ADMISSION.value %}
-        {% set amountToPay = totalAmount | numeral %}
-      {% endif %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
-        { defendantFullName: response.defendant.name, paymentDate: paymentIntention.paymentDate | date }
+    {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+      {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
+      {{ claimantName }} will receive the money no later than {{ paymentDate }}.
+      Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
+        { defendantFullName: claim.response.defendant.name,
+          claimantName: claim.claimData.claimant.name,
+          paymentDate: paymentIntention.paymentDate | date,
+          totalAmount: totalAmount | numeral}
+      )) }}
+      {{ row('Completion date', paymentIntention.paymentDate | date) }}
+    {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+      {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }}, no later than {{ paymentDate }}',
+        { defendantFullName: claim.response.defendant.name,
+          paymentDate: paymentIntention.paymentDate | date,
+          totalAmount: totalAmount | numeral}
       )) }}
       {{ row('Completion date', paymentIntention.paymentDate | date) }}
     {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-      {{ row('The offer', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
-        { defendantFullName: response.defendant.name,
+      {{ row('The agreement', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+        { defendantFullName: claim.response.defendant.name,
           instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
           paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
           firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
