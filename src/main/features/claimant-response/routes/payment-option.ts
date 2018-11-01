@@ -84,7 +84,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
   }
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
-    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
       return undefined
     }
 
@@ -100,9 +100,6 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
   }
 
   static getCourtDecision (draft: DraftClaimantResponse, claim: Claim): DecisionType {
-    if (draft.alternatePaymentMethod.paymentOption.option !== PaymentType.IMMEDIATELY) {
-      return undefined
-    }
     return CourtDecisionHelper.createCourtDecision(claim, draft)
   }
 
@@ -144,10 +141,12 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
-    const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
-    locals.draft.document.decisionType = decisionType
-    locals.draft.document.courtCalculatedPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-    locals.draft.document.courtOfferedPaymentIntention = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
+      const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
+      locals.draft.document.decisionType = decisionType
+      locals.draft.document.courtCalculatedPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+      locals.draft.document.courtOfferedPaymentIntention = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    }
 
     return super.saveDraft(locals)
   }
