@@ -25,15 +25,15 @@ import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
   static generateCourtOfferedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
-    const courtCalculatedPaymentIntention = new PaymentIntention()
+    const courtOfferedPaymentIntention = new PaymentIntention()
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
-        courtCalculatedPaymentIntention.paymentDate = draft.alternatePaymentMethod.toDomainInstance().paymentDate
-        courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
+        courtOfferedPaymentIntention.paymentDate = draft.alternatePaymentMethod.toDomainInstance().paymentDate
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
-      return courtCalculatedPaymentIntention
+      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.COURT) {
@@ -41,15 +41,15 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
       const lastPaymentDate: Moment = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
 
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
-        courtCalculatedPaymentIntention.paymentDate = lastPaymentDate
-        courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
+        courtOfferedPaymentIntention.paymentDate = lastPaymentDate
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
 
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
         const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
         const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
-        courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-        courtCalculatedPaymentIntention.repaymentPlan = {
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
           instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
@@ -58,22 +58,22 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         }
       }
 
-      return courtCalculatedPaymentIntention
+      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.DEFENDANT) {
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-        courtCalculatedPaymentIntention.paymentDate = claimResponse.paymentIntention.paymentDate
-        courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
+        courtOfferedPaymentIntention.paymentDate = claimResponse.paymentIntention.paymentDate
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
 
-        courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-        courtCalculatedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
       }
-      return courtCalculatedPaymentIntention
+      return courtOfferedPaymentIntention
     }
   }
 
