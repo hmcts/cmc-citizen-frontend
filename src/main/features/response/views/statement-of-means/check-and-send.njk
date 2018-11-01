@@ -42,7 +42,7 @@
 {{ tableStart('statementOfMeans', 'Your financial details') }}
 
 {% set numberOfBankAccounts = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length %}
-{{ row('Bank and savings accounts', 'No bank account' if numberOfBankAccounts === 0, StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts, bold = true) }}
+{{ row('Bank and savings accounts', 'None' if numberOfBankAccounts === 0, StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts, bold = true) }}
 {% set indexOfLastRow = numberOfBankAccounts - 1 %}
 
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
