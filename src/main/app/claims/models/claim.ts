@@ -11,6 +11,8 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { ReDetermination } from 'ccj/form/models/reDetermination'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 interface State {
   status: ClaimStatus
@@ -44,6 +46,8 @@ export class Claim {
   features: string[]
   directionsQuestionnaireDeadline: Moment
   moneyReceivedOn: Moment
+  reDetermination: ReDetermination
+  reDeterminationRequestedAt: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -95,6 +99,12 @@ export class Claim {
       }
       if (input.moneyReceivedOn) {
         this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
+      }
+      if (input.reDetermination) {
+        this.reDetermination = new ReDetermination().deserialize(input.reDetermination)
+      }
+      if (input.reDeterminationRequestedAt) {
+        this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
       }
     }
 
@@ -248,5 +258,12 @@ export class Claim {
   private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
+  }
+
+  isEligibleForReDetermination (): boolean {
+    const dateAfter19Days = this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
+    return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === CountyCourtJudgmentType.DETERMINATION
+      && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
+      && this.reDeterminationRequestedAt === undefined
   }
 }
