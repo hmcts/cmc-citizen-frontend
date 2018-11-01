@@ -1,7 +1,6 @@
 import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse.ts'
 import { ResponseRejection } from 'claims/models/response/core/responseRejection.ts'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
-import { CourtDetermination } from 'claims/models/response/core/courtDetermination.ts'
 import { ClaimantResponse } from 'claims/models/response/core/claimantResponse'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseAcceptance } from 'claims/models/response/core/responseAcceptance'
@@ -20,6 +19,7 @@ import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { DecisionType } from 'common/court-calculations/courtDecision'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class ClaimantResponseConverter {
 
@@ -32,8 +32,8 @@ export class ClaimantResponseConverter {
       if (draftClaimantResponse.freeMediation) {
         reject.freeMediation = draftClaimantResponse.freeMediation.option === FreeMediationOption.YES
       }
-      if (draftClaimantResponse.rejectionReason) {
-        reject.reason = draftClaimantResponse.rejectionReason.text
+      if (draftClaimantResponse.courtDetermination.rejectionReason) {
+        reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse)
@@ -47,41 +47,21 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
-    const courtDetermination = this.createCourtDetermination(draftClaimantResponse)
+    const courtDetermination: CourtDetermination = draftClaimantResponse.courtDetermination
     if (courtDetermination) {
-      respAcceptance.courtDetermination = courtDetermination
+      respAcceptance.courtDetermination = {
+        courtDecision: draftClaimantResponse.courtDetermination.courtDecision,
+        courtPaymentIntention: draftClaimantResponse.courtDetermination.courtPaymentIntention,
+        rejectionReason: draftClaimantResponse.courtDetermination.rejectionReason.text,
+        disposableIncome: draftClaimantResponse.courtDetermination.disposableIncome,
+        decisionType: draftClaimantResponse.courtDetermination.decisionType
+      }
     }
-    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod, draftClaimantResponse.decisionType)
+    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod, draftClaimantResponse.courtDetermination.decisionType)
     if (claimantPaymentIntention) {
       respAcceptance.claimantPaymentIntention = claimantPaymentIntention
     }
     return respAcceptance
-  }
-
-  private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
-    if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
-      throw new Error('court offered payment intention not found where decision type is COURT')
-    }
-    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      return undefined
-    }
-
-    if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
-      return undefined
-    }
-
-    const courtDetermination: CourtDetermination = new CourtDetermination()
-    courtDetermination.courtPaymentIntention = draftClaimantResponse.courtCalculatedPaymentIntention
-    courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
-    if (courtDetermination.courtDecision.repaymentPlan) {
-      courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
-    }
-    if (draftClaimantResponse.rejectionReason) {
-      courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
-    }
-    courtDetermination.disposableIncome = draftClaimantResponse.disposableIncome ? draftClaimantResponse.disposableIncome : 0
-    courtDetermination.decisionType = draftClaimantResponse.decisionType
-    return courtDetermination
   }
 
   private static getFormaliseOption (repaymentPlan: FormaliseRepaymentPlan): string {

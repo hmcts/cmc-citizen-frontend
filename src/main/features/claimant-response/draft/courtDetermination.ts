@@ -26,8 +26,8 @@ export class CourtDetermination {
 
   deserialize (input?: any): CourtDetermination {
     if (input) {
-      this.courtDecision = PaymentIntention.deserialize(input.courtDecision)
-      this.courtPaymentIntention = PaymentIntention.deserialize(input.courtPaymentIntention)
+      this.courtDecision = input.courtDecision
+      this.courtPaymentIntention = input.courtPaymentIntention
       this.rejectionReason = input.rejectionReason
       this.disposableIncome = input.disposableIncome
       this.decisionType = input.decisionType
