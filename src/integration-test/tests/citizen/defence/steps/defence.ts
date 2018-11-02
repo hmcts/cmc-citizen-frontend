@@ -440,21 +440,19 @@ export class DefenceSteps {
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM:
         this.admitAllOfClaimAndMakeCounterClaim()
-        I.see('Counterclaim fee')
-        I.see(claimRef)
-        I.see(claimant.name)
-        I.see(defendant.name)
+        I.see('Download the defence and counterclaim form.')
         break
-
       case DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT:
         this.chooseLessThenAmountClaimedOption()
-        I.see('You’ve paid less than the total claim amount')
-        I.see('You need to explain why you believe you don’t owe the remaining amount')
-        I.see(claimant.name)
+        I.see('Download the admission form and the defence form')
         break
-
       default:
         throw new Error('Unknown DefenceType')
     }
+
+    I.see('Post your response')
+    I.see(claimRef)
+    I.see(claimant.name)
+    I.see(defendant.name)
   }
 }
