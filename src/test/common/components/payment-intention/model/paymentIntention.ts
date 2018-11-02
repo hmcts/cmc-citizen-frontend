@@ -4,13 +4,6 @@ import { expect } from 'chai'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentType } from 'main/common/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
-
-import {
-  intentionOfImmediatePayment,
-  intentionOfPaymentByInstalments,
-  intentionOfPaymentInFullBySetDate
-} from 'test/data/draft/paymentIntentionDraft'
-import { PaymentOption } from 'claims/models/paymentOption'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
