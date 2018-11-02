@@ -13,7 +13,6 @@ const fields = {
     input: 'input[id="rent[amount]"]',
     everyWeek: 'input[id="rent[schedule]WEEK"]'
   }
-
 }
 
 const buttons = {
@@ -37,7 +36,7 @@ export class MonthlyExpensesPage {
     I.click(buttons.submit)
   }
 
-  private fillGenericField (field: GenericMonthlyExpenseField, amount: string): void {
+  fillGenericField (field: GenericMonthlyExpenseField, amount: string): void {
     I.click(field.radio)
     I.fillField(field.input, amount)
     I.click(field.everyWeek)
