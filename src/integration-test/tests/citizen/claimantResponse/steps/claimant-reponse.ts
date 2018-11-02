@@ -38,34 +38,49 @@ export class ClaimantResponseSteps {
 
   acceptSettlementFromDashboardWhenRejectPaymentMethod (
     testData: EndToEndTestData,
-    claimantResponseTestData: ClaimantResponseTestData
+    claimantResponseTestData: ClaimantResponseTestData,
+    buttonText: string
   ): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
     this.acceptSettlementWithClaimantPaymentOption(testData, claimantResponseTestData)
   }
 
-  acceptSettlementFromDashboardWhenAcceptPaymentMethod (testData: EndToEndTestData): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
+  acceptSettlementFromDashboardWhenAcceptPaymentMethod (
+    testData: EndToEndTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
     this.acceptSettlement()
   }
 
-  acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod (testData: EndToEndTestData): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
+  acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod (
+    testData: EndToEndTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
     this.acceptCCJ(false)
   }
 
-  acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (testData: EndToEndTestData): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
+  acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
+    testData: EndToEndTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
     this.acceptCCJ(true)
   }
 
-  viewClaimFromDashboard (claimRef: string, shouldRespondToOffer: boolean): void {
+  viewClaimFromDashboard (claimRef: string): void {
     I.click('My account')
     I.see('Your money claims account')
     I.click(claimRef)
-    if (shouldRespondToOffer) {
-      I.click('View and respond to the offer')
-    }
+  }
+
+  respondToOffer (buttonText: string): void {
+    I.click(buttonText)
   }
 
   acceptSettlement (): void {

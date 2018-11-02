@@ -56,4 +56,8 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskFreeMediation()
   }
 
+  selectTaskWhenYouWillPay (): void {
+    defendantTaskListPage.selectTaskWhenWillYouPay()
+  }
+
 }

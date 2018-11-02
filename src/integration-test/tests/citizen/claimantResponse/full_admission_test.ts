@@ -7,7 +7,7 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { ClaimantResponseTestData } from './data/ClaimantResponseTestData'
+import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -15,7 +15,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
-Feature('Claimant Response').retry(3)
+Feature('Claimant Response: Fully Admit').retry(3)
 
 Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -25,7 +25,7 @@ Scenario('I can as a claimant view the defendants full admission with immediate 
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+  claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
   I.see('The defendant said they’ll pay you immediately')
   I.click('My account')
@@ -41,7 +41,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData)
+  claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, 'View and respond to the offer')
   checkAndSendPage.verifyFactsForSettlement()
   checkAndSendPage.checkFactsTrueAndSubmit()
   I.see('You’ve accepted the repayment plan')
@@ -60,7 +60,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
+  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
   checkAndSendPage.verifyFactsForSettlement()
   checkAndSendPage.checkFactsTrueAndSubmit()
   I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
@@ -79,7 +79,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
+  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
   I.see('Error: (/usr/src/app/src/main/features/claimant-response/views/check-and-send.njk)')
   // checkAndSendPage.verifyFactsForSettlement()
   // checkAndSendPage.checkFactsTrueAndSubmit()
@@ -100,7 +100,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
+  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
   checkAndSendPage.verifyFactsForSettlement()
   checkAndSendPage.checkFactsTrueAndSubmit()
   I.see('You’ve proposed an alternative repayment plan')
@@ -117,7 +117,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData)
+  claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData, 'View and respond to the offer')
   I.see(testData.claimRef)
   I.see('A County Court Judgment has been issued.')
 })
@@ -130,7 +130,7 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData)
+  claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData, 'View and respond to the offer')
   I.see(testData.claimRef)
   I.see('A County Court Judgment has been issued.')
 })

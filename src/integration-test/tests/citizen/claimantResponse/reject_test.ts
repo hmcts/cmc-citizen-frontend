@@ -10,7 +10,7 @@ const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
-Feature('Claimant Response').retry(3)
+Feature('Claimant Response: Reject').retry(3)
 
 Scenario('As a claimant I can reject the claim @citizen @admissions',
   async (I: I) => {
@@ -33,7 +33,7 @@ Scenario('As a claimant I can reject the claim @citizen @admissions',
 
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     // check dashboard
     I.click('My account')
     I.see(testData.claimRef)
@@ -73,7 +73,7 @@ Scenario(
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     // check dashboard
     I.click('My account')
     I.see(testData.claimRef)
@@ -114,7 +114,7 @@ Scenario(
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     // check dashboard
     I.click('My account')
     I.see(testData.claimRef)

@@ -8,7 +8,14 @@ const button = {
 
 export class ClaimantDefendantResponsePage {
 
-  Submit (): void {
+  submit (): void {
+    I.see('The defendant’s response')
     I.click(button.submit)
   }
+
+  submitHowTheyWantToPay (): void {
+    I.see('How they want to pay')
+    I.click(button.submit)
+  }
+
 }

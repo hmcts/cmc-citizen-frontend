@@ -21,6 +21,7 @@ export class EndToEndTestData {
   claimantEmail: string
   claimantPartyType: PartyType
   claimantPaymentOption: PaymentOption
+  defendantClaimsToHavePaidInFull: boolean
 
   public static async prepareData (
     I: I,
