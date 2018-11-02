@@ -32,7 +32,7 @@ export class MonthlyIncomePage {
     this.fillGenericField(fields.universalCredit, '10')
   }
 
-  private fillGenericField (field: GenericMonthyIncomeField, amount: string): void {
+  fillGenericField (field: GenericMonthyIncomeField, amount: string): void {
     I.click(field.radio)
     I.fillField(field.input, amount)
     I.click(field.everyWeek)
