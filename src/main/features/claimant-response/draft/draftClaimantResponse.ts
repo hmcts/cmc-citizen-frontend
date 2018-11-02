@@ -61,7 +61,7 @@ export class DraftClaimantResponse extends DraftDocument {
         this.courtOrderAmount = input.courtOrderAmount
       }
       if (input.courtDetermination) {
-        this.courtDetermination = input.courtDetermination
+        this.courtDetermination = new CourtDetermination().deserialize(input.courtDetermination)
       }
     }
     return this

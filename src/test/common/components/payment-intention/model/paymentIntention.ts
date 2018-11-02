@@ -10,11 +10,15 @@ import {
   intentionOfPaymentByInstalments,
   intentionOfPaymentInFullBySetDate
 } from 'test/data/draft/paymentIntentionDraft'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { LocalDate } from 'forms/models/localDate'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 describe('PaymentIntention', () => {
   describe('toDomainInstance', () => {
     it('should convert immediate payment', () => {
-      const paymentIntention = PaymentIntention.deserialize(intentionOfImmediatePayment)
+      const paymentIntention = PaymentIntention.deserialize({
+        paymentOption: { option: PaymentType.IMMEDIATELY } })
 
       const result = paymentIntention.toDomainInstance()
       expect(result.paymentOption).to.be.equal(PaymentType.IMMEDIATELY)
@@ -23,7 +27,10 @@ describe('PaymentIntention', () => {
     })
 
     it('should convert payment in full by specified date', () => {
-      const paymentIntention = PaymentIntention.deserialize(intentionOfPaymentInFullBySetDate)
+      const paymentIntention = PaymentIntention.deserialize({
+        paymentOption: { option: PaymentType.BY_SET_DATE },
+        paymentDate: { date: new LocalDate(2018,12,31) }
+      })
 
       const result = paymentIntention.toDomainInstance()
       expect(result.paymentOption).to.be.equal(PaymentType.BY_SET_DATE)
@@ -32,7 +39,14 @@ describe('PaymentIntention', () => {
     })
 
     it('should convert payment by installments', () => {
-      const paymentIntention = PaymentIntention.deserialize(intentionOfPaymentByInstalments)
+      const paymentIntention = PaymentIntention.deserialize({
+        paymentOption: { option: PaymentType.INSTALMENTS },
+        paymentPlan: {
+          instalmentAmount : 100,
+          paymentSchedule: { value: PaymentSchedule.EVERY_MONTH },
+          completionDate: new LocalDate(2019,12,30)
+        }
+      })
 
       const result = paymentIntention.toDomainInstance()
       expect(result.paymentOption).to.be.equal(PaymentType.INSTALMENTS)

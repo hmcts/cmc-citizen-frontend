@@ -5,6 +5,7 @@ import {
   intentionOfPaymentByInstalments,
   intentionOfPaymentInFullBySetDate
 } from 'test/data/draft/paymentIntentionDraft'
+import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 
 describe('CourtDetermination', () => {
   context('deserialize', () => {
@@ -17,10 +18,15 @@ describe('CourtDetermination', () => {
         {
           courtDecision: intentionOfPaymentByInstalments,
           courtPaymentIntention: intentionOfPaymentInFullBySetDate,
-          rejectionReason: undefined,
+          rejectionReason: { text: 'rejection reason'},
           disposableIncome: 1000,
           decisionType: DecisionType.COURT
-        })).to.deep.equal(new CourtDetermination(intentionOfPaymentByInstalments, intentionOfPaymentInFullBySetDate, undefined, 1000, DecisionType.COURT))
+        })).to.deep.equal(new CourtDetermination(
+          intentionOfPaymentByInstalments,
+        intentionOfPaymentInFullBySetDate,
+        new RejectionReason('rejection reason'),
+        1000,
+        DecisionType.COURT))
     })
   })
 })
