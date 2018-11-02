@@ -8214,10 +8214,10 @@ sinon-chai@^3.2.0:
   resolved "https://registry.yarnpkg.com/sinon-chai/-/sinon-chai-3.2.0.tgz#ed995e13a8a3cfccec18f218d9b767edc47e0715"
   integrity sha512-Z72B4a0l0IQe5uWi9yzcqX/Ml6K9e1Hp03NmkjJnRG3gDsKTX7KvLFZsVUmCaz0eqeXLLK089mwTsP1P1W+DUQ==
 
-sinon-express-mock@^2.0.5:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/sinon-express-mock/-/sinon-express-mock-2.0.5.tgz#2ca382a89153149fe2e817a90cee32a6552479d2"
-  integrity sha512-iekqBy+IyzPq+PU8gFO1iwZc4n3CFlFoXBuffLc+z3DLEX0LIM8LUbt/PSDou/027xaO4fRiYYP/XLvH8zD/zw==
+sinon-express-mock@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/sinon-express-mock/-/sinon-express-mock-2.1.0.tgz#9ed521cd7480af780e4f615bc558ca826777061a"
+  integrity sha512-wUhdw+YbNanYmjKYVEMejRmDRq58uGfKYVe8umIQnIF7Jpq6ew4mFIgo2tso+rLNRGRQqYHlkf9cSnK8RpAIUA==
 
 sinon@^7.1.1:
   version "7.1.1"

@@ -131,7 +131,7 @@
     "sass-lint": "^1.10.2",
     "sinon": "^7.1.1",
     "sinon-chai": "^3.2.0",
-    "sinon-express-mock": "^2.0.5",
+    "sinon-express-mock": "^2.1.0",
     "sonarqube-scanner": "^2.1.2",
     "supertest": "^3.2.0",
     "tslint": "^5.11.0",
