@@ -23,6 +23,12 @@ export function resolveExchangeCode (token: string) {
     })
 }
 
+export function rejectExchangeCode () {
+  mock(apiServiceBaseURL)
+    .post(new RegExp('/oauth2/token.*'))
+    .reply(HttpStatus.UNAUTHORIZED)
+}
+
 export function resolveInvalidateSession (token: string) {
   mock(apiServiceBaseURL)
     .delete(`/session/${token}`)
@@ -39,6 +45,12 @@ export function rejectRetrieveUserFor (reason: string) {
   return mock(apiServiceBaseURL)
     .get('/details')
     .reply(HttpStatus.FORBIDDEN, reason)
+}
+
+export function rejectUnauthorisedRetrieveUserFor (reason: string) {
+  return mock(apiServiceBaseURL)
+    .get('/details')
+    .reply(HttpStatus.UNAUTHORIZED, reason)
 }
 
 export function resolveRetrieveServiceToken (token: string = defaultAuthToken) {
