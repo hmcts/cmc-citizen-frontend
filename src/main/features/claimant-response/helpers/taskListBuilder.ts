@@ -159,7 +159,7 @@ export class TaskListBuilder {
     if (
       (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
         || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)
-        && (draft.courtDetermination.rejectionReason === undefined))))) {
+        && (draft.courtDetermination.rejectionReason.text === undefined))))) {
       tasks.push(
         new TaskListItem(
           'Choose how to formalise repayment',
