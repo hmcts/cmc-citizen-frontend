@@ -4,7 +4,7 @@ const I: I = actor()
 
 const fields = {
   radioYes: 'input[id=acceptyes]',
-  radioNo: 'input[id=acceptNo]'
+  radioNo: 'input[id=acceptno]'
 }
 
 const buttons = {

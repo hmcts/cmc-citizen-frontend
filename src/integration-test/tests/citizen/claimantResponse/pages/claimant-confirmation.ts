@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  linkGoToYourAccount: 'input[href=/dashboard]'
+  linkGoToYourAccount: 'a[href="/dashboard"]'
 }
 
 export class ClaimantConfirmation {
