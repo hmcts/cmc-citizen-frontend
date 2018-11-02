@@ -18,7 +18,7 @@ describe('CourtDetermination', () => {
         {
           courtDecision: intentionOfPaymentByInstalments,
           courtPaymentIntention: intentionOfPaymentInFullBySetDate,
-          rejectionReason: { text: 'rejection reason'},
+          rejectionReason: { text: 'rejection reason' },
           disposableIncome: 1000,
           decisionType: DecisionType.COURT
         })).to.deep.equal(new CourtDetermination(
