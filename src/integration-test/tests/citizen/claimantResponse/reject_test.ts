@@ -53,7 +53,7 @@ Scenario(
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     const claimantResponseTestData = new ClaimantResponseTestData()
-    claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPage_enterAmountPaidWithDateAndExplanation = {
+    claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
       paidAmount: 50,
       date: '2018-01-01',
       explanation: 'My explanation...'
@@ -94,7 +94,7 @@ Scenario(
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     const claimantResponseTestData = new ClaimantResponseTestData()
-    claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPage_enterAmountPaidWithDateAndExplanation = {
+    claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
       paidAmount: 125,
       date: '2018-01-01',
       explanation: 'My explanation...'

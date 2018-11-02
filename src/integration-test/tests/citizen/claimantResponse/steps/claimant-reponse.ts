@@ -104,13 +104,13 @@ export class ClaimantResponseSteps {
         break
       case PaymentOption.BY_SET_DATE:
         paymentOptionPage.chooseFullBySetDate()
-        paymentDatePage.enterDate(claimantResponseTestData.pageSpecificValues.paymentDatePage_enterDate)
+        paymentDatePage.enterDate(claimantResponseTestData.pageSpecificValues.paymentDatePageEnterDate)
         paymentDatePage.saveAndContinue()
         payBySetDateAcceptedPage.continue()
         break
       case PaymentOption.INSTALMENTS:
         paymentOptionPage.chooseInstalments()
-        paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPage_enterRepaymentPlan)
+        paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
         paymentPlanPage.saveAndContinue()
         counterOfferAcceptedPage.continue()
         break

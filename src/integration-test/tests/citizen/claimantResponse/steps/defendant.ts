@@ -36,17 +36,17 @@ export class DefendantResponseSteps {
     defenceSteps.requestNoExtraTimeToRespond()
     defenceSteps.rejectAllOfClaimAsDisputeClaim()
     defendantSteps.selectTaskWhyDoYouDisagreeWithTheClaim()
-    whyYouDisagreePage.enterReason(claimantResponseTestData.pageSpecificValues.whyYouDisagreePage_enterReason)
+    whyYouDisagreePage.enterReason(claimantResponseTestData.pageSpecificValues.whyYouDisagreePageEnterReason)
     timelineEventsPage.enterTimelineEvent(
-      claimantResponseTestData.pageSpecificValues.timelineEventsPage_enterTimelineEvent.eventNum,
-      claimantResponseTestData.pageSpecificValues.timelineEventsPage_enterTimelineEvent.date,
-      claimantResponseTestData.pageSpecificValues.timelineEventsPage_enterTimelineEvent.description
+      claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.eventNum,
+      claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.date,
+      claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.description
     )
     timelineEventsPage.submitForm()
     evidencePage.enterEvidenceRow(
-      claimantResponseTestData.pageSpecificValues.evidencePage_enterEvidenceRow.type,
-      claimantResponseTestData.pageSpecificValues.evidencePage_enterEvidenceRow.description,
-      claimantResponseTestData.pageSpecificValues.evidencePage_enterEvidenceRow.comment
+      claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.type,
+      claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
+      claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
     defendantSteps.selectTaskFreeMediation()
     freeMediationPage.chooseNo()
@@ -68,24 +68,24 @@ export class DefendantResponseSteps {
     defenceSteps.rejectAllOfClaimAsAlreadyPaid()
     defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
     howMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(
-      claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPage_enterAmountPaidWithDateAndExplanation.paidAmount,
-      claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPage_enterAmountPaidWithDateAndExplanation.date,
-      claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPage_enterAmountPaidWithDateAndExplanation.explanation
+      claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.paidAmount,
+      claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.date,
+      claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.explanation
     )
     if (! isClaimTotalPaid) {
       youHavePaidLessPage.continue()
       defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
-      whyYouDisagreePage.enterReason(claimantResponseTestData.pageSpecificValues.whyYouDisagreePage_enterReason)
+      whyYouDisagreePage.enterReason(claimantResponseTestData.pageSpecificValues.whyYouDisagreePageEnterReason)
       timelineEventsPage.enterTimelineEvent(
-        claimantResponseTestData.pageSpecificValues.timelineEventsPage_enterTimelineEvent.eventNum,
-        claimantResponseTestData.pageSpecificValues.timelineEventsPage_enterTimelineEvent.date,
-        claimantResponseTestData.pageSpecificValues.timelineEventsPage_enterTimelineEvent.description
+        claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.eventNum,
+        claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.date,
+        claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.description
       )
       timelineEventsPage.submitForm()
       evidencePage.enterEvidenceRow(
-        claimantResponseTestData.pageSpecificValues.evidencePage_enterEvidenceRow.type,
-        claimantResponseTestData.pageSpecificValues.evidencePage_enterEvidenceRow.description,
-        claimantResponseTestData.pageSpecificValues.evidencePage_enterEvidenceRow.comment
+        claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.type,
+        claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
+        claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
       )
       defendantSteps.selectTaskFreeMediation()
       freeMediationPage.chooseNo()
