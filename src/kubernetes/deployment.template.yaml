@@ -194,34 +194,38 @@ spec:
     app: feature-toggle-api
   clusterIP: None
 ---
-apiVersion: batch/v1
-kind: Job
+apiVersion: batch/v1beta1
+kind: CronJob
 metadata:
   name: feature-toggle-importer
   namespace: ${NAMESPACE}
 spec:
-  template:
-    metadata:
-      labels:
-        app: feature-toggle-importer
+  schedule: '*/5 * * * *'
+  concurrencyPolicy: 'Forbid'
+  jobTemplate:
     spec:
-      initContainers:
-      - name: init-wait-feature-toggle-api
-        image: busybox
-        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 feature-toggle-api 8580 && exit 0 || sleep 3; done; exit 1"]
-      containers:
-      - image: hmcts/cmc-feature-toggle-importer
-        name: feature-toggle-importer
-        imagePullPolicy: Always
-        env:
-        - name: WAIT_HOSTS
-          value: 'feature-toggle-api:8580'
-        - name: VERBOSE
-          value: 'true'
-        - name: WAIT_HOSTS_TIMEOUT
-          value: '300'
-      restartPolicy: Never
-  backoffLimit: 4
+      template:
+        metadata:
+          labels:
+            app: feature-toggle-importer
+        spec:
+          initContainers:
+          - name: init-wait-feature-toggle-api
+            image: busybox
+            command: ['sh', '-c', 'for i in $(seq 1 300); do nc -zvw1 feature-toggle-api 8580 && exit 0 || sleep 3; done; exit 1']
+          containers:
+          - image: hmcts/cmc-feature-toggle-importer
+            name: feature-toggle-importer
+            imagePullPolicy: Always
+            env:
+            - name: WAIT_HOSTS
+              value: 'feature-toggle-api:8580'
+            - name: VERBOSE
+              value: 'true'
+            - name: WAIT_HOSTS_TIMEOUT
+              value: '300'
+          restartPolicy: Never
+      backoffLimit: 4
 ---
 #
 # SHARED-DATABASE
