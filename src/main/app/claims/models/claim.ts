@@ -13,6 +13,7 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 interface State {
   status: ClaimStatus
@@ -182,6 +183,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
     } else if (this.hasClaimantSignedSettlementAgreement()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION
+    } else if (this.hasClaimantSignedSettlementAgreementChosenByCourt()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.eligibleForCCJ) {
@@ -247,7 +250,12 @@ export class Claim {
   }
 
   private hasClaimantSignedSettlementAgreement (): boolean {
-    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions()
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() && !this.settlement.partyStatements
+  }
+
+  private hasClaimantSignedSettlementAgreementChosenByCourt (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
+      this.settlement && this.settlement.partyStatements[0].madeBy === MadeBy.CLAIMANT.value
   }
 
   private hasDefendantNotSignedSettlementAgreement (): boolean {
