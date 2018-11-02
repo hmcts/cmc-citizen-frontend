@@ -6053,10 +6053,10 @@ mocha-multi@^1.0.1:
     mkdirp "^0.5.1"
     object-assign "^4.1.1"
 
-mocha-parallel-tests@^2.0.4:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/mocha-parallel-tests/-/mocha-parallel-tests-2.0.4.tgz#3bd83f81714aacd65756fac5f3165de2c3303597"
-  integrity sha512-/mAVjbD3a118pd5rTtn8WRtKDR+/NrvvR2z82tKJ4Ag8+uTWuySLoPMxxC++BOOy7Rxgr0BbMJX8nEN58j0DvQ==
+mocha-parallel-tests@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/mocha-parallel-tests/-/mocha-parallel-tests-2.0.5.tgz#a6ae4310a0174d7b210104f2cbb31807c9512937"
+  integrity sha512-DS8TefUVzYXFStVmhFDE9w+MWmUGrUraRpgunANPZwjSYQ5yPPIQSLdAsRF+Avq7CNWef/Kn2dqK2JTc5+7RIg==
   dependencies:
     circular-json "^0.5.4"
     debug "3.1.0"
