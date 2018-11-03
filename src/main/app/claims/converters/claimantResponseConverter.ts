@@ -8,6 +8,8 @@ import { YesNoOption } from 'models/yesNoOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 import { PaymentIntention as ModelPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class ClaimantResponseConverter {
 
@@ -42,13 +44,18 @@ export class ClaimantResponseConverter {
         courtPaymentIntention: draftClaimantResponse.courtDetermination.courtPaymentIntention,
         rejectionReason: draftClaimantResponse.courtDetermination.rejectionReason ?
           draftClaimantResponse.courtDetermination.rejectionReason.text : undefined,
-        disposableIncome: draftClaimantResponse.courtDetermination.disposableIncome,
+        disposableIncome: draftClaimantResponse.courtDetermination.disposableIncome ?
+          draftClaimantResponse.courtDetermination.disposableIncome : 0,
         decisionType: draftClaimantResponse.courtDetermination.decisionType
       }
     }
     const claimantPaymentIntention: ModelPaymentIntention = draftClaimantResponse.alternatePaymentMethod
     if (claimantPaymentIntention) {
-      respAcceptance.claimantPaymentIntention = claimantPaymentIntention.toDomainInstance()
+      if (claimantPaymentIntention.toDomainInstance().paymentOption === PaymentOption.IMMEDIATELY) {
+        respAcceptance.claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
+      } else {
+        respAcceptance.claimantPaymentIntention = claimantPaymentIntention.toDomainInstance()
+      }
     }
     return respAcceptance
   }
