@@ -14,7 +14,7 @@ describe('PaymentIntention', () => {
         paymentOption: { option: PaymentType.IMMEDIATELY } })
 
       const result = paymentIntention.toDomainInstance()
-      expect(result.paymentOption).to.be.equal(PaymentType.IMMEDIATELY)
+      expect(result.paymentOption).to.be.equal('IMMEDIATELY')
       expect(result.paymentDate).to.be.undefined
       expect(result.repaymentPlan).to.be.undefined
     })
@@ -26,7 +26,7 @@ describe('PaymentIntention', () => {
       })
 
       const result = paymentIntention.toDomainInstance()
-      expect(result.paymentOption).to.be.equal(PaymentType.BY_SET_DATE)
+      expect(result.paymentOption).to.be.equal('BY_SPECIFIED_DATE')
       expect(result.paymentDate.toISOString()).to.be.deep.equal(MomentFactory.parse('2018-12-31').toISOString())
       expect(result.repaymentPlan).to.be.undefined
     })
@@ -42,7 +42,7 @@ describe('PaymentIntention', () => {
       })
 
       const result = paymentIntention.toDomainInstance()
-      expect(result.paymentOption).to.be.equal(PaymentType.INSTALMENTS)
+      expect(result.paymentOption).to.be.equal('INSTALMENTS')
       expect(result.paymentDate).to.be.undefined
       expect(result.repaymentPlan.instalmentAmount).to.be.equal(100)
       expect(result.repaymentPlan.completionDate.toISOString()).to.be.deep.equal(MomentFactory.parse('2019-12-30').toISOString())
