@@ -12,7 +12,7 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft as DraftWrapper, Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { Moment } from 'moment'
-import { getEarliestPaymentDateForAlternatePaymentInstalments } from 'claimant-response/helpers/paydateHelper'
+import { getEarliestPaymentDateForPaymentPlan } from 'claimant-response/helpers/paydateHelper'
 import { ValidationError } from 'class-validator'
 
 class RepaymentPlanPage {
@@ -26,7 +26,7 @@ class RepaymentPlanPage {
   postValidation (req: express.Request, res: express.Response): FormValidationError {
     const model = req.body.model
     if (model.firstPaymentDate) {
-      const validDate: Moment = getEarliestPaymentDateForAlternatePaymentInstalments(res.locals.claim, model.firstPaymentDate.toMoment())
+      const validDate: Moment = getEarliestPaymentDateForPaymentPlan(res.locals.claim, model.firstPaymentDate.toMoment())
       if (validDate && validDate > model.firstPaymentDate.toMoment()) {
         const error: ValidationError = {
           target: model,
