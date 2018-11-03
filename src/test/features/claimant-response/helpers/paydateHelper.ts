@@ -24,7 +24,7 @@ describe('paydateHelper', () => {
   it('should return the correct earliest date where defendant pays set date in 10 days but claimant chooses pay by instalment in 5 days - partial admissions', () => {
     const claim = prepareClaim(partialAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth)
     const claimantPaymentDate: moment.Moment = MomentFactory.currentDate().add(5, 'days')
-    const monthIncrement = calculateMonthIncrement(moment())
+    const monthIncrement = calculateMonthIncrement(moment().startOf('day'))
     const paymentDate = getEarliestPaymentDateForPaymentPlan(claim, claimantPaymentDate)
 
     expect(paymentDate.toString()).to.equal(monthIncrement.toString())
@@ -32,7 +32,7 @@ describe('paydateHelper', () => {
   it('should return the correct earliest date where defendant pays set date in 10 days but claimant chooses pay by instalment in 20 days - partial admissions', () => {
     const claim = prepareClaim(partialAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth)
     const claimantPaymentDate: moment.Moment = MomentFactory.currentDate().add(20, 'days')
-    const monthIncrement = calculateMonthIncrement(moment())
+    const monthIncrement = calculateMonthIncrement(moment().startOf('day'))
     const paymentDate = getEarliestPaymentDateForPaymentPlan(claim, claimantPaymentDate)
 
     expect(paymentDate.toString()).to.equal(monthIncrement.toString())
@@ -40,7 +40,7 @@ describe('paydateHelper', () => {
   it('should return the correct earliest date where defendant pays set date in 10 days but claimant chooses pay by instalment in 50 days - partial admissions', () => {
     const claim = prepareClaim(partialAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth)
     const claimantPaymentDate: moment.Moment = MomentFactory.currentDate().add(20, 'days')
-    const monthIncrement = calculateMonthIncrement(moment())
+    const monthIncrement = calculateMonthIncrement(moment().startOf('day'))
     const paymentDate = getEarliestPaymentDateForPaymentPlan(claim, claimantPaymentDate)
 
     expect(paymentDate.toString()).to.equal(monthIncrement.toString())
@@ -48,7 +48,7 @@ describe('paydateHelper', () => {
   it('should return the correct earliest date where defendant pays set date in 50 days but claimant chooses pay by instalment in 5 days', () => {
     const claim = prepareClaim(fullAdmissionWithPaymentBySetDateDataPaymentDateAfterMonth)
     const claimantPaymentDate: moment.Moment = MomentFactory.currentDate().add(5, 'days')
-    const monthIncrement = calculateMonthIncrement(moment())
+    const monthIncrement = calculateMonthIncrement(moment().startOf('day'))
     const paymentDate = getEarliestPaymentDateForPaymentPlan(claim, claimantPaymentDate)
 
     expect(paymentDate.toString()).to.equal(monthIncrement.toString())
@@ -98,7 +98,7 @@ describe('paydateHelper', () => {
   it('should return the correct earliest date where defendant pays by instalment in 50 days but claimant chooses pay by instalment in 5 days - partial admissions', () => {
     const claim = prepareClaim(partialAdmissionWithPaymentByInstalmentsDataPaymentDateAfterMonth)
     const claimantPaymentDate: moment.Moment = MomentFactory.currentDate().add(5, 'days')
-    const monthIncrement = calculateMonthIncrement(moment())
+    const monthIncrement = calculateMonthIncrement(moment().startOf('day'))
     const paymentDate = getEarliestPaymentDateForPaymentPlan(claim, claimantPaymentDate)
 
     expect(paymentDate.toString()).to.equal(monthIncrement.toString())
