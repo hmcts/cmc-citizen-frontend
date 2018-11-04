@@ -51,10 +51,10 @@ export class ClaimantResponseConverter {
     }
     const claimantPaymentIntention: ModelPaymentIntention = draftClaimantResponse.alternatePaymentMethod
     if (claimantPaymentIntention) {
-      if (claimantPaymentIntention.toDomainInstance().paymentOption === PaymentOption.IMMEDIATELY) {
+      respAcceptance.claimantPaymentIntention = claimantPaymentIntention.toDomainInstance()
+
+      if (claimantPaymentIntention.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
         respAcceptance.claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
-      } else {
-        respAcceptance.claimantPaymentIntention = claimantPaymentIntention.toDomainInstance()
       }
     }
     return respAcceptance
