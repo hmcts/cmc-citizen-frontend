@@ -12,10 +12,10 @@ import { MomentFactory } from 'shared/momentFactory'
 export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
 
     const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const defendantInstalmentLastDate: Moment = PaymentPlanHelper.createPaymentPlanFromClaim(claim).calculateLastPaymentDate()
+    const defendantInstalmentLastDate: Moment = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft).calculateLastPaymentDate()
     const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantEnteredPayBySetDate : defendantInstalmentLastDate
 
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
@@ -35,7 +35,7 @@ export class CourtDecisionHelper {
   private static getClaimantLastPaymentDate (draft: DraftClaimantResponse): Moment {
     switch (draft.alternatePaymentMethod.paymentOption.option) {
       case PaymentType.IMMEDIATELY:
-        return MomentFactory.currentDate().add(5,'days')
+        return MomentFactory.currentDate().add(5, 'days')
       case PaymentType.BY_SET_DATE:
         return draft.alternatePaymentMethod.paymentDate.date.toMoment()
       case PaymentType.INSTALMENTS:
