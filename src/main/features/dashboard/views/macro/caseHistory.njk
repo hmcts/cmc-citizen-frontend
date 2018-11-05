@@ -51,6 +51,7 @@ ccjRequestedForDefendantClaimDetails %}
   offerSettlementReachedForDefendant,
   offerSettlementReachedForClaimant %}
 
+{% from "./claimStatus/paidInFullClaimant.njk" import paidInFullClaimantClaimDetails, paidInFullCCJCancelledClaimantClaimDetails, paidInFullCCJSatisfiedClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import admissionByCCJDefendantClaimDetails %}
 {% from "./claimStatus/settlementAgreementDefendant.njk" import
@@ -111,6 +112,14 @@ ccjRequestedForDefendantClaimDetails %}
         <p>
           {{ caseStatusForClaimant(state.status, claim) }}
         </p>
+      {% endif %}
+      {% if state.status === ClaimStatus.PAID_IN_FULL %}
+        {{ paidInFullClaimantClaimDetails(claim) }}
+      {% endif %}
+      {% if state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
+        {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
+        {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
       {% endif %}
     </div>
   {% endfor %}

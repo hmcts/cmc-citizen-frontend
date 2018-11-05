@@ -10,6 +10,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
@@ -184,6 +185,13 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    }
+    if (this.hasCCJ()) {
+      if (this.isCCJPaidWithinMonth()) {
+        return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+      } else if (!this.isCCJPaidWithinMonth()) {
+        return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+      }
     } else {
       throw new Error('Unknown Status')
     }
@@ -197,6 +205,10 @@ export class Claim {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
     } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
+    }
+
+    if (this.isPaidInFullEligible()) {
+      statuses.push({ status: ClaimStatus.PAID_IN_FULL })
     }
 
     return statuses
@@ -220,6 +232,29 @@ export class Claim {
 
   private isSettlementReached (): boolean {
     return this.settlement && !!this.settlementReachedAt
+  }
+
+  private isCCJPaidWithinMonth (): boolean {
+    let futureMonth
+
+    if (this.countyCourtJudgmentIssuedAt) {
+      futureMonth = calculateMonthIncrement(this.countyCourtJudgmentIssuedAt)
+    } else if (this.countyCourtJudgmentRequestedAt) {
+      futureMonth = calculateMonthIncrement(this.countyCourtJudgmentRequestedAt)
+    }
+    return this.moneyReceivedOn.isSameOrBefore(futureMonth)
+  }
+
+  private hasCCJ (): boolean {
+    if (this.countyCourtJudgmentRequestedAt || this.countyCourtJudgmentIssuedAt) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  private isPaidInFullEligible (): boolean {
+    return true
   }
 
   private isSettlementReachedThroughAdmission (): boolean {

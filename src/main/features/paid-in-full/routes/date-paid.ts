@@ -42,6 +42,7 @@ export default express.Router()
 
         await new ClaimStoreClient().savePaidInFull(externalId, user, draft.document)
         await new DraftService().delete(draft.id, user.bearerToken)
+
         res.redirect(Paths.confirmationPage.uri.replace(':externalId', externalId))
       }
     }))
