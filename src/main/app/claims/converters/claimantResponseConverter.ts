@@ -40,13 +40,13 @@ export class ClaimantResponseConverter {
     const courtDetermination: CourtDetermination = draftClaimantResponse.courtDetermination
     if (courtDetermination) {
       respAcceptance.courtDetermination = {
-        courtDecision: draftClaimantResponse.courtDetermination.courtDecision,
-        courtPaymentIntention: draftClaimantResponse.courtDetermination.courtPaymentIntention,
-        rejectionReason: draftClaimantResponse.courtDetermination.rejectionReason ?
-          draftClaimantResponse.courtDetermination.rejectionReason.text : undefined,
-        disposableIncome: draftClaimantResponse.courtDetermination.disposableIncome ?
-          draftClaimantResponse.courtDetermination.disposableIncome : 0,
-        decisionType: draftClaimantResponse.courtDetermination.decisionType
+        courtDecision: courtDetermination.courtDecision,
+        courtPaymentIntention: courtDetermination.courtPaymentIntention,
+        rejectionReason: courtDetermination.rejectionReason ?
+          courtDetermination.rejectionReason.text : undefined,
+        disposableIncome: courtDetermination.disposableIncome ?
+          courtDetermination.disposableIncome : 0,
+        decisionType: courtDetermination.decisionType
       }
     }
     const claimantPaymentIntention: ModelPaymentIntention = draftClaimantResponse.alternatePaymentMethod
