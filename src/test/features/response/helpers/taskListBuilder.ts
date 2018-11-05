@@ -29,6 +29,7 @@ import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { TaskListItem } from 'drafts/tasks/taskListItem'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
@@ -490,6 +491,32 @@ describe('Defendant response task list builder', () => {
 
       const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
       expect(taskList).to.be.equal(undefined)
+    })
+  })
+
+  describe('buildRemainingTasks', () => {
+    let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
+
+    beforeEach(() => {
+      isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+    })
+
+    afterEach(() => {
+      isResponseRejectedFullyWithDisputeStub.restore()
+    })
+
+    it('Should return "Consider free mediation" when not completed for fully reject', () => {
+      isResponseRejectedFullyWithDisputeStub.returns(true)
+
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      expect(tasks.map(task => task.name)).to.contain('Consider free mediation')
+    })
+
+    it('Should not return "Consider free mediation" when not fully reject', () => {
+      isResponseRejectedFullyWithDisputeStub.returns(false)
+
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      expect(tasks.map(task => task.name)).to.not.contain('Consider free mediation')
     })
   })
 
