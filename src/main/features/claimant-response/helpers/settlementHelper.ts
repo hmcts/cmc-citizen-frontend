@@ -30,18 +30,18 @@ export function getRepaymentPlanOrigin (settlement: Settlement): string {
 
 export function prepareSettlement (claim: Claim, draft: DraftClaimantResponse): Settlement {
   if (draft.settlementAgreement && draft.settlementAgreement.signed) {
-    const partyStatements: PartyStatement[] = [prepareDefendantPartyStatement(claim), acceptOffer()]
+    const partyStatements: PartyStatement[] = [prepareDefendantPartyStatement(claim, draft), acceptOffer()]
     return new Settlement(partyStatements)
   }
   throw new Error('SettlementAgreement should be signed by claimant')
 }
 
-export function prepareDefendantPartyStatement (claim: Claim): PartyStatement {
-  const offer: Offer = prepareDefendantOffer(claim)
+export function prepareDefendantPartyStatement (claim: Claim, draft: DraftClaimantResponse): PartyStatement {
+  const offer: Offer = prepareDefendantOffer(claim, draft)
   return new PartyStatement(StatementType.OFFER.value, MadeBy.DEFENDANT.value, offer)
 }
 
-export function prepareDefendantOffer (claim: Claim): Offer {
+export function prepareDefendantOffer (claim: Claim, draft: DraftClaimantResponse): Offer {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
   if (response.paymentIntention.paymentDate) {
@@ -50,7 +50,7 @@ export function prepareDefendantOffer (claim: Claim): Offer {
     const content: string = `${response.defendant.name} will pay ${amount}, no later than ${MomentFormatter.formatLongDate(completionDate)}`
     return new Offer(content, completionDate, response.paymentIntention)
   } else if (response.paymentIntention.repaymentPlan) {
-    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
     const instalmentAmount: string = NumberFormatter.formatMoney(paymentPlan.instalmentAmount)
     const paymentSchedule: string = PaymentScheduleTypeViewFilter.render(response.paymentIntention.repaymentPlan.paymentSchedule)
     const firstPaymentDate: string = MomentFormatter.formatLongDate(paymentPlan.startDate)
