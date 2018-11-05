@@ -126,24 +126,6 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     return courtCalculatedPaymentIntention
   }
 
-  postValidation (req: express.Request, res: express.Response): FormValidationError {
-    const model = req.body.model
-    if (model.firstPaymentDate) {
-      const validDate: Moment = getEarliestPaymentDateForPaymentPlan(res.locals.claim, model.firstPaymentDate.toMoment())
-      if (validDate && validDate > model.firstPaymentDate.toMoment()) {
-        const error: ValidationError = {
-          target: model,
-          property: 'firstPaymentDate',
-          value: model.firstPaymentDate.toMoment(),
-          constraints: { 'Failed': 'Enter a date of  ' + validDate.format('DD MM YYYY') + ' or later for the first instalment' },
-          children: undefined
-        }
-        return new FormValidationError(error)
-      }
-    }
-    return undefined
-  }
-
   getView (): string {
     return 'claimant-response/views/payment-plan'
   }
@@ -168,6 +150,69 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
     return super.saveDraft(locals)
   }
+
+  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
+    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
+    locals.draft.document.decisionType = decisionType
+
+    const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    if (courtCalculatedPaymentIntention) {
+      locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
+    }
+    locals.draft.document.courtOfferedPaymentIntention = PaymentPlanPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+
+    return super.saveDraft(locals)
+  }
+  
+  buildPostSubmissionUri (req: express.Request, res: express.Response): string {
+    const claim: Claim = res.locals.claim
+    const draft: DraftClaimantResponse = res.locals.draft.document
+    const courtDecision: DecisionType = CourtDecisionHelper.createCourtDecision(claim, draft)
+    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    const externalId: string = req.params.externalId
+    switch (courtDecision) {
+      case DecisionType.COURT: {
+        return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+      }
+      case DecisionType.DEFENDANT: {
+        if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+        }
+
+        if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+          return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
+        }
+        break
+      }
+      case DecisionType.CLAIMANT:
+      case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT: {
+        return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
+      }
+    }
+  }
+
+  postValidation (req: express.Request, res: express.Response): FormValidationError {
+    const model = req.body.model
+    if (model.firstPaymentDate) {
+      const validDate: Moment = getEarliestPaymentDateForPaymentPlan(res.locals.claim, model.firstPaymentDate.toMoment())
+      if (validDate && validDate > model.firstPaymentDate.toMoment()) {
+        const error: ValidationError = {
+          target: model,
+          property: 'firstPaymentDate',
+          value: model.firstPaymentDate.toMoment(),
+          constraints: { 'Failed': 'Enter a date of  ' + validDate.format('DD MM YYYY') + ' or later for the first instalment' },
+          children: undefined
+        }
+        return new FormValidationError(error)
+      }
+    }
+    return undefined
+  }
+
+
+
+
 
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
