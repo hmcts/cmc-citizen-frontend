@@ -37,7 +37,8 @@ export default express.Router()
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
         isCourtOrderPaymentPlanConvertedByDefendantFrequency: isCourtOrderPaymentPlanConvertedByDefendantFrequency,
         claimantPaymentPlan: claimantPaymentPlan,
-        courtOrderPaymentPlan: draft.document.courtDetermination.courtDecision.repaymentPlan
+        courtOrderPaymentPlan: draft.document.courtDetermination.courtDecision ?
+          draft.document.courtDetermination.courtDecision.repaymentPlan : undefined
       })
     }))
   .post(
