@@ -1956,13 +1956,13 @@ cookies@0.7.1:
     depd "~1.1.1"
     keygrip "~1.0.2"
 
-cookies@^0.7.2:
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/cookies/-/cookies-0.7.2.tgz#52736976126658af7713d7f858f7d21f99dab486"
-  integrity sha512-J2JjH9T3PUNKPHknprxgCrCaZshIfxW2j49gq1E1CP5Micj1LppWAR2y9EHSQAzEiX84zOsScWNwUZ0b/ChlMw==
+cookies@^0.7.3:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/cookies/-/cookies-0.7.3.tgz#7912ce21fbf2e8c2da70cf1c3f351aecf59dadfa"
+  integrity sha512-+gixgxYSgQLTaTIilDHAdlNPZDENDQernEMiIcZpYYP14zgHsCt4Ce1FEjFtcp6GefhozebB6orvhAAWx/IS0A==
   dependencies:
     depd "~1.1.2"
-    keygrip "~1.0.2"
+    keygrip "~1.0.3"
 
 copy-descriptor@^0.1.0:
   version "0.1.1"
@@ -5278,6 +5278,11 @@ keygrip@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/keygrip/-/keygrip-1.0.2.tgz#ad3297c557069dea8bcfe7a4fa491b75c5ddeb91"
   integrity sha1-rTKXxVcGneqLz+ek+kkbdcXd65E=
+
+keygrip@~1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/keygrip/-/keygrip-1.0.3.tgz#399d709f0aed2bab0a059e0cdd3a5023a053e1dc"
+  integrity sha512-/PpesirAIfaklxUzp4Yb7xBper9MwP6hNRA6BGGUFCgbJ+BM5CKBtsoxinNXkLHAr+GXS1/lSlF2rP7cv5Fl+g==
 
 keyv@3.0.0:
   version "3.0.0"
