@@ -23,7 +23,7 @@ describe('PaymentIntentionHelper', () => {
       alternatePaymentMethod: {
         paymentOption: new PaymentOption(PaymentType.IMMEDIATELY)
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
 
     draftClaimantResponsePayBySetDate = new DraftClaimantResponse().deserialize({
@@ -37,7 +37,7 @@ describe('PaymentIntentionHelper', () => {
           }
         }
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
 
     draftClaimantResponseInstalments = new DraftClaimantResponse().deserialize({
@@ -47,7 +47,7 @@ describe('PaymentIntentionHelper', () => {
           totalAmount: 1060,
           instalmentAmount: 100,
           paymentSchedule: {
-            value: PaymentSchedule.EVERY_MONTH.value
+            value: PaymentSchedule.EVERY_MONTH
           },
           firstPaymentDate: {
             year: 2018,
@@ -62,7 +62,7 @@ describe('PaymentIntentionHelper', () => {
           paymentLength: ''
         }
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
   })
 
