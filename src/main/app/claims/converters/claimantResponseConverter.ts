@@ -22,7 +22,7 @@ export class ClaimantResponseConverter {
       if (draftClaimantResponse.freeMediation) {
         reject.freeMediation = draftClaimantResponse.freeMediation.option === FreeMediationOption.YES
       }
-      if (draftClaimantResponse.courtDetermination.rejectionReason) {
+      if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
       return reject
