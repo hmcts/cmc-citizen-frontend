@@ -29,7 +29,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     const courtOfferedPaymentIntention = new PaymentIntention()
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+    if (decisionType === DecisionType.CLAIMANT) {
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
         courtOfferedPaymentIntention.paymentOption = PaymentOption.IMMEDIATELY
         courtOfferedPaymentIntention.paymentDate = MomentFactory.currentDate().add(5,'days')

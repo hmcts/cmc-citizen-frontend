@@ -14,13 +14,18 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { DecisionType } from 'claimant-response/draft/courtDecision'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
   if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
     return response.paymentIntention
   } else {
-    return draft.courtDetermination.courtDecision
+    if (draft.courtDetermination.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+      return draft.alternatePaymentMethod.toDomainInstance()
+    } else {
+      return draft.courtDetermination.courtDecision
+    }
   }
 }
 
