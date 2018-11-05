@@ -8,8 +8,8 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption as ClaimPaymentOption } from 'claims/models/paymentOption'
 import { PaymentType, PaymentOption } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentDatePage } from 'claimant-response/routes/payment-date'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { PaymentPlanPage } from 'claimant-response/routes/payment-plan'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 describe('PaymentIntentionHelper', () => {
   let claim: Claim
@@ -35,21 +35,16 @@ describe('PaymentIntentionHelper', () => {
     draftClaimantResponseInstalments = new DraftClaimantResponse().deserialize({ alternatePaymentMethod: {
       paymentOption: new PaymentOption(PaymentType.INSTALMENTS),
       paymentPlan: {
+        totalAmount: 1060,
         instalmentAmount: 100,
         paymentSchedule: {
-          value: PaymentSchedule.EVERY_MONTH.value
+          value: PaymentSchedule.EVERY_MONTH
         },
         firstPaymentDate: {
           year: 2018,
           month: 12,
           day: 31
-        },
-        completionDate: {
-          year: 2019,
-          month: 12,
-          day: 30
-        },
-        paymentLength: ''
+        }
       }
     } })
   })
@@ -84,7 +79,7 @@ describe('PaymentIntentionHelper', () => {
     it('should return payment intention with Claimants Payment Option', () => {
       expect(PaymentOptionPage.generateCourtOfferedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.IMMEDIATELY)
       expect(PaymentDatePage.generateCourtOfferedPaymentIntention(draftClaimantResponsePayBySetDate, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
-      expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponsePayBySetDate, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
+      expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
     })
   })
 
