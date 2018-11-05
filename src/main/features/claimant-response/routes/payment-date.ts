@@ -140,9 +140,9 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
     const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     if (courtCalculatedPaymentIntention) {
       locals.draft.document.courtCalculatedPaymentIntention = courtCalculatedPaymentIntention
-      locals.draft.document.courtOfferedPaymentIntention = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
 
+    locals.draft.document.courtOfferedPaymentIntention = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     return super.saveDraft(locals)
   }
 
