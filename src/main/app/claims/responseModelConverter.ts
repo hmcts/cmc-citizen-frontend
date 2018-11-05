@@ -65,6 +65,7 @@ import { CarerOption } from 'response/form/models/statement-of-means/carer'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
+import { FreeMediation } from 'response/form/models/freeMediation'
 
 export class ResponseModelConverter {
 
@@ -99,7 +100,7 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
+      freeMediation: this.convertFreeMediation(draft.freeMediation),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
         draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
@@ -124,7 +125,7 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
+      freeMediation: this.convertFreeMediation(draft.freeMediation),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -133,7 +134,7 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
-      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
+      freeMediation: this.convertFreeMediation(draft.freeMediation),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -169,7 +170,7 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
-      freeMediation: draft.freeMediation && draft.freeMediation.option as YesNoOption,
+      freeMediation: this.convertFreeMediation(draft.freeMediation),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -648,5 +649,13 @@ export class ResponseModelConverter {
     }
 
     return expenses
+  }
+
+  private static convertFreeMediation (freeMediation: FreeMediation): YesNoOption {
+    if (!freeMediation || !freeMediation.option) {
+      return YesNoOption.NO
+    } else {
+      return freeMediation.option as YesNoOption
+    }
   }
 }
