@@ -31,7 +31,7 @@ const draftOverride: object = {
       }
     }
   },
-  disposableIncome: 100
+  courtDetermination: { disposableIncome: 100 }
 }
 
 describe('Claimant response: payment date', () => {
