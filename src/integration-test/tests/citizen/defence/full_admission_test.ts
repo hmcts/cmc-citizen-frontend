@@ -19,24 +19,26 @@ async function prepareClaim (I: I) {
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
+  const isAdmissionsOn: boolean = await I.isAdmissionsAllowedForCitizenWithConsentGiven({ email: defendantEmail, bearerToken: '' })
+
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.linkClaimToDefendant(defendantEmail)
   helperSteps.startResponseFromDashboard(claimRef)
 
-  return claimData
+  return { data: claimData, isAdmissionsOn: isAdmissionsOn }
 }
 
 Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen @admissions', async (I: I) => {
   const claimData = await prepareClaim(I)
-  defenceSteps.makeFullAdmission(claimData.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.claimants[0].name)
+  defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name, claimData.isAdmissionsOn)
 })
 
 Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen @admissions', async (I: I) => {
   const claimData = await prepareClaim(I)
-  defenceSteps.makeFullAdmission(claimData.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.claimants[0].name)
+  defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, claimData.isAdmissionsOn)
 })
 
 Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen @admissions', async (I: I) => {
   const claimData = await prepareClaim(I)
-  defenceSteps.makeFullAdmission(claimData.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.claimants[0].name)
+  defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, claimData.isAdmissionsOn)
 })

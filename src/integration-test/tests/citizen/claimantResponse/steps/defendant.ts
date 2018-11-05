@@ -67,32 +67,37 @@ export class DefendantResponseSteps {
     defenceSteps.requestNoExtraTimeToRespond()
     defenceSteps.rejectAllOfClaimAsAlreadyPaid()
     defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
+
     howMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(
       claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.paidAmount,
       claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.date,
       claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.explanation
     )
-    if (! isClaimTotalPaid) {
-      youHavePaidLessPage.continue()
-      defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
-      whyYouDisagreePage.enterReason(claimantResponseTestData.pageSpecificValues.whyYouDisagreePageEnterReason)
-      timelineEventsPage.enterTimelineEvent(
-        claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.eventNum,
-        claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.date,
-        claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.description
-      )
-      timelineEventsPage.submitForm()
-      evidencePage.enterEvidenceRow(
-        claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.type,
-        claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
-        claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
-      )
-      defendantSteps.selectTaskFreeMediation()
-      freeMediationPage.chooseNo()
+    if (testData.isAdmissionsToggleOn) {
+      if (!isClaimTotalPaid) {
+        youHavePaidLessPage.continue()
+        defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+        whyYouDisagreePage.enterReason(claimantResponseTestData.pageSpecificValues.whyYouDisagreePageEnterReason)
+        timelineEventsPage.enterTimelineEvent(
+          claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.eventNum,
+          claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.date,
+          claimantResponseTestData.pageSpecificValues.timelineEventsPageEnterTimelineEvent.description
+        )
+        timelineEventsPage.submitForm()
+        evidencePage.enterEvidenceRow(
+          claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.type,
+          claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
+          claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
+        )
+        defendantSteps.selectTaskFreeMediation()
+        freeMediationPage.chooseNo()
+      }
+      defendantSteps.selectCheckAndSubmitYourDefence()
+      defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
+      I.see('You’ve submitted your response')
+    } else {
+      I.see('Post your response')
     }
-    defendantSteps.selectCheckAndSubmitYourDefence()
-    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
-    I.see('You’ve submitted your response')
   }
 
 }

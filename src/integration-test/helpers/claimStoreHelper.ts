@@ -12,7 +12,7 @@ class ClaimStoreHelper extends codecept_helper {
 
   async linkDefendantToClaim (claimRef: string, claimantEmail: string, defendantEmail: string): Promise<void> {
     const claimantBearerToken = await IdamClient.authenticateUser(claimantEmail)
-    const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: claimantBearerToken })
+    const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: claimantBearerToken, email: '' })
     const pinResponse = await IdamClient.getPin(claim.letterHolderId)
     const upliftToken = await IdamClient.authenticatePinUser(pinResponse.body)
     await IdamClient.upliftUser(defendantEmail, upliftToken)

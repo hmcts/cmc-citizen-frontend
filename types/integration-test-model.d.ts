@@ -1,6 +1,7 @@
 declare type User = {
   id?: string
   bearerToken: string
+  email: string
 }
 
 declare type ClaimData = {

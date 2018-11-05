@@ -29,6 +29,9 @@ exports.config = {
     IdamHelper: {
       require: './src/integration-test/helpers/idamHelper'
     },
+    FeatureToggleHelper: {
+      require: './src/integration-test/helpers/featureToggleHelper'
+    },
     ClaimStoreHelper: {
       require: './src/integration-test/helpers/claimStoreHelper'
     },

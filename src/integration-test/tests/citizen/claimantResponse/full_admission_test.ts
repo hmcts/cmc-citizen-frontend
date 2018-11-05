@@ -27,10 +27,18 @@ Scenario('I can as a claimant view the defendants full admission with immediate 
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
   I.see(testData.claimRef)
-  I.see('The defendant said they’ll pay you immediately')
+  if (testData.isAdmissionsToggleOn) {
+    I.see('The defendant said they’ll pay you immediately')
+  } else {
+    I.see('The defendant has requested more time to respond')
+  }
   I.click('My account')
   I.see(testData.claimRef)
-  I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
+  if (testData.isAdmissionsToggleOn) {
+    I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
 })
 
 Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions', async (I: I) => {
@@ -41,13 +49,21 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData)
-  checkAndSendPage.verifyFactsForSettlement()
-  checkAndSendPage.checkFactsTrueAndSubmit()
-  I.see('You’ve accepted the repayment plan')
+  if (testData.isAdmissionsToggleOn) {
+    claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData)
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.see('You’ve accepted the repayment plan')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
   confirmationPage.clickGoToYourAccount()
   I.see(testData.claimRef)
-  I.see('You’ve signed a settlement agreement')
+  if (testData.isAdmissionsToggleOn) {
+    I.see('You’ve signed a settlement agreement')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
 })
 
 Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @error', async (I: I) => {
@@ -60,13 +76,22 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
-  checkAndSendPage.verifyFactsForSettlement()
-  checkAndSendPage.checkFactsTrueAndSubmit()
-  I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
+  if (testData.isAdmissionsToggleOn) {
+    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
+  // remove when above error fixed
   // confirmationPage.clickGoToYourAccount()
   // I.see(testData.claimRef)
-  // I.see('You’ve signed a settlement agreement')
+  // if (testData.isAdmissionsToggleOn) {
+  //   I.see('You’ve signed a settlement agreement')
+  // } else {
+  //   I.see(`${testData.defendantName} has requested more time to respond.`)
+  // }
 })
 
 Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions @error', async (I: I) => {
@@ -79,14 +104,23 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
-  I.see('Error: (/usr/src/app/src/main/features/claimant-response/views/check-and-send.njk)')
-  // checkAndSendPage.verifyFactsForSettlement()
-  // checkAndSendPage.checkFactsTrueAndSubmit()
+  if (testData.isAdmissionsToggleOn) {
+    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
+    I.see('Error: (/usr/src/app/src/main/features/claimant-response/views/check-and-send.njk)')
+    // checkAndSendPage.verifyFactsForSettlement()
+    // checkAndSendPage.checkFactsTrueAndSubmit()
+    // I.see('You’ve proposed an alternative repayment plan')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
+  // remove when above error fixed
   // confirmationPage.clickGoToYourAccount()
-  // I.see(claim.claimRef)
-  // I.see('You’ve signed a settlement agreement')
-
+  // I.see(testData.claimRef)
+  // if (testData.isAdmissionsToggleOn) {
+  //   I.see('You’ve signed a settlement agreement')
+  // } else {
+  //   I.see(`${testData.defendantName} has requested more time to respond.`)
+  // }
 })
 
 // TODO: confirm this journey
@@ -100,13 +134,22 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
-  checkAndSendPage.verifyFactsForSettlement()
-  checkAndSendPage.checkFactsTrueAndSubmit()
-  I.see('You’ve proposed an alternative repayment plan')
-  confirmationPage.clickGoToYourAccount()
-  I.see(testData.claimRef)
-  I.see('You’ve signed a settlement agreement')
+  if (testData.isAdmissionsToggleOn) {
+    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.see('You’ve proposed an alternative repayment plan')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
+  // remove when above error fixed
+  // confirmationPage.clickGoToYourAccount()
+  // I.see(testData.claimRef)
+  // if (testData.isAdmissionsToggleOn) {
+  //   I.see('You’ve signed a settlement agreement')
+  // } else {
+  //   I.see(`${testData.defendantName} has requested more time to respond.`)
+  // }
 })
 
 Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {
@@ -117,9 +160,17 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData)
+  if (testData.isAdmissionsToggleOn) {
+    claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData)
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
   I.see(testData.claimRef)
-  I.see('A County Court Judgment has been issued.')
+  if (testData.isAdmissionsToggleOn) {
+    I.see('A County Court Judgment has been issued.')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
 })
 
 Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', async (I: I) => {
@@ -130,7 +181,15 @@ Scenario('I can as a claimant accept the defendants full admission by set date w
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData)
+  if (testData.isAdmissionsToggleOn) {
+    claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData)
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
   I.see(testData.claimRef)
-  I.see('A County Court Judgment has been issued.')
+  if (testData.isAdmissionsToggleOn) {
+    I.see('A County Court Judgment has been issued.')
+  } else {
+    I.see(`${testData.defendantName} has requested more time to respond.`)
+  }
 })

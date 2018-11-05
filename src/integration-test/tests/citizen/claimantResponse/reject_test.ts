@@ -61,15 +61,19 @@ Scenario(
     // as defendant
     defendantResponseSteps.disputeClaimAsAlreadyPaid(testData, claimantResponseTestData, false)
     I.see(testData.claimRef)
-    I.see(`You told us you’ve paid the £${Number(50).toLocaleString()} you believe you owe. We’ve sent ${testData.claimantName} this response.`)
-    // check dashboard
-    I.click('My account')
-    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
-    // check status
-    I.click(testData.claimRef)
-    I.see(testData.claimRef)
-    I.see('Claim status')
-    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+    if (testData.isAdmissionsToggleOn) {
+      I.see(`You told us you’ve paid the £${Number(50).toLocaleString()} you believe you owe. We’ve sent ${testData.claimantName} this response.`)
+      // check dashboard
+      I.click('My account')
+      I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+      // check status
+      I.click(testData.claimRef)
+      I.see(testData.claimRef)
+      I.see('Claim status')
+      I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+    } else {
+      I.see('Post your response')
+    }
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -77,13 +81,17 @@ Scenario(
     // check dashboard
     I.click('My account')
     I.see(testData.claimRef)
-    I.see(`The defendant believes they owe you £50. You can accept or reject that this is the amount owed.`) // TODO IS THIS WRONG? should be defendants name
-    // check status
-    I.click(testData.claimRef)
-    I.see(testData.claimRef)
-    I.see('Claim status')
-    I.see('The defendant’s response')
-    I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
+    if (testData.isAdmissionsToggleOn) {
+      I.see(`The defendant believes they owe you £50. You can accept or reject that this is the amount owed.`) // TODO IS THIS WRONG? should be defendants name
+      // check status
+      I.click(testData.claimRef)
+      I.see(testData.claimRef)
+      I.see('Claim status')
+      I.see('The defendant’s response')
+      I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
+    } else {
+      I.see('Your claim has been sent')
+    }
     // TODO: accept or reject the response - implemented yet?
     I.click('Sign out')
   })
@@ -102,15 +110,19 @@ Scenario(
     // as defendant
     defendantResponseSteps.disputeClaimAsAlreadyPaid(testData, claimantResponseTestData, true)
     I.see(testData.claimRef)
-    I.see(`We’ve emailed ${testData.claimantName} your response, explaining why you reject the claim.`)
-    // check dashboard
-    I.click('My account')
-    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
-    // check status
-    I.click(testData.claimRef)
-    I.see(testData.claimRef)
-    I.see('Claim status')
-    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+    if (testData.isAdmissionsToggleOn) {
+      I.see(`We’ve emailed ${testData.claimantName} your response, explaining why you reject the claim.`)
+      // check dashboard
+      I.click('My account')
+      I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+      // check status
+      I.click(testData.claimRef)
+      I.see(testData.claimRef)
+      I.see('Claim status')
+      I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+    } else {
+      I.see('Post your response')
+    }
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -118,12 +130,16 @@ Scenario(
     // check dashboard
     I.click('My account')
     I.see(testData.claimRef)
-    I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
-    // check status
-    I.click(testData.claimRef)
-    I.see(testData.claimRef)
-    I.see('Claim status')
-    I.see('The defendant’s response')
-    I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+    if (testData.isAdmissionsToggleOn) {
+      I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+      // check status
+      I.click(testData.claimRef)
+      I.see(testData.claimRef)
+      I.see('Claim status')
+      I.see('The defendant’s response')
+      I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+    } else {
+      I.see('Your claim has been sent')
+    }
     I.click('Sign out')
   })

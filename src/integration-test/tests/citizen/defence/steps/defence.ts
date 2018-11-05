@@ -81,7 +81,7 @@ const defendantRepaymentPlan: PaymentPlan = {
 export class DefenceSteps {
 
   async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
-    const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: authorisation })
+    const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: authorisation, email: '' })
 
     const pinResponse = await IdamClient.getPin(claim.letterHolderId)
 
@@ -205,7 +205,7 @@ export class DefenceSteps {
 
     defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
       100,
-      '1990-01-01' ,
+      '1990-01-01',
       'I will not pay that much!'
     )
 
@@ -267,7 +267,12 @@ export class DefenceSteps {
         this.rejectAllOfClaimAsDisputeClaim()
         I.see('Why do you disagree with the claim?')
         this.submitDefenceText('I fully dispute this claim')
-        this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent, { date: 'june', description: 'ok' } as TimelineEvent] } as Timeline)
+        this.addTimeLineOfEvents({
+          events: [{ date: 'may', description: 'ok' } as TimelineEvent, {
+            date: 'june',
+            description: 'ok'
+          } as TimelineEvent]
+        } as Timeline)
         this.enterEvidence('description', 'comment')
         this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
@@ -300,7 +305,8 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantType: PartyType,
     paymentOption: PaymentOption,
-    claimantName: string
+    claimantName: string,
+    isAdmissionsToggleOn: boolean
   ): void {
     I.dontSee('COMPLETE')
 
@@ -310,6 +316,12 @@ export class DefenceSteps {
 
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitAllOfMoneyClaim()
+
+    if (isAdmissionsToggleOn) {
+      I.see('Post your response')
+      return
+    }
+
     defendantSteps.selectTaskDecideHowWillYouPay()
 
     switch (paymentOption) {
@@ -380,7 +392,6 @@ export class DefenceSteps {
     this.enterEvidence('description', 'They do not have evidence')
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
-
     I.see('You’ve submitted your response')
   }
 
@@ -416,7 +427,6 @@ export class DefenceSteps {
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
-
     defendantTaskListPage.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseNo()
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
