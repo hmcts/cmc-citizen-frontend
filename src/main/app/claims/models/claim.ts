@@ -13,7 +13,6 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
-import { MadeBy } from 'offer/form/models/madeBy'
 
 interface State {
   status: ClaimStatus
@@ -250,17 +249,18 @@ export class Claim {
   }
 
   private hasClaimantSignedSettlementAgreement (): boolean {
-    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() && !this.settlement.partyStatements
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
+      this.claimantResponse && !this.claimantResponse.hasOwnProperty('courtDetermination')
   }
 
   private hasClaimantSignedSettlementAgreementChosenByCourt (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.settlement && this.settlement.partyStatements[0].madeBy === MadeBy.CLAIMANT.value
+      this.claimantResponse && this.claimantResponse.hasOwnProperty('courtDetermination')
   }
 
   private hasDefendantNotSignedSettlementAgreement (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.respondToResponseDeadline.isBefore(MomentFactory.currentDate().hour(16))
+      this.respondToResponseDeadline && this.respondToResponseDeadline.isBefore(MomentFactory.currentDate().hour(16))
   }
 
   private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
