@@ -123,7 +123,7 @@
     "mochawesome": "^3.1.1",
     "mock-require": "^3.0.2",
     "mocha-parallel-tests": "^2.0.5",
-    "nock": "^10.0.1",
+    "nock": "^10.0.2",
     "nsp": "^3.0.0",
     "nyc": "^13.1.0",
     "pa11y": "^5.1.0",
