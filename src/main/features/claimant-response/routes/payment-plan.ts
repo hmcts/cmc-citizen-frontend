@@ -39,7 +39,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
       courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
 
-      if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS
+      if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS
         && claimResponse.paymentIntention.repaymentPlan.paymentSchedule !== draft.alternatePaymentMethod.toDomainInstance().repaymentPlan.paymentSchedule) {
         const paymentPlanConvertedToDefendantFrequency = claimantEnteredPaymentPlan.convertTo(PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule))
 
