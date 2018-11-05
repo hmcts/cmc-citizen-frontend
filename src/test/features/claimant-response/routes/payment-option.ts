@@ -96,7 +96,7 @@ describe('Claimant response: payment options', () => {
           })
 
           it('should return 500 and render error page when cannot retrieve draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.rejectFind('Error')
 
             await request(app)
@@ -107,7 +107,7 @@ describe('Claimant response: payment options', () => {
           })
 
           it('should return 500 and render error page when cannot save draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse')
             draftStoreServiceMock.rejectSave()
 
@@ -121,7 +121,7 @@ describe('Claimant response: payment options', () => {
 
         context('when service is healthy', () => {
           beforeEach(() => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse')
           })
 
@@ -138,10 +138,10 @@ describe('Claimant response: payment options', () => {
                 .expect(res => expect(res).to.be.redirect.toLocation(expectedToRedirect))
             }
 
-            it('should redirect to task list page for "IMMEDIATELY" option selected', async () => {
+            it('should redirect to court offer page for "IMMEDIATELY" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: PaymentType.IMMEDIATELY.value },
-                Paths.taskListPage.evaluateUri({ externalId: externalId }))
+                Paths.courtOfferPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
@@ -165,6 +165,21 @@ describe('Claimant response: payment options', () => {
                 .send({})
                 .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"'))
             })
+          })
+        })
+
+        context('when service is healthy with different test date for pay by set date scenario', () => {
+
+          it('should redirect to court offer set date page for "IMMEDIATELY" option selected', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+            draftStoreServiceMock.resolveFind('claimantResponse')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: PaymentType.IMMEDIATELY.value })
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
           })
         })
       })
