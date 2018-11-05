@@ -25,7 +25,7 @@
       {{ row('The agreement', t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
         { defendantFullName: claim.response.defendant.name,
           instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
-          paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+          paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
           firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
         }
       )) }}
