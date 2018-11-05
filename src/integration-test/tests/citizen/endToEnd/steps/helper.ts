@@ -1,8 +1,9 @@
 import I = CodeceptJS.I
-import { PartyType } from 'integration-test/data/party-type'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
 import { DefenceType } from 'integration-test/data/defence-type'
+import { PaymentOption } from 'integration-test/data/payment-option'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 
 const I: I = actor()
 const defenceSteps: DefenceSteps = new DefenceSteps()
@@ -28,17 +29,29 @@ export class Helper {
     I.click('Respond to claim')
   }
 
-  finishResponse (
-    claimRef: string,
-    defendantEmail: string,
-    defendantType: PartyType,
-    defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
-
+  finishResponse (testData: EndToEndTestData): void {
+    if (testData.defenceType === undefined) {
+      testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
+    }
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
-    defenceSteps.loginAsDefendant(defendantEmail)
-    I.click(claimRef)
-    return defenceSteps.makeDefenceAndSubmit(defendantEmail, defendantType, defenceType)
+    defenceSteps.loginAsDefendant(testData.defendantEmail)
+    I.click(testData.claimRef)
+    I.click('Respond to claim')
+    defenceSteps.makeDefenceAndSubmit(testData.defendant, testData.defendantEmail, testData.defendantPartyType, testData.defenceType)
+  }
+
+  // TODO: refactor with above ^^^
+  finishResponseWithFullAdmission (testData: EndToEndTestData): void {
+    if (testData.paymentOption === undefined) {
+      testData.paymentOption = PaymentOption.IMMEDIATELY
+    }
+    I.waitForText(claimDetailsHeading)
+    defenceSteps.respondToClaim()
+    defenceSteps.loginAsDefendant(testData.defendantEmail)
+    I.click(testData.claimRef)
+    I.click('Respond to claim')
+    defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {
