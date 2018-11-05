@@ -60,7 +60,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     }
 
     if (decisionType === DecisionType.COURT) {
-      const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+      const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
       const claimantFrequency: Frequency = Frequency.of(draft.alternatePaymentMethod.paymentPlan.paymentSchedule.value)
       const paymentPlanConvertedToClaimantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(claimantFrequency)
 
@@ -77,7 +77,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
       }
 
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
-        const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+        const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
         courtOfferedPaymentIntention.paymentDate = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
 
@@ -107,7 +107,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     }
 
     const courtCalculatedPaymentIntention = new PaymentIntention()
-    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     if (!paymentPlan) {
       return undefined
     }
