@@ -13,6 +13,7 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 
 interface State {
   status: ClaimStatus
@@ -180,7 +181,7 @@ export class Claim {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.hasDefendantNotSignedSettlementAgreement()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
-    } else if (this.hasClaimantSignedSettlementAgreement()) {
+    } else if (this.hasClaimantAcceptedOfferAndSignedSettlementAgreement()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION
     } else if (this.hasClaimantSignedSettlementAgreementChosenByCourt()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
@@ -244,23 +245,25 @@ export class Claim {
     if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
       const response: FullAdmissionResponse = this.response
       return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-        response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+        response.paymentIntention && response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+    } else {
+      return false
     }
   }
 
-  private hasClaimantSignedSettlementAgreement (): boolean {
+  private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.claimantResponse && !this.claimantResponse.hasOwnProperty('courtDetermination')
+      this.claimantResponse && !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
   private hasClaimantSignedSettlementAgreementChosenByCourt (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.claimantResponse && this.claimantResponse.hasOwnProperty('courtDetermination')
+      this.claimantResponse && !!(this.claimantResponse as AcceptationClaimantResponse ).courtDetermination
   }
 
   private hasDefendantNotSignedSettlementAgreement (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.respondToResponseDeadline && this.respondToResponseDeadline.isBefore(MomentFactory.currentDate().hour(16))
+      this.claimantRespondedAt && this.claimantRespondedAt.add('7', 'days').isBefore(MomentFactory.currentDate())
   }
 
   private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
