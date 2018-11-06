@@ -1,25 +1,21 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
 
 {% block content %}
-
-  {% set defendantName = claim.claimData.defendant.name %}
-
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t('The claim is now settled') }}</h1>
       </div>
-
-      <a class="button" href="/dashboard" >{{ t('Go to your account') }}</a>
-
+      <p>
+        {{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') | safe }}
+      </p>
       {{ supportWidget() }}
-
     </div>
   </div>
-
 {% endblock %}

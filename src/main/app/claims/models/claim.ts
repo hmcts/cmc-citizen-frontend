@@ -185,8 +185,7 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-    }
-    if (this.hasCCJ()) {
+    } else if (this.hasCCJ()) {
       if (this.isCCJPaidWithinMonth()) {
         return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
       } else if (!this.isCCJPaidWithinMonth()) {
@@ -236,17 +235,13 @@ export class Claim {
 
   private isCCJPaidWithinMonth (): boolean {
     let futureMonth
+    futureMonth = calculateMonthIncrement(this.countyCourtJudgmentRequestedAt)
 
-    if (this.countyCourtJudgmentIssuedAt) {
-      futureMonth = calculateMonthIncrement(this.countyCourtJudgmentIssuedAt)
-    } else if (this.countyCourtJudgmentRequestedAt) {
-      futureMonth = calculateMonthIncrement(this.countyCourtJudgmentRequestedAt)
-    }
     return this.moneyReceivedOn.isSameOrBefore(futureMonth)
   }
 
   private hasCCJ (): boolean {
-    if (this.countyCourtJudgmentRequestedAt || this.countyCourtJudgmentIssuedAt) {
+    if (this.countyCourtJudgmentRequestedAt) {
       return true
     } else {
       return false
@@ -254,6 +249,9 @@ export class Claim {
   }
 
   private isPaidInFullEligible (): boolean {
+    if (this.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED) {
+      return false
+    }
     return true
   }
 
