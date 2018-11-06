@@ -21,7 +21,6 @@ export class EndToEndTestData {
   claimantEmail: string
   claimantPartyType: PartyType
   claimantPaymentOption: PaymentOption
-  isAdmissionsToggleOn: boolean
 
   public static async prepareData (
     I: I,
@@ -50,13 +49,10 @@ export class EndToEndTestData {
     const claimantEmail: string = await I.createCitizenUser()
     const defendantEmail: string = await I.createCitizenUser()
 
-    const claimRef: string = await I.createClaim(claimData, claimantEmail)
+    const claimRef: string = await I.createClaimAndAddRoleToUser(claimData, claimantEmail, 'cmc-new-features-consent-given')
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
-    const isAdmissionsOn: boolean = await I.isAdmissionsAllowedForCitizenWithConsentGiven({ email: defendantEmail, bearerToken: '' })
-
     const testData = new EndToEndTestData()
-    testData.isAdmissionsToggleOn = isAdmissionsOn
     testData.defendantName = claimData.defendants[0].name
     testData.defendant = claimData.defendants[0]
     testData.claimantName = claimData.claimants[0].name

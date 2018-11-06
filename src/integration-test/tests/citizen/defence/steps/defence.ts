@@ -81,7 +81,7 @@ const defendantRepaymentPlan: PaymentPlan = {
 export class DefenceSteps {
 
   async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
-    const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: authorisation, email: '' })
+    const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: authorisation })
 
     const pinResponse = await IdamClient.getPin(claim.letterHolderId)
 
@@ -305,8 +305,7 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantType: PartyType,
     paymentOption: PaymentOption,
-    claimantName: string,
-    isAdmissionsToggleOn: boolean
+    claimantName: string
   ): void {
     I.dontSee('COMPLETE')
 
@@ -317,10 +316,7 @@ export class DefenceSteps {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitAllOfMoneyClaim()
 
-    if (isAdmissionsToggleOn) {
-      I.see('Post your response')
-      return
-    }
+    I.wait(30)
 
     defendantSteps.selectTaskDecideHowWillYouPay()
 

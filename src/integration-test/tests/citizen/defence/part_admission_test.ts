@@ -27,7 +27,7 @@ async function prepareClaim (I: I) {
   return { data: claimData, isAdmissionsOn: isAdmissionsOn }
 }
 
-Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions @debug11', async (I: I) => {
+Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {
   const claimData = await prepareClaim(I)
   defenceSteps.makePartialAdmission(claimData.data.defendants[0])
   if (claimData.isAdmissionsOn) {

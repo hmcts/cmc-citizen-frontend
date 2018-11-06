@@ -51,7 +51,7 @@ export class Helper {
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName, testData.isAdmissionsToggleOn)
+    defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {

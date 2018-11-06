@@ -31,6 +31,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 
+
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
