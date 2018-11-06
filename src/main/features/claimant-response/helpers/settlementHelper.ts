@@ -44,9 +44,9 @@ export function prepareDefendantPartyStatement (claim: Claim, draft: DraftClaima
 export function prepareDefendantOffer (claim: Claim, draft: DraftClaimantResponse): Offer {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
+  const amount = response.responseType === ResponseType.PART_ADMISSION ? NumberFormatter.formatMoney(response.amount) : NumberFormatter.formatMoney(claim.totalAmountTillToday)
   if (response.paymentIntention.paymentDate) {
     const completionDate: Moment = response.paymentIntention.paymentDate
-    const amount = response.responseType === ResponseType.PART_ADMISSION ? NumberFormatter.formatMoney(response.amount) : 'the full amount'
     const content: string = `${response.defendant.name} will pay ${amount}, no later than ${MomentFormatter.formatLongDate(completionDate)}`
     return new Offer(content, completionDate, response.paymentIntention)
   } else if (response.paymentIntention.repaymentPlan) {
@@ -55,7 +55,7 @@ export function prepareDefendantOffer (claim: Claim, draft: DraftClaimantRespons
     const paymentSchedule: string = PaymentScheduleTypeViewFilter.render(response.paymentIntention.repaymentPlan.paymentSchedule)
     const firstPaymentDate: string = MomentFormatter.formatLongDate(paymentPlan.startDate)
     const completionDate: Moment = paymentPlan.calculateLastPaymentDate()
-    const content: string = `${response.defendant.name} will pay instalments of ${instalmentAmount} ${paymentSchedule}. The first instalment will be paid by ${firstPaymentDate}.`
+    const content: string = `${response.defendant.name} will repay ${amount} in instalments of ${instalmentAmount} ${paymentSchedule}. The first instalment will be paid by ${firstPaymentDate}.`
     return new Offer(content, completionDate, response.paymentIntention)
   }
   throw new Error('Invalid paymentIntention')
