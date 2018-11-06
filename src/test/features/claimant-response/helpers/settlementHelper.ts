@@ -39,7 +39,7 @@ describe('settlementHelper', () => {
       expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('INSTALMENTS')
       expect(partyStatement.offer.paymentIntention.repaymentPlan).is.not.undefined
       expect(partyStatement.offer.paymentIntention.paymentDate).is.undefined
-      expect(partyStatement.offer.content).to.be.eql('John Smith will repay £200 in instalments of £100 Each week. The first instalment will be paid by 31 December 2050.')
+      expect(partyStatement.offer.content).to.be.eql('John Smith will repay £200 in instalments of £100 each week. The first instalment will be paid by 31 December 2050.')
 
     })
 
