@@ -36,7 +36,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     const courtOfferedPaymentIntention = new PaymentIntention()
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    if (decisionType === DecisionType.CLAIMANT) {
+    if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
         courtOfferedPaymentIntention.paymentOption = PaymentOption.IMMEDIATELY
         courtOfferedPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
@@ -170,6 +170,9 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     const courtDetermination: CourtDetermination = new CourtDetermination()
 
+    locals.draft.document.courtDetermination = courtDetermination
+    locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
+
     if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
       const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
 
@@ -177,8 +180,6 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
       courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
       courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
-    locals.draft.document.courtDetermination = courtDetermination
-    locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
 
     return super.saveDraft(locals)
   }

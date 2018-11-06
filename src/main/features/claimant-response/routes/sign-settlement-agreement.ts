@@ -12,18 +12,13 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { DecisionType } from 'claimant-response/draft/courtDecision'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function getPaymentIntention (response: FullAdmissionResponse | PartialAdmissionResponse, draft: DraftClaimantResponse): PaymentIntention {
   if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
     return response.paymentIntention
   } else {
-    if (draft.courtDetermination.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      return draft.alternatePaymentMethod.toDomainInstance()
-    } else {
-      return draft.courtDetermination.courtDecision
-    }
+    return draft.courtDetermination.courtDecision
   }
 }
 

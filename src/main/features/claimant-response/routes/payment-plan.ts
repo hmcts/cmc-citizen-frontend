@@ -33,7 +33,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtOfferedPaymentIntention = new PaymentIntention()
 
-    if (decisionType === DecisionType.CLAIMANT) {
+    if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper
         .createPaymentPlanFromDraft(draft)
 
