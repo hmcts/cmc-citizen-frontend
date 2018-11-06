@@ -17,6 +17,12 @@ services:
         - CLAIM_STORE_URL
         - HEALTHCHECK_CITIZEN=true
         - CHUNKS=1
+        - FEATURE_TESTING_SUPPORT
+        - FEATURE_NEW_FEATURES_CONSENT
+        - FEATURE_ADMISSIONS
+        - FEATURE_FINE_PRINT
+        - FEATURE_RETURN_ERROR_TO_USER
+        - FEATURE_MOCK_PAY
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:

@@ -315,9 +315,6 @@ export class DefenceSteps {
 
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitAllOfMoneyClaim()
-
-    I.wait(30)
-
     defendantSteps.selectTaskDecideHowWillYouPay()
 
     switch (paymentOption) {
