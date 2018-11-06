@@ -30,7 +30,8 @@ const draftOverride: object = {
         value: PaymentType.INSTALMENTS.value
       }
     }
-  }
+  },
+  disposableIncome: 100
 }
 
 describe('Claimant response: payment plan', () => {

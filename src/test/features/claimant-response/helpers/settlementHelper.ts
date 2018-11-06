@@ -30,7 +30,7 @@ describe('settlementHelper', () => {
     })
 
     it('should return defendant party statement by installment option', () => {
-      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
+      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim, draft)
       expect(partyStatement).is.not.undefined
       expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
       expect(partyStatement.type).to.be.eql('OFFER')
@@ -44,7 +44,7 @@ describe('settlementHelper', () => {
 
     it('should return defendant party statement by set date option', () => {
       claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
-      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
+      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim, draft)
       expect(partyStatement).is.not.undefined
       expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
       expect(partyStatement.type).to.be.eql('OFFER')
