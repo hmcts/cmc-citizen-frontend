@@ -21,7 +21,6 @@ import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
@@ -105,6 +104,20 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
     return new DefaultModelAccessor('alternatePaymentMethod')
   }
 
+  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
+
+    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
+    locals.draft.document.courtDetermination.decisionType = decisionType
+
+    const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    if (courtCalculatedPaymentIntention) {
+      locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+    }
+
+    locals.draft.document.courtDetermination.courtDecision = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    return super.saveDraft(locals)
+  }
+
   buildPostSubmissionUri (req: express.Request, res: express.Response): string {
     const claim: Claim = res.locals.claim
     const draft: DraftClaimantResponse = res.locals.draft.document
@@ -132,22 +145,6 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         return Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })
       }
     }
-  }
-
-  async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
-    const courtDetermination: CourtDetermination = new CourtDetermination()
-
-    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
-    courtDetermination.decisionType = decisionType
-
-    const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-    if (courtCalculatedPaymentIntention) {
-      courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
-    }
-
-    courtDetermination.courtDecision = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-    locals.draft.document.courtDetermination = courtDetermination
-    return super.saveDraft(locals)
   }
 
 }

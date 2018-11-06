@@ -183,7 +183,7 @@ describe('Claimant response: payment plan', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferPage.evaluateUri({ externalId: externalId })))
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })))
           })
         })
 
