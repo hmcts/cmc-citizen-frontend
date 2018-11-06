@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  checkboxConfirm: 'input[id=signedTrue]'
+  checkboxConfirm: 'input[id=signedtrue]'
 }
 
 const buttons = {

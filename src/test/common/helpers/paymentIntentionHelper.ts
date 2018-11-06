@@ -6,7 +6,7 @@ import { PaymentOptionPage } from 'claimant-response/routes/payment-option'
 import { expect } from 'chai'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption as ClaimPaymentOption } from 'claims/models/paymentOption'
-import { PaymentType, PaymentOption } from 'shared/components/payment-intention/model/paymentOption'
+import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentDatePage } from 'claimant-response/routes/payment-date'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { PaymentPlanPage } from 'claimant-response/routes/payment-plan'
@@ -19,39 +19,50 @@ describe('PaymentIntentionHelper', () => {
 
   beforeEach(() => {
     claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
-    draftClaimantResponseImmediately = new DraftClaimantResponse().deserialize({ alternatePaymentMethod: {
-      paymentOption: new PaymentOption(PaymentType.IMMEDIATELY)
-    } })
+    draftClaimantResponseImmediately = new DraftClaimantResponse().deserialize({
+      alternatePaymentMethod: {
+        paymentOption: new PaymentOption(PaymentType.IMMEDIATELY)
+      },
+      disposableIncome: 100
+    })
 
-    draftClaimantResponsePayBySetDate = new DraftClaimantResponse().deserialize({ alternatePaymentMethod: {
-      paymentOption: new PaymentOption(PaymentType.BY_SET_DATE),
-      paymentDate: { date: {
-        year: 2050,
-        month: 12,
-        day: 31
-      } }
-    } })
+    draftClaimantResponsePayBySetDate = new DraftClaimantResponse().deserialize({
+      alternatePaymentMethod: {
+        paymentOption: new PaymentOption(PaymentType.BY_SET_DATE),
+        paymentDate: {
+          date: {
+            year: 2050,
+            month: 12,
+            day: 31
+          }
+        }
+      },
+      disposableIncome: 100
+    })
 
-    draftClaimantResponseInstalments = new DraftClaimantResponse().deserialize({ alternatePaymentMethod: {
-      paymentOption: new PaymentOption(PaymentType.INSTALMENTS),
-      paymentPlan: {
-        instalmentAmount: 100,
-        paymentSchedule: {
-          value: PaymentSchedule.EVERY_MONTH.value
-        },
-        firstPaymentDate: {
-          year: 2018,
-          month: 12,
-          day: 31
-        },
-        completionDate: {
-          year: 2019,
-          month: 12,
-          day: 30
-        },
-        paymentLength: ''
-      }
-    } })
+    draftClaimantResponseInstalments = new DraftClaimantResponse().deserialize({
+      alternatePaymentMethod: {
+        paymentOption: new PaymentOption(PaymentType.INSTALMENTS),
+        paymentPlan: {
+          instalmentAmount: 100,
+          paymentSchedule: {
+            value: PaymentSchedule.EVERY_MONTH.value
+          },
+          firstPaymentDate: {
+            year: 2018,
+            month: 12,
+            day: 31
+          },
+          completionDate: {
+            year: 2019,
+            month: 12,
+            day: 30
+          },
+          paymentLength: ''
+        }
+      },
+      disposableIncome: 100
+    })
   })
 
   context('getDefendantPaymentIntention', () => {
