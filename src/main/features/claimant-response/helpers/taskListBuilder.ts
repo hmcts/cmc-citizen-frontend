@@ -34,7 +34,7 @@ export class TaskListBuilder {
 
     tasks.push(
       new TaskListItem(
-        'View the defendant’s full response',
+        'View the defendant’s response',
         Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
         ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
       )

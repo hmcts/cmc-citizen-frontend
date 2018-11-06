@@ -75,6 +75,10 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
       throw new Error('court offered payment intention not found where decision type is COURT')
     }
+    if (draftClaimantResponse.decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+      return undefined
+    }
+
     if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
       return undefined
     }
@@ -110,7 +114,7 @@ export class ClaimantResponseConverter {
     if (draftPaymentIntention) {
       const paymentIntention: PaymentIntention = new PaymentIntention()
       paymentIntention.paymentOption = draftPaymentIntention.paymentOption.option.value as PaymentOption
-      if (draftPaymentIntention.paymentDate) {
+      if (draftPaymentIntention.paymentDate || draftPaymentIntention.paymentOption.option === PaymentType.IMMEDIATELY) {
         paymentIntention.paymentDate = this.convertPaymentDate(draftPaymentIntention.paymentOption, draftPaymentIntention.paymentDate)
       }
       if (draftPaymentIntention.paymentPlan) {

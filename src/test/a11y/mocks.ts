@@ -13,6 +13,7 @@ import {
   partialAdmissionWithPaymentByInstalmentsData,
   statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
@@ -31,7 +32,20 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
       ...statementOfMeansWithMandatoryFieldsOnlyData
     }
   },
-  countyCourtJudgmentRequestedAt: '2017-08-09T11:51:28.144',
+  countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
+  countyCourtJudgment: {
+    defendantDateOfBirth: '1990-11-01',
+    paidAmount: 2,
+    paymentOption: 'INSTALMENTS',
+    repaymentPlan: {
+      instalmentAmount: 30,
+      firstPaymentDate: '2018-11-11',
+      paymentSchedule: 'EVERY_MONTH',
+      completionDate: '2019-11-11',
+      paymentLength: '12 months'
+    },
+    ccjType: CountyCourtJudgmentType.DETERMINATION
+  },
   settlementReachedAt: '2017-08-10T15:27:32.917'
 }).persist()
 
