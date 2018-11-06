@@ -105,7 +105,7 @@ describe('statesPaidHelper', () => {
         }
       )
 
-      expect(() => StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)).to.throw(Error, StatesPaidHelper.FULL_ADMISSION_NOT_SUPPORTED)
+      expect(() => StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)).to.throw(Error, StatesPaidHelper.RESPONSE_TYPE_NOT_SUPPPORTED)
     })
   })
 
@@ -140,7 +140,7 @@ describe('statesPaidHelper', () => {
         }
       )
 
-      expect(() => StatesPaidHelper.getAlreadyPaidAmount(claim)).to.throw(Error, StatesPaidHelper.FULL_ADMISSION_NOT_SUPPORTED)
+      expect(() => StatesPaidHelper.getAlreadyPaidAmount(claim)).to.throw(Error, StatesPaidHelper.RESPONSE_TYPE_NOT_SUPPPORTED)
     })
   })
 })

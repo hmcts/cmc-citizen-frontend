@@ -48,7 +48,7 @@
       {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
         {% include "./confirmation/accepted-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
-        {% include "./confirmation/proposed-alternateayment-plan.njk" %}
+        {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
       {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
