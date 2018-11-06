@@ -201,6 +201,7 @@ describe('Claim', () => {
       }
       claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.respondedAt = MomentFactory.currentDateTime().subtract(2, 'months')
+      claim.claimantRespondedAt = MomentFactory.currentDate().subtract('8', 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED)
     })
