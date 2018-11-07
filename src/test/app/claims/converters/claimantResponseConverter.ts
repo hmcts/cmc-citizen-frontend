@@ -16,12 +16,19 @@ import {
   intentionOfPaymentByInstallments,
   intentionOfPaymentInFullBySetDate
 } from '../../../data/draft/paymentIntentionDraft'
-import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { LocalDate } from 'forms/models/localDate'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
+import {
+  paymentIntentionInInstallment,
+  paymentIntentionBySetDate,
+  courtDecisionInstalments,
+  courtPaymentIntentionInstallments,
+  courtPaymentIntentionBySetDate,
+  courtDecisionBySetDate,
+  paymentIntentionByPayBySetDate
+} from '../../../data/entity/claimantResponseConverterData'
 
 function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()
@@ -36,65 +43,6 @@ function createDraftClaimantResponseBaseForAcceptance (accept: YesNoOption, sett
   draftResponse.paidAmount = new PaidAmount(PaidAmountOption.YES,10,100)
   if (accept) draftResponse.acceptPaymentMethod = new AcceptPaymentMethod(accept)
   return draftResponse
-}
-
-const paymentIntentionInInstallment = {
-  paymentOption: PaymentOption.INSTALMENTS,
-  paymentDate: MomentFactory.currentDate().add(5, 'days'),
-  repaymentPlan: {
-    instalmentAmount: 10,
-    firstPaymentDate: MomentFactory.currentDate().add(30, 'days'),
-    paymentSchedule: PaymentSchedule.EVERY_MONTH,
-    completionDate: MomentFactory.currentDate().add(90, 'days'),
-    paymentLength: '3 Months'
-  }
-}
-
-const paymentIntentionBySetDate = {
-  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-  paymentDate: MomentFactory.currentDate().add(5, 'days')
-}
-
-const installmentPaymentIntention = {
-  'paymentOption': 'INSTALMENTS',
-  'paymentDate': MomentFactory.currentDate().add(5, 'days'),
-  'repaymentPlan': {
-    'instalmentAmount': 10,
-    'firstPaymentDate': MomentFactory.currentDate().add(30, 'days'),
-    'paymentSchedule': 'EVERY_MONTH',
-    'completionDate': MomentFactory.currentDate().add(90, 'days'),
-    'paymentLength': '3 Months'
-  }
-}
-
-const courtDecisionInstalments = {
-  'courtDecision': installmentPaymentIntention
-}
-
-const courtPaymentIntentionInstallments = {
-  'courtPaymentIntention': installmentPaymentIntention
-}
-
-const courtPaymentIntentionBySetDate = {
-  'courtPaymentIntention': {
-    'paymentOption': 'BY_SPECIFIED_DATE',
-    'paymentDate': MomentFactory.currentDate().add(5, 'days'),
-    'repaymentPlan': undefined
-  }
-}
-
-const courtDecisionBySetDate = {
-  'courtDecision': {
-    'paymentOption': 'BY_SPECIFIED_DATE',
-    'paymentDate': MomentFactory.currentDate().add(5, 'days'),
-    'repaymentPlan': undefined
-  }
-}
-
-const paymentIntentionByPayBySetDate = {
-  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-  paymentDate: MomentFactory.currentDate().add(5, 'days'),
-  repaymentPlan: undefined
 }
 
 function createDraftClaimantResponseWithCourtDecisionType (
