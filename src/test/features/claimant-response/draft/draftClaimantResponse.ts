@@ -9,10 +9,9 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { DecisionType } from 'common/court-calculations/courtDecision'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import {
   intentionOfImmediatePayment,
-  intentionOfPaymentByInstallments
+  intentionOfPaymentByInstalments
 } from 'test/data/draft/paymentIntentionDraft'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
@@ -59,8 +58,8 @@ describe('DraftClaimantResponse', () => {
           accepted: YesNoOption.NO
         },
         courtDetermination: new CourtDetermination(
-          PaymentIntention.deserialize(intentionOfImmediatePayment),
-          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
+          intentionOfImmediatePayment,
+          intentionOfPaymentByInstalments,
           undefined,
           1000,
           DecisionType.COURT)
@@ -90,8 +89,8 @@ describe('DraftClaimantResponse', () => {
       const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
         externalId: myExternalId,
         courtDetermination: new CourtDetermination(
-          PaymentIntention.deserialize(intentionOfImmediatePayment),
-          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
+          intentionOfImmediatePayment,
+          intentionOfPaymentByInstalments,
           undefined,
           1000,
           DecisionType.COURT)

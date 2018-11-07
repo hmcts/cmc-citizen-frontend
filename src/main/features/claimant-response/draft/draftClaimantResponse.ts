@@ -6,12 +6,9 @@ import { SettlementAgreement } from 'claimant-response/form/models/settlementAgr
 import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
-import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/partPaymentReceived'
 import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
-import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { DecisionType } from 'common/court-calculations/courtDecision'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class DraftClaimantResponse extends DraftDocument {
@@ -23,16 +20,11 @@ export class DraftClaimantResponse extends DraftDocument {
   formaliseRepaymentPlan?: FormaliseRepaymentPlan
   settlementAgreement?: SettlementAgreement
   alternatePaymentMethod?: DraftPaymentIntention
-  courtCalculatedPaymentIntention?: PaymentIntention
-  courtOfferedPaymentIntention?: PaymentIntention
-  decisionType?: DecisionType
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
-  rejectionReason?: RejectionReason
   partPaymentReceived?: PartPaymentReceived
   accepted?: ClaimSettled
   acceptCourtOffer?: AcceptCourtOffer
-  disposableIncome: number
   courtDetermination?: CourtDetermination
 
   constructor () {
@@ -63,9 +55,6 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.paidAmount) {
         this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       }
-      if (input.rejectionReason) {
-        this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
-      }
       if (input.partPaymentReceived) {
         this.partPaymentReceived = new PartPaymentReceived().deserialize(input.partPaymentReceived)
       }
@@ -78,23 +67,11 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.alternatePaymentMethod) {
         this.alternatePaymentMethod = DraftPaymentIntention.deserialize(input.alternatePaymentMethod)
       }
-      if (input.courtOfferedPaymentIntention) {
-        this.courtOfferedPaymentIntention = PaymentIntention.deserialize(input.courtOfferedPaymentIntention)
-      }
-      if (input.courtCalculatedPaymentIntention) {
-        this.courtCalculatedPaymentIntention = PaymentIntention.deserialize(input.courtCalculatedPaymentIntention)
-      }
-      if (input.decisionType) {
-        this.decisionType = input.decisionType
-      }
       if (input.courtOrderAmount) {
         this.courtOrderAmount = input.courtOrderAmount
       }
-      if (input.disposableIncome) {
-        this.disposableIncome = input.disposableIncome
-      }
       if (input.courtDetermination) {
-        this.courtDetermination = input.courtDetermination
+        this.courtDetermination = new CourtDetermination().deserialize(input.courtDetermination)
       }
     }
     return this
