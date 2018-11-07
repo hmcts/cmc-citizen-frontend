@@ -7,6 +7,7 @@ import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -52,7 +53,7 @@ export class CCJModelConverter {
       convertRepaymentPlan(draft.repaymentPlan),
       convertPayBySetDate(draft),
       statementOfTruth,
-      'DEFAULT'
+      CountyCourtJudgmentType.DEFAULT
     )
   }
 }

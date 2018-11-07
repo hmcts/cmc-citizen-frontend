@@ -16,8 +16,8 @@ export class ClaimantTaskListPage {
     I.click('Accept or reject their repayment plan')
   }
 
-  selectTaskFormaliseTheRepaymentPlan (): void {
-    I.click('Formalise the repayment plan')
+  selectTaskChooseHowToFormaliseRepayment (): void {
+    I.click('Choose how to formalise repayment')
   }
 
   selectTaskSignASettlementAgreement (): void {
@@ -26,6 +26,14 @@ export class ClaimantTaskListPage {
 
   selectTaskCheckandSubmitYourResponse (): void {
     I.click('Check and submit your response')
+  }
+
+  selectTaskRequestCountyCourtJudgment (): void {
+    I.click('Request a County Court Judgment')
+  }
+
+  selectProposeAnAlternativeRepaymentPlan (): void {
+    I.click('Propose an alternative repayment plan')
   }
 
 }

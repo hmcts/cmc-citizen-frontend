@@ -7,7 +7,6 @@ import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { User } from 'idam/user'
-import { DraftService } from 'services/draftService'
 import { DatePaid } from 'paid-in-full/form/models/datePaid'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 
@@ -36,12 +35,10 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.datePaid = form.model
-        await new DraftService().save(draft, user.bearerToken)
 
         const { externalId } = req.params
 
         await new ClaimStoreClient().savePaidInFull(externalId, user, draft.document)
-        await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.uri.replace(':externalId', externalId))
       }
     }))
