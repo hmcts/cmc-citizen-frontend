@@ -213,7 +213,6 @@ export class Claim {
     if (this.eligibleForCCJAfterBreachedSettlement) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
-
     return statuses
   }
 
@@ -258,7 +257,7 @@ export class Claim {
 
   private hasClaimantSignedSettlementAgreementChosenByCourt (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.claimantResponse && !!(this.claimantResponse as AcceptationClaimantResponse ).courtDetermination
+      this.claimantResponse && !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
   private hasDefendantNotSignedSettlementAgreement (): boolean {
