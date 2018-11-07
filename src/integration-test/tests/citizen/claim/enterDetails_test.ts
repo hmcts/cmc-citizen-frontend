@@ -82,5 +82,6 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
 Scenario('I can enter a claim details and navigate up to payment page @citizen-smoke-test', (I: I) => {
+  I.see(process.env.FEATURE_ADMISSIONS)
   claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, false)
 })
