@@ -8,7 +8,7 @@ declare namespace CodeceptJS {
   export interface I {
     createCitizenUser: () => Promise[string]
     createSolicitorUser: () => Promise[string]
-    createClaim: (claimData: ClaimData, submitterEmail: string) => Promise[string]
+    createClaim: (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions']) => Promise[string]
     linkDefendantToClaim: (claimRef: string, claimantEmail: string, defendantEmail: string) => void
     respondToClaim: (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string) => void
     retrievePin (letterHolderId: string): () => string

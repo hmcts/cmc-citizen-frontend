@@ -31,7 +31,7 @@ export class TaskListBuilder {
       || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)) {
       tasks.push(
         new TaskListItem(
-          'View the defendant’s full response',
+          'View the defendant’s response',
           Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
           ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
         )
@@ -159,7 +159,7 @@ export class TaskListBuilder {
     if (
       (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
         || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)
-        && (draft.rejectionReason === undefined))))) {
+        && (draft.courtDetermination.rejectionReason.text === undefined))))) {
       tasks.push(
         new TaskListItem(
           'Choose how to formalise repayment',

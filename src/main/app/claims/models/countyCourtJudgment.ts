@@ -4,6 +4,7 @@ import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 export class CountyCourtJudgment {
 
@@ -13,7 +14,7 @@ export class CountyCourtJudgment {
                public repaymentPlan?: RepaymentPlan,
                public payBySetDate?: Moment,
                public statementOfTruth?: StatementOfTruth,
-               public ccjType?: string
+               public ccjType?: CountyCourtJudgmentType
   ) {
     this.defendantDateOfBirth = defendantDateOfBirth
     this.paymentOption = paymentOption

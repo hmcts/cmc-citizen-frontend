@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+{% set heading = 'The repayment plan' %}
+
+{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "repaymentPlanBlock.njk" import repaymentPlanBlock %}
+
+
+{% block content %}
+  {{ csrfProtection(csrf) }}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      {{ repaymentPlanBlock(
+        heading = 'The repayment plan',
+        repaymentPlan = repaymentPlan
+      ) }}
+
+      {% if claim.isEligibleForReDetermination() %}
+
+        <p>{{ t('If you think the defendant can repay you sooner, you can ') }} <a
+            href="{{ CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('ask a judge to make a new repayment plan.') }}</a>
+        </p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

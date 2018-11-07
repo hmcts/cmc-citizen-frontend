@@ -14,7 +14,8 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 
 const baseResponseData = {
   defendant: individual,
-  moreTimeNeeded: 'no'
+  moreTimeNeeded: 'no',
+  freeMediation: 'no'
 }
 
 const baseCompanyResponseData = {
@@ -36,12 +37,12 @@ export const defenceWithDisputeData = {
 
 const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
-  freeMediation: undefined
+  freeMediation: 'no'
 }
 
 const basePartialAdmissionData = {
   responseType: 'PART_ADMISSION',
-  freeMediation: undefined
+  freeMediation: 'no'
 }
 
 const basePartialEvidencesAndTimeLines = {
@@ -153,6 +154,21 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
   }
 }
 
+export const fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2018-10-01',
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2019-02-01',
+      paymentLength: '1'
+    }
+  }
+}
+
 export const partialAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
@@ -230,7 +246,7 @@ export const statementOfMeansWithAllFieldsData = {
     }],
     selfEmployment: {
       jobTitle: 'Director',
-      annualTurnover: 10000,
+      annualTurnover: 100000,
       onTaxPayments: {
         amountYouOwe: 100,
         reason: 'Various taxes'
@@ -261,6 +277,13 @@ export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   ...fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsOnlyData
   }
 }
 
