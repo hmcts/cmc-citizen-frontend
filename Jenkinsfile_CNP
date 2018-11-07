@@ -32,7 +32,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // THESE VARS CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
-env.FEATURE_ADMISSIONS = true  // used to selective determine integration tests
+env.FEATURE_ADMISSIONS = 'true'  // used to selective determine integration tests
 // if you add more variables then update docker-compose.functional-tests.yml and docker-compose.smoke-tests.yml
 
 String notificationsChannel = '#cmc-tech-notification'
