@@ -21,7 +21,7 @@ export default express.Router()
     Paths.rejectionReasonPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      renderView(new Form(draft.document.rejectionReason), res)
+      renderView(new Form(draft.document.courtDetermination.rejectionReason), res)
     })
     )
   .post(
@@ -38,7 +38,7 @@ export default express.Router()
         draft.document.settlementAgreement = undefined
         draft.document.formaliseRepaymentPlan = undefined
 
-        draft.document.rejectionReason = form.model
+        draft.document.courtDetermination.rejectionReason = form.model
 
         await new DraftService().save(draft, user.bearerToken)
 

@@ -8,8 +8,8 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption as ClaimPaymentOption } from 'claims/models/paymentOption'
 import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentDatePage } from 'claimant-response/routes/payment-date'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { PaymentPlanPage } from 'claimant-response/routes/payment-plan'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 describe('PaymentIntentionHelper', () => {
   let claim: Claim
@@ -23,7 +23,7 @@ describe('PaymentIntentionHelper', () => {
       alternatePaymentMethod: {
         paymentOption: new PaymentOption(PaymentType.IMMEDIATELY)
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
 
     draftClaimantResponsePayBySetDate = new DraftClaimantResponse().deserialize({
@@ -37,16 +37,17 @@ describe('PaymentIntentionHelper', () => {
           }
         }
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
 
     draftClaimantResponseInstalments = new DraftClaimantResponse().deserialize({
       alternatePaymentMethod: {
         paymentOption: new PaymentOption(PaymentType.INSTALMENTS),
         paymentPlan: {
+          totalAmount: 1060,
           instalmentAmount: 100,
           paymentSchedule: {
-            value: PaymentSchedule.EVERY_MONTH.value
+            value: PaymentSchedule.EVERY_MONTH
           },
           firstPaymentDate: {
             year: 2018,
@@ -61,21 +62,21 @@ describe('PaymentIntentionHelper', () => {
           paymentLength: ''
         }
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
   })
 
   context('getDefendantPaymentIntention', () => {
     it('should return correct instance of PaymentIntention', () => {
-      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT)).to.be.instanceOf(PaymentIntention)
-      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT)).to.be.instanceOf(PaymentIntention)
-      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT)).to.be.instanceOf(PaymentIntention)
+      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim)).to.be.instanceOf(PaymentIntention)
+      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim)).to.be.instanceOf(PaymentIntention)
+      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim)).to.be.instanceOf(PaymentIntention)
     })
 
     it('should return payment intention with Defendants Payment Option', () => {
-      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
-      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
-      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseInstalments, claim, DecisionType.DEFENDANT).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
+      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
+      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
+      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseInstalments, claim).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
     })
   })
 
@@ -95,7 +96,7 @@ describe('PaymentIntentionHelper', () => {
     it('should return payment intention with Claimants Payment Option', () => {
       expect(PaymentOptionPage.generateCourtOfferedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.IMMEDIATELY)
       expect(PaymentDatePage.generateCourtOfferedPaymentIntention(draftClaimantResponsePayBySetDate, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
-      expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponsePayBySetDate, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
+      expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claim, DecisionType.CLAIMANT).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
     })
   })
 
