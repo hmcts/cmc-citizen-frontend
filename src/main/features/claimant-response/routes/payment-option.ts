@@ -28,6 +28,7 @@ import { Party } from 'claims/models/details/yours/party'
 import { Moment } from 'moment'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse> {
 
@@ -54,7 +55,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount,
+          instalmentAmount: Math.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount * 100) / 100,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
@@ -90,11 +91,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     return undefined
   }
 
-  static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
-    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
-      return undefined
-    }
-
+  static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     if (!paymentPlan) {
@@ -167,14 +164,18 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
+    const courtDetermination: CourtDetermination = new CourtDetermination()
+
+    locals.draft.document.courtDetermination = courtDetermination
+    locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
+
     if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
       const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
-      locals.draft.document.decisionType = decisionType
-      locals.draft.document.courtCalculatedPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-      locals.draft.document.courtOfferedPaymentIntention = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-    }
 
-    locals.draft.document.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
+      courtDetermination.decisionType = decisionType
+      courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+      courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    }
 
     return super.saveDraft(locals)
   }
