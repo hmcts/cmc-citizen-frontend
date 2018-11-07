@@ -105,7 +105,7 @@ describe('statesPaidHelper', () => {
         }
       )
 
-      expect(() => StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)).to.throw(Error, StatesPaidHelper.RESPONSE_TYPE_NOT_SUPPPORTED)
+      expect(() => StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)).to.throw(Error, StatesPaidHelper.RESPONSE_TYPE_NOT_SUPPORTED)
     })
   })
 
@@ -140,7 +140,7 @@ describe('statesPaidHelper', () => {
         }
       )
 
-      expect(() => StatesPaidHelper.getAlreadyPaidAmount(claim)).to.throw(Error, StatesPaidHelper.RESPONSE_TYPE_NOT_SUPPPORTED)
+      expect(() => StatesPaidHelper.getAlreadyPaidAmount(claim)).to.throw(Error, StatesPaidHelper.RESPONSE_TYPE_NOT_SUPPORTED)
     })
   })
 })
