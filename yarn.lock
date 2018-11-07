@@ -4081,10 +4081,10 @@ husky@^1.1.3:
     run-node "^1.0.0"
     slash "^2.0.0"
 
-i18next-conv@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-7.0.0.tgz#fdf29ea37d8b507b8d66030dea477b7f03dffd09"
-  integrity sha512-psuqQyJc9aMMOOKRGo7SMKNAdY2gVRPdPWiR73cvA0NT3qnc8A4WgJ92zr8Tj592xk8+2vc0ZtxfAXR9o5Lq+g==
+i18next-conv@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-7.1.0.tgz#a4f8b5dc6158a960be80d93f35e1747e01c2ba7b"
+  integrity sha512-4rm2wUsb82KKS1quJL+ZBpQLqKcsbmFJA9Ysx8vdqJyh5yNGZcPefEEdb/LbVUtBqbi5VNHcxHnL+2038qtMQA==
   dependencies:
     bluebird "^3.5.2"
     chalk "^2.4.1"
