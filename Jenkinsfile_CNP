@@ -32,12 +32,12 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
-env.FEATURE_TESTING_SUPPORT = 'true'
-env.FEATURE_NEW_FEATURES_CONSENT = 'true'
-env.FEATURE_ADMISSIONS = 'true'
-env.FEATURE_FINE_PRINT = 'true'
-env.FEATURE_RETURN_ERROR_TO_USER = 'true'
-env.FEATURE_MOCK_PAY = 'false'
+env.FEATURE_TESTING_SUPPORT = true
+env.FEATURE_NEW_FEATURES_CONSENT = true
+env.FEATURE_ADMISSIONS = true
+env.FEATURE_FINE_PRINT = true
+env.FEATURE_RETURN_ERROR_TO_USER = true
+env.FEATURE_MOCK_PAY = false
 
 String notificationsChannel = '#cmc-tech-notification'
 
