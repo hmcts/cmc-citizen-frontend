@@ -23,7 +23,7 @@ async function prepareClaim (I: I) {
   return { data: claimData }
 }
 
-if (process.env.FEATURE_ADMISSIONS === 'true') {
+if (JSON.parse(process.env.FEATURE_ADMISSIONS)) {
   Feature('Partially admit the claim').retry(3)
 
   Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {

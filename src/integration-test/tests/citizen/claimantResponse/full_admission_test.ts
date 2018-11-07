@@ -15,7 +15,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
-if (process.env.FEATURE_ADMISSIONS === 'true') {
+if (JSON.parse(process.env.FEATURE_ADMISSIONS)) {
   Feature('Claimant Response').retry(3)
 
   Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', async (I: I) => {

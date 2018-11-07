@@ -15,7 +15,7 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
   helperSteps.finishResponse(testData)
 })
 
-if (process.env.FEATURE_ADMISSIONS === 'true') {
+if (JSON.parse(process.env.FEATURE_ADMISSIONS)) {
   Scenario('I can fill out forms for I admit part of the claim @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION
