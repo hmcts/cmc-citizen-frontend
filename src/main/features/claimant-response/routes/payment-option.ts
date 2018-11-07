@@ -21,6 +21,13 @@ import { User } from 'idam/user'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Draft } from '@hmcts/draft-store-client'
+import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
+import { AllowanceCalculations } from 'common/allowances/allowanceCalculations'
+import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
+import { Party } from 'claims/models/details/yours/party'
+import { Moment } from 'moment'
+import { PartyType } from 'common/partyType'
+import { Individual } from 'claims/models/details/theirs/individual'
 
 export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse> {
 
@@ -31,14 +38,14 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
         courtOfferedPaymentIntention.paymentOption = PaymentOption.IMMEDIATELY
-        courtOfferedPaymentIntention.paymentDate = MomentFactory.currentDate().add(5,'days')
+        courtOfferedPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
         return courtOfferedPaymentIntention
       }
       return undefined
     }
 
     if (decisionType === DecisionType.COURT) {
-      const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+      const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
         const defendantFrequency: Frequency = Frequency.of(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
@@ -89,7 +96,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     }
 
     const courtCalculatedPaymentIntention = new PaymentIntention()
-    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim)
+    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     if (!paymentPlan) {
       return undefined
     }
@@ -139,6 +146,25 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     }
   }
 
+  private static getDateOfBirth (defendant: Party): Moment {
+    if (defendant.type === PartyType.INDIVIDUAL.value) {
+      return MomentFactory.parse((defendant as Individual).dateOfBirth)
+    }
+    return undefined
+  }
+
+  private static getMonthlyDisposableIncome (claim: Claim): number {
+    const repository: AllowanceRepository = new ResourceAllowanceRepository()
+    const allowanceHelper = new AllowanceCalculations(repository)
+    const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
+    const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    return Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
+      response.statementOfMeans,
+      response.defendant.type,
+      PaymentOptionPage.getDateOfBirth(response.defendant)), 0)
+  }
+
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
     if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
@@ -147,6 +173,8 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
       locals.draft.document.courtCalculatedPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
       locals.draft.document.courtOfferedPaymentIntention = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
+
+    locals.draft.document.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
 
     return super.saveDraft(locals)
   }

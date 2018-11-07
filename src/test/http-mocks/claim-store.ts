@@ -393,3 +393,9 @@ export function resolveClaimantResponse () {
     .post(new RegExp('/.+/claimant/[0-9]+'))
     .reply(HttpStatus.OK)
 }
+
+export function resolveSavePaidInFull () {
+  mock(`${serviceBaseURL}/claims`)
+    .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
+    .reply(HttpStatus.OK)
+}
