@@ -23,6 +23,10 @@ export abstract class AbstractPaymentDatePage<Draft> {
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
   abstract buildPostSubmissionUri (req: express.Request, res: express.Response): string
 
+  getNotice (): string {
+    return undefined
+  }
+
   getView (): string {
     return 'components/payment-intention/payment-date'
   }
@@ -70,9 +74,11 @@ export abstract class AbstractPaymentDatePage<Draft> {
   }
 
   private renderView (form: Form<PaymentDate>, res: express.Response) {
+    const notice: string = this.getNotice()
     res.render(this.getView(), {
       heading: this.getHeading(),
-      form: form
+      form: form,
+      notice: notice ? notice : undefined
     })
   }
 }

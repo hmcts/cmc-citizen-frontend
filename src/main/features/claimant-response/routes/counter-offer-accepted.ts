@@ -27,7 +27,7 @@ export default express.Router()
 
       const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
       const defendantPaymentOption: PaymentOption = response.paymentIntention.paymentOption
-      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft.document)
 
       const differentPaymentFrequency: boolean = claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency
 
