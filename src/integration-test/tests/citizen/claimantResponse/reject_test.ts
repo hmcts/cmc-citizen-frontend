@@ -10,7 +10,7 @@ const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
-if (JSON.parse(process.env.FEATURE_ADMISSIONS)) {
+if (process.env.FEATURE_ADMISSIONS !== undefined && JSON.parse(process.env.FEATURE_ADMISSIONS)) {
   Feature('Claimant Response').retry(3)
 
   Scenario('As a claimant I can reject the claim @citizen @admissions',

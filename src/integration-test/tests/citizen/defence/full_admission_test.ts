@@ -24,7 +24,7 @@ async function prepareClaim (I: I) {
   return { data: claimData }
 }
 
-if (JSON.parse(process.env.FEATURE_ADMISSIONS)) {
+if (process.env.FEATURE_ADMISSIONS !== undefined && JSON.parse(process.env.FEATURE_ADMISSIONS)) {
   Feature('Fully admit all of the claim').retry(3)
 
   Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen @admissions', async (I: I) => {
