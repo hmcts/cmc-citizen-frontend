@@ -42,16 +42,6 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot retrieve paidInFull draft', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectFind('Error')
-
-        await request(app)
-          .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('paidInFull')
@@ -86,33 +76,8 @@ describe('claim - date money was received', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 when cannot retrieve paidInFull draft', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        draftStoreServiceMock.rejectFind('Error')
-
-        await request(app)
-          .post(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .send(validFormData)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
-      context('when form is valid', async () => {
-        it('should return 500 and render error page when cannot save paidInFull draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('paidInFull')
-          draftStoreServiceMock.rejectSave()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(validFormData)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
-      })
-
       context('when form is invalid', async () => {
-        it('should render page when everything is fine', async () => {
+        it('should render page with error message', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('paidInFull')
 
@@ -121,6 +86,21 @@ describe('claim - date money was received', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ date: { day: '31', month: '12', year: '2020' } })
             .expect(res => expect(res).to.be.successful.withText('When did you receive the money?', 'div class="error-summary"'))
+        })
+      })
+
+      context('when form is valid', async () => {
+        it('should render the confirmation page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('paidInFull')
+          claimStoreServiceMock.resolveSavePaidInFull()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ date: { day: '10', month: '10', year: '2018' } })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(Paths.confirmationPage.evaluateUri({ externalId: externalId })))
         })
       })
     })
