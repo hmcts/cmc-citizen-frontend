@@ -4,7 +4,7 @@ import { DefenceType } from 'claims/models/response/defenceType'
 
 export class StatesPaidHelper {
 
-  static readonly RESPONSE_TYPE_NOT_SUPPPORTED: string = 'Unsupported response type'
+  static readonly RESPONSE_TYPE_NOT_SUPPORTED: string = 'Unsupported response type'
 
   static isResponseAlreadyPaid (claim: Claim): boolean {
     switch (claim.response.responseType) {
@@ -25,7 +25,7 @@ export class StatesPaidHelper {
         return claim.response.amount < claim.totalAmountTillDateOfIssue
       case ResponseType.FULL_ADMISSION:
       default:
-        throw new Error(this.RESPONSE_TYPE_NOT_SUPPPORTED)
+        throw new Error(this.RESPONSE_TYPE_NOT_SUPPORTED)
     }
   }
 
@@ -36,7 +36,7 @@ export class StatesPaidHelper {
       case ResponseType.PART_ADMISSION:
         return claim.response.amount
       default:
-        throw new Error(this.RESPONSE_TYPE_NOT_SUPPPORTED)
+        throw new Error(this.RESPONSE_TYPE_NOT_SUPPORTED)
     }
   }
 
