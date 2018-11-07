@@ -100,11 +100,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     }
   }
 
-  static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType) {
-    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT && draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
-      return undefined
-    }
-
+  static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim) {
     const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     if (!paymentPlan) {
@@ -138,7 +134,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
     locals.draft.document.courtDetermination.decisionType = decisionType
 
-    const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
     if (courtCalculatedPaymentIntention) {
       locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
     }

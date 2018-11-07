@@ -68,15 +68,15 @@ describe('PaymentIntentionHelper', () => {
 
   context('getDefendantPaymentIntention', () => {
     it('should return correct instance of PaymentIntention', () => {
-      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT)).to.be.instanceOf(PaymentIntention)
-      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT)).to.be.instanceOf(PaymentIntention)
-      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT)).to.be.instanceOf(PaymentIntention)
+      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim)).to.be.instanceOf(PaymentIntention)
+      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim)).to.be.instanceOf(PaymentIntention)
+      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim)).to.be.instanceOf(PaymentIntention)
     })
 
     it('should return payment intention with Defendants Payment Option', () => {
-      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
-      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim, DecisionType.DEFENDANT).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
-      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseInstalments, claim, DecisionType.DEFENDANT).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
+      expect(PaymentOptionPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
+      expect(PaymentDatePage.generateCourtCalculatedPaymentIntention(draftClaimantResponseImmediately, claim).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
+      expect(PaymentPlanPage.generateCourtCalculatedPaymentIntention(draftClaimantResponseInstalments, claim).paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
     })
   })
 
