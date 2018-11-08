@@ -15,18 +15,18 @@ export class CourtDecisionHelper {
     const defendantLastPaymentDate: Moment = CourtDecisionHelper.getDefendantLastPaymentDate(claim, draft)
 
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
-
-    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
-    let courtOfferedLastDate: Moment
-    if (courtCalculatedPaymentPlan) {
-      courtOfferedLastDate = courtCalculatedPaymentPlan.calculateLastPaymentDate()
-    }
+    let courtOfferedLastDate = this.getCourtOfferedLastDate(claim, draft)
 
     return CourtDecision.calculateDecision(
       defendantLastPaymentDate,
       claimantLastPaymentDate,
       courtOfferedLastDate
     )
+  }
+
+  private static getCourtOfferedLastDate (claim: Claim, draft: DraftClaimantResponse) {
+    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
+    return courtCalculatedPaymentPlan ? courtCalculatedPaymentPlan.calculateLastPaymentDate() : undefined
   }
 
   private static getDefendantLastPaymentDate (claim: Claim, draft: DraftClaimantResponse): Moment {
