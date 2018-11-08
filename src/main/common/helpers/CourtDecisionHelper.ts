@@ -12,7 +12,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 
 export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
-    const defendantLastPaymentDate: Moment = CourtDecisionHelper.getDefendantLastPaymentDate(claim, draft)
+    const defendantLastPaymentDate: Moment = CourtDecisionHelper.getDefendantLastPaymentDate(claim)
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
     const courtOfferedLastDate = this.getCourtOfferedLastDate(claim, draft)
 
@@ -23,16 +23,16 @@ export class CourtDecisionHelper {
     )
   }
 
-  private static getCourtOfferedLastDate (claim: Claim, draft: DraftClaimantResponse) {
+  private static getCourtOfferedLastDate (claim: Claim, draft: DraftClaimantResponse): Moment {
     const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     return courtCalculatedPaymentPlan ? courtCalculatedPaymentPlan.calculateLastPaymentDate() : undefined
   }
 
-  private static getDefendantLastPaymentDate (claim: Claim, draft: DraftClaimantResponse): Moment {
+  private static getDefendantLastPaymentDate (claim: Claim): Moment {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     return claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS
-      ? PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft).calculateLastPaymentDate()
+      ? claimResponse.paymentIntention.repaymentPlan.completionDate
       : claimResponse.paymentIntention.paymentDate
   }
 
