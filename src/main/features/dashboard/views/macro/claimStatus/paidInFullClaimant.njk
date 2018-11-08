@@ -10,24 +10,18 @@
 {% endmacro %}
 
 {% macro paidInFullClaimantClaimSettledDetails(claim) %}
-  <h2 class="heading-small">This claim is settled</h2>
-  <p>
-    {{ t('{{ defendantName }} paid you £{{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
-      { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday, moneyReceivedOn: claim.moneyReceivedOn | trim }) | safe }}
-  </p>
+  <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+  <p>{{ t('{{ defendantName }} paid you £{{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
+      { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday, moneyReceivedOn: claim.moneyReceivedOn | date }) | safe }}</p>
 {% endmacro %}
 
 {% macro paidInFullCCJCancelledClaimantClaimDetails(claim) %}
   {{  paidInFullClaimantClaimSettledDetails(claim) }}
-  <p>
-    {{ t('The defendant’s County Court Judgment has been cancelled.') }}
-  </p>
+  <p>{{ t('The defendant’s County Court Judgment has been cancelled.') }}</p>
 {% endmacro %}
 
 {% macro paidInFullCCJSatisfiedClaimantClaimDetails(claim) %}
   {{  paidInFullClaimantClaimSettledDetails(claim) }}
-  <p>
-  {{ t('The defendant’s County Court Judgment has been marked as paid.') }}
-  </p>
+  <p>{{ t('The defendant’s County Court Judgment has been marked as paid.') }}</p>
 {% endmacro %}
 

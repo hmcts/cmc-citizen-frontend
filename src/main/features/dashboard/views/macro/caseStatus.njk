@@ -60,7 +60,9 @@
   settlementAgreementSignedByBothDefendantDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
-  {% if status === ClaimStatus.NO_RESPONSE %}
+  {% if status === ClaimStatus.PAID_IN_FULL %}
+    {{ paidInFullClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForClaimantDashboard(claim) }}
@@ -105,8 +107,6 @@
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}
-  {% elif status === ClaimStatus.PAID_IN_FULL %}
-    {{ paidInFullClaimantDashboard(claim) }}
   {% endif %}
 {% endmacro %}
 
