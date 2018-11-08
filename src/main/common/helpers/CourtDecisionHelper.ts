@@ -8,6 +8,7 @@ import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
@@ -15,7 +16,8 @@ export class CourtDecisionHelper {
     const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
 
     const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const defendantInstalmentLastDate: Moment = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft).calculateLastPaymentDate()
+    const defendantInstalmentLastDate: Moment = claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
+      PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft).calculateLastPaymentDate() : undefined
     const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantEnteredPayBySetDate : defendantInstalmentLastDate
 
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
