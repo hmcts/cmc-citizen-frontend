@@ -65,7 +65,7 @@ export class PaymentPlanHelper {
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      const instalmentAmount: number = draft.disposableIncome / Frequency.WEEKLY.monthlyRatio
+      const instalmentAmount: number = draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio
       return PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
     }
   }
@@ -81,11 +81,11 @@ export class PaymentPlanHelper {
     }
 
     // No Payment plan when calculated disposable income is negative / zero
-    if (draft.disposableIncome === 0) {
+    if (draft.courtDetermination.disposableIncome === 0) {
       return undefined
     }
 
-    const instalmentAmount: number = Math.min(draft.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
+    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
     return PaymentPlanHelper.createPaymentPlan(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
