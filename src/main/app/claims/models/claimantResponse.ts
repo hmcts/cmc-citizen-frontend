@@ -11,6 +11,10 @@ const deserializers = {
 
 export namespace ClaimantResponse {
   export function deserialize (input: any): ClaimantResponse {
+    if (!input) {
+      return input
+    }
+    
     return deserializers[input.type](input)
   }
 }

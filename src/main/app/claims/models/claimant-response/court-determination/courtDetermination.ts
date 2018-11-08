@@ -11,6 +11,10 @@ export interface CourtDetermination {
 
 export namespace CourtDetermination {
   export function deserialize (input: any): CourtDetermination {
+    if (!input) {
+      return input
+    }
+    
     return {
       courtDecision: PaymentIntention.deserialize(input.courtDecision),
       courtPaymentIntention: PaymentIntention.deserialize(input.courtPaymentIntention),
