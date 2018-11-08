@@ -14,7 +14,7 @@ declare namespace CodeceptJS {
     respondToClaim: (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string) => void
     retrievePin (letterHolderId: string): () => string
     amOnCitizenAppPage: (path: string) => void
-
+    isFeatureAdmissionsEnabled: () => Promise[boolean]
     fillField: (locator: string, value: string) => any
     selectOption: (select: string, option: string) => any
   }

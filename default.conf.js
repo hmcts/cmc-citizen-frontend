@@ -26,6 +26,9 @@ exports.config = {
         proxy: new ProxySettings()
       }
     },
+    AppHelper: {
+      require: './src/integration-test/helpers/appHelper'
+    },
     IdamHelper: {
       require: './src/integration-test/helpers/idamHelper'
     },
