@@ -63,6 +63,10 @@ export class PaymentPlanHelper {
         paymentIntention.repaymentPlan.firstPaymentDate
       )
     }
+    // No Payment plan when calculated disposable income is negative / zero
+    if (draft.courtDetermination.disposableIncome === 0) {
+      return undefined
+    }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
       const instalmentAmount: number = draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio
