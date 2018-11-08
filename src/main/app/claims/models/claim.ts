@@ -1,13 +1,13 @@
 import { Moment } from 'moment'
 import { ClaimData } from 'claims/models/claimData'
 import { MomentFactory } from 'shared/momentFactory'
-import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { ClaimantResponse } from 'claims/models/claimantResponse'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
-import { ClaimantResponse } from 'claims/models/claimantResponse'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
@@ -30,15 +30,16 @@ export class Claim {
   claimData: ClaimData
   moreTimeRequested: boolean
   respondedAt: Moment
+  response: Response
   claimantEmail: string
   countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
   countyCourtJudgmentIssuedAt: Moment
-  response: Response
-  claimantResponse: ClaimantResponse
   defendantEmail: string
   settlement: Settlement
   settlementReachedAt: Moment
+  claimantResponse: ClaimantResponse
+  claimantRespondedAt: Moment
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
@@ -69,9 +70,6 @@ export class Claim {
       if (input.response) {
         this.response = Response.deserialize(input.response)
       }
-      if (input.claimantResponse) {
-        this.claimantResponse = ClaimantResponse.deserialize(input.claimantResponse)
-      }
       this.claimantEmail = input.submitterEmail
       this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
       if (input.countyCourtJudgmentRequestedAt) {
@@ -85,6 +83,12 @@ export class Claim {
       }
       if (input.settlementReachedAt) {
         this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
+      }
+      if (input.claimantResponse) {
+        this.claimantResponse = ClaimantResponse.deserialize(input.claimantResponse)
+      }
+      if (input.claimantRespondedAt) {
+        this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
       }
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
@@ -103,6 +107,7 @@ export class Claim {
         this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
       }
     }
+
     return this
   }
 

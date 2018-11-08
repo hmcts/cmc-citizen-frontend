@@ -1,7 +1,7 @@
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 export interface ClaimantResponseCommon {
-  type: ClaimantResponseType,
+  type: ClaimantResponseType
   amountPaid: number
 }
 
