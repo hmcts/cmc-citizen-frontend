@@ -44,7 +44,7 @@ export class PaymentPlan {
     return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
 
-  convertTo (frequency: Frequency): PaymentPlan {
+  convertTo (frequency: Frequency, startDate?: moment.Moment): PaymentPlan {
     let monthlyInstalmentAmount
     switch (frequency) {
       case Frequency.WEEKLY:
@@ -62,8 +62,8 @@ export class PaymentPlan {
       default:
         throw new Error(`Incompatible Frequency: ${frequency}`)
     }
-
-    return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, this.startDate)
+    const paymentPlanStartDate = startDate ? startDate : this.startDate
+    return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, paymentPlanStartDate)
   }
 
   private pluralize (num: number, word: string) {
