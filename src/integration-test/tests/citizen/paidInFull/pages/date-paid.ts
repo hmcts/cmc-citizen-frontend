@@ -18,7 +18,7 @@ export class DatePaidPage {
   datePaid (datePaid: string): void {
     const [ year, month, day ] = DateParser.parse(datePaid)
 
-    I.see('When did you receive the money?')
+    I.see('When did you settle the claim?')
     I.fillField(fields.day, day)
     I.fillField(fields.month, month)
     I.fillField(fields.year, year)
