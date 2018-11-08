@@ -45,7 +45,7 @@ describe('CourtDecisionHelper', () => {
           totalAmount: 3326.59,
           instalmentAmount: 1000,
           firstPaymentDate: {
-            year: 2019,
+            year: 2020,
             month: 1,
             day: 1
           },
@@ -60,7 +60,7 @@ describe('CourtDecisionHelper', () => {
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT)
   })
 
-  it('should create DEFENDANT decision when defendant payment intention is most reasonable', () => {
+  it('should create DEFENDANT decision when defendant payment intention is most reasonable with pay by set date', () => {
     claim = new Claim().deserialize({
       ...claimStoreServiceMock.sampleClaimObj,
       ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule
@@ -81,6 +81,40 @@ describe('CourtDecisionHelper', () => {
         }
       },
       courtDetermination: { disposableIncome: 100 }
+    })
+    expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.DEFENDANT)
+  })
+
+  it('should create DEFENDANT decision when defendant payment intention is most reasonable with pay by instalments', () => {
+    claim = new Claim().deserialize({
+      ...claimStoreServiceMock.sampleClaimObj,
+      ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome
+    })
+    draft = new DraftClaimantResponse().deserialize({
+      alternatePaymentMethod: {
+        paymentOption: {
+          option: {
+            value: 'INSTALMENTS',
+            displayValue: 'By instalments'
+          }
+        },
+        paymentPlan: {
+          totalAmount: 3326.59,
+          instalmentAmount: 1000,
+          firstPaymentDate: {
+            year: 2019,
+            month: 1,
+            day: 1
+          },
+          paymentSchedule: {
+            value: 'EACH_WEEK',
+            displayValue: 'Each week'
+          },
+          completionDate: '2019-10-01',
+          paymentLength: '1'
+        }
+      },
+      courtDetermination: { disposableIncome: 0 }
     })
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.DEFENDANT)
   })

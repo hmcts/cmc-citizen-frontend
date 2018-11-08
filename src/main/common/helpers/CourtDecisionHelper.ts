@@ -14,7 +14,7 @@ export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
     const defendantLastPaymentDate: Moment = CourtDecisionHelper.getDefendantLastPaymentDate(claim)
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
-    const courtOfferedLastDate = this.getCourtOfferedLastDate(claim, draft)
+    const courtOfferedLastDate = CourtDecisionHelper.getCourtOfferedLastDate(claim, draft)
 
     return CourtDecision.calculateDecision(
       defendantLastPaymentDate,

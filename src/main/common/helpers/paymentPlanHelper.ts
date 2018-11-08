@@ -84,7 +84,6 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    // No Payment plan when calculated disposable income is negative / zero
     if (draft.courtDetermination.disposableIncome === 0) {
       return undefined
     }
