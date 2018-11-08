@@ -152,7 +152,9 @@ export class StatementOfMeansCalculations {
   }
 
   calculateMonthlySavings (bankAccounts: BankAccount[], monthlyRegularIncome: number): number {
-
+    if (!bankAccounts) {
+      return 0
+    }
     const reducer = (total: number, bankAccount: BankAccount) => {
       const balance: number = bankAccount.balance
 

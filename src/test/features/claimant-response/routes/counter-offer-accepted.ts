@@ -140,7 +140,7 @@ describe('Claimant Response - Counter offer accepted', () => {
 
       it('should render page when defendant payment option is pay by set date and claimant response is accepted', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj)
-        draftStoreServiceMock.resolveFind('claimantResponse', { disposableIncome: 100 })
+        draftStoreServiceMock.resolveFind('claimantResponse', { courtDetermination: { disposableIncome: 100 } })
 
         await
           request(app)
