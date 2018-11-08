@@ -13,9 +13,8 @@ import { PaymentOption } from 'claims/models/paymentOption'
 export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
     const defendantLastPaymentDate: Moment = CourtDecisionHelper.getDefendantLastPaymentDate(claim, draft)
-
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
-    let courtOfferedLastDate = this.getCourtOfferedLastDate(claim, draft)
+    const courtOfferedLastDate = this.getCourtOfferedLastDate(claim, draft)
 
     return CourtDecision.calculateDecision(
       defendantLastPaymentDate,
