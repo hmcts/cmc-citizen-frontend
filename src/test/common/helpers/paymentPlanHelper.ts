@@ -12,7 +12,7 @@ describe('PaymentPlanHelper', () => {
   let claim: Claim
   claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
   let draft: DraftClaimantResponse
-  draft = new DraftClaimantResponse().deserialize({ disposableIncome: 1000 })
+  draft = new DraftClaimantResponse().deserialize({ courtDetermination: { disposableIncome: 1000 } })
   context('createPaymentPlanFromDefendantFinancialStatement', () => {
     it('should return correct paymentPlan from defendants financial statement ', () => {
       expect(PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)).to.deep

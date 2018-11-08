@@ -24,7 +24,7 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
   if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
     return response.paymentIntention
   } else {
-    return draft.courtOfferedPaymentIntention
+    return draft.courtDetermination.courtDecision
   }
 }
 

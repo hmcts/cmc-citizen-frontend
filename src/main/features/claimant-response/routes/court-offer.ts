@@ -20,7 +20,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
     form: form,
     claim: claim,
-    courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
+    courtOrderPaymentPlan: draft.document.courtDetermination.courtDecision.repaymentPlan
   })
 }
 
@@ -59,7 +59,7 @@ export default express.Router()
         if (form.model.accept.option === YesNoOption.YES.option) {
           draft.document.settlementAgreement = undefined
           draft.document.formaliseRepaymentPlan = undefined
-          draft.document.rejectionReason = undefined
+          draft.document.courtDetermination.rejectionReason = undefined
 
           await saveAndRedirect(res, draft, ClaimantsResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
         } else {

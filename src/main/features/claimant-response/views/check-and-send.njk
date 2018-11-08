@@ -97,9 +97,10 @@
           bottomBorder = true, bold = true) }}
       {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
         {{ row(label = 'The agreement',
-          value = t('{{ defendantFullName }} will pay ' + amountToPay + ', no later than {{ paymentDate }}',
+          value = t('{{ defendantFullName }} will pay {{ totalAmount }}, no later than {{ paymentDate }}',
             {
               defendantFullName: claim.response.defendant.name,
+              totalAmount: totalAmount | numeral,
               paymentDate: paymentIntention.paymentDate | date
             }),
           bottomBorder = true, bold = true,
@@ -111,10 +112,11 @@
         ) }}
       {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
         {{ row(label = 'The agreement',
-          value = t('{{ defendantFullName }} will pay instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+          value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
             { defendantFullName: claim.response.defendant.name,
+              totalAmount: totalAmount | numeral,
               instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
-              paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+              paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
               firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
             }),
           bottomBorder = true, bold = true,
