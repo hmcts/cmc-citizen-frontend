@@ -13,6 +13,7 @@ export default express.Router()
       res.render(Paths.confirmationPage.associatedView,
         {
           defendantName: claim.claimData.defendant.name,
-          ccjRequestedAt: claim.countyCourtJudgmentRequestedAt
+          ccjRequestedAt: claim.countyCourtJudgmentRequestedAt,
+          reDeterminationRequestedAt: claim.reDeterminationRequestedAt
         })
     }))

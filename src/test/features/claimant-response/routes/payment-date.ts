@@ -30,7 +30,8 @@ const draftOverride: object = {
         value: PaymentType.BY_SET_DATE.value
       }
     }
-  }
+  },
+  courtDetermination: { disposableIncome: 100 }
 }
 
 describe('Claimant response: payment date', () => {
@@ -68,14 +69,23 @@ describe('Claimant response: payment date', () => {
       })
 
       context('when service is healthy', () => {
-        it(`should render page with heading '${heading}'`, async () => {
+        beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+        })
 
+        it(`should render page with heading '${heading}'`, async () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText(heading))
+        })
+
+        it('should show the claimant response notice', async () => {
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('The court will review your suggestion and may reject it if it’s sooner than the defendant can afford to repay the money.'))
         })
       })
     })
