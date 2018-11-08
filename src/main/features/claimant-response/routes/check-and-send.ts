@@ -39,7 +39,7 @@ export default express.Router()
         draft: draft.document,
         claim: claim,
         totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
-        paymentIntention: getPaymentIntention(draft.document, claim),
+        paymentIntention: alreadyPaid ? undefined : getPaymentIntention(draft.document, claim),
         alreadyPaid: alreadyPaid,
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined
       })

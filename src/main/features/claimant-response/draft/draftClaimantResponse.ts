@@ -10,6 +10,7 @@ import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/p
 import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
+import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -26,6 +27,7 @@ export class DraftClaimantResponse extends DraftDocument {
   accepted?: ClaimSettled
   acceptCourtOffer?: AcceptCourtOffer
   courtDetermination?: CourtDetermination
+  rejectionReason?: RejectionReason
 
   constructor () {
     super()
@@ -72,6 +74,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.courtDetermination) {
         this.courtDetermination = new CourtDetermination().deserialize(input.courtDetermination)
+      }
+      if (input.rejectionReason) {
+        this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
       }
     }
     return this
