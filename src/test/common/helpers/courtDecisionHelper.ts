@@ -17,14 +17,14 @@ describe('CourtDecisionHelper', () => {
       alternatePaymentMethod: {
         paymentOption: new PaymentOption(PaymentType.IMMEDIATELY)
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.COURT)
   })
 
   it('should create CLAIMANT decision when claimant payment intention is most reasonable', () => {
     claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
-    draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, disposableIncome: 100 })
+    draft = new DraftClaimantResponse().deserialize({ ...sampleClaimantResponseDraftObj, courtDetermination: { disposableIncome: 100 } })
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.CLAIMANT)
   })
 
@@ -55,7 +55,7 @@ describe('CourtDecisionHelper', () => {
           }
         }
       },
-      disposableIncome: 100
+      courtDetermination: { disposableIncome: 100 }
     })
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT)
   })
@@ -79,7 +79,8 @@ describe('CourtDecisionHelper', () => {
             day: 1
           }
         }
-      }
+      },
+      courtDetermination: { disposableIncome: 100 }
     })
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.DEFENDANT)
   })

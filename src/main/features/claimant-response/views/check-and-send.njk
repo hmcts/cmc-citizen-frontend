@@ -116,7 +116,7 @@
             { defendantFullName: claim.response.defendant.name,
               totalAmount: totalAmount | numeral,
               instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
-              paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+              paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
               firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
             }),
           bottomBorder = true, bold = true,

@@ -12,12 +12,13 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { YesNoOption } from 'models/yesNoOption'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
-function getPaymentIntention (response: FullAdmissionResponse | PartialAdmissionResponse, draft: DraftClaimantResponse) {
+function getPaymentIntention (response: FullAdmissionResponse | PartialAdmissionResponse, draft: DraftClaimantResponse): PaymentIntention {
   if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
     return response.paymentIntention
   } else {
-    return draft.courtOfferedPaymentIntention
+    return draft.courtDetermination.courtDecision
   }
 }
 
