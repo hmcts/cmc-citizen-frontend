@@ -25,7 +25,7 @@ import { Frequency } from 'common/frequency/frequency'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
-import { Moment } from 'moment';
+import { Moment } from 'moment'
 
 export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
@@ -65,7 +65,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
         const claimantRepaymentPlanStartDate: Moment = draft.alternatePaymentMethod.toDomainInstance().repaymentPlan.firstPaymentDate
-        const courtOfferedStartDate: Moment = 
+        const courtOfferedStartDate: Moment =
             paymentPlanFromDefendantFinancialStatement.startDate < claimantRepaymentPlanStartDate ? claimantRepaymentPlanStartDate : paymentPlanFromDefendantFinancialStatement.startDate
         const paymentPlanConvertedToClaimantFrequency: PaymentPlan =
                         paymentPlanFromDefendantFinancialStatement.convertTo(claimantFrequency, courtOfferedStartDate)
