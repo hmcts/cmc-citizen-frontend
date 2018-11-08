@@ -1,11 +1,11 @@
 import { PaymentOption } from 'claims/models/paymentOption'
 
-import { 
-  weeklyRepaymentPlanData, 
-  twoWeeklyRepaymentPlanData, 
+import {
+  weeklyRepaymentPlanData,
+  twoWeeklyRepaymentPlanData,
   monthlyRepaymentPlanData } from 'test/data/entity/repaymentPlanData'
 
-export const immediatlyPaymentIntentionData = {
+export const immediatelyPaymentIntentionData = {
   paymentOption: PaymentOption.IMMEDIATELY
 }
 

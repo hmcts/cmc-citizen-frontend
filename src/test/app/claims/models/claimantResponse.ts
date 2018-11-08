@@ -19,7 +19,7 @@ describe('ClaimantResponse', () => {
       { type: 'rejection', data: rejectionClaimantResponseData }
     ]
 
-    tests.forEach(test => 
+    tests.forEach(test =>
       it(`should deserialize valid JSON of type '${test.type}' to valid ClaimantResponse object`, () => {
         const actual: ClaimantResponse = ClaimantResponse.deserialize(rejectionClaimantResponseData)
         expect(convertToRawObject(actual)).to.be.deep.equal(rejectionClaimantResponseData)

@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { convertToRawObject } from 'test/rawObjectUtils'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 
-import { 
+import {
   ccjAcceptationClaimantResponseData,
   settlementAcceptationClaimantResponseData,
   referToJudgeAcceptationClaimantResponseData
@@ -32,7 +32,7 @@ describe('AcceptationClaimantResponse', () => {
       { type: 'Refer to Judge', data: referToJudgeAcceptationClaimantResponseData }
     ]
 
-    tests.forEach(test => 
+    tests.forEach(test =>
       it(`should deserialize valid JSON of type '${test.type}' to valid AcceptationClaimantResponse object`, () => {
         const actual: AcceptationClaimantResponse = AcceptationClaimantResponse.deserialize(test.data)
         expect(convertToRawObject(actual)).to.be.deep.equal(test.data)

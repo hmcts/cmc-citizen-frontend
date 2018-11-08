@@ -12,7 +12,7 @@ export namespace RejectionClaimantResponse {
     if (!input) {
       return input
     }
-    
+
     return {
       ...ClaimantResponseCommon.deserialize(input),
       type: ClaimantResponseType.REJECTION,

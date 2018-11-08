@@ -24,24 +24,24 @@ describe('CourtDetermination', () => {
 
     const tests = [
       {
-        type: DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT, 
-        data: {...courtDeterminationData, decisionType: DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT}
+        type: DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT,
+        data: { ...courtDeterminationData, decisionType: DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT }
       },
       {
-        type: DecisionType.CLAIMANT, 
-        data: {...courtDeterminationData, decisionType: DecisionType.CLAIMANT}
+        type: DecisionType.CLAIMANT,
+        data: { ...courtDeterminationData, decisionType: DecisionType.CLAIMANT }
       },
       {
-        type: DecisionType.DEFENDANT, 
-        data: {...courtDeterminationData, decisionType: DecisionType.DEFENDANT}
+        type: DecisionType.DEFENDANT,
+        data: { ...courtDeterminationData, decisionType: DecisionType.DEFENDANT }
       },
       {
-        type: DecisionType.COURT, 
-        data: {...courtDeterminationData, decisionType: DecisionType.COURT}
+        type: DecisionType.COURT,
+        data: { ...courtDeterminationData, decisionType: DecisionType.COURT }
       }
     ]
 
-    tests.forEach(test => 
+    tests.forEach(test =>
       it(`should deserialize valid JSON of type '${test.type}' to valid CourtDetermination object`, () => {
         const actual: CourtDetermination = CourtDetermination.deserialize(test.data)
         expect(convertToRawObject(actual)).to.be.deep.equal(test.data)

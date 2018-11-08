@@ -17,7 +17,7 @@ export namespace AcceptationClaimantResponse {
     if (!input) {
       return input
     }
-    
+
     return {
       ...ClaimantResponseCommon.deserialize(input),
       type: ClaimantResponseType.ACCEPTATION,

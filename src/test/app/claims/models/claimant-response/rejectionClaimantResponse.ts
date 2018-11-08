@@ -25,6 +25,6 @@ describe('RejectionClaimantResponse', () => {
     it(`should deserialize valid JSON to valid RejectionClaimantResponse object`, () => {
       const actual: RejectionClaimantResponse = RejectionClaimantResponse.deserialize(rejectionClaimantResponseData)
       expect(convertToRawObject(actual)).to.be.deep.equal(rejectionClaimantResponseData)
-      })
+    })
   })
 })

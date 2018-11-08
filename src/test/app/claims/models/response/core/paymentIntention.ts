@@ -2,12 +2,12 @@ import { expect } from 'chai'
 import { convertToRawObject } from 'test/rawObjectUtils'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
-import { 
-  immediatlyPaymentIntentionData,
+import {
+  immediatelyPaymentIntentionData,
   bySetDatePaymentIntentionData,
   weeklyInstalmentPaymentIntentionData,
   twoWeeklyInstalmentPaymentIntentionData,
-  monthlyInstalmentPaymentIntentionData 
+  monthlyInstalmentPaymentIntentionData
 } from 'test/data/entity/paymentIntentionData'
 
 describe('PaymentIntention', () => {
@@ -21,14 +21,14 @@ describe('PaymentIntention', () => {
     })
 
     const tests = [
-      {type: 'immediatly', data: immediatlyPaymentIntentionData},
-      {type: 'set date', data: bySetDatePaymentIntentionData},
-      {type: 'weekly instalment', data: weeklyInstalmentPaymentIntentionData},
-      {type: 'two weekly instament', data: twoWeeklyInstalmentPaymentIntentionData},
-      {type: 'monthly instament', data: monthlyInstalmentPaymentIntentionData}
+      { type: 'immediatly', data: immediatelyPaymentIntentionData },
+      { type: 'set date', data: bySetDatePaymentIntentionData },
+      { type: 'weekly instalment', data: weeklyInstalmentPaymentIntentionData },
+      { type: 'two weekly instament', data: twoWeeklyInstalmentPaymentIntentionData },
+      { type: 'monthly instament', data: monthlyInstalmentPaymentIntentionData }
     ]
 
-    tests.forEach(test => 
+    tests.forEach(test =>
       it(`should deserialize valid JSON of type '${test.type}' to valid PaymentIntention object`, () => {
         const actual: PaymentIntention = PaymentIntention.deserialize(test.data)
         expect(convertToRawObject(actual)).to.be.deep.equal(test.data)

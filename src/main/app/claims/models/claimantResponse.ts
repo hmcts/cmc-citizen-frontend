@@ -6,7 +6,7 @@ export type ClaimantResponse = AcceptationClaimantResponse | RejectionClaimantRe
 
 const deserializers = {
   [ClaimantResponseType.ACCEPTATION]: AcceptationClaimantResponse.deserialize,
-  [ClaimantResponseType.REJECTION]: RejectionClaimantResponse.deserialize,
+  [ClaimantResponseType.REJECTION]: RejectionClaimantResponse.deserialize
 }
 
 export namespace ClaimantResponse {
@@ -14,7 +14,7 @@ export namespace ClaimantResponse {
     if (!input) {
       return input
     }
-    
+
     return deserializers[input.type](input)
   }
 }
