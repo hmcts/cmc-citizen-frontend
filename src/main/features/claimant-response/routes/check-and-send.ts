@@ -14,11 +14,10 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { isUndefined } from 'util'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-  if (draft.settleAdmitted.admitted.option === YesNoOption.NO && isUndefined(draft.acceptPaymentMethod)) {
+  if (!draft.acceptPaymentMethod && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
     return undefined
   }
   if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
