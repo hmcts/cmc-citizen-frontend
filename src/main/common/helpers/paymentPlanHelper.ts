@@ -64,6 +64,10 @@ export class PaymentPlanHelper {
       )
     }
 
+    if (draft.courtDetermination.disposableIncome === 0) {
+      return undefined
+    }
+
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
       const instalmentAmount: number = draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio
       return PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
@@ -80,7 +84,6 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    // No Payment plan when calculated disposable income is negative / zero
     if (draft.courtDetermination.disposableIncome === 0) {
       return undefined
     }
