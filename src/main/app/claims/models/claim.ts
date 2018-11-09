@@ -143,7 +143,7 @@ export class Claim {
   get eligibleForCCJ (): boolean {
     return !this.countyCourtJudgmentRequestedAt
       && (this.isFullAdmissionPayImmediatelyPastPaymentDate()
-        || this.hasDefendantNotSignedSettlementAgreement()
+        || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
         )
       )
@@ -179,7 +179,7 @@ export class Claim {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
-    } else if (this.hasDefendantNotSignedSettlementAgreement()) {
+    } else if (this.hasDefendantNotSignedSettlementAgreementInTime()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
     } else if (this.hasClaimantAcceptedOfferAndSignedSettlementAgreement()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION
@@ -260,7 +260,7 @@ export class Claim {
       this.claimantResponse && !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
-  private hasDefendantNotSignedSettlementAgreement (): boolean {
+  private hasDefendantNotSignedSettlementAgreementInTime (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
       this.claimantRespondedAt && this.claimantRespondedAt.add('7', 'days').isBefore(MomentFactory.currentDate())
   }
