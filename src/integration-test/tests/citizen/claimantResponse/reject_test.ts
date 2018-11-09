@@ -5,12 +5,14 @@ import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantRe
 import { DefendantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/defendant'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
+import { AppClient } from '../../../helpers/clients/appClient'
 
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
-if (process.env.FEATURE_ADMISSIONS !== undefined && JSON.parse(process.env.FEATURE_ADMISSIONS)) {
+const isEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
+if (isEnabled) {
   Feature('Claimant Response').retry(3)
 
   Scenario('As a claimant I can reject the claim @citizen @admissions',

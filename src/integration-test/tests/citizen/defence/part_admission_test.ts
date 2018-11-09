@@ -5,6 +5,7 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
+import { AppClient } from '../../../helpers/clients/appClient'
 
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
@@ -23,7 +24,8 @@ async function prepareClaim (I: I) {
   return { data: claimData }
 }
 
-if (process.env.FEATURE_ADMISSIONS !== undefined && JSON.parse(process.env.FEATURE_ADMISSIONS)) {
+const isEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
+if (isEnabled) {
   Feature('Partially admit the claim').retry(3)
 
   Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {
