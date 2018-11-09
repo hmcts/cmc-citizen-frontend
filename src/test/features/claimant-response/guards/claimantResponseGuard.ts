@@ -5,9 +5,6 @@ import * as sinon from 'sinon'
 import * as spies from 'sinon-chai'
 import { mockReq as req, mockRes as res } from 'sinon-express-mock'
 
-import { cookieName as eligibilityCookieName } from 'eligibility/store'
-import { eligibleCookie } from 'test/data/cookie/eligibility'
-
 import { User } from 'idam/user'
 
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
@@ -40,12 +37,8 @@ describe('Claimant Response guard', () => {
     })
   })
 
-  context('when claim has a claimant response', () => {
-    beforeEach(() => {
-      req.cookies = {}
-    })
-
-    it('should not pass request through', async () => {
+  context('When the claim has a claimant response', () => {
+    it('should not pass the request through', async () => {
       const spy = sinon.spy(next)
       await ClaimantResponseGuard.checkClaimantResponseDoesNotExist()(req, res, spy)
 
@@ -53,15 +46,12 @@ describe('Claimant Response guard', () => {
     })
   })
 
-  context('when claim has no claimant response', () => {
+  context('When the claim has no claimant response', () => {
     beforeEach(() => {
       res.locals.claim.claimantResponse = undefined
-      req.cookies = {
-        [eligibilityCookieName]: eligibleCookie
-      }
     })
 
-    it('should not pass request through', async () => {
+    it('should pass the request through', async () => {
       const spy = sinon.spy(next)
       await ClaimantResponseGuard.checkClaimantResponseDoesNotExist()(req, res, spy)
 
