@@ -8,28 +8,32 @@ import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
-    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
-
-    const defendantEnteredPayBySetDate: Moment = claimResponse.paymentIntention.paymentDate
-    const defendantInstalmentLastDate: Moment = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft).calculateLastPaymentDate()
-    const defendantLastPaymentDate: Moment = defendantEnteredPayBySetDate ? defendantEnteredPayBySetDate : defendantInstalmentLastDate
-
+    const defendantLastPaymentDate: Moment = CourtDecisionHelper.getDefendantLastPaymentDate(claim)
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
-
-    let courtOfferedLastDate: Moment
-    if (courtCalculatedPaymentPlan) {
-      courtOfferedLastDate = courtCalculatedPaymentPlan.calculateLastPaymentDate()
-    }
+    const courtOfferedLastDate = CourtDecisionHelper.getCourtOfferedLastDate(claim, draft)
 
     return CourtDecision.calculateDecision(
       defendantLastPaymentDate,
       claimantLastPaymentDate,
       courtOfferedLastDate
     )
+  }
+
+  private static getCourtOfferedLastDate (claim: Claim, draft: DraftClaimantResponse): Moment {
+    const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
+    return courtCalculatedPaymentPlan ? courtCalculatedPaymentPlan.calculateLastPaymentDate() : undefined
+  }
+
+  private static getDefendantLastPaymentDate (claim: Claim): Moment {
+    const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    return claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS
+      ? claimResponse.paymentIntention.repaymentPlan.completionDate
+      : claimResponse.paymentIntention.paymentDate
   }
 
   private static getClaimantLastPaymentDate (draft: DraftClaimantResponse): Moment {
