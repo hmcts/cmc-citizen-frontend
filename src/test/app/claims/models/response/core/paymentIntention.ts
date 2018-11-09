@@ -1,38 +1,38 @@
 import { expect } from 'chai'
+import { convertToRawObject } from 'test/rawObjectUtils'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { MomentFactory } from 'shared/momentFactory'
+
+import {
+  immediatelyPaymentIntentionData,
+  bySetDatePaymentIntentionData,
+  weeklyInstalmentPaymentIntentionData,
+  twoWeeklyInstalmentPaymentIntentionData,
+  monthlyInstalmentPaymentIntentionData
+} from 'test/data/entity/paymentIntentionData'
 
 describe('PaymentIntention', () => {
+
   describe('deserialize', () => {
-    it('should deserialize payment intention', () => {
-      const paymentIntention = PaymentIntention.deserialize({
-        repaymentPlan: {
-          instalmentAmount: 100,
-          paymentSchedule: {
-            value: PaymentSchedule.EVERY_MONTH.value
-          },
-          firstPaymentDate: MomentFactory.parse('2018-12-31'),
-          completionDate: MomentFactory.parse('2019-12-31'),
-          paymentLength: '10 weeks'
-        } })
 
-      expect(paymentIntention).to.be.instanceOf(PaymentIntention)
+    it('should return undefined when undefined input given', () => {
+      const actual: PaymentIntention = PaymentIntention.deserialize(undefined)
+
+      expect(actual).to.be.eq(undefined)
     })
 
-    it('should deserialize without completion date or payment length', () => {
-      const paymentIntention = PaymentIntention.deserialize({
-        repaymentPlan: {
-          instalmentAmount: 100,
-          paymentSchedule: {
-            value: PaymentSchedule.EVERY_MONTH.value
-          },
-          firstPaymentDate: MomentFactory.parse('2018-12-31'),
-          completionDate: undefined,
-          paymentLength: undefined
-        } })
+    const tests = [
+      { type: 'immediatly', data: immediatelyPaymentIntentionData },
+      { type: 'set date', data: bySetDatePaymentIntentionData },
+      { type: 'weekly instalment', data: weeklyInstalmentPaymentIntentionData },
+      { type: 'two weekly instament', data: twoWeeklyInstalmentPaymentIntentionData },
+      { type: 'monthly instament', data: monthlyInstalmentPaymentIntentionData }
+    ]
 
-      expect(paymentIntention).to.be.instanceOf(PaymentIntention)
-    })
+    tests.forEach(test =>
+      it(`should deserialize valid JSON of type '${test.type}' to valid PaymentIntention object`, () => {
+        const actual: PaymentIntention = PaymentIntention.deserialize(test.data)
+        expect(convertToRawObject(actual)).to.be.deep.equal(test.data)
+      })
+    )
   })
 })
