@@ -14,11 +14,15 @@ export interface AcceptationClaimantResponse extends ClaimantResponseCommon {
 
 export namespace AcceptationClaimantResponse {
   export function deserialize (input: any): AcceptationClaimantResponse {
+    if (!input) {
+      return input
+    }
+
     return {
       ...ClaimantResponseCommon.deserialize(input),
       type: ClaimantResponseType.ACCEPTATION,
       claimantPaymentIntention: PaymentIntention.deserialize(input.claimantPaymentIntention),
-      courtDetermination: input.courtDetermination,
+      courtDetermination: CourtDetermination.deserialize(input.courtDetermination),
       formaliseOption: input.formaliseOption
     }
   }

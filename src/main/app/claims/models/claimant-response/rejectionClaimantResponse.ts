@@ -3,12 +3,16 @@ import { ClaimantResponseType } from 'claims/models/claimant-response/claimantRe
 
 export interface RejectionClaimantResponse extends ClaimantResponseCommon {
   type: ClaimantResponseType.REJECTION
-  freeMediation?: string,
+  freeMediation?: boolean,
   reason?: string
 }
 
 export namespace RejectionClaimantResponse {
   export function deserialize (input: any): RejectionClaimantResponse {
+    if (!input) {
+      return input
+    }
+
     return {
       ...ClaimantResponseCommon.deserialize(input),
       type: ClaimantResponseType.REJECTION,
