@@ -14,7 +14,8 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 
 const baseResponseData = {
   defendant: individual,
-  moreTimeNeeded: 'no'
+  moreTimeNeeded: 'no',
+  freeMediation: 'no'
 }
 
 const baseCompanyResponseData = {
@@ -36,12 +37,12 @@ export const defenceWithDisputeData = {
 
 const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
-  freeMediation: undefined
+  freeMediation: 'no'
 }
 
 const basePartialAdmissionData = {
   responseType: 'PART_ADMISSION',
-  freeMediation: undefined
+  freeMediation: 'no'
 }
 
 const basePartialEvidencesAndTimeLines = {
@@ -153,6 +154,21 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
   }
 }
 
+export const fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2018-10-01',
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2019-02-01',
+      paymentLength: '1'
+    }
+  }
+}
+
 export const partialAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
@@ -196,6 +212,37 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
   }] as Income[],
   expenses: [{
     amount: 100,
+    frequency: PaymentFrequency.MONTH,
+    type: ExpenseType.MORTGAGE
+  }] as Expense[],
+  carer: false
+}
+
+export const statementOfMeansWithMandatoryFieldsAndNoDisposableIncome = {
+  bankAccounts: [
+    {
+      balance: 0,
+      joint: false,
+      type: BankAccountType.CURRENT_ACCOUNT
+    }
+  ],
+  disability: DisabilityStatus.NO,
+  priorityDebts: [],
+  residence: {
+    type: ResidenceType.OWN_HOME
+  },
+  employment: {
+    unemployment: {
+      retired: true
+    }
+  },
+  incomes: [{
+    amount: 0,
+    frequency: PaymentFrequency.WEEK,
+    type: IncomeType.CHILD_BENEFIT
+  }] as Income[],
+  expenses: [{
+    amount: 1000,
     frequency: PaymentFrequency.MONTH,
     type: ExpenseType.MORTGAGE
   }] as Expense[],
@@ -261,6 +308,20 @@ export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   ...fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsOnlyData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsAndNoDisposableIncome
   }
 }
 

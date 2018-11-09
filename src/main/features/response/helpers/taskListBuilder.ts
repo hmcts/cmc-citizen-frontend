@@ -268,9 +268,12 @@ export class TaskListBuilder {
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
+    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim)
+
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
+      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks,
+      resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : []
     )
       .filter(item => !item.completed)
   }

@@ -42,7 +42,7 @@
 {{ tableStart('statementOfMeans', 'Your financial details') }}
 
 {% set numberOfBankAccounts = draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().length %}
-{{ row('Bank and savings accounts', '', StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts, bold = true) }}
+{{ row('Bank and savings accounts', 'None' if numberOfBankAccounts === 0, StatementOfMeansPaths.bankAccountsPage.evaluateUri({ externalId: claim.externalId }), not numberOfBankAccounts, bold = true) }}
 {% set indexOfLastRow = numberOfBankAccounts - 1 %}
 
 {% for account in draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly() %}
@@ -66,7 +66,7 @@
   {% set defendantSeverelyDisabled = draft.statementOfMeans.severeDisability.option === 'yes' %}
 {% endif %}
 
-{{ row('Where are you living?	', draft.statementOfMeans.residence.residenceType, bold = true, StatementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
+{{ row('Where do you live?	', draft.statementOfMeans.residence.residenceType, bold = true, StatementOfMeansPaths.residencePage.evaluateUri({ externalId: claim.externalId })) }}
 
 {{ row('Do you live with a partner?', draft.statementOfMeans.cohabiting.option | capitalize, bold = true, StatementOfMeansPaths.partnerPage.evaluateUri({ externalId: claim.externalId })) }}
 {% if draft.statementOfMeans.cohabiting.option === 'yes' %}

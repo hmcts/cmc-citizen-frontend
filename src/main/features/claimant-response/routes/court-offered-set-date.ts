@@ -17,13 +17,15 @@ import { DecisionType } from 'common/court-calculations/courtDecision'
 import { Moment } from 'moment'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
 function getPayBySetDate (draft: Draft<DraftClaimantResponse>, claimResponse): Moment {
-  switch (draft.document.decisionType) {
+  const courtDetermination: CourtDetermination = draft.document.courtDetermination
+  switch (courtDetermination.decisionType) {
     case DecisionType.DEFENDANT:
       return claimResponse.paymentIntention.paymentDate
     case DecisionType.COURT:
-      return draft.document.courtOfferedPaymentIntention.paymentDate
+      return draft.document.courtDetermination.courtDecision.paymentDate
     case DecisionType.CLAIMANT:
     case DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT:
       return draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
@@ -68,8 +70,8 @@ export default express.Router()
 
         draft.document.acceptCourtOffer = form.model
 
-        if (draft.document.rejectionReason || draft.document.formaliseRepaymentPlan) {
-          delete draft.document.rejectionReason
+        if (draft.document.courtDetermination.rejectionReason || draft.document.formaliseRepaymentPlan) {
+          delete draft.document.courtDetermination.rejectionReason
           delete draft.document.formaliseRepaymentPlan
           delete draft.document.settlementAgreement
         }

@@ -22,7 +22,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import * as appInsights from 'applicationinsights'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 const logger = Logger.getLogger('router/receiver')
 
@@ -36,15 +36,12 @@ const eligibilityStore = new CookieEligibilityStore()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
-    appInsights.defaultClient.trackEvent({
-      name: 'State cookie mismatch (citizen)',
-      properties: {
+    trackCustomEvent('State cookie mismatch (citizen)',
+      {
         requestValue: req.query.state,
         cookieValue: OAuthHelper.getStateCookie(req)
-      }
-    })
+      })
   }
-
   const authToken: AuthToken = await IdamClient.exchangeCode(
     req.query.code,
     buildURL(req, receiver.uri)
@@ -123,6 +120,10 @@ export default express.Router()
           res.locals.isLoggedIn = true
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
+        } else {
+
+          trackCustomEvent('Authentication token undefined',
+            { requestValue: req.query.state })
         }
       } catch (err) {
         return loginErrorHandler(req, res, cookies, next, err)

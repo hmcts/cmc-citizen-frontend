@@ -29,10 +29,10 @@ describe('Claimant response task list builder', () => {
   })
 
   describe('"Before you start section" section', () => {
-    describe('"View the defendant’s full response" task', () => {
+    describe('"View the defendant’s response" task', () => {
       it('should be available when claimant tries to respond', () => {
         const taskList: TaskList = TaskListBuilder.buildDefendantResponseSection(draft, claim)
-        expect(taskList.tasks.find(task => task.name === 'View the defendant’s full response')).not.to.be.undefined
+        expect(taskList.tasks.find(task => task.name === 'View the defendant’s response')).not.to.be.undefined
       })
     })
   })
@@ -490,7 +490,7 @@ describe('Claimant response task list builder', () => {
     })
 
     describe('"Formalise Repayment Plan task"', () => {
-      const taskName = 'Formalise the repayment plan'
+      const taskName = 'Choose how to formalise repayment'
 
       it('should render page with Formalise repayment plan task', () => {
         claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
