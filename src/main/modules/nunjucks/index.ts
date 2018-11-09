@@ -46,6 +46,7 @@ import { MonthlyExpenseType } from 'response/form/models/statement-of-means/mont
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { PriorityDebtType } from 'claims/models/response/statement-of-means/priorityDebts'
 import { Disability } from 'response/form/models/statement-of-means/disability'
+import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -104,6 +105,7 @@ export class Nunjucks {
     nunjucksEnv.addFilter('addDays', addDaysFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
+    nunjucksEnv.addFilter('yesNo', yesNoFilter)
     nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))

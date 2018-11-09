@@ -14,26 +14,18 @@
     {% if alreadyPaid %}
 
       {% if draft.partPaymentReceived %}
-        {% set paymentReceivedResponse = 'Yes' if draft.partPaymentReceived.received.option === 'yes' else 'No' %}
-
         {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
-          value = 'Yes' if draft.partPaymentReceived.received.option === 'yes' else 'No',
+          value = draft.partPaymentReceived.received | yesNo,
           changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
       {% if draft.accepted %}
-        {% if draft.accepted.accepted.option === 'yes' %}
-          {% set paymentAcceptedResponse = 'Yes' %}
-        {% else %}
-          {% set paymentAcceptedResponse = 'No' %}
-        {% endif %}
-
         {% if draft.partPaymentReceived %}
           {% set paymentAcceptedText = 'Do you want to settle the claim for the ' + amount | numeral + '?' %}
         {% else %}
           {% set paymentAcceptedText = 'Do you agree the defendant has paid ' + amount | numeral + '?'  %}
         {% endif %}
-        {{ row(label = paymentAcceptedText, bold = true, value = paymentAcceptedResponse,
+        {{ row(label = paymentAcceptedText, bold = true, value = draft.accepted.accepted | yesNo,
           changeLink = ClaimantResponsePaths.settleClaimPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
@@ -43,13 +35,7 @@
       {% endif %}
 
       {% if draft.freeMediation %}
-        {% if draft.freeMediation.option === 'yes' %}
-          {% set freeMediationResponse = 'Yes' %}
-        {% else %}
-          {% set freeMediationResponse = 'No' %}
-        {% endif %}
-
-        {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
+        {{ row(label = 'Will you try free mediation?', bold = true, value = draft.freeMediation.option | yesNo,
           changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
     {% else %}
