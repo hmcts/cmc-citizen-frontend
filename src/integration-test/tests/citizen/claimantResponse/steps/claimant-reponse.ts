@@ -14,8 +14,6 @@ import { ClaimantCcjPaidAnyMoneyPage } from 'integration-test/tests/citizen/clai
 import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-option'
 import { ClaimantPaymentDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-date'
 import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-plan'
-import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
-import { ClaimantCounterOfferAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-counter-offer-accepted'
 import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
 
 const I: I = actor()
@@ -30,8 +28,6 @@ const ccjPaidAnyMoneyPage: ClaimantCcjPaidAnyMoneyPage = new ClaimantCcjPaidAnyM
 const paymentOptionPage: ClaimantPaymentOptionPage = new ClaimantPaymentOptionPage()
 const paymentDatePage: ClaimantPaymentDatePage = new ClaimantPaymentDatePage()
 const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
-const counterOfferAcceptedPage: ClaimantCounterOfferAcceptedPage = new ClaimantCounterOfferAcceptedPage()
-const payBySetDateAcceptedPage: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
 const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
 
 export class ClaimantResponseSteps {
@@ -106,13 +102,13 @@ export class ClaimantResponseSteps {
         paymentOptionPage.chooseFullBySetDate()
         paymentDatePage.enterDate(claimantResponseTestData.pageSpecificValues.paymentDatePageEnterDate)
         paymentDatePage.saveAndContinue()
-        payBySetDateAcceptedPage.continue()
+        courtOfferedSetDataPage.accept()
         break
       case PaymentOption.INSTALMENTS:
         paymentOptionPage.chooseInstalments()
         paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
         paymentPlanPage.saveAndContinue()
-        counterOfferAcceptedPage.continue()
+        courtOfferedSetDataPage.accept()
         break
       default:
         throw new Error(`Unknown payment option: ${testData.claimantPaymentOption}`)

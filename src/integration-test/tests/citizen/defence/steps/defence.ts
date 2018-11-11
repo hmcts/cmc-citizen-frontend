@@ -279,20 +279,20 @@ export class DefenceSteps {
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
+        this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence)
+        this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('How much money have you paid?')
         return
       default:
         throw new Error('Unknown DefenceType')
     }
-
-    I.wait(10)
     this.checkAndSendAndSubmit(defendantType)
     if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
       I.see('You’ve submitted your response')
@@ -383,6 +383,7 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence('I have already paid for the bill')
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
+    this.askForMediation()
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
     I.see('You’ve submitted your response')

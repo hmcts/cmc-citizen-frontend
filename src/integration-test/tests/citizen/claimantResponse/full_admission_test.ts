@@ -73,7 +73,7 @@ if (isEnabled) {
     // I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
@@ -84,17 +84,14 @@ if (isEnabled) {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
-    I.see('Error: (/usr/src/app/src/main/features/claimant-response/views/check-and-send.njk)')
-    // checkAndSendPage.verifyFactsForSettlement()
-    // checkAndSendPage.checkFactsTrueAndSubmit()
-    // I.see('You’ve proposed an alternative repayment plan')
-    // remove when above error fixed
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('You’ve signed a settlement agreement')
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.see('You’ve accepted the repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
   })
 
-// TODO: confirm this journey
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
@@ -108,11 +105,10 @@ if (isEnabled) {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve proposed an alternative repayment plan')
-    // remove when above error fixed
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('You’ve signed a settlement agreement')
+    I.see('You’ve accepted the repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {

@@ -27,7 +27,7 @@ const isEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
 if (isEnabled) {
   Feature('Partially admit the claim').retry(3)
 
-  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions @debug', async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
