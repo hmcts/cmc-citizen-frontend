@@ -38,7 +38,7 @@
     {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
       {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
-      {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
+      {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule | lower) %}
       {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ installmentAmount }} {{ paymentSchedule }} starting {{ paymentDate }}.',
         { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name,
           installmentAmount: installmentAmount, paymentSchedule: paymentSchedule, paymentDate: repaymentPlan.firstPaymentDate | date }) }}

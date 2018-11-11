@@ -172,7 +172,7 @@ describe('Claimant response: payment options', () => {
 
           it('should redirect to court offer set date page for "IMMEDIATELY" option selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
-            draftStoreServiceMock.resolveFind('claimantResponse')
+            draftStoreServiceMock.resolveFind('claimantResponse', { courtDetermination: { disposableIncome: 100 } })
             draftStoreServiceMock.resolveSave()
 
             await request(app)
