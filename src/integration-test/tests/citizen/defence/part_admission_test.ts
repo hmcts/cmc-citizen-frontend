@@ -2,10 +2,9 @@ import I = CodeceptJS.I
 import { createClaimData } from 'integration-test/data/test-data'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
-
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
-import { AppClient } from '../../../helpers/clients/appClient'
+import { AppClient } from 'integration-test/helpers/clients/appClient'
 
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
@@ -28,7 +27,7 @@ const isEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
 if (isEnabled) {
   Feature('Partially admit the claim').retry(3)
 
-  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions @debug', async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)

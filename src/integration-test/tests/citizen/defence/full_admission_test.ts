@@ -1,12 +1,10 @@
 import I = CodeceptJS.I
-
 import { createClaimData } from 'integration-test/data/test-data'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
-
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
-import { AppClient } from '../../../helpers/clients/appClient'
+import { AppClient } from 'integration-test/helpers/clients/appClient'
 
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()

@@ -1,10 +1,9 @@
 import I = CodeceptJS.I
-
 import { PartyType } from 'integration-test/data/party-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { DefenceType } from 'integration-test/data/defence-type'
-import { AppClient } from '../../../helpers/clients/appClient'
+import { AppClient } from 'integration-test/helpers/clients/appClient'
 
 const helperSteps: Helper = new Helper()
 

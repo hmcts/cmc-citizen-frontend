@@ -14,7 +14,6 @@ services:
         - OAUTH_CLIENT_SECRET
         - CLAIM_STORE_URL
         - HEALTHCHECK_CITIZEN=true
-        - FEATURE_ADMISSIONS
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:

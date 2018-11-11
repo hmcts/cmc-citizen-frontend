@@ -5,7 +5,7 @@ import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantRe
 import { DefendantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/defendant'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { AppClient } from '../../../helpers/clients/appClient'
+import { AppClient } from 'integration-test/helpers/clients/appClient'
 
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
