@@ -13,7 +13,7 @@ import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import {
   intentionOfPaymentByInstalments,
   intentionOfPaymentInFullBySetDate
- } from '../../../data/draft/paymentIntentionDraft'
+ } from 'test/data/draft/paymentIntentionDraft'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
@@ -24,7 +24,7 @@ import {
   payByInstallmentsIntent,
   payBySetDateIntent,
   payImmediatelyIntent
-} from '../../../data/draft/claimantPaymentIntentionDraft'
+} from 'test/data/draft/claimantPaymentIntentionDraft'
 
 function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()

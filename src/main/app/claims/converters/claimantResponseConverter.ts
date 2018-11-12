@@ -55,9 +55,6 @@ export class ClaimantResponseConverter {
     if (decisionType === DecisionType.COURT && !courtDetermination.courtPaymentIntention) {
       throw new Error('court offered payment intention not found where decision type is COURT')
     }
-    if (decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      return undefined
-    }
     if (!courtDetermination.courtPaymentIntention && !courtDetermination.courtDecision) {
       return undefined
     }
