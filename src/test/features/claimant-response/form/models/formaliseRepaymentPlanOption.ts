@@ -10,7 +10,7 @@ describe('FormaliseRepaymentPlanOption', () => {
       const actual: FormaliseRepaymentPlanOption[] = FormaliseRepaymentPlanOption.all()
 
       expect(actual).instanceof(Array)
-      expect(actual.length).to.eq(2)
+      expect(actual.length).to.eq(3)
     })
   })
 
