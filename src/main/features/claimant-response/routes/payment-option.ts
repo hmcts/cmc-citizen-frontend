@@ -156,10 +156,10 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    return Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
+    return statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
       response.statementOfMeans,
       response.defendant.type,
-      PaymentOptionPage.getDateOfBirth(response.defendant)), 0)
+      PaymentOptionPage.getDateOfBirth(response.defendant))
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
