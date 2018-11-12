@@ -4,6 +4,7 @@
 {% set heading = 'Why do you believe the defendant can repay you sooner?' %}
 {% else %}
 {% set heading = 'Ask a judge to make a repayment plan' %}
+{% set textAreaLabel = 'Why do you feel this plan is not affordable?' %}
 {% endif %}
 
 {% from "form.njk" import saveAndContinueButton, submitButton, csrfProtection, errorSummary, textArea %}
@@ -19,13 +20,12 @@
     {{ repaymentPlanBlock( heading = 'The claimant has proposed this repayment plan', repaymentPlan = repaymentPlan ) }}
     {% endif %}
 
-    {{ textArea(label = 'Why do you feel this plan is not affordable?', name = 'text', form = form, rows = 5,
-    columns=18) }}
+    {{ textArea(label = textAreaLabel, name = 'text', form = form, rows = 5, columns=18) }}
 
     {% if madeBy === 'CLAIMANT'%}
     {{ saveAndContinueButton() }}
     {% else %}
-    {{ submitButton(label = 'Ask a judge to make a repayment plan', id = 'saveAndContinue') }}
+    {{ submitButton(label = heading, id = 'saveAndContinue') }}
     {% endif %}
   </form>
 
