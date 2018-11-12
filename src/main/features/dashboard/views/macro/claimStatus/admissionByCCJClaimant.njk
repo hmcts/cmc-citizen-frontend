@@ -9,8 +9,7 @@
   <h2 class="heading-small">{{ t('A County Court Judgment has been issued') }}</h2>
   <p>{{ t('We’ll post a copy of the judgment to you and to {{ defendantName }}',
       { defendantName: claim.claimData.defendant.name }) }}</p>
-  <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId })) }}</p>
+  <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy })) }}</p>
   <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
   <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've been paid</a>
 {% endmacro %}
-ccjGuard.ts
