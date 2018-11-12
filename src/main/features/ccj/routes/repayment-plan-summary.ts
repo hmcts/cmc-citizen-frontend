@@ -19,13 +19,12 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
     completionDate: repaymentPlan.completionDate,
     paymentLength: repaymentPlan.paymentLength
   } as CoreRepaymentPlan
-  const madeBy: string = req.query.madeBy
 
   res.render(Paths.repaymentPlanSummaryPage.associatedView, {
     form: form,
     claim: claim,
     repaymentPlan: coreRepaymentPlan,
-    madeBy: madeBy
+    madeBy: req.params.madeBy
   })
 }
 

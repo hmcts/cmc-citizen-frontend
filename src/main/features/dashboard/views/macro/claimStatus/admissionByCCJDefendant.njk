@@ -13,7 +13,7 @@
     <p>{{ t('{{ claimantName }} accepted your repayment plan and requested a CCJ against you.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('If a defendant doesn’t pay immediately, claimants can request a CCJ even if they accept a repayment plan.') }}</p>
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy })) }}</p>
+    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: 'DEFENDANT' })) }}</p>
 
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
@@ -38,7 +38,7 @@
   <div class="status-block">
     <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     <p>{{ t('Because you didn’t pay on time or didn’t pay the correct amount, they requested a CCJ against you.') }}</p>
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy })) }}</p>
+    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: 'DEFENDANT' })) }}</p>
 
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
@@ -53,7 +53,7 @@
 
     <p>{{ t('{{ claimantName }} accepted your repayment plan.', { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('They asked you to sign a settlement agreement. Because you didn’t sign it, they requested a CCJ against you.') }}</p>
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy })) }}</p>
+    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: 'DEFENDANT' })) }}</p>
 
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
@@ -75,7 +75,7 @@
       {% elif courtOffered %}
       <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>
     {% endif %}
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy })) }}</p>
+    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: 'DEFENDANT' })) }}</p>
 
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>

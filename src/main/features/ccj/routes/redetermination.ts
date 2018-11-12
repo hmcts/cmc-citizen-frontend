@@ -9,13 +9,26 @@ import { User } from 'idam/user'
 import { CCJClient } from 'claims/ccjClient'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { MadeBy } from 'offer/form/models/madeBy'
+import { RepaymentPlan } from 'claims/models/repaymentPlan'
+import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
-function renderView (form: Form<ReDetermination>, res: express.Response): void {
+function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
+  const repaymentPlan: RepaymentPlan = claim.countyCourtJudgment.repaymentPlan
+  const coreRepaymentPlan: CoreRepaymentPlan = {
+    instalmentAmount: repaymentPlan.instalmentAmount,
+    firstPaymentDate: repaymentPlan.firstPaymentDate,
+    paymentSchedule: (repaymentPlan.paymentSchedule as PaymentSchedule).value,
+    completionDate: repaymentPlan.completionDate,
+    paymentLength: repaymentPlan.paymentLength
+  } as CoreRepaymentPlan
 
   res.render(Paths.redeterminationPage.associatedView, {
     form: form,
-    claim: claim
+    claim: claim,
+    repaymentPlan: coreRepaymentPlan,
+    madeBy: req.params.madeBy
   })
 }
 
@@ -23,7 +36,7 @@ function renderView (form: Form<ReDetermination>, res: express.Response): void {
 export default express.Router()
   .get(Paths.redeterminationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      renderView(new Form(new ReDetermination()), res)
+      renderView(new Form(new ReDetermination()), req, res)
     }))
   .post(
     Paths.redeterminationPage.uri,
@@ -32,13 +45,11 @@ export default express.Router()
       const form: Form<ReDetermination> = req.body
 
       if (form.hasErrors()) {
-        renderView(form, res)
+        renderView(form, req, res)
       } else {
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
-        const madeBy: string = req.query.madeBy
-
-        await CCJClient.redetermination(claim.externalId, form.model, user, MadeBy.valueOf(madeBy))
+        await CCJClient.redetermination(claim.externalId, form.model, user, MadeBy.valueOf(req.params.madeBy))
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))
