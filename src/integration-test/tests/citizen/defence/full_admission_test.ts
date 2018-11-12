@@ -23,8 +23,8 @@ async function prepareClaim (I: I) {
   return { data: claimData }
 }
 
-const isEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
-if (isEnabled) {
+const isAdmissionsEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
+if (isAdmissionsEnabled) {
   Feature('Fully admit all of the claim').retry(3)
 
   Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen @admissions', async (I: I) => {

@@ -11,8 +11,8 @@ const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
-const isEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
-if (isEnabled) {
+const isAdmissionsEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
+if (isAdmissionsEnabled) {
   Feature('Claimant Response').retry(3)
 
   Scenario('As a claimant I can reject the claim @citizen @admissions',
