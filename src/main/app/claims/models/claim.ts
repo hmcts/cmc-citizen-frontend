@@ -1,15 +1,18 @@
 import { Moment } from 'moment'
 import { ClaimData } from 'claims/models/claimData'
 import { MomentFactory } from 'shared/momentFactory'
-import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
+import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
+import { ClaimantResponse } from 'claims/models/claimantResponse'
 import { Settlement } from 'claims/models/settlement'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { ReDetermination } from 'ccj/form/models/reDetermination'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 interface State {
   status: ClaimStatus
@@ -27,20 +30,24 @@ export class Claim {
   claimData: ClaimData
   moreTimeRequested: boolean
   respondedAt: Moment
+  response: Response
   claimantEmail: string
   countyCourtJudgment: CountyCourtJudgment
   countyCourtJudgmentRequestedAt: Moment
   countyCourtJudgmentIssuedAt: Moment
-  response: Response
   defendantEmail: string
   settlement: Settlement
   settlementReachedAt: Moment
+  claimantResponse: ClaimantResponse
+  claimantRespondedAt: Moment
   totalAmountTillToday: number
   totalAmountTillDateOfIssue: number
   totalInterest: number
   features: string[]
   directionsQuestionnaireDeadline: Moment
   moneyReceivedOn: Moment
+  reDetermination: ReDetermination
+  reDeterminationRequestedAt: Moment
 
   deserialize (input: any): Claim {
     if (input) {
@@ -77,6 +84,12 @@ export class Claim {
       if (input.settlementReachedAt) {
         this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
       }
+      if (input.claimantResponse) {
+        this.claimantResponse = ClaimantResponse.deserialize(input.claimantResponse)
+      }
+      if (input.claimantRespondedAt) {
+        this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
+      }
       this.totalAmountTillToday = input.totalAmountTillToday
       this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
       this.totalInterest = input.totalInterest
@@ -87,7 +100,14 @@ export class Claim {
       if (input.moneyReceivedOn) {
         this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
       }
+      if (input.reDetermination) {
+        this.reDetermination = new ReDetermination().deserialize(input.reDetermination)
+      }
+      if (input.reDeterminationRequestedAt) {
+        this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
+      }
     }
+
     return this
   }
 
@@ -121,8 +141,11 @@ export class Claim {
 
   get eligibleForCCJ (): boolean {
     return !this.countyCourtJudgmentRequestedAt
-      && !this.respondedAt
-      && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+      && (this.isFullAdmissionPayImmediatelyPastPaymentDate()
+        || this.hasDefendantNotSignedSettlementAgreement()
+        || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+        )
+      )
   }
 
   get eligibleForCCJAfterBreachedSettlement (): boolean {
@@ -146,17 +169,23 @@ export class Claim {
 
   get status (): ClaimStatus {
     if (this.countyCourtJudgmentRequestedAt) {
-      return ClaimStatus.CCJ_REQUESTED
+      if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
+        return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
+      } else {
+        return ClaimStatus.CCJ_REQUESTED
+      }
+    } else if (this.isSettlementReachedThroughAdmission()) {
+      return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.eligibleForCCJAfterBreachedSettlement) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT
+    } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
+    } else if (this.hasDefendantNotSignedSettlementAgreement()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
+    } else if (this.hasClaimantSignedSettlementAgreement()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (this.isOfferAccepted()) {
-      return ClaimStatus.OFFER_ACCEPTED
-    } else if (this.isOfferRejected()) {
-      return ClaimStatus.OFFER_REJECTED
-    } else if (this.isOfferSubmitted()) {
-      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isResponseSubmitted()) {
@@ -172,8 +201,12 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.isResponseSubmitted() && statuses[0].status !== ClaimStatus.RESPONSE_SUBMITTED) {
-      statuses.push({ status: ClaimStatus.RESPONSE_SUBMITTED })
+    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions()) {
+      statuses.push({ status: ClaimStatus.OFFER_REJECTED })
+    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions()) {
+      statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
+    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
+      statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
     return statuses
@@ -197,5 +230,38 @@ export class Claim {
 
   private isSettlementReached (): boolean {
     return this.settlement && !!this.settlementReachedAt
+  }
+
+  private isSettlementReachedThroughAdmission (): boolean {
+    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+  }
+
+  private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
+    if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
+      const response: FullAdmissionResponse = this.response
+      return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+        response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+    }
+  }
+
+  private hasClaimantSignedSettlementAgreement (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions()
+  }
+
+  private hasDefendantNotSignedSettlementAgreement (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
+      this.respondToResponseDeadline.isBefore(MomentFactory.currentDate().hour(16))
+  }
+
+  private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
+    return this.countyCourtJudgment && this.response &&
+      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
+  }
+
+  isEligibleForReDetermination (): boolean {
+    const dateAfter19Days = this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
+    return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === CountyCourtJudgmentType.DETERMINATION
+      && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
+      && this.reDeterminationRequestedAt === undefined
   }
 }

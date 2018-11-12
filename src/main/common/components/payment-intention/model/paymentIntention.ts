@@ -50,7 +50,7 @@ export class PaymentIntention {
 
   toDomainInstance (): domain.PaymentIntention {
     const instance = new domain.PaymentIntention()
-    instance.paymentOption = this.paymentOption.option as any
+    instance.paymentOption = this.paymentOption.option.value as any
 
     switch (this.paymentOption.option) {
       case PaymentType.BY_SET_DATE:

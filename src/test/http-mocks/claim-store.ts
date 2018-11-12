@@ -10,12 +10,14 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
+const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
 
 export const sampleClaimObj = {
   id: 1,
@@ -130,6 +132,16 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   response: fullAdmissionWithSoMPaymentByInstalmentsData
 }
 
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule
+}
+
 export function mockCalculateInterestRate (expected: number): mock.Scope {
   return mock(serviceBaseURL)
     .get('/interest/calculate')
@@ -139,25 +151,25 @@ export function mockCalculateInterestRate (expected: number): mock.Scope {
 
 export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
 
 export function resolveRetrieveClaimByExternalIdWithResponse (override?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
 }
 
 export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {
   mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason: string = 'Claim not found') {
   mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.NOT_FOUND, reason)
 }
 
@@ -223,7 +235,7 @@ export function rejectRetrieveByDefendantId (reason: string) {
 
 export function resolvePrePaymentSave () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}/pre-payment'))
+    .post(new RegExp('/' + externalIdPattern + '/pre-payment'))
     .reply(HttpStatus.OK, { case_reference: 1527177480274990 })
 }
 
@@ -271,9 +283,23 @@ export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
 
 export function resolveSaveCcjForExternalId () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
+    .post(new RegExp('/' + externalIdPattern +
       '/county-court-judgment'))
     .reply(HttpStatus.OK, { ...sampleClaimObj })
+}
+
+export function resolveSaveReDeterminationForExternalId (explanation: string) {
+
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/' + externalIdPattern +
+      '/re-determination'))
+    .reply(HttpStatus.OK, { explanation: explanation, partyType: MadeBy.CLAIMANT })
+}
+
+export function rejectSaveReDeterminationForExternalId (reason: string = 'HTTP error') {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/.+/re-determination'))
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function rejectSaveOfferForDefendant (reason: string = 'HTTP error') {
@@ -314,20 +340,20 @@ export function resolveCountersignOffer (by: string = 'defendant') {
 
 export function rejectSaveCcjForExternalId (reason: string = 'HTTP error') {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}' +
+    .post(new RegExp('/' + externalIdPattern +
       '/county-court-judgment'))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function rejectRetrieveDocument (reason: string) {
   mock(`${serviceBaseURL}/documents`)
-    .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
 export function resolveRetrieveDocument () {
   mock(`${serviceBaseURL}/documents`)
-    .get(new RegExp('/.+/[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'))
+    .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK)
 }
 
@@ -370,5 +396,11 @@ export function rejectRetrieveUserRoles () {
 export function resolveClaimantResponse () {
   mock(`${serviceBaseURL}/responses`)
     .post(new RegExp('/.+/claimant/[0-9]+'))
+    .reply(HttpStatus.OK)
+}
+
+export function resolveSavePaidInFull () {
+  mock(`${serviceBaseURL}/claims`)
+    .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
 }

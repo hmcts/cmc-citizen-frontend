@@ -1,25 +1,15 @@
 import { DraftClaimantResponse } from 'features/claimant-response/draft/draftClaimantResponse.ts'
 import { ResponseRejection } from 'claims/models/response/core/responseRejection.ts'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
-import { CourtDetermination } from 'claims/models/response/core/courtDetermination.ts'
 import { ClaimantResponse } from 'claims/models/response/core/claimantResponse'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { ResponseAcceptance } from 'claims/models/response/core/responseAcceptance'
 import { YesNoOption } from 'models/yesNoOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
-import { PaymentIntention as PaymentIntentionDraft } from 'shared/components/payment-intention/model/paymentIntention'
-import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
+import { PaymentIntention as ModelPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import {
-  PaymentOption as PaymentOptionDraft,
-  PaymentType
-} from 'shared/components/payment-intention/model/paymentOption'
-import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
-import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { DecisionType } from 'common/court-calculations/courtDecision'
 
 export class ClaimantResponseConverter {
 
@@ -32,8 +22,8 @@ export class ClaimantResponseConverter {
       if (draftClaimantResponse.freeMediation) {
         reject.freeMediation = draftClaimantResponse.freeMediation.option === FreeMediationOption.YES
       }
-      if (draftClaimantResponse.rejectionReason) {
-        reject.reason = draftClaimantResponse.rejectionReason.text
+      if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
+        reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse)
@@ -47,37 +37,27 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
-    const courtDetermination = this.createCourtDetermination(draftClaimantResponse)
+    const courtDetermination: CourtDetermination = draftClaimantResponse.courtDetermination
     if (courtDetermination) {
-      respAcceptance.courtDetermination = courtDetermination
+      respAcceptance.courtDetermination = {
+        courtDecision: courtDetermination.courtDecision,
+        courtPaymentIntention: courtDetermination.courtPaymentIntention,
+        rejectionReason: courtDetermination.rejectionReason ?
+          courtDetermination.rejectionReason.text : undefined,
+        disposableIncome: courtDetermination.disposableIncome ?
+          courtDetermination.disposableIncome : 0,
+        decisionType: courtDetermination.decisionType
+      }
     }
-    const claimantPaymentIntention = this.convertPaymentIntention(draftClaimantResponse.alternatePaymentMethod, draftClaimantResponse.decisionType)
+    const claimantPaymentIntention: ModelPaymentIntention = draftClaimantResponse.alternatePaymentMethod
     if (claimantPaymentIntention) {
-      respAcceptance.claimantPaymentIntention = claimantPaymentIntention
+      respAcceptance.claimantPaymentIntention = claimantPaymentIntention.toDomainInstance()
+
+      if (claimantPaymentIntention.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
+        respAcceptance.claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
+      }
     }
     return respAcceptance
-  }
-
-  private static createCourtDetermination (draftClaimantResponse: DraftClaimantResponse): CourtDetermination {
-    if (draftClaimantResponse.decisionType === DecisionType.COURT && !draftClaimantResponse.courtOfferedPaymentIntention) {
-      throw new Error('court offered payment intention not found where decision type is COURT')
-    }
-    if (!draftClaimantResponse.courtCalculatedPaymentIntention && !draftClaimantResponse.courtOfferedPaymentIntention) {
-      return undefined
-    }
-
-    const courtDetermination: CourtDetermination = new CourtDetermination()
-    courtDetermination.courtPaymentIntention = draftClaimantResponse.courtCalculatedPaymentIntention
-    courtDetermination.courtDecision = draftClaimantResponse.courtOfferedPaymentIntention
-    if (courtDetermination.courtDecision.repaymentPlan) {
-      courtDetermination.courtDecision.repaymentPlan.instalmentAmount = Number(courtDetermination.courtDecision.repaymentPlan.instalmentAmount.toFixed(2))
-    }
-    if (draftClaimantResponse.rejectionReason) {
-      courtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
-    }
-    courtDetermination.disposableIncome = draftClaimantResponse.disposableIncome ? draftClaimantResponse.disposableIncome : 0
-    courtDetermination.decisionType = draftClaimantResponse.decisionType
-    return courtDetermination
   }
 
   private static getFormaliseOption (repaymentPlan: FormaliseRepaymentPlan): string {
@@ -92,40 +72,4 @@ export class ClaimantResponseConverter {
         throw new Error(`Unknown formalise repayment option ${repaymentPlan.option.value}`)
     }
   }
-
-  private static convertPaymentIntention (draftPaymentIntention: PaymentIntentionDraft, decisionType: DecisionType): PaymentIntention {
-    if (draftPaymentIntention) {
-      const paymentIntention: PaymentIntention = new PaymentIntention()
-      paymentIntention.paymentOption = draftPaymentIntention.paymentOption.option.value as PaymentOption
-      if (draftPaymentIntention.paymentDate) {
-        paymentIntention.paymentDate = this.convertPaymentDate(draftPaymentIntention.paymentOption, draftPaymentIntention.paymentDate)
-      }
-      if (draftPaymentIntention.paymentPlan) {
-        paymentIntention.repaymentPlan = {
-          firstPaymentDate: draftPaymentIntention.paymentPlan.firstPaymentDate.toMoment(),
-          instalmentAmount: draftPaymentIntention.paymentPlan.instalmentAmount,
-          paymentSchedule: draftPaymentIntention.paymentPlan.paymentSchedule.value as PaymentSchedule,
-          completionDate: draftPaymentIntention.paymentPlan.completionDate.toMoment(),
-          paymentLength: draftPaymentIntention.paymentPlan.paymentLength
-        } as RepaymentPlan
-      }
-      return paymentIntention
-    }
-    if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
-    }
-    return undefined
-  }
-
-  private static convertPaymentDate (paymentOption: PaymentOptionDraft, paymentDate: PaymentDate): Moment {
-    switch (paymentOption.option) {
-      case PaymentType.IMMEDIATELY:
-        return MomentFactory.currentDate().add(5, 'days')
-      case PaymentType.BY_SET_DATE:
-        return paymentDate.date.toMoment()
-      default:
-        throw new Error(`Unknown value in paymentOption ${paymentOption.option.value}`)
-    }
-  }
-
 }

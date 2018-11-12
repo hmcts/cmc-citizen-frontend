@@ -75,6 +75,7 @@ describe('Pay by set date: payment date', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('What date will you pay on?'))
+            .expect(res => expect(res).to.be.successful.withoutText('<div class="panel">'))
         })
       })
     })

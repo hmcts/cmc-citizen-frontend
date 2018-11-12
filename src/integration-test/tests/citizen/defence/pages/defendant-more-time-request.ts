@@ -2,6 +2,13 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 
+const fields = {
+  requestMoreTime: {
+    yes: 'input[id=optionyes]',
+    no: 'input[id=optionno]'
+  }
+}
+
 const buttons = {
   submit: 'input[type=submit]'
 }
@@ -9,7 +16,12 @@ const buttons = {
 export class DefendantMoreTimeRequestPage {
 
   chooseYes (): void {
-    I.checkOption('Yes, I need an extra 14 days')
+    I.checkOption(fields.requestMoreTime.yes)
+    I.click(buttons.submit)
+  }
+
+  chooseNo (): void {
+    I.checkOption(fields.requestMoreTime.no)
     I.click(buttons.submit)
   }
 }

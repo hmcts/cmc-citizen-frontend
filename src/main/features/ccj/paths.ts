@@ -10,5 +10,7 @@ export class Paths {
   static readonly checkAndSendPage = new RoutablePath(`${ccjPath}/check-and-send`)
   static readonly payBySetDatePage = new RoutablePath(`${ccjPath}/pay-by-set-date`)
   static readonly repaymentPlanPage = new RoutablePath(`${ccjPath}/repayment-plan`)
+  static readonly repaymentPlanSummaryPage = new RoutablePath(`${ccjPath}/repayment-plan-summary`)
+  static readonly redeterminationPage = new RoutablePath(`${ccjPath}/redetermination`)
   static readonly confirmationPage = new RoutablePath(`${ccjPath}/confirmation`)
 }
