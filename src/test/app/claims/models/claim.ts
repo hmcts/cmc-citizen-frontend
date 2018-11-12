@@ -11,7 +11,7 @@ import { DefenceType } from 'claims/models/response/defenceType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
 import { defenceWithDisputeData } from 'test/data/entity/responseData'
 import { offer, offerRejection } from 'test/data/entity/offer'
-import { individual } from 'test/data/entity/party'
+import { individual, organisation } from 'test/data/entity/party'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
@@ -20,6 +20,9 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { Organisation } from 'claims/models/details/theirs/organisation'
+import { rejectionClaimantResponseData } from '../../../data/entity/claimantResponseData'
+import { Company } from 'claims/models/details/theirs/company'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -320,6 +323,38 @@ describe('Claim', () => {
 
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+    })
+
+    it('should contain the claim status only if claimant rejects organisation response', () => {
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(60, 'days'),
+          paymentOption: 'BY_SPECIFIED_DATE'
+        },
+        defendant: new Organisation().deserialize(organisation)
+      }
+      claim.claimantResponse = rejectionClaimantResponseData
+
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
+    })
+
+    it('should contain the claim status only if claimant rejects company response', () => {
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(60, 'days'),
+          paymentOption: 'BY_SPECIFIED_DATE'
+        },
+        defendant: new Company().deserialize(organisation)
+      }
+      claim.claimantResponse = rejectionClaimantResponseData
+
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {

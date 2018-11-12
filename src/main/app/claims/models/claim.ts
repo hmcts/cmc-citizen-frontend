@@ -13,6 +13,8 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { PartyType } from 'common/partyType'
 
 interface State {
   status: ClaimStatus
@@ -194,6 +196,10 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else if (this.hasClaimantRejectedDefendantResponse() &&
+      (this.response.defendant.type === PartyType.COMPANY.value
+        || this.response.defendant.type === PartyType.ORGANISATION.value)) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
     } else {
       throw new Error('Unknown Status')
     }
@@ -213,7 +219,7 @@ export class Claim {
   }
 
   private isResponseSubmitted (): boolean {
-    return this.response !== undefined
+    return this.response !== undefined && this.claimantResponse === undefined
   }
 
   private isOfferSubmitted (): boolean {
@@ -256,6 +262,10 @@ export class Claim {
   private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
+  }
+
+  private hasClaimantRejectedDefendantResponse (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
   isEligibleForReDetermination (): boolean {
