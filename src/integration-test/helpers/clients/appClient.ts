@@ -1,4 +1,3 @@
-/* tslint:disable:no-console */
 import { request } from 'integration-test/helpers/clients/base/request'
 import * as fs from 'fs'
 
@@ -7,7 +6,7 @@ const baseUrl = process.env.CITIZEN_APP_URL
 export class AppClient {
 
   /**
-   * Retrieves claim from the claim store by claim reference number
+   * Returns if 'admissions' feature toggle is enabled via /info
    *
    * @returns {Promise<boolean>}
    */
@@ -19,7 +18,6 @@ export class AppClient {
         rejectUnauthorized: false,
         ca: fs.readFileSync('./src/integration-test/resources/localhost.crt')
       }).then((response: any) => {
-        console.log(response)
         return response.extraBuildInfo.featureToggles.admissions
       })
   }
