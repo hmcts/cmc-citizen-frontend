@@ -14,7 +14,8 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 
 const baseResponseData = {
   defendant: individual,
-  moreTimeNeeded: 'no'
+  moreTimeNeeded: 'no',
+  freeMediation: 'no'
 }
 
 const baseCompanyResponseData = {
@@ -36,12 +37,12 @@ export const defenceWithDisputeData = {
 
 const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
-  freeMediation: undefined
+  freeMediation: 'no'
 }
 
 const basePartialAdmissionData = {
   responseType: 'PART_ADMISSION',
-  freeMediation: undefined
+  freeMediation: 'no'
 }
 
 const basePartialEvidencesAndTimeLines = {
@@ -217,6 +218,37 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
   carer: false
 }
 
+export const statementOfMeansWithMandatoryFieldsAndNoDisposableIncome = {
+  bankAccounts: [
+    {
+      balance: 0,
+      joint: false,
+      type: BankAccountType.CURRENT_ACCOUNT
+    }
+  ],
+  disability: DisabilityStatus.NO,
+  priorityDebts: [],
+  residence: {
+    type: ResidenceType.OWN_HOME
+  },
+  employment: {
+    unemployment: {
+      retired: true
+    }
+  },
+  incomes: [{
+    amount: 0,
+    frequency: PaymentFrequency.WEEK,
+    type: IncomeType.CHILD_BENEFIT
+  }] as Income[],
+  expenses: [{
+    amount: 1000,
+    frequency: PaymentFrequency.MONTH,
+    type: ExpenseType.MORTGAGE
+  }] as Expense[],
+  carer: false
+}
+
 export const statementOfMeansWithAllFieldsData = {
   ...statementOfMeansWithMandatoryFieldsOnlyData,
   dependant: {
@@ -283,6 +315,13 @@ export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSch
   ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
   statementOfMeans: {
     ...statementOfMeansWithMandatoryFieldsOnlyData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsAndNoDisposableIncome
   }
 }
 

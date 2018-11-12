@@ -10,7 +10,7 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
@@ -130,6 +130,11 @@ export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome
 }
 
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule = {
@@ -391,5 +396,11 @@ export function rejectRetrieveUserRoles () {
 export function resolveClaimantResponse () {
   mock(`${serviceBaseURL}/responses`)
     .post(new RegExp('/.+/claimant/[0-9]+'))
+    .reply(HttpStatus.OK)
+}
+
+export function resolveSavePaidInFull () {
+  mock(`${serviceBaseURL}/claims`)
+    .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
 }
