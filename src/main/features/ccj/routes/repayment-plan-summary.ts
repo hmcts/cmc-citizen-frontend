@@ -9,7 +9,7 @@ import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
-function renderView (form: Form<PaidAmount>, res: express.Response): void {
+function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const repaymentPlan: RepaymentPlan = claim.countyCourtJudgment.repaymentPlan
   const coreRepaymentPlan: CoreRepaymentPlan = {
@@ -19,11 +19,13 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
     completionDate: repaymentPlan.completionDate,
     paymentLength: repaymentPlan.paymentLength
   } as CoreRepaymentPlan
+  const madeBy: string = req.query.madeBy
 
   res.render(Paths.repaymentPlanSummaryPage.associatedView, {
     form: form,
     claim: claim,
-    repaymentPlan: coreRepaymentPlan
+    repaymentPlan: coreRepaymentPlan,
+    madeBy: madeBy
   })
 }
 
@@ -31,5 +33,5 @@ function renderView (form: Form<PaidAmount>, res: express.Response): void {
 export default express.Router()
   .get(Paths.repaymentPlanSummaryPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      renderView(Form.empty(), res)
+      renderView(Form.empty(), req, res)
     }))
