@@ -23,7 +23,7 @@ if (isAdmissionsEnabled) {
     helperSteps.finishResponse(testData)
   })
 
-  Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions @debug', async (I: I) => {
+  Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
     helperSteps.finishResponse(testData)
