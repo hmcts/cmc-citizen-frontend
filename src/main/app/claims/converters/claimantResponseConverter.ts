@@ -77,10 +77,8 @@ export class ClaimantResponseConverter {
         claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
       }
       return claimantPaymentIntention
-    } else {
-      if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-        throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
-      }
+    } else if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
+      throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
     }
     return undefined
   }
