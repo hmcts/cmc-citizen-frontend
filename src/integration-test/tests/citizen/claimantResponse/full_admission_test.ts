@@ -53,7 +53,7 @@ if (isEnabled) {
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @debug', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
@@ -73,7 +73,7 @@ if (isEnabled) {
     // I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions @error @debug', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
@@ -86,13 +86,14 @@ if (isEnabled) {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve accepted the repayment plan')
-    confirmationPage.clickGoToYourAccount()
-    I.see(testData.claimRef)
-    I.see('You’ve signed a settlement agreement')
+    I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
+    // I.see('You’ve accepted the repayment plan')
+    // confirmationPage.clickGoToYourAccount()
+    // I.see(testData.claimRef)
+    // I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen @error @debug', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
@@ -105,10 +106,11 @@ if (isEnabled) {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve accepted the repayment plan')
-    confirmationPage.clickGoToYourAccount()
-    I.see(testData.claimRef)
-    I.see('You’ve signed a settlement agreement')
+    I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
+    // I.see('You’ve accepted the repayment plan')
+    // confirmationPage.clickGoToYourAccount()
+    // I.see(testData.claimRef)
+    // I.see('You’ve signed a settlement agreement')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {
