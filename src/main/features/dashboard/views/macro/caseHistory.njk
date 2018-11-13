@@ -61,19 +61,15 @@ ccjRequestedForDefendantClaimDetails %}
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
     <div class="status-block">
-      {% if not state.status === ClaimStatus.RESPONSE_SUBMITTED %}
-        {% if state.status === ClaimStatus.PAID_IN_FULL_ELIGIBLE %}
-          {{ paidInFullClaimantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.PAID_IN_FULL %}
-           {{ paidInFullClaimantClaimSettledDetails(claim) }}
-        {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
-           {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
-        {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
-           {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-        {% endif %}
-      {% endif %}
-
-      {% if state.status === ClaimStatus.NO_RESPONSE %}
+      {% if state.status === ClaimStatus.PAID_IN_FULL_ELIGIBLE %}
+        {{ paidInFullClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.PAID_IN_FULL %}
+        {{ paidInFullClaimantClaimSettledDetails(claim) }}
+      {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
+        {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
+        {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.NO_RESPONSE %}
         {{ noResponseForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
         {{ moreTimeRequestedForClaimantClaimDetails(claim) }}

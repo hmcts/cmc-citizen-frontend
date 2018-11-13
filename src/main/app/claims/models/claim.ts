@@ -169,8 +169,16 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-    if (this.moneyReceivedOn && !this.hasCCJ()) {
-      return ClaimStatus.PAID_IN_FULL
+    if (this.moneyReceivedOn) {
+      if (this.hasCCJ()) {
+        if (this.isCCJPaidWithinMonth()) {
+          return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+        } else if (!this.isCCJPaidWithinMonth()) {
+          return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+        }
+      } else {
+        return ClaimStatus.PAID_IN_FULL
+      }
     } else if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
@@ -197,12 +205,6 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-    } else if (this.hasCCJ()) {
-      if (this.isCCJPaidWithinMonth()) {
-        return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
-      } else if (!this.isCCJPaidWithinMonth()) {
-        return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
-      }
     } else {
       throw new Error('Unknown Status')
     }
@@ -217,11 +219,9 @@ export class Claim {
     } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
-
     if (!this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
     }
-
     return statuses
   }
 
