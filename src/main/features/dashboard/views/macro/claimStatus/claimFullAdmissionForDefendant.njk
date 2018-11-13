@@ -17,7 +17,7 @@
 
 {% macro claimFullAdmissionForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
+    <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
     {% set claimantName = claim.claimData.claimant.name %}
     {% set amount = claim.totalAmountTillToday | numeral %}
     {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
