@@ -218,8 +218,8 @@ export class Claim {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
-    if (this.isPaidInFullEligible() && !this.moneyReceivedOn) {
-      statuses.push({ status: ClaimStatus.PAID_IN_FULL })
+    if (!this.moneyReceivedOn) {
+      statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
     }
 
     return statuses
@@ -258,13 +258,6 @@ export class Claim {
     } else {
       return false
     }
-  }
-
-  private isPaidInFullEligible (): boolean {
-    // if (this.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED) {
-    //   return false
-    // }
-    return true
   }
 
   private isSettlementReachedThroughAdmission (): boolean {

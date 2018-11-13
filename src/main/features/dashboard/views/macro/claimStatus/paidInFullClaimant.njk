@@ -11,8 +11,7 @@
 
 {% macro paidInFullClaimantClaimSettledDetails(claim) %}
   <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
-  <p>{{ t('{{ defendantName }} paid you £{{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
-      { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday, moneyReceivedOn: claim.moneyReceivedOn | date }) | safe }}</p>
+  <p> {{ t('{{ defendantName }} paid you £{{ totalAmountTillToday }} on {{ moneyReceivedOn }}.', { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday, moneyReceivedOn: claim.moneyReceivedOn | date }) }} </p>
 {% endmacro %}
 
 {% macro paidInFullCCJCancelledClaimantClaimDetails(claim) %}
