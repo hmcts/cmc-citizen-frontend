@@ -80,7 +80,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromForm(form.model)
     const paymentLength: string = paymentPlan ? paymentPlan.calculatePaymentLength() : undefined
     let amount: number = claim.totalAmountTillToday
-    if (draft.document.partialAdmission) amount = draft.document.partialAdmission.howMuchDoYouOwe.amount
+    if (draft && draft.document && draft.document.partialAdmission) amount = draft.document.partialAdmission.howMuchDoYouOwe.amount
     res.render(this.getView(), {
       heading: this.getHeading(),
       form,
