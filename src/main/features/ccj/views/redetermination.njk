@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 
-{% if madeBy === 'CLAIMANT'%}
+{% if madeBy === MadeBy.CLAIMANT.value %}
 {% set heading = 'Why do you believe the defendant can repay you sooner?' %}
 {% else %}
 {% set heading = 'Ask a judge to make a repayment plan' %}
@@ -16,13 +16,13 @@
   <form method="post">
     {{ csrfProtection(csrf) }}
 
-    {% if madeBy === 'DEFENDANT'%}
+    {% if madeBy === MadeBy.DEFENDANT.value %}
     {{ repaymentPlanBlock( heading = 'The claimant has proposed this repayment plan', repaymentPlan = repaymentPlan ) }}
     {% endif %}
 
     {{ textArea(label = textAreaLabel, name = 'text', form = form, rows = 5, columns=18) }}
 
-    {% if madeBy === 'CLAIMANT'%}
+    {% if madeBy === MadeBy.CLAIMANT.value  %}
     {{ saveAndContinueButton() }}
     {% else %}
     {{ submitButton(label = heading, id = 'saveAndContinue') }}
