@@ -13,6 +13,7 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 
 interface State {
   status: ClaimStatus
@@ -142,7 +143,7 @@ export class Claim {
   get eligibleForCCJ (): boolean {
     return !this.countyCourtJudgmentRequestedAt
       && (this.isFullAdmissionPayImmediatelyPastPaymentDate()
-        || this.hasDefendantNotSignedSettlementAgreement()
+        || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
         )
       )
@@ -176,14 +177,14 @@ export class Claim {
       }
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
-    } else if (this.eligibleForCCJAfterBreachedSettlement) {
-      return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT
     } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
-    } else if (this.hasDefendantNotSignedSettlementAgreement()) {
+    } else if (this.hasDefendantNotSignedSettlementAgreementInTime()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
-    } else if (this.hasClaimantSignedSettlementAgreement()) {
+    } else if (this.hasClaimantAcceptedOfferAndSignedSettlementAgreement()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION
+    } else if (this.hasClaimantSignedSettlementAgreementChosenByCourt()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.eligibleForCCJ) {
@@ -209,6 +210,9 @@ export class Claim {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
+    if (this.eligibleForCCJAfterBreachedSettlement) {
+      statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
+    }
     return statuses
   }
 
@@ -240,17 +244,25 @@ export class Claim {
     if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
       const response: FullAdmissionResponse = this.response
       return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-        response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+        response.paymentIntention && response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+    } else {
+      return false
     }
   }
 
-  private hasClaimantSignedSettlementAgreement (): boolean {
-    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions()
+  private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
+      this.claimantResponse && !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
-  private hasDefendantNotSignedSettlementAgreement (): boolean {
+  private hasClaimantSignedSettlementAgreementChosenByCourt (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.respondToResponseDeadline.isBefore(MomentFactory.currentDate().hour(16))
+      this.claimantResponse && !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+  }
+
+  private hasDefendantNotSignedSettlementAgreementInTime (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
+      this.claimantRespondedAt && this.claimantRespondedAt.add('7', 'days').isBefore(MomentFactory.currentDate())
   }
 
   private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
