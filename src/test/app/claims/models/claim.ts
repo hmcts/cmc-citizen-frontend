@@ -23,6 +23,9 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Organisation } from 'claims/models/details/theirs/organisation'
 import { rejectionClaimantResponseData } from '../../../data/entity/claimantResponseData'
 import { Company } from 'claims/models/details/theirs/company'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
+import { DecisionType } from 'common/court-calculations/courtDecision'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -153,10 +156,45 @@ describe('Claim', () => {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
         paymentDate: MomentFactory.currentDate()
       }
-      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.SETTLEMENT
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION)
+    })
+
+    it('should return CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT when a claimant has signed a settlement agreement', () => {
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.SETTLEMENT,
+        courtDetermination: {
+          decisionType: DecisionType.CLAIMANT,
+          courtDecision: {
+            paymentDate: MomentFactory.currentDate().add('1 year'),
+            paymentOption: PaymentOption.BY_SPECIFIED_DATE
+          },
+          disposableIncome: 0,
+          courtPaymentIntention: {
+            paymentDate: MomentFactory.currentDate().add('6 months'),
+            paymentOption: PaymentOption.BY_SPECIFIED_DATE
+          }
+        },
+        claimantPaymentIntention: {
+          paymentDate: MomentFactory.currentDate().add('1 year'),
+          paymentOption: PaymentOption.BY_SPECIFIED_DATE
+        }
+      }
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate()
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.CLAIMANT)
+      claim.respondedAt = MomentFactory.currentDateTime()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT)
     })
 
     it('should return CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED when a claimant has signed a settlement agreement but defendant has not', () => {
@@ -164,8 +202,9 @@ describe('Claim', () => {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
         paymentDate: MomentFactory.currentDate()
       }
-      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.respondedAt = MomentFactory.currentDateTime().subtract(2, 'months')
+      claim.claimantRespondedAt = MomentFactory.currentDate().subtract('8', 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED)
     })
@@ -175,7 +214,7 @@ describe('Claim', () => {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
         paymentDate: MomentFactory.currentDate().subtract(1, 'days')
       }
-      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
       claim.response = {
         responseType: ResponseType.FULL_ADMISSION,
@@ -183,7 +222,7 @@ describe('Claim', () => {
         defendant: new Individual().deserialize(individual)
       }
 
-      expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
+      expect(claim.stateHistory.map(state => state.status)).includes(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
     })
   })
 
@@ -370,12 +409,12 @@ describe('Claim', () => {
   })
 })
 
-function prepareSettlement (paymentIntention: PaymentIntention): Settlement {
+function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
   const settlement = {
     partyStatements: [
       {
         type: StatementType.OFFER.value,
-        madeBy: MadeBy.DEFENDANT.value,
+        madeBy: party.value,
         offer: {
           content: 'My offer contents here.',
           completionDate: '2020-10-10',

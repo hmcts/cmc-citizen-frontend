@@ -5,9 +5,12 @@
 {% endmacro %}
 
 {% macro claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus(claim) %}
+
+{% set claimNumber = claim.claimNumber %}
+
 <h2 class="heading-small">{{ t('You need to send the defendant’s financial details to the court') }}</h2>
 
-<p>{{ t('Make sure you include your claim number: {{ claim.claimNumber }}.') }}</p>
+<p>{{ t('Make sure you include your claim number: {{ claimNumber }}.') }}</p>
 <p>{{ t('The court will review the details to see if the defendant can afford your repayment plan.') }}</p>
 
 <h3 class="heading-small">Use this address</h3>
