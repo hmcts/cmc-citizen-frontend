@@ -111,8 +111,6 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {{ offerSettlementReachedForClaimant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
         {{ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus(claim) }}
-      {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
-        Show this status
       {% else %}
         <p>
           {{ caseStatusForClaimant(state.status, claim) }}
