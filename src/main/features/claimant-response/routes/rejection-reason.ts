@@ -29,7 +29,7 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       renderView(new Form(draft.document.rejectionReason), res)
     })
-    )
+  )
   .post(
     Paths.rejectionReasonPage.uri,
     FormValidator.requestHandler(RejectionReason),
@@ -44,7 +44,10 @@ export default express.Router()
         draft.document.settlementAgreement = undefined
 
         draft.document.rejectionReason = form.model
-        draft.document.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
+
+        if (!StatesPaidHelper.isResponseAlreadyPaid(res.locals.claim)) {
+          draft.document.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
+        }
 
         await new DraftService().save(draft, user.bearerToken)
 
@@ -52,4 +55,4 @@ export default express.Router()
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     })
-    )
+  )
