@@ -10,6 +10,8 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 import { Claim } from 'claims/models/claim'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
+import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 
 function renderView (form: Form<RejectionReason>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -40,9 +42,9 @@ export default express.Router()
         const user: User = res.locals.user
 
         draft.document.settlementAgreement = undefined
-        draft.document.formaliseRepaymentPlan = undefined
 
         draft.document.rejectionReason = form.model
+        draft.document.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
 
         await new DraftService().save(draft, user.bearerToken)
 
