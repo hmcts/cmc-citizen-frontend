@@ -2,4 +2,3 @@ ignore:
 - "src/main/server.ts"
 - "src/main/ts-paths-bootstrap.ts"
 - "src/main/public/**"
-- "**/models/**"
