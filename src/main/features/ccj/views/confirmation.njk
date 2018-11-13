@@ -31,9 +31,13 @@
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       {% if reDeterminationRequestedAt !== undefined %}
-        <p>{{ t('A judge will decide what the defendant can afford to pay based on their financial details.') }}</p>
+         {% if reDeterminationBy === 'CLAIMANT' %}
+            <p>{{ t('A judge will decide what the defendant can afford to pay based on their financial details.') }}</p>
+         {% else %}
+            {{ t('A judge will review the case.')}}
+         {% endif %}
 
-        <P>{{ t('We’ll contact both you and {{ defendantName }} to tell you what to do next.', { defendantName: defendantName }) }}</P>
+         <P>{{ t('We’ll contact both you and {{ defendantName }} to tell you what to do next.', { defendantName: defendantName }) }}</P>
 
       {% else %}
 

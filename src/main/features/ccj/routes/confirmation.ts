@@ -14,6 +14,7 @@ export default express.Router()
         {
           defendantName: claim.claimData.defendant.name,
           ccjRequestedAt: claim.countyCourtJudgmentRequestedAt,
-          reDeterminationRequestedAt: claim.reDeterminationRequestedAt
+          reDeterminationRequestedAt: claim.reDeterminationRequestedAt,
+          reDeterminationBy: claim.reDetermination.partyType.value
         })
     }))
