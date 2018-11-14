@@ -17,7 +17,7 @@
               claimantAmount: claimantPaymentPlan.instalmentAmount | numeral,
               claimantFrequency: claimantPaymentPlan.frequency | renderFrequencyViewType | lower,
               courtOrderAmount: courtOrderPaymentPlan.instalmentAmount | numeral,
-              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule
+              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule | lower
             }) }}</p>
 
           {{
@@ -26,7 +26,7 @@
             repaymentPlan = courtOrderPaymentPlan
           )
           }}
-          
+
         {% else %}
           <p> {{ t('The court has accepted your repayment plan.') }} </p>
         {% endif %}

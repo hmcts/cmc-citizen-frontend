@@ -8,25 +8,34 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { CourtDecision, DecisionType } from 'common/court-calculations/courtDecision'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import {
+  intentionOfPaymentByInstalments,
+  intentionOfPaymentInFullBySetDate
+ } from 'test/data/draft/paymentIntentionDraft'
+import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
+import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { MomentFactory } from 'shared/momentFactory'
+import { LocalDate } from 'forms/models/localDate'
 import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import {
-  intentionOfImmediatePayment,
-  intentionOfPaymentByInstallments,
-  intentionOfPaymentInFullBySetDate
-} from '../../../data/draft/paymentIntentionDraft'
-import { PaymentOption } from 'claims/models/paymentOption'
-import { MomentFactory } from 'shared/momentFactory'
-import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { LocalDate } from 'forms/models/localDate'
-import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
+  payByInstallmentsIntent,
+  payBySetDateIntent,
+  payImmediatelyIntent
+} from 'test/data/draft/claimantPaymentIntentionDraft'
 
 function createDraftClaimantResponseForFullRejection (): DraftClaimantResponse {
   const draftResponse: DraftClaimantResponse = new DraftClaimantResponse()
   draftResponse.settleAdmitted = new SettleAdmitted(YesNoOption.NO)
   draftResponse.paidAmount = new PaidAmount(PaidAmountOption.NO,10,100)
+  draftResponse.courtDetermination = new CourtDetermination(
+    intentionOfPaymentByInstalments,
+    intentionOfPaymentInFullBySetDate,
+    new RejectionReason('Rejection reason is..'),
+    1000,
+    DecisionType.COURT)
   return draftResponse
 }
 
@@ -38,66 +47,24 @@ function createDraftClaimantResponseBaseForAcceptance (accept: YesNoOption, sett
   return draftResponse
 }
 
-const paymentIntentionInInstallment = {
-  paymentOption: PaymentOption.INSTALMENTS,
-  paymentDate: MomentFactory.currentDate().add(5, 'days'),
-  repaymentPlan: {
-    instalmentAmount: 10,
-    firstPaymentDate: MomentFactory.currentDate().add(30, 'days'),
-    paymentSchedule: PaymentSchedule.EVERY_MONTH,
-    completionDate: MomentFactory.currentDate().add(90, 'days'),
-    paymentLength: '3 Months'
-  }
-}
-
-const installmentPaymentIntention = {
-  'paymentOption': 'INSTALMENTS',
-  'paymentDate': MomentFactory.currentDate().add(5, 'days'),
-  'repaymentPlan': {
-    'instalmentAmount': 10,
-    'firstPaymentDate': MomentFactory.currentDate().add(30, 'days'),
-    'paymentSchedule': 'EVERY_MONTH',
-    'completionDate': MomentFactory.currentDate().add(90, 'days'),
-    'paymentLength': '3 Months'
-  }
-}
-
-const courtDecisionInstalments = {
-  'courtDecision': installmentPaymentIntention
-}
-
-const courtPaymentIntentionInstallments = {
-  'courtPaymentIntention': installmentPaymentIntention
-}
-
-const courtPaymentIntentionBySetDate = {
-  'courtPaymentIntention': {
-    'paymentOption': 'BY_SPECIFIED_DATE',
-    'paymentDate': MomentFactory.currentDate().add(5, 'days'),
-    'repaymentPlan': undefined
-  }
-}
-
-const paymentIntentionByPayBySetDate = {
-  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-  paymentDate: MomentFactory.currentDate().add(5, 'days')
-}
-
 function createDraftClaimantResponseWithCourtDecisionType (
-  claimantPI: any,
+  claimantPI: DraftPaymentIntention,
   decisionType: DecisionType,
   formaliseOption: FormaliseRepaymentPlanOption,
-  courtCalculatedPaymentIntention: any
+  courtDecision: CourtDecision,
+  courtPaymentIntention: PaymentIntention
 ): DraftClaimantResponse {
   const draftClaimantResponse: DraftClaimantResponse = new DraftClaimantResponse()
   draftClaimantResponse.paidAmount = new PaidAmount(PaidAmountOption.YES, 10, 100)
   draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(formaliseOption)
   draftClaimantResponse.acceptPaymentMethod = new AcceptPaymentMethod(YesNoOption.NO)
-  draftClaimantResponse.decisionType = decisionType
-  draftClaimantResponse.alternatePaymentMethod = DraftPaymentIntention.deserialize(claimantPI)
-  draftClaimantResponse.courtOfferedPaymentIntention = PaymentIntention.deserialize(paymentIntentionInInstallment)
-  draftClaimantResponse.courtCalculatedPaymentIntention = PaymentIntention.deserialize(courtCalculatedPaymentIntention)
-  draftClaimantResponse.disposableIncome = 200
+  if (claimantPI) draftClaimantResponse.alternatePaymentMethod = claimantPI
+  draftClaimantResponse.courtDetermination = new CourtDetermination(
+    courtDecision,
+    courtPaymentIntention,
+    undefined,
+    1000,
+    decisionType)
   draftClaimantResponse.settleAdmitted = new SettleAdmitted(YesNoOption.YES)
   return draftClaimantResponse
 }
@@ -107,9 +74,9 @@ describe('claimant response converter ', () => {
     it('rejection with mediation missing ', () => {
       expect(converter.convertToClaimantResponse(createDraftClaimantResponseForFullRejection())).to.deep.eq({
         'type': 'REJECTION',
-        'amountPaid': 10
+        'amountPaid': 10,
+        'reason': 'Rejection reason is..'
       })
-
     })
 
     it('rejection with mediation ', () => {
@@ -118,7 +85,8 @@ describe('claimant response converter ', () => {
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'REJECTION',
         'amountPaid': 10,
-        'freeMediation': true
+        'freeMediation': true,
+        'reason': 'Rejection reason is..'
       })
 
     })
@@ -126,7 +94,7 @@ describe('claimant response converter ', () => {
     it('rejection with mediation with reason', () => {
       const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
       draftClaimantResponse.freeMediation = new FreeMediation('yes')
-      draftClaimantResponse.rejectionReason = new RejectionReason('rejected')
+      draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected')
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'REJECTION',
         'amountPaid': 10,
@@ -140,21 +108,27 @@ describe('claimant response converter ', () => {
       draftClaimantResponse.settleAdmitted = new SettleAdmitted(YesNoOption.NO)
       draftClaimantResponse.paidAmount = new PaidAmount(PaidAmountOption.NO,0,100)
       draftClaimantResponse.freeMediation = new FreeMediation('yes')
+      draftClaimantResponse.courtDetermination = new CourtDetermination(
+        intentionOfPaymentByInstalments,
+        intentionOfPaymentInFullBySetDate,
+        new RejectionReason('Rejection reason is..'),
+        1000,
+        DecisionType.COURT)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'REJECTION',
         'amountPaid': 0,
-        'freeMediation': true
+        'freeMediation': true,
+        'reason': 'Rejection reason is..'
       })
     })
 
   })
 
   describe('Claimant Acceptance', () => {
-
     it(' Accept defendant offer with CCJ', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
-      draftClaimantResponse.decisionType = DecisionType.DEFENDANT
+      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,
@@ -166,7 +140,7 @@ describe('claimant response converter ', () => {
     it(' Accept defendant offer with settlement', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      draftClaimantResponse.decisionType = DecisionType.DEFENDANT
+      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,
@@ -175,37 +149,40 @@ describe('claimant response converter ', () => {
 
     })
 
-    it(' Accept defendant offer with no unknown formalise option', () => {
+    it(' Accept defendant offer with unknown formalise option', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
-      draftClaimantResponse.decisionType = DecisionType.DEFENDANT
+      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('xyz', 'xyz'))
       const errMsg = 'Unknown formalise repayment option xyz'
       expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
 
-    it(' Accept court decision with ccj', () => {
-      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(intentionOfImmediatePayment,
-        DecisionType.COURT, FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT, paymentIntentionInInstallment)
+    it(' Accept defendant offer but propose a counter repayment plan to pay immediately', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payImmediatelyIntent,
+        DecisionType.CLAIMANT,
+        FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+        null,
+        null)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
           'claimantPaymentIntention': {
-            'paymentOption': 'IMMEDIATELY'
-          },
-          'courtDetermination': {
-            ...courtDecisionInstalments,
-            ...courtPaymentIntentionInstallments,
-            'disposableIncome': 200,
-            'decisionType': 'COURT'
+            'paymentOption': 'IMMEDIATELY',
+            'paymentDate': MomentFactory.currentDate().add(5,'days')
           },
           'formaliseOption': 'CCJ'
         })
     })
 
-    it(' Accept court decision favouring defendant payment intent ', () => {
-      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(intentionOfPaymentInFullBySetDate,
-        DecisionType.DEFENDANT, FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT, paymentIntentionInInstallment)
+    it(' Accept defendant offer but propose a counter repayment plan to pay by set date', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payBySetDateIntent,
+        DecisionType.CLAIMANT,
+        FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+        null,
+        null)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
@@ -214,19 +191,17 @@ describe('claimant response converter ', () => {
             'paymentOption': 'BY_SPECIFIED_DATE',
             'paymentDate': new LocalDate(2018, 12, 31).toMoment()
           },
-          'courtDetermination': {
-            ...courtDecisionInstalments,
-            ...courtPaymentIntentionInstallments,
-            'disposableIncome': 200,
-            'decisionType': 'DEFENDANT'
-          },
           'formaliseOption': 'CCJ'
         })
     })
 
-    it(' Accept court decision favouring claimant payment intent ', () => {
-      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(intentionOfPaymentByInstallments,
-        DecisionType.CLAIMANT, FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT, paymentIntentionByPayBySetDate)
+    it(' Accept defendant offer but propose a counter repayment plan to pay by instalments', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payByInstallmentsIntent,
+        DecisionType.CLAIMANT,
+        FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+        null,
+        null)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
@@ -241,34 +216,165 @@ describe('claimant response converter ', () => {
               'completionDate': new LocalDate(2019, 12, 30).toMoment()
             }
           },
-          'courtDetermination': {
-            ...courtDecisionInstalments,
-            ...courtPaymentIntentionBySetDate,
-            'disposableIncome': 200,
-            'decisionType': 'CLAIMANT'
-          },
           'formaliseOption': 'CCJ'
         })
     })
 
-    it(' Reject court decision and refer to judge ', () => {
-      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(intentionOfImmediatePayment,
-        DecisionType.COURT, FormaliseRepaymentPlanOption.REFER_TO_JUDGE, paymentIntentionInInstallment)
+    it('Claimant proposes immediate payment court decides pay by set date ', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payImmediatelyIntent,
+        DecisionType.COURT,
+        FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+        intentionOfPaymentInFullBySetDate,
+        intentionOfPaymentByInstalments)
+      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
+        {
+          'type': 'ACCEPTATION',
+          'amountPaid': 10,
+          'formaliseOption': 'CCJ',
+          'claimantPaymentIntention': {
+            'paymentOption': 'IMMEDIATELY',
+            'paymentDate': MomentFactory.currentDate().add(5,'days')
+          },
+          'courtDetermination': {
+            courtDecision: intentionOfPaymentInFullBySetDate,
+            courtPaymentIntention: intentionOfPaymentByInstalments,
+            disposableIncome: 1000,
+            decisionType: DecisionType.COURT
+          }
+        })
+    })
 
-      draftClaimantResponse.rejectionReason = new RejectionReason('rejected reason')
+    it('Accept court decision to pay by instalments with ccj', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payImmediatelyIntent,
+        DecisionType.COURT,
+        FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+        intentionOfPaymentByInstalments,
+        intentionOfPaymentByInstalments)
+      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
+        {
+          'type': 'ACCEPTATION',
+          'amountPaid': 10,
+          'formaliseOption': 'CCJ',
+          'claimantPaymentIntention': {
+            'paymentOption': 'IMMEDIATELY',
+            'paymentDate': MomentFactory.currentDate().add(5,'days')
+          },
+          'courtDetermination': {
+            courtDecision: intentionOfPaymentByInstalments,
+            courtPaymentIntention: intentionOfPaymentByInstalments,
+            disposableIncome: 1000,
+            decisionType: DecisionType.COURT
+          }
+        })
+    })
+
+    it(' Accept court decision favouring defendant payment intent ', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payBySetDateIntent,
+        DecisionType.DEFENDANT,
+        FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+        intentionOfPaymentByInstalments,
+        intentionOfPaymentInFullBySetDate)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
           'claimantPaymentIntention': {
-            'paymentOption': 'IMMEDIATELY'
+            'paymentOption': 'BY_SPECIFIED_DATE',
+            'paymentDate': new LocalDate(2018, 12, 31).toMoment()
           },
           'courtDetermination': {
-            ...courtDecisionInstalments,
-            ...courtPaymentIntentionInstallments,
-            'disposableIncome': 200,
-            'rejectionReason': 'rejected reason',
-            'decisionType': 'COURT'
+            courtDecision: intentionOfPaymentByInstalments,
+            courtPaymentIntention: intentionOfPaymentInFullBySetDate,
+            disposableIncome: 1000,
+            decisionType: DecisionType.DEFENDANT
+          },
+          'formaliseOption': 'CCJ'
+        })
+    })
+
+    it(' Accept court decision favouring claimant payment intent ', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payByInstallmentsIntent,
+        DecisionType.CLAIMANT,
+        FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+        intentionOfPaymentByInstalments,
+        intentionOfPaymentInFullBySetDate)
+      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
+        {
+          'type': 'ACCEPTATION',
+          'amountPaid': 10,
+          'formaliseOption': 'CCJ',
+          'claimantPaymentIntention': {
+            'paymentOption': 'INSTALMENTS',
+            'repaymentPlan': {
+              'firstPaymentDate': new LocalDate(2018, 12, 31).toMoment(),
+              'instalmentAmount': 100,
+              'paymentSchedule': 'EVERY_MONTH',
+              'paymentLength': '',
+              'completionDate': new LocalDate(2019, 12, 30).toMoment()
+            }
+          },
+          'courtDetermination': {
+            courtDecision: intentionOfPaymentByInstalments,
+            courtPaymentIntention: intentionOfPaymentInFullBySetDate,
+            disposableIncome: 1000,
+            decisionType: DecisionType.CLAIMANT
+          }
+        })
+    })
+
+    it(' Reject court decision to pay by set date and refer to judge ', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payImmediatelyIntent,
+        DecisionType.COURT,
+        FormaliseRepaymentPlanOption.REFER_TO_JUDGE,
+        intentionOfPaymentInFullBySetDate,
+        intentionOfPaymentByInstalments)
+      draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected reason')
+      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
+        {
+          'type': 'ACCEPTATION',
+          'amountPaid': 10,
+          'claimantPaymentIntention': {
+            'paymentOption': 'IMMEDIATELY',
+            'paymentDate': MomentFactory.currentDate().add(5,'days')
+          },
+          'courtDetermination': {
+            courtDecision: intentionOfPaymentInFullBySetDate,
+            courtPaymentIntention: intentionOfPaymentByInstalments,
+            rejectionReason: 'rejected reason',
+            disposableIncome: 1000,
+            decisionType: DecisionType.COURT
+          },
+          'formaliseOption': 'REFER_TO_JUDGE'
+        })
+    })
+
+    it(' Reject court decision to pay by instalments and refer to judge ', () => {
+      const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
+        payImmediatelyIntent,
+        DecisionType.COURT,
+        FormaliseRepaymentPlanOption.REFER_TO_JUDGE,
+        intentionOfPaymentByInstalments,
+        intentionOfPaymentInFullBySetDate)
+      draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected reason')
+      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq(
+        {
+          'type': 'ACCEPTATION',
+          'amountPaid': 10,
+          'claimantPaymentIntention': {
+            'paymentOption': 'IMMEDIATELY',
+            'paymentDate': MomentFactory.currentDate().add(5,'days')
+          },
+          'courtDetermination': {
+            courtDecision: intentionOfPaymentByInstalments,
+            courtPaymentIntention: intentionOfPaymentInFullBySetDate,
+            rejectionReason: 'rejected reason',
+            disposableIncome: 1000,
+            decisionType: DecisionType.COURT
           },
           'formaliseOption': 'REFER_TO_JUDGE'
         })
@@ -276,8 +382,8 @@ describe('claimant response converter ', () => {
 
     it(' claimant payment intention missing where the decision type is CLAIMANT', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
-      draftClaimantResponse.decisionType = DecisionType.CLAIMANT
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
+      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.CLAIMANT)
       const errMsg = 'claimant payment intention not found where decision type is CLAIMANT'
       expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })
@@ -285,7 +391,7 @@ describe('claimant response converter ', () => {
     it(' Court payment intention missing where the decision type is COURT', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      draftClaimantResponse.decisionType = DecisionType.COURT
+      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.COURT)
       const errMsg = 'court offered payment intention not found where decision type is COURT'
       expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)
     })

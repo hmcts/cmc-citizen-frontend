@@ -15,6 +15,8 @@ import { User } from 'main/app/idam/user'
 import { Form } from 'main/app/forms/form'
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Claim } from 'claims/models/claim'
 
 export abstract class AbstractPaymentOptionPage<Draft> {
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
@@ -22,6 +24,11 @@ export abstract class AbstractPaymentOptionPage<Draft> {
 
   getView (): string {
     return 'components/payment-intention/payment-option'
+  }
+
+  async saveDraft (locals: { user: User, draft: DraftWrapper<Draft>, claim: Claim }): Promise<void> {
+    const user: User = locals.user
+    await new DraftService().save(locals.draft, user.bearerToken)
   }
 
   buildPostSubmissionUri (path: string, req: express.Request, res: express.Response): string {
@@ -58,8 +65,7 @@ export abstract class AbstractPaymentOptionPage<Draft> {
               this.createModelAccessor().patch(res.locals.draft.document, model => model.paymentOption = form.model)
               this.deleteRedundantData(res, req)
 
-              const user: User = res.locals.user
-              await new DraftService().save(res.locals.draft, user.bearerToken)
+              await this.saveDraft(res.locals)
 
               res.redirect(this.buildPostSubmissionUri(path, req, res))
             }

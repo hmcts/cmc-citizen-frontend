@@ -13,6 +13,9 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
+import { MomentFactory } from 'shared/momentFactory'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -50,6 +53,40 @@ describe('CCJ: confirmation page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('County Court Judgment requested'))
+        })
+      })
+
+      context('when re determination is requested', () => {
+
+        it('should render page when everything is fine', async () => {
+
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+            respondedAt: MomentFactory.currentDateTime(),
+            countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
+            countyCourtJudgment: {
+              defendantDateOfBirth: '1990-11-01',
+              paidAmount: 2,
+              paymentOption: 'INSTALMENTS',
+              repaymentPlan: {
+                instalmentAmount: 30,
+                firstPaymentDate: '2018-11-11',
+                paymentSchedule: 'EVERY_MONTH',
+                completionDate: '2019-11-11',
+                paymentLength: '12 months'
+              },
+              ccjType: CountyCourtJudgmentType.DETERMINATION
+            },
+            reDetermination: {
+              explanation: 'I feel Defendant can pay earlier and I need money sooner',
+              partyType: MadeBy.CLAIMANT.value
+            },
+            reDeterminationRequestedAt: '2017-10-11T22:45:51.785'
+          })
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('You’ve asked for a judge to decide a repayment plan'))
         })
       })
     })

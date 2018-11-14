@@ -31,9 +31,10 @@ export class ClaimStoreClient {
    *
    * @param {ClaimData} claimData - claim data
    * @param {User} submitter - user that submits claim
+   * @param (features} string array of enabled features for user
    * @returns {Promise<Claim>}
    */
-  static create (claimData: ClaimData, submitter: User): Promise<Claim> {
+  static create (claimData: ClaimData, submitter: User, features: string[]): Promise<Claim> {
     if (!claimData) {
       return Promise.reject('Claim data is required')
     }
@@ -43,7 +44,7 @@ export class ClaimStoreClient {
 
     const headers = {
       Authorization: `Bearer ${submitter.bearerToken}`,
-      Features: ['admissions']
+      Features: features
     }
     return request.post(`${baseURL}/claims/${claimData.externalId}/pre-payment`, {
       headers
