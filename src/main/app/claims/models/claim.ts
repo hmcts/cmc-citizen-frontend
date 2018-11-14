@@ -219,7 +219,8 @@ export class Claim {
     } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
-    if (!this.moneyReceivedOn) {
+
+    if (!this.moneyReceivedOn && !this.settlementReachedAt && !this.countyCourtJudgmentIssuedAt && this.claimantResponse) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
     }
     return statuses

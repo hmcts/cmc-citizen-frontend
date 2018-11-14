@@ -1,5 +1,6 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "./utilityMacros.njk" import downloadAgreementLink %}
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro settlementAgreementSignedByClaimantDashboard(claim) %}
     {{ t('You’ve signed a settlement agreement. The defendant can choose to sign it or not.') }}
@@ -52,5 +53,5 @@
   <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
   <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
   <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-  <a href="{{ DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }) }}" class="button button-secondary">Tell us you've been paid</a>
+  {{ paidInFullClaimantButtonClaimDetails(claim,'Tell us you’ve been paid') }}
 {% endmacro %}

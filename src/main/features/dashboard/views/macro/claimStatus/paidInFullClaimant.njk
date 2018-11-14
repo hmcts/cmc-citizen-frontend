@@ -2,7 +2,15 @@
 
 {% macro paidInFullClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('Settling the claim') }}</h2>
-  <p>{{ t('If the defendant has paid you, ' + internalLink('you need to tell us', DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId })) + '.') | safe }}</p>
+    <p>{{ t('If the defendant has paid you, ' + internalLink('you need to tell us', DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId })) + '.') | safe }}</p>
+{% endmacro %}
+
+{% macro paidInFullClaimantButtonClaimDetails(claim, text='Tell us you’ve settled') %}
+  {% if featureToggles.paidInFull %}
+    <div class="form-group">
+      <p>{{ internalLink(text, DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }), "button button-secondary") | safe }}</p>
+    </div>
+  {% endif %}
 {% endmacro %}
 
 {% macro paidInFullClaimantDashboard(claim) %}
@@ -23,4 +31,3 @@
   {{  paidInFullClaimantClaimSettledDetails(claim) }}
   <p>{{ t('The defendant’s County Court Judgment has been marked as paid.') }}</p>
 {% endmacro %}
-

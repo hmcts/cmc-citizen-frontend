@@ -72,6 +72,8 @@
       {{ downloadAgreementLink(claim) }}
     </p>
   {% endif %}
+
+
 {% endmacro %}
 
 {% macro offerSettlementReachedForClaimant(claim) %}
@@ -111,10 +113,6 @@
     <p>
       {{ downloadAgreementLink(claim) }}
     </p>
-
-    <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
-    <a href="{{ DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }) }}" class="button button-secondary">Tell us you've been paid</a>
-
     {% if claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
       <hr>
       <p>
