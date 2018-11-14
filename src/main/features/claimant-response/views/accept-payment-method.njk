@@ -25,6 +25,10 @@
           }}
         {% endif %}
 
+        {% if claim.claimData.defendant.type === 'company' %}
+          {% set hint = 'They’ll send you their financial details. You can use these to decide whether to to accept or reject their offer' %}
+        {% endif %}
+
         {{
         radioGroupWithHintPanel(
           form = form,
@@ -40,7 +44,8 @@
           {
             label: 'No - I’ll suggest my own',
             value: YesNoOption.NO.option,
-            checked: (form.valueFor('accept') === YesNoOption.NO)
+            checked: (form.valueFor('accept') === YesNoOption.NO),
+            hint: hint
           }
         ]
         )
