@@ -218,6 +218,37 @@ export const statementOfMeansWithMandatoryFieldsOnlyData = {
   carer: false
 }
 
+export const statementOfMeansWithMandatoryFieldsAndNoDisposableIncome = {
+  bankAccounts: [
+    {
+      balance: 0,
+      joint: false,
+      type: BankAccountType.CURRENT_ACCOUNT
+    }
+  ],
+  disability: DisabilityStatus.NO,
+  priorityDebts: [],
+  residence: {
+    type: ResidenceType.OWN_HOME
+  },
+  employment: {
+    unemployment: {
+      retired: true
+    }
+  },
+  incomes: [{
+    amount: 0,
+    frequency: PaymentFrequency.WEEK,
+    type: IncomeType.CHILD_BENEFIT
+  }] as Income[],
+  expenses: [{
+    amount: 1000,
+    frequency: PaymentFrequency.MONTH,
+    type: ExpenseType.MORTGAGE
+  }] as Expense[],
+  carer: false
+}
+
 export const statementOfMeansWithAllFieldsData = {
   ...statementOfMeansWithMandatoryFieldsOnlyData,
   dependant: {
@@ -284,6 +315,13 @@ export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSch
   ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
   statementOfMeans: {
     ...statementOfMeansWithMandatoryFieldsOnlyData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsAndNoDisposableIncome
   }
 }
 
