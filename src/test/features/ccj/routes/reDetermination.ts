@@ -16,10 +16,11 @@ import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not
 import { MomentFactory } from 'shared/momentFactory'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.redeterminationPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.redeterminationPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
 const confirmationPage = Paths.confirmationPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
