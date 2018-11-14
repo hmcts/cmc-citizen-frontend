@@ -224,7 +224,7 @@ export class Claim {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
     }
     return statuses
-  }
+  }tell
 
   private isResponseSubmitted (): boolean {
     return this.response !== undefined
