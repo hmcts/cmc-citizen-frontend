@@ -312,13 +312,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/node@*":
-  version "9.6.35"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.35.tgz#197dd535c094362a7c95f0b78f07583d6681ed26"
-
-"@types/node@<10.0.0":
-  version "9.6.36"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.36.tgz#c4a2bdb16d3a79b34e01464b4bd38c1b849efdac"
+"@types/node@*", "@types/node@<10.0.0":
+  version "9.6.37"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-9.6.37.tgz#0db79d7429a9ca21482630e653f3b27877291400"
 
 "@types/nunjucks@^3.1.0":
   version "3.1.0"
