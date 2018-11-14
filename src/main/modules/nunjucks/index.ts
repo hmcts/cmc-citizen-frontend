@@ -44,7 +44,7 @@ import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
-import { PriorityDebtType } from 'claims/models/response/statement-of-means/priorityDebts'
+import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 
