@@ -11,11 +11,11 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { PartyType } from 'common/partyType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
+import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
 
 interface State {
   status: ClaimStatus
@@ -104,7 +104,7 @@ export class Claim {
         this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
       }
       if (input.reDetermination) {
-        this.reDetermination = new ReDetermination().deserialize(input.reDetermination)
+        this.reDetermination = ReDetermination.deserialize(input.reDetermination)
       }
       if (input.reDeterminationRequestedAt) {
         this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
