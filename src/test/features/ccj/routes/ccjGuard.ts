@@ -12,6 +12,7 @@ import { expect } from 'chai'
 import { MomentFactory } from 'shared/momentFactory'
 import { RoutablePath } from 'shared/router/routablePath'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const ccjWithDeterminationType = {
@@ -72,7 +73,7 @@ describe('CCJ guard', () => {
       })
 
       it('should NOT redirect to dashboard when claim not eligible for CCJ on re determination page', async () => {
-        const route: string = Paths.redeterminationPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
+        const route: string = Paths.redeterminationPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8', madeBy: MadeBy.CLAIMANT.value })
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(ccjWithDeterminationType)
 
         await request(app)
@@ -82,7 +83,7 @@ describe('CCJ guard', () => {
       })
 
       it('should NOT redirect to dashboard when claim not eligible for CCJ on repayment plan summary page', async () => {
-        const route: string = Paths.repaymentPlanSummaryPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
+        const route: string = Paths.repaymentPlanSummaryPage.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8', madeBy: MadeBy.CLAIMANT.value })
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(ccjWithDeterminationType)
 
         await request(app)
