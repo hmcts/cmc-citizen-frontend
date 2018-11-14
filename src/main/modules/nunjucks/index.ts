@@ -13,7 +13,10 @@ import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { PaymentOption as DefendantPaymentOption, PaymentType as DefendantPaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import {
+  PaymentOption as DefendantPaymentOption,
+  PaymentType as DefendantPaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 import { SignatureType } from 'common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
@@ -45,6 +48,8 @@ import { MonthlyIncomeType } from 'response/form/models/statement-of-means/month
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
+import { DecisionType } from 'common/court-calculations/courtDecision'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -117,6 +122,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestRateOption', InterestRateOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
+    nunjucksEnv.addGlobal('MadeBy', MadeBy)
     nunjucksEnv.addGlobal('CountyCourtJudgmentType', CountyCourtJudgmentType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
@@ -148,6 +154,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     nunjucksEnv.addGlobal('serviceName', `Money Claims`)
     nunjucksEnv.addGlobal('headingVisible', true)
+    nunjucksEnv.addGlobal('DecisionType', DecisionType)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

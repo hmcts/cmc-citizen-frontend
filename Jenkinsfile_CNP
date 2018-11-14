@@ -27,7 +27,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-// Vars needed for AKS testing
+// Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 
