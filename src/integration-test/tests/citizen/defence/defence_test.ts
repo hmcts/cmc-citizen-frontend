@@ -3,7 +3,6 @@ import { PartyType } from 'integration-test/data/party-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { DefenceType } from 'integration-test/data/defence-type'
-import { AppClient } from 'integration-test/helpers/clients/appClient'
 
 const helperSteps: Helper = new Helper()
 
@@ -15,15 +14,14 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
   helperSteps.finishResponse(testData)
 })
 
-const isAdmissionsEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
-if (isAdmissionsEnabled) {
-  Scenario('I can fill out forms for I admit part of the claim @citizen @admissions', async (I: I) => {
+if (process.env.FEATURE_ADMISSIONS === 'true') {
+  Scenario('I can fill out forms for I admit part of the claim @citizen @admissions @debug', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION
     helperSteps.finishResponse(testData)
   })
 
-  Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions @debug', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
     helperSteps.finishResponse(testData)
