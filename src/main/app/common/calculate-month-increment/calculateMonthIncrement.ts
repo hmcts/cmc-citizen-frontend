@@ -14,3 +14,17 @@ export function calculateMonthIncrement (startDate: moment.Moment) {
 
   return futureMonth
 }
+
+export function calculateMonthsIncrement (startDate: moment.Moment, monthsToAdd: number) {
+  if (!startDate) {
+    return startDate
+  }
+
+  const futureMonth = moment(startDate).add(monthsToAdd, 'months')
+  if ((startDate.date() !== futureMonth.date()) &&
+    (futureMonth.daysInMonth() === futureMonth.date())) {
+    return futureMonth.add(1, 'days')
+  }
+
+  return futureMonth
+}

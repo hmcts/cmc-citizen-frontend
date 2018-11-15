@@ -3,7 +3,6 @@ import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
 import { expect } from 'chai'
 import * as moment from 'moment'
-// import paymentPlan from 'features/claimant-response/routes/payment-plan';
 
 const TOTAL_AMOUNT = 20
 const TOTAL_AMOUNT_2 = 1643.20

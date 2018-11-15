@@ -1,6 +1,7 @@
 import * as moment from 'moment'
 import 'moment-precise-range-plugin'
 import { MomentFactory } from 'shared/momentFactory'
+import { calculateMonthsIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 import { Frequency } from 'common/frequency/frequency'
 import { FrequencyConversions } from 'common/frequency/frequencyConversions'
@@ -50,7 +51,8 @@ export class PaymentPlan {
         lastPaymentDate.add((this.numberOfInstalments - 1) * 2, 'weeks')
         break
       case (Frequency.MONTHLY):
-        lastPaymentDate.add(this.numberOfInstalments - 1, 'months')
+        // lastPaymentDate.add(this.numberOfInstalments - 1, 'months')
+        lastPaymentDate = calculateMonthsIncrement(lastPaymentDate, this.numberOfInstalments - 1)
         break
     }
     return lastPaymentDate
