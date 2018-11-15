@@ -27,7 +27,7 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro resideceneSection(residence) %}
+{% macro residenceSection(residence) %}
   {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType, bottomBorder = true) }}
 {% endmacro %}
 
@@ -103,7 +103,9 @@
   {{ row(label = 'Annual turnover', value = selfEmployment.annualTurnover | numeral, bottomBorder = not selfEmployment.onTaxPayments) }}
   {{ row(label = 'Are they behind on tax payments?', value = (selfEmployment.onTaxPayments !== undefined) | renderYesNo) }}
   {{ row(label = 'Amount they owe?', value = selfEmployment.onTaxPayments.amountYouOwe | numeral) }}
+  {% if selfEmployment.onTaxPayments.reason %}
   {{ row(label = 'Reason', value = selfEmployment.onTaxPayments.reason, bottomBorder = true) }}
+  {% endif %}
 {% endmacro %}
 
 {% macro monthlyIncomesSection(incomes) %}
@@ -153,13 +155,15 @@
     <div class="panel">
       {{ heading('Bank and savings accounts') }}
       {{ bankAccountsSection(statementOfMeans.bankAccounts) }}
-      {{ resideceneSection(statementOfMeans.residence) }}
+      {{ residenceSection(statementOfMeans.residence) }}
 
       {{ heading('Children') }}
       {{ childrenSection(statementOfMeans.dependant.children) }}
 
+      {% if statementOfMeans.dependant.numberOfMaintainedChildren %}
       {{ heading('Maintenance') }}
       {{ maintenanceSection(statementOfMeans.dependant.numberOfMaintainedChildren) }}
+      {% endif %}
 
       {{ heading('Financial support') }}
       {{ otherDependantsSection(statementOfMeans.dependant.otherDependants) }}
@@ -185,4 +189,10 @@
       {{ courtOrdersSection(statementOfMeans.courtOrders) }}
     </div>
   </details>
+{% endmacro %}
+
+{% macro financialDetailsBlock(claim, headingContent, labelContent, classes = undefined) %}
+  {% if not claim.claimData.defendant.isBusiness() %}
+    {{ financialDetailsTable(label = labelContent, statementOfMeans = claim.response.statementOfMeans, classes = classes) }}
+  {% endif %}
 {% endmacro %}

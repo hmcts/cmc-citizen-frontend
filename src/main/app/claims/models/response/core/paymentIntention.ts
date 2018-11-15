@@ -20,14 +20,11 @@ export class PaymentIntention {
     instance.repaymentPlan = input.repaymentPlan && {
       instalmentAmount: input.repaymentPlan.instalmentAmount,
       firstPaymentDate: MomentFactory.parse(input.repaymentPlan.firstPaymentDate),
-      paymentSchedule: input.repaymentPlan.paymentSchedule
+      paymentSchedule: input.repaymentPlan.paymentSchedule,
+      completionDate: input.repaymentPlan.completionDate && MomentFactory.parse(input.repaymentPlan.completionDate),
+      paymentLength: input.repaymentPlan.paymentLength
     }
 
     return instance
-  }
-
-  get isPastPaymentDeadline (): boolean {
-    const currentDateSetTo4PM = MomentFactory.currentDate().hour(15)
-    return this.paymentDate && currentDateSetTo4PM > this.paymentDate
   }
 }

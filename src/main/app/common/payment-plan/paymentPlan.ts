@@ -9,10 +9,10 @@ export class PaymentPlan {
   private numberOfInstalments: number
 
   constructor (
-    public readonly totalAmount: number,
-    public readonly instalmentAmount: number,
-    public readonly frequency: Frequency,
-    public readonly startDate: moment.Moment) {
+    public totalAmount: number,
+    public instalmentAmount: number,
+    public frequency: Frequency,
+    public startDate: moment.Moment) {
     this.numberOfInstalments = Math.ceil(totalAmount / instalmentAmount)
   }
 
@@ -25,33 +25,16 @@ export class PaymentPlan {
   }
 
   calculatePaymentLength (): string {
-    const lastPaymentDate: moment.Moment = this.calculateLastPaymentDate()
-
-    const { years, months, days } = (moment as any).preciseDiff(this.startDate, lastPaymentDate, true)
     const paymentLength: Array<string> = []
-
-    if (years) {
-      paymentLength.push(this.pluralize(years, 'year'))
-    }
-
-    if (this.frequency === Frequency.MONTHLY) {
-      if (days) {
-        paymentLength.push(this.pluralize(months + 1, 'month'))
-      } else {
-        paymentLength.push(this.pluralize(months, 'month'))
-      }
-      return paymentLength.join(' ')
-    }
-
-    if (months) {
-      paymentLength.push(this.pluralize(months, 'month'))
-    }
-
-    if (days) {
-      const weeks = moment.duration(days, 'day').get('week')
-      if (weeks) {
-        paymentLength.push(this.pluralize(weeks, 'week'))
-      }
+    switch (this.frequency) {
+      case (Frequency.WEEKLY):
+        paymentLength.push(this.pluralize(this.numberOfInstalments, 'week'))
+        break
+      case (Frequency.TWO_WEEKLY):
+        paymentLength.push(this.pluralize(2 * this.numberOfInstalments, 'week'))
+        break
+      default:
+        paymentLength.push(this.pluralize(this.numberOfInstalments, 'month'))
     }
     return paymentLength.join(' ')
   }
@@ -61,7 +44,7 @@ export class PaymentPlan {
     return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
 
-  convertTo (frequency: Frequency): PaymentPlan {
+  convertTo (frequency: Frequency, startDate?: moment.Moment): PaymentPlan {
     let monthlyInstalmentAmount
     switch (frequency) {
       case Frequency.WEEKLY:
@@ -79,8 +62,8 @@ export class PaymentPlan {
       default:
         throw new Error(`Incompatible Frequency: ${frequency}`)
     }
-
-    return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, this.startDate)
+    const paymentPlanStartDate = startDate ? startDate : this.startDate
+    return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, paymentPlanStartDate)
   }
 
   private pluralize (num: number, word: string) {

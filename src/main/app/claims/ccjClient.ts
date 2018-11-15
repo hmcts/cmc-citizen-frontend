@@ -6,14 +6,10 @@ import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Draft } from '@hmcts/draft-store-client'
-import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { ReDetermination } from 'ccj/form/models/reDetermination'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 export class CCJClient {
-
-  static async issue (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<Claim> {
-    const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForIssue(claim, draft)
-    return CCJClient.save(claim.externalId, countyCourtJudgment, user, true)
-  }
 
   static async request (externalId: string, draft: Draft<DraftCCJ>, user: User): Promise<Claim> {
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draft.document)
@@ -23,6 +19,15 @@ export class CCJClient {
   private static async save (externalId: string, countyCourtJudgment: CountyCourtJudgment, user: User, issue: boolean = false): Promise<Claim> {
     return request.post(`${claimStoreApiUrl}/${externalId}/county-court-judgment?issue=${issue}`, {
       body: countyCourtJudgment,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    })
+  }
+
+  static async redetermination (externalId: string, reDetermination: ReDetermination, user: User, madeBy: MadeBy) {
+    return request.post(`${claimStoreApiUrl}/${externalId}/re-determination`, {
+      body: { explanation: reDetermination.text, partyType: madeBy.value },
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }

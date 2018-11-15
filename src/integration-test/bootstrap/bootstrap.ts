@@ -58,6 +58,7 @@ async function waitTillHealthy (appURL: string) {
 
     if (response.statusCode === 200) {
       console.log(`Service ${appURL} became ready after ${sleepInterval * i} seconds`)
+      console.log(`FEATURE_ADMISSIONS=${process.env.FEATURE_ADMISSIONS}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)

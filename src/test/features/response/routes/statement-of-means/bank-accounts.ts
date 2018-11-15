@@ -121,7 +121,7 @@ describe('Defendant response: Statement of means: bank accounts', () => {
             .send({ rows: [{ typeOfAccount: BankAccountType.ISA.value, joint: false, balance: 10 }] })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.residencePage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.disabilityPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

@@ -125,7 +125,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
               }})
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Enter a valid income from your job amount, maximum two decimal places'))
-            .expect(res => expect(res).to.be.successful.withText('Enter a valid pension payments amount, maximum two decimal places'))
+            .expect(res => expect(res).to.be.successful.withText('Enter a valid pension amount, maximum two decimal places'))
         })
 
         it('should trigger validation when invalid decimal amount is given', async () => {
@@ -237,7 +237,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
               } })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.explanationPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

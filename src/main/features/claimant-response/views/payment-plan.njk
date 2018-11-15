@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import linkButton, saveAndContinueButton, errorSummary, csrfProtection, radioOption, poundInput, textArea %}
 {% from "date.njk" import dateInput %}
-{% from "financialDetails.njk" import financialDetailsTable %}
+{% from "financialDetails.njk" import financialDetailsTable, financialDetailsBlock %}
 
 {% block additional_scripts %}
   {% include "payment-plan-calculation-scripts.njk" %}
@@ -17,12 +17,7 @@
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
-      <h2 class="heading-small">{{ t('Their finances') }}</h2>
-      <p>{{ t('Their total monthly income is {{ monthlyIncomeAmount }}',
-          { monthlyIncomeAmount: monthlyIncomeAmount | numeral }) }}</p>
-      <p>{{ t('Their total monthly expenses are {{ monthlyExpensesAmount }}',
-          { monthlyExpensesAmount: monthlyExpensesAmount | numeral }) }}</p>
-      {{ financialDetailsTable(label = 'See their financial details', statementOfMeans = statementOfMeans, classes = 'form-group') }}
+      {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
 
       <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
       {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}

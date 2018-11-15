@@ -3,6 +3,7 @@ import * as express from 'express'
 import { Paths } from 'ccj/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Claim } from 'claims/models/claim'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -13,6 +14,8 @@ export default express.Router()
       res.render(Paths.confirmationPage.associatedView,
         {
           defendantName: claim.claimData.defendant.name,
-          ccjRequestedAt: claim.countyCourtJudgmentRequestedAt
+          ccjRequestedAt: claim.countyCourtJudgmentRequestedAt,
+          reDeterminationRequestedAt: claim.reDeterminationRequestedAt,
+          reDeterminationByClaimant: claim.reDetermination && claim.reDetermination.partyType === MadeBy.CLAIMANT
         })
     }))

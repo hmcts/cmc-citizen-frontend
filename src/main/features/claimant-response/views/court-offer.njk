@@ -9,25 +9,23 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('Based on the financial details provided by the defendant, we do not believe they would be able to meet these requirements.') }}</p>
+      <p>{{ t('Based on the financial details provided by the defendant, we don’t believe they would be able to make these repayments.') }}</p>
 
-      <p>{{ t('The court affordability calculator has proposed the below repayment plan as the maximum the defendant can repay.') }}</p>
+      <p>{{ t('The court affordability calculator has determined a new repayment plan as the most the defendant can repay.') }}</p>
 
-      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-        {{
-        repaymentPlanBlock(
-          heading = 'The court’s proposed repayment plan',
-          paymentPlan = courtOrderPaymentPlan
-        )
-        }}
-      {% endif %}
+      {{
+      repaymentPlanBlock(
+        heading = 'The court’s proposed repayment plan',
+        repaymentPlan = courtOrderPaymentPlan
+      )
+      }}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
         {{
         radioGroup(
-          label = 'Do you want to accept the court’s proposed repayment plan?',
+          label = 'Do you accept the court’s proposed repayment plan?',
           labelForScreenReadersOnly = false,
           form = form,
           name = 'accept',
@@ -39,7 +37,7 @@
             bold: false
           },
           {
-            label: 'No - I want a judge to make a new repayment plan',
+            label: 'No - I want a judge to determine the repayment plan',
             value:  YesNoOption.NO.option,
             checked: (form.valueFor('accept') === YesNoOption.NO),
             bold: false

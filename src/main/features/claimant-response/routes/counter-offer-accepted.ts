@@ -10,8 +10,10 @@ import { DraftService } from 'services/draftService'
 
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { CourtOrderHelper } from 'shared/helpers/courtOrderHelper'
 import { ErrorHandling } from 'shared/errorHandling'
+import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -21,24 +23,23 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
+      const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
       const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
-      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+      const defendantPaymentOption: PaymentOption = response.paymentIntention.paymentOption
+      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft.document)
 
-      const courtOrderPaymentPlan: PaymentPlan = new PaymentPlan(
-        defendantPaymentPlan.totalAmount,
-        claimantPaymentPlan.instalmentAmount,
-        claimantPaymentPlan.frequency,
-        claimantPaymentPlan.startDate
-      )
+      const differentPaymentFrequency: boolean = claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency
 
-      draft.document.courtOrderAmount = CourtOrderHelper
-        .createCourtOrder(claim, draft.document)
-        .calculateAmount()
+      const isCourtOrderPaymentPlanConvertedByDefendantFrequency =
+        (defendantPaymentOption !== 'BY_SPECIFIED_DATE') ? defendantPaymentPlan.frequency && differentPaymentFrequency : false
 
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
-        isCourtOrderPaymentPlanConvertedByDefendantFrequency: claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency,
-        claimantPaymentPlan,
-        courtOrderPaymentPlan: courtOrderPaymentPlan.convertTo(defendantPaymentPlan.frequency) })
+        isCourtOrderPaymentPlanConvertedByDefendantFrequency: isCourtOrderPaymentPlanConvertedByDefendantFrequency,
+        claimantPaymentPlan: claimantPaymentPlan,
+        courtOrderPaymentPlan: draft.document.courtDetermination.courtDecision ?
+          draft.document.courtDetermination.courtDecision.repaymentPlan : undefined
+      })
     }))
   .post(
     Paths.counterOfferAcceptedPage.uri,
@@ -49,7 +50,7 @@ export default express.Router()
 
       draft.document.settlementAgreement = undefined
       draft.document.formaliseRepaymentPlan = undefined
-      draft.document.rejectionReason = undefined
+      draft.document.courtDetermination.rejectionReason = undefined
 
       await new DraftService().save(draft, user.bearerToken)
 

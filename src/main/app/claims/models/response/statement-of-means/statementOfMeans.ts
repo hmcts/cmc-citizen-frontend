@@ -6,9 +6,12 @@ import { Employment } from 'claims/models/response/statement-of-means/employment
 import { Expense } from 'claims/models/response/statement-of-means/expense'
 import { Income } from 'claims/models/response/statement-of-means/income'
 import { Residence } from 'claims/models/response/statement-of-means/residence'
+import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
+import { Partner } from 'claims/models/response/statement-of-means/partner'
+import { PriorityDebts } from 'claims/models/response/statement-of-means/priorityDebts'
 
 export interface StatementOfMeans {
-  bankAccounts: BankAccount[]
+  bankAccounts?: BankAccount[]
   residence?: Residence
   dependant?: Dependant
   employment?: Employment
@@ -16,5 +19,9 @@ export interface StatementOfMeans {
   expenses?: Expense[]
   debts?: Debt[]
   courtOrders?: CourtOrder[]
+  partner?: Partner
+  disability?: DisabilityStatus
+  carer?: boolean
+  priorityDebts?: PriorityDebts[]
   reason?: string
 }

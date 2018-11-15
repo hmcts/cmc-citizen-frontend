@@ -2,7 +2,7 @@
 
 {% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
 {% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
-{% set heading = 'How they want to pay' %}
+{% set heading = 'Accept or reject their repayment plan' %}
 
 {% block content %}
   <div class="grid-row">
@@ -19,7 +19,8 @@
         {% elseif paymentOption === domain.PaymentOption.INSTALMENTS and paymentPlan is defined %}
           {{
           repaymentPlanBlock(
-            paymentPlan = paymentPlan
+            heading = '',
+            repaymentPlan = claim.response.paymentIntention.repaymentPlan
           )
           }}
         {% endif %}

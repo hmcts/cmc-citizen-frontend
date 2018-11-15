@@ -25,9 +25,11 @@ import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
 import { HowMuchDoYouOwe } from 'response/form/models/howMuchDoYouOwe'
 import { Defendant } from 'drafts/models/defendant'
+import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { TaskListItem } from 'drafts/tasks/taskListItem'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
@@ -316,6 +318,29 @@ describe('Defendant response task list builder', () => {
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
         expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
       })
+
+      it('should be enabled when response is PART_ADMISSION and alreadyPaid is YES should clear payment ' +
+        'intention and statement of means', () => {
+        isResponseFullyAdmittedStub.returns(false)
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(false)
+        isResponsePartiallyAdmittedStub.returns(true)
+
+        const draft = new ResponseDraft()
+        draft.response = new Response(ResponseType.PART_ADMISSION)
+        draft.partialAdmission = new PartialAdmission()
+        draft.defendantDetails.partyDetails = new PartyDetails()
+        draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+        draft.partialAdmission.alreadyPaid = new AlreadyPaid(YesNoOption.YES)
+        draft.partialAdmission.paymentIntention = new PaymentIntention()
+        draft.statementOfMeans = new StatementOfMeans()
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
+        expect(draft.partialAdmission.paymentIntention).eq(undefined)
+        expect(draft.statementOfMeans).eq(undefined)
+      })
+
     })
 
     describe('"When will you pay the £xxx?" task', () => {
@@ -466,6 +491,32 @@ describe('Defendant response task list builder', () => {
 
       const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
       expect(taskList).to.be.equal(undefined)
+    })
+  })
+
+  describe('buildRemainingTasks', () => {
+    let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
+
+    beforeEach(() => {
+      isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+    })
+
+    afterEach(() => {
+      isResponseRejectedFullyWithDisputeStub.restore()
+    })
+
+    it('Should return "Consider free mediation" when not completed for fully reject', () => {
+      isResponseRejectedFullyWithDisputeStub.returns(true)
+
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      expect(tasks.map(task => task.name)).to.contain('Consider free mediation')
+    })
+
+    it('Should not return "Consider free mediation" when not fully reject', () => {
+      isResponseRejectedFullyWithDisputeStub.returns(false)
+
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      expect(tasks.map(task => task.name)).to.not.contain('Consider free mediation')
     })
   })
 

@@ -10,6 +10,9 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
+import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -42,6 +45,21 @@ export class ClaimStoreClient {
     }).then(caseReference => {
       return caseReference.case_reference
     })
+  }
+
+  savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
+    return this.request
+      .put(`${claimStoreApiUrl}/${externalId}/paid-in-full`, {
+        body: {
+          'moneyReceivedOn': draft.datePaid.date.toMoment()
+        },
+        headers: {
+          Authorization: `Bearer ${submitter.bearerToken}`
+        }
+      })
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
   }
 
   saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
@@ -210,6 +228,19 @@ export class ClaimStoreClient {
     return this.request
       .post(`${claimApiBaseUrl}/user/roles`, {
         body: { role: role },
+        headers: {
+          Authorization: `Bearer ${user.bearerToken}`
+        }
+      })
+  }
+
+  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<void> {
+    const response = ClaimantResponseConverter.convertToClaimantResponse(draft.document)
+    const externalId: string = claim.externalId
+
+    return this.request
+      .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {
+        body: response,
         headers: {
           Authorization: `Bearer ${user.bearerToken}`
         }

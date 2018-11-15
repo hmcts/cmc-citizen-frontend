@@ -17,7 +17,7 @@ import { YourDetails } from 'response/tasks/yourDetails'
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
-import { isPastResponseDeadline } from 'claims/isPastResponseDeadline'
+import { isPastDeadline } from 'claims/isPastDeadline'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
 import { StatementOfMeansTask } from 'response/tasks/statementOfMeansTask'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
@@ -41,7 +41,7 @@ export class TaskListBuilder {
       )
     )
 
-    if (!isPastResponseDeadline(now, claim.responseDeadline)) {
+    if (!isPastDeadline(now, claim.responseDeadline)) {
       tasks.push(
         new TaskListItem(
           'Do you want more time to respond?',
@@ -142,6 +142,12 @@ export class TaskListBuilder {
               ValidationUtils.isValid(draft.partialAdmission.howMuchHaveYouPaid)
             )
           )
+          if (draft.partialAdmission.paymentIntention !== undefined) {
+            draft.partialAdmission.paymentIntention = undefined
+          }
+          if (draft.statementOfMeans !== undefined) {
+            draft.statementOfMeans = undefined
+          }
         } else {
           tasks.push(
             new TaskListItem(
@@ -262,9 +268,12 @@ export class TaskListBuilder {
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
+    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim)
+
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
+      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks,
+      resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : []
     )
       .filter(item => !item.completed)
   }

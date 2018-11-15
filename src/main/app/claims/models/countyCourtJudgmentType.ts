@@ -1,0 +1,5 @@
+export enum CountyCourtJudgmentType {
+  DEFAULT = 'DEFAULT',
+  ADMISSIONS = 'ADMISSIONS',
+  DETERMINATION = 'DETERMINATION'
+}

@@ -22,6 +22,8 @@ const DEFENDANT_PAYMENT_PLAN_FOR_DESERIALISATION = {
   instalmentAmount: 50,
   firstPaymentDate: { year: FUTURE_YEAR, month: 10, day: 10 },
   paymentSchedule: { value: PaymentSchedule.EVERY_MONTH.value, displayValue: PaymentSchedule.EVERY_MONTH.displayValue },
+  completionDate: { year: FUTURE_YEAR, month: 12, day: 10 },
+  paymentLength: '2 months',
   text: 'I owe nothing'
 }
 
@@ -61,7 +63,7 @@ describe('PaymentPlan', () => {
       it('undefined option', () => {
         const errors = validator.validateSync(new PaymentPlan(undefined))
         expect(errors.length).to.equal(3)
-        expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
+        expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
         expectValidationError(errors, ValidationErrors.SCHEDULE_REQUIRED)
         expectValidationError(errors, ValidationErrors.FIRST_PAYMENT_DATE_INVALID)
       })
@@ -74,15 +76,15 @@ describe('PaymentPlan', () => {
         expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
       })
 
-      it('instalment amount <= 0', () => {
+      it('instalment amount <= 0.99', () => {
         const paymentPlan = validPaymentPlan()
-        const valuesToTest = [0, -1]
+        const valuesToTest = [0.99, -1]
 
         valuesToTest.forEach(amount => {
           paymentPlan.instalmentAmount = amount
           const errors = validator.validateSync(paymentPlan)
           expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.INSTALMENTS_AMOUNT_INVALID)
+          expectValidationError(errors, CommonValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
         })
       })
 

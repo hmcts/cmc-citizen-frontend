@@ -41,8 +41,14 @@ import { ClaimType } from 'eligibility/model/claimType'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { MomentFactory } from 'shared/momentFactory'
+import * as moment from 'moment'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
+
+export const samplePaidInFullDraftObj = {
+  datePaid: moment()
+}
 
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
@@ -301,7 +307,27 @@ export const samplePartialAdmissionResponseDraftObj = {
   },
   partialAdmission: {
     alreadyPaid: new AlreadyPaid().deserialize({ alreadyPaid: new AlreadyPaid(YesNoOption.YES) }),
-    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100, date: '2018-02-01', text: 'by Cash' })
+    howMuchHaveYouPaid: new HowMuchHaveYouPaid().deserialize({ amount: 100, date: '2018-02-01', text: 'by Cash' }),
+    paymentIntention: {
+      paymentOption: {
+        option: {
+          value: 'INSTALMENTS'
+        }
+      },
+      paymentPlan: {
+        totalAmount: 3685,
+        instalmentAmount: 100,
+        firstPaymentDate: {
+          year: 2019,
+          month: 1,
+          day: 1
+        },
+        paymentSchedule: {
+          value: 'EVERY_MONTH',
+          displayValue: 'every month'
+        }
+      }
+    }
   }
 }
 
@@ -383,6 +409,24 @@ export const sampleClaimantResponseDraftObj = {
       }
     }
   },
+  courtDetermination: {
+    courtDecision: {
+      paymentOption: {
+        value: 'INSTALMENTS'
+      },
+      repaymentPlan: {
+        instalmentAmount: 4.3333335,
+        firstPaymentDate: '2019-01-01T00:00:00.000',
+        paymentSchedule: 'EVERY_MONTH',
+        completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
+        paymentLength: '20 years 5 months'
+      }
+    },
+    rejectionReason: {
+      text: 'i reject repayment plan because ...'
+    }
+  }
+  ,
   formaliseRepaymentPlan: {
     option: {
       value: 'signSettlementAgreement',
@@ -394,9 +438,6 @@ export const sampleClaimantResponseDraftObj = {
   },
   freeMediation: {
     option: FreeMediationOption.NO
-  },
-  rejectionReason: {
-    text: 'i reject repayment plan because ...'
   }
 }
 
@@ -471,6 +512,12 @@ export function resolveFindAllDrafts (): mock.Scope {
         id: 204,
         type: 'claimantResponse',
         document: sampleClaimantResponseDraftObj,
+        created: '2017-10-03T12:00:00.000',
+        updated: '2017-10-03T12:01:00.000'
+      }, {
+        id: 205,
+        type: 'paid-in-full',
+        document: samplePaidInFullDraftObj,
         created: '2017-10-03T12:00:00.000',
         updated: '2017-10-03T12:01:00.000'
       }]

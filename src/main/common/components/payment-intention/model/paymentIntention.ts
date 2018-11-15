@@ -6,6 +6,8 @@ import {
 import { PaymentDate } from 'main/common/components/payment-intention/model/paymentDate'
 import { PaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
 
+import * as domain from 'claims/models/response/core/paymentIntention'
+
 export class PaymentIntention {
   @IsDefined()
   @ValidateNested()
@@ -21,7 +23,7 @@ export class PaymentIntention {
   @ValidateNested()
   paymentPlan?: PaymentPlan
 
-  static deserialise (input: any): PaymentIntention {
+  static deserialize (input: any): PaymentIntention {
     if (!input) {
       return input
     }
@@ -43,6 +45,28 @@ export class PaymentIntention {
           break
       }
     }
+    return instance
+  }
+
+  toDomainInstance (): domain.PaymentIntention {
+    const instance = new domain.PaymentIntention()
+    instance.paymentOption = this.paymentOption.option.value as any
+
+    switch (this.paymentOption.option) {
+      case PaymentType.BY_SET_DATE:
+        instance.paymentDate = this.paymentDate.date.toMoment()
+        break
+      case PaymentType.INSTALMENTS:
+        instance.repaymentPlan = {
+          instalmentAmount: this.paymentPlan.instalmentAmount,
+          paymentSchedule: this.paymentPlan.paymentSchedule.value as any,
+          firstPaymentDate: this.paymentPlan.firstPaymentDate.toMoment(),
+          completionDate: this.paymentPlan.completionDate.toMoment(),
+          paymentLength: this.paymentPlan.paymentLength
+        }
+        break
+    }
+
     return instance
   }
 }
