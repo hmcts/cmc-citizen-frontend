@@ -92,12 +92,12 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
   }
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
+    const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     if (!paymentPlan) {
       return undefined
     }
 
-    const courtCalculatedPaymentIntention = new PaymentIntention()
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
     courtCalculatedPaymentIntention.paymentDate = paymentPlan.calculateLastPaymentDate()
     return courtCalculatedPaymentIntention

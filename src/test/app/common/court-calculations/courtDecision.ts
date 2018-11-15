@@ -2,6 +2,7 @@ import { expect } from 'chai'
 
 import { CourtDecision, DecisionType } from 'common/court-calculations/courtDecision'
 import moment = require('moment')
+import { MomentFactory } from 'shared/momentFactory'
 
 describe('CourtDecision', () => {
 
@@ -43,11 +44,10 @@ describe('CourtDecision', () => {
       }).to.throw(Error, 'Input should be a moment, cannot be empty')
     })
 
-    it('should return a defendant decision type when no court date is supplied', () => {
-
-      let courtGeneratedPaymentDate = undefined
-
-      expect(CourtDecision.calculateDecision(null, null, courtGeneratedPaymentDate)).to.equal(DecisionType.DEFENDANT)
+    it('should return a defendant decision type when max future court date is supplied', () => {
+      let claimantPaymentDate = moment(new Date()).add(1, 'days')
+      let defendantPaymentDate = moment(new Date()).add(3, 'days')
+      expect(CourtDecision.calculateDecision(defendantPaymentDate, claimantPaymentDate, MomentFactory.maxDate())).to.equal(DecisionType.DEFENDANT)
     })
 
     it('should return a claimant decision type when claimantPaymentDate is after the defendantPaymentDate', () => {
