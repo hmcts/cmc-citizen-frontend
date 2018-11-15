@@ -3,7 +3,7 @@ version: '2.1'
 services:
     citizen-integration-tests:
       image: hmcts/cmc-citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
-      command: test:integration --grep '^(?!.*@admissions)(?!.*@citizen-smoke-test)'
+      command: test:integration --grep '^(?!.*@citizen-smoke-test)'
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=${TEST_URL}
@@ -14,6 +14,7 @@ services:
         - OAUTH_CLIENT_SECRET
         - CLAIM_STORE_URL
         - HEALTHCHECK_CITIZEN=true
+        - FEATURE_ADMISSIONS
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:
