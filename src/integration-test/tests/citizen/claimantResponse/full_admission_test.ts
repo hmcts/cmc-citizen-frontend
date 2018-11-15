@@ -8,7 +8,6 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from './data/ClaimantResponseTestData'
-import { AppClient } from 'integration-test/helpers/clients/appClient'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -16,8 +15,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 // const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
-const isAdmissionsEnabled = async () => { return AppClient.isFeatureAdmissionsEnabled() }
-if (isAdmissionsEnabled) {
+if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response').retry(3)
 
   Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', async (I: I) => {
