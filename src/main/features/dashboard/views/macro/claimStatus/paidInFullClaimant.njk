@@ -10,6 +10,7 @@
     <div class="form-group">
       <p>{{ internalLink(text, DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }), "button button-secondary") | safe }}</p>
     </div>
+    {#else show contactus page#}
   {% endif %}
 {% endmacro %}
 
@@ -19,15 +20,17 @@
 
 {% macro paidInFullClaimantClaimSettledDetails(claim) %}
   <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
-  <p> {{ t('{{ defendantName }} paid you £{{ totalAmountTillToday }} on {{ moneyReceivedOn }}.', { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday, moneyReceivedOn: claim.moneyReceivedOn | date }) }} </p>
+  <p>{{ t('{{ defendantName }} paid you £{{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
+      { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday,
+        moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
 {% endmacro %}
 
 {% macro paidInFullCCJCancelledClaimantClaimDetails(claim) %}
-  {{  paidInFullClaimantClaimSettledDetails(claim) }}
+  {{ paidInFullClaimantClaimSettledDetails(claim) }}
   <p>{{ t('The defendant’s County Court Judgment has been cancelled.') }}</p>
 {% endmacro %}
 
 {% macro paidInFullCCJSatisfiedClaimantClaimDetails(claim) %}
-  {{  paidInFullClaimantClaimSettledDetails(claim) }}
+  {{ paidInFullClaimantClaimSettledDetails(claim) }}
   <p>{{ t('The defendant’s County Court Judgment has been marked as paid.') }}</p>
 {% endmacro %}

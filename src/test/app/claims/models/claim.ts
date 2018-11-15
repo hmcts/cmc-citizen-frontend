@@ -191,6 +191,7 @@ describe('Claim', () => {
       claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.CLAIMANT)
       claim.respondedAt = MomentFactory.currentDateTime()
 
+      // why does it return CLAIMANT_ACCEPTED_ADMISSION ?
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT)
     })
 
@@ -332,10 +333,9 @@ describe('Claim', () => {
         defendant: new Individual().deserialize(individual)
       }
 
-      expect(claim.stateHistory).to.have.lengthOf(3)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
-      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should return OFFER_REJECTED when offer is rejected', () => {
@@ -344,23 +344,21 @@ describe('Claim', () => {
         partyStatements: [offer, offerRejection]
       })
 
-      expect(claim.stateHistory).to.have.lengthOf(3)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
-      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if not responded to', () => {
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if response submitted but no offer made', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
     })
 
@@ -370,10 +368,9 @@ describe('Claim', () => {
       claim.settlement = new Settlement()
       claim.settlementReachedAt = moment()
 
-      expect(claim.stateHistory).to.have.lengthOf(3)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
-      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
   })
 
