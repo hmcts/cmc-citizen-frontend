@@ -57,7 +57,6 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
       }
-
       return courtOfferedPaymentIntention
     }
 
@@ -86,6 +85,7 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
     const courtCalculatedPaymentIntention = new PaymentIntention()
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
     courtCalculatedPaymentIntention.paymentDate = paymentPlan.calculateLastPaymentDate()
+
     return courtCalculatedPaymentIntention
   }
 

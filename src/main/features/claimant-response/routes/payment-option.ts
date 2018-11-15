@@ -92,12 +92,12 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
   }
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
-    const courtCalculatedPaymentIntention = new PaymentIntention()
     const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     if (!paymentPlan) {
       return undefined
     }
 
+    const courtCalculatedPaymentIntention = new PaymentIntention()
     courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
     courtCalculatedPaymentIntention.paymentDate = paymentPlan.calculateLastPaymentDate()
     return courtCalculatedPaymentIntention
@@ -156,10 +156,11 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-    return statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
+    const disposableIncome = statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
       response.statementOfMeans,
       response.defendant.type,
       PaymentOptionPage.getDateOfBirth(response.defendant))
+    return disposableIncome === 0 ? 0 : (disposableIncome * 100) / 100
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {

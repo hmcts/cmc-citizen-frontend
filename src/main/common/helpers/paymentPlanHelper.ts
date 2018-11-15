@@ -64,8 +64,8 @@ export class PaymentPlanHelper {
       )
     }
 
-    if (draft.courtDetermination.disposableIncome === 0) {
-      return undefined
+    if (draft.courtDetermination.disposableIncome <= 0) {
+      return PaymentPlan.create(0, 0, undefined, MomentFactory.maxDate())
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
@@ -84,8 +84,8 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    if (draft.courtDetermination.disposableIncome === 0) {
-      return undefined
+    if (draft.courtDetermination.disposableIncome <= 0) {
+      return PaymentPlan.create(0, 0, undefined, MomentFactory.maxDate())
     }
 
     const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)

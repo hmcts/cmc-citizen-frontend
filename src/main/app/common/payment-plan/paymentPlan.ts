@@ -40,6 +40,9 @@ export class PaymentPlan {
   }
 
   calculateLastPaymentDate (): moment.Moment {
+    if (MomentFactory.maxDate().isSame(this.startDate)) {
+      return this.startDate
+    }
     const timeToCompletePaymentsInWeeks: number = this.numberOfInstalments * this.frequency.inWeeks
     return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
   }
