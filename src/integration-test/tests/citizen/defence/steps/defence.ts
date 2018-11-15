@@ -291,7 +291,12 @@ export class DefenceSteps {
         this.rejectAllOfClaimAsDisputeClaim()
         I.see('Why do you disagree with the claim?')
         this.submitDefenceText('I fully dispute this claim')
-        this.addTimeLineOfEvents({ events: [{ date: 'may', description: 'ok' } as TimelineEvent, { date: 'june', description: 'ok' } as TimelineEvent] } as Timeline)
+        this.addTimeLineOfEvents({
+          events: [{ date: 'may', description: 'ok' } as TimelineEvent, {
+            date: 'june',
+            description: 'ok'
+          } as TimelineEvent]
+        } as Timeline)
         this.enterEvidence('description', 'comment')
         this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
@@ -304,6 +309,7 @@ export class DefenceSteps {
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)
+        this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         if (isClaimAlreadyPaid) {
           I.see('How much money have you paid?')
@@ -314,10 +320,12 @@ export class DefenceSteps {
       default:
         throw new Error('Unknown DefenceType')
     }
-
-    I.wait(10)
     this.checkAndSendAndSubmit(defendantType)
-    I.see('You’ve submitted your response')
+    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
+      I.see('You’ve submitted your response')
+    } else {
+      I.see('Next steps')
+    }
   }
 
   makeFullAdmission (
@@ -402,9 +410,9 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence('I have already paid for the bill')
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
+    this.askForMediation()
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
-
     I.see('You’ve submitted your response')
   }
 
@@ -440,7 +448,6 @@ export class DefenceSteps {
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
-
     defendantTaskListPage.selectTaskFreeMediation()
     defendantFreeMediationPage.chooseNo()
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()

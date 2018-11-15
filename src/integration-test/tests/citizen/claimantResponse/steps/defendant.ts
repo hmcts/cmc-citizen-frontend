@@ -67,12 +67,13 @@ export class DefendantResponseSteps {
     defenceSteps.requestNoExtraTimeToRespond()
     defenceSteps.rejectAllOfClaimAsAlreadyPaid()
     defendantSteps.selectTaskTellUsHowMuchYouHavePaid()
+
     howMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(
       claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.paidAmount,
       claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.date,
       claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation.explanation
     )
-    if (! isClaimTotalPaid) {
+    if (!isClaimTotalPaid) {
       youHavePaidLessPage.continue()
       defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
       whyYouDisagreePage.enterReason(claimantResponseTestData.pageSpecificValues.whyYouDisagreePageEnterReason)
