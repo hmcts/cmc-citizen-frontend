@@ -128,7 +128,6 @@ describe('claimant response converter ', () => {
     it(' Accept defendant offer with CCJ', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
-      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,
@@ -140,7 +139,6 @@ describe('claimant response converter ', () => {
     it(' Accept defendant offer with settlement', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
-      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'ACCEPTATION',
         'amountPaid': 10,
@@ -151,7 +149,6 @@ describe('claimant response converter ', () => {
 
     it(' Accept defendant offer with unknown formalise option', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
-      draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('xyz', 'xyz'))
       const errMsg = 'Unknown formalise repayment option xyz'
       expect(() => converter.convertToClaimantResponse(draftClaimantResponse)).to.throw(Error, errMsg)

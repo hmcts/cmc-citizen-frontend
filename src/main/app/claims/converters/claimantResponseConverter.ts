@@ -39,13 +39,15 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
-    const courtDetermination: DomainCourtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
-    if (courtDetermination) {
-      respAcceptance.courtDetermination = courtDetermination
-    }
-    const claimantPaymentIntention: DomainPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
-    if (claimantPaymentIntention) {
-      respAcceptance.claimantPaymentIntention = claimantPaymentIntention
+    if (draftClaimantResponse.courtDetermination) {
+      const courtDetermination: DomainCourtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
+      if (courtDetermination) {
+        respAcceptance.courtDetermination = courtDetermination
+      }
+      const claimantPaymentIntention: DomainPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
+      if (claimantPaymentIntention) {
+        respAcceptance.claimantPaymentIntention = claimantPaymentIntention
+      }
     }
     return respAcceptance
   }
@@ -65,7 +67,7 @@ export class ClaimantResponseConverter {
       responseCourtDetermination.rejectionReason = courtDetermination.rejectionReason.text
     }
     responseCourtDetermination.disposableIncome = courtDetermination.disposableIncome ? courtDetermination.disposableIncome : 0
-    responseCourtDetermination.decisionType = courtDetermination.decisionType
+    responseCourtDetermination.decisionType = decisionType
     return responseCourtDetermination
   }
 
