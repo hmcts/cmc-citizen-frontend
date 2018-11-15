@@ -410,6 +410,7 @@ export class DefenceSteps {
         statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
         break
       case PaymentOption.INSTALMENTS:
+        defendantRepaymentPlan.equalInstalment = 5.00  // total claimed = £10
         defendantWhenWillYouPage.chooseInstalments()
         defendantTaskListPage.selectYourRepaymentPlanTask()
         defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
