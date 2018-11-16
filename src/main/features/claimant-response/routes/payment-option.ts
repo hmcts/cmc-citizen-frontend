@@ -160,7 +160,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
       response.statementOfMeans,
       response.defendant.type,
       PaymentOptionPage.getDateOfBirth(response.defendant))
-    return disposableIncome === 0 ? 0 : (disposableIncome * 100) / 100
+    return disposableIncome === 0 ? 0 : Math.round(disposableIncome * 100) / 100
   }
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {

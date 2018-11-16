@@ -65,7 +65,7 @@ export class PaymentPlanHelper {
     }
 
     if (draft.courtDetermination.disposableIncome <= 0) {
-      return PaymentPlanHelper.createPaymentPlanFromStartDate(totalAmount, MomentFactory.maxDate())
+      return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
@@ -85,7 +85,7 @@ export class PaymentPlanHelper {
     }
 
     if (draft.courtDetermination.disposableIncome <= 0) {
-      return PaymentPlanHelper.createPaymentPlanFromStartDate(AdmissionHelper.getAdmittedAmount(claim), MomentFactory.maxDate())
+      return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
     const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
@@ -145,11 +145,7 @@ export class PaymentPlanHelper {
     return PaymentPlan.create(totalAmount, instalmentAmount, frequency, firstPaymentDate)
   }
 
-  private static createPaymentPlanFromStartDate (totalAmount: number, firstPaymentDate: Moment): PaymentPlan {
-    if (!totalAmount) {
-      return undefined
-    }
-
-    return PaymentPlan.create(totalAmount, 0, Frequency.WEEKLY, firstPaymentDate)
+  private static createPaymentPlanFromStartDate (firstPaymentDate: Moment): PaymentPlan {
+    return PaymentPlan.create(0, 0, Frequency.WEEKLY, firstPaymentDate)
   }
 }
