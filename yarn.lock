@@ -80,9 +80,9 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@hmcts/cmc-common-frontend@^1.51.1":
-  version "1.51.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.51.1.tgz#33f4a15652b6c0c665b452f140f88ecd553037d0"
+"@hmcts/cmc-common-frontend@^1.51.2":
+  version "1.51.2"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.51.2.tgz#ff4663766746226734c8ff5425485b052b2053b4"
 
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
@@ -3537,9 +3537,9 @@ i18next-conv@^8.0.1:
     mkdirp "^0.5.1"
     node-gettext "^2.0.0"
 
-i18next-express-middleware@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/i18next-express-middleware/-/i18next-express-middleware-1.4.1.tgz#273c4a490ad688ce246815ce1288689c63fa7de1"
+i18next-express-middleware@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/i18next-express-middleware/-/i18next-express-middleware-1.5.0.tgz#02dd5dbeb3b8e00f7c837ca6724e07257cb9a340"
   dependencies:
     cookies "0.7.1"
 
@@ -5161,9 +5161,9 @@ nunjucks-numeral-filter@0.0.2:
   dependencies:
     numeral "^2.0.4"
 
-nunjucks@^3.1.3:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/nunjucks/-/nunjucks-3.1.3.tgz#9a23c844af01c143a0b40f3bdd1212a9d7877260"
+nunjucks@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/nunjucks/-/nunjucks-3.1.4.tgz#d15d7b6c4215d2525f991b948335e16502fa1bfa"
   dependencies:
     a-sync-waterfall "^1.0.0"
     asap "^2.0.3"
@@ -7272,9 +7272,9 @@ ts-node@^7.0.1:
     source-map-support "^0.5.6"
     yn "^2.0.0"
 
-tsconfig-paths@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.6.0.tgz#f14078630d9d6e8b1dc690c1fc0cfb9cd0663891"
+tsconfig-paths@^3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.7.0.tgz#02ae978db447b22e09dafcd4198be95c4885ceb2"
   dependencies:
     "@types/json5" "^0.0.29"
     deepmerge "^2.0.1"

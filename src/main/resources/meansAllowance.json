@@ -36,45 +36,45 @@
   "pensioner": [
     {
       "item": "DEFENDANT_ONLY",
-      "weekly": 78.10,
-      "monthly": 335.83
+      "weekly": 89.90,
+      "monthly": 386.57
     },
     {
       "item": "DEFENDANT_AND_PARTNER",
-      "weekly": 116.00,
-      "monthly": 502.66
+      "weekly": 133.95,
+      "monthly": 575.99
     }
   ],
   "disability": [
     {
       "item": "DEFENDANT_ONLY",
-      "weekly": 32.25,
-      "monthly": 139.75
+      "weekly": 33.55,
+      "monthly": 144.27
     },
     {
       "item": "DEFENDANT_AND_PARTNER",
-      "weekly": 49.95,
-      "monthly": 199.12
+      "weekly": 47.80,
+      "monthly": 205.54
     },
     {
       "item": "DEFENDANT_ONLY_SEVERE",
-      "weekly": 61.85,
-      "monthly": 268.01
+      "weekly": 64.30,
+      "monthly": 276.49
     },
     {
       "item": "DEFENDANT_AND_PARTNER_SEVERE",
-      "weekly": 123.70,
-      "monthly": 536.03
+      "weekly": 128.60,
+      "monthly": 552.98
     },
     {
       "item": "DEPENDANT",
-      "weekly": 60.06,
-      "monthly": 260.26
+      "weekly": 62.86,
+      "monthly": 270.30
     },
     {
       "item": "CARER",
-      "weekly": 34.60,
-      "monthly": 149.93
+      "weekly": 36.00,
+      "monthly": 154.80
     }
   ]
 }

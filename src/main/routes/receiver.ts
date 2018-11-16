@@ -120,6 +120,10 @@ export default express.Router()
           res.locals.isLoggedIn = true
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
+        } else {
+
+          trackCustomEvent('Authentication token undefined',
+            { requestValue: req.query.state })
         }
       } catch (err) {
         return loginErrorHandler(req, res, cookies, next, err)

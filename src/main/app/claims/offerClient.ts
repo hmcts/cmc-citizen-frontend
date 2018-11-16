@@ -5,7 +5,6 @@ import { User } from 'idam/user'
 import { Offer as OfferForm } from 'features/offer/form/models/offer'
 import * as config from 'config'
 import { request } from 'client/request'
-import { Settlement } from 'claims/models/settlement'
 
 export const claimStoreApiUrl: string = `${config.get<string>('claim-store.url')}/claims`
 
@@ -42,15 +41,6 @@ export class OfferClient {
   static countersignOffer (externalId: string, user: User): Promise<Claim> {
     return request.post(`${claimStoreApiUrl}/${externalId}/offers/defendant/countersign`, {
       body: '',
-      headers: {
-        Authorization: `Bearer ${user.bearerToken}`
-      }
-    })
-  }
-
-  static signSettlementAgreement (externalId: string, user: User, settlement: Settlement): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${externalId}/settlement`, {
-      body: settlement,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }
