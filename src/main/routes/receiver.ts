@@ -139,6 +139,10 @@ export default express.Router()
           res.redirect(await retrieveRedirectForLandingPage(req, res))
         }
       } else {
+        if (res.locals.code) {
+          trackCustomEvent('Authentication token undefined (jwt defined)',
+            { requestValue: req.query.state })
+        }
         res.redirect(OAuthHelper.forLogin(req, res))
       }
     }))
