@@ -18,6 +18,10 @@
             {{ t('You’ve signed a settlement agreement') }}
           {% elseif claim.countyCourtJudgmentIssuedAt %}
             {{ t('County Court Judgment issued') }}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+            {{ t('You’ve rejected their response') }}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
+            {{ t('You’ve accpeted their response') }}
           {% endif %}
         </h1>
         <p class="reference-number">
@@ -35,7 +39,6 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-
       {% if claim.countyCourtJudgmentIssuedAt %}
         {% if paymentIntentionAccepted %}
           <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
@@ -48,6 +51,18 @@
         {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
+        <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
+      {% elseif claim.claimantResponse.freeMediation %}
+        <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
+        <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+        <p>
+          {{ t('You need to')}}
+          <a href="{{ DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }}">
+             {{ t('complete a directions questionnaire form ')}}</a> {{ t('to tell us more about the claim.')}}
+        </p>
+        <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ responseDeadline }}.', { responseDeadline: claim.responseDeadline | date }) }}</p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}
