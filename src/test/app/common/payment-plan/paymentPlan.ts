@@ -110,11 +110,10 @@ const TESTS_FOR_LAST_PAYMENT_DATE = [
 ]
 
 frequencies.forEach(frequency => {
-  describe.only(`when frequency is ${frequency}`, () => {
+  describe(`when frequency is ${frequency}`, () => {
     TESTS_FOR_LAST_PAYMENT_DATE.forEach(test => {
-      it(`${test.desc} ${test.claimAmount / test.instalmentAmount} installments in the future starting from ${test.fromDate}`, () => {
+      it(`${test.desc} ${test.claimAmount / test.instalmentAmount} installments in the future starting from ${test.fromDate.format('YYYY-MM-DD')}`, () => {
         const paymentPlan = PaymentPlan.create(test.claimAmount, test.instalmentAmount, Frequency.of(frequency), test.fromDate)
-        // console.log(paymentPlan.calculateLastPaymentDate())
         expect(paymentPlan.calculateLastPaymentDate().isSame(test.expected[frequency])).to.be.true
       })
     })
