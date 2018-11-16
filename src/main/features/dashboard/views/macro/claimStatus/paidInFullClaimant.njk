@@ -10,7 +10,10 @@
     <div class="form-group">
       <p>{{ internalLink(text, DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }), "button button-secondary") | safe }}</p>
     </div>
-    {#else show contactus page#}
+    {% else %}
+      <div class="form-group">
+        <p>{{ internalLink(text, AppPaths.contactUsPage.uri, "button button-secondary") | safe }}</p>
+      </div>
   {% endif %}
 {% endmacro %}
 

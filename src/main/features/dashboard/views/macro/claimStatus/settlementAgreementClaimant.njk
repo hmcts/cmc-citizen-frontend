@@ -58,7 +58,7 @@
   <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
   <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
   <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-  <a href="{{ DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }) }}" class="button button-secondary">Tell us you've been paid</a>
+  {{ paidInFullClaimantButtonClaimDetails(claim) }}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -75,7 +75,8 @@
     <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
     <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
     <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-    <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary form-group">Tell us you've been paid</a>
+    {{ paidInFullClaimantButtonClaimDetails(claim) }}
+
   </div>
 {% endmacro %}
 
