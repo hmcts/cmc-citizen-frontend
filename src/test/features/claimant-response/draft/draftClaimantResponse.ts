@@ -51,6 +51,12 @@ describe('DraftClaimantResponse', () => {
           amount: 999,
           claimedAmount: 1000
         },
+        partPaymentReceived: {
+          received: YesNoOption.YES
+        },
+        accepted: {
+          accepted: YesNoOption.NO
+        },
         courtDetermination: new CourtDetermination(
           intentionOfImmediatePayment,
           intentionOfPaymentByInstalments,
@@ -73,6 +79,8 @@ describe('DraftClaimantResponse', () => {
       expect(draft.paidAmount.option).to.be.equal(PaidAmountOption.YES)
       expect(draft.paidAmount.amount).to.be.equal(999)
       expect(draft.paidAmount.claimedAmount).to.be.equal(1000)
+      expect(draft.partPaymentReceived.received.option).to.be.equal(YesNoOption.YES.option)
+      expect(draft.accepted.accepted.option).to.be.equal(YesNoOption.NO.option)
       expect(draft.courtDetermination).to.be.instanceOf(CourtDetermination)
     })
 
