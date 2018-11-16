@@ -399,18 +399,6 @@ export function resolveClaimantResponse () {
     .reply(HttpStatus.OK)
 }
 
-export function resolveSettlement () {
-  mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/settlement'))
-    .reply(HttpStatus.CREATED)
-}
-
-export function rejectSettlement () {
-  mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/settlement'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
-}
-
 export function resolveSavePaidInFull () {
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
