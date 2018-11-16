@@ -11,47 +11,75 @@
 
     {{ tableStart('yourResponse', 'Your response') }}
 
-    {% if draft.settleAdmitted %}
-      {% if draft.settleAdmitted.admitted.option === 'yes' %}
-        {% set settleAdmittedResponse = 'I accept this amount' %}
-      {% else %}
-        {% set settleAdmittedResponse = 'I reject this amount' %}
+    {% if alreadyPaid %}
+
+      {% if draft.partPaymentReceived %}
+        {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
+          value = draft.partPaymentReceived.received | yesNo,
+          changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+      {% endif %}
+
+      {% if draft.accepted %}
+        {% if draft.partPaymentReceived %}
+          {% set paymentAcceptedText = 'Do you want to settle the claim for the ' + amount | numeral + '?' %}
+        {% else %}
+          {% set paymentAcceptedText = 'Do you agree the defendant has paid ' + amount | numeral + '?'  %}
+        {% endif %}
+        {{ row(label = paymentAcceptedText, bold = true, value = draft.accepted.accepted | yesNo,
+          changeLink = ClaimantResponsePaths.settleClaimPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+      {% endif %}
+
+      {% if draft.rejectionReason %}
+        {{ row(label = 'Reason for rejecting their response', bold = true, value = draft.rejectionReason.text,
+          changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+      {% endif %}
+
+      {% if draft.freeMediation %}
+        {{ row(label = 'Will you try free mediation?', bold = true, value = draft.freeMediation.option | yesNo,
+          changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+      {% endif %}
+    {% else %}
+      {% if draft.settleAdmitted %}
+        {% if draft.settleAdmitted.admitted.option === 'yes' %}
+          {% set settleAdmittedResponse = 'I accept this amount' %}
+        {% else %}
+          {% set settleAdmittedResponse = 'I reject this amount' %}
         {% if draft.freeMediation.option === 'yes' %}
           {% set freeMediationResponse =  'Yes' %}
         {% else %}
           {% set freeMediationResponse = 'No' %}
         {% endif %}
-      {% endif %}
-
-      {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
-        changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-      {% if draft.settleAdmitted.admitted.option === 'no' and claim.response.freeMediation === 'yes' %}
-        {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
-          changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
-      {% endif %}
-    {% endif %}
-
-    {% if draft.acceptPaymentMethod %}
-      {% if draft.acceptPaymentMethod.accept.option === 'yes' %}
-        {% set acceptPaymentMethodResponse = 'I accept this repayment plan' %}
-      {% else %}
-        {% set acceptPaymentMethodResponse = 'I reject this repayment plan' %}
-      {% endif %}
-
-      {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
-        changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-
-      {% if draft.acceptPaymentMethod.accept.option === 'no' %}
-        {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
-          {% set alternatePaymentMethodResponse = t('Immediately') %}
-        {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-          {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: paymentIntention.paymentDate | date }) %}
-        {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-          {% set alternatePaymentMethodResponse = t('By instalments') %}
         {% endif %}
 
-        {{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
-          changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
+          changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        {% if draft.settleAdmitted.admitted.option === 'no' and claim.response.freeMediation === 'yes' %}
+          {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
+            changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
+        {% endif %}
+      {% endif %}
+
+      {% if draft.acceptPaymentMethod %}
+        {% if draft.acceptPaymentMethod.accept.option === 'yes' %}
+          {% set acceptPaymentMethodResponse = 'I accept this repayment plan' %}
+        {% else %}
+          {% set acceptPaymentMethodResponse = 'I reject this repayment plan' %}
+        {% endif %}
+
+        {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
+          changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+
+        {% if draft.acceptPaymentMethod.accept.option === 'no' %}
+          {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+            {% set alternatePaymentMethodResponse = t('Immediately') %}
+          {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+            {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: paymentIntention.paymentDate | date }) %}
+          {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+            {% set alternatePaymentMethodResponse = t('By instalments') %}
+          {% endif %}
+
+          {{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
+            changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
         {% if paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
           {{ row(label = 'Regular payments of', bold = true, value = paymentIntention.repaymentPlan.instalmentAmount | numeral,
@@ -62,6 +90,8 @@
             bottomBorder = true) }}
         {% endif %}
       {% endif %}
+    {% endif %}
+
     {% endif %}
 
     {{ tableEnd() }}
