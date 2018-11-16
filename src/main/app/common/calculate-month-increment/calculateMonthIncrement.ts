@@ -1,7 +1,7 @@
 import * as moment from 'moment'
 
 export function calculateMonthIncrement (startDate: moment.Moment, monthsToAdd?: number) {
-  if (!startDate || !monthsToAdd) {
+  if (!startDate || monthsToAdd === null) {
     return startDate
   }
 

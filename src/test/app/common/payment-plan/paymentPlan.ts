@@ -3,6 +3,7 @@ import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Frequency } from 'common/frequency/frequency'
 import { expect } from 'chai'
 import * as moment from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 const TOTAL_AMOUNT = 20
 const TOTAL_AMOUNT_2 = 1643.20
@@ -80,28 +81,28 @@ frequencies.forEach(frequency => {
 
 const TESTS_FOR_LAST_PAYMENT_DATE = [
   {
-    desc: 'should return a final payment date ',
+    desc: 'should return a final payment date',
     claimAmount: TOTAL_AMOUNT_3,
     instalmentAmount: TOTAL_AMOUNT_3,
     fromDate: moment('2019-01-01'),
     expected: { WEEK: moment('2019-01-01'), TWO_WEEK: moment('2019-01-01'), MONTH: moment('2019-01-01') }
   },
   {
-    desc: 'should return a final payment date ',
+    desc: 'should return a final payment date',
     claimAmount: TOTAL_AMOUNT_3,
     instalmentAmount: TOTAL_AMOUNT_3 / 2,
     fromDate: moment('2019-01-30'),
     expected: { WEEK: moment('2019-02-06'), TWO_WEEK: moment('2019-02-13'), MONTH: moment('2019-03-01') }
   },
   {
-    desc: 'should return a final payment date ',
+    desc: 'should return a final payment date',
     claimAmount: TOTAL_AMOUNT_3,
     instalmentAmount: TOTAL_AMOUNT_3 / 4,
     fromDate: moment('2019-01-31'),
     expected: { WEEK: moment('2019-02-21'), TWO_WEEK: moment('2019-03-14'), MONTH: moment('2019-05-01') }
   },
   {
-    desc: 'should return a final payment date ',
+    desc: 'should return a final payment date',
     claimAmount: TOTAL_AMOUNT_3,
     instalmentAmount: TOTAL_AMOUNT_3 / 13,
     fromDate: moment('2020-02-29'),
@@ -112,9 +113,12 @@ const TESTS_FOR_LAST_PAYMENT_DATE = [
 frequencies.forEach(frequency => {
   describe(`when frequency is ${frequency}`, () => {
     TESTS_FOR_LAST_PAYMENT_DATE.forEach(test => {
-      it(`${test.desc} ${test.claimAmount / test.instalmentAmount} installments in the future starting from ${test.fromDate.format('YYYY-MM-DD')}`, () => {
-        const paymentPlan = PaymentPlan.create(test.claimAmount, test.instalmentAmount, Frequency.of(frequency), test.fromDate)
-        expect(paymentPlan.calculateLastPaymentDate().isSame(test.expected[frequency])).to.be.true
+      it(`${test.desc} ${test.claimAmount / test.instalmentAmount} installments in the future
+        starting from ${test.fromDate.format('YYYY-MM-DD')}`, () => {
+        const paymentPlan = PaymentPlan.create(test.claimAmount, test.instalmentAmount,
+                                              Frequency.of(frequency), test.fromDate)
+        expect(paymentPlan.calculateLastPaymentDate().format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse(test.expected[frequency]).format('YYYY-MM-DD'))
       })
     })
   })
