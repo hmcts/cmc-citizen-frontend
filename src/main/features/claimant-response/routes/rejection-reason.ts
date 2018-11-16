@@ -8,12 +8,16 @@ import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
+import { Claim } from 'claims/models/claim'
+import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 
 function renderView (form: Form<RejectionReason>, res: express.Response) {
+  const claim: Claim = res.locals.claim
   res.render(Paths.rejectionReasonPage.associatedView, {
-    form: form
+    form: form,
+    alreadyPaid: StatesPaidHelper.isResponseAlreadyPaid(claim)
   })
 }
 
@@ -23,9 +27,9 @@ export default express.Router()
     Paths.rejectionReasonPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
-      renderView(new Form(draft.document.courtDetermination.rejectionReason), res)
+      renderView(new Form(draft.document.rejectionReason), res)
     })
-    )
+  )
   .post(
     Paths.rejectionReasonPage.uri,
     FormValidator.requestHandler(RejectionReason),
@@ -39,8 +43,11 @@ export default express.Router()
 
         draft.document.settlementAgreement = undefined
 
-        draft.document.courtDetermination.rejectionReason = form.model
-        draft.document.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
+        draft.document.rejectionReason = form.model
+
+        if (!StatesPaidHelper.isResponseAlreadyPaid(res.locals.claim)) {
+          draft.document.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
+        }
 
         await new DraftService().save(draft, user.bearerToken)
 
@@ -48,4 +55,4 @@ export default express.Router()
         res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
       }
     })
-    )
+  )

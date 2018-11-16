@@ -46,8 +46,10 @@ import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
-import { Disability } from 'response/form/models/statement-of-means/disability'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
+import { Disability } from 'response/form/models/statement-of-means/disability'
+import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 import { DecisionType } from 'common/court-calculations/courtDecision'
 import { MadeBy } from 'offer/form/models/madeBy'
 
@@ -109,6 +111,7 @@ export class Nunjucks {
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('monthIncrement', monthIncrementFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
+    nunjucksEnv.addFilter('yesNo', yesNoFilter)
     nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
@@ -133,6 +136,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
+    nunjucksEnv.addGlobal('ClaimantResponseType', ClaimantResponseType)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
