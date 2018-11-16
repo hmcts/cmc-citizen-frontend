@@ -2,6 +2,7 @@ import { MomentFormatter } from 'utils/momentFormatter'
 import * as moment from 'moment'
 import { Logger } from '@hmcts/nodejs-logging'
 import { MomentFactory } from 'shared/momentFactory'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 const logger = Logger.getLogger('modules/nunjucks/dateFilter')
 
@@ -94,6 +95,43 @@ export function addDaysFilter (value: moment.Moment | string, num: number): mome
       throw new Error('Invalid date')
     }
     return date.add(num, 'day')
+  } catch (err) {
+    logger.error(err)
+    throw err
+  }
+}
+
+/* *
+ * This filter should be used when you need to return a monthly increment from a given date.
+ * The keyword 'now' may be given as input to generate dates relative to the current date.
+ *
+ * Usage (in njk):
+ * Example 1:
+ * {{ someMoment | monthIncrementFilter('2018-01-01') }}
+ *
+ * output:
+ *  a moment representing the date for a monthly increment
+ */
+export function monthIncrementFilter (value: moment.Moment | string): moment.Moment {
+  try {
+    if (!value || !(typeof value === 'string' || value instanceof moment)) {
+      throw new Error('Input should be moment or string, cannot be empty')
+    }
+
+    let date: moment.Moment
+    if (typeof value === 'string') {
+      if (value === 'now') {
+        date = moment()
+      } else {
+        date = moment(value)
+      }
+    } else {
+      date = value
+    }
+    if (!date.isValid()) {
+      throw new Error('Invalid date')
+    }
+    return calculateMonthIncrement(date)
   } catch (err) {
     logger.error(err)
     throw err

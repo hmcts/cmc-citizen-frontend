@@ -84,11 +84,11 @@ describe('calculateMonthIncrement', () => {
     expect(calculateMonthDate.toString()).to.equal(MomentFactory.parse('2019-01-31').toString())
   })
 
-  it('should return null when given a null start date', () => {
-    expect(calculateMonthIncrement(null)).to.be.equal(null)
+  it('should return error when given a null start date', () => {
+    expect(() => { calculateMonthIncrement(null) }).to.throw(Error, 'Start Date is invalid')
   })
 
   it('should return undefined when given an undefined start date', () => {
-    expect(calculateMonthIncrement(undefined)).to.be.equal(undefined)
+    expect(() => { calculateMonthIncrement(undefined) }).to.throw(Error, 'Start Date is invalid')
   })
 })

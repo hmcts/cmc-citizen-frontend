@@ -6,8 +6,11 @@ import { SettlementAgreement } from 'claimant-response/form/models/settlementAgr
 import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/partPaymentReceived'
+import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
+import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -20,8 +23,11 @@ export class DraftClaimantResponse extends DraftDocument {
   alternatePaymentMethod?: DraftPaymentIntention
   freeMediation?: FreeMediation
   paidAmount?: PaidAmount
+  partPaymentReceived?: PartPaymentReceived
+  accepted?: ClaimSettled
   acceptCourtOffer?: AcceptCourtOffer
   courtDetermination?: CourtDetermination
+  rejectionReason?: RejectionReason
 
   constructor () {
     super()
@@ -51,6 +57,12 @@ export class DraftClaimantResponse extends DraftDocument {
       if (input.paidAmount) {
         this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       }
+      if (input.partPaymentReceived) {
+        this.partPaymentReceived = new PartPaymentReceived().deserialize(input.partPaymentReceived)
+      }
+      if (input.accepted) {
+        this.accepted = new ClaimSettled().deserialize(input.accepted)
+      }
       if (input.acceptCourtOffer) {
         this.acceptCourtOffer = new AcceptCourtOffer().deserialize(input.acceptCourtOffer)
       }
@@ -62,6 +74,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.courtDetermination) {
         this.courtDetermination = new CourtDetermination().deserialize(input.courtDetermination)
+      }
+      if (input.rejectionReason) {
+        this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
       }
     }
     return this
