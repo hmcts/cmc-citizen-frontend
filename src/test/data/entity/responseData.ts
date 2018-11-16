@@ -35,6 +35,16 @@ export const defenceWithDisputeData = {
   defenceType: 'DISPUTE'
 }
 
+export const defenceWithAmountClaimedAlreadyPaidData = {
+  ...baseResponseData,
+  ...baseDefenceData,
+  defenceType: 'ALREADY_PAID',
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  }
+}
+
 const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
   freeMediation: 'no'

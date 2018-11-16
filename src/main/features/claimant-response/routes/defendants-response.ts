@@ -10,22 +10,27 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { ResponseType } from 'claims/models/response/responseType'
+import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
 
   return claim.response.responseType === ResponseType.FULL_ADMISSION
-    || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)
+    || (claim.response.responseType === ResponseType.PART_ADMISSION)
+    || (claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.paymentDeclaration !== undefined)
 }, (req: express.Request): void => {
   throw new NotFoundError(req.path)
 })
 
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
+  const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
   res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
-    page: page
+    page: page,
+    alreadyPaid: alreadyPaid,
+    partiallyPaid: alreadyPaid ? StatesPaidHelper.isAlreadyPaidLessThanAmount(claim) : undefined
   })
 }
 
@@ -45,8 +50,10 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
+      const claim: Claim = res.locals.claim
+      const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
-      if (req.body.action && req.body.action.showPage) {
+      if (req.body.action && req.body.action.showPage && !alreadyPaid) {
         const page: number = +req.body.action.showPage
         return renderView(res, page)
       }

@@ -32,7 +32,6 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
       ...statementOfMeansWithMandatoryFieldsOnlyData
     }
   },
-  directionsQuestionnaireDeadline: '2010-10-10',
   countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
   countyCourtJudgment: {
     defendantDateOfBirth: '1990-11-01',
