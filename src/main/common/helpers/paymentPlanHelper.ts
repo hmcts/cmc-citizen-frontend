@@ -18,6 +18,7 @@ import { PaymentIntention as PI } from 'claims/models/response/core/paymentInten
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { AdmissionHelper } from 'shared/helpers/admissionHelper'
+import { PartyType } from 'common/partyType'
 
 export class PaymentPlanHelper {
 
@@ -76,6 +77,10 @@ export class PaymentPlanHelper {
 
   static createPaymentPlanFromDefendantFinancialStatement (claim: Claim, draft: DraftClaimantResponse): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    if (claim.response.defendant.type === PartyType.COMPANY.value) {
+      return undefined
+    }
 
     if (response === undefined) {
       throw new Error('Claim does not have response attached')

@@ -21,6 +21,7 @@ import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { PartyType } from 'common/partyType'
 
 export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
@@ -121,8 +122,12 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
-    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
 
+    if (claim.response.defendant.type === PartyType.COMPANY.value) {
+      return Paths.taskListPage.evaluateUri({ externalId: externalId })
+    }
+
+    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
     switch (courtDecision) {
       case DecisionType.COURT: {
         return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })

@@ -122,8 +122,11 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     const externalId: string = req.params.externalId
 
-    const courtDecision = PaymentOptionPage.getCourtDecision(draft, claim)
+    if (claim.response.defendant.type === PartyType.COMPANY.value) {
+      return Paths.taskListPage.evaluateUri({ externalId: externalId })
+    }
 
+    const courtDecision = PaymentOptionPage.getCourtDecision(draft, claim)
     switch (courtDecision) {
       case DecisionType.COURT:
       case DecisionType.DEFENDANT: {
@@ -167,16 +170,20 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     const courtDetermination: CourtDetermination = new CourtDetermination()
 
     locals.draft.document.courtDetermination = courtDetermination
-    locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
 
-    if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
-      const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
+    if (locals.claim.response.defendant.type !== PartyType.COMPANY.value) {
+      locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
+    } else {
+      locals.draft.document.courtDetermination.disposableIncome = undefined
 
-      courtDetermination.decisionType = decisionType
-      courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-      courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+      if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
+        const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
+
+        courtDetermination.decisionType = decisionType
+        courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+        courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+      }
     }
-
     return super.saveDraft(locals)
   }
 }

@@ -15,6 +15,7 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
+import { PartyType } from 'common/partyType'
 
 const validator: Validator = new Validator()
 
@@ -79,7 +80,11 @@ export class TaskListBuilder {
       }
 
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (claim.response.defendant.type !== PartyType.COMPANY.value) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
@@ -107,7 +112,11 @@ export class TaskListBuilder {
         )
       )
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (claim.response.defendant.type !== PartyType.COMPANY.value) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }

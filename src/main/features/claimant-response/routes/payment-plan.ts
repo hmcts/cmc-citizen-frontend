@@ -26,6 +26,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { Moment } from 'moment'
+import { PartyType } from 'common/partyType'
 
 export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
@@ -156,6 +157,11 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
+
+    if (claim.response.defendant.type === PartyType.COMPANY.value) {
+      return Paths.taskListPage.evaluateUri({ externalId: externalId })
+    }
+
     switch (courtDecision) {
       case DecisionType.COURT: {
         return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
@@ -185,8 +191,10 @@ export default new PaymentPlanPage()
       const claim: Claim = res.locals.claim
       const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-      if (response.statementOfMeans === undefined) {
-        return next(new Error('Page cannot be rendered because response does not have statement of means'))
+      if (claim.response.defendant.type !== PartyType.COMPANY.value) {
+        if (response.statementOfMeans === undefined) {
+          return next(new Error('Page cannot be rendered because response does not have statement of means'))
+        }
       }
 
       next()
@@ -194,7 +202,6 @@ export default new PaymentPlanPage()
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
       const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
       res.locals.monthlyIncomeAmount = response.statementOfMeans && response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
         response.statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
       ) : 0
