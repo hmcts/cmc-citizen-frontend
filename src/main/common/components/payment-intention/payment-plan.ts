@@ -13,7 +13,7 @@ import { NotFoundError } from 'errors'
 
 import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
-import { Form } from 'forms/form'
+import { Form, FormValidationError } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 
@@ -26,6 +26,7 @@ export abstract class AbstractPaymentPlanPage<Draft> {
   abstract getHeading (): string
   abstract createModelAccessor (): AbstractModelAccessor<Draft, PaymentIntention>
   abstract buildPostSubmissionUri (req: express.Request, res: express.Response): string
+  postValidation (req: express.Request, res: express.Response): FormValidationError { return undefined }
 
   getView (): string {
     return 'components/payment-intention/payment-plan'
@@ -60,8 +61,14 @@ export abstract class AbstractPaymentPlanPage<Draft> {
         FormValidator.requestHandler(PaymentPlanModel, PaymentPlanModel.fromObject, undefined, ['calculatePaymentPlan']),
         ErrorHandling.apply(
           async (req: express.Request, res: express.Response): Promise<void> => {
+            let form: Form<PaymentPlanModel> = req.body
 
-            const form: Form<PaymentPlanModel> = req.body
+            const error: FormValidationError = this.postValidation(req, res)
+
+            if (error) {
+              form = new Form<PaymentPlanModel>(form.model, [error, ...form.errors])
+            }
+
             if (form.hasErrors() || _.get(req, 'body.action.calculatePaymentPlan')) {
               this.renderView(form, res)
             } else {

@@ -16,7 +16,7 @@ import { DecisionType } from 'claimant-response/draft/courtDecision'
 export class ClaimantResponseConverter {
 
   public static convertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
-    if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
+    if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
       if (draftClaimantResponse.paidAmount) {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
@@ -29,6 +29,19 @@ export class ClaimantResponseConverter {
       }
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse)
+  }
+
+  private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
+    if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
+      return false
+    } else if (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted === YesNoOption.NO) {
+      return false
+    } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received === YesNoOption.NO) {
+      return false
+    }
+
+    return true
+
   }
 
   private static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {

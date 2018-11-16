@@ -16,6 +16,8 @@ import {
  } from 'test/data/draft/paymentIntentionDraft'
 import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPaymentMethod'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
+import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'
+import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/partPaymentReceived'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
@@ -119,6 +121,24 @@ describe('claimant response converter ', () => {
         'amountPaid': 0,
         'freeMediation': true,
         'reason': 'Rejection reason is..'
+      })
+    })
+
+    it('rejection from non acceptance of states paid', () => {
+      const draftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
+
+      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
+        'type': 'REJECTION'
+      })
+    })
+
+    it('Should convert to rejection when given a no option in part payment recieved', () => {
+      const draftClaimantResponse = new DraftClaimantResponse()
+      draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
+
+      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
+        'type': 'REJECTION'
       })
     })
 
