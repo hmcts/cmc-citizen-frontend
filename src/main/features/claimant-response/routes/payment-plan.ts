@@ -15,6 +15,9 @@ import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/inc
 
 import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
+import { FormValidationError } from 'forms/form'
+import { getEarliestPaymentDateForPaymentPlan } from 'claimant-response/helpers/paydateHelper'
+import { ValidationError } from 'class-validator'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
@@ -180,6 +183,24 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
         return Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })
       }
     }
+  }
+
+  postValidation (req: express.Request, res: express.Response): FormValidationError {
+    const model = req.body.model
+    if (model.firstPaymentDate) {
+      const validDate: Moment = getEarliestPaymentDateForPaymentPlan(res.locals.claim, model.firstPaymentDate.toMoment())
+      if (validDate && validDate > model.firstPaymentDate.toMoment()) {
+        const error: ValidationError = {
+          target: model,
+          property: 'firstPaymentDate',
+          value: model.firstPaymentDate.toMoment(),
+          constraints: { 'Failed': 'Enter a date of  ' + validDate.format('DD MM YYYY') + ' or later for the first instalment' },
+          children: undefined
+        }
+        return new FormValidationError(error)
+      }
+    }
+    return undefined
   }
 }
 
