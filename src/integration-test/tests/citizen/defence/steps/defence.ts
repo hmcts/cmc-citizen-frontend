@@ -253,7 +253,7 @@ export class DefenceSteps {
     defenceType: DefenceType
   ): void {
     I.see('Confirm your details')
-    I.see('Do you want more time to respond?')
+    I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     I.dontSee('COMPLETE')
 
