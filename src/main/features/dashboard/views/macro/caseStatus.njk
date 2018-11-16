@@ -20,7 +20,7 @@
   claimRejectedFreeMediationYESForClaimantDashboard,
   claimRejectedFreeMediationYESForDefendantDashboard %}
 
-{% from "./claimStatus/claimPartAdmitted.njk" import
+{% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
   claimPartAdmittedToOweForDefendantDashboard %}
 
@@ -72,7 +72,7 @@
     {{ claimFullAdmissionForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
     {{ settlementAgreementSignedByClaimantDeadlinePassedDashboard(claim) }}
-  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION or status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT %}
     {{ settlementAgreementSignedByClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
     {{ settlementAgreementSignedByBothClaimantDashboard(claim) }}
@@ -117,7 +117,8 @@
       {{ ccjRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantDashboard(claim) }}
-    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
+    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION or status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
+      or status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
       {{ settlementAgreementSignedByClaimantDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionForDefendantDashboard(claim) }}
