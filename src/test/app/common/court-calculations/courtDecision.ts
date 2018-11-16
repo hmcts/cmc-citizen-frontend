@@ -50,6 +50,12 @@ describe('CourtDecision', () => {
       expect(CourtDecision.calculateDecision(defendantPaymentDate, claimantPaymentDate, MomentFactory.maxDate())).to.equal(DecisionType.DEFENDANT)
     })
 
+    it('should return a claimant in favour of defendant decision type when claimant offers better date and court calculated is max date', () => {
+      let claimantPaymentDate = moment(new Date()).add(3, 'days')
+      let defendantPaymentDate = moment(new Date()).add(1, 'days')
+      expect(CourtDecision.calculateDecision(defendantPaymentDate, claimantPaymentDate, MomentFactory.maxDate())).to.equal(DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT)
+    })
+
     it('should return a claimant decision type when claimantPaymentDate is after the defendantPaymentDate', () => {
 
       let defendantPaymentDate = moment(new Date())
