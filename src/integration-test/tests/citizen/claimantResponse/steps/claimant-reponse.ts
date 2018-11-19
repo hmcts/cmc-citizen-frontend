@@ -67,6 +67,20 @@ export class ClaimantResponseSteps {
     this.acceptCCJ(true)
   }
 
+  respondToOfferAndExpectBrokenTaskListPage (
+    testData: EndToEndTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
+    I.dontSee('COMPLETE')
+    // an empty tasklist page - only task: Check and submit your response
+    I.see('Your response')
+    I.seeNumberOfElements('//*[@class="task-group"]', 3)
+    I.seeNumberOfElements('//*[@class="task-list-heading"]', 3)
+    I.seeNumberOfElements('//*[@class="task"]', 1)
+  }
+
   viewClaimFromDashboard (claimRef: string): void {
     I.click('My account')
     I.see('Your money claims account')

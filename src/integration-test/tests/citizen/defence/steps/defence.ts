@@ -321,11 +321,7 @@ export class DefenceSteps {
         throw new Error('Unknown DefenceType')
     }
     this.checkAndSendAndSubmit(defendantType)
-    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
-      I.see('You’ve submitted your response')
-    } else {
-      I.see('Next steps')
-    }
+    I.see('You’ve submitted your response')
   }
 
   makeFullAdmission (
@@ -438,6 +434,7 @@ export class DefenceSteps {
         statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet()
         break
       case PaymentOption.INSTALMENTS:
+        defendantRepaymentPlan.equalInstalment = 5.00
         defendantWhenWillYouPage.chooseInstalments()
         defendantTaskListPage.selectYourRepaymentPlanTask()
         defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
