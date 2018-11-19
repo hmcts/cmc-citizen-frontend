@@ -97,12 +97,13 @@ describe('Settlement agreement: sign settlement agreement page', () => {
         context('when form is valid', () => {
 
           it('should return 500 and render error page when cannot post to claim store', async () => {
-            claimStoreServiceMock.resolveRetrieveByClaimantId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             settlementAgreementServiceMock.rejectRejectSettlementAgreement()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: 'no' })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -113,7 +114,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'yes' })
+              .send({ option: 'no' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.settlementAgreementConfirmation
                   .evaluateUri({ externalId: externalId })))
