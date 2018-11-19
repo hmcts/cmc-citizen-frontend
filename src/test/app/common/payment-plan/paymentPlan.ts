@@ -113,7 +113,6 @@ const TESTS_FOR_LAST_PAYMENT_DATE = [
 
 describe('PaymentPlan', () => {
   describe('calculateLastPaymentDate', () => {
-
     frequencies.forEach(frequency => {
       describe(`when frequency is ${frequency}`, () => {
         TESTS_FOR_LAST_PAYMENT_DATE.forEach(test => {
@@ -128,8 +127,7 @@ describe('PaymentPlan', () => {
       })
     })
 
-    describe.only('Negative month increment', () => {
-
+    describe('negative month increment', () => {
       it('should return the 1st of a month when start date is the 1st of the following month', () => {
         expect(calculateMonthIncrement(moment('2019-01-01'), -1).format('YYYY-MM-DD'))
           .to.equal(moment('2018-12-01').format('YYYY-MM-DD'))
@@ -137,20 +135,18 @@ describe('PaymentPlan', () => {
       it('should return a month date in the middle of the previous month starting from 15th December ', () => {
         expect(calculateMonthIncrement(moment('2018-08-15'), -1).format('YYYY-MM-DD'))
           .to.equal(moment('2018-07-15').format('YYYY-MM-DD'))
-      });
+      })
 
       it('should return the last day of february (leap year) when starting date >= 28th of a month', () => {
         expect(calculateMonthIncrement(moment('2020-03-30'), -1).format('YYYY-MM-DD'))
           .to.equal(moment('2020-02-29').format('YYYY-MM-DD'))
-      });
+      })
 
       it('should return the last day of february (no leap year) when starting date >= 29th of a month', () => {
         expect(calculateMonthIncrement(moment('2018-03-30'), -1).format('YYYY-MM-DD'))
           .to.equal(moment('2018-02-28').format('YYYY-MM-DD'))
-      });
-
+      })
     })
-
 
     it('should return the last payment date from given start date', () => {
       const instalmentAmount = 10

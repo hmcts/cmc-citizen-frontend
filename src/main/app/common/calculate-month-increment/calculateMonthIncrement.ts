@@ -11,8 +11,8 @@ export function calculateMonthIncrement (startDate: moment.Moment, monthsToAdd?:
 
   const futureMonth = moment(startDate).add(monthsToAdd === undefined ? 1 : monthsToAdd, 'M')
 
-  if (monthsToAdd >= 0 && startDate.date() !== futureMonth.date() &&
-      futureMonth.daysInMonth() === futureMonth.date()) {
+  if ((monthsToAdd === undefined ? true : monthsToAdd >= 0) &&
+      startDate.date() !== futureMonth.date() && futureMonth.daysInMonth() === futureMonth.date()) {
     futureMonth.add(1, 'd')
   }
 
