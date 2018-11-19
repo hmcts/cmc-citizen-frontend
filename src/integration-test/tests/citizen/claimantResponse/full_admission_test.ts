@@ -69,7 +69,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
@@ -82,13 +82,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve accepted the repayment plan')
+    I.see('You’ve proposed an alternative repayment plan')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
@@ -101,13 +101,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve accepted the repayment plan')
+    I.see('You’ve proposed an alternative repayment plan')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
@@ -116,13 +116,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData)
-    I.see('County Court Judgment issued')
+    I.see('You’ve accepted their response')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('A County Court Judgment has been issued.')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
@@ -131,7 +131,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData)
-    I.see('County Court Judgment issued')
+    I.see('You’ve accepted their response')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('A County Court Judgment has been issued.')
