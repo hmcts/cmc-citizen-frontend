@@ -4,6 +4,7 @@ import { Frequency } from 'common/frequency/frequency'
 import { expect } from 'chai'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 const TOTAL_AMOUNT = 20
 const TOTAL_AMOUNT_2 = 1643.20
@@ -110,22 +111,47 @@ const TESTS_FOR_LAST_PAYMENT_DATE = [
   }
 ]
 
-frequencies.forEach(frequency => {
-  describe(`when frequency is ${frequency}`, () => {
-    TESTS_FOR_LAST_PAYMENT_DATE.forEach(test => {
-      it(`${test.desc} ${test.claimAmount / test.instalmentAmount} installments in the future
-        starting from ${test.fromDate.format('YYYY-MM-DD')}`, () => {
-        const paymentPlan = PaymentPlan.create(test.claimAmount, test.instalmentAmount,
-                                              Frequency.of(frequency), test.fromDate)
-        expect(paymentPlan.calculateLastPaymentDate().format('YYYY-MM-DD'))
-          .to.equal(MomentFactory.parse(test.expected[frequency]).format('YYYY-MM-DD'))
-      })
-    })
-  })
-})
-
 describe('PaymentPlan', () => {
   describe('calculateLastPaymentDate', () => {
+
+    frequencies.forEach(frequency => {
+      describe(`when frequency is ${frequency}`, () => {
+        TESTS_FOR_LAST_PAYMENT_DATE.forEach(test => {
+          it(`${test.desc} ${test.claimAmount / test.instalmentAmount} installments in the future
+        starting from ${test.fromDate.format('YYYY-MM-DD')}`, () => {
+            const paymentPlan = PaymentPlan.create(test.claimAmount, test.instalmentAmount,
+              Frequency.of(frequency), test.fromDate)
+            expect(paymentPlan.calculateLastPaymentDate().format('YYYY-MM-DD'))
+              .to.equal(MomentFactory.parse(test.expected[frequency]).format('YYYY-MM-DD'))
+          })
+        })
+      })
+    })
+
+    describe.only('Negative month increment', () => {
+
+      it('should return the 1st of a month when start date is the 1st of the following month', () => {
+        expect(calculateMonthIncrement(moment('2019-01-01'), -1).format('YYYY-MM-DD'))
+          .to.equal(moment('2018-12-01').format('YYYY-MM-DD'))
+      })
+      it('should return a month date in the middle of the previous month starting from 15th December ', () => {
+        expect(calculateMonthIncrement(moment('2018-08-15'), -1).format('YYYY-MM-DD'))
+          .to.equal(moment('2018-07-15').format('YYYY-MM-DD'))
+      });
+
+      it('should return the last day of february (leap year) when starting date >= 28th of a month', () => {
+        expect(calculateMonthIncrement(moment('2020-03-30'), -1).format('YYYY-MM-DD'))
+          .to.equal(moment('2020-02-29').format('YYYY-MM-DD'))
+      });
+
+      it('should return the last day of february (no leap year) when starting date >= 29th of a month', () => {
+        expect(calculateMonthIncrement(moment('2018-03-30'), -1).format('YYYY-MM-DD'))
+          .to.equal(moment('2018-02-28').format('YYYY-MM-DD'))
+      });
+
+    })
+
+
     it('should return the last payment date from given start date', () => {
       const instalmentAmount = 10
       const fromDate = moment('2018-01-01')
