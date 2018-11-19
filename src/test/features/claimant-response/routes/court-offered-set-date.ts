@@ -65,11 +65,14 @@ describe('Claimant response: court offered set date page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse', {
-          decisionType: 'DEFENDANT',
-          courtOfferedPaymentIntention: {
-            paymentOption: 'BY_SPECIFIED_DATE',
-            paymentDate: MomentFactory.parse('2018-11-01'),
-            repaymentPlan: undefined } })
+          courtDetermination: {
+            decisionType: 'DEFENDANT',
+            courtDecision: {
+              paymentOption: 'BY_SPECIFIED_DATE',
+              paymentDate: MomentFactory.parse('2018-11-01'),
+              repaymentPlan: undefined }
+          }
+        })
 
         await request(app)
           .get(pagePath)
@@ -80,11 +83,14 @@ describe('Claimant response: court offered set date page', () => {
       it('should render page when everything is fine and COURT date is accepted', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse', {
-          decisionType: 'COURT',
-          courtOfferedPaymentIntention: {
-            paymentOption: 'BY_SPECIFIED_DATE',
-            paymentDate: MomentFactory.parse('2018-11-01'),
-            repaymentPlan: undefined } })
+          courtDetermination: {
+            decisionType: 'COURT',
+            courtDecision: {
+              paymentOption: 'BY_SPECIFIED_DATE',
+              paymentDate: MomentFactory.parse('2018-11-01'),
+              repaymentPlan: undefined }
+          }
+        })
 
         await request(app)
           .get(pagePath)
@@ -95,11 +101,13 @@ describe('Claimant response: court offered set date page', () => {
       it('should render page when everything is fine and CLAIMANT date is accepted', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse', {
-          decisionType: 'CLAIMANT',
-          courtOfferedPaymentIntention: {
-            paymentOption: 'BY_SPECIFIED_DATE',
-            paymentDate: MomentFactory.parse('2018-11-01'),
-            repaymentPlan: undefined },
+          courtDetermination: {
+            decisionType: 'CLAIMANT',
+            courtDecision: {
+              paymentOption: 'BY_SPECIFIED_DATE',
+              paymentDate: MomentFactory.parse('2018-11-01'),
+              repaymentPlan: undefined }
+          },
           alternatePaymentMethod: {
             paymentOption: {
               option: {
@@ -185,11 +193,12 @@ describe('Claimant response: court offered set date page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse',
             {
-              decisionType: 'COURT',
-              courtOfferedPaymentIntention: {
-                paymentOption: 'BY_SPECIFIED_DATE',
-                paymentDate: MomentFactory.parse('2019-10-10'),
-                repaymentPlan: undefined
+              courtDetermination: {
+                decisionType: 'COURT',
+                courtDecision: {
+                  paymentOption: 'BY_SPECIFIED_DATE',
+                  paymentDate: MomentFactory.parse('2018-11-01'),
+                  repaymentPlan: undefined }
               }
             })
 

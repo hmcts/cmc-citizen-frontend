@@ -40,7 +40,7 @@ describe('Dashboard - Complete your directions questionnaire form', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(
-          { directionsQuestionnaireDeadline: MomentFactory.currentDate() }
+          { responseDeadline: MomentFactory.currentDate() }
         )
 
         await request(app)

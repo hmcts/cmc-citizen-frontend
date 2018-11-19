@@ -1,0 +1,45 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+
+{% set heading =  "Has the defendant paid you " + paidAmount | numeral +  "?" %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger"
+            data-event-action="Claimant Response: Has defendant paid less than claim amount"
+            data-event-label-from="received"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = "Has the defendant paid you " + paidAmount | numeral + "?",
+          name = "received",
+          options = [
+          {
+            label: 'Yes',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor("received") === YesNoOption.YES),
+            bold: true
+          },
+          {
+            label: 'No',
+            value: YesNoOption.NO.option,
+            checked: (form.valueFor("received") === YesNoOption.NO),
+            bold: true
+          }
+        ],
+          form = form,
+          legendHidden = true
+        )
+        }}
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

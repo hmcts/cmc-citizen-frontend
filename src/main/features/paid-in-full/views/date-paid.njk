@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, errorSummary, saveAndContinueButton %}
 {% from "date.njk" import dateInput %}
 
-{% set heading = ('When did you receive the money?') %}
+{% set heading = ('When did you settle the claim?') %}
 
 {% block content %}
   <div class="grid-row">
@@ -11,7 +11,7 @@
         <input type="hidden" name="known" value="true"/>
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('Enter the exact date the money was clear in your account if you were paid by cheque or bank transfer.') }}</p>
+        <p>{{ t('If you were paid by cheque or bank transfer, enter the exact date money was clear in your account.') }}</p>
         {{ dateInput(form = form, name = 'date', hint = t('For example, {{ twoWeeksAgo }}', { twoWeeksAgo : 'now' | addDays(-14) | inputDate })) }}
 
         {{ saveAndContinueButton() }}

@@ -10,7 +10,7 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
@@ -130,6 +130,11 @@ export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome
 }
 
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule = {
@@ -394,14 +399,8 @@ export function resolveClaimantResponse () {
     .reply(HttpStatus.OK)
 }
 
-export function resolveSettlement () {
+export function resolveSavePaidInFull () {
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/settlement'))
-    .reply(HttpStatus.CREATED)
-}
-
-export function rejectSettlement () {
-  mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/settlement'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR)
+    .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
+    .reply(HttpStatus.OK)
 }

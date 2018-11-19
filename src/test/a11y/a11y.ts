@@ -19,6 +19,7 @@ import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 app.locals.csrf = 'dummy-token'
 
@@ -104,7 +105,9 @@ describe('Accessibility', () => {
     Object.values(pathsRegistry).forEach((path: RoutablePath) => {
       const excluded = excludedPaths.some(_ => _ === path)
       if (!excluded) {
-        if (path.uri.includes(':externalId')) {
+        if (path.uri.includes(':madeBy')) {
+          check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6', madeBy: MadeBy.CLAIMANT.value }))
+        } else if (path.uri.includes(':externalId')) {
           check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
         } else {
           check(path.uri)

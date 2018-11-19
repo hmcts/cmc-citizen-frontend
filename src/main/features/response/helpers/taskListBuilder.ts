@@ -44,7 +44,7 @@ export class TaskListBuilder {
     if (!isPastDeadline(now, claim.responseDeadline)) {
       tasks.push(
         new TaskListItem(
-          'Do you want more time to respond?',
+          'Decide if you need more time to respond',
           Paths.moreTimeRequestPage.evaluateUri({ externalId: externalId }),
           MoreTimeNeededTask.isCompleted(draft, claim.moreTimeRequested)
         )
@@ -268,9 +268,12 @@ export class TaskListBuilder {
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
+    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim)
+
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
-      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks
+      TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks,
+      resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : []
     )
       .filter(item => !item.completed)
   }
