@@ -1,0 +1,14 @@
+{% macro settlementAgreementSummary(offer) %}
+  <table class="offer-table">
+    <tbody>
+    <tr>
+      <td>{{ t('The agreement') }}</td>
+      <td>{{ offer.content }}</td>
+    </tr>
+    <tr>
+      <td>{{ t('Completion date')}}</td>
+      <td>{{ offer.completionDate | date }}</td>
+    </tr>
+    </tbody>
+  </table>
+{% endmacro %}
