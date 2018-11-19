@@ -56,6 +56,7 @@
 {% from "./claimStatus/settlementAgreementDefendant.njk" import
   settlementAgreementSignedByClaimantDefendantDashboard,
   settlementAgreementSignedByBothDefendantDashboard %}
+{% from "./claimStatus/claimantResponse.njk" import claimantRejectedDefendantAsCompanyOrOrganisationResponse %}
 
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
@@ -103,6 +104,8 @@
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
+    {{ claimantRejectedDefendantAsCompanyOrOrganisationResponse() }}
   {% endif %}
 {% endmacro %}
 

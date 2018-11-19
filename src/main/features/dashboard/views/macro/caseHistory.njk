@@ -51,6 +51,8 @@ ccjRequestedForDefendantClaimDetails %}
   offerSettlementReachedClaimDetails,
   offerSettlementReachedForDefendant,
   offerSettlementReachedForClaimant %}
+{% from "./claimStatus/claimantResponse.njk" import
+claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
 
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import admissionByCCJDefendantClaimDetails %}
@@ -107,6 +109,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerAcceptedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReachedForClaimant(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
+        {{ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus(claim) }}
       {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
         {{ requestCCJ(claim) }}
       {% endif %}
