@@ -21,7 +21,7 @@
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
             {{ t('You’ve rejected their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
-            {{ t('You’ve accpeted their response') }}
+            {{ t('You’ve accepted their response') }}
           {% endif %}
         </h1>
         <p class="reference-number">
@@ -31,19 +31,14 @@
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
-        {% if claim.countyCourtJudgmentIssuedAt %}
-          <p class="receipt-download-container">
-            <a href="{{ ClaimantResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download judgment') }}</a> (PDF)
-          </p>
-        {% endif %}
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       {% if claim.countyCourtJudgmentIssuedAt %}
         {% if paymentIntentionAccepted %}
-          <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>
+          <p>{{ t('A County Court Judgment has been requested against the defendant.') }}</p>
         {% else %}
-          <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been issued against them.') }}</p>
+          <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been requested against them.') }}</p>
         {% endif %}
       {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
         {% include "./confirmation/accepted-payment-plan.njk" %}
