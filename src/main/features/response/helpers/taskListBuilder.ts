@@ -44,7 +44,7 @@ export class TaskListBuilder {
     if (!isPastDeadline(now, claim.responseDeadline)) {
       tasks.push(
         new TaskListItem(
-          'Do you want more time to respond?',
+          'Decide if you need more time to respond',
           Paths.moreTimeRequestPage.evaluateUri({ externalId: externalId }),
           MoreTimeNeededTask.isCompleted(draft, claim.moreTimeRequested)
         )
