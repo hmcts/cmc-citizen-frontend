@@ -203,6 +203,8 @@ export class Claim {
       (this.response.defendant.type === PartyType.COMPANY.value
         || this.response.defendant.type === PartyType.ORGANISATION.value)) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
+    } else if (this.isClaimantResponseSubmitted()) {
+      return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else {
       throw new Error('Unknown Status')
     }
@@ -281,6 +283,10 @@ export class Claim {
 
   private hasClaimantRejectedDefendantResponse (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+  }
+
+  private isClaimantResponseSubmitted (): boolean {
+    return this.response !== undefined && this.claimantResponse !== undefined
   }
 
   isEligibleForReDetermination (): boolean {
