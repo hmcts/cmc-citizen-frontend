@@ -5,6 +5,7 @@ import { request } from 'client/request'
 import { User } from 'idam/user'
 import { ServiceAuthToken } from 'idam/serviceAuthToken'
 import { AuthToken } from 'idam/authToken'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 const s2sUrl = config.get<string>('idam.service-2-service-auth.url')
 const idamApiUrl = config.get<string>('idam.api.url')
@@ -69,6 +70,12 @@ export class IdamClient {
           response.token_type,
           response.expires_in
         )
+      })
+      .catch((error: any) => {
+        trackCustomEvent('failed to exchange code',{
+          errorValue: error
+        })
+        return undefined
       })
   }
 

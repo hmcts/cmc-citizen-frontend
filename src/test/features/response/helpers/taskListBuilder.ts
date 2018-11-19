@@ -43,31 +43,32 @@ describe('Defendant response task list builder', () => {
   describe('"Before you start" section', () => {
     describe('"Do you need more time to respond?" task', () => {
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
+      const taskListItemText: string = 'Decide if you need more time to respond'
 
       it('should be available when defendant tries to respond before due day', () => {
         claim.responseDeadline = MomentFactory.currentDate().add(1, 'days')
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).not.to.be.undefined
       })
 
       it('should be available when defendant tries to respond on due day before 4 PM', () => {
         claim.responseDeadline = MomentFactory.currentDate()
         const now: moment.Moment = MomentFactory.currentDateTime().hour(15)
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).not.to.be.undefined
       })
 
       it('should not be available when defendant tries to respond on due day after 4 PM', () => {
         claim.responseDeadline = MomentFactory.currentDate()
         const now: moment.Moment = MomentFactory.currentDateTime().hour(17)
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).to.be.undefined
       })
 
       it('should not be available when defendant tries to respond after due day', () => {
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'days')
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).to.be.undefined
       })
     })
   })
