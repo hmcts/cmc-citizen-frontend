@@ -4,7 +4,7 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { PaymentOption } from 'integration-test/data/payment-option'
-// import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
+import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from './data/ClaimantResponseTestData'
@@ -13,7 +13,7 @@ const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
-// const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
+const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response').retry(3)
@@ -45,12 +45,10 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('TypeError: Cannot read property \'decisionType\' of undefined')
-    // uncomment & remove line above when above error fixed
-    // I.see('You’ve accepted the repayment plan')
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('You’ve signed a settlement agreement')
+    I.see('You’ve accepted the repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @error', async (I: I) => {
@@ -66,14 +64,12 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
-    // uncomment & remove line above when above error fixed
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('You’ve signed a settlement agreement')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
@@ -86,15 +82,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
-    // uncomment & remove line above when above error fixed
-    // I.see('You’ve accepted the repayment plan')
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('You’ve signed a settlement agreement')
+    I.see('You’ve proposed an alternative repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
@@ -107,15 +101,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('422 - "courtDetermination.courtPaymentIntention : must not be null"')
-    // uncomment & remove line above when above error fixed
-    // I.see('You’ve accepted the repayment plan')
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('You’ve signed a settlement agreement')
+    I.see('You’ve proposed an alternative repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
@@ -124,15 +116,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData)
-    I.see('TypeError: Cannot read property \'decisionType\' of undefined')
-    // uncomment & remove line above when above error fixed
-    // I.see('County Court Judgment issued')
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('A County Court Judgment has been issued.')
+    I.see('You’ve accepted their response')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('A County Court Judgment has been issued.')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen @error', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
@@ -141,11 +131,9 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData)
-    I.see('TypeError: Cannot read property \'decisionType\' of undefined')
-    // uncomment & remove line above when above error fixed
-    // I.see('County Court Judgment issued')
-    // confirmationPage.clickGoToYourAccount()
-    // I.see(testData.claimRef)
-    // I.see('A County Court Judgment has been issued.')
+    I.see('You’ve accepted their response')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('A County Court Judgment has been issued.')
   })
 }
