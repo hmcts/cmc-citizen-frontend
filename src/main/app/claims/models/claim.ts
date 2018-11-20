@@ -275,7 +275,7 @@ export class Claim {
       this.claimantRespondedAt && this.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
   }
 
-  private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
+  hasClaimantAcceptedAdmissionWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
       !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
@@ -290,7 +290,7 @@ export class Claim {
   }
 
   isEligibleForReDetermination (): boolean {
-    const dateAfter19Days = this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
+    const dateAfter19Days = this.countyCourtJudgmentRequestedAt && this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
     return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === CountyCourtJudgmentType.DETERMINATION
       && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
       && this.reDeterminationRequestedAt === undefined
