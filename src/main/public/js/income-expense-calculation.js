@@ -33,7 +33,7 @@ $(document).ready(function () {
     }
 
     var setTotalMonthlyIncomeExpense = function (totalAmount) {
-      totalMonthlyIncomeExpenseElement.text(numeral(totalAmount).format('0,0[.]00'));  // £18 or £18.50
+      totalMonthlyIncomeExpenseElement.text(numeral(totalAmount).format('0,0.00'));
     }
 
     var csrfInputFieldElement,
