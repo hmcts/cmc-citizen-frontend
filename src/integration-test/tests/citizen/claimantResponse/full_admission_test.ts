@@ -116,10 +116,10 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData)
-    I.see('You’ve accepted their response')
+    I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
-    I.see('A County Court Judgment has been issued.')
+    I.see('County Court Judgment')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', async (I: I) => {
@@ -131,9 +131,9 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData)
-    I.see('You’ve accepted their response')
+    I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
-    I.see('A County Court Judgment has been issued.')
+    I.see('County Court Judgment')
   })
 }
