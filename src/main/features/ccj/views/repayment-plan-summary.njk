@@ -5,22 +5,27 @@
 {% from "repaymentPlanBlock.njk" import repaymentPlanBlock %}
 
 
+{% macro paymentIntentionFragment(amount, payBySetDate) %}
+{{ t('The defendant will pay {{ amount }} by {{ paymentDate }}.', { amount: amount | numeral, paymentDate: payBySetDate | date }) }}
+{% endmacro %}
+
+
 {% block content %}
-  {{ csrfProtection(csrf) }}
-  <div class="grid-row">
-    <div class="column-two-thirds">
+{{ csrfProtection(csrf) }}
+<div class="grid-row">
+  <div class="column-two-thirds">
 
-      {{ repaymentPlanBlock(
-        heading = 'The repayment plan',
-        repaymentPlan = repaymentPlan
-      ) }}
+    {% if paymentOption === domain.PaymentOption.INSTALMENTS %}
+      {{ repaymentPlanBlock( heading = 'The repayment plan', repaymentPlan = repaymentPlan ) }}
 
-      {% if claim.isEligibleForReDetermination() %}
+    {% elseif paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentOption === domain.PaymentOption.IMMEDIATELY %}
+      <h2 class="heading-medium">{{ t(heading) }}</h2>
+      {{paymentIntentionFragment( amount = remainingAmountToPay, payBySetDate = payBySetDate ) }}
+    {% endif %}
 
-        <p>{{ t('If you think the defendant can repay you sooner, you can ') }} <a
-            href="{{ CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy }) }}">{{ t('ask a judge to make a new repayment plan.') }}</a>
-        </p>
-      {% endif %}
-    </div>
+    {% if claim.isEligibleForReDetermination() %}
+    <p>{{ t('If you think the defendant can repay you sooner, you can ') }} <a href="{{ CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy }) }}">{{ t('ask a judge to make a new repayment plan.') }}</a></p>
+    {% endif %}
   </div>
+</div>
 {% endblock %}
