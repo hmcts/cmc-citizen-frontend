@@ -155,11 +155,11 @@ export class Claim {
     if (this.response && (this.response as FullAdmissionResponse).paymentIntention) {
       let paymentOption = (this.response as FullAdmissionResponse).paymentIntention.paymentOption
       switch (paymentOption) {
-        // case PaymentOption.IMMEDIATELY:
-        //   return !this.countyCourtJudgmentRequestedAt
-        //     && isPastDeadline(MomentFactory.currentDateTime(),
-        //     (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
-        //   break
+        case PaymentOption.IMMEDIATELY:
+          return !this.countyCourtJudgmentRequestedAt
+            && isPastDeadline(MomentFactory.currentDateTime(),
+            (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
+          break
         case PaymentOption.BY_SPECIFIED_DATE:
           return !this.countyCourtJudgmentRequestedAt
             && this.isSettlementReached()
