@@ -48,8 +48,8 @@ export class EndToEndTestData {
   ) {
     const claimantEmail: string = await I.createCitizenUser()
     const defendantEmail: string = await I.createCitizenUser()
-    const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
+    const claimRef: string = await I.createClaimWithFeaturesAndRole(claimData, claimantEmail,'cmc-new-features-consent-given', ['admissions'])
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
     const testData = new EndToEndTestData()

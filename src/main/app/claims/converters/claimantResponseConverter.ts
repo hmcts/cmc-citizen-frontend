@@ -7,14 +7,15 @@ import { ResponseAcceptance } from 'claims/models/response/core/responseAcceptan
 import { YesNoOption } from 'models/yesNoOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
-import { PaymentIntention as ModelPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { CourtDetermination as DomainCourtDetermination } from 'claims/models/response/core/courtDetermination'
+import { PaymentIntention as DomainPaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 
 export class ClaimantResponseConverter {
 
   public static convertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
-    if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
+    if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
       if (draftClaimantResponse.paidAmount) {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
@@ -29,6 +30,19 @@ export class ClaimantResponseConverter {
     } else return this.createResponseAcceptance(draftClaimantResponse)
   }
 
+  private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
+    if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
+      return false
+    } else if (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted === YesNoOption.NO) {
+      return false
+    } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received === YesNoOption.NO) {
+      return false
+    }
+
+    return true
+
+  }
+
   private static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {
     const respAcceptance: ResponseAcceptance = new ResponseAcceptance()
     if (draftClaimantResponse.paidAmount) {
@@ -37,27 +51,35 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
-    const courtDetermination: CourtDetermination = draftClaimantResponse.courtDetermination
-    if (courtDetermination) {
-      respAcceptance.courtDetermination = {
-        courtDecision: courtDetermination.courtDecision,
-        courtPaymentIntention: courtDetermination.courtPaymentIntention,
-        rejectionReason: courtDetermination.rejectionReason ?
-          courtDetermination.rejectionReason.text : undefined,
-        disposableIncome: courtDetermination.disposableIncome ?
-          courtDetermination.disposableIncome : 0,
-        decisionType: courtDetermination.decisionType
-      }
-    }
-    const claimantPaymentIntention: ModelPaymentIntention = draftClaimantResponse.alternatePaymentMethod
-    if (claimantPaymentIntention) {
-      respAcceptance.claimantPaymentIntention = claimantPaymentIntention.toDomainInstance()
-
-      if (claimantPaymentIntention.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
-        respAcceptance.claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
-      }
+    if (draftClaimantResponse.courtDetermination) {
+      respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
+      respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
     }
     return respAcceptance
+  }
+
+  private static getCourtDetermination (courtDetermination: CourtDetermination): DomainCourtDetermination {
+    if (!courtDetermination.courtPaymentIntention && !courtDetermination.courtDecision) {
+      throw new Error('Court payment intention and court decision are missing in court Determination')
+    }
+
+    const responseCourtDetermination: DomainCourtDetermination = new DomainCourtDetermination()
+    responseCourtDetermination.courtDecision = courtDetermination.courtDecision
+    responseCourtDetermination.courtPaymentIntention = courtDetermination.courtPaymentIntention
+    if (courtDetermination.rejectionReason) {
+      responseCourtDetermination.rejectionReason = courtDetermination.rejectionReason.text
+    }
+    responseCourtDetermination.disposableIncome = courtDetermination.disposableIncome ? courtDetermination.disposableIncome : 0
+    responseCourtDetermination.decisionType = courtDetermination.decisionType
+    return responseCourtDetermination
+  }
+
+  private static getClaimantPaymentIntention (draftClaimantResponse: DraftClaimantResponse): DomainPaymentIntention {
+    const claimantPaymentIntention = draftClaimantResponse.alternatePaymentMethod.toDomainInstance()
+    if (draftClaimantResponse.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
+      claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
+    }
+    return claimantPaymentIntention
   }
 
   private static getFormaliseOption (repaymentPlan: FormaliseRepaymentPlan): string {

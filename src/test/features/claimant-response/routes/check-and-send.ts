@@ -87,6 +87,55 @@ describe('Claimant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
+
+        it('should redirect to incomplete submission when response is accepted but rest is incomplete', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+          draftStoreServiceMock.resolveFind(draftType,
+            {
+              settleAdmitted: {
+                admitted: {
+                  option: 'yes'
+                }
+              },
+              acceptPaymentMethod: undefined,
+              formaliseRepaymentPlan: undefined,
+              settlementAgreement: undefined,
+              freeMediation: undefined,
+              rejectionReason: undefined,
+              alternatePaymentMethod: undefined,
+              courtOfferedPaymentIntention: undefined
+            })
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ClaimantResponsePaths.incompleteSubmissionPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should render page successfully when Defendant`s response is rejected', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+          draftStoreServiceMock.resolveFind(draftType,
+            {
+              settleAdmitted: {
+                admitted: {
+                  option: 'no'
+                }
+              },
+              acceptPaymentMethod: undefined,
+              formaliseRepaymentPlan: undefined,
+              settlementAgreement: undefined,
+              freeMediation: undefined,
+              rejectionReason: undefined,
+              alternatePaymentMethod: undefined,
+              courtOfferedPaymentIntention: undefined
+            })
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+        })
       })
     })
   })
@@ -113,7 +162,7 @@ describe('Claimant response: check and send page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should return 500 and render error page when cannot save settlement', async () => {
+        it('should return 500 and render error page when cannot save claimant response', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
           claimStoreServiceMock.rejectSaveClaimantResponse('HTTP error')
@@ -128,8 +177,8 @@ describe('Claimant response: check and send page', () => {
         it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
           draftStoreServiceMock.resolveFind(draftType)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
-          draftStoreServiceMock.rejectDelete()
           claimStoreServiceMock.resolveClaimantResponse()
+          draftStoreServiceMock.rejectDelete()
 
           await request(app)
             .post(pagePath)
@@ -139,7 +188,7 @@ describe('Claimant response: check and send page', () => {
         })
       })
 
-      it('should redirect to confirmation page when user signed settlement agreement', async () => {
+      it('should redirect to confirmation page when saved claimant response', async () => {
         draftStoreServiceMock.resolveFind(draftType)
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
         draftStoreServiceMock.resolveDelete()
