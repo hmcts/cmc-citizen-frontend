@@ -50,7 +50,7 @@
     "@types/nunjucks": "^3.1.0",
     "@types/request-promise-native": "^1.0.2",
     "@types/shortid": "^0.0.29",
-    "applicationinsights": "^1.0.6",
+    "applicationinsights": "^1.0.7",
     "body-parser": "^1.18.3",
     "build-url": "^1.2.0",
     "class-transformer": "^0.2.0",
