@@ -17,7 +17,7 @@
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
           {% elseif claim.countyCourtJudgmentRequestedAt %}
-            {{ t('County Court Judgment issued') }}
+            {{ t('County Court Judgment requested') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
             {{ t('You’ve rejected their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
