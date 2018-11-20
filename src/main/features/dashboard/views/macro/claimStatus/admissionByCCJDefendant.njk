@@ -9,7 +9,7 @@
 
 {% macro admissionByCCJDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('They accepted your repayment plan.') }}</p>
     <p>{{ t('If a defendant doesn’t pay immediately, claimants can request a CCJ even if they accept a repayment plan.') }}</p>
 
@@ -60,7 +60,7 @@
 
 {% macro CCJByDeterminationDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       <p>{{ t('They rejected your repayment plan and requested a CCJ against you.') }}</p>
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
