@@ -30,6 +30,7 @@ import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { Moment } from 'moment'
 import { PartyType } from 'common/partyType'
+import { MomentFactory } from 'shared/momentFactory'
 
 export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
@@ -38,8 +39,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     const courtOfferedPaymentIntention = new PaymentIntention()
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper
-        .createPaymentPlanFromDraft(draft)
+      const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
 
       courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
 
@@ -116,15 +116,20 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     if (!paymentPlan) {
       return undefined
     }
-    courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-    courtCalculatedPaymentIntention.repaymentPlan = {
-      firstPaymentDate: paymentPlan.startDate,
-      instalmentAmount: Math.round(paymentPlan.instalmentAmount * 100) / 100,
-      paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
-      completionDate: paymentPlan.calculateLastPaymentDate(),
-      paymentLength: paymentPlan.calculatePaymentLength()
-    }
 
+    if (paymentPlan.startDate.isSame(MomentFactory.maxDate())) {
+      courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
+      courtCalculatedPaymentIntention.paymentDate = MomentFactory.maxDate()
+    } else {
+      courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+      courtCalculatedPaymentIntention.repaymentPlan = {
+        firstPaymentDate: paymentPlan.startDate,
+        instalmentAmount: Math.round(paymentPlan.instalmentAmount * 100) / 100,
+        paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
+        completionDate: paymentPlan.calculateLastPaymentDate(),
+        paymentLength: paymentPlan.calculatePaymentLength()
+      }
+    }
     return courtCalculatedPaymentIntention
   }
 
