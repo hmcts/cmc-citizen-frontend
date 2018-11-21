@@ -176,6 +176,8 @@ export class Claim {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
       } else if (this.hasClaimantSuggestedAlternativePlanWithCCJ()) {
         return ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
+      } else if (this.hasRedeterminationBeenRequested()) {
+        return ClaimStatus.REDETERMINATION_BY_JUDGE
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
@@ -278,7 +280,7 @@ export class Claim {
   hasClaimantAcceptedAdmissionWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
-      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
@@ -286,7 +288,7 @@ export class Claim {
   }
 
   private isClaimantResponseSubmitted (): boolean {
-    return this.response !== undefined && this.claimantResponse !== undefined
+    return this.response !== undefined && this.claimantResponse !== undefined && !this.reDeterminationRequestedAt
   }
 
   isEligibleForReDetermination (): boolean {
@@ -298,6 +300,10 @@ export class Claim {
 
   private hasClaimantSuggestedAlternativePlanWithCCJ (): boolean {
     return this.claimantResponse && this.countyCourtJudgment &&
-      !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+      !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
+  }
+
+  private hasRedeterminationBeenRequested (): boolean {
+    return this.claimantResponse && this.countyCourtJudgmentRequestedAt && !!this.reDeterminationRequestedAt
   }
 }
