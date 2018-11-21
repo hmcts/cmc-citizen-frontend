@@ -177,6 +177,10 @@ export class ResponseModelConverter {
   }
 
   private static convertStatementOfMeans (draft: ResponseDraft): StatementOfMeans {
+    if (draft.defendantDetails.partyDetails.isBusiness()) {
+      return undefined
+    }
+
     return draft.statementOfMeans && {
       bankAccounts: draft.statementOfMeans.bankAccounts.getPopulatedRowsOnly().map((bankAccount: BankAccountRow) => {
         return {
