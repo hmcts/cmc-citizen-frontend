@@ -174,6 +174,8 @@ export class Claim {
     if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
+      } else if (this.hasClaimantSuggestedAlternativePlanWithCCJ()) {
+        return ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
@@ -225,7 +227,7 @@ export class Claim {
   }
 
   private isResponseSubmitted (): boolean {
-    return this.response !== undefined && this.claimantResponse === undefined
+    return this.response !== undefined && !this.claimantResponse
   }
 
   private isOfferSubmitted (): boolean {
@@ -270,12 +272,13 @@ export class Claim {
 
   private hasDefendantNotSignedSettlementAgreementInTime (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.claimantRespondedAt && this.claimantRespondedAt.add('7', 'days').isBefore(MomentFactory.currentDate())
+      this.claimantRespondedAt && this.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
   }
 
-  private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
+  hasClaimantAcceptedAdmissionWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response &&
-      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
+      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
+      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
@@ -304,5 +307,10 @@ export class Claim {
     return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === CountyCourtJudgmentType.DETERMINATION
       && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
       && this.reDeterminationRequestedAt === undefined
+  }
+
+  private hasClaimantSuggestedAlternativePlanWithCCJ (): boolean {
+    return this.claimantResponse && this.countyCourtJudgment &&
+      !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 }
