@@ -172,16 +172,12 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-    if (this.moneyReceivedOn) {
-      if (this.hasCCJ()) {
-        if (this.isCCJPaidWithinMonth()) {
-          return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
-        } else if (!this.isCCJPaidWithinMonth()) {
-          return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
-        }
-      } else {
-        return ClaimStatus.PAID_IN_FULL
-      }
+    if (this.moneyReceivedOn && this.hasCCJ() && this.isCCJPaidWithinMonth()) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.moneyReceivedOn && this.hasCCJ()) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else {
+      return ClaimStatus.PAID_IN_FULL
     }
     if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
@@ -269,11 +265,7 @@ export class Claim {
   }
 
   private hasCCJ (): boolean {
-    if (this.countyCourtJudgmentRequestedAt) {
-      return true
-    } else {
-      return false
-    }
+    return !!this.countyCourtJudgmentRequestedAt
   }
 
   private isSettlementReachedThroughAdmission (): boolean {
