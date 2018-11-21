@@ -78,7 +78,9 @@
 
     {{ tableEnd() }}
 
-    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if draft.isResponseFullyAdmitted()
+      and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY)
+      and not draft.defendantDetails.partyDetails.isBusiness() %}
 
       {{
         notImmediatePayment(
@@ -283,7 +285,7 @@
       {{ tableEnd() }}
     {% endif %}
 
-    {% if statementOfMeansIsApplicable and draft.statementOfMeans %}
+    {% if statementOfMeansIsApplicable and draft.statementOfMeans and not draft.defendantDetails.partyDetails.isBusiness() %}
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
