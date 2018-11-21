@@ -35,7 +35,7 @@
       <p>{{ t('You can settle for less than the full claim amount.') }}</p>
       {{ paidInFullClaimantButtonClaimDetails(claim) }}
       <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
-      {% if claim.response.paymentIntention.isPastPaymentDeadline %}
+      {% if claim.eligibleForCCJ %}
         <p>{{ t('If the defendant hasn’t paid you, you can ' + internalLink('request a County Court Judgment', CCJPaths.paidAmountPage.evaluateUri({ externalId: claim.externalId }))
             + '.') | safe }}</p>
       {% else %}

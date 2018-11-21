@@ -11,7 +11,6 @@ import { CourtDetermination as DomainCourtDetermination } from 'claims/models/re
 import { PaymentIntention as DomainPaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
-import { DecisionType } from 'claimant-response/draft/courtDecision'
 
 export class ClaimantResponseConverter {
 
@@ -52,25 +51,18 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
-    const courtDetermination: DomainCourtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
-    if (courtDetermination) {
-      respAcceptance.courtDetermination = courtDetermination
-    }
-    const claimantPaymentIntention: DomainPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
-    if (claimantPaymentIntention) {
-      respAcceptance.claimantPaymentIntention = claimantPaymentIntention
+    if (draftClaimantResponse.courtDetermination) {
+      respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
+      respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
     }
     return respAcceptance
   }
 
   private static getCourtDetermination (courtDetermination: CourtDetermination): DomainCourtDetermination {
-    const decisionType: DecisionType = courtDetermination.decisionType
-    if (decisionType === DecisionType.COURT && !courtDetermination.courtPaymentIntention) {
-      throw new Error('court offered payment intention not found where decision type is COURT')
-    }
     if (!courtDetermination.courtPaymentIntention && !courtDetermination.courtDecision) {
-      return undefined
+      throw new Error('Court payment intention and court decision are missing in court Determination')
     }
+
     const responseCourtDetermination: DomainCourtDetermination = new DomainCourtDetermination()
     responseCourtDetermination.courtDecision = courtDetermination.courtDecision
     responseCourtDetermination.courtPaymentIntention = courtDetermination.courtPaymentIntention
@@ -83,17 +75,11 @@ export class ClaimantResponseConverter {
   }
 
   private static getClaimantPaymentIntention (draftClaimantResponse: DraftClaimantResponse): DomainPaymentIntention {
-    const decisionType = draftClaimantResponse.courtDetermination.decisionType
-    if (draftClaimantResponse.alternatePaymentMethod) {
-      const claimantPaymentIntention = draftClaimantResponse.alternatePaymentMethod.toDomainInstance()
-      if (draftClaimantResponse.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
-        claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
-      }
-      return claimantPaymentIntention
-    } else if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      throw new Error(`claimant payment intention not found where decision type is ${decisionType}`)
+    const claimantPaymentIntention = draftClaimantResponse.alternatePaymentMethod.toDomainInstance()
+    if (draftClaimantResponse.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
+      claimantPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
     }
-    return undefined
+    return claimantPaymentIntention
   }
 
   private static getFormaliseOption (repaymentPlan: FormaliseRepaymentPlan): string {
