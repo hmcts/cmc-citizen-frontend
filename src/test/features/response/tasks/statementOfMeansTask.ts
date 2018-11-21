@@ -44,6 +44,7 @@ import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/i
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { Disability, DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { Cohabiting, CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
+import { PartyType } from 'common/partyType'
 
 function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -106,6 +107,8 @@ function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   responseDraft.statementOfMeans.courtOrders = new CourtOrders(false)
   responseDraft.statementOfMeans.explanation = new Explanation('Some explanation')
 
+  responseDraft.statementOfMeans.seenSendYourFinancesPage = false
+
   return responseDraft
 }
 
@@ -125,18 +128,42 @@ describe('StatementOfMeansTask', () => {
         expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
       })
 
-      it('should not be completed when residence is undefined', () => {
-        responseDraft.statementOfMeans.residence = undefined
-        expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
+      context('Individual defendant', () => {
+
+        it('should not be completed when residence is undefined', () => {
+          responseDraft.statementOfMeans.residence = undefined
+          expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
+        })
+
+        it('should not be completed when residence is invalid', () => {
+          responseDraft.statementOfMeans.residence.type = undefined
+          expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
+        })
+
+        it('should be completed when all SOM items are valid', () => {
+          expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
+        })
+
       })
 
-      it('should not be completed when residence is invalid', () => {
-        responseDraft.statementOfMeans.residence.type = undefined
-        expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
-      })
+      const altPartyTypes: string[] = [PartyType.COMPANY.value, PartyType.ORGANISATION.value]
+      altPartyTypes.forEach(partyType => {
+        context(`${partyType} defendant`, () => {
 
-      it('should be completed when all SOM items are valid', () => {
-        expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
+          beforeEach(() => {
+            responseDraft.defendantDetails.partyDetails.type = partyType
+          })
+
+          it('should not be completed when send-your-details page has not been visited', () => {
+            expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.false
+          })
+
+          it('should be completed when send-your-details page has been visited', () => {
+            responseDraft.statementOfMeans.seenSendYourFinancesPage = true
+            expect(StatementOfMeansTask.isCompleted(responseDraft)).to.be.true
+          })
+
+        })
       })
     })
 
