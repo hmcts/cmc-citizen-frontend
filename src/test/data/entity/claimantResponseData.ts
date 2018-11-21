@@ -4,7 +4,7 @@ import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption
 import { monthlyInstalmentPaymentIntentionData } from 'test/data/entity/paymentIntentionData'
 import { courtDeterminationData } from 'test/data/entity/courtDeterminationData'
 
-const baseAcceptationClaimantResponseData = {
+export const baseAcceptationClaimantResponseData = {
   type: ClaimantResponseType.ACCEPTATION,
   claimantPaymentIntention: monthlyInstalmentPaymentIntentionData,
   courtDetermination: courtDeterminationData,
