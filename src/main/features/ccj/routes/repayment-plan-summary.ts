@@ -29,11 +29,9 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
 
   } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
     paymentIntention = claim.settlement.getLastOffer().paymentIntention
-  } else {
-    throw Error(`Claimant hasn’t responded yet for the defendant response`)
   }
 
-  const amountPaid = claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
+  const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
 
   res.render(Paths.repaymentPlanSummaryPage.associatedView, {
     form: form,

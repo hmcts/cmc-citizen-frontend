@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "internalLink.njk" import internalLink %}
-{% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "form.njk" import submitButton %}
 {% from "paymentPlanTable.njk" import paymentPlanTable %}
 
 {% if requestedBy === MadeBy.DEFENDANT.value %}
@@ -13,7 +13,6 @@
 {% endif %}
 
 {% block content %}
-{{ csrfProtection(csrf) }}
 <div class="grid-row">
   <div class="column-two-thirds">
     {% if paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}

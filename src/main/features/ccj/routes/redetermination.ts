@@ -33,11 +33,9 @@ function renderView (form: Form<ReDetermination>, req: express.Request, res: exp
 
   } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
     paymentIntention = claim.settlement.getLastOffer().paymentIntention
-  } else {
-    throw Error(`Claimant hasn’t responded yet for the defendant response`)
   }
 
-  const amountPaid = claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
+  const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
 
   res.render(Paths.redeterminationPage.associatedView, {
     form: form,
