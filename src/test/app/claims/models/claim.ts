@@ -191,7 +191,6 @@ describe('Claim', () => {
       claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.CLAIMANT)
       claim.respondedAt = MomentFactory.currentDateTime()
 
-      // why does it return CLAIMANT_ACCEPTED_ADMISSION ?
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT)
     })
 
