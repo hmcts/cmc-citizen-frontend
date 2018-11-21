@@ -10,8 +10,8 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
-import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
