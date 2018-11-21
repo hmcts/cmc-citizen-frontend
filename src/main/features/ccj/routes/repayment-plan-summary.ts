@@ -11,27 +11,24 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  const hasCountyCourtJudgement = claim.countyCourtJudgment !== undefined && claim.countyCourtJudgmentRequestedAt !== undefined
   let paymentIntention: PaymentIntention
 
-  if (claim.claimantResponse) {
-    if (hasCountyCourtJudgement) {
-      const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-      paymentIntention = {
-        repaymentPlan: ccjRepaymentPlan && {
-          instalmentAmount: ccjRepaymentPlan.instalmentAmount,
-          firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
-          paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
-          completionDate: ccjRepaymentPlan.completionDate,
-          paymentLength: ccjRepaymentPlan.paymentLength
-        } as CoreRepaymentPlan,
-        paymentDate: claim.countyCourtJudgment.payBySetDate,
-        paymentOption: claim.countyCourtJudgment.paymentOption
-      } as PaymentIntention
+  if (claim.hasClaimantAcceptedDefendantResponseWithCCJ) {
+    const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
+    paymentIntention = {
+      repaymentPlan: ccjRepaymentPlan && {
+        instalmentAmount: ccjRepaymentPlan.instalmentAmount,
+        firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
+        paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
+        completionDate: ccjRepaymentPlan.completionDate,
+        paymentLength: ccjRepaymentPlan.paymentLength
+      } as CoreRepaymentPlan,
+      paymentDate: claim.countyCourtJudgment.payBySetDate,
+      paymentOption: claim.countyCourtJudgment.paymentOption
+    } as PaymentIntention
 
-    } else if (claim.settlement) {
-      paymentIntention = claim.settlement.getLastOffer().paymentIntention
-    }
+  } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
+    paymentIntention = claim.settlement.getLastOffer().paymentIntention
   } else {
     throw Error(`Claimant hasn’t responded yet for the defendant response`)
   }
