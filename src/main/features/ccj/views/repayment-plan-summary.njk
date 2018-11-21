@@ -3,12 +3,12 @@
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 {% from "paymentPlanTable.njk" import paymentPlanTable %}
 
-{% if madeBy === MadeBy.DEFENDANT.value %}
-  {% set topHeading = 'The claimant’s repayment plan' %}
+{% if requestedBy === MadeBy.DEFENDANT.value %}
+  {% set heading = 'The claimant’s repayment plan' %}
   {% set topMessage = 'They’ve suggested this repayment plan based on the financial details you gave:' %}
   {% set bottomMessage = 'If you think you can’t afford the repayment plan, you can ' %}
 {% else %}
-  {% set topHeading = 'The repayment plan' %}
+  {% set heading = 'The repayment plan' %}
   {% set bottomMessage = 'If you think the defendant can repay you sooner, you can ' %}
 {% endif %}
 
@@ -16,27 +16,23 @@
 {{ csrfProtection(csrf) }}
 <div class="grid-row">
   <div class="column-two-thirds">
-
     {% if paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-      {% if topHeading %}
-       <h2 class="heading-large">{{ t(topHeading) }}</h2>
-      {% endif %}
-      <p> {{ t(topMessage)}}</p>
+      <p>{{ t(topMessage)}}</p>
       {{ paymentPlanTable(
-      id = 'payment-table',
-      instalmentAmount = paymentIntention.repaymentPlan.instalmentAmount,
-      paymentSchedule = paymentIntention.repaymentPlan.paymentSchedule,
-      firstPaymentDate = paymentIntention.repaymentPlan.firstPaymentDate,
-      completionDate = paymentIntention.repaymentPlan.completionDate,
-      paymentLength = paymentIntention.repaymentPlan.paymentLength
-      )
+        id = 'payment-table',
+        instalmentAmount = paymentIntention.repaymentPlan.instalmentAmount,
+        paymentSchedule = paymentIntention.repaymentPlan.paymentSchedule,
+        firstPaymentDate = paymentIntention.repaymentPlan.firstPaymentDate,
+        completionDate = paymentIntention.repaymentPlan.completionDate,
+        paymentLength = paymentIntention.repaymentPlan.paymentLength
+        )
       }}
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
       <p>{{ t('The defendant will pay {{ amount }} by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}<p>
     {% endif %}
 
     {% if claim.isEligibleForReDetermination() %}
-      <p>{{ t(bottomMessage) }}{{ internalLink('ask a judge to make a new repayment plan.', CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId, madeBy: madeBy })) }}</p>
+      <p>{{ t(bottomMessage) }}{{ internalLink('ask a judge to make a new repayment plan.', CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId, madeBy: requestedBy })) }}</p>
     {% endif %}
   </div>
 </div>

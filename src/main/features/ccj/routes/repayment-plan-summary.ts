@@ -40,7 +40,7 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
     claim: claim,
     paymentIntention: paymentIntention,
     remainingAmountToPay: claim.totalAmountTillDateOfIssue - amountPaid,
-    madeBy: req.params.madeBy
+    requestedBy: req.params.madeBy
   })
 }
 
