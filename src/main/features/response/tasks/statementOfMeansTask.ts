@@ -18,6 +18,10 @@ export class StatementOfMeansTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
     const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
 
+    if (responseDraft.defendantDetails.partyDetails.isBusiness()) {
+      return StatementOfMeansTask.isCompletedAsBusiness(responseDraft)
+    }
+
     return statementOfMeans !== undefined
       && isValid(statementOfMeans.bankAccounts)
       && isValid(statementOfMeans.residence)
@@ -31,6 +35,13 @@ export class StatementOfMeansTask {
       && isValid(statementOfMeans.explanation)
       && StatementOfMeansTask.isDisabilityCompleted(statementOfMeans)
       && StatementOfMeansTask.isPartnerCompleted(statementOfMeans)
+  }
+
+  private static isCompletedAsBusiness (responseDraft: ResponseDraft): boolean {
+    const statementOfMeans: StatementOfMeans = responseDraft.statementOfMeans
+
+    return statementOfMeans !== undefined
+      && statementOfMeans.seenSendYourFinancesPage
   }
 
   private static isDependantsCompleted (statementOfMeans: StatementOfMeans): boolean {

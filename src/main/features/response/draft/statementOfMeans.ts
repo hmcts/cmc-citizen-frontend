@@ -52,6 +52,7 @@ export class StatementOfMeans {
   dependantsDisability?: DependantsDisability
   otherDependantsDisability?: OtherDependantsDisability
   carer?: Carer
+  seenSendYourFinancesPage?: boolean
 
   deserialize (input: any): StatementOfMeans {
     if (input) {
@@ -81,6 +82,7 @@ export class StatementOfMeans {
       this.dependantsDisability = new DependantsDisability(input.dependantsDisability && input.dependantsDisability.option)
       this.otherDependantsDisability = new OtherDependantsDisability(input.otherDependantsDisability && input.otherDependantsDisability.option)
       this.carer = new Carer(input.carer && input.carer.option)
+      this.seenSendYourFinancesPage = input.seenSendYourFinancesPage
     }
     return this
   }

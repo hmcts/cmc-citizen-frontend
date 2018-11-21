@@ -112,7 +112,10 @@ export class TaskListBuilder {
           tasks.push(
             new TaskListItem(
               'Share your financial details',
-              StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
+              (draft.defendantDetails.partyDetails.isBusiness()
+                  ? StatementOfMeansPaths.sendYourDetailsPage
+                  : StatementOfMeansPaths.introPage
+              ).evaluateUri({ externalId: externalId }),
               StatementOfMeansTask.isCompleted(draft)
             )
           )
