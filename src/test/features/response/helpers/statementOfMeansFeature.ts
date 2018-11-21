@@ -19,25 +19,12 @@ claim.features = ['admissions']
 describe('StatementOfMeansFeature', () => {
 
   describe('isApplicableFor', () => {
-    function itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants (responseDraft: ResponseDraft) {
-      it('should be enabled for individual', () => {
-        responseDraft.defendantDetails = new Defendant(new IndividualDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.true
-      })
-
-      it('should be enabled for sole trader', () => {
-        responseDraft.defendantDetails = new Defendant(new SoleTraderDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.true
-      })
-
-      it('should be disabled for company', () => {
-        responseDraft.defendantDetails = new Defendant(new CompanyDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.false
-      })
-
-      it('should be disabled for organisation', () => {
-        responseDraft.defendantDetails = new Defendant(new OrganisationDetails())
-        expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.false
+    function itShouldBeEnabledForAllDefendantTypes (responseDraft: ResponseDraft) {
+      it('should be disabled for all defendant types', () => {
+        [IndividualDetails, SoleTraderDetails, CompanyDetails, OrganisationDetails].forEach((DefendantType) => {
+          responseDraft.defendantDetails = new Defendant(new DefendantType())
+          expect(StatementOfMeansFeature.isApplicableFor(claim, responseDraft)).to.be.true
+        })
       })
     }
 
@@ -68,7 +55,7 @@ describe('StatementOfMeansFeature', () => {
         }
       } as ResponseDraft
 
-      itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(new ResponseDraft().deserialize(responseDraft))
+      itShouldBeEnabledForAllDefendantTypes(new ResponseDraft().deserialize(responseDraft))
     })
 
     context('when response is part admission - I have already paid', () => {
@@ -103,7 +90,7 @@ describe('StatementOfMeansFeature', () => {
         })
       } as ResponseDraft
 
-      itShouldBeEnabledForNonBusinessAndDisabledForBusinessDefendants(new ResponseDraft().deserialize(responseDraft))
+      itShouldBeEnabledForAllDefendantTypes(new ResponseDraft().deserialize(responseDraft))
     })
 
     context('when response is rejection', () => {
