@@ -104,15 +104,17 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
-    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
-    locals.draft.document.courtDetermination.decisionType = decisionType
+    if (locals.claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
+      const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
+      locals.draft.document.courtDetermination.decisionType = decisionType
 
-    const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-    if (courtCalculatedPaymentIntention) {
-      locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+      const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+      if (courtCalculatedPaymentIntention) {
+        locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+      }
+
+      locals.draft.document.courtDetermination.courtDecision = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
-
-    locals.draft.document.courtDetermination.courtDecision = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     return super.saveDraft(locals)
   }
 
@@ -123,7 +125,8 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
 
     const externalId: string = req.params.externalId
 
-    if (claim.response.defendant.type === PartyType.COMPANY.value) {
+    if (claim.response.defendant.type === PartyType.COMPANY.value
+      || claim.response.defendant.type === PartyType.ORGANISATION.value) {
       return Paths.taskListPage.evaluateUri({ externalId: externalId })
     }
 

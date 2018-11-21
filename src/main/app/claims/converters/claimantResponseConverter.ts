@@ -51,7 +51,7 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
-    if (draftClaimantResponse.courtDetermination) {
+    if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.courtDecision) {
       respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
       respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
     }

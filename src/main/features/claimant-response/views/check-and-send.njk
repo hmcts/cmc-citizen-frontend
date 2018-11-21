@@ -78,8 +78,8 @@
             {% set alternatePaymentMethodResponse = t('By instalments') %}
           {% endif %}
 
-          {{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
-            changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+          {#{{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,#}
+            {#changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}#}
 
         {% if paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
           {{ row(label = 'Regular payments of', bold = true, value = paymentIntention.repaymentPlan.instalmentAmount | numeral,
@@ -90,8 +90,6 @@
             bottomBorder = true) }}
         {% endif %}
       {% endif %}
-    {% endif %}
-
     {% endif %}
 
     {{ tableEnd() }}
@@ -105,7 +103,6 @@
         changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
       ) }}
       {{ tableEnd() }}
-    {% endif %}
 
     {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
@@ -175,6 +172,9 @@
 
       {{ tableEnd() }}
     {% endif %}
+
+    {% endif %}
+  {% endif %}
 
     {{ submitButton('Submit response') }}
 
