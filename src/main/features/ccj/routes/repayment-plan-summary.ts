@@ -13,7 +13,7 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
   const claim: Claim = res.locals.claim
   let paymentIntention: PaymentIntention
 
-  if (claim.hasClaimantAcceptedDefendantResponseWithCCJ) {
+  if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
     const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
     paymentIntention = {
       repaymentPlan: ccjRepaymentPlan && {

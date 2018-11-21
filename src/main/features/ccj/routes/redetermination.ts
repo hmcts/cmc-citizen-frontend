@@ -17,7 +17,7 @@ function renderView (form: Form<ReDetermination>, req: express.Request, res: exp
   const claim: Claim = res.locals.claim
   let paymentIntention: PaymentIntention
 
-  if (claim.hasClaimantAcceptedDefendantResponseWithCCJ) {
+  if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
     const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
     paymentIntention = {
       repaymentPlan: ccjRepaymentPlan && {

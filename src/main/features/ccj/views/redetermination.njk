@@ -4,15 +4,12 @@
 {% set heading = 'Why do you believe the defendant can repay you sooner?' %}
 {% else %}
 {% set heading = 'Ask a judge to make a repayment plan' %}
+{% set topMessage = 'The claimant has proposed this repayment plan:' %}
 {% set textAreaLabel = 'Why do you feel this plan is not affordable?' %}
 {% endif %}
 
 {% from "form.njk" import saveAndContinueButton, submitButton, csrfProtection, errorSummary, textArea %}
-{% from "repaymentPlanBlock.njk" import repaymentPlanBlock %}
-
-{% macro paymentIntentionFragment(amount, payBySetDate) %}
-<p>{{ t('The defendant will pay {{ amount }} by {{ paymentDate }}.', { amount: amount | numeral, paymentDate: payBySetDate | date }) }}</p>
-{% endmacro %}
+{% from "paymentPlanTable.njk" import paymentPlanTable %}
 
 {% block content %}
 <div class="column-two-thirds">
@@ -22,9 +19,18 @@
 
     {% if madeBy === MadeBy.DEFENDANT.value %}
       {% if paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-         {{ repaymentPlanBlock( heading = 'The repayment plan', repaymentPlan = paymentIntention.repaymentPlan ) }}
+          <p> {{ t(topMessage)}}</p>
+          {{ paymentPlanTable(
+          id = 'payment-table',
+          instalmentAmount = paymentIntention.repaymentPlan.instalmentAmount,
+          paymentSchedule = paymentIntention.repaymentPlan.paymentSchedule,
+          firstPaymentDate = paymentIntention.repaymentPlan.firstPaymentDate,
+          completionDate = paymentIntention.repaymentPlan.completionDate,
+          paymentLength = paymentIntention.repaymentPlan.paymentLength
+          )
+          }}
       {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-         {{paymentIntentionFragment( amount = remainingAmountToPay, payBySetDate = paymentIntention.paymentDate ) }}
+          <p>{{ t('The defendant will pay {{ amount }} by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}<p>
       {% endif %}
     {% endif %}
 
