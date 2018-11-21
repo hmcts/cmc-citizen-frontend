@@ -9,25 +9,44 @@ import { User } from 'idam/user'
 import { CCJClient } from 'claims/ccjClient'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { MadeBy } from 'offer/form/models/madeBy'
-import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  const repaymentPlan: RepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-  const coreRepaymentPlan: CoreRepaymentPlan = {
-    instalmentAmount: repaymentPlan.instalmentAmount,
-    firstPaymentDate: repaymentPlan.firstPaymentDate,
-    paymentSchedule: (repaymentPlan.paymentSchedule as PaymentSchedule).value,
-    completionDate: repaymentPlan.completionDate,
-    paymentLength: repaymentPlan.paymentLength
-  } as CoreRepaymentPlan
+  const hasCountyCourtJudgement = claim.countyCourtJudgment !== undefined && claim.countyCourtJudgmentRequestedAt !== undefined
+  let paymentIntention: PaymentIntention
+
+  if (claim.claimantResponse) {
+    if (hasCountyCourtJudgement) {
+      const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
+      paymentIntention = {
+        repaymentPlan: ccjRepaymentPlan && {
+          instalmentAmount: ccjRepaymentPlan.instalmentAmount,
+          firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
+          paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
+          completionDate: ccjRepaymentPlan.completionDate,
+          paymentLength: ccjRepaymentPlan.paymentLength
+        } as CoreRepaymentPlan,
+        paymentDate: claim.countyCourtJudgment.payBySetDate,
+        paymentOption: claim.countyCourtJudgment.paymentOption
+      } as PaymentIntention
+
+    } else if (claim.settlement) {
+      paymentIntention = claim.settlement.getLastOffer().paymentIntention
+    }
+  } else {
+    throw Error('Claimant hasn’t responded yet for the defendant response')
+  }
+
+  const amountPaid = claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
 
   res.render(Paths.redeterminationPage.associatedView, {
     form: form,
     claim: claim,
-    repaymentPlan: coreRepaymentPlan,
+    paymentIntention: paymentIntention,
+    remainingAmountToPay: claim.totalAmountTillDateOfIssue - amountPaid,
     madeBy: req.params.madeBy
   })
 }

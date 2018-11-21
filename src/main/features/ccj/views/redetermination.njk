@@ -10,6 +10,10 @@
 {% from "form.njk" import saveAndContinueButton, submitButton, csrfProtection, errorSummary, textArea %}
 {% from "repaymentPlanBlock.njk" import repaymentPlanBlock %}
 
+{% macro paymentIntentionFragment(amount, payBySetDate) %}
+<p>{{ t('The defendant will pay {{ amount }} by {{ paymentDate }}.', { amount: amount | numeral, paymentDate: payBySetDate | date }) }}</p>
+{% endmacro %}
+
 {% block content %}
 <div class="column-two-thirds">
 
@@ -17,7 +21,11 @@
     {{ csrfProtection(csrf) }}
 
     {% if madeBy === MadeBy.DEFENDANT.value %}
-    {{ repaymentPlanBlock( heading = 'The claimant has proposed this repayment plan', repaymentPlan = repaymentPlan ) }}
+      {% if paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+         {{ repaymentPlanBlock( heading = 'The repayment plan', repaymentPlan = paymentIntention.repaymentPlan ) }}
+      {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+         {{paymentIntentionFragment( amount = remainingAmountToPay, payBySetDate = paymentIntention.paymentDate ) }}
+      {% endif %}
     {% endif %}
 
     {{ textArea(label = textAreaLabel, name = 'text', form = form, rows = 5, columns=18) }}
