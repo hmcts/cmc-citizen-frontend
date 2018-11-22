@@ -17,6 +17,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { MadeBy } from 'offer/form/models/madeBy'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -65,7 +66,12 @@ describe('CCJ - re-determination page', () => {
               paymentLength: '12 months'
             },
             ccjType: CountyCourtJudgmentType.DETERMINATION
+          },
+          claimantResponse: {
+            type: ClaimantResponseType.ACCEPTATION,
+            amountPaid: 0
           }
+
         })
 
         await request(app)
@@ -114,6 +120,10 @@ describe('CCJ - re-determination page', () => {
                   paymentLength: '12 months'
                 },
                 ccjType: CountyCourtJudgmentType.DETERMINATION
+              },
+              claimantResponse: {
+                type: ClaimantResponseType.ACCEPTATION,
+                amountPaid: 0
               }
             })
           })
@@ -156,6 +166,10 @@ describe('CCJ - re-determination page', () => {
                   paymentLength: '12 months'
                 },
                 ccjType: CountyCourtJudgmentType.DETERMINATION
+              },
+              claimantResponse: {
+                type: ClaimantResponseType.ACCEPTATION,
+                amountPaid: 0
               }
             })
 
