@@ -285,6 +285,19 @@ export class Claim {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
+  hasClaimantAcceptedDefendantResponseWithCCJ (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.countyCourtJudgmentRequestedAt !== undefined
+      && this.countyCourtJudgment !== undefined
+  }
+
+  hasClaimantAcceptedDefendantResponseWithSettlement (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.settlement !== undefined
+  }
+
   private isClaimantResponseSubmitted (): boolean {
     return this.response !== undefined && this.claimantResponse !== undefined
   }
