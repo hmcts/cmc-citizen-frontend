@@ -8,7 +8,6 @@ import { Claim } from 'claims/models/claim'
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { Paths as SettlementAgreementPaths } from 'settlement-agreement/paths'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -49,9 +48,3 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       renderView(Form.empty(), req, res)
     }))
-  .post(Paths.repaymentPlanSummaryPage.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-    const { externalId } = req.params
-
-    res.redirect(SettlementAgreementPaths.signSettlementAgreement.evaluateUri({ externalId: externalId }))
-
-  }))
