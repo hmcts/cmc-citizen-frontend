@@ -80,7 +80,6 @@ export class Settlement {
   isSettlementAgreement (): boolean {
     return this.partyStatements.length >= 2
       && this.partyStatements[0].type === StatementType.OFFER.value
-      && this.partyStatements[0].madeBy === MadeBy.CLAIMANT.value
       && this.partyStatements[1].type === StatementType.ACCEPTATION.value
       && this.partyStatements[1].madeBy === MadeBy.CLAIMANT.value
   }
