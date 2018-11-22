@@ -21,7 +21,10 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Organisation } from 'claims/models/details/theirs/organisation'
-import { rejectionClaimantResponseData } from 'test/data/entity/claimantResponseData'
+import {
+  baseAcceptationClaimantResponseData,
+  rejectionClaimantResponseData
+} from 'test/data/entity/claimantResponseData'
 import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
@@ -223,6 +226,21 @@ describe('Claim', () => {
       }
 
       expect(claim.stateHistory.map(state => state.status)).includes(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
+    })
+
+    it('should return CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ when there is a CCJ and a claimant response with a court decision', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseAcceptationClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
     })
   })
 
