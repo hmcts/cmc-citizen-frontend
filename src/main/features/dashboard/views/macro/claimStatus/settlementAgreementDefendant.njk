@@ -77,7 +77,7 @@
     <p>{{ t('A CCJ would order you to repay the money in line with the terms of the agreement.') }}</p>
     <p>{{ t('If they request a CCJ, you can ask a judge to consider changing the repayment plan, based on your financial details.') }}</p>
     <p>{{ t('The court has reviewed the plan and believes you can afford it, so a judge may not change it.') }}</p>
-    <p>{{ t('We’ll email you when the claimant responds.')}}</p>
+    <p>{{ t('We’ll email you when {{ defendantName }} responds', { defendantName: claim.claimData.claimant.name } )}}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}
