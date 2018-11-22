@@ -18,6 +18,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
 import { CCJModelConverter } from 'claims/ccjModelConverter'
+import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -61,7 +62,7 @@ function deserializerFunction (value: any): Declaration | QualifiedDeclaration {
   }
 }
 
-function getStatementOfTruthClassFor (claim: Claim): { new(): Declaration | QualifiedDeclaration } {
+function getStatementOfTruthClassFor (claim: Claim): { new (): Declaration | QualifiedDeclaration } {
   if (claim.claimData.claimant.isBusiness()) {
     return QualifiedDeclaration
   } else {
@@ -93,8 +94,13 @@ export default express.Router()
           draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
           await new DraftService().save(draft, user.bearerToken)
         }
-
-        const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document)
+        let ccjType: CountyCourtJudgmentType = undefined
+        if (claim.response) {
+          ccjType = CountyCourtJudgmentType.ADMISSIONS
+        } else {
+          ccjType = CountyCourtJudgmentType.DEFAULT
+        }
+        const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document, ccjType)
         await CCJClient.request(claim.externalId, countyCourtJudgment, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))

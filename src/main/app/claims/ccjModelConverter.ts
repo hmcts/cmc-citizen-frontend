@@ -36,7 +36,7 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
 
 export class CCJModelConverter {
 
-  static convertForRequest (draft: DraftCCJ): CountyCourtJudgment {
+  static convertForRequest (draft: DraftCCJ, ccjType: CountyCourtJudgmentType): CountyCourtJudgment {
     let statementOfTruth: StatementOfTruth = undefined
     if (draft.qualifiedDeclaration) {
       // API model is called statement of truth
@@ -45,7 +45,6 @@ export class CCJModelConverter {
         draft.qualifiedDeclaration.signerRole
       )
     }
-
     return new CountyCourtJudgment(
       draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined,
       draft.paymentOption.option.value as PaymentOption,
@@ -53,7 +52,7 @@ export class CCJModelConverter {
       convertRepaymentPlan(draft.repaymentPlan),
       convertPayBySetDate(draft),
       statementOfTruth,
-      CountyCourtJudgmentType.DEFAULT
+      ccjType
     )
   }
 }

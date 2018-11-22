@@ -338,9 +338,8 @@ describe('Claim', () => {
       }
 
       expect(claim.stateHistory).to.have.lengthOf(2)
-      console.log("history: ", claim.stateHistory)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
-      //expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
     })
 
     it('should return OFFER_REJECTED when offer is rejected', () => {
