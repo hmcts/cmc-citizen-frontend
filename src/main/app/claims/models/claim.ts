@@ -176,7 +176,7 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.moneyReceivedOn && this.hasCCJ()) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
-    } else {
+    } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     }
     if (this.countyCourtJudgmentRequestedAt) {

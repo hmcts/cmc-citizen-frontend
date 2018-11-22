@@ -67,7 +67,7 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
       {% if state.status === ClaimStatus.PAID_IN_FULL_ELIGIBLE %}
-        {{ paidInFullClaimantClaimDetails(claim) }}
+        {{ paidInFullClaimantClaimDetails(claim.externalId) }}
       {% elif state.status === ClaimStatus.PAID_IN_FULL %}
         {{ paidInFullClaimantClaimSettledDetails(claim) }}
       {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
