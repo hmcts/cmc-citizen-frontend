@@ -1379,12 +1379,13 @@ co@^4.6.0:
   version "4.6.0"
   resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
 
-codacy-coverage@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/codacy-coverage/-/codacy-coverage-3.2.0.tgz#529b54f642bb4d0ff503d660b0b7cfd7535f1f86"
+codacy-coverage@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/codacy-coverage/-/codacy-coverage-3.3.0.tgz#9818f593190110b144f9cfc8769d80059e26f063"
   dependencies:
     bluebird "^3.5.x"
     commander "^2.x"
+    jacoco-parse "^2.x"
     joi "^13.x"
     lcov-parse "^1.x"
     lodash "^4.17.4"
@@ -4101,6 +4102,13 @@ isurl@^1.0.0-alpha5:
     has-to-string-tag-x "^1.2.0"
     is-object "^1.0.1"
 
+jacoco-parse@^2.x:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/jacoco-parse/-/jacoco-parse-2.0.0.tgz#8684576497a1eddf6d766afa6546aef7b1036f29"
+  dependencies:
+    mocha "^5.2.0"
+    xml2js "^0.4.9"
+
 joi@^13.x:
   version "13.2.0"
   resolved "https://registry.yarnpkg.com/joi/-/joi-13.2.0.tgz#72307f1765bb40b068361f9368a4ba1092b8478e"
@@ -6451,7 +6459,7 @@ sass-lint@^1.10.2:
     path-is-absolute "^1.0.0"
     util "^0.10.3"
 
-sax@^1.2.4:
+sax@>=0.6.0, sax@^1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
 
@@ -7862,9 +7870,20 @@ xdg-basedir@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/xdg-basedir/-/xdg-basedir-3.0.0.tgz#496b2cc109eca8dbacfe2dc72b603c17c5870ad4"
 
+xml2js@^0.4.9:
+  version "0.4.19"
+  resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.19.tgz#686c20f213209e94abf0d1bcf1efaa291c7827a7"
+  dependencies:
+    sax ">=0.6.0"
+    xmlbuilder "~9.0.1"
+
 xml@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/xml/-/xml-1.0.1.tgz#78ba72020029c5bc87b8a81a3cfcd74b4a2fc1e5"
+
+xmlbuilder@~9.0.1:
+  version "9.0.7"
+  resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
 
 xmlcreate@^1.0.1:
   version "1.0.2"
