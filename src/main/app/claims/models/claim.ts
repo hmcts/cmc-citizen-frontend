@@ -252,7 +252,7 @@ export class Claim {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
 
-  private isSettlementAgreementRejected(): boolean {
+  private isSettlementAgreementRejected (): boolean {
     return this.settlement && this.settlement.isOfferRejected() && this.settlement.isSettlementAgreement()
   }
 
