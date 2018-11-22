@@ -77,6 +77,14 @@ export class Settlement {
     return this.partyStatements && this.partyStatements.some(statement => statement.type === 'COUNTERSIGNATURE') && this.isThroughAdmissions()
   }
 
+  isSettlementAgreement (): boolean{
+    return this.partyStatements.length >= 2
+      && this.partyStatements[0].type === StatementType.OFFER.value
+      && this.partyStatements[0].madeBy === MadeBy.CLAIMANT.value
+      && this.partyStatements[1].type === StatementType.ACCEPTATION.value
+      && this.partyStatements[1].madeBy === MadeBy.CLAIMANT.value
+  }
+
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
     return partyStatement.type === StatementType.OFFER.value && partyStatement.madeBy === MadeBy.DEFENDANT.value
   }

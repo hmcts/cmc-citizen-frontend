@@ -179,6 +179,8 @@ export class Claim {
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
+    } else if (this.isSettlementAgreementRejected()) {
+      return ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
@@ -248,6 +250,10 @@ export class Claim {
 
   private isSettlementReachedThroughAdmission (): boolean {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+  }
+
+  private isSettlementAgreementRejected(): boolean {
+    return this.settlement && this.settlement.isOfferRejected() && this.settlement.isSettlementAgreement()
   }
 
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
