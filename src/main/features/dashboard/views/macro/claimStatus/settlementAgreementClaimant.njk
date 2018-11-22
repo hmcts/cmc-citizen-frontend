@@ -1,6 +1,7 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "internalLink.njk" import internalLink %}
 {% from "./utilityMacros.njk" import downloadAgreementLink %}
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro settlementAgreementSignedByClaimantDashboard(claim) %}
     {{ t('You’ve signed a settlement agreement. The defendant can choose to sign it or not.') }}
@@ -42,6 +43,22 @@
 {% endmacro %}
 
 {% macro settlementAgreementSignedByBothClaimantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <p>{{ t('The agreement says the defendant will pay you in full by {{ paymentDate }}.',
+        { paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date }) }}</p>
+    {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    <p>{{ t('The agreement says the defendant will pay you in instalments of {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
+        {
+          instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+          firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+        }) }}</p>
+  {% endif %}
+  <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
+  <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
+  <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
+  {{ paidInFullClaimantButtonClaimDetails(claim) }}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -58,7 +75,8 @@
     <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
     <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
     <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-    <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary form-group">Tell us you've been paid</a>
+    {{ paidInFullClaimantButtonClaimDetails(claim) }}
+
   </div>
 {% endmacro %}
 
@@ -69,5 +87,5 @@
         + internalLink('request a County Court Judgment. ', CCJPaths.paidAmountPage.evaluateUri({externalId:claim.externalId}) )) | safe }}
     </p>
   </div>
+  {{ paidInFullClaimantButtonClaimDetails(claim,'Tell us you’ve been paid') }}
 {% endmacro %}
-

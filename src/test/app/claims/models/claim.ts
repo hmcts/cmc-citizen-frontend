@@ -343,7 +343,7 @@ describe('Claim', () => {
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
     })
 
-    it('should return OFFER_SUBMITTED and RESPONSE_SUBMITTED if an offer has been submitted.', () => {
+    it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_ELIGIBLE if an offer has been submitted.', () => {
       claim.settlement = new Settlement()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
@@ -354,8 +354,8 @@ describe('Claim', () => {
       }
 
       expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
     })
 
     it('should return OFFER_REJECTED when offer is rejected', () => {
@@ -365,8 +365,8 @@ describe('Claim', () => {
       })
 
       expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
     })
 
     it('should contain the claim status only if not responded to', () => {
@@ -394,8 +394,9 @@ describe('Claim', () => {
       }
       claim.claimantResponse = rejectionClaimantResponseData
 
-      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if claimant rejects company response', () => {
@@ -410,8 +411,9 @@ describe('Claim', () => {
       }
       claim.claimantResponse = rejectionClaimantResponseData
 
-      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {
@@ -421,8 +423,28 @@ describe('Claim', () => {
       claim.settlementReachedAt = moment()
 
       expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+    })
+  })
+
+  describe('paidInFullCCJPaidWithinMonth', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.moneyReceivedOn = MomentFactory.currentDate()
+    })
+
+    it('should return true when CCJ is paid within month of countyCourtJudgmentRequestedAt', () => {
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().add(1, 'month')
+      expect(claim.isCCJPaidWithinMonth()).to.be.equal(true)
+    })
+
+    it('should return false when CCJ is paid 2 months after countyCourtJudgmentRequestedAt', () => {
+      claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+      expect(claim.isCCJPaidWithinMonth()).to.be.equal(false)
     })
   })
 })

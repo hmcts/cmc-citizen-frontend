@@ -49,6 +49,8 @@
   settlementAgreementSignedByClaimantDeadlinePassedDashboard,
   settlementAgreementSignedByBothClaimantDashboard %}
 
+{% from "./claimStatus/paidInFullClaimant.njk" import paidInFullClaimantDashboard %}
+
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantDashboard %}
@@ -59,7 +61,9 @@
 {% from "./claimStatus/claimantResponse.njk" import claimantRejectedDefendantAsCompanyOrOrganisationResponse %}
 
 {% macro caseStatusForClaimant(status, claim) %}
-  {% if status === ClaimStatus.NO_RESPONSE %}
+  {% if status === ClaimStatus.PAID_IN_FULL %}
+    {{ paidInFullClaimantDashboard() }}
+  {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForClaimantDashboard(claim) }}

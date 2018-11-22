@@ -2,6 +2,7 @@
 {% from "internalLink.njk" import internalLink %}
 {% from "form.njk" import linkButton %}
 {% from "./utilityMacros.njk" import downloadResponseLink, viewAndRespondOffer %}
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro claimFullAdmissionForClaimantDashboard(claim) %}
 
@@ -32,7 +33,7 @@
           { paymentDate: paymentDate }) }}</p>
       <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
       <p>{{ t('You can settle for less than the full claim amount.') }}</p>
-      <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've settled</a>
+      {{ paidInFullClaimantButtonClaimDetails(claim) }}
       <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
       {% if claim.eligibleForCCJ %}
         <p>{{ t('If the defendant hasn’t paid you, you can ' + internalLink('request a County Court Judgment', CCJPaths.paidAmountPage.evaluateUri({ externalId: claim.externalId }))
