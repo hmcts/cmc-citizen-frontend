@@ -27,7 +27,7 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
   } else if (claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
     return draft.courtDetermination.courtDecision
   } else {
-    return response.paymentIntention
+    return draft.alternatePaymentMethod.toDomainInstance()
   }
 }
 
