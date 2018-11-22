@@ -12,6 +12,8 @@ import { isPastDeadline } from 'claims/isPastDeadline'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { PartyType } from 'common/partyType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
 
@@ -172,6 +174,8 @@ export class Claim {
     if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
+      } else if (this.hasClaimantSuggestedAlternativePlanWithCCJ()) {
+        return ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
@@ -195,6 +199,12 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else if (this.hasClaimantRejectedDefendantResponse() &&
+      (this.response.defendant.type === PartyType.COMPANY.value
+        || this.response.defendant.type === PartyType.ORGANISATION.value)) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
+    } else if (this.isClaimantResponseSubmitted()) {
+      return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else {
       throw new Error('Unknown Status')
     }
@@ -217,7 +227,7 @@ export class Claim {
   }
 
   private isResponseSubmitted (): boolean {
-    return this.response !== undefined
+    return this.response !== undefined && !this.claimantResponse
   }
 
   private isOfferSubmitted (): boolean {
@@ -262,18 +272,45 @@ export class Claim {
 
   private hasDefendantNotSignedSettlementAgreementInTime (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.claimantRespondedAt && this.claimantRespondedAt.add('7', 'days').isBefore(MomentFactory.currentDate())
+      this.claimantRespondedAt && this.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
   }
 
-  private hasClaimantAcceptedAdmissionWithCCJ (): boolean {
+  hasClaimantAcceptedAdmissionWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response &&
-      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
+      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
+      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+  }
+
+  private hasClaimantRejectedDefendantResponse (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+  }
+
+  hasClaimantAcceptedDefendantResponseWithCCJ (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.countyCourtJudgmentRequestedAt !== undefined
+      && this.countyCourtJudgment !== undefined
+  }
+
+  hasClaimantAcceptedDefendantResponseWithSettlement (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.settlement !== undefined
+  }
+
+  private isClaimantResponseSubmitted (): boolean {
+    return this.response !== undefined && this.claimantResponse !== undefined
   }
 
   isEligibleForReDetermination (): boolean {
-    const dateAfter19Days = this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
+    const dateAfter19Days = this.countyCourtJudgmentRequestedAt && this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
     return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === CountyCourtJudgmentType.DETERMINATION
       && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
       && this.reDeterminationRequestedAt === undefined
+  }
+
+  private hasClaimantSuggestedAlternativePlanWithCCJ (): boolean {
+    return this.claimantResponse && this.countyCourtJudgment &&
+      !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 }

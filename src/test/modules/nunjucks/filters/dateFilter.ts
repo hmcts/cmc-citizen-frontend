@@ -1,7 +1,8 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import { addDaysFilter, dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
+import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 describe('dateFilter', () => {
   it('formats date (moment object) properly', () => {
@@ -142,6 +143,47 @@ describe('addDaysFilter', () => {
   })
 })
 
+describe('monthIncrementFilter', () => {
+  it('adds monthly increment to a moment', () => {
+    expect(monthIncrementFilter(moment('2018-01-01')).toJSON()).to.eq(moment('2018-02-01').toJSON())
+  })
+  it('adds monthly increment to a valid string', () => {
+    expect(monthIncrementFilter('2018-01-01').toJSON()).to.eq(moment('2018-02-01').toJSON())
+  })
+  it('adds monthly increment to "now"', () => {
+    const monthlyIncrement = calculateMonthIncrement(moment())
+    expect(monthIncrementFilter('now').format(moment.HTML5_FMT.DATETIME_LOCAL))
+      .to.eq(monthlyIncrement.format(moment.HTML5_FMT.DATETIME_LOCAL))
+  })
+
+  describe('throws exception when', () => {
+    it('null given', () => {
+      expectMonthIncrementToThrowErrorWithMsg(null, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('undefined given', () => {
+      expectMonthIncrementToThrowErrorWithMsg(undefined, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('empty string given', () => {
+      expectMonthIncrementToThrowErrorWithMsg('', 'Input should be moment or string, cannot be empty')
+    })
+
+    it('number given', () => {
+      expectMonthIncrementToThrowErrorWithMsg(1.01 as any, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('string given, but it is not a valid date', () => {
+      expectMonthIncrementToThrowErrorWithMsg('this is invalid date', 'Invalid date')
+    })
+
+    it('moment given with invalid date', () => {
+      const invalidDateMoment = moment('2010-02-31')
+      expectMonthIncrementToThrowErrorWithMsg(invalidDateMoment, 'Invalid date')
+    })
+  })
+})
+
 function expectDateFilterToThrowErrorWithMsg (input: any, msg: string): void {
   expect(() => {
     dateFilter(input)
@@ -157,5 +199,11 @@ function expectInputDateFilterToThrowErrorWithMsg (input: any, msg: string): voi
 function expectAddDaysFilterToThrowErrorWithMsg (input: any, msg: string): void {
   expect(() => {
     addDaysFilter(input, 1)
+  }).to.throw(Error, msg)
+}
+
+function expectMonthIncrementToThrowErrorWithMsg (input: any, msg: string): void {
+  expect(() => {
+    monthIncrementFilter(input)
   }).to.throw(Error, msg)
 }
