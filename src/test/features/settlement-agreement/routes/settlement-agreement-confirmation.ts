@@ -12,7 +12,6 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as settlementAgreementServiceMock from 'test/http-mocks/settlement-agreement'
 import { Paths } from 'settlement-agreement/paths'
 import { app } from 'main/app'
-import { checkNotDefendantInCaseGuard } from '../../response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -24,11 +23,10 @@ describe('Claimant response: confirmation page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       context('when claimant response submitted', () => {

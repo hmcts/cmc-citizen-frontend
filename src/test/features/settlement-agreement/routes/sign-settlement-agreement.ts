@@ -13,12 +13,10 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as settlementAgreementServiceMock from 'test/http-mocks/settlement-agreement'
 
-import { checkNotDefendantInCaseGuard } from '../../response/routes/checks/not-defendant-in-case-check'
 import { Paths } from 'settlement-agreement/paths'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const defendantPartialAdmissionResponse = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 const pagePath = Paths.signSettlementAgreement.evaluateUri({ externalId: externalId })
 
 const claim = {
@@ -34,11 +32,10 @@ describe('Settlement agreement: sign settlement agreement page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       context('when response not submitted', () => {
@@ -52,7 +49,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
 
           await request(app)
             .get(pagePath)
@@ -66,11 +63,10 @@ describe('Settlement agreement: sign settlement agreement page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       context('when response not submitted', () => {

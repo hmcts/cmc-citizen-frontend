@@ -5,7 +5,7 @@ import {
   DefendantSettlementResponse,
   DefendantSettlementResponseOption,
   ValidationErrors
-} from '../../../../../main/features/settlement-agreement/form/models/defendantSettlementResponse'
+} from 'settlement-agreement/form/models/defendantSettlementResponse'
 
 describe('DefendantSettlementResponse', () => {
 

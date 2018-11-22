@@ -1,22 +1,17 @@
 {% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "./macro/settlement-agreement.njk" import settlementAgreementSummary %}
-
 {% extends "layout.njk" %}
 
 {% set heading = t('Respond to the settlement agreement') %}
 
 {% block content %}
-
   <div class="grid-row">
     <div class="column-two-thirds">
-
       <form novalidate method="post" class="analytics-submit-event-trigger"
             data-event-action="Settlement Agreement">
         {{ csrfProtection(csrf) }}
-
         {{ settlementAgreementSummary(offer) }}
-
         <div>
           <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName}}.
            This includes all money owed in the claim, for example court fees, expenses or interest.',
@@ -25,18 +20,13 @@
           <p>{{ t('Neither party can make any further claims relating to this case, other than to enforce it.') }}</p>
           <p>{{ t('Either party can view and download this agreement from their Money Claims account. Both parties should keep
             a copy of this agreement.') }}</p>
-
-
           <h3 class="heading-medium">{{ t('If the agreement is broken') }}</h3>
           <p>{{ t('The claimant can request a County Court Judgment (CCJ) for any money still owed from this agreement.') }}</p>
         </div>
-
         <h2 class="heading-medium">{{ t('Do you want to sign the settlement agreement?') }}</h2>
         <p>{{ t('You can choose not to sign the settlement agreement, for example if you think you can’t afford it.') }}</p>
         <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ claimantName }} before signing. You won’t be
           able to change this later.', { claimantName: claim.claimData.claimant.name }) }}</p>
-
-
         {{ radioGroup(
           label = "Do you want more time to respond?",
           name = "option",
@@ -57,9 +47,7 @@
           form = form,
           legendHidden = true
         ) }}
-
         {{ saveAndContinueButton() }}
-
       </form>
     </div>
   </div>
