@@ -172,7 +172,8 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     locals.draft.document.courtDetermination = courtDetermination
 
-    if (locals.claim.response.defendant.type !== PartyType.COMPANY.value) {
+    if (locals.claim.response.defendant.type !== PartyType.COMPANY.value ||
+          locals.claim.response.defendant.type !== PartyType.ORGANISATION.value) {
       locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
     } else {
       locals.draft.document.courtDetermination.disposableIncome = undefined

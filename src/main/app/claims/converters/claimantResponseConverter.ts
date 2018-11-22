@@ -33,7 +33,7 @@ export class ClaimantResponseConverter {
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
       return false
-    } else if (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted === YesNoOption.NO) {
+    } else if (draftClaimantResponse.acceptPaymentMethod && draftClaimantResponse.acceptPaymentMethod.accept === YesNoOption.NO) {
       return false
     } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received === YesNoOption.NO) {
       return false

@@ -78,8 +78,8 @@
             {% set alternatePaymentMethodResponse = t('By instalments') %}
           {% endif %}
 
-          {#{{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,#}
-            {#changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}#}
+          {{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
+            changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
         {% if paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
           {{ row(label = 'Regular payments of', bold = true, value = paymentIntention.repaymentPlan.instalmentAmount | numeral,
