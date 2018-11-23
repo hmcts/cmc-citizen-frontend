@@ -99,3 +99,7 @@ variable "capacity" {
 variable "common_tags" {
   type = "map"
 }
+
+variable "website_local_cache_sizeinmb" {
+  default = "300"
+}
