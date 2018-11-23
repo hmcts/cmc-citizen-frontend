@@ -101,7 +101,7 @@ variable "common_tags" {
 }
 
 // overriding the default module-webapp setting to debug intermittent 502 issue (outage: 23/11/18)
-// will update when what we should set value to - or remove...
+// will update when determined what we should set value to - or remove...
 variable "website_local_cache_sizeinmb" {
   default = "300"
 }
