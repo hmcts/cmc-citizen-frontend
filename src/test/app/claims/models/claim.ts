@@ -416,10 +416,12 @@ describe('Claim', () => {
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
-        },
-        defendant: new Company().deserialize(organisation)
+        }
       }
       claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimData = {
+        defendant: new Company().deserialize(organisation)
+      }
 
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
