@@ -197,6 +197,8 @@ export class Claim {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.hasClaimantRejectedPartAdmission()) {
+      return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else if (this.hasClaimantRejectedDefendantResponse() &&
@@ -312,5 +314,9 @@ export class Claim {
   private hasClaimantSuggestedAlternativePlanWithCCJ (): boolean {
     return this.claimantResponse && this.countyCourtJudgment &&
       !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+  }
+
+  private hasClaimantRejectedPartAdmission (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 }

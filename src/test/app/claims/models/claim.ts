@@ -242,6 +242,12 @@ describe('Claim', () => {
       claim.claimantRespondedAt = MomentFactory.currentDate()
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
     })
+
+    it('should return CLAIMANT_REJECTS_PART_ADMISSION when the claimant rejects the part admission', () => {
+      claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
+    })
   })
 
   describe('respondToResponseDeadline', () => {

@@ -63,6 +63,9 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
   settlementAgreementSignedByBothDefendantClaimDetails,
   settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails %}
 
+{% from "./claimStatus/partAdmitRejectionClaimant.njk" import partAdmitRejectedByClaimantClaimDetails %}
+{% from "./claimStatus/partAdmitRejectionDefendant.njk" import partAdmitRejectedByClaimantDefendantClaimDetails %}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -116,6 +119,8 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {{ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus(claim) }}
       {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
         {{ requestCCJ(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+        {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -171,7 +176,9 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-          {{ offerSettlementReachedForDefendant(claim) }}
+        {{ offerSettlementReachedForDefendant(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+        {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}
