@@ -63,6 +63,9 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
   settlementAgreementSignedByBothDefendantClaimDetails,
   settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails %}
 
+{% from "./claimStatus/redeterminationRequestedDefendant.njk" import redeterminationDefendnatClaimDetails %}
+{% from "./claimStatus/redeterminationRequestedClaimant.njk" import redeterminationClaimantClaimDetails %}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
       {% if state.status === ClaimStatus.NO_RESPONSE %}
@@ -80,6 +83,8 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {{ admissionByCCJClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
         {{ settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) }}
+      {% elif state.status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
+        {{ redeterminationClaimantClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION %}
         {{ settlementAgreementSignedByClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
@@ -134,6 +139,8 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {{ settlementAgreementSignedByClaimantDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ %}
         {{ CCJByDeterminationDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
+        {{ redeterminationDefendnatClaimDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT %}
         {{ settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
