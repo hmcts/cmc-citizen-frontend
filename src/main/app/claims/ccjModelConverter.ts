@@ -8,6 +8,9 @@ import { Moment } from 'moment'
 import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { Claim } from 'claims/models/claim'
+import { Response } from 'claims/models/response'
+import { ResponseType } from 'claims/models/response/responseType'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -34,9 +37,27 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
     ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 
+function getPaymentOption (response: Response, draft: DraftCCJ): PaymentOption {
+  if(response.responseType === ResponseType.PART_ADMISSION
+    || response.responseType === ResponseType.FULL_ADMISSION) {
+      return response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY ?
+        response.paymentIntention.paymentOption : draft.paymentOption.option.value as PaymentOption
+  }
+  return draft.paymentOption.option.value as PaymentOption
+}
+
+function getRepaymentPlan (response: Response, draft: DraftCCJ): RepaymentPlan {
+  if(response.responseType === ResponseType.PART_ADMISSION
+    || response.responseType === ResponseType.FULL_ADMISSION) {
+    return response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY ?
+      response.paymentIntention.repaymentPlan as RepaymentPlan :  convertRepaymentPlan(draft.repaymentPlan)
+  }
+  return  convertRepaymentPlan(draft.repaymentPlan)
+}
+
 export class CCJModelConverter {
 
-  static convertForRequest (draft: DraftCCJ, ccjType: CountyCourtJudgmentType): CountyCourtJudgment {
+  static convertForRequest (draft: DraftCCJ, claim: Claim): CountyCourtJudgment {
     let statementOfTruth: StatementOfTruth = undefined
     if (draft.qualifiedDeclaration) {
       // API model is called statement of truth
@@ -45,11 +66,34 @@ export class CCJModelConverter {
         draft.qualifiedDeclaration.signerRole
       )
     }
+
+    let ccjType: CountyCourtJudgmentType = undefined
+
+    let paymentOption: PaymentOption = undefined
+
+    let repaymentPlan: RepaymentPlan = undefined
+
+    let response: Response = claim.response
+
+    if(response){
+      ccjType = CountyCourtJudgmentType.ADMISSIONS
+      paymentOption = getPaymentOption(response, draft)
+      repaymentPlan = getRepaymentPlan(response, draft)
+    }else {
+      ccjType = CountyCourtJudgmentType.DEFAULT
+      paymentOption = draft.paymentOption.option.value as PaymentOption
+      repaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
+    }
+
+    if(!paymentOption) {
+      throw new Error('payment option cannot be undefined')
+    }
+
     return new CountyCourtJudgment(
       draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined,
-      draft.paymentOption.option.value as PaymentOption,
+      paymentOption,
       convertPaidAmount(draft),
-      convertRepaymentPlan(draft.repaymentPlan),
+      repaymentPlan,
       convertPayBySetDate(draft),
       statementOfTruth,
       ccjType
