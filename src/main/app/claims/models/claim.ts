@@ -202,8 +202,8 @@ export class Claim {
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else if (this.hasClaimantRejectedDefendantResponse() &&
-      (this.response.defendant.type === PartyType.COMPANY.value
-        || this.response.defendant.type === PartyType.ORGANISATION.value)) {
+      (this.claimData.defendant.type === PartyType.COMPANY.value
+        || this.claimData.defendant.type === PartyType.ORGANISATION.value)) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
@@ -317,6 +317,6 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
   }
 }

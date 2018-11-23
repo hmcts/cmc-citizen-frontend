@@ -246,6 +246,9 @@ describe('Claim', () => {
     it('should return CLAIMANT_REJECTS_PART_ADMISSION when the claimant rejects the part admission', () => {
       claim.claimantResponse = rejectionClaimantResponseData
       claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.claimData = {
+        defendant: new Individual().deserialize(individual)
+      }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
     })
   })
@@ -395,7 +398,9 @@ describe('Claim', () => {
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
-        },
+        }
+      }
+      claim.claimData = {
         defendant: new Organisation().deserialize(organisation)
       }
       claim.claimantResponse = rejectionClaimantResponseData
