@@ -125,8 +125,7 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
 
     const externalId: string = req.params.externalId
 
-    if (claim.response.defendant.type === PartyType.COMPANY.value
-      || claim.response.defendant.type === PartyType.ORGANISATION.value) {
+    if (claim.claimData.defendant.isBusiness()) {
       return Paths.taskListPage.evaluateUri({ externalId: externalId })
     }
 

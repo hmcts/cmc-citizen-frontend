@@ -29,7 +29,6 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { Moment } from 'moment'
-import { PartyType } from 'common/partyType'
 import { MomentFactory } from 'shared/momentFactory'
 
 export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
@@ -166,7 +165,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
     const externalId: string = req.params.externalId
 
-    if (claim.response.defendant.type === PartyType.COMPANY.value) {
+    if (claim.claimData.defendant.isBusiness()) {
       return Paths.taskListPage.evaluateUri({ externalId: externalId })
     }
 
@@ -217,7 +216,7 @@ export default new PaymentPlanPage()
       const claim: Claim = res.locals.claim
       const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-      if (claim.response.defendant.type !== PartyType.COMPANY.value) {
+      if (!claim.claimData.defendant.isBusiness()) {
         if (response.statementOfMeans === undefined) {
           return next(new Error('Page cannot be rendered because response does not have statement of means'))
         }

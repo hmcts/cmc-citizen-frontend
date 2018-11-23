@@ -13,7 +13,6 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
-import { PartyType } from 'common/partyType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
 
@@ -199,9 +198,7 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-    } else if (this.hasClaimantRejectedDefendantResponse() &&
-      (this.response.defendant.type === PartyType.COMPANY.value
-        || this.response.defendant.type === PartyType.ORGANISATION.value)) {
+    } else if (this.hasClaimantRejectedDefendantResponse() && this.claimData.defendant.isBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED

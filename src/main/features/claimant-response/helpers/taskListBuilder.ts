@@ -15,7 +15,6 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
-import { PartyType } from 'common/partyType'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettledTask'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
@@ -139,7 +138,7 @@ export class TaskListBuilder {
 
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
 
-      if (claim.response.defendant.type !== PartyType.COMPANY.value) {
+      if (!claim.claimData.defendant.isBusiness()) {
         this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       }
 
@@ -171,7 +170,7 @@ export class TaskListBuilder {
       )
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
 
-      if (claim.response.defendant.type !== PartyType.COMPANY.value) {
+      if (!claim.claimData.defendant.isBusiness()) {
         this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       }
 
