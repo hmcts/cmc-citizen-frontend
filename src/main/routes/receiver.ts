@@ -72,11 +72,11 @@ function loginErrorHandler (req: express.Request,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    cookies.set(sessionCookie, '', { sameSite: 'lax' })
+    cookies.set(sessionCookie, '', { sameSite: false })
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(OAuthHelper.forLogin(req, res, receiver))
   }
-  cookies.set(stateCookieName, '', { sameSite: 'lax' })
+  cookies.set(stateCookieName, '', { sameSite: false })
   return next(err)
 }
 
@@ -100,8 +100,8 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
-  cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
-  cookies.set(stateCookieName, '', { sameSite: 'lax' })
+  cookies.set(sessionCookie, authenticationToken, { sameSite: false })
+  cookies.set(stateCookieName, '', { sameSite: false })
 }
 
 /* tslint:disable:no-default-export */
@@ -132,7 +132,7 @@ export default express.Router()
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
           // re-set state cookie as it was cleared above, we need it in this case
-          cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
+          cookies.set(stateCookieName, req.query.state, { sameSite: false })
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
           await claimStoreClient.linkDefendant(user)

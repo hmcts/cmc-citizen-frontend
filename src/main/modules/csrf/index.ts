@@ -9,7 +9,7 @@ export class CsrfProtection {
           cookie: {
             key: '_csrf',
             secure: true,
-            sameSite: 'lax',
+            sameSite: false,
             httpOnly: true
           }
         }
