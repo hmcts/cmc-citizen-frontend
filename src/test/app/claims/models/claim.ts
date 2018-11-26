@@ -370,8 +370,9 @@ describe('Claim', () => {
     })
 
     it('should contain the claim status only if not responded to', () => {
-      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if response submitted but no offer made', () => {

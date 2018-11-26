@@ -1,8 +1,12 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% macro paidInFullClaimantClaimDetails(externalId) %}
-  <h2 class="heading-small">{{ t('Settling the claim') }}</h2>
-  <p>{{ t('If the defendant has paid you, ' + internalLink('you need to tell us', DashboardPaths.datePaidPage.evaluateUri({ externalId: externalId })) + '.') | safe }}</p>
+  {% if featureToggles.paidInFull %}
+    <div class="status-block">
+      <h2 class="heading-small">{{ t('Settling the claim') }}</h2>
+      <p>{{ t('If the defendant has paid you, ' + internalLink('you need to tell us', DashboardPaths.datePaidPage.evaluateUri({ externalId: externalId })) + '.') | safe }}</p>
+    </div>
+  {% endif %}
 {% endmacro %}
 
 {% macro paidInFullClaimantButtonClaimDetails(claim, text='Tell us you’ve settled') %}
