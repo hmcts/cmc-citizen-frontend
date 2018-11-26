@@ -199,11 +199,13 @@ export class Claim {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.hasClaimantRejectedPartAdmission()) {
+      return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else if (this.hasClaimantRejectedDefendantResponse() &&
-      (this.response.defendant.type === PartyType.COMPANY.value
-        || this.response.defendant.type === PartyType.ORGANISATION.value)) {
+      (this.claimData.defendant.type === PartyType.COMPANY.value
+        || this.claimData.defendant.type === PartyType.ORGANISATION.value)) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
@@ -318,5 +320,9 @@ export class Claim {
 
   private hasRedeterminationBeenRequested (): boolean {
     return this.claimantResponse && this.countyCourtJudgmentRequestedAt && !!this.reDeterminationRequestedAt
+  }
+
+  private hasClaimantRejectedPartAdmission (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
   }
 }

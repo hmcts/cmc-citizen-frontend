@@ -262,6 +262,15 @@ describe('Claim', () => {
 
       expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
     })
+
+    it('should return CLAIMANT_REJECTS_PART_ADMISSION when the claimant rejects the part admission', () => {
+      claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.claimData = {
+        defendant: new Individual().deserialize(individual)
+      }
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
+    })
   })
 
   describe('respondToResponseDeadline', () => {
@@ -409,7 +418,9 @@ describe('Claim', () => {
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
-        },
+        }
+      }
+      claim.claimData = {
         defendant: new Organisation().deserialize(organisation)
       }
       claim.claimantResponse = rejectionClaimantResponseData
@@ -425,10 +436,12 @@ describe('Claim', () => {
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
-        },
-        defendant: new Company().deserialize(organisation)
+        }
       }
       claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimData = {
+        defendant: new Company().deserialize(organisation)
+      }
 
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
