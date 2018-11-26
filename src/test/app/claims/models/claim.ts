@@ -241,6 +241,26 @@ describe('Claim', () => {
       claim.claimantResponse = baseAcceptationClaimantResponseData
       claim.claimantRespondedAt = MomentFactory.currentDate()
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ)
+    })
+
+    it('should return REDETERMINATION_BY_JUDGE when there is a CCJ and a redetermination requested at', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseAcceptationClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+      claim.reDeterminationRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
     })
   })
 

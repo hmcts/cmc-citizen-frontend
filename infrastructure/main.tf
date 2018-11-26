@@ -83,6 +83,7 @@ module "citizen-frontend" {
   asp_name = "${local.asp_name}"
   asp_rg = "${local.asp_name}"
   instance_size = "${local.sku_size}"
+  website_local_cache_sizeinmb = "${var.website_local_cache_sizeinmb}"
 
   app_settings = {
     // Node specific vars
