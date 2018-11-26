@@ -54,7 +54,9 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.courtDecision) {
       respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
     }
-    respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
+    if (draftClaimantResponse.alternatePaymentMethod) {
+      respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
+    }
     return respAcceptance
   }
 

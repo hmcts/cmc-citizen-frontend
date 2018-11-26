@@ -198,7 +198,7 @@ export class Claim {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-    } else if (this.hasClaimantRejectedDefendantResponse() && this.claimData.defendant.isBusiness()) {
+    } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
@@ -221,6 +221,10 @@ export class Claim {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
     return statuses
+  }
+
+  private isDefendantBusiness (): boolean {
+    return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
   }
 
   private isResponseSubmitted (): boolean {

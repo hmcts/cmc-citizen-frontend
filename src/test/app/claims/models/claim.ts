@@ -29,6 +29,8 @@ import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 import { DecisionType } from 'common/court-calculations/courtDecision'
+import { ClaimData } from 'claims/models/claimData'
+import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -392,8 +394,15 @@ describe('Claim', () => {
         },
         defendant: new Organisation().deserialize(organisation)
       }
+      claim.claimData = new ClaimData().deserialize({
+        defendants: new Array(new TheirDetails().deserialize({
+          type: 'organisation',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        }))
+      })
       claim.claimantResponse = rejectionClaimantResponseData
-
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
     })
@@ -409,7 +418,14 @@ describe('Claim', () => {
         defendant: new Company().deserialize(organisation)
       }
       claim.claimantResponse = rejectionClaimantResponseData
-
+      claim.claimData = new ClaimData().deserialize({
+        defendants: new Array(new TheirDetails().deserialize({
+          type: 'organisation',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        }))
+      })
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
     })
