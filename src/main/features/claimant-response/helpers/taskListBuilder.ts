@@ -215,9 +215,15 @@ export class TaskListBuilder {
 
   private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
     if (
-      (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
-        || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)
-        && (draft.courtDetermination.rejectionReason.text === undefined))))) {
+      draft.acceptPaymentMethod && (
+        draft.acceptPaymentMethod.accept.option === YesNoOption.YES || (
+          draft.formaliseRepaymentPlan.option !== FormaliseRepaymentPlanOption.REFER_TO_JUDGE &&
+          draft.acceptPaymentMethod.accept.option === YesNoOption.NO &&
+          isDefinedAndValid(draft.alternatePaymentMethod) &&
+          draft.courtDetermination.rejectionReason.text === undefined
+        )
+      )
+    ) {
       tasks.push(
         new TaskListItem(
           'Choose how to formalise repayment',

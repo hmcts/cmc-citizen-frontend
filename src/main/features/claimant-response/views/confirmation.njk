@@ -10,7 +10,9 @@
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
         <h1 class="bold-large">
-          {% if repaymentPlanOrigin === 'DEFENDANT' %}
+          {% if claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
+          {{ t('You have requested free mediation') }}
+          {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
             {{ t('You’ve accepted the repayment plan') }}
           {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
             {{ t('You’ve proposed an alternative repayment plan') }}
@@ -48,7 +50,8 @@
         {% include "./confirmation/proposed-alternate-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'COURT' %}
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
-      {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION and
+                claim.claimantResponse.formaliseOption !== FormaliseOption.REFER_TO_JUDGE %}
         <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
       {% elseif claim.claimantResponse.freeMediation %}
         <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
