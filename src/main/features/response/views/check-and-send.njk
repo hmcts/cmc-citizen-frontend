@@ -285,7 +285,7 @@
       {{ tableEnd() }}
     {% endif %}
 
-    {% if statementOfMeansIsApplicable and draft.statementOfMeans and not draft.defendantDetails.partyDetails.isBusiness() %}
+    {% if statementOfMeansIsApplicable %}
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 

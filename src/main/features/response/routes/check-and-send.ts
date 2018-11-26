@@ -32,7 +32,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     form: form,
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
-    statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
+    statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document) && !draft.document.defendantDetails.partyDetails.isBusiness(),
     admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim)
   })
 }
