@@ -33,7 +33,7 @@ export class ClaimantResponseConverter {
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
     if (draftClaimantResponse.settleAdmitted && draftClaimantResponse.settleAdmitted.admitted === YesNoOption.NO) {
       return false
-    } else if (draftClaimantResponse.acceptPaymentMethod && draftClaimantResponse.acceptPaymentMethod.accept === YesNoOption.NO) {
+    } else if (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted === YesNoOption.NO) {
       return false
     } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received === YesNoOption.NO) {
       return false
@@ -53,8 +53,8 @@ export class ClaimantResponseConverter {
     }
     if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.courtDecision) {
       respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
-      respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
     }
+    respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
     return respAcceptance
   }
 
