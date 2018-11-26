@@ -28,6 +28,6 @@ export class CookieEligibilityStore {
   }
 
   clear (req: express.Request, res: express.Response): void {
-    res.clearCookie(cookieName, { sameSite: false })
+    res.clearCookie(cookieName)
   }
 }
