@@ -17,6 +17,8 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { MomentFactory } from 'shared/momentFactory'
+import { PartyType } from 'common/partyType'
+import { Individual } from 'claims/models/details/yours/individual'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -88,16 +90,6 @@ function getRepaymentPlan (claim: Claim, draft: DraftCCJ): RepaymentPlan {
   return convertRepaymentPlan(draft.repaymentPlan)
 }
 
-function getPayBySetDate (response: Response, draft: DraftCCJ): Moment {
-  if (response.responseType === ResponseType.PART_ADMISSION
-    || response.responseType === ResponseType.FULL_ADMISSION) {
-    if (response.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      return response.paymentIntention.paymentDate
-    }
-  }
-  return convertPayBySetDate(draft)
-}
-
 export function getPartAdmissionPaymentOption (claim: Claim): PaymentOption {
   if (claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse) {
     let acceptation: AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
@@ -140,24 +132,28 @@ export class CCJModelConverter {
 
     let payBySetDate: Moment = undefined
 
+    let defendantDateOfBirth: Moment = undefined
+
     if (response) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
       paymentOption = getPaymentOption(claim, draft)
       repaymentPlan = getRepaymentPlan(claim, draft)
-      payBySetDate = getPayBySetDate(response, draft)
+      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.name ? MomentFactory.parse((response.defendant as Individual).dateOfBirth): undefined
     } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
       paymentOption = draft.paymentOption.option.value as PaymentOption
       repaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
       payBySetDate = convertPayBySetDate(draft)
+      defendantDateOfBirth = draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined
     }
+    payBySetDate = convertPayBySetDate(draft)
 
     if (!paymentOption) {
       throw new Error('payment option cannot be undefined')
     }
 
     return new CountyCourtJudgment(
-      draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined,
+      defendantDateOfBirth,
       paymentOption,
       convertPaidAmount(draft),
       repaymentPlan,

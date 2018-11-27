@@ -94,6 +94,7 @@ export default express.Router()
           await new DraftService().save(draft, user.bearerToken)
         }
         const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document, claim)
+        console.log('CCJ', countyCourtJudgment)
         await CCJClient.request(claim.externalId, countyCourtJudgment, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
