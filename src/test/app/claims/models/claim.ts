@@ -404,7 +404,7 @@ describe('Claim', () => {
       })
       claim.claimantResponse = rejectionClaimantResponseData
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
     })
 
     it('should contain the claim status only if claimant rejects company response', () => {
@@ -427,7 +427,7 @@ describe('Claim', () => {
         }))
       })
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {

@@ -26,7 +26,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     I.see(testData.claimRef)
     I.see('The defendant said they’ll pay you immediately')
     I.click('My account')

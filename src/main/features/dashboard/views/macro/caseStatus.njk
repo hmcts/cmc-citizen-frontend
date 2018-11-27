@@ -56,9 +56,10 @@
 {% from "./claimStatus/settlementAgreementDefendant.njk" import
   settlementAgreementSignedByClaimantDefendantDashboard,
   settlementAgreementSignedByBothDefendantDashboard %}
-{% from "./claimStatus/claimantResponse.njk" import claimantRejectedDefendantAsCompanyOrOrganisationResponse %}
+{% from "./claimStatus/claimantResponse.njk" import claimantWithDefendantAsBusinessResponse %}
 
 {% macro caseStatusForClaimant(status, claim) %}
+  {{ status }}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -105,11 +106,14 @@
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
-    {{ claimantRejectedDefendantAsCompanyOrOrganisationResponse() }}
+    {{ claimantWithDefendantAsBusinessResponse() }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
+    {{ claimantWithDefendantAsBusinessResponse() }}
   {% endif %}
 {% endmacro %}
 
 {% macro caseStatusForDefendant(status, claim) %}
+  {{ status }}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -154,5 +158,9 @@
     {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
       or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}
+    {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
+      NEED TO HANDLE
+    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
+      NEED TO HANDLE
   {% endif %}
 {% endmacro %}

@@ -199,7 +199,9 @@ export class Claim {
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
-      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
+    } else if (this.hasClaimantAcceptedDefendantResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else {
@@ -284,6 +286,11 @@ export class Claim {
 
   private hasClaimantRejectedDefendantResponse (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+  }
+
+  private hasClaimantAcceptedDefendantResponseWithAlternativePaymentIntention (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.claimantResponse.claimantPaymentIntention !== undefined
   }
 
   hasClaimantAcceptedDefendantResponseWithCCJ (): boolean {

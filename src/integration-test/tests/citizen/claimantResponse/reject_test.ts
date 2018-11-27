@@ -34,7 +34,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
       // as claimant
       userSteps.login(testData.claimantEmail)
-      claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+      claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)
@@ -74,7 +74,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.click('Sign out')
       // as claimant
       userSteps.login(testData.claimantEmail)
-      claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+      claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)
@@ -115,7 +115,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.click('Sign out')
       // as claimant
       userSteps.login(testData.claimantEmail)
-      claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+      claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)

@@ -12,6 +12,10 @@ export class ClaimantTaskListPage {
     I.click('Accept or reject')
   }
 
+  selectTaskAcceptOrRejectSpecificAmount (amount: number): void {
+    I.click(`Accept or reject the £${Number(amount).toLocaleString()}`)
+  }
+
   selectTaskAcceptOrRejectTheirRepaymentPlan (): void {
     I.click('Accept or reject their repayment plan')
   }
