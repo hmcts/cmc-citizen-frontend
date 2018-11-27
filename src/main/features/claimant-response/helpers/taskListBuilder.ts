@@ -124,7 +124,9 @@ export class TaskListBuilder {
         )
       )
 
-      if (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES) {
+      if (draft.settleAdmitted
+        && draft.settleAdmitted.admitted.option === YesNoOption.YES
+        && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
         tasks.push(
           new TaskListItem(
             'Accept or reject their repayment plan',
