@@ -186,6 +186,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReachedForDefendant(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+        {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
       {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
         NEED TO HANDLE
       {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
