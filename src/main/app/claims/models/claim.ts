@@ -16,6 +16,7 @@ import { ClaimantResponseType } from 'claims/models/claimant-response/claimantRe
 import { PartyType } from 'common/partyType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 
 interface State {
   status: ClaimStatus
@@ -253,7 +254,13 @@ export class Claim {
   }
 
   private isSettlementAgreementRejected (): boolean {
-    return this.settlement && this.settlement.isOfferRejected() && this.settlement.isSettlementAgreement()
+    if (this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION) {
+      const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
+      return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
+        && this.settlement && this.settlement.isOfferRejected()
+    } else {
+      return false
+    }
   }
 
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {

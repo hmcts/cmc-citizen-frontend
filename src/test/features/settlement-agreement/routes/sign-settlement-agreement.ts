@@ -23,6 +23,10 @@ const claim = {
   ...claimStoreServiceMock.sampleClaimObj,
   settlement: {
     ...settlementAgreementServiceMock.sampleSettlementAgreementOffer
+  },
+  claimantResponse: {
+    type: 'ACCEPTATION',
+    formaliseOption: 'SETTLEMENT'
   }
 }
 
