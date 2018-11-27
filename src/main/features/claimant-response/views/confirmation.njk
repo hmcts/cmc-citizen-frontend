@@ -34,7 +34,7 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      {% if claim.claimantResponse.formaliseOption !== FormaliseOption.REFER_TO_JUDGE %}
+      {% if claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
           <p>{{ t(' You’ve requested a County Court Judgment against {{ defendantName }}.',
               { defendantName: claim.claimData.defendant.name }) }}</p>
           <p>{{ t('When we’ve processed your request we’ll post a copy of the judgment to you and to {{ defendantName }}.',
