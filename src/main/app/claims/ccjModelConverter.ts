@@ -11,6 +11,8 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Claim } from 'claims/models/claim'
 import { Response } from 'claims/models/response'
 import { ResponseType } from 'claims/models/response/responseType'
+import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -37,22 +39,46 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
     ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 
-function getPaymentOption (response: Response, draft: DraftCCJ): PaymentOption {
-  if(response.responseType === ResponseType.PART_ADMISSION
-    || response.responseType === ResponseType.FULL_ADMISSION) {
-      return response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY ?
-        response.paymentIntention.paymentOption : draft.paymentOption.option.value as PaymentOption
+function getPaymentOption (claim: Claim, draft: DraftCCJ): PaymentOption {
+  let response: Response = claim.response
+  if (response.responseType === ResponseType.FULL_ADMISSION) {
+    let paymentOption: PaymentOption = response.paymentIntention.paymentOption
+    return (paymentOption === PaymentOption.INSTALMENTS) ?
+      paymentOption : draft.paymentOption.option.value as PaymentOption
+  } else if (response.responseType === ResponseType.PART_ADMISSION) {
+    let paymentOption: PaymentOption = getPartAdmissionPaymentOption(claim)
+    return (paymentOption === PaymentOption.INSTALMENTS) ?
+      paymentOption : draft.paymentOption.option.value as PaymentOption
+  } else {
+    return draft.paymentOption.option.value as PaymentOption
   }
-  return draft.paymentOption.option.value as PaymentOption
 }
 
 function getRepaymentPlan (response: Response, draft: DraftCCJ): RepaymentPlan {
-  if(response.responseType === ResponseType.PART_ADMISSION
+  if (response.responseType === ResponseType.PART_ADMISSION
     || response.responseType === ResponseType.FULL_ADMISSION) {
     return response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY ?
-      response.paymentIntention.repaymentPlan as RepaymentPlan :  convertRepaymentPlan(draft.repaymentPlan)
+      response.paymentIntention.repaymentPlan as RepaymentPlan : convertRepaymentPlan(draft.repaymentPlan)
   }
-  return  convertRepaymentPlan(draft.repaymentPlan)
+  return convertRepaymentPlan(draft.repaymentPlan)
+}
+
+function getPayBySetDate (response: Response, draft: DraftCCJ): Moment {
+  if (response.responseType === ResponseType.PART_ADMISSION
+    || response.responseType === ResponseType.FULL_ADMISSION) {
+    if (response.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      return response.paymentIntention.paymentDate
+    }
+  }
+  return convertPayBySetDate(draft)
+}
+
+export function getPartAdmissionPaymentOption (claim: Claim): PaymentOption {
+  if (claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse) {
+    let acceptation: AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
+    return acceptation.courtDetermination.courtPaymentIntention.paymentOption
+  }
+  return (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption
 }
 
 export class CCJModelConverter {
@@ -75,17 +101,21 @@ export class CCJModelConverter {
 
     let response: Response = claim.response
 
-    if(response){
+    let payBySetDate: Moment = undefined
+
+    if (response) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
-      paymentOption = getPaymentOption(response, draft)
+      paymentOption = getPaymentOption(claim, draft)
       repaymentPlan = getRepaymentPlan(response, draft)
-    }else {
+      payBySetDate = getPayBySetDate(response, draft)
+    } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
       paymentOption = draft.paymentOption.option.value as PaymentOption
       repaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
+      payBySetDate = convertPayBySetDate(draft)
     }
 
-    if(!paymentOption) {
+    if (!paymentOption) {
       throw new Error('payment option cannot be undefined')
     }
 
@@ -94,7 +124,7 @@ export class CCJModelConverter {
       paymentOption,
       convertPaidAmount(draft),
       repaymentPlan,
-      convertPayBySetDate(draft),
+      payBySetDate,
       statementOfTruth,
       ccjType
     )

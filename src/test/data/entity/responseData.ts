@@ -12,7 +12,7 @@ import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
 
-const baseResponseData = {
+export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
   freeMediation: 'no'
@@ -45,7 +45,7 @@ export const defenceWithAmountClaimedAlreadyPaidData = {
   }
 }
 
-const baseFullAdmissionData = {
+export const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
   freeMediation: 'no'
 }

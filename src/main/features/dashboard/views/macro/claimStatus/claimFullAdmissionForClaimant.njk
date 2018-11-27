@@ -32,14 +32,7 @@
           { paymentDate: paymentDate }) }}</p>
       <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
       <p>{{ t('You can settle for less than the full claim amount.') }}</p>
-      <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've settled</a>
-      <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
-      {% if claim.eligibleForCCJ %}
-        <p>{{ t('If the defendant hasn’t paid you, you can ' + internalLink('request a County Court Judgment', CCJPaths.paidAmountPage.evaluateUri({ externalId: claim.externalId }))
-            + '.') | safe }}</p>
-      {% else %}
-        <p>{{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', { paymentDate: paymentDate }) }}</p>
-      {% endif %}
+      <p><a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary">Tell us you've settled</a></p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <h2 class="heading-small">{{ t('The defendant has offered to pay by {{ paymentDate }}.',
           { defendantName: defendantName, paymentDate: paymentDate }) }}</h2>

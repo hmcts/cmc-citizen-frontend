@@ -8,8 +8,11 @@ import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/m
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { ResponseType } from 'claims/models/response/responseType'
 import { Response } from 'claims/models/response'
+import { ResponseType } from 'claims/models/response/responseType'
+import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { getPartAdmissionPaymentOption } from 'claims/ccjModelConverter'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
@@ -22,7 +25,7 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     let claim: Claim = res.locals.claim
     let response = claim.response
     if (response) {
-      if (this.isPaymentImmediate(response)) {
+      if (this.showPaymentOptionsPage(claim)) {
         return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
       } else {
         return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
@@ -36,15 +39,28 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     return undefined
   }
 
-  isPaymentImmediate (response: Response): boolean {
-    if (response.responseType === ResponseType.FULL_ADMISSION
-      || response.responseType === ResponseType.PART_ADMISSION) {
+  private showPaymentOptionsPage (claim: Claim): boolean {
+    let response: Response = claim.response
+    if (response.responseType === ResponseType.FULL_ADMISSION) {
       let paymentOption = response.paymentIntention.paymentOption
-      if (paymentOption === PaymentOption.IMMEDIATELY) {
-        return true
+      if (paymentOption === PaymentOption.INSTALMENTS) {
+        return false
+      }
+    } else if(response.responseType === ResponseType.PART_ADMISSION) {
+      let paymentOption = getPartAdmissionPaymentOption(claim)
+      if (paymentOption === PaymentOption.INSTALMENTS) {
+        return false
       }
     }
-    return false
+    return true
+  }
+
+  getPartAdmissionPaymentOption(claim: Claim): PaymentOption {
+    if(claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse){
+      let acceptation : AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
+      return acceptation.courtDetermination.courtPaymentIntention.paymentOption
+    }
+    return (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption
   }
 }
 
