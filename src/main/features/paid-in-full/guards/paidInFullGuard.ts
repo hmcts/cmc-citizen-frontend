@@ -14,7 +14,11 @@ export class PaidInFullGuard {
     return GuardFactory.create((res: express.Response) => {
       const claim: Claim = res.locals.claim
       const user: User = res.locals.user
-      return !claim.moneyReceivedOn && claim.claimantId === user.id
+      if(!claim.moneyReceivedOn){
+        return !claim.moneyReceivedOn && claim.claimantId === user.id
+      } else if(claim.moneyReceivedOn){
+        return claim.claimantId === user.id
+      }
     }, (req: express.Request, res: express.Response): void => {
       throw new ForbiddenError()
     })
