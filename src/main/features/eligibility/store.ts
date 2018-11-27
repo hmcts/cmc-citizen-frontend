@@ -24,7 +24,7 @@ export class CookieEligibilityStore {
       }
       return undefined
     }
-    res.cookie(cookieName, _.cloneDeepWith(eligibility, excludeDisplayValue), { httpOnly: true, secure: true, sameSite: false, maxAge: cookieTimeToLiveInMinutes })
+    res.cookie(cookieName, _.cloneDeepWith(eligibility, excludeDisplayValue), { httpOnly: true, secure: true, maxAge: cookieTimeToLiveInMinutes })
   }
 
   clear (req: express.Request, res: express.Response): void {

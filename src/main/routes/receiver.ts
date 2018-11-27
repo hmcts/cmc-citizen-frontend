@@ -72,11 +72,11 @@ function loginErrorHandler (req: express.Request,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    cookies.set(sessionCookie, '', { sameSite: false })
+    cookies.set(sessionCookie)
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(OAuthHelper.forLogin(req, res, receiver))
   }
-  cookies.set(stateCookieName, '', { sameSite: false })
+  cookies.set(stateCookieName, '')
   return next(err)
 }
 
@@ -100,8 +100,8 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
-  cookies.set(sessionCookie, authenticationToken, { sameSite: false })
-  cookies.set(stateCookieName, '', { sameSite: false })
+  cookies.set(sessionCookie, authenticationToken)
+  cookies.set(stateCookieName, '')
 }
 
 /* tslint:disable:no-default-export */
