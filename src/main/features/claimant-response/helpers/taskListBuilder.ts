@@ -217,6 +217,7 @@ export class TaskListBuilder {
     if (
       draft.acceptPaymentMethod && (
         draft.acceptPaymentMethod.accept.option === YesNoOption.YES || (
+          draft.formaliseRepaymentPlan &&
           draft.formaliseRepaymentPlan.option !== FormaliseRepaymentPlanOption.REFER_TO_JUDGE &&
           draft.acceptPaymentMethod.accept.option === YesNoOption.NO &&
           isDefinedAndValid(draft.alternatePaymentMethod) &&
