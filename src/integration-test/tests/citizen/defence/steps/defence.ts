@@ -195,6 +195,23 @@ export class DefenceSteps {
     defendantHowMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(claimAmount.getTotal(), '2018-01-01', 'Paid Cash')
   }
 
+  admitPartOfTheClaim (defence: PartialDefence): void {
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitPartOfMoneyClaim()
+    alreadyPaidPage.chooseNo()
+    defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
+    defendantHowMuchYouOwePage.enterAmountOwed(50)
+    defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+    defendantYourDefencePage.enterYourDefence('I do not like it')
+    this.addTimeLineOfEvents(defence.timeline)
+    this.enterEvidence('description', 'They do not have evidence')
+    defendantTaskListPage.selectTaskWhenWillYouPay()
+    defendantWhenWillYouPage.chooseFullBySetDate()
+    defendantPaymentDatePage.enterDate('2025-01-01')
+    defendantPaymentDatePage.saveAndContinue()
+    I.see('Respond to a money claim')
+  }
+
   admitPartOfTheClaimAlreadyPaid (defence: PartialDefence): void {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitPartOfMoneyClaim()
@@ -250,7 +267,8 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantEmail: string,
     defendantType: PartyType,
-    defenceType: DefenceType
+    defenceType: DefenceType,
+    isRequestMoreTimeToRespond: boolean = true
   ): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
@@ -260,7 +278,11 @@ export class DefenceSteps {
     this.confirmYourDetails(defendantParty)
     I.see('COMPLETED')
 
-    this.requestMoreTimeToRespond()
+    if (isRequestMoreTimeToRespond) {
+      this.requestMoreTimeToRespond()
+    } else {
+      this.requestNoExtraTimeToRespond()
+    }
 
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_DISPUTE:
@@ -283,6 +305,12 @@ export class DefenceSteps {
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
         break
+      case DefenceType.PART_ADMISSION_NONE_PAID:
+        this.admitPartOfTheClaim(defence)
+        this.askForMediation()
+        defendantSteps.selectCheckAndSubmitYourDefence()
+        I.see('How much money do you admit you owe?')
+        break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence)
         this.askForMediation()
@@ -293,7 +321,9 @@ export class DefenceSteps {
         throw new Error('Unknown DefenceType')
     }
     this.checkAndSendAndSubmit(defendantType)
-    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
+    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE ||
+      defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID ||
+      defenceType === DefenceType.PART_ADMISSION_NONE_PAID) {
       I.see('You’ve submitted your response')
     } else {
       I.see('Next steps')
