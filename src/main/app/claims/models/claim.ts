@@ -16,6 +16,7 @@ import { ClaimantResponseType } from 'claims/models/claimant-response/claimantRe
 import { PartyType } from 'common/partyType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
+import { StatementType } from 'offer/form/models/statementType'
 
 interface State {
   status: ClaimStatus
@@ -156,15 +157,12 @@ export class Claim {
       let paymentOption = (this.response as FullAdmissionResponse).paymentIntention.paymentOption
       switch (paymentOption) {
         case PaymentOption.IMMEDIATELY:
-          return !this.countyCourtJudgmentRequestedAt
-            && isPastDeadline(MomentFactory.currentDateTime(),
-            (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
-          break
+          return false
         case PaymentOption.BY_SPECIFIED_DATE:
           return !this.countyCourtJudgmentRequestedAt
             && this.isSettlementReached()
             && isPastDeadline(MomentFactory.currentDateTime(),
-              (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
+              (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
           break
         case PaymentOption.INSTALMENTS:
           return !this.countyCourtJudgmentRequestedAt
@@ -202,12 +200,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (this.isOfferAccepted()) {
-      return ClaimStatus.OFFER_ACCEPTED
-    } else if (this.isOfferRejected()) {
-      return ClaimStatus.OFFER_REJECTED
-    } else if (this.isOfferSubmitted()) {
-      return ClaimStatus.OFFER_SUBMITTED
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isResponseSubmitted()) {
@@ -231,6 +223,7 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
+    console.log(statuses)
     if (this.isOfferRejected() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
     } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions()) {
@@ -295,7 +288,7 @@ export class Claim {
   }
 
   hasClaimantAcceptedAdmissionWithCCJ (): boolean {
-    return this.countyCourtJudgment && this.response &&
+    return this.countyCourtJudgment && this.response && this.claimantResponse &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
       !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
