@@ -143,7 +143,6 @@ export class CCJModelConverter {
       ccjType = CountyCourtJudgmentType.DEFAULT
       paymentOption = draft.paymentOption.option.value as PaymentOption
       repaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
-      payBySetDate = convertPayBySetDate(draft)
       defendantDateOfBirth = draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined
     }
     payBySetDate = convertPayBySetDate(draft)
