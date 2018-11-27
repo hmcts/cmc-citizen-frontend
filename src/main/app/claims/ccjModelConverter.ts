@@ -138,7 +138,7 @@ export class CCJModelConverter {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
       paymentOption = getPaymentOption(claim, draft)
       repaymentPlan = getRepaymentPlan(claim, draft)
-      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.name ? MomentFactory.parse((response.defendant as Individual).dateOfBirth): undefined
+      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.value ? MomentFactory.parse((response.defendant as Individual).dateOfBirth): undefined
     } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
       paymentOption = draft.paymentOption.option.value as PaymentOption
