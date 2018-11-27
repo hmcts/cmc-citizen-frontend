@@ -14,6 +14,7 @@ import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claima
 import { ClaimantPaymentDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-date'
 import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-plan'
 import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
+import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -27,6 +28,7 @@ const paymentOptionPage: ClaimantPaymentOptionPage = new ClaimantPaymentOptionPa
 const paymentDatePage: ClaimantPaymentDatePage = new ClaimantPaymentDatePage()
 const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
 const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
+const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
 
 export class ClaimantResponseSteps {
 
@@ -129,13 +131,13 @@ export class ClaimantResponseSteps {
         paymentOptionPage.chooseFullBySetDate()
         paymentDatePage.enterDate(claimantResponseTestData.pageSpecificValues.paymentDatePageEnterDate)
         paymentDatePage.saveAndContinue()
-        courtOfferedSetDataPage.accept()
+        payBySetDateAccepted.continue()
         break
       case PaymentOption.INSTALMENTS:
         paymentOptionPage.chooseInstalments()
         paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
         paymentPlanPage.saveAndContinue()
-        courtOfferedSetDataPage.accept()
+        payBySetDateAccepted.continue()
         break
       default:
         throw new Error(`Unknown payment option: ${testData.claimantPaymentOption}`)

@@ -84,11 +84,36 @@ describe('calculateMonthIncrement', () => {
     expect(calculateMonthDate.toString()).to.equal(MomentFactory.parse('2019-01-31').toString())
   })
 
-  it('should return null when given a null start date', () => {
-    expect(calculateMonthIncrement(null)).to.be.equal(null)
+  it('should return the 1st of a month when start date is the 1st of the following month', () => {
+    expect(calculateMonthIncrement(moment('2019-01-01'), -1).format('YYYY-MM-DD'))
+      .to.equal(moment('2018-12-01').format('YYYY-MM-DD'))
+  })
+
+  it('should return a month date in the middle of the previous month starting from 15th December ', () => {
+    expect(calculateMonthIncrement(moment('2018-08-15'), -1).format('YYYY-MM-DD'))
+      .to.equal(moment('2018-07-15').format('YYYY-MM-DD'))
+  })
+
+  it('should return last date of a 30 days month when start date is on 31th of the following month', () => {
+    expect(calculateMonthIncrement(moment('2018-12-31'), -1).format('YYYY-MM-DD'))
+      .to.equal(moment('2018-11-30').format('YYYY-MM-DD'))
+  })
+
+  it('should return the last day of february (leap year) when starting date >= 28th of a month', () => {
+    expect(calculateMonthIncrement(moment('2020-03-30'), -1).format('YYYY-MM-DD'))
+      .to.equal(moment('2020-02-29').format('YYYY-MM-DD'))
+  })
+
+  it('should return the last day of february (no leap year) when starting date >= 29th of a month', () => {
+    expect(calculateMonthIncrement(moment('2018-03-30'), -1).format('YYYY-MM-DD'))
+      .to.equal(moment('2018-02-28').format('YYYY-MM-DD'))
+  })
+
+  it('should return error when given a null start date', () => {
+    expect(() => { calculateMonthIncrement(null) }).to.throw(Error, 'Start Date is invalid')
   })
 
   it('should return undefined when given an undefined start date', () => {
-    expect(calculateMonthIncrement(undefined)).to.be.equal(undefined)
+    expect(() => { calculateMonthIncrement(undefined) }).to.throw(Error, 'Start Date is invalid')
   })
 })

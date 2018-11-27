@@ -1,2 +1,2 @@
-{% macro internalLink(text, href) %}
-  <a href="{{ href }}">{{ text }}</a>{% endmacro %}
+{% macro internalLink(text, href, class='') %}
+  <a href="{{ href }}" class="{{ class }}">{{ text }}</a>{% endmacro %}

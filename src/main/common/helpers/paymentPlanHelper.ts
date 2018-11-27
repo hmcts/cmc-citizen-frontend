@@ -56,7 +56,7 @@ export class PaymentPlanHelper {
     }
 
     if (paymentIntention.repaymentPlan) {
-      return PaymentPlanHelper.createPaymentPlan(
+      return PaymentPlanHelper.createPaymentPlanFromInstallment(
         totalAmount,
         paymentIntention.repaymentPlan.instalmentAmount,
         Frequency.of(paymentIntention.repaymentPlan.paymentSchedule),
@@ -64,13 +64,13 @@ export class PaymentPlanHelper {
       )
     }
 
-    if (draft.courtDetermination.disposableIncome === 0) {
-      return undefined
+    if (draft.courtDetermination.disposableIncome <= 0) {
+      return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
     if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
       const instalmentAmount: number = draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio
-      return PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+      return PaymentPlanHelper.createPaymentPlanFromInstallment(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
     }
   }
 
@@ -84,12 +84,12 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    if (draft.courtDetermination.disposableIncome === 0) {
-      return undefined
+    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
+    if (instalmentAmount < 1) {
+      return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
-    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
-    return PaymentPlanHelper.createPaymentPlan(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+    return PaymentPlanHelper.createPaymentPlanFromInstallment(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
   static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {
@@ -108,7 +108,7 @@ export class PaymentPlanHelper {
       return undefined
     }
 
-    return PaymentPlanHelper.createPaymentPlan(
+    return PaymentPlanHelper.createPaymentPlanFromInstallment(
       paymentPlanForm.totalAmount,
       paymentPlanForm.instalmentAmount,
       paymentPlanForm.paymentSchedule ? Frequency.of(paymentPlanForm.paymentSchedule.value) : undefined,
@@ -129,7 +129,7 @@ export class PaymentPlanHelper {
       return undefined
     }
 
-    return PaymentPlanHelper.createPaymentPlan(
+    return PaymentPlanHelper.createPaymentPlanFromInstallment(
       paymentPlan.totalAmount,
       paymentPlan.instalmentAmount,
       paymentPlan.paymentSchedule ? Frequency.of(paymentPlan.paymentSchedule.value) : undefined,
@@ -137,11 +137,15 @@ export class PaymentPlanHelper {
     )
   }
 
-  private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
+  private static createPaymentPlanFromInstallment (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
     if (!totalAmount || !instalmentAmount || !frequency) {
       return undefined
     }
 
     return PaymentPlan.create(totalAmount, instalmentAmount, frequency, firstPaymentDate)
+  }
+
+  private static createPaymentPlanFromStartDate (firstPaymentDate: Moment): PaymentPlan {
+    return PaymentPlan.create(0, 0, Frequency.WEEKLY, firstPaymentDate)
   }
 }
