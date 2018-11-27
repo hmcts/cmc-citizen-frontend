@@ -58,6 +58,12 @@
   settlementAgreementSignedByBothDefendantDashboard %}
 {% from "./claimStatus/claimantResponse.njk" import claimantRejectedDefendantAsCompanyOrOrganisationResponse %}
 
+{% from "./claimStatus/redeterminationRequestedDefendant.njk" import redeterminationDefendantDashboard %}
+{% from "./claimStatus/redeterminationRequestedClaimant.njk" import redeterminationClaimantDashboard %}
+
+{% from "./claimStatus/partAdmitRejectionClaimant.njk" import partAdmitRejectedByClaimantDashboard %}
+{% from "./claimStatus/partAdmitRejectionDefendant.njk" import partAdmitRejectedByClaimantDefendantDashboard %}
+
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
@@ -67,6 +73,8 @@
     {{ ccjEligibleForClaimantDashboard() }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
+    {{ redeterminationClaimantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ %}
     {{ admissionByCCJClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
@@ -106,6 +114,8 @@
     {{ offerSettlementReachedDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
     {{ claimantRejectedDefendantAsCompanyOrOrganisationResponse() }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+    {{ partAdmitRejectedByClaimantDashboard(claim) }}
   {% endif %}
 {% endmacro %}
 
@@ -116,6 +126,8 @@
       {{ moreTimeRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
       {{ ccjEligibleForDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
+      {{ redeterminationDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CCJ_REQUESTED %}
       {{ ccjRequestedForDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ %}
@@ -146,13 +158,15 @@
         {{ claimFullAdmissionForDefendantDashboard(claim) }}
       {% endif %}
     {% elif status === ClaimStatus.OFFER_SUBMITTED %}
-    {{ offerSubmittedForDefendantDashboard() }}
+      {{ offerSubmittedForDefendantDashboard() }}
     {% elif status === ClaimStatus.OFFER_REJECTED %}
-    {{ offerRejectedForDefendantDashboard() }}
+      {{ offerRejectedForDefendantDashboard() }}
     {% elif status === ClaimStatus.OFFER_ACCEPTED %}
-    {{ offerAcceptedForDefendantDashboard() }}
+      {{ offerAcceptedForDefendantDashboard() }}
+    {% elif status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+      {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
       or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
-    {{ offerSettlementReachedDashboard() }}
+      {{ offerSettlementReachedDashboard() }}
   {% endif %}
 {% endmacro %}

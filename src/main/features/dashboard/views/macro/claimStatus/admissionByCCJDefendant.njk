@@ -64,7 +64,7 @@
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       <p>{{ t('They rejected your repayment plan.') }}</p>
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.') }}</p>
+      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount }) }}</p>
     {% endif %}
 
     {% if claim.claimantResponse.courtDetermination.decisionType === DecisionType.CLAIMANT %}
