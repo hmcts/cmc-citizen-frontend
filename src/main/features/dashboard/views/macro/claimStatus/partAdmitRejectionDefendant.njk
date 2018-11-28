@@ -8,7 +8,7 @@
 
 {% macro partAdmitRejectedByClaimantDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} has rejected your admission of £{{ amount }}',
+    <h2 class="heading-small">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
         { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.claimData.amount.totalAmount() | numeral }) }}</p>
 
