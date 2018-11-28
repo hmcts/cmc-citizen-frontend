@@ -1,5 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton %}
+{% from "internalLink.njk" import internalLink %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
 {% set claimantFullName = claim.claimData.claimant.name %}
 {% set heading = 'Send ' + claimantFullName + ' your financial details' %}
@@ -13,6 +15,7 @@
         <p>{{ t('They’ll review your accounts and can reject your suggested repayment plan if they believe you can pay sooner.') }}</p>
         <p>{{ t('If they reject your plan, the court will make a new plan based on your financial details.') }}</p>
         {{ submitButton('Continue') }}
+        {{ internalLink('Get ' + claimantName + ' contact details.', claimantDetailsPageURI) }}
       </form>
     </div>
   </div>
