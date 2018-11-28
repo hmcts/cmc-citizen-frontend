@@ -111,7 +111,7 @@
     "debug": "^4.1.0",
     "gulp-livereload": "^4.0.0",
     "gulp-nodemon": "^2.4.1",
-    "gulp-plumber": "^1.0.0",
+    "gulp-plumber": "^1.2.1",
     "gulp-rename": "^1.4.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
