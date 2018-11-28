@@ -46,7 +46,10 @@ async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath
     req.query.code,
     buildURL(req, receiver.uri)
   )
-  return authToken.accessToken
+  if (authToken) {
+    return authToken.accessToken
+  }
+  return Promise.reject()
 }
 
 async function getAuthToken (req: express.Request,
@@ -120,10 +123,6 @@ export default express.Router()
           res.locals.isLoggedIn = true
           res.locals.user = user
           setAuthCookie(cookies, authenticationToken)
-        } else {
-
-          trackCustomEvent('Authentication token undefined',
-            { requestValue: req.query.state })
         }
       } catch (err) {
         return loginErrorHandler(req, res, cookies, next, err)
