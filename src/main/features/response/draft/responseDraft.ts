@@ -82,6 +82,7 @@ export class ResponseDraft extends DraftDocument {
   rejectAllOfClaim?: RejectAllOfClaim
 
   statementOfMeans?: StatementOfMeans
+  companyDefendantResponseViewed: boolean
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -115,6 +116,9 @@ export class ResponseDraft extends DraftDocument {
 
       if (input.statementOfMeans) {
         this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
+      }
+      if (input.companyDefendantResponseViewed) {
+        this.companyDefendantResponseViewed = input.companyDefendantResponseViewed
       }
     }
 
