@@ -109,7 +109,7 @@
     "codeceptjs": "^1.4.6",
     "codecov": "^3.1.0",
     "debug": "^4.1.0",
-    "gulp-livereload": "^4.0.0",
+    "gulp-livereload": "^4.0.1",
     "gulp-nodemon": "^2.4.1",
     "gulp-plumber": "^1.2.1",
     "gulp-rename": "^1.4.0",
