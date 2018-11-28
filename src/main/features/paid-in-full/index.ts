@@ -28,7 +28,7 @@ export class PaidInFullFeature {
     app.all(allPaidInFull, requestHandler())
     app.all(allPaidInFull, ClaimMiddleware.retrieveByExternalId)
     app.all(allPaidInFull, OnlyClaimantLinkedToClaimCanDoIt.check())
-    app.all(allPaidInFull, PaidInFullGuard.check())
+    app.all(/^\/case\/.+\/paid-in-full\/(?!confirmation).*$/, PaidInFullGuard.check())
     app.all(/^\/case\/.+\/paid-in-full\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'paidInFull', 100, (value: any): DraftPaidInFull => {
         return new DraftPaidInFull().deserialize(value)
