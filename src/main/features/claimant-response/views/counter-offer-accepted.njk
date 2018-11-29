@@ -12,9 +12,9 @@
 
         <p> {{ t('The court has accepted your repayment plan.') }} </p>
         {% if isCourtOrderPaymentPlanConvertedByDefendantFrequency %}
-          <p> {{ t('The defendant asked to pay in {{ courtOrderFrequency }} instalments and the court accepted this.
-              The revised repayment plan is below.', {
-              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule(adverbial=true) | lower
+          <p> {{ t('The defendant asked to pay {{ courtOrderFrequency }} and the court accepted this.
+              Here is the revised repayment plan:', {
+              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule | lower
             }) }} </p>
           {{
           repaymentPlanBlock(
