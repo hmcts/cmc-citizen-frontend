@@ -1032,9 +1032,9 @@ buffer@^5.1.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
 
-build-url@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/build-url/-/build-url-1.2.0.tgz#65b6e000ef8c6a19145851730a646a055c14b483"
+build-url@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/build-url/-/build-url-1.3.0.tgz#4271530adb12fe01591a7cbff662336f4e75381c"
 
 builtin-modules@^1.0.0, builtin-modules@^1.1.1:
   version "1.1.1"
@@ -4699,9 +4699,9 @@ mime@^1.4.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
 
-mime@^2.0.3, mime@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/mime/-/mime-2.3.1.tgz#b1621c54d63b97c47d3cfe7f7215f7d64517c369"
+mime@^2.0.3, mime@^2.3.1, mime@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/mime/-/mime-2.4.0.tgz#e051fd881358585f3279df333fe694da0bcffdd6"
 
 mimic-fn@^1.0.0:
   version "1.2.0"
@@ -6605,9 +6605,9 @@ signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.2.tgz#b5fdc08f1287ea1178628e415e25132b73646c6d"
 
-sinon-chai@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/sinon-chai/-/sinon-chai-3.2.0.tgz#ed995e13a8a3cfccec18f218d9b767edc47e0715"
+sinon-chai@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/sinon-chai/-/sinon-chai-3.3.0.tgz#8084ff99451064910fbe2c2cb8ab540c00b740ea"
 
 sinon-express-mock@^2.1.0:
   version "2.1.0"
