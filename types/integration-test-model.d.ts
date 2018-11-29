@@ -13,6 +13,7 @@ declare type ClaimData = {
   payment: Payment,
   total: number,
   externalId: string
+  moneyReceivedOn: moment
 }
 
 declare type Claim = {
