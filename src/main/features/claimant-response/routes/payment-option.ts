@@ -177,7 +177,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     } else {
       locals.draft.document.courtDetermination.disposableIncome = undefined
 
-      if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
+      if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY && !locals.claim.claimData.defendant.isBusiness()) {
         const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
 
         courtDetermination.decisionType = decisionType
