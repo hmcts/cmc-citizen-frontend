@@ -272,9 +272,9 @@
   dependencies:
     "@types/i18next" "^2"
 
-"@types/i18next@*", "@types/i18next@^11.9.3":
-  version "11.9.3"
-  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-11.9.3.tgz#04d84c6539908ad69665d26d8967f942d1638550"
+"@types/i18next@*", "@types/i18next@^12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@types/i18next/-/i18next-12.1.0.tgz#7c3fd3dbe03f9531147033773bbd0ca4f474a180"
 
 "@types/i18next@^2":
   version "2.3.40"
