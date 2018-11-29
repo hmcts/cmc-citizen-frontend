@@ -61,7 +61,7 @@
 {% from "./claimStatus/claimantResponse.njk" import claimantRejectedDefendantAsCompanyOrOrganisationResponse %}
 
 {% macro caseStatusForClaimant(status, claim) %}
-  {% if status === ClaimStatus.PAID_IN_FULL %}
+  {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
     {{ paidInFullClaimantDashboard() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
