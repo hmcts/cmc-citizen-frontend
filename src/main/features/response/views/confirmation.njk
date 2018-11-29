@@ -40,7 +40,7 @@
 
         <p>{{ internalLink(
             t('Get {{ claimantName }}’s contact details', { claimantName: claim.claimData.claimant.name }),
-            DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.claimData.externalId })
+            DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })
           ) }}.</p>
       {% endif %}
 
