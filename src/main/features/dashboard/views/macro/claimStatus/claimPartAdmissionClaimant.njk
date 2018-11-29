@@ -37,11 +37,11 @@
       <p>{{ t('They’ve offered to pay in instalments.') }}</p>
     {% endif %}
 
-    {% if claim.claimData.defendant.type === 'company' %}
+    {% if claim.claimData.defendant.isBusiness() %}
       <p>{{ t('They’ll send you their financial details. You can use these to decide whether to accept or reject what they say they owe') }}</p>
     {% endif %}
 
-    {% if claim.claimData.defendant.type === 'individual' %}
+    {% if not claim.claimData.defendant.isBusiness() %}
       <p>{{ t('You can accept or reject their admission.') }}</p>
     {% endif %}
 
