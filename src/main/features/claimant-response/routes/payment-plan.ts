@@ -30,12 +30,14 @@ import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import { AmountHelper } from 'claimant-response/helpers/amountHelper'
 
 export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
   static generateCourtOfferedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtOfferedPaymentIntention = new PaymentIntention()
+    const totalClaimAmount: number = AmountHelper.calculateTotalAmount(claim,draft)
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
@@ -45,10 +47,11 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS
         && claimResponse.paymentIntention.repaymentPlan.paymentSchedule !== draft.alternatePaymentMethod.toDomainInstance().repaymentPlan.paymentSchedule) {
         const paymentPlanConvertedToDefendantFrequency = claimantEnteredPaymentPlan.convertTo(PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule))
+        const instalmentAmount = Math.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount * 100) / 100
 
         courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: Math.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount * 100) / 100,
+          instalmentAmount: instalmentAmount > totalClaimAmount ? totalClaimAmount : instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
