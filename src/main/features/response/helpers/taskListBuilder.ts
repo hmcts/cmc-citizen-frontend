@@ -195,6 +195,14 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
+        } else {
+          tasks.push(
+            new TaskListItem(
+            'Share your financial details',
+            Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+            ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+          )
+        )
         }
 
         if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
