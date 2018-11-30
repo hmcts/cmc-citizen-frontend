@@ -10,8 +10,6 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Claim } from 'claims/models/claim'
 import { Response } from 'claims/models/response'
-import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { MomentFactory } from 'shared/momentFactory'
@@ -30,7 +28,6 @@ function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan 
       repaymentPlan.paymentSchedule.value
     )
   }
-
   return undefined
 }
 
@@ -56,24 +53,16 @@ export function getRepaymentPlanForm (claim: Claim, draft: DraftWrapper<DraftCCJ
       const paymentSchedule: PaymentSchedule = PaymentSchedule.of(coreRepaymentPlan.paymentSchedule)
       const alreadyPaid: number = draft.document.paidAmount.amount || 0
       const remainingAmount: number = claim.totalAmountTillToday - alreadyPaid
-      return new RepaymentPlanForm(
+      const repaymentPlanForm: RepaymentPlanForm = new RepaymentPlanForm(
         remainingAmount,
         coreRepaymentPlan.instalmentAmount,
         new LocalDate(firstPaymentDate.year(), firstPaymentDate.month() + 1, firstPaymentDate.date()),
         paymentSchedule)
+
+      return repaymentPlanForm
     }
   }
   return draft.document.repaymentPlan
-}
-
-export function getPartAdmissionPaymentOption (claim: Claim): PaymentOption {
-  if (claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse) {
-    const acceptation: AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
-    if (acceptation.courtDetermination) {
-      return acceptation.courtDetermination.courtPaymentIntention.paymentOption
-    }
-    return (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption
-  }
 }
 
 export class CCJModelConverter {
@@ -98,9 +87,18 @@ export class CCJModelConverter {
 
     const payBySetDate: Moment = convertPayBySetDate(draft)
 
+    const repaymentPlan: RepaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
+
     if (claim.response && claim.isAdmissionsResponse()) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
-      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.value ? MomentFactory.parse((response.defendant as Individual).dateOfBirth) : undefined
+      if (response.defendant.type === PartyType.INDIVIDUAL.value) {
+        defendantDateOfBirth = MomentFactory.parse((response.defendant as Individual).dateOfBirth)
+        if (!defendantDateOfBirth) {
+          throw new Error('Defendant date of birth cannot be undefined for Admissions response')
+        }
+      } else {
+        defendantDateOfBirth = undefined
+      }
     } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
       defendantDateOfBirth = draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined
@@ -114,7 +112,7 @@ export class CCJModelConverter {
       defendantDateOfBirth,
       paymentOption,
       convertPaidAmount(draft),
-      convertRepaymentPlan(draft.repaymentPlan),
+      repaymentPlan,
       payBySetDate,
       statementOfTruth,
       ccjType

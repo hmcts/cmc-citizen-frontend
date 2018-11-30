@@ -43,8 +43,8 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
       const paymentOptionFromOffer: PaymentOption = claim.settlement.getLastOffer().paymentIntention.paymentOption
       return new CCJPaymentOption(PaymentType.valueOf(paymentOptionFromOffer))
     }
-    return undefined
   }
+
 }
 
 /* tslint:disable:no-default-export */

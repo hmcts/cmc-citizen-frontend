@@ -271,6 +271,23 @@ describe('Claim', () => {
       }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
     })
+
+    it('should return CCJ_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.settlement = prepareSettlementWithCounterSignature(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED)
+    })
   })
 
   describe('respondToResponseDeadline', () => {
@@ -477,6 +494,30 @@ function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): 
       {
         madeBy: MadeBy.CLAIMANT.value,
         type: StatementType.ACCEPTATION.value
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}
+function prepareSettlementWithCounterSignature (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: party.value,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2020-10-10',
+          paymentIntention: paymentIntention
+        }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
+      },
+      {
+        type: 'COUNTERSIGNATURE',
+        madeBy: 'DEFENDANT'
       }
     ]
   }

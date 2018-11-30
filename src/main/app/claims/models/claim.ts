@@ -184,6 +184,8 @@ export class Claim {
         return ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
       } else if (this.hasRedeterminationBeenRequested()) {
         return ClaimStatus.REDETERMINATION_BY_JUDGE
+      } else if (this.hasCCJBeenRequestedAfterSettlementBreached()) {
+        return ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
@@ -241,7 +243,7 @@ export class Claim {
   }
 
   isAdmissionsResponse (): boolean {
-    return (this.response.responseType  === ResponseType.FULL_ADMISSION
+    return (this.response.responseType === ResponseType.FULL_ADMISSION
       || this.response.responseType === ResponseType.PART_ADMISSION)
   }
 
@@ -291,7 +293,7 @@ export class Claim {
   }
 
   hasClaimantAcceptedAdmissionWithCCJ (): boolean {
-    return this.countyCourtJudgment && this.response && this.claimantResponse &&
+    return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementReachedThroughAdmission() &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
       !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
@@ -325,7 +327,7 @@ export class Claim {
   }
 
   private hasClaimantSuggestedAlternativePlanWithCCJ (): boolean {
-    return this.claimantResponse && this.countyCourtJudgmentRequestedAt &&
+    return this.claimantResponse && this.countyCourtJudgmentRequestedAt && !this.isSettlementReachedThroughAdmission() &&
       !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
 
@@ -335,5 +337,9 @@ export class Claim {
 
   private hasClaimantRejectedPartAdmission (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+  }
+
+  private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
+    return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt
   }
 }

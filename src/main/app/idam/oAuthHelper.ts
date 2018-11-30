@@ -45,6 +45,6 @@ export class OAuthHelper {
 
   private static storeStateCookie (req: express.Request, res: express.Response, state: string): void {
     const cookies = new Cookies(req, res)
-    cookies.set('state', state, { sameSite: 'lax' })
+    cookies.set('state', state)
   }
 }

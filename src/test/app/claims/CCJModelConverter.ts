@@ -7,7 +7,6 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -35,7 +34,7 @@ const ccjDraft = new DraftCCJ().deserialize({
 
 const ccjDraftWithInstallments = new DraftCCJ().deserialize({
   paymentOption: {
-    option: PaymentType.INSTALMENTS,
+    option: PaymentType.INSTALMENTS
   },
   repaymentPlan: {
     remainingAmount: 3685,
@@ -86,7 +85,7 @@ const repaymentPlanPaymentIntention = {
 const repaymentPlan = {
   instalmentAmount: 100,
   firstPaymentDate: '2010-12-31',
-  paymentSchedule: PaymentSchedule.EACH_WEEK,
+  paymentSchedule: PaymentSchedule.EACH_WEEK
 }
 
 const fullAdmissionResponseWithInstallmentsAndPaymentDateElapsed = {
@@ -99,12 +98,12 @@ const fullAdmissionResponseWithInstallmentsAndPaymentDateElapsed = {
 }
 
 const sampleClaimWithFullAdmissionWithSetDateResponseObj = {
-  ...sampleClaimIssueObj,
+  ...claimStoreMock.sampleClaimIssueObj,
   response: fullAdmissionResponseWithSetDateAndPaymentDateElapsed
 }
 
 const sampleClaimWithFullAdmissionWithInstallmentsResponseObj = {
-  ...sampleClaimIssueObj,
+  ...claimStoreMock.sampleClaimIssueObj,
   response: fullAdmissionResponseWithInstallmentsAndPaymentDateElapsed,
   settlement: {
     partyStatements: [

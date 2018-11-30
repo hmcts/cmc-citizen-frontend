@@ -40,7 +40,7 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
   }
 
-  if(claim.response && claim.isAdmissionsResponse()) {
+  if (claim.response && claim.isAdmissionsResponse()) {
     draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
   }
 
@@ -97,6 +97,7 @@ export default express.Router()
           draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
           await new DraftService().save(draft, user.bearerToken)
         }
+
         const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document, claim)
         await CCJClient.request(claim.externalId, countyCourtJudgment, user)
         await new DraftService().delete(draft.id, user.bearerToken)
