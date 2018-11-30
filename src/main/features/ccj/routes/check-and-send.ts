@@ -22,24 +22,22 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
 function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
-  let urls: object = {
-    paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
-  }
-  if (!claim.response) {
-    return urls = {
-      urls,
-      dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
-      paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
-    }
-  } else if (claim.response && claim.isAdmissionsResponse()) {
+  if (claim.response && claim.isAdmissionsResponse()) {
     if (draft.document.paymentOption.option !== PaymentType.INSTALMENTS) {
-      return urls = {
-        urls,
+      return {
+        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
         paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
       }
     } else {
-      return urls
+      return {
+        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+      }
     }
+  }
+  return {
+    paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
+    paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
   }
 }
 
