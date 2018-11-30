@@ -13,7 +13,6 @@ import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { Moment } from 'moment'
 import { DecisionType } from 'common/court-calculations/courtDecision'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Frequency } from 'common/frequency/frequency'
 import { Draft } from '@hmcts/draft-store-client'
 import { User } from 'idam/user'
 import { PaymentOption } from 'claims/models/paymentOption'
@@ -44,19 +43,6 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
         courtOfferedPaymentIntention.paymentDate = lastPaymentDate
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
-      }
-
-      if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
-        const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
-        const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
-        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-        courtOfferedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: Math.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount * 100) / 100,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
-          completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
-          paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
-        }
       }
 
       return courtOfferedPaymentIntention
