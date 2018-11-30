@@ -100,7 +100,7 @@ describe('PaymentIntentionHelper', () => {
     })
 
     it('should return payment intention with claimants instalments payment frequency converted to defendants payment frequency', () => {
-      expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claim, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal('EACH_WEEK')
+      expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claim, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EACH_WEEK)
     })
   })
 
