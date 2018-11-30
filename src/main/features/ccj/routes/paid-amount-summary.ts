@@ -46,7 +46,7 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
       if (paymentOption === PaymentOption.INSTALMENTS) {
         return false
       }
-    } else if(response.responseType === ResponseType.PART_ADMISSION) {
+    } else if (response.responseType === ResponseType.PART_ADMISSION) {
       let paymentOption = getPartAdmissionPaymentOption(claim)
       if (paymentOption === PaymentOption.INSTALMENTS) {
         return false
@@ -55,9 +55,9 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     return true
   }
 
-  getPartAdmissionPaymentOption(claim: Claim): PaymentOption {
-    if(claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse){
-      let acceptation : AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
+  getPartAdmissionPaymentOption (claim: Claim): PaymentOption {
+    if (claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse) {
+      const acceptation: AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
       return acceptation.courtDetermination.courtPaymentIntention.paymentOption
     }
     return (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption

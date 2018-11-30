@@ -3,7 +3,7 @@ import { Response } from 'claims/models/response'
 
 export class ResponseUtils {
   static isAdmissionsResponse (response: Response): boolean {
-    return (response.responseType  === ResponseType.FULL_ADMISSION
+    return (response.responseType === ResponseType.FULL_ADMISSION
       || response.responseType === ResponseType.PART_ADMISSION)
   }
 }

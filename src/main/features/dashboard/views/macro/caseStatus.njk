@@ -64,6 +64,9 @@
 {% from "./claimStatus/partAdmitRejectionClaimant.njk" import partAdmitRejectedByClaimantDashboard %}
 {% from "./claimStatus/partAdmitRejectionDefendant.njk" import partAdmitRejectedByClaimantDefendantDashboard %}
 
+{% from "./claimStatus/breachOfPaymentDefendant.njk" import CCJAfterBreakingSettlementAgreementClaimDetails %}
+
+
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}

@@ -63,9 +63,9 @@ function getPaymentOption (claim: Claim, draft: DraftCCJ): PaymentOption {
 function getRepaymentPlan (claim: Claim, draft: DraftCCJ): RepaymentPlan {
   let response: Response = claim.response
   if (response.responseType === ResponseType.FULL_ADMISSION) {
-    let fullAdmissionResponse: FullAdmissionResponse = response as FullAdmissionResponse
-    let paymentOption: PaymentOption = fullAdmissionResponse.paymentIntention.paymentOption
-    let repaymentPlan: CoreRepaymentPlan = fullAdmissionResponse.paymentIntention.repaymentPlan
+    const fullAdmissionResponse: FullAdmissionResponse = response
+    const paymentOption: PaymentOption = fullAdmissionResponse.paymentIntention.paymentOption
+    const repaymentPlan: CoreRepaymentPlan = fullAdmissionResponse.paymentIntention.repaymentPlan
     if (paymentOption === PaymentOption.INSTALMENTS) {
       let firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
       return new RepaymentPlan(repaymentPlan.instalmentAmount,
@@ -75,9 +75,9 @@ function getRepaymentPlan (claim: Claim, draft: DraftCCJ): RepaymentPlan {
       return convertRepaymentPlan(draft.repaymentPlan)
     }
   } else if (response.responseType === ResponseType.PART_ADMISSION) {
-    let partAdmissionResponse: PartialAdmissionResponse = response as PartialAdmissionResponse
-    let paymentOption: PaymentOption = partAdmissionResponse.paymentIntention.paymentOption
-    let repaymentPlan: CoreRepaymentPlan = getPartAdmissionRepaymentPlan(claim)
+    const partAdmissionResponse: PartialAdmissionResponse = response
+    const paymentOption: PaymentOption = partAdmissionResponse.paymentIntention.paymentOption
+    const repaymentPlan: CoreRepaymentPlan = getPartAdmissionRepaymentPlan(claim)
     if (paymentOption === PaymentOption.INSTALMENTS) {
       let firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
       return new RepaymentPlan(repaymentPlan.instalmentAmount,
@@ -138,7 +138,7 @@ export class CCJModelConverter {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
       paymentOption = getPaymentOption(claim, draft)
       repaymentPlan = getRepaymentPlan(claim, draft)
-      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.value ? MomentFactory.parse((response.defendant as Individual).dateOfBirth): undefined
+      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.value ? MomentFactory.parse((response.defendant as Individual).dateOfBirth) : undefined
     } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
       paymentOption = draft.paymentOption.option.value as PaymentOption

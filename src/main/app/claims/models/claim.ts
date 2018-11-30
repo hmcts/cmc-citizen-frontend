@@ -218,6 +218,8 @@ export class Claim {
         return ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
       } else if (this.hasRedeterminationBeenRequested()) {
         return ClaimStatus.REDETERMINATION_BY_JUDGE
+      } else if (this.hasCCJBeenRequestedAfterSettlementBreached()) {
+        return ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
@@ -256,7 +258,6 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    console.log(statuses)
     if (this.isOfferRejected() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
     } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions()) {
@@ -322,7 +323,7 @@ export class Claim {
   }
 
   hasClaimantAcceptedAdmissionWithCCJ (): boolean {
-    return this.countyCourtJudgment && this.response && this.claimantResponse &&
+    return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementReachedThroughAdmission() &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
       !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
@@ -356,7 +357,7 @@ export class Claim {
   }
 
   private hasClaimantSuggestedAlternativePlanWithCCJ (): boolean {
-    return this.claimantResponse && this.countyCourtJudgmentRequestedAt &&
+    return this.claimantResponse && this.countyCourtJudgmentRequestedAt && !this.isSettlementReachedThroughAdmission() &&
       !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
 
@@ -368,9 +369,12 @@ export class Claim {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
   }
 
-  private getPaymentIntentionDate(givenPaymentIntentionDate: Moment) : Moment {
-    if(this.claimantResponse &&
-      (this.claimantResponse as AcceptationClaimantResponse).courtDetermination) {
+  private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
+    return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt
+  }
+
+  private getPaymentIntentionDate (givenPaymentIntentionDate: Moment): Moment {
+    if (this.claimantResponse && (this.claimantResponse as AcceptationClaimantResponse).courtDetermination) {
       return (this.claimantResponse as AcceptationClaimantResponse).courtDetermination.courtPaymentIntention.paymentDate
     }
     return givenPaymentIntentionDate

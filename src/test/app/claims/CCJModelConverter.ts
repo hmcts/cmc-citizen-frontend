@@ -7,7 +7,6 @@ import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { Moment } from 'moment'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -61,12 +60,12 @@ const fullAdmissionResponseWithInstallmentsAndPaymentDateElapsed = {
 }
 
 const sampleClaimWithFullAdmissionWithSetDateResponseObj = {
-  ...sampleClaimIssueObj,
+  ...claimStoreMock.sampleClaimIssueObj,
   response: fullAdmissionResponseWithSetDateAndPaymentDateElapsed
 }
 
 const sampleClaimWithFullAdmissionWithInstallmentsResponseObj = {
-  ...sampleClaimIssueObj,
+  ...claimStoreMock.sampleClaimIssueObj,
   response: fullAdmissionResponseWithInstallmentsAndPaymentDateElapsed
 }
 
