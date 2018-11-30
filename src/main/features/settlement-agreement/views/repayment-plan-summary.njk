@@ -21,7 +21,7 @@
         paymentLength = paymentIntention.repaymentPlan.paymentLength
       ) }}
       {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-          <p>{{ t('The defendant will pay {{ amount }} by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}
+          <p>{{ t('They’ve suggested you pay in full by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}
           <p>
       {% endif %}
 
