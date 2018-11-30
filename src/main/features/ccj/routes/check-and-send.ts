@@ -17,7 +17,7 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
-import { CCJModelConverter } from 'claims/ccjModelConverter'
+import { CCJModelConverter, getRepaymentPlanForm } from 'claims/ccjModelConverter'
 
 function prepareUrls (externalId: string): object {
   return {
@@ -38,6 +38,10 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
   const defendant = convertToPartyDetails(claim.claimData.defendant)
   if (defendant.type === PartyType.INDIVIDUAL.value) {
     (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
+  }
+
+  if(claim.response && claim.isAdmissionsResponse()) {
+    draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
   }
 
   res.render(Paths.checkAndSendPage.associatedView, {

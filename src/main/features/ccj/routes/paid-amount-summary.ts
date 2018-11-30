@@ -8,11 +8,7 @@ import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/m
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { Response } from 'claims/models/response'
-import { ResponseType } from 'claims/models/response/responseType'
-import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { getPartAdmissionPaymentOption } from 'claims/ccjModelConverter'
+import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
@@ -22,13 +18,15 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
   buildRedirectUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
-    let claim: Claim = res.locals.claim
-    let response = claim.response
+    const claim: Claim = res.locals.claim
+    const response = claim.response
     if (response) {
-      if (this.showPaymentOptionsPage(claim)) {
-        return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
-      } else {
+      const paymentOption: CCJPaymentOption = this.retrievePaymentOptions(claim)
+      if (paymentOption.option.value === PaymentOption.INSTALMENTS) {
+        res.locals.draft.document.paymentOption = paymentOption
         return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
+      } else {
+        return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
       }
     } else {
       return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
@@ -39,28 +37,13 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     return undefined
   }
 
-  private showPaymentOptionsPage (claim: Claim): boolean {
-    let response: Response = claim.response
-    if (response.responseType === ResponseType.FULL_ADMISSION) {
-      let paymentOption = response.paymentIntention.paymentOption
-      if (paymentOption === PaymentOption.INSTALMENTS) {
-        return false
-      }
-    } else if(response.responseType === ResponseType.PART_ADMISSION) {
-      let paymentOption = getPartAdmissionPaymentOption(claim)
-      if (paymentOption === PaymentOption.INSTALMENTS) {
-        return false
-      }
+  private retrievePaymentOptions (claim: Claim): CCJPaymentOption {
+    if (claim.isAdmissionsResponse() &&
+      ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime())) {
+      const paymentOptionFromOffer: PaymentOption = claim.settlement.getLastOffer().paymentIntention.paymentOption
+      return new CCJPaymentOption(PaymentType.valueOf(paymentOptionFromOffer))
     }
-    return true
-  }
-
-  getPartAdmissionPaymentOption(claim: Claim): PaymentOption {
-    if(claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse){
-      let acceptation : AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
-      return acceptation.courtDetermination.courtPaymentIntention.paymentOption
-    }
-    return (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption
+    return undefined
   }
 }
 

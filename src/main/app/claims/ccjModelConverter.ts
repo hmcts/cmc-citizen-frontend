@@ -10,15 +10,16 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Claim } from 'claims/models/claim'
 import { Response } from 'claims/models/response'
-import { ResponseType } from 'claims/models/response/responseType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/yours/individual'
+import { LocalDate } from 'forms/models/localDate'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -45,68 +46,33 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
     ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 
-function getPaymentOption (claim: Claim, draft: DraftCCJ): PaymentOption {
-  let response: Response = claim.response
-  if (response.responseType === ResponseType.FULL_ADMISSION) {
-    let paymentOption: PaymentOption = response.paymentIntention.paymentOption
-    return (paymentOption === PaymentOption.INSTALMENTS) ?
-      paymentOption : draft.paymentOption.option.value as PaymentOption
-  } else if (response.responseType === ResponseType.PART_ADMISSION) {
-    let paymentOption: PaymentOption = getPartAdmissionPaymentOption(claim)
-    return (paymentOption === PaymentOption.INSTALMENTS) ?
-      paymentOption : draft.paymentOption.option.value as PaymentOption
-  } else {
-    return draft.paymentOption.option.value as PaymentOption
-  }
-}
-
-function getRepaymentPlan (claim: Claim, draft: DraftCCJ): RepaymentPlan {
-  let response: Response = claim.response
-  if (response.responseType === ResponseType.FULL_ADMISSION) {
-    let fullAdmissionResponse: FullAdmissionResponse = response as FullAdmissionResponse
-    let paymentOption: PaymentOption = fullAdmissionResponse.paymentIntention.paymentOption
-    let repaymentPlan: CoreRepaymentPlan = fullAdmissionResponse.paymentIntention.repaymentPlan
-    if (paymentOption === PaymentOption.INSTALMENTS) {
-      let firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
-      return new RepaymentPlan(repaymentPlan.instalmentAmount,
-        firstPaymentDate,
-        repaymentPlan.paymentSchedule)
-    } else {
-      return convertRepaymentPlan(draft.repaymentPlan)
-    }
-  } else if (response.responseType === ResponseType.PART_ADMISSION) {
-    let partAdmissionResponse: PartialAdmissionResponse = response as PartialAdmissionResponse
-    let paymentOption: PaymentOption = partAdmissionResponse.paymentIntention.paymentOption
-    let repaymentPlan: CoreRepaymentPlan = getPartAdmissionRepaymentPlan(claim)
-    if (paymentOption === PaymentOption.INSTALMENTS) {
-      let firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
-      return new RepaymentPlan(repaymentPlan.instalmentAmount,
-        firstPaymentDate,
-        repaymentPlan.paymentSchedule)
-    } else {
-      return convertRepaymentPlan(draft.repaymentPlan)
+export function getRepaymentPlanForm (claim: Claim, draft: DraftWrapper<DraftCCJ>): RepaymentPlanForm {
+  console.log('draft: ', draft)
+  console.log('payment option: ', draft.document.paymentOption)
+  if (draft.document.paymentOption.option === PaymentType.INSTALMENTS) {
+    if ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime()) {
+      const coreRepaymentPlan: CoreRepaymentPlan = claim.settlement.getLastOffer().paymentIntention.repaymentPlan
+      const firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
+      const paymentSchedule: PaymentSchedule = PaymentSchedule.of(coreRepaymentPlan.paymentSchedule)
+      const alreadyPaid: number = draft.document.paidAmount.amount || 0
+      const remainingAmount: number = claim.totalAmountTillToday - alreadyPaid
+      return new RepaymentPlanForm(
+        remainingAmount,
+        coreRepaymentPlan.instalmentAmount,
+        new LocalDate(firstPaymentDate.year(), firstPaymentDate.month() + 1, firstPaymentDate.date()),
+        paymentSchedule)
     }
   }
-  return convertRepaymentPlan(draft.repaymentPlan)
+  return draft.document.repaymentPlan
 }
 
 export function getPartAdmissionPaymentOption (claim: Claim): PaymentOption {
   if (claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse) {
-    let acceptation: AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
+    const acceptation: AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
     if (acceptation.courtDetermination) {
       return acceptation.courtDetermination.courtPaymentIntention.paymentOption
     }
     return (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption
-  }
-}
-
-function getPartAdmissionRepaymentPlan (claim: Claim): CoreRepaymentPlan {
-  if (claim.claimantResponse && claim.claimantResponse as AcceptationClaimantResponse) {
-    let acceptation: AcceptationClaimantResponse = claim.claimantResponse as AcceptationClaimantResponse
-    if (acceptation.courtDetermination) {
-      return acceptation.courtDetermination.courtPaymentIntention.repaymentPlan
-    }
-    return (claim.response as PartialAdmissionResponse).paymentIntention.repaymentPlan
   }
 }
 
@@ -124,28 +90,21 @@ export class CCJModelConverter {
 
     let ccjType: CountyCourtJudgmentType = undefined
 
-    let paymentOption: PaymentOption = undefined
+    const paymentOption: PaymentOption = draft.paymentOption.option.value as PaymentOption
 
-    let repaymentPlan: RepaymentPlan = undefined
-
-    let response: Response = claim.response
-
-    let payBySetDate: Moment = undefined
+    const response: Response = claim.response
 
     let defendantDateOfBirth: Moment = undefined
 
-    if (response) {
+    const payBySetDate: Moment = convertPayBySetDate(draft)
+
+    if (claim.response && claim.isAdmissionsResponse()) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
-      paymentOption = getPaymentOption(claim, draft)
-      repaymentPlan = getRepaymentPlan(claim, draft)
-      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.value ? MomentFactory.parse((response.defendant as Individual).dateOfBirth): undefined
+      defendantDateOfBirth = response.defendant.type === PartyType.INDIVIDUAL.value ? MomentFactory.parse((response.defendant as Individual).dateOfBirth) : undefined
     } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
-      paymentOption = draft.paymentOption.option.value as PaymentOption
-      repaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
       defendantDateOfBirth = draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined
     }
-    payBySetDate = convertPayBySetDate(draft)
 
     if (!paymentOption) {
       throw new Error('payment option cannot be undefined')
@@ -155,7 +114,7 @@ export class CCJModelConverter {
       defendantDateOfBirth,
       paymentOption,
       convertPaidAmount(draft),
-      repaymentPlan,
+      convertRepaymentPlan(draft.repaymentPlan),
       payBySetDate,
       statementOfTruth,
       ccjType
