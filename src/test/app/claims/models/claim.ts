@@ -353,9 +353,10 @@ describe('Claim', () => {
         defendant: new Individual().deserialize(individual)
       }
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should return OFFER_REJECTED when offer is rejected', () => {
@@ -364,9 +365,10 @@ describe('Claim', () => {
         partyStatements: [offer, offerRejection]
       })
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if not responded to', () => {
@@ -379,8 +381,9 @@ describe('Claim', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
 
-      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if claimant rejects organisation response', () => {
@@ -423,9 +426,10 @@ describe('Claim', () => {
       claim.settlement = new Settlement()
       claim.settlementReachedAt = moment()
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
   })
 

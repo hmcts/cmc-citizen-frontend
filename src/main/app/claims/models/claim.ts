@@ -230,7 +230,8 @@ export class Claim {
     if (this.eligibleForCCJAfterBreachedSettlement) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
-    if ((!this.moneyReceivedOn && !this.settlementReachedAt && !this.countyCourtJudgmentRequestedAt && this.claimantResponse) || (!this.response && !this.moneyReceivedOn)) {
+    if ((!this.moneyReceivedOn && !this.settlementReachedAt && !this.countyCourtJudgmentRequestedAt && this.claimantResponse) || ((!!this.response || !this.response) && !this.moneyReceivedOn)
+      || (this.moreTimeRequested && !this.moneyReceivedOn)) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
     }
 
