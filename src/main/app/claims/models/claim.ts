@@ -16,7 +16,6 @@ import { ClaimantResponseType } from 'claims/models/claimant-response/claimantRe
 import { PartyType } from 'common/partyType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { StatementType } from 'offer/form/models/statementType'
 
 interface State {
@@ -153,55 +152,22 @@ export class Claim {
       )
   }
 
-  get eligibleForCCJAfterBreachedSettlementAsFullAdmission (): boolean {
-    if (this.response && (this.response as FullAdmissionResponse).paymentIntention) {
-      let paymentOption = (this.response as FullAdmissionResponse).paymentIntention.paymentOption
+  get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
+    if (this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
+      const paymentOption = this.settlement.getLastOffer().paymentIntention.paymentOption
       switch (paymentOption) {
         case PaymentOption.IMMEDIATELY:
-          return !this.countyCourtJudgmentRequestedAt
-            && isPastDeadline(MomentFactory.currentDateTime(),
-              (this.response as FullAdmissionResponse).paymentIntention.paymentDate)
+          // TODO: needed to be taken care of
           break
         case PaymentOption.BY_SPECIFIED_DATE:
           return !this.countyCourtJudgmentRequestedAt
-            && this.isSettlementReached()
             && isPastDeadline(MomentFactory.currentDateTime(),
               (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
           break
         case PaymentOption.INSTALMENTS:
           return !this.countyCourtJudgmentRequestedAt
-            && this.isSettlementReached()
             && isPastDeadline(MomentFactory.currentDateTime(),
-              (this.response as FullAdmissionResponse).paymentIntention.repaymentPlan.firstPaymentDate)
-          break
-        default:
-          throw new Error(`Payment option ${paymentOption} is not supported`)
-      }
-    }
-    return false
-  }
-
-  get eligibleForCCJAfterBreachedSettlementAsPartAdmission (): boolean {
-    if (this.response && (this.response as PartialAdmissionResponse).paymentIntention) {
-      let paymentOption = (this.response as PartialAdmissionResponse).paymentIntention.paymentOption
-      let paymentIntentionDate: Moment = (this.response as PartialAdmissionResponse).paymentIntention.paymentDate
-      switch (paymentOption) {
-        case PaymentOption.IMMEDIATELY:
-          return !this.countyCourtJudgmentRequestedAt
-            && isPastDeadline(MomentFactory.currentDateTime(),
-              this.getPaymentIntentionDate(paymentIntentionDate))
-          break
-        case PaymentOption.BY_SPECIFIED_DATE:
-          return !this.countyCourtJudgmentRequestedAt
-            && this.isSettlementReached()
-            && isPastDeadline(MomentFactory.currentDateTime(),
-              this.getPaymentIntentionDate(paymentIntentionDate))
-          break
-        case PaymentOption.INSTALMENTS:
-          return !this.countyCourtJudgmentRequestedAt
-            && this.isSettlementReached()
-            && isPastDeadline(MomentFactory.currentDateTime(),
-              this.getPaymentIntentionDate(paymentIntentionDate))
+              (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.paymentIntention.repaymentPlan.firstPaymentDate))
           break
         default:
           throw new Error(`Payment option ${paymentOption} is not supported`)
@@ -266,11 +232,19 @@ export class Claim {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
-    if (this.eligibleForCCJAfterBreachedSettlementAsFullAdmission
-      || this.eligibleForCCJAfterBreachedSettlementAsPartAdmission) {
+    if (this.eligibleForCCJAfterBreachedSettlementTerms) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
     return statuses
+  }
+
+  isSettlementReachedThroughAdmission (): boolean {
+    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+  }
+
+  isAdmissionsResponse (): boolean {
+    return (this.response.responseType === ResponseType.FULL_ADMISSION
+      || this.response.responseType === ResponseType.PART_ADMISSION)
   }
 
   private isResponseSubmitted (): boolean {
@@ -293,10 +267,6 @@ export class Claim {
     return this.settlement && !!this.settlementReachedAt
   }
 
-  private isSettlementReachedThroughAdmission (): boolean {
-    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
-  }
-
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
     if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
       const response: FullAdmissionResponse = this.response
@@ -317,7 +287,7 @@ export class Claim {
       this.claimantResponse && !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
-  private hasDefendantNotSignedSettlementAgreementInTime (): boolean {
+  hasDefendantNotSignedSettlementAgreementInTime (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
       this.claimantRespondedAt && this.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
   }
@@ -371,12 +341,5 @@ export class Claim {
 
   private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
     return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt
-  }
-
-  private getPaymentIntentionDate (givenPaymentIntentionDate: Moment): Moment {
-    if (this.claimantResponse && (this.claimantResponse as AcceptationClaimantResponse).courtDetermination) {
-      return (this.claimantResponse as AcceptationClaimantResponse).courtDetermination.courtPaymentIntention.paymentDate
-    }
-    return givenPaymentIntentionDate
   }
 }
