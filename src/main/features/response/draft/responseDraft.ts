@@ -122,20 +122,20 @@ export class ResponseDraft extends DraftDocument {
       }
     }
 
-    const isImmediatePaymentOptionSelected = (data: FullAdmission | PartialAdmission): boolean => {
-      const isPaymentOptionPopulated = (): boolean => {
-        return data !== undefined
-          && data.paymentIntention !== undefined
-          && data.paymentIntention.paymentOption !== undefined
-      }
-      return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(PaymentType.IMMEDIATELY)
-    }
-
-    if (isImmediatePaymentOptionSelected(this.fullAdmission) || isImmediatePaymentOptionSelected(this.partialAdmission)) {
+    if (this.isImmediatePaymentOptionSelected(this.fullAdmission) || this.isImmediatePaymentOptionSelected(this.partialAdmission)) {
       delete this.statementOfMeans
     }
 
     return this
+  }
+
+  public isImmediatePaymentOptionSelected (data: FullAdmission | PartialAdmission): boolean {
+    const isPaymentOptionPopulated = (): boolean => {
+      return data !== undefined
+        && data.paymentIntention !== undefined
+        && data.paymentIntention.paymentOption !== undefined
+    }
+    return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(PaymentType.IMMEDIATELY)
   }
 
   public isMoreTimeRequested (): boolean {

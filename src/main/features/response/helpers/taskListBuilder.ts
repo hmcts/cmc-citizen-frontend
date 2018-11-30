@@ -117,7 +117,10 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
-        } else {
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+        ) {
           tasks.push(
             new TaskListItem(
               'Share your financial details',
@@ -195,14 +198,17 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
-        } else {
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+          ) {
           tasks.push(
             new TaskListItem(
-            'Share your financial details',
-            Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
-            ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+              'Share your financial details',
+              Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+              ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+            )
           )
-        )
         }
 
         if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)

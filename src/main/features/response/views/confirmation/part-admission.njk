@@ -1,4 +1,7 @@
+{% from "../macro/confirmation/sendFinancialDetails.njk" import sendFinancialDetailsForBusiness %}
+
 {% set claimantName = claim.claimData.claimant.name %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 {% set amount = claim.response.amount | numeral %}
 
 {% if claim.response.paymentDeclaration %}
