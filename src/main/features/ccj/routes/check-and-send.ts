@@ -17,13 +17,29 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
-import { CCJModelConverter } from 'claims/ccjModelConverter'
+import { CCJModelConverter, retrieveDateOfBirthOfDefendant } from 'claims/ccjModelConverter'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
-function prepareUrls (externalId: string): object {
-  return {
-    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
-    paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
-    paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
+  let urls: object = {
+    paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
+  }
+  if (!claim.response) {
+    return urls = {
+      urls,
+      dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
+      paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
+    }
+  } else if (claim.response && claim.isAdmissionsResponse()) {
+    if (draft.document.paymentOption.option !== PaymentType.INSTALMENTS) {
+      return urls = {
+        urls,
+        paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+      }
+    } else {
+      return urls
+    }
   }
 }
 
@@ -34,8 +50,12 @@ function convertToPartyDetails (party: Party): PartyDetails {
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-
   const defendant = convertToPartyDetails(claim.claimData.defendant)
+  const DOBFromAdmissionResponse: DateOfBirth = retrieveDateOfBirthOfDefendant(claim)
+  if (DOBFromAdmissionResponse) {
+    draft.document.defendantDateOfBirth = DOBFromAdmissionResponse
+  }
+
   if (defendant.type === PartyType.INDIVIDUAL.value) {
     (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
   }
@@ -46,7 +66,7 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     draft: draft.document,
     defendant: defendant,
     amountToBePaid: claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
-    ...prepareUrls(req.params.externalId)
+    ...prepareUrls(req.params.externalId, claim, draft)
   })
 }
 
@@ -88,6 +108,7 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const draft: Draft<DraftCCJ> = res.locals.ccjDraft
         const user: User = res.locals.user
+
 
         if (form.model.type === SignatureType.QUALIFIED) {
           draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
