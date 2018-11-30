@@ -44,8 +44,8 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
     ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 
-export function retrieveDateOfBirthOfDefendant (claim: Claim) : DateOfBirth {
-  if(claim.response && claim.isAdmissionsResponse() && claim.response.defendant.type === PartyType.INDIVIDUAL.value ) {
+export function retrieveDateOfBirthOfDefendant (claim: Claim): DateOfBirth {
+  if (claim.response && claim.isAdmissionsResponse() && claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
     const defendantDateOfBirth: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
     return new DateOfBirth(true, LocalDate.fromMoment(defendantDateOfBirth))
   }

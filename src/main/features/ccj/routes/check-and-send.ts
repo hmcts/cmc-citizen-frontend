@@ -30,7 +30,7 @@ function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>):
       }
     } else {
       return {
-        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
       }
     }
   }
@@ -106,7 +106,6 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const draft: Draft<DraftCCJ> = res.locals.ccjDraft
         const user: User = res.locals.user
-
 
         if (form.model.type === SignatureType.QUALIFIED) {
           draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
