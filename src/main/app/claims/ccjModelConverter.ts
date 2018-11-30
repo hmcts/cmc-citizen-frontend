@@ -51,14 +51,14 @@ export function getRepaymentPlanForm (claim: Claim, draft: DraftWrapper<DraftCCJ
       const coreRepaymentPlan: CoreRepaymentPlan = claim.settlement.getLastOffer().paymentIntention.repaymentPlan
       const firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
       const paymentSchedule: PaymentSchedule = PaymentSchedule.of(coreRepaymentPlan.paymentSchedule)
-      const alreadyPaid: number = draft.document.paidAmount.amount || 0
+      const alreadyPaid: number = (draft.document.paidAmount.amount || 0)
       const remainingAmount: number = claim.totalAmountTillToday - alreadyPaid
       const repaymentPlanForm: RepaymentPlanForm = new RepaymentPlanForm(
         remainingAmount,
         coreRepaymentPlan.instalmentAmount,
         new LocalDate(firstPaymentDate.year(), firstPaymentDate.month() + 1, firstPaymentDate.date()),
         paymentSchedule)
-
+      console.log('repaymentPlanForm ', repaymentPlanForm)
       return repaymentPlanForm
     }
   }
