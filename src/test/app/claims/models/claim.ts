@@ -217,7 +217,7 @@ describe('Claim', () => {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
         paymentDate: MomentFactory.currentDate().subtract(1, 'days')
       }
-      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlement = prepareSettlementWithCounterSignatureWithDatePassed(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
       claim.response = {
         responseType: ResponseType.FULL_ADMISSION,
@@ -499,6 +499,8 @@ function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): 
   }
   return new Settlement().deserialize(settlement)
 }
+
+
 function prepareSettlementWithCounterSignature (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
   const settlement = {
     partyStatements: [
@@ -508,6 +510,31 @@ function prepareSettlementWithCounterSignature (paymentIntention: PaymentIntenti
         offer: {
           content: 'My offer contents here.',
           completionDate: '2020-10-10',
+          paymentIntention: paymentIntention
+        }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
+      },
+      {
+        type: 'COUNTERSIGNATURE',
+        madeBy: 'DEFENDANT'
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}
+
+function prepareSettlementWithCounterSignatureWithDatePassed (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: party.value,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2010-10-10',
           paymentIntention: paymentIntention
         }
       },
