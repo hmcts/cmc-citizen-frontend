@@ -72,6 +72,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
           completionDate: paymentPlanConvertedToMonthlyFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToMonthlyFrequency.calculatePaymentLength()
         }
+        return courtOfferedPaymentIntention
       }
       return undefined
     }
