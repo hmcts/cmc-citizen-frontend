@@ -61,13 +61,17 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
         return courtOfferedPaymentIntention
-      }
+      } else {
+        const paymentPlanConvertedToMonthlyFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(Frequency.MONTHLY)
 
-      if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-        courtOfferedPaymentIntention.paymentDate = paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate()
-        courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
-
-        return courtOfferedPaymentIntention
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        courtOfferedPaymentIntention.repaymentPlan = {
+          firstPaymentDate: paymentPlanConvertedToMonthlyFrequency.startDate,
+          instalmentAmount: Math.round(paymentPlanConvertedToMonthlyFrequency.instalmentAmount * 100) / 100,
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToMonthlyFrequency.frequency),
+          completionDate: paymentPlanConvertedToMonthlyFrequency.calculateLastPaymentDate(),
+          paymentLength: paymentPlanConvertedToMonthlyFrequency.calculatePaymentLength()
+        }
       }
       return undefined
     }
