@@ -18,7 +18,7 @@ import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = ClaimantResponsePaths.courtOfferPage.evaluateUri({ externalId: externalId })
+const pagePath = ClaimantResponsePaths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
 const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
 const defendantFullAdmissionResponse = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
 const rejectionReasonPagePath = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: externalId })
