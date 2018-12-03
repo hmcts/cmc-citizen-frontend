@@ -3,15 +3,15 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, signAgreementLink, downloadAgreementLink %}
 
 {% macro settlementAgreementSignedByClaimantDefendantDashboard(claim) %}
-  {{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}
+  {{ t('{{ claimantName }} asked you to sign a settlement agreement.', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByBothDefendantDashboard(claim) %}
-  {{ t('You’ve both signed a settlement agreement') }}
+  {{ t('You’ve both signed a settlement agreement.') }}
 {% endmacro %}
 
 {% macro settlementAgreementRejectedForDefendantDashboard(claim) %}
-  {{ t('You rejected the settlement agreement') }}
+  {{ t('You rejected the settlement agreement.') }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByClaimantDefendantClaimDetails(claim) %}
