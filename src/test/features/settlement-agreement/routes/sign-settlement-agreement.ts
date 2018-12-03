@@ -107,7 +107,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to confirmation page when everything is fine', async () => {
+          it('should redirect to confirmation page when everything is fine and settlement agreement is rejected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             settlementAgreementServiceMock.resolveRejectSettlementAgreement()
 
@@ -115,6 +115,19 @@ describe('Settlement agreement: sign settlement agreement page', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: 'no' })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(Paths.settlementAgreementConfirmation
+                  .evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to confirmation page when everything is fine and settlement agreement is accepted', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            settlementAgreementServiceMock.resolveCountersignSettlementAgreement()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: 'yes' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(Paths.settlementAgreementConfirmation
                   .evaluateUri({ externalId: externalId })))

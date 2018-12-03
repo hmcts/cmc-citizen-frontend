@@ -1,6 +1,5 @@
 import * as express from 'express'
 import { Paths } from 'settlement-agreement/paths'
-import { Paths as DashboardPaths } from 'main/app/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { Claim } from 'main/app/claims/models/claim'
 import { DefendantSettlementResponse } from 'settlement-agreement/form/models/defendantSettlementResponse'
@@ -46,11 +45,11 @@ export default express.Router()
         const user: User = res.locals.user
 
         if (form.model.option === YesNoOption.YES.option) {
-          res.redirect(DashboardPaths.homePage.uri)
+          await settlementAgreementClient.countersignSettlementAgreement(claim.externalId, user)
         } else {
           await settlementAgreementClient.rejectSettlementAgreement(claim.externalId, user)
-          res.redirect(Paths.settlementAgreementConfirmation.evaluateUri({ externalId: claim.externalId }))
         }
+        res.redirect(Paths.settlementAgreementConfirmation.evaluateUri({ externalId: claim.externalId }))
       }
     }
     ))

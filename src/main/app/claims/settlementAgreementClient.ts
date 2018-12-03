@@ -16,4 +16,13 @@ export class SettlementAgreementClient {
     })
   }
 
+  countersignSettlementAgreement (externalId: string, user: User): Promise<Claim> {
+    return request.post(`${claimStoreApiUrl}/${externalId}/settlement-agreement/countersign`, {
+      body: '',
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    })
+  }
+
 }
