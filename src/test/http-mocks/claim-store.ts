@@ -15,6 +15,8 @@ import {
   fullAdmissionWithSoMPaymentBySetDate,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -155,10 +157,72 @@ export const sampleClaimObj = {
         type: StatementType.OFFER.value,
         madeBy: MadeBy.DEFENDANT.value,
         offer: { content: 'offer text', completionDate: '2017-08-08' }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
       }
     ]
   },
   features: ['admissions']
+}
+
+export const settlementWithInstalmentsAndAcceptation = {
+  settlement: {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: {
+          content: 'offer text',
+          completionDate: '2017-08-08',
+          paymentIntention: {
+            paymentOption: PaymentOption.INSTALMENTS,
+            repaymentPlan: {
+              instalmentAmount: 100,
+              firstPaymentDate: '2018-10-01',
+              paymentSchedule: PaymentSchedule.EACH_WEEK,
+              completionDate: '2019-02-01',
+              paymentLength: '1'
+            }
+          }
+        }
+      },
+      {
+        madeBy: MadeBy.DEFENDANT.value,
+        type: 'COUNTERSIGNATURE'
+      }
+    ]
+  }
+}
+
+export const settlementWithSetDateAndAcceptation = {
+  settlement: {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: {
+          content: 'offer text',
+          completionDate: '2017-08-08',
+          paymentIntention: {
+            paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+            paymentDate: '2010-12-31'
+          }
+        }
+      },
+      {
+        madeBy: MadeBy.DEFENDANT.value,
+        type: 'COUNTERSIGNATURE'
+      }
+    ]
+  }
+}
+
+export const settlementAndSettlementReachedAt: object = {
+  settlementReachedAt: '2017-07-25T22:45:51.785',
+  ...this.settlementWithInstalmentsAndAcceptation
+
 }
 
 export const sampleDefendantResponseObj = {
@@ -223,6 +287,12 @@ export function resolveRetrieveClaimByExternalIdWithResponse (override?: object)
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
+}
+
+export function resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement (override?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule, ...override })
 }
 
 export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {

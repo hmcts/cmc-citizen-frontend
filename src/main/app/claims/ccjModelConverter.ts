@@ -1,7 +1,7 @@
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { RepaymentPlan as RepaymentPlanForm } from 'ccj/form/models/repaymentPlan'
-import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Moment } from 'moment'
@@ -48,6 +48,15 @@ export function retrieveDateOfBirthOfDefendant (claim: Claim): DateOfBirth {
   if (claim.response && claim.isAdmissionsResponse() && claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
     const defendantDateOfBirth: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
     return new DateOfBirth(true, LocalDate.fromMoment(defendantDateOfBirth))
+  }
+  return undefined
+}
+
+export function retrievePaymentOptionsFromClaim (claim: Claim): CCJPaymentOption {
+  if (claim.response && claim.isAdmissionsResponse() &&
+    ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime())) {
+    const paymentOptionFromOffer: PaymentOption = claim.settlement.getLastOffer().paymentIntention.paymentOption
+    return new CCJPaymentOption(PaymentType.valueOf(paymentOptionFromOffer))
   }
   return undefined
 }

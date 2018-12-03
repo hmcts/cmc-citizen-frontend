@@ -18,7 +18,6 @@ import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.paidAmountSummaryPage.evaluateUri({ externalId: externalId })
-const paymentOptionsPage = Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ - paid amount summary page', () => {
   attachDefaultHooks(app)
@@ -61,59 +60,14 @@ describe('CCJ - paid amount summary page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
-    })
-  })
-  describe('on Post', () => {
-    const method = 'post'
-    checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
-    context('when user authorised', () => {
-      beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      })
-      context('when middleware failure', () => {
-        it('should return 500 when cannot retrieve claim by external id', async () => {
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+      it('should render page when everything is fine when settlement is broken', async () => {
+        draftStoreServiceMock.resolveFind('ccj')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement(claimStoreServiceMock.settlementAndSettlementReachedAt)
 
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
-
-        it('should return 500 when cannot retrieve CCJ draft', async () => {
-          draftStoreServiceMock.rejectFind('Error')
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
-      })
-      context('when form is valid', async () => {
-
-        it('should redirect to payment options page', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.resolveSave()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(paymentOptionsPage))
-        })
-
-        it('should return 500 and render error page when cannot save ccj draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.rejectSave()
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
     })
   })

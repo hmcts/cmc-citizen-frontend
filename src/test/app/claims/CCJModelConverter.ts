@@ -40,11 +40,7 @@ const ccjDraftWithInstallments = new DraftCCJ().deserialize({
   repaymentPlan: {
     remainingAmount: 4060,
     instalmentAmount: 100,
-    firstPaymentDate: {
-      year: 2010,
-      month: 12,
-      day: 30
-    },
+    firstPaymentDate: new LocalDate(2010, 12, 30),
     paymentSchedule: {
       value: 'EACH_WEEK',
       displayValue: 'Each week'

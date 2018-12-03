@@ -17,9 +17,14 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
-import { CCJModelConverter, retrieveDateOfBirthOfDefendant } from 'claims/ccjModelConverter'
+import {
+  CCJModelConverter, getRepaymentPlanForm,
+  retrieveDateOfBirthOfDefendant,
+  retrievePaymentOptionsFromClaim
+} from 'claims/ccjModelConverter'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
-import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
   if (claim.response && claim.isAdmissionsResponse()) {
@@ -52,6 +57,14 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
   const DOBFromAdmissionResponse: DateOfBirth = retrieveDateOfBirthOfDefendant(claim)
   if (DOBFromAdmissionResponse) {
     draft.document.defendantDateOfBirth = DOBFromAdmissionResponse
+  }
+
+  const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
+
+  if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+    const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+    draft.document.paymentOption = paymentOption
+    draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
   }
 
   if (defendant.type === PartyType.INDIVIDUAL.value) {
@@ -111,7 +124,6 @@ export default express.Router()
           draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
           await new DraftService().save(draft, user.bearerToken)
         }
-
         const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document, claim)
         await CCJClient.request(claim.externalId, countyCourtJudgment, user)
         await new DraftService().delete(draft.id, user.bearerToken)

@@ -8,11 +8,11 @@ import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/m
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 import { User } from 'idam/user'
-import { Draft, Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
-import { getRepaymentPlanForm } from 'claims/ccjModelConverter'
+import { retrievePaymentOptionsFromClaim } from 'claims/ccjModelConverter'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
@@ -25,15 +25,9 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     const claim: Claim = res.locals.claim
     const response = claim.response
     if (response) {
-      const paymentOption: CCJPaymentOption = this.retrievePaymentOptions(claim)
+      const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
       if (paymentOption.option.value === PaymentOption.INSTALMENTS) {
-        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-        draft.document.paymentOption = paymentOption
-        draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
-        this.saveDraft(res.locals)
-
         return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
-
       } else {
         return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
       }
@@ -50,15 +44,6 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     const user: User = locals.user
     await new DraftService().save(locals.draft, user.bearerToken)
   }
-
-  private retrievePaymentOptions (claim: Claim): CCJPaymentOption {
-    if (claim.isAdmissionsResponse() &&
-      ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime())) {
-      const paymentOptionFromOffer: PaymentOption = claim.settlement.getLastOffer().paymentIntention.paymentOption
-      return new CCJPaymentOption(PaymentType.valueOf(paymentOptionFromOffer))
-    }
-  }
-
 }
 
 /* tslint:disable:no-default-export */
