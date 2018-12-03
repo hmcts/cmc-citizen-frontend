@@ -22,7 +22,7 @@ import { ClaimantResponseType } from 'claims/models/claimant-response/claimantRe
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.redeterminationPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
-const confirmationPage = Paths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
+const confirmationPage = Paths.redeterminationConfirmationPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
   text: 'I feel Defendant can pay earlier and I need money sooner'
@@ -128,7 +128,7 @@ describe('CCJ - re-determination page', () => {
             })
           })
 
-          it('should redirect to check and send page', async () => {
+          it('should redirect to redetermination confirmation page', async () => {
 
             claimStoreServiceMock.resolveSaveReDeterminationForExternalId(validFormData.text)
             await request(app)

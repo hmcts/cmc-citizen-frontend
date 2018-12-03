@@ -47,7 +47,7 @@ describe('CCJ guard', () => {
       })
 
       context('should redirect to dashboard when claim not eligible for CCJ', () => {
-        const excludedPaths = [Paths.ccjConfirmationPage, Paths.redeterminationPage, Paths.repaymentPlanSummaryPage]
+        const excludedPaths = [Paths.ccjConfirmationPage, Paths.redeterminationConfirmationPage, Paths.redeterminationPage, Paths.repaymentPlanSummaryPage]
         Object.values(Paths)
           .filter(path => !excludedPaths.includes(path))
           .forEach((path: RoutablePath) => {
