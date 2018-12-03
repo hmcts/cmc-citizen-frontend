@@ -190,8 +190,6 @@ ccjRequestedForDefendantClaimDetails %}
         {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
         {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
-      {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
-        NEED TO HANDLE
       {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
         {{ claimFullAdmissionForDefendantDashboard(claim) }}
       {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
