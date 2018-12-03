@@ -1,4 +1,4 @@
-{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioGroupWithHintPanel, saveAndContinueButton, errorSummary %}
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "./macro/settlement-agreement.njk" import settlementAgreementSummary %}
 {% extends "layout.njk" %}
@@ -27,20 +27,22 @@
         <p>{{ t('You can choose not to sign the settlement agreement, for example if you think you can’t afford it.') }}</p>
         <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ claimantName }} before signing. You won’t be
           able to change this later.', { claimantName: claim.claimData.claimant.name }) }}</p>
-        {{ radioGroup(
-          label = "Do you want more time to respond?",
+        {{ radioGroupWithHintPanel(
+          label = "Do you accept the settlement agreement?",
           name = "option",
           options = [
             {
               label: t('Yes - I confirm I’ve read and accept the terms of the agreement.'),
               value: "yes",
-              hint: moreTimeDeadline,
+              hint: t('The claim will be put on hold and the claimant can’t request a CCJ against you.'),
               bold: false
             },
             {
               label: t('No - I reject the terms of the agreement.'),
               value: "no",
-              hint: responseDeadline,
+              hint: t('The claimant can request a CCJ against you to enforce the repayment plan shown in the agreement.
+               You can ask a judge to change the plan based on your financial details.
+                The court has reviewed the plan and believes you can afford it, so a judge may not change it.'),
               bold: false
             }
           ],
