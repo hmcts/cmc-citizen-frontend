@@ -75,7 +75,6 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
         }
         return courtOfferedPaymentIntention
       }
-      return undefined
     }
 
     if (decisionType === DecisionType.DEFENDANT) {
