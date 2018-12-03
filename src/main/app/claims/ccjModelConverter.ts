@@ -18,6 +18,7 @@ import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -43,22 +44,27 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
     ? draftCcj.payBySetDate.date.toMoment() : undefined
 }
 
+export function retrieveDateOfBirthOfDefendant (claim: Claim): DateOfBirth {
+  if (claim.response && claim.isAdmissionsResponse() && claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
+    const defendantDateOfBirth: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
+    return new DateOfBirth(true, LocalDate.fromMoment(defendantDateOfBirth))
+  }
+  return undefined
+}
+
 export function getRepaymentPlanForm (claim: Claim, draft: DraftWrapper<DraftCCJ>): RepaymentPlanForm {
-  console.log('draft: ', draft)
-  console.log('payment option: ', draft.document.paymentOption)
   if (draft.document.paymentOption.option === PaymentType.INSTALMENTS) {
     if ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime()) {
       const coreRepaymentPlan: CoreRepaymentPlan = claim.settlement.getLastOffer().paymentIntention.repaymentPlan
       const firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
       const paymentSchedule: PaymentSchedule = PaymentSchedule.of(coreRepaymentPlan.paymentSchedule)
-      const alreadyPaid: number = draft.document.paidAmount.amount || 0
+      const alreadyPaid: number = (draft.document.paidAmount.amount || 0)
       const remainingAmount: number = claim.totalAmountTillToday - alreadyPaid
       const repaymentPlanForm: RepaymentPlanForm = new RepaymentPlanForm(
         remainingAmount,
         coreRepaymentPlan.instalmentAmount,
         new LocalDate(firstPaymentDate.year(), firstPaymentDate.month() + 1, firstPaymentDate.date()),
         paymentSchedule)
-
       return repaymentPlanForm
     }
   }

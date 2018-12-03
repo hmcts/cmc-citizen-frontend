@@ -17,12 +17,26 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
-import { CCJModelConverter, getRepaymentPlanForm } from 'claims/ccjModelConverter'
+import { CCJModelConverter, retrieveDateOfBirthOfDefendant } from 'claims/ccjModelConverter'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 
-function prepareUrls (externalId: string): object {
+function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
+  if (claim.response && claim.isAdmissionsResponse()) {
+    if (draft.document.paymentOption.option !== PaymentType.INSTALMENTS) {
+      return {
+        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+        paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+      }
+    } else {
+      return {
+        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
+      }
+    }
+  }
   return {
-    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
     paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
     paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
   }
 }
@@ -34,14 +48,14 @@ function convertToPartyDetails (party: Party): PartyDetails {
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-
   const defendant = convertToPartyDetails(claim.claimData.defendant)
-  if (defendant.type === PartyType.INDIVIDUAL.value) {
-    (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
+  const DOBFromAdmissionResponse: DateOfBirth = retrieveDateOfBirthOfDefendant(claim)
+  if (DOBFromAdmissionResponse) {
+    draft.document.defendantDateOfBirth = DOBFromAdmissionResponse
   }
 
-  if (claim.response && claim.isAdmissionsResponse()) {
-    draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
+  if (defendant.type === PartyType.INDIVIDUAL.value) {
+    (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
   }
 
   res.render(Paths.checkAndSendPage.associatedView, {
@@ -50,7 +64,7 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     draft: draft.document,
     defendant: defendant,
     amountToBePaid: claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
-    ...prepareUrls(req.params.externalId)
+    ...prepareUrls(req.params.externalId, claim, draft)
   })
 }
 

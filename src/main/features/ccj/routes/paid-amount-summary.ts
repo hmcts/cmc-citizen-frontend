@@ -9,6 +9,10 @@ import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { User } from 'idam/user'
+import { Draft, Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { DraftService } from 'services/draftService'
+import { getRepaymentPlanForm } from 'claims/ccjModelConverter'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
@@ -23,8 +27,13 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     if (response) {
       const paymentOption: CCJPaymentOption = this.retrievePaymentOptions(claim)
       if (paymentOption.option.value === PaymentOption.INSTALMENTS) {
-        res.locals.draft.document.paymentOption = paymentOption
+        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+        draft.document.paymentOption = paymentOption
+        draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
+        this.saveDraft(res.locals)
+
         return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
+
       } else {
         return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
       }
@@ -35,6 +44,11 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
   amountSettledFor (claim: Claim, draft: DraftCCJ): number {
     return undefined
+  }
+
+  async saveDraft (locals: { user: User, draft: DraftWrapper<DraftCCJ> }): Promise<void> {
+    const user: User = locals.user
+    await new DraftService().save(locals.draft, user.bearerToken)
   }
 
   private retrievePaymentOptions (claim: Claim): CCJPaymentOption {
