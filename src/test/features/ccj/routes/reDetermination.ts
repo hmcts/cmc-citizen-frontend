@@ -22,7 +22,7 @@ import { ClaimantResponseType } from 'claims/models/claimant-response/claimantRe
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.redeterminationPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
-const confirmationPage = Paths.confirmationPage.evaluateUri({ externalId: externalId })
+const confirmationPage = Paths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
   text: 'I feel Defendant can pay earlier and I need money sooner'

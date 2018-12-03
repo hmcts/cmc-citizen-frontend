@@ -19,7 +19,7 @@ import { MadeBy } from 'offer/form/models/madeBy'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
+const pagePath = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: confirmation page', () => {
   attachDefaultHooks(app)
