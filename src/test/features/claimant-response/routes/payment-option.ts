@@ -141,7 +141,7 @@ describe('Claimant response: payment options', () => {
             it('should redirect to court offer page for "IMMEDIATELY" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: PaymentType.IMMEDIATELY.value },
-                Paths.courtOfferPage.evaluateUri({ externalId: externalId }))
+                Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
