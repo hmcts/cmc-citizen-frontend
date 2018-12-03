@@ -500,7 +500,6 @@ function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): 
   return new Settlement().deserialize(settlement)
 }
 
-
 function prepareSettlementWithCounterSignature (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
   const settlement = {
     partyStatements: [

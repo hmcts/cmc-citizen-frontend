@@ -1,3 +1,6 @@
+{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
+
 {% macro downloadResponseLink(claim) %}
   <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
 {% endmacro %}

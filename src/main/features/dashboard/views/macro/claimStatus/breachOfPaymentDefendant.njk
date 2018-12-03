@@ -24,25 +24,24 @@
             { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
       {% endif %}
     {% endif %}
-      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-        <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
-            { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
-        <p>{{ t('Because you didn’t pay within 5 days, they requested the CCJ.') }}</p>
-      {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-        <p>{{ t('They’ve offered to pay by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
-      {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-        <p>{{ t('They’ve offered to pay in instalments.') }}</p>
-      {% endif %}
-
-      {% if claim.claimantResponse.courtDetermination.decisionType !== DecisionType.CLAIMANT %}
-        <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>
-      {% else %}
-        <p>{{ t('They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.') }}</p>
-      {% endif %}
-
-
-      <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
+    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+      <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
           { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
+      <p>{{ t('Because you didn’t pay within 5 days, they requested the CCJ.') }}</p>
+    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+      <p>{{ t('They’ve offered to pay by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+      <p>{{ t('They’ve offered to pay in instalments.') }}</p>
+    {% endif %}
+
+    {% if claim.claimantResponse.courtDetermination.decisionType !== DecisionType.CLAIMANT %}
+      <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>
+    {% else %}
+      <p>{{ t('They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.') }}</p>
+    {% endif %}
+
+    <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
+        { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
 {% endmacro %}
