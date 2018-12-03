@@ -11,11 +11,11 @@
 {% endmacro %}
 
 {% macro settlementAgreementSignedByBothClaimantDashboard(claim) %}
-  {{ t('You’ve both signed a settlement agreement') }}
+  {{ t('You’ve both signed a settlement agreement.') }}
 {% endmacro %}
 
 {% macro settlementAgreementRejectedForClaimantDashboard(claim) %}
-  {{ t('The defendant has rejected your settlement agreement. You can request a County Court Judgment against them') }}
+  {{ t('The defendant has rejected your settlement agreement. You can request a County Court Judgment against them.') }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
@@ -48,9 +48,10 @@
 {% macro settlementAgreementSignedByBothClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
+    {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('The agreement says the defendant will pay you in full by {{ paymentDate }}.',
-          { paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date }) }}</p>
+          { paymentDate: paymentIntention.paymentDate | date }) }}</p>
       {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       <p>{{ t('The agreement says the defendant will pay you in instalments of {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
           {

@@ -17,7 +17,7 @@
       {% elseif claim.settlement.isSettled() %}
         <h1 class="bold-large">{{ t('You’ve both signed a settlement agreement') }}</h1>
         <p class="receipt-download-container">
-          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download settlement agreement') }}</a> (PDF)
+          <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download settlement agreement') }}</a> (PDF)
         </p>
       {% endif %}
     </div>
@@ -28,12 +28,14 @@
       <p>{{ t('The court has reviewed the plan and believes you can afford it, so a judge may not change it.') }}</p>
       <p>{{ t('We’ll email you when the claimant responds.') }}</p>
     {% elseif claim.settlement.isSettled() %}
-      {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+      {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
+      {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
         <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
-            { amount: amountToPay,
-              paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date })
-          }}</p>
-        {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+            {
+              amount: amountToPay,
+              paymentDate: paymentIntention.paymentDate | date
+            }) }}</p>
+      {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
         <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
             {
               instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
@@ -42,7 +44,6 @@
             }) }}</p>
       {% endif %}
       <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms') }}</p>
-      <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a> (PDF)
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) +
         ' if you need their payment details.') | safe }}</p>
