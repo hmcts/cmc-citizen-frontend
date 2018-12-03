@@ -131,6 +131,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     switch (courtDecision) {
       case DecisionType.COURT:
+        return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
       case DecisionType.DEFENDANT: {
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
           return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
