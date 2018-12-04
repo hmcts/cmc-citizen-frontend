@@ -44,21 +44,21 @@
 {% macro settlementAgreementSignedByBothClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {% if claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('The agreement says the defendant will pay you in full by {{ paymentDate }}.',
           { paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date }) }}</p>
-      {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {% elif claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       <p>{{ t('The agreement says the defendant will pay you in instalments of {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
           {
-            instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
-            paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
-            firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+            instalmentAmount: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.instalmentAmount | numeral,
+            paymentSchedule: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+            firstPaymentDate: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.firstPaymentDate | date
           }) }}</p>
     {% endif %}
     <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
     <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
     <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-    <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary form-group">Tell us you've been paid</a>
+    {{ internalLink('Tell us you’ve been paid', AppPaths.contactUsPage.uri, 'button button-secondary form-group') }}
   </div>
 {% endmacro %}
 

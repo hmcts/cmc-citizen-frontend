@@ -239,7 +239,7 @@ export class Claim {
   }
 
   isSettlementReachedThroughAdmission (): boolean {
-    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+    return this.settlement && this.settlement.isThroughAdmissionsAndSettled() && !this.countyCourtJudgmentRequestedAt
   }
 
   isAdmissionsResponse (): boolean {

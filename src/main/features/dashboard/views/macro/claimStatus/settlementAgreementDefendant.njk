@@ -23,17 +23,17 @@
 {% macro settlementAgreementSignedByBothDefendantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {% if claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
           { amount: amountToPay,
             paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date })
         }}</p>
-    {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    {% elif claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
           {
-            instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
-            paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
-            firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+            instalmentAmount: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.instalmentAmount | numeral,
+            paymentSchedule: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+            firstPaymentDate: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.firstPaymentDate | date
           }) }}</p>
     {% endif %}
     <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms.') }}</p>
