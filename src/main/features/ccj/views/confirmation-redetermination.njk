@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
@@ -36,10 +37,9 @@
 
       {% include "includes/service_survey_link.njk" %}
 
-      <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
+      <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') }}</p>
+
       {{ supportWidget() }}
-
-
     </div>
   </div>
 
