@@ -34,10 +34,10 @@
 
 {% macro paidInFullCCJCancelledClaimantClaimDetails(claim) %}
   {{ paidInFullClaimantClaimSettledDetails(claim) }}
-  <p>{{ t('The defendant’s County Court Judgment has been cancelled.') }}</p>
+  <p>{{ t('The defendant’s County Court Judgment will be cancelled.') }}</p>
 {% endmacro %}
 
 {% macro paidInFullCCJSatisfiedClaimantClaimDetails(claim) %}
   {{ paidInFullClaimantClaimSettledDetails(claim) }}
-  <p>{{ t('The defendant’s County Court Judgment has been marked as paid.') }}</p>
+  <p>{{ t('The defendant’s County Court Judgment will be marked as paid.') }}</p>
 {% endmacro %}
