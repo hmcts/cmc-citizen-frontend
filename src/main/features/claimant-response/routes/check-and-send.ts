@@ -21,11 +21,18 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
   if (!draft.acceptPaymentMethod && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
     return undefined
   }
-  if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+  if (isAcceptPaymentMethodOrSettleAdmitted(draft)) {
     return response.paymentIntention
   } else {
     return draft.courtDetermination.courtDecision
   }
+}
+
+function isAcceptPaymentMethodOrSettleAdmitted (draft: DraftClaimantResponse): boolean {
+  return (draft.settleAdmitted && draft.settleAdmitted.admitted &&
+            draft.settleAdmitted.admitted.option === YesNoOption.YES) ||
+         (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept &&
+            draft.acceptPaymentMethod.accept.option === YesNoOption.YES)
 }
 
 /* tslint:disable:no-default-export */
