@@ -58,13 +58,24 @@ export class TaskListBuilder {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
 
-    tasks.push(
-      new TaskListItem(
-        'Choose a response',
-        Paths.responseTypePage.evaluateUri({ externalId: externalId }),
-        OweMoneyTask.isCompleted(draft)
+    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)
+      && (draft.isResponsePartiallyAdmitted() || draft.isResponseFullyAdmitted())) {
+      tasks.push(
+        new TaskListItem(
+          'Choose a response',
+          Paths.responseTypePage.evaluateUri({ externalId: externalId }),
+          false
+        )
       )
-    )
+    } else {
+      tasks.push(
+        new TaskListItem(
+          'Choose a response',
+          Paths.responseTypePage.evaluateUri({ externalId: externalId }),
+          OweMoneyTask.isCompleted(draft)
+        )
+      )
+    }
 
     if (draft.isResponseRejectedFullyBecausePaidWhatOwed()) {
       tasks.push(
