@@ -37,7 +37,7 @@
 
       {% include "includes/service_survey_link.njk" %}
 
-      <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') }}</p>
+      <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
 
       {{ supportWidget() }}
     </div>
