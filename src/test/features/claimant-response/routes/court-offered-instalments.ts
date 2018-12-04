@@ -88,8 +88,7 @@ describe('Claimant Response - Court offer', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Your instalments are more than the ' +
-            'defendant can afford'))
+          .expect(res => expect(res).to.be.successful.withText('The defendant can’t afford your plan'))
       })
     })
   })
