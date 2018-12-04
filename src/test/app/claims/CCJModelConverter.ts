@@ -79,12 +79,6 @@ const repaymentPlanPaymentIntention = {
   }
 }
 
-const repaymentPlan = {
-  instalmentAmount: 100,
-  firstPaymentDate: new LocalDate(2010, 12, 30).toMoment(),
-  paymentSchedule: 'EACH_WEEK'
-}
-
 const fullAdmissionResponseWithInstallmentsAndPaymentDateElapsed = {
   ...baseResponseData,
   ...baseFullAdmissionData,
@@ -138,14 +132,12 @@ describe('CCJModelConverter - convert CCJDraft to CountyCourtJudgement', () => {
     expect(countyCourtJudgment).to.be.deep.equal(new CountyCourtJudgment(DOB, PaymentOption.IMMEDIATELY, undefined, undefined, undefined, undefined, CountyCourtJudgmentType.ADMISSIONS))
   })
 
-  xit('should convert to CCJ - for a valid CCJ draft for full admission response paying by installments on breach of payment terms', () => {
+  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by installments on breach of payment terms', () => {
     const draft: DraftCCJ = ccjDraftWithInstallments
     const claim: Claim = new Claim().deserialize(sampleClaimWithFullAdmissionWithInstallmentsResponseObj)
-    const expectedRepaymentPlan: RepaymentPlan = new RepaymentPlan().deserialize(repaymentPlan)
+    const expectedRepaymentPlan: RepaymentPlan = new RepaymentPlan(100, new LocalDate(2010, 12, 30).toMoment(), 'EACH_WEEK')
     const DOB: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draft, claim)
-    expect(countyCourtJudgment.repaymentPlan.paymentSchedule).to.be.equal(draft.repaymentPlan.paymentSchedule.value, 'installment payment option expected')
-    countyCourtJudgment.repaymentPlan.paymentSchedule = draft.repaymentPlan.paymentSchedule
     expect(countyCourtJudgment).to.be.deep.equal(new CountyCourtJudgment(
       DOB,
       PaymentOption.INSTALMENTS,
@@ -153,7 +145,7 @@ describe('CCJModelConverter - convert CCJDraft to CountyCourtJudgement', () => {
       expectedRepaymentPlan,
       undefined,
       undefined,
-      CountyCourtJudgmentType.ADMISSIONS))
+      CountyCourtJudgmentType.ADMISSIONS)
+    )
   })
-
 })
