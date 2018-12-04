@@ -85,30 +85,3 @@ Scenario('Claimant is telling us defendant has paid in full. CCJ has been reques
     + ' on 1 January 2017.')
   I.see('The defendant’s County Court Judgment has been cancelled.')
 })
-
-// Scenario('Claimant is telling us defendant has paid in full. CCJ has been requested after 1 month @citizen', async (I: I) => {
-//   const email: string = await I.createCitizenUser()
-//   const claimRef: string = await I.createClaim(createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST), email)
-//
-//   userSteps.login(email)
-//   ccjSteps.requestCCJ(claimRef, defendantType)
-//   ccjSteps.ccjDefendantToPayBySetDate()
-//   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, defendantType)
-//   confirmationPage.clickGoToYourAccount()
-//   I.click(claimRef)
-//   I.click('you need to tell us')
-//   paidInFullSteps.inputDatePaid('2017-01-01')
-//   I.see('The claim is now settled')
-//
-//   // Note: Validation will not allow countyCourtJudgmentRequestedAt or moneyReceivedOn to be in past/future
-//   // CCJ paid in full 2 months after countyCourtJudgmentRequestedAt
-//   // claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
-//   // claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
-//
-//   confirmationPage.clickGoToYourAccount()
-//   I.click(claimRef)
-//   I.see('This claim is settled')
-//   I.see(createDefendant(PartyType.COMPANY).name + ' paid you ' + AmountHelper.formatMoney(claimAmount.getTotal())
-//     + ' on 1 January 2017.')
-//   I.see('The defendant’s County Court Judgment has been marked as paid.')
-// })
