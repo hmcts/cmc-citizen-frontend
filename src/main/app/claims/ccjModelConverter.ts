@@ -104,9 +104,6 @@ export class CCJModelConverter {
 
     let defendantDateOfBirth: Moment = undefined
 
-    const payBySetDate: Moment = convertPayBySetDate(draft)
-
-    const repaymentPlan: RepaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
     if (claim.response && claim.isAdmissionsResponse()) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
       if (response.defendant.type === PartyType.INDIVIDUAL.value) {
@@ -127,8 +124,8 @@ export class CCJModelConverter {
       defendantDateOfBirth,
       paymentOption,
       convertPaidAmount(draft),
-      repaymentPlan,
-      payBySetDate,
+      convertRepaymentPlan(draft.repaymentPlan),
+      convertPayBySetDate(draft),
       statementOfTruth,
       ccjType
     )
