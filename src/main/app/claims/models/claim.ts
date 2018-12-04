@@ -172,14 +172,13 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-    if (this.moneyReceivedOn && this.hasCCJ() && this.isCCJPaidWithinMonth()) {
+    if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
-    } else if (this.moneyReceivedOn && this.hasCCJ()) {
+    } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
-    }
-    if (this.countyCourtJudgmentRequestedAt) {
+    } else if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
       } else if (this.hasClaimantSuggestedAlternativePlanWithCCJ()) {
@@ -234,7 +233,7 @@ export class Claim {
     if (this.eligibleForCCJAfterBreachedSettlement) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
-    if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.hasCCJ())) {
+    if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
     }
 
@@ -262,14 +261,7 @@ export class Claim {
   }
 
   private isCCJPaidWithinMonth (): boolean {
-    let futureMonth
-    futureMonth = calculateMonthIncrement(this.countyCourtJudgmentRequestedAt)
-
-    return this.moneyReceivedOn.isSameOrBefore(futureMonth)
-  }
-
-  private hasCCJ (): boolean {
-    return !!this.countyCourtJudgmentRequestedAt
+    return this.moneyReceivedOn.isSameOrBefore(calculateMonthIncrement(this.countyCourtJudgmentRequestedAt))
   }
 
   private isSettlementReachedThroughAdmission (): boolean {

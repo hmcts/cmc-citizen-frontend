@@ -113,7 +113,7 @@
         {{ downloadAgreementLink(claim) }}
       </p>
 
-      <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
+      <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
       {{ paidInFullClaimantButtonClaimDetails(claim) }}
 
       {% if claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
@@ -124,7 +124,7 @@
           + internalLink('request a County Court Judgment. ', ccjRequest )) | safe }}
         </p>
 
-    <p> {{ t('When you’ve been paid in full, you need to let us know.') }} </p>
+    <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
         {{ paidInFullClaimantButtonClaimDetails(claim) }}
       {% endif %}
 

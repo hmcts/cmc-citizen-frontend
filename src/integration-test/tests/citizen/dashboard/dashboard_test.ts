@@ -4,15 +4,15 @@ import { ClaimSteps } from 'integration-test/tests/citizen/claim/steps/claim'
 import I = CodeceptJS.I
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
-import { EndToEndTestData } from '../endToEnd/data/EndToEndTestData'
-import { Helper } from '../endToEnd/steps/helper'
-import { PaymentOption } from '../../../data/payment-option'
-import { UserSteps } from '../home/steps/user'
-import { ClaimantResponseSteps } from '../claimantResponse/steps/claimant-reponse'
-import { ClaimantConfirmation } from '../claimantResponse/pages/claimant-confirmation'
+import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
+import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
+import { PaymentOption } from 'integration-test/data/payment-option'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
+import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
+import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
 import { PaidInFullSteps } from 'integration-test/tests/citizen/dashboard/steps/paid-in-full'
-import { InterestType } from '../../../data/interest-type'
-import { CountyCourtJudgementSteps } from '../ccj/steps/ccj'
+import { InterestType } from 'integration-test/data/interest-type'
+import { CountyCourtJudgementSteps } from 'integration-test/tests/citizen/ccj/steps/ccj'
 
 const claimSteps: ClaimSteps = new ClaimSteps()
 const paidInFullSteps: PaidInFullSteps = new PaidInFullSteps()
