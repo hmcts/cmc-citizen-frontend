@@ -2339,7 +2339,7 @@ event-emitter@~0.3.5:
     d "1"
     es5-ext "~0.10.14"
 
-event-stream@3.3.4, event-stream@^3.3.4, event-stream@~3.3.0:
+event-stream@3.3.4:
   version "3.3.4"
   resolved "http://registry.npmjs.org/event-stream/-/event-stream-3.3.4.tgz#4ab4c9a0f5a54db9338b4c34d86bfce8f4b35571"
   dependencies:
@@ -3223,14 +3223,13 @@ gulp-livereload@^4.0.1:
     tiny-lr "^1.1.1"
     vinyl "^2.2.0"
 
-gulp-nodemon@^2.4.1:
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/gulp-nodemon/-/gulp-nodemon-2.4.1.tgz#ede8664ea8e8c656f262a1a92a4ef44faab5474b"
+gulp-nodemon@^2.4.2:
+  version "2.4.2"
+  resolved "https://registry.yarnpkg.com/gulp-nodemon/-/gulp-nodemon-2.4.2.tgz#5b368edf3df00b53fa9cc9e894b1a7660c6347bf"
   dependencies:
     colors "^1.2.1"
-    event-stream "^3.3.4"
     gulp "^4.0.0"
-    nodemon "^1.17.5"
+    nodemon "^1.18.7"
 
 gulp-plumber@^1.2.1:
   version "1.2.1"
@@ -4951,9 +4950,9 @@ nocache@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/nocache/-/nocache-2.0.0.tgz#202b48021a0c4cbde2df80de15a17443c8b43980"
 
-nock@^10.0.2:
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/nock/-/nock-10.0.2.tgz#9e9a92253808e480a8163c2a21fc12937c02c3b0"
+nock@^10.0.3:
+  version "10.0.3"
+  resolved "https://registry.yarnpkg.com/nock/-/nock-10.0.3.tgz#4c92596592a2f6c8a63da053fc9f81149013150d"
   dependencies:
     chai "^4.1.2"
     debug "^4.1.0"
@@ -5061,15 +5060,15 @@ nodelist-foreach-polyfill@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/nodelist-foreach-polyfill/-/nodelist-foreach-polyfill-1.2.0.tgz#92bca739959af68271734087e48474c2fef5152c"
 
-nodemon@^1.17.5:
-  version "1.18.5"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.18.5.tgz#3d3924df23d06806952e8b6d3de052f2a3351807"
+nodemon@^1.18.7:
+  version "1.18.7"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-1.18.7.tgz#716b66bf3e89ac4fcfb38a9e61887a03fc82efbb"
   dependencies:
     chokidar "^2.0.4"
     debug "^3.1.0"
     ignore-by-default "^1.0.1"
     minimatch "^3.0.4"
-    pstree.remy "^1.1.0"
+    pstree.remy "^1.1.2"
     semver "^5.5.0"
     supports-color "^5.2.0"
     touch "^3.1.0"
@@ -5782,12 +5781,6 @@ proxy-from-env@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.0.0.tgz#33c50398f70ea7eb96d21f7b817630a55791c7ee"
 
-ps-tree@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/ps-tree/-/ps-tree-1.1.0.tgz#b421b24140d6203f1ed3c76996b4427b08e8c014"
-  dependencies:
-    event-stream "~3.3.0"
-
 pseudomap@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/pseudomap/-/pseudomap-1.0.2.tgz#f052a28da70e618917ef0a8ac34c1ae5a68286b3"
@@ -5796,11 +5789,9 @@ psl@^1.1.24:
   version "1.1.29"
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.1.29.tgz#60f580d360170bb722a797cc704411e6da850c67"
 
-pstree.remy@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/pstree.remy/-/pstree.remy-1.1.0.tgz#f2af27265bd3e5b32bbfcc10e80bac55ba78688b"
-  dependencies:
-    ps-tree "^1.1.0"
+pstree.remy@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/pstree.remy/-/pstree.remy-1.1.2.tgz#4448bbeb4b2af1fed242afc8dc7416a6f504951a"
 
 pump@^2.0.0:
   version "2.0.1"

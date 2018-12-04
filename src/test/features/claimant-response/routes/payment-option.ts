@@ -141,7 +141,7 @@ describe('Claimant response: payment options', () => {
             it('should redirect to court offer page for "IMMEDIATELY" option selected', async () => {
               await checkThatSelectedPaymentOptionRedirectsToPage(
                 { option: PaymentType.IMMEDIATELY.value },
-                Paths.courtOfferPage.evaluateUri({ externalId: externalId }))
+                Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId }))
             })
 
             it('should redirect to payment date page for "BY_SET_DATE" option selected', async () => {
@@ -170,7 +170,7 @@ describe('Claimant response: payment options', () => {
 
         context('when service is healthy with different test date for pay by set date scenario', () => {
 
-          it('should redirect to court offer set date page for "IMMEDIATELY" option selected', async () => {
+          it('should redirect to court offered instalments page for "IMMEDIATELY" option selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse', { courtDetermination: { disposableIncome: 100 } })
             draftStoreServiceMock.resolveSave()
@@ -179,7 +179,7 @@ describe('Claimant response: payment options', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: PaymentType.IMMEDIATELY.value })
-              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
           })
         })
       })
