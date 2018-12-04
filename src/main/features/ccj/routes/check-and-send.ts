@@ -52,20 +52,14 @@ function convertToPartyDetails (party: Party): PartyDetails {
 
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+  let draft: Draft<DraftCCJ> = res.locals.ccjDraft
   const defendant = convertToPartyDetails(claim.claimData.defendant)
   const DOBFromAdmissionResponse: DateOfBirth = retrieveDateOfBirthOfDefendant(claim)
   if (DOBFromAdmissionResponse) {
     draft.document.defendantDateOfBirth = DOBFromAdmissionResponse
   }
 
-  const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
-
-  if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
-    const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-    draft.document.paymentOption = paymentOption
-    draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
-  }
+  draft = retrieveAndSetValuesInDraft(claim, draft)
 
   if (defendant.type === PartyType.INDIVIDUAL.value) {
     (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
@@ -79,6 +73,16 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     amountToBePaid: claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
     ...prepareUrls(req.params.externalId, claim, draft)
   })
+}
+
+function retrieveAndSetValuesInDraft (claim: Claim, draft: Draft<DraftCCJ>): Draft<DraftCCJ> {
+  const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
+
+  if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+    draft.document.paymentOption = paymentOption
+    draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
+  }
+  return draft
 }
 
 function deserializerFunction (value: any): Declaration | QualifiedDeclaration {
@@ -117,7 +121,8 @@ export default express.Router()
         renderView(form, req, res)
       } else {
         const claim: Claim = res.locals.claim
-        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+        let draft: Draft<DraftCCJ> = res.locals.ccjDraft
+        draft = retrieveAndSetValuesInDraft(claim, draft)
         const user: User = res.locals.user
 
         if (form.model.type === SignatureType.QUALIFIED) {

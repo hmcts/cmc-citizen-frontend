@@ -157,10 +157,6 @@ export const sampleClaimObj = {
         type: StatementType.OFFER.value,
         madeBy: MadeBy.DEFENDANT.value,
         offer: { content: 'offer text', completionDate: '2017-08-08' }
-      },
-      {
-        madeBy: MadeBy.CLAIMANT.value,
-        type: StatementType.ACCEPTATION.value
       }
     ]
   },

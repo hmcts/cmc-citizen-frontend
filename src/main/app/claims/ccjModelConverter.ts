@@ -94,6 +94,10 @@ export class CCJModelConverter {
 
     let ccjType: CountyCourtJudgmentType = undefined
 
+    if (!draft.paymentOption.option) {
+      throw new Error('payment option cannot be undefined')
+    }
+
     const paymentOption: PaymentOption = draft.paymentOption.option.value as PaymentOption
 
     const response: Response = claim.response
@@ -103,7 +107,6 @@ export class CCJModelConverter {
     const payBySetDate: Moment = convertPayBySetDate(draft)
 
     const repaymentPlan: RepaymentPlan = convertRepaymentPlan(draft.repaymentPlan)
-
     if (claim.response && claim.isAdmissionsResponse()) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
       if (response.defendant.type === PartyType.INDIVIDUAL.value) {
@@ -117,10 +120,7 @@ export class CCJModelConverter {
     } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
       defendantDateOfBirth = draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined
-    }
 
-    if (!paymentOption) {
-      throw new Error('payment option cannot be undefined')
     }
 
     return new CountyCourtJudgment(
