@@ -12,30 +12,28 @@
 {% block content %}
 <div class="grid-row">
   <div class="column-two-thirds">
-    {% if evidence.rows %}
-      {% if evidence.rows.length > 0 %}
-        <div class="description-block">
-          <h3 class="heading-small">Their evidence</h3>
-          <div class="form-fields">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">{{ t('Type') }}</th>
-                  <th scope="col">{{ t('Description') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-              {% for item in evidence.rows %}
-                <tr>
-                  <td>{{ item.type.displayValue }}</td>
-                  <td>{{ item.description | default('')}}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-          </div>
+    {% if evidence and evidence.rows and evidence.rows.length > 0 %}
+      <div class="description-block">
+        <h3 class="heading-small">Their evidence</h3>
+        <div class="form-fields">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">{{ t('Type') }}</th>
+                <th scope="col">{{ t('Description') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for item in evidence.rows %}
+              <tr>
+                <td>{{ item.type.displayValue }}</td>
+                <td>{{ item.description | default('')}}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
         </div>
-      {% endif %}
+      </div>
     {% endif %}
 
     <form method="post" novalidate>
