@@ -236,6 +236,12 @@ export class Claim {
     return statuses
   }
 
+  isAdmissionPayImmediatelyPastPaymentDate (): boolean {
+    return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+      (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+  }
+
+
   isSettlementReachedThroughAdmission (): boolean {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
@@ -263,11 +269,6 @@ export class Claim {
 
   private isSettlementReached (): boolean {
     return this.settlement && !!this.settlementReachedAt
-  }
-
-  isAdmissionPayImmediatelyPastPaymentDate (): boolean {
-    return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-      (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
   private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
