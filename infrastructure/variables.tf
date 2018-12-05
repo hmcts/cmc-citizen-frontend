@@ -105,3 +105,7 @@ variable "common_tags" {
 variable "website_local_cache_sizeinmb" {
   default = "300"
 }
+
+variable "log_level" {
+  default = "INFO"
+}

@@ -93,6 +93,7 @@ module "citizen-frontend" {
     TS_BASE_URL = "./src"
 
     // Logging vars
+    LOG_LEVEL = "${var.log_level}"
     REFORM_TEAM = "${var.product}"
     REFORM_SERVICE_NAME = "${var.microservice}"
     REFORM_ENVIRONMENT = "${var.env}"
