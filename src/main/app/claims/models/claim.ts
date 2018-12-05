@@ -237,7 +237,7 @@ export class Claim {
   }
 
   isSettlementReachedThroughAdmission (): boolean {
-    return this.settlement && this.settlement.isThroughAdmissionsAndSettled() && !this.countyCourtJudgmentRequestedAt
+    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
 
   isAdmissionsResponse (): boolean {
@@ -266,7 +266,7 @@ export class Claim {
   }
 
   isAdmissionPayImmediatelyPastPaymentDate (): boolean {
-    return this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+    return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
       (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
