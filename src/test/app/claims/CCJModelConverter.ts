@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { CCJModelConverter } from 'claims/ccjModelConverter'
+import { CCJModelConverter, retrievePaymentOptionsFromClaim } from 'claims/ccjModelConverter'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { PaymentOption } from 'claims/models/paymentOption'
@@ -20,6 +20,7 @@ import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { LocalDate } from 'forms/models/localDate'
+import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
 
 const ccjDraft = new DraftCCJ().deserialize({
   paymentOption: {
@@ -117,14 +118,14 @@ const sampleClaimWithFullAdmissionWithInstallmentsResponseObj = {
 
 describe('CCJModelConverter - convert CCJDraft to CountyCourtJudgement', () => {
 
-  it('should convert to CCJ - for a valid CCJ draft', () => {
+  it('should convert to CCJ - for a valid CCJ draft',() => {
     const draft: DraftCCJ = ccjDraft
     const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimIssueObj)
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draft, claim)
     expect(countyCourtJudgment).to.be.deep.equal(new CountyCourtJudgment(undefined, PaymentOption.IMMEDIATELY, undefined, undefined, undefined, undefined, CountyCourtJudgmentType.DEFAULT))
   })
 
-  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by set date on breach of payment terms', () => {
+  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by set date on breach of payment terms',() => {
     const draft: DraftCCJ = ccjDraft
     const claim: Claim = new Claim().deserialize(sampleClaimWithFullAdmissionWithSetDateResponseObj)
     const DOB: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
@@ -132,7 +133,7 @@ describe('CCJModelConverter - convert CCJDraft to CountyCourtJudgement', () => {
     expect(countyCourtJudgment).to.be.deep.equal(new CountyCourtJudgment(DOB, PaymentOption.IMMEDIATELY, undefined, undefined, undefined, undefined, CountyCourtJudgmentType.ADMISSIONS))
   })
 
-  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by installments on breach of payment terms', () => {
+  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by installments on breach of payment terms',() => {
     const draft: DraftCCJ = ccjDraftWithInstallments
     const claim: Claim = new Claim().deserialize(sampleClaimWithFullAdmissionWithInstallmentsResponseObj)
     const expectedRepaymentPlan: RepaymentPlan = new RepaymentPlan(100, new LocalDate(2010, 12, 30).toMoment(), 'EACH_WEEK')
@@ -147,5 +148,41 @@ describe('CCJModelConverter - convert CCJDraft to CountyCourtJudgement', () => {
       undefined,
       CountyCourtJudgmentType.ADMISSIONS)
     )
+  })
+}
+)
+
+describe('CCJModelConverter - Unit test on ModelConverter', () => {
+  const sampleClaimWithInstalments = {
+    ...claimStoreMock.sampleClaimIssueObj,
+    response: fullAdmissionResponseWithInstallmentsAndPaymentDateElapsed,
+    settlement: {
+      partyStatements: [
+        {
+          type: StatementType.OFFER.value,
+          madeBy: MadeBy.DEFENDANT.value,
+          offer: {
+            content: 'My offer contents here.',
+            completionDate: '2020-10-10',
+            ...repaymentPlanPaymentIntention
+          }
+        },
+        {
+          madeBy: MadeBy.CLAIMANT.value,
+          type: StatementType.ACCEPTATION.value
+        }
+      ]
+    },
+    settlementReachedAt: new LocalDate(2010, 1, 1).toMoment()
+  }
+  it('should get undefined CCJPaymentOption when response not present', () => {
+    const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimIssueObj)
+    const ccjPaymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
+    expect(ccjPaymentOption).to.be.equal(undefined)
+  })
+  it('should get defined CCJPaymentOption when response is present', () => {
+    const claim: Claim = new Claim().deserialize(sampleClaimWithInstalments)
+    const ccjPaymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
+    expect(ccjPaymentOption.option.value).to.be.equal(PaymentType.INSTALMENTS.value)
   })
 })
