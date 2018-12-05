@@ -20,6 +20,7 @@
     <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
     {% set claimantName = claim.claimData.claimant.name %}
     {% set amount = claim.totalAmountTillToday | numeral %}
+    {% set defendant = claim.claimData.defendant %}
     {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
     {% if claim.response.paymentIntention.paymentDate %}
@@ -34,18 +35,31 @@
       <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
         {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+      {% if defendant.type === PartyType.COMPANY.value or defendant.type === PartyType.ORGANISATION.value%}
+        <p>{{ t('You`ve said you owe {{ amount }} and offered to pay {{ claimantName }} by {{ paymentDate }}.
+                  You need to send them your company`s financial details if you haven`t already.',
+            { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }}</p>
+        <p>{{ internalLink('Get ' + claimantName + '`s contact details.', claimantDetailsPageURI ) }}</p>
+      {% else %}
       <p>{{ t('You’ve offered to pay {{ claimantName }} {{ amount }} on {{ paymentDate }}.',
           { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }}</p>
+      {% endif %}
       <p>{{ t('We’ll contact you when they respond.') }}</p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
       {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
       {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
       {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
-
-      <p>{{ t('You’ve offered to pay {{ claimantName }} {{ amount }} {{ paymentSchedule }} starting {{ repaymentDate }}.',
-          { claimantName: claimantName, amount: installmentAmount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }}</p>
-      <p>{{ t('We’ll contact you when they respond.') }}</p>
+      {% if defendant.type === PartyType.COMPANY.value or defendant.type === PartyType.ORGANISATION.value%}
+        <p>{{ t('You`ve said you owe {{ amount }} and offered to pay {{ claimantName }} in installments.
+                  You need to send them your company`s financial details if you haven`t already.',
+            { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }}</p>
+        <p>{{ internalLink('Get ' + claimantName + '`s contact details.', claimantDetailsPageURI ) }}</p>
+      {% else %}
+        <p>{{ t('You’ve offered to pay {{ claimantName }} {{ amount }} {{ paymentSchedule }} starting {{ repaymentDate }}.',
+            { claimantName: claimantName, amount: installmentAmount, paymentSchedule: paymentSchedule, repaymentDate: repaymentDate }) }}</p>
+        <p>{{ t('We’ll contact you when they respond.') }}</p>
+      {% endif %}
     {% endif %}
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
