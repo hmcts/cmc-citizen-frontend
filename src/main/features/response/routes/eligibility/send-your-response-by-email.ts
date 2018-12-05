@@ -8,6 +8,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { FeesClient } from 'fees/feesClient'
 import { FeeRange as MergableRange } from 'claim/helpers/feesTableViewHelper'
 import { FeeRange } from 'fees/models/feeRange'
+import { DraftService } from 'services/draftService'
 
 const supportedFeeLimitInGBP: number = 10000
 
@@ -26,5 +27,8 @@ export default express.Router()
         draft: draft.document,
         fees: supportedIssueFees
       }
-    )
+  )
+    const user: User = res.locals.user
+    delete draft.document.response.type
+    await new DraftService().save(draft, user.bearerToken)
   }))
