@@ -78,7 +78,7 @@
 
     {{ tableEnd() }}
 
-    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
 
       {{
         notImmediatePayment(
