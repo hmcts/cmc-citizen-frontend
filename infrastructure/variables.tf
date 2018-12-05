@@ -109,3 +109,7 @@ variable "website_local_cache_sizeinmb" {
 variable "log_level" {
   default = "INFO"
 }
+
+variable "node_debug" {
+  default = ""
+}
