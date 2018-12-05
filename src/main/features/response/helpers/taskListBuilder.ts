@@ -57,11 +57,13 @@ export class TaskListBuilder {
   static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
+
     tasks.push(
       new TaskListItem(
         'Choose a response',
         Paths.responseTypePage.evaluateUri({ externalId: externalId }),
-        OweMoneyTask.isCompleted(draft))
+        OweMoneyTask.isCompleted(draft)
+      )
     )
 
     if (draft.isResponseRejectedFullyBecausePaidWhatOwed()) {
