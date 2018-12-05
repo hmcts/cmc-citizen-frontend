@@ -26,9 +26,8 @@
         {% endif %}
 
         {% if claim.claimData.defendant.isBusiness() %}
-          {% set hint = 'The defendant should have sent you their financial details. You’ll need to send them to us. We’ll use them to check if they can afford your plan' %}
+          {% set hint = 'The defendant should have sent you their financial details. You’ll need to send them to us. We’ll issue a CCJ against them. The terms of the CCJ will depend on whether we believe they can afford your suggested repayment plan.' %}
         {% endif %}
-
         {{
         radioGroupWithHintPanel(
           form = form,
