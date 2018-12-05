@@ -12,14 +12,14 @@
         <h1 class="bold-large">
           {% if claim.claimData.defendant.isBusiness() and claim.claimantResponse.claimantPaymentIntention %}
             {{ t('You’ve proposed a different repayment plan') }}
+          {% elseif claim.countyCourtJudgmentRequestedAt or claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
+            {{ t('County Court Judgment requested') }}
           {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
             {{ t('You’ve accepted the repayment plan') }}
           {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
             {{ t('You’ve proposed an alternative repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
-          {% elseif claim.countyCourtJudgmentRequestedAt %}
-            {{ t('County Court Judgment requested') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
             {{ t('You’ve rejected their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
@@ -38,6 +38,15 @@
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       {% if claim.claimData.defendant.isBusiness() and claim.claimantResponse.claimantPaymentIntention %}
         {% include "./confirmation/proposed-alternate-payment-plan-to-business-defendant.njk" %}
+      {% elseif claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
+          <p>{{ t('You’ve requested a County Court Judgment against {{ defendantName }}.',
+              { defendantName: claim.claimData.defendant.name }) }}</p>
+          <p>{{ t('When we’ve processed your request we’ll post a copy of the judgment to you and to {{ defendantName }}.',
+              { defendantName: claim.claimData.defendant.name }) }}</p>
+          <p>{{ t('A judge will decide what {{ defendantName }} can afford to pay, based on their financial details.',
+              { defendantName: claim.claimData.defendant.name }) }}</p>
+          <p>{{ t('We’ll contact both you and {{ defendantName }} to tell you what to do next.',
+              { defendantName: claim.claimData.defendant.name }) }}</p>
       {% elseif claim.countyCourtJudgmentRequestedAt %}
         {% if paymentIntentionAccepted %}
           <p>{{ t('A County Court Judgment has been requested against the defendant.') }}</p>
