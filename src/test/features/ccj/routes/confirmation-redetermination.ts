@@ -19,9 +19,9 @@ import { MadeBy } from 'offer/form/models/madeBy'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
+const pagePath = CCJPaths.redeterminationConfirmationPage.evaluateUri({ externalId: externalId })
 
-describe('CCJ: confirmation page', () => {
+describe('CCJ: redetermination confirmation page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -43,20 +43,6 @@ describe('CCJ: confirmation page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
-
-        it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(
-            { countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785' }
-          )
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('County Court Judgment requested'))
-        })
-      })
-
-      context('when re determination is requested', () => {
 
         it('should render page when everything is fine', async () => {
 
