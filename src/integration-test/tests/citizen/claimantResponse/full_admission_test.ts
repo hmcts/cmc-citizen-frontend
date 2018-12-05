@@ -29,8 +29,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
     I.see(testData.claimRef)
     I.see('The defendant said they’ll pay you immediately')
-    I.see('Settling the claim')
-    I.see('If the defendant has paid you, you need to tell us.')
     I.click('My account')
     I.see(testData.claimRef)
     I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
@@ -51,8 +49,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
-    I.see('Settling the claim')
-    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @error', async (I: I) => {
