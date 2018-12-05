@@ -121,7 +121,7 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
       }
       case DecisionType.DEFENDANT: {
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+          return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
         }
 
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {

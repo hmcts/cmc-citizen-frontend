@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as _ from 'lodash'
 
 import { AbstractPaymentPlanPage } from 'shared/components/payment-intention/payment-plan'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
@@ -47,7 +48,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS
         && claimResponse.paymentIntention.repaymentPlan.paymentSchedule !== draft.alternatePaymentMethod.toDomainInstance().repaymentPlan.paymentSchedule) {
         const paymentPlanConvertedToDefendantFrequency = claimantEnteredPaymentPlan.convertTo(PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule))
-        const instalmentAmount = Math.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount * 100) / 100
+        const instalmentAmount = _.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount,2)
 
         courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
@@ -79,7 +80,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: Math.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount * 100) / 100,
+          instalmentAmount: _.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount,2),
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
@@ -118,7 +119,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
       courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
       courtCalculatedPaymentIntention.repaymentPlan = {
         firstPaymentDate: paymentPlan.startDate,
-        instalmentAmount: Math.round(paymentPlan.instalmentAmount * 100) / 100,
+        instalmentAmount: _.round(paymentPlan.instalmentAmount,2),
         paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
         completionDate: paymentPlan.calculateLastPaymentDate(),
         paymentLength: paymentPlan.calculatePaymentLength()
@@ -166,11 +167,11 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
     switch (courtDecision) {
       case DecisionType.COURT: {
-        return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+        return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
       }
       case DecisionType.DEFENDANT: {
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+          return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
         }
 
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
