@@ -145,8 +145,7 @@ export class Claim {
 
   get eligibleForCCJ (): boolean {
     return !this.countyCourtJudgmentRequestedAt
-      && (this.isFullAdmissionPayImmediatelyPastPaymentDate()
-        || this.hasDefendantNotSignedSettlementAgreementInTime()
+      && (this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
         )
       )
@@ -156,9 +155,6 @@ export class Claim {
     if (this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
       const paymentOption = this.settlement.getLastOffer().paymentIntention.paymentOption
       switch (paymentOption) {
-        case PaymentOption.IMMEDIATELY:
-          // TODO: needed to be taken care of
-          break
         case PaymentOption.BY_SPECIFIED_DATE:
           return !this.countyCourtJudgmentRequestedAt
             && isPastDeadline(MomentFactory.currentDateTime(),
@@ -191,7 +187,7 @@ export class Claim {
       }
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
-    } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
+    } else if (this.isAdmissionPayImmediatelyPastPaymentDate() && !this.claimantResponse) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.hasDefendantNotSignedSettlementAgreementInTime()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
@@ -211,6 +207,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
+      return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.hasClaimantRejectedDefendantResponse() &&
       (this.claimData.defendant.type === PartyType.COMPANY.value
         || this.claimData.defendant.type === PartyType.ORGANISATION.value)) {
@@ -248,7 +246,7 @@ export class Claim {
   }
 
   private isResponseSubmitted (): boolean {
-    return this.response !== undefined && !this.claimantResponse
+    return !!this.response && !this.claimantResponse
   }
 
   private isOfferSubmitted (): boolean {
@@ -267,14 +265,9 @@ export class Claim {
     return this.settlement && !!this.settlementReachedAt
   }
 
-  private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
-    if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
-      const response: FullAdmissionResponse = this.response
-      return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-        response.paymentIntention && response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
-    } else {
-      return false
-    }
+  isAdmissionPayImmediatelyPastPaymentDate (): boolean {
+    return this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+      (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
   private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
@@ -341,5 +334,10 @@ export class Claim {
 
   private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
     return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt
+  }
+
+  private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
   }
 }
