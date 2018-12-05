@@ -28,10 +28,10 @@ describe('CCJ guard', () => {
     })
   })
 
-  it('should redirect to dashboard page when eligibleForCCJ, isAdmissionPayImmediatelyPastPaymentDate, eligibleForCCJAfterBreachedSettlementTerms is false', () => {
+  it('should redirect to dashboard page when eligibleForCCJ, admissionPayImmediatelyPastPaymentDate, eligibleForCCJAfterBreachedSettlementTerms is false', () => {
     res.locals.claim = {
       eligibleForCCJ: false,
-      isAdmissionPayImmediatelyPastPaymentDate: false,
+      admissionPayImmediatelyPastPaymentDate: false,
       eligibleForCCJAfterBreachedSettlementTerms: false
     }
 
@@ -39,12 +39,12 @@ describe('CCJ guard', () => {
     chai.expect(res.redirect).to.have.been.calledWith(Paths.dashboardPage.uri)
   })
 
-  it('should pass when eligibleForCCJ, isAdmissionPayImmediatelyPastPaymentDate, eligibleForCCJAfterBreachedSettlementTerms  is true', () => {
+  it('should pass when eligibleForCCJ, admissionPayImmediatelyPastPaymentDate, eligibleForCCJAfterBreachedSettlementTerms  is true', () => {
     const spy = sinon.spy(next)
 
     res.locals.claim = {
       eligibleForCCJ: true,
-      isAdmissionPayImmediatelyPastPaymentDate: true,
+      admissionPayImmediatelyPastPaymentDate: true,
       eligibleForCCJAfterBreachedSettlementTerms: true
     }
 

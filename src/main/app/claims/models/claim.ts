@@ -152,7 +152,7 @@ export class Claim {
   }
 
   get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
-    if (this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
+    if (this.response && this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
       const paymentOption = this.settlement.getLastOffer().paymentIntention.paymentOption
       switch (paymentOption) {
         case PaymentOption.BY_SPECIFIED_DATE:
@@ -187,7 +187,7 @@ export class Claim {
       }
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
-    } else if (this.isAdmissionPayImmediatelyPastPaymentDate() && !this.claimantResponse) {
+    } else if (this.admissionPayImmediatelyPastPaymentDate && !this.claimantResponse) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.hasDefendantNotSignedSettlementAgreementInTime()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
@@ -236,11 +236,10 @@ export class Claim {
     return statuses
   }
 
-  isAdmissionPayImmediatelyPastPaymentDate (): boolean {
+  get admissionPayImmediatelyPastPaymentDate (): boolean {
     return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
       (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
-
 
   isSettlementReachedThroughAdmission (): boolean {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()

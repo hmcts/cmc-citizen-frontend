@@ -48,13 +48,17 @@ describe('CCJ guard', () => {
 
       context('should redirect to dashboard when claim not eligible for CCJ', () => {
         const excludedPaths = [Paths.confirmationPage, Paths.redeterminationPage, Paths.repaymentPlanSummaryPage]
+        const override: object = {
+          respondedAt: MomentFactory.currentDateTime().subtract(30, 'days'),
+          countyCourtJudgmentRequestedAt: MomentFactory.currentDateTime()
+        }
         Object.values(Paths)
           .filter(path => !excludedPaths.includes(path))
           .forEach((path: RoutablePath) => {
             const route: string = path.evaluateUri({ externalId: 'b17af4d2-273f-4999-9895-bce382fa24c8' })
 
             it(`for ${route} route`, async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId({ respondedAt: MomentFactory.currentDateTime() })
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(override)
 
               await request(app)
                 .get(route)
