@@ -23,8 +23,8 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
-const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
 const dashboardUri = Paths.dashboardPage.uri
+const confirmationPage = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: check and send page', () => {
   attachDefaultHooks(app)
