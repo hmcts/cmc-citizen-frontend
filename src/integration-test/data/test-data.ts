@@ -58,7 +58,8 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         case InterestType.BREAKDOWN:
           return this.amount.getClaimTotal() + fixedInterestAmount + claimFee
       }
-    }
+    },
+    moneyReceivedOn: null
   } as ClaimData
 
   switch (interestType) {
