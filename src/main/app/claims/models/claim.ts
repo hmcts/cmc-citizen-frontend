@@ -258,13 +258,12 @@ export class Claim {
   }
 
   private isSettlementAgreementRejected (): boolean {
-    if (this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION) {
-      const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
-      return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
-        && this.settlement && this.settlement.isOfferRejected()
-    } else {
+    if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
       return false
     }
+    const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
+    return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
+      && this.settlement && this.settlement.isOfferRejected()
   }
 
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {

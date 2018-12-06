@@ -63,8 +63,7 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
   settlementAgreementSignedByClaimantDefendantClaimDetails,
   settlementAgreementSignedByBothDefendantClaimDetails,
   settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails,
-  settlementAgreementRejectedDefendantClaimDetails
-%}
+  settlementAgreementRejectedDefendantClaimDetails %}
 
 {% from "./claimStatus/redeterminationRequestedDefendant.njk" import redeterminationDefendnatClaimDetails %}
 {% from "./claimStatus/redeterminationRequestedClaimant.njk" import redeterminationClaimantClaimDetails %}
@@ -191,7 +190,6 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
         {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
-          {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
         {{ settlementAgreementRejectedDefendantClaimDetails(claim) }}
       {% endif %}

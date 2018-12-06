@@ -1,6 +1,4 @@
-{% from "form.njk" import csrfProtection, radioGroupWithHintPanel, saveAndContinueButton, errorSummary %}
-{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
-{% from "./macro/settlement-agreement.njk" import settlementAgreementSummary %}
+{% from "form.njk" import csrfProtection, radioGroupWithHintPanel, saveAndContinueButton %}
 {% extends "layout.njk" %}
 
 {% set heading = t('Respond to the settlement agreement') %}
@@ -11,7 +9,18 @@
       <form novalidate method="post" class="analytics-submit-event-trigger"
             data-event-action="Settlement Agreement">
         {{ csrfProtection(csrf) }}
-        {{ settlementAgreementSummary(offer) }}
+        <table class="offer-table">
+          <tbody>
+          <tr>
+            <td>{{ t('The agreement') }}</td>
+            <td>{{ offer.content }}</td>
+          </tr>
+          <tr>
+            <td>{{ t('Completion date')}}</td>
+            <td>{{ offer.completionDate | date }}</td>
+          </tr>
+          </tbody>
+        </table>
         <div>
           <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName}}.
            This includes all money owed in the claim, for example court fees, expenses or interest.',
