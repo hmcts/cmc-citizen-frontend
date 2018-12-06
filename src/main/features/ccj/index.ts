@@ -30,7 +30,7 @@ export class CCJFeature {
     const allCCJ = '/case/*/ccj/*'
     app.all(allCCJ, requestHandler())
     app.all(allCCJ, ClaimMiddleware.retrieveByExternalId)
-    app.all(allCCJ, OnlyClaimantLinkedToClaimCanDoIt.check())
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation-redetermination|repayment-plan-summary|redetermination).*$/, OnlyClaimantLinkedToClaimCanDoIt.check())
     app.all(/^\/case\/.+\/ccj\/(?!confirmation|repayment-plan-summary|redetermination).*$/, CCJGuard.requestHandler)
     app.all(/^\/case\/.+\/ccj\/(?!confirmation|repayment-plan-summary|redetermination).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {

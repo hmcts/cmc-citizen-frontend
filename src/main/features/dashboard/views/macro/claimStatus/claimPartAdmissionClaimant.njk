@@ -55,7 +55,7 @@
     <p>{{ t('You can settle for less than the full claim amount.') }}</p>
     {{ internalLink('Tell us you’ve settled', AppPaths.contactUsPage.uri, 'button button-secondary form-group') }}
 
-    {% if claim.isAdmissionPayImmediatelyPastPaymentDate() %}
+    {% if claim.admissionPayImmediatelyPastPaymentDate %}
       <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
       <p>{{ t('If the defendant has not paid you, you can '
           + internalLink('request a County Court Judgment.', CCJPaths.paidAmountPage.evaluateUri({ externalId:claim.externalId }) )) | safe }}</p>

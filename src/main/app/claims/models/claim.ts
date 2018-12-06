@@ -14,6 +14,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { PartyType } from 'common/partyType'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
 import { StatementType } from 'offer/form/models/statementType'
@@ -152,7 +153,7 @@ export class Claim {
   }
 
   get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
-    if (this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
+    if (this.response && this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
       const paymentOption = this.settlement.getLastOffer().paymentIntention.paymentOption
       switch (paymentOption) {
         case PaymentOption.BY_SPECIFIED_DATE:
@@ -173,7 +174,13 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-    if (this.countyCourtJudgmentRequestedAt) {
+    if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.moneyReceivedOn) {
+      return ClaimStatus.PAID_IN_FULL
+    } else if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
       } else if (this.hasClaimantSuggestedAlternativePlanWithCCJ()) {
@@ -187,7 +194,7 @@ export class Claim {
       }
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
-    } else if (this.isAdmissionPayImmediatelyPastPaymentDate() && !this.claimantResponse) {
+    } else if (this.admissionPayImmediatelyPastPaymentDate && !this.claimantResponse) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.hasDefendantNotSignedSettlementAgreementInTime()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
@@ -233,7 +240,16 @@ export class Claim {
     if (this.eligibleForCCJAfterBreachedSettlementTerms) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
+    if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
+      statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
+    }
+
     return statuses
+  }
+
+  get admissionPayImmediatelyPastPaymentDate (): boolean {
+    return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+      (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
   isSettlementReachedThroughAdmission (): boolean {
@@ -265,9 +281,8 @@ export class Claim {
     return this.settlement && !!this.settlementReachedAt
   }
 
-  isAdmissionPayImmediatelyPastPaymentDate (): boolean {
-    return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-      (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+  private isCCJPaidWithinMonth (): boolean {
+    return this.moneyReceivedOn.isSameOrBefore(calculateMonthIncrement(this.countyCourtJudgmentRequestedAt))
   }
 
   private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {

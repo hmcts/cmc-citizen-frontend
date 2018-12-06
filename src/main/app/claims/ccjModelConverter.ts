@@ -19,6 +19,7 @@ import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { Offer } from 'claims/models/offer'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
 
@@ -55,8 +56,11 @@ export function retrieveDateOfBirthOfDefendant (claim: Claim): DateOfBirth {
 export function retrievePaymentOptionsFromClaim (claim: Claim): CCJPaymentOption {
   if (claim.response && claim.isAdmissionsResponse() &&
     ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime())) {
-    const paymentOptionFromOffer: PaymentOption = claim.settlement.getLastOffer().paymentIntention.paymentOption
-    return new CCJPaymentOption(PaymentType.valueOf(paymentOptionFromOffer))
+    const lastOffer: Offer = claim.settlement.getLastOffer()
+    if (lastOffer && lastOffer.paymentIntention) {
+      const paymentOptionFromOffer: PaymentOption = lastOffer.paymentIntention.paymentOption
+      return new CCJPaymentOption(PaymentType.valueOf(paymentOptionFromOffer))
+    }
   }
   return undefined
 }
@@ -92,7 +96,7 @@ export class CCJModelConverter {
       )
     }
 
-    let ccjType: CountyCourtJudgmentType = undefined
+    let ccjType: CountyCourtJudgmentType
 
     if (!draft.paymentOption.option) {
       throw new Error('payment option cannot be undefined')
@@ -102,7 +106,7 @@ export class CCJModelConverter {
 
     const response: Response = claim.response
 
-    let defendantDateOfBirth: Moment = undefined
+    let defendantDateOfBirth: Moment
 
     if (claim.response && claim.isAdmissionsResponse()) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
