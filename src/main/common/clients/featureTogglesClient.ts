@@ -1,6 +1,7 @@
 import { request as requestPromiseApi, RequestPromiseAPI } from 'main/app/client/request'
 import { User } from 'main/app/idam/user'
 import * as config from 'config'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 export const featureTogglesApiBaseUrl: string = `${config.get<string>('feature-toggles-api.url')}`
 const featureTogglesApiUrl: string = `${featureTogglesApiBaseUrl}/api/ff4j/check`
@@ -21,6 +22,11 @@ export class FeatureTogglesClient {
           'X-USER-ID': `${user.email}`,
           'X-USER-PERMISSIONS': roles.join(',')
         }
+      }).catch((error: any) => {
+        trackCustomEvent('ff4J error',{
+          errorValue: error
+        })
+        return Promise.reject(new Error('ff4J error'))
       })
   }
 }
