@@ -4,6 +4,7 @@ import { createClaimData } from 'integration-test/data/test-data'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { DefenceType } from 'integration-test/data/defence-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
+import { Moment } from 'moment'
 
 const helperSteps: Helper = new Helper()
 
@@ -22,6 +23,7 @@ export class EndToEndTestData {
   claimantPartyType: PartyType
   claimantPaymentOption: PaymentOption
   defendantClaimsToHavePaidInFull: boolean
+  moneyReceivedOn: Moment
 
   public static async prepareData (
     I: I,
