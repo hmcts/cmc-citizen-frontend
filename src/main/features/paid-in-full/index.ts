@@ -7,6 +7,7 @@ import { ClaimMiddleware } from 'claims/claimMiddleware'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
+import { PaidInFullGuard } from './guards/paidInFullGuard'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { DraftPaidInFull } from 'features/paid-in-full/draft/draftPaidInFull'
 
@@ -27,6 +28,7 @@ export class PaidInFullFeature {
     app.all(allPaidInFull, requestHandler())
     app.all(allPaidInFull, ClaimMiddleware.retrieveByExternalId)
     app.all(allPaidInFull, OnlyClaimantLinkedToClaimCanDoIt.check())
+    app.all(/^\/case\/.+\/paid-in-full\/(?!confirmation).*$/, PaidInFullGuard.check())
     app.all(/^\/case\/.+\/paid-in-full\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'paidInFull', 100, (value: any): DraftPaidInFull => {
         return new DraftPaidInFull().deserialize(value)
