@@ -1,7 +1,7 @@
 import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { PaymentOptionPage } from 'claimant-response/routes/payment-option'
 import { expect } from 'chai'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'

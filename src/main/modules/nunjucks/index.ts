@@ -51,7 +51,7 @@ import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { MadeBy } from 'offer/form/models/madeBy'
 
 const packageDotJson = require('../../../../package.json')

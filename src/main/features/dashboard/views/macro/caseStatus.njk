@@ -22,11 +22,13 @@
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
-  claimPartAdmittedToOweForDefendantDashboard %}
+  claimPartAdmittedToOweForDefendantDashboard,
+  partAdmittedClaimantAcceptsDefendantDashboard %}
 
 {% from "./claimStatus/claimPartAdmissionClaimant.njk" import
   claimPartAdmittedAlreadyPaidForClaimantDashboard,
-  claimPartAdmittedToOweForClaimantDashboard %}
+  claimPartAdmittedToOweForClaimantDashboard,
+  partAdmittedClaimantAcceptsClaimantDashboard %}
 
 {% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
   claimFullAdmissionForDefendantDashboard %}
@@ -124,6 +126,8 @@
     {{ claimantWithDefendantAsBusinessResponse() }}
     {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
     {{ claimantWithDefendantAsBusinessResponse() }}
+  {% elif status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
+    {{ partAdmittedClaimantAcceptsClaimantDashboard(claim) }}
   {% endif %}
 {% endmacro %}
 
@@ -173,6 +177,8 @@
     {{ offerAcceptedForDefendantDashboard() }}
     {% elif status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
     {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}
+    {% elif status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
+      {{ partAdmittedClaimantAcceptsDefendantDashboard(claim) }}
     {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
       or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}

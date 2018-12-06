@@ -13,7 +13,7 @@ import { Claim } from 'claims/models/claim'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
@@ -127,12 +127,10 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     const externalId: string = req.params.externalId
 
-    if (claim.response.defendant.isBusiness()) {
-      return Paths.taskListPage.evaluateUri({ externalId: externalId })
-    }
-
     const courtDecision = PaymentOptionPage.getCourtDecision(draft, claim)
     switch (courtDecision) {
+      case DecisionType.NOT_APPLICABLE_IS_BUSINESS:
+        return Paths.taskListPage.evaluateUri({ externalId: externalId })
       case DecisionType.COURT:
         return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
       case DecisionType.DEFENDANT: {

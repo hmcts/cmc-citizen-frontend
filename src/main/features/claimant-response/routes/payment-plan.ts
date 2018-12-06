@@ -24,7 +24,7 @@ import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { Frequency } from 'common/frequency/frequency'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
@@ -161,11 +161,9 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
     const externalId: string = req.params.externalId
 
-    if (claim.claimData.defendant.isBusiness()) {
-      return Paths.taskListPage.evaluateUri({ externalId: externalId })
-    }
-
     switch (courtDecision) {
+      case DecisionType.NOT_APPLICABLE_IS_BUSINESS:
+        return Paths.taskListPage.evaluateUri({ externalId: externalId })
       case DecisionType.COURT: {
         return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
       }

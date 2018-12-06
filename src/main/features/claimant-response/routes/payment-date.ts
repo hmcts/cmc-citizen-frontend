@@ -11,7 +11,7 @@ import { claimantResponsePath, Paths } from 'claimant-response/paths'
 import { Claim } from 'claims/models/claim'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { Moment } from 'moment'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { Draft } from '@hmcts/draft-store-client'
 import { User } from 'idam/user'
@@ -110,12 +110,10 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
 
     const externalId: string = req.params.externalId
 
-    if (claim.claimData.defendant.isBusiness()) {
-      return Paths.taskListPage.evaluateUri({ externalId: externalId })
-    }
-
     const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
     switch (courtDecision) {
+      case DecisionType.NOT_APPLICABLE_IS_BUSINESS:
+        return Paths.taskListPage.evaluateUri({ externalId: externalId })
       case DecisionType.COURT: {
         return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
       }
