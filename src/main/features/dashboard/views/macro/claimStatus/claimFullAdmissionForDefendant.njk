@@ -18,38 +18,39 @@
 {% macro claimFullAdmissionForDefendantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
-    {% set claimantName = claim.claimData.claimant.name %}
-    {% set amount = claim.totalAmountTillToday | numeral %}
+    {% set claimant = claim.claimData.claimant %}
     {% set defendant = claim.claimData.defendant %}
+    {% set amount = claim.totalAmountTillToday | numeral %}
+    {% set paymentIntention = claim.response.paymentIntention %}
     {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
-    {% if claim.response.paymentIntention.paymentDate %}
-      {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
+    {% if paymentIntention.paymentDate %}
+      {% set paymentDate = paymentIntention.paymentDate | date %}
     {% endif %}
 
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    {% if paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
       <p>{{ t('You said you’ll pay {{ claimantName }} {{ amount }} before 4pm on {{ paymentDate }}.',
-          { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }}</p>
+          { claimantName: claimant.name, amount: amount, paymentDate: paymentDate }) }}</p>
       <p>{{ t('If you pay by cheque or transfer the money must be clear in their account.') }}</p>
       <p>{{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }}</p>
-      <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+      <p>{{ internalLink('Contact ' + claimant.name, claimantDetailsPageURI) }}
         {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
-    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} by {{ paymentDate }}.',
-      { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }}
-    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-      {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
+      { claimantName: claimant.name, amount: amount, paymentDate: paymentDate }) }}
+    {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+      {% set repaymentPlan = paymentIntention.repaymentPlan %}
       {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
       {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
       {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
       <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ installmentAmount }} {{ paymentSchedule }} starting {{ paymentDate }}.',
-          { amount: amount, claimantName: claimantName, installmentAmount: installmentAmount, paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
+          { amount: amount, claimantName: claimant.name, installmentAmount: installmentAmount, paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
     {% endif %}
 
-    {% if claim.response.paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY %}
-      {% if claim.claimData.defendant.isBusiness() %}
+    {% if paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY %}
+      {% if defendant.isBusiness() %}
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
-        {{ internalLink('Get ' + claim.claimData.claimant.name + '’s contact details.', claimantDetailsPageURI ) }} </p>
+        {{ internalLink('Get ' + claimant.name + '’s contact details.', claimantDetailsPageURI ) }} </p>
       {% endif %}
         <p>{{ t('We’ll contact you when they respond.') }}</p>
     {% endif %}

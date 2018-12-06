@@ -25,8 +25,8 @@
 {% macro claimPartAdmittedToOweForDefendantClaimDetails(claim) %}
   {% set claimant = claim.claimData.claimant %}
   {% set defendant = claim.claimData.defendant %}
-  {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
   {% set paymentIntention = claim.response.paymentIntention %}
+  {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
@@ -47,10 +47,9 @@
             paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
       {% endif %}
 
-      {% if paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY
-        and claim.claimData.defendant.isBusiness() %}
+      {% if paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY and defendant.isBusiness() %}
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
-        {{ internalLink('Get ' + claimant.name + '’s contact details.', claimantDetailsPageURI ) }}
+        <p>{{ internalLink('Get ' + claimant.name + '’s contact details.', claimantDetailsPageURI ) }}
       {% endif %}
     </p>
     <p>{{ t('We’ll contact you when they respond.') }}</p>
