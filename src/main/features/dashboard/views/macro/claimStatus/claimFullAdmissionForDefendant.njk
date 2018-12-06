@@ -46,10 +46,11 @@
           { amount: amount, claimantName: claimantName, installmentAmount: installmentAmount, paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
     {% endif %}
 
-    {% if claim.response.paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY
-        and (claim.claimData.defendant.type === PartyType.COMPANY.value or claim.claimData.defendant.type === PartyType.ORGANISATION.value) %}
+    {% if claim.response.paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY %}
+      {% if claim.claimData.defendant.type === PartyType.COMPANY.value or claim.claimData.defendant.type === PartyType.ORGANISATION.value %}
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
-      {{ internalLink('Get ' + claim.claimData.claimant.name + '’s contact details.', claimantDetailsPageURI ) }} </p>
+        {{ internalLink('Get ' + claim.claimData.claimant.name + '’s contact details.', claimantDetailsPageURI ) }} </p>
+      {% endif %}
         <p>{{ t('We’ll contact you when they respond.') }}</p>
     {% endif %}
 
