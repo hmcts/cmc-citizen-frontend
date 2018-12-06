@@ -195,24 +195,46 @@ export class DefenceSteps {
     defendantHowMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(claimAmount.getTotal(), '2018-01-01', 'Paid Cash')
   }
 
-  admitPartOfTheClaimAlreadyPaid (defence: PartialDefence): void {
+  admitPartOfTheClaimAlreadyPaid (
+    defence: PartialDefence,
+    isClaimAlreadyPaid: boolean = true
+  ): void {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitPartOfMoneyClaim()
-    alreadyPaidPage.chooseYes()
-    I.see('How much have you paid?')
 
-    defendantSteps.selectTaskHowMuchHaveYouPaid()
+    if (isClaimAlreadyPaid) {
+      alreadyPaidPage.chooseYes()
+      I.see('How much have you paid?')
+      defendantSteps.selectTaskHowMuchHaveYouPaid()
+      defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
+        100,
+        '1990-01-01',
+        'I will not pay that much!'
+      )
+      defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+      defendantYourDefencePage.enterYourDefence('I do not like it')
+      this.addTimeLineOfEvents(defence.timeline)
+      this.enterEvidence('description', 'They do not have evidence')
+    } else {
+      alreadyPaidPage.chooseNo()
+      I.see('How much money do you admit you owe?')
+      defendantSteps.selectTaskHowMuchMoneyBelieveYouOwe()
+      defendantHowMuchYouOwePage.enterAmountOwed(50)
+      defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+      defendantYourDefencePage.enterYourDefence('I paid half')
+      this.addTimeLineOfEvents(defence.timeline)
+      this.enterEvidence('description', 'Some evidence')
+      I.see('When will you pay the £50?')
+      defendantSteps.selectTaskWhenYouWillPay()
+      defendantWhenWillYouPage.chooseInstalments()
+      defendantTaskListPage.selectYourRepaymentPlanTask()
+      defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
+      defendantPaymentPlanPage.saveAndContinue()
+      defendantTaskListPage.selectShareYourFinancialDetailsTask()
+      statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+      this.askForMediation()
+    }
 
-    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
-      100,
-      '1990-01-01',
-      'I will not pay that much!'
-    )
-
-    defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
-    defendantYourDefencePage.enterYourDefence('I do not like it')
-    this.addTimeLineOfEvents(defence.timeline)
-    this.enterEvidence('description', 'They do not have evidence')
     I.see('Respond to a money claim')
   }
 
@@ -250,7 +272,8 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantEmail: string,
     defendantType: PartyType,
-    defenceType: DefenceType
+    defenceType: DefenceType,
+    isClaimAlreadyPaid: boolean = true
   ): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
@@ -260,7 +283,8 @@ export class DefenceSteps {
     this.confirmYourDetails(defendantParty)
     I.see('COMPLETED')
 
-    this.requestMoreTimeToRespond()
+    // this.requestMoreTimeToRespond()
+    this.requestNoExtraTimeToRespond()
 
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_DISPUTE:
@@ -284,20 +308,20 @@ export class DefenceSteps {
         I.see('How did you pay this amount?')
         break
       case DefenceType.PART_ADMISSION:
-        this.admitPartOfTheClaimAlreadyPaid(defence)
+        this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)
         this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
-        I.see('How much money have you paid?')
-        return
+        if (isClaimAlreadyPaid) {
+          I.see('How much money have you paid?')
+        } else {
+          I.see('How much money do you admit you owe?')
+        }
+        break
       default:
         throw new Error('Unknown DefenceType')
     }
     this.checkAndSendAndSubmit(defendantType)
-    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
-      I.see('You’ve submitted your response')
-    } else {
-      I.see('Next steps')
-    }
+    I.see('You’ve submitted your response')
   }
 
   makeFullAdmission (
