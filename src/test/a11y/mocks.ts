@@ -51,7 +51,8 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
   claimantResponse: {
     type: ClaimantResponseType.ACCEPTATION,
     amountPaid: 0
-  }
+  },
+  reDeterminationRequestedAt: '2018-12-01T12:34:56.789'
 }).persist()
 
 claimStoreMock.mockCalculateInterestRate(0).persist()
