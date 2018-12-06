@@ -23,10 +23,10 @@ export class FeatureTogglesClient {
           'X-USER-PERMISSIONS': roles.join(',')
         }
       }).catch((error: any) => {
-        trackCustomEvent('ff4J error',{
+        trackCustomEvent('ff4J cmc_admissions failure',{
           errorValue: error
         })
-        return Promise.reject(new Error('ff4J error'))
+        return Promise.reject(new Error('ff4J cmc_admissions failure'))
       })
   }
 }
