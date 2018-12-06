@@ -273,6 +273,22 @@ describe('Claim', () => {
       }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
     })
+
+    it('should return PART_ADMIT_PAY_IMMEDIATELY when the claimant accepts a part admit with immediately as the payment option', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        paymentDate: MomentFactory.currentDate().add(5, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION
+      }
+      expect(claim.status).to.be.equal(ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY)
+    })
   })
 
   describe('respondToResponseDeadline', () => {
