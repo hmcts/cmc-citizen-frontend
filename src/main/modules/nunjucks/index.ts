@@ -35,6 +35,7 @@ import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as CCJPaths } from 'features/ccj/paths'
 import { Paths as StatePaidPaths } from 'features/paid-in-full/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
+import { Paths as SettlementAgreementPaths } from 'settlement-agreement/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -153,6 +154,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
+    nunjucksEnv.addGlobal('SettlementAgreementPaths', SettlementAgreementPaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('MonthlyIncomeType', MonthlyIncomeType)
     nunjucksEnv.addGlobal('MonthlyExpenseType', MonthlyExpenseType)

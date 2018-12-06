@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
+
+{% extends "layout.njk" %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <div class="govuk-box-highlight">
+      {% if claim.settlement.isOfferRejected() %}
+        <h1 class="bold-large">{{ t('You’ve rejected the settlement agreement') }}</h1>
+      {% endif %}
+    </div>
+    <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+    {% if claim.settlement.isOfferRejected() %}
+      <p>{{ t('The claimant can request a County Court Judgment (CCJ) against you. A CCJ would order you to repay the money in line with the terms of the agreement.') }}</p>
+      <p>{{ t('If they request a CCJ, you can ask a judge to consider changing the repayment plan, based on your financial details.') }}</p>
+      <p>{{ t('The court has reviewed the plan and believes you can afford it, so a judge may not change it.') }}</p>
+      <p>{{ t('We’ll email you when the claimant responds.') }}</p>
+    {% endif %}
+    {% include "includes/service_survey_link.njk" %}
+    {{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri) }}
+    {{ supportWidget() }}
+</div>
+{% endblock %}
