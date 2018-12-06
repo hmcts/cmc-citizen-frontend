@@ -7,27 +7,18 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-
       {{ offerTable(claim.claimData.defendant.name + ': ' + offer.content, offer.completionDate) }}
 
       {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-        <p>
-          {{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}, including the part that {{ defendantName }} admitted.', {
+        <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}, including the part that {{ defendantName }} admitted.', {
             claimantName: claim.claimData.claimant.name,
-            defendantName: claim.claimData.defendant.name
-          }) }}
-        </p>
+            defendantName: claim.claimData.defendant.name }) }}</p>
       {% else %}
-        <p>
-          {{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.', {
+        <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.', {
             claimantName: claim.claimData.claimant.name,
-            defendantName: claim.claimData.defendant.name
-          }) }}
-        </p>
+            defendantName: claim.claimData.defendant.name }) }}</p>
 
-        <p>
-          {{ t('Neither party can make any further claims relating to this case, other than to enforce it.') }}
-        </p>
+        <p>{{ t('Neither party can make any further claims relating to this case, other than to enforce it.') }}</p>
       {% endif %}
 
       <p>{{ t('Either party can view and download this agreement from their Money Claims account. Both parties should keep a copy of this agreement.') }}</p>
@@ -48,12 +39,9 @@
         </ul>
 
         {% if not isThroughAdmissions %}
-          <p>
-            {{ t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.', {
+          <p>{{ t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.', {
               n244formUri: 'http://formfinder.hmctsformfinder.justice.gov.uk/n244-eng.pdf',
-              countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc'
-            }) | safe }}
-          </p>
+              countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc' }) | safe }}</p>
         {% endif %}
       {% endif %}
 

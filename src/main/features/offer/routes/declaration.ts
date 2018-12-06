@@ -8,6 +8,7 @@ import { Declaration } from 'offer/form/models/declaration'
 import { Claim } from 'claims/models/claim'
 import { OfferClient } from 'claims/offerClient'
 import { OfferAcceptedGuard } from 'offer/guards/offerAcceptedGuard'
+import { ClaimStatus } from 'claims/models/claimStatus'
 
 function renderView (form: Form<Declaration>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -18,7 +19,7 @@ function renderView (form: Form<Declaration>, res: express.Response) {
     {
       claim: claim,
       form: form,
-      offer: claim.defendantOffer,
+      offer: claim.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT ? claim.settlement.getLastOffer() : claim.defendantOffer,
       isThroughAdmissions: claim.settlement && claim.settlement.isThroughAdmissions(),
       otherPartyName: user.id === claim.defendantId ? claim.claimData.claimant.name : claim.claimData.defendant.name
     }
