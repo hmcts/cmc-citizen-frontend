@@ -18,10 +18,9 @@
 {% macro pastPaymentDeadlineDefendantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
-    {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      {% if claim.claimantResponse.courtDetermination %}
+    {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and claim.claimantResponse.courtDetermination %}
         <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
-            { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
+            { partAdmitAmount: claim.response.amount }) }}</p>
       {% endif %}
     {% endif %}
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
@@ -57,7 +56,7 @@
     {% endif %}
     <p>{{ t('Because you didn’t pay within 5 days, they requested a CCJ against you.') }}</p>
 
-    {{ admissionByCCJCommonInfoClaimDetails(claim) }}They requested the judgment because you
+    {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
 {% endmacro %}
 
