@@ -22,7 +22,6 @@ export class DatePaidPage {
     I.fillField(fields.day, day)
     I.fillField(fields.month, month)
     I.fillField(fields.year, year)
-
     I.click(buttons.submit)
   }
 }
