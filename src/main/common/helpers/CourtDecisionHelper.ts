@@ -1,4 +1,5 @@
-import { CourtDecision, DecisionType } from 'common/court-calculations/courtDecision'
+import { CourtDecision } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'

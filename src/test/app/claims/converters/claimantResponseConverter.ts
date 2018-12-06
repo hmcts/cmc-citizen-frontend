@@ -8,7 +8,8 @@ import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { FreeMediation } from 'response/form/models/freeMediation'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
-import { CourtDecision, DecisionType } from 'common/court-calculations/courtDecision'
+import { CourtDecision } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
 import {
   intentionOfPaymentByInstalments,
