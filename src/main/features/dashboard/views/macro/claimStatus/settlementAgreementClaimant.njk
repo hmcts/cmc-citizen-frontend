@@ -15,7 +15,8 @@
 {% endmacro %}
 
 {% macro settlementAgreementRejectedForClaimantDashboard(claim) %}
-  {{ t('The defendant has rejected your settlement agreement. You can request a County Court Judgment against them.') }}
+  {{ t('{{ defendantName }} has rejected your settlement agreement. You can request a County Court Judgment against them.',
+    { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
