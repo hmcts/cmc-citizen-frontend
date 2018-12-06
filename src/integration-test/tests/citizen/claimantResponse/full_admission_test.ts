@@ -37,12 +37,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions @error', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
+    const claimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, 'View and respond to the offer')
+    claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve accepted the repayment plan')

@@ -28,6 +28,10 @@ export class ClaimantTaskListPage {
     I.click('Check and submit your response')
   }
 
+  selectTaskFreeMediation (): void {
+    I.click('Free mediation?')
+  }
+
   selectTaskRequestCountyCourtJudgment (): void {
     I.click('Request a County Court Judgment')
   }
