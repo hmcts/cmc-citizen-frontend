@@ -13,7 +13,6 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
-import { PartyType } from 'common/partyType'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
