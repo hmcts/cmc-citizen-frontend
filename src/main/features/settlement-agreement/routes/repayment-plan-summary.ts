@@ -28,7 +28,3 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       renderView(Form.empty(), req, res)
     }))
-  .post(Paths.repaymentPlanSummary.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
-    const { externalId } = req.params
-    res.redirect(Paths.signSettlementAgreement.evaluateUri({ externalId: externalId }))
-  }))
