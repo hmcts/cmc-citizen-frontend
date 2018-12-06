@@ -49,7 +49,8 @@
 
       {% if paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY and defendant.isBusiness() %}
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
-        <p>{{ internalLink('Get ' + claimant.name + '’s contact details.', claimantDetailsPageURI ) }}
+        <p>{{ internalLink( t('Get {{ claimantName }}’s contact details.', { claimantName: claimant.name }),
+            claimantDetailsPageURI ) }}
       {% endif %}
     </p>
     <p>{{ t('We’ll contact you when they respond.') }}</p>
