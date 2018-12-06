@@ -45,7 +45,6 @@ describe('Defendant response: send your response by email', () => {
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('response')
-        draftStoreServiceMock.resolveSave()
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
 
