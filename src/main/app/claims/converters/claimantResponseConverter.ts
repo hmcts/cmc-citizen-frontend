@@ -14,7 +14,10 @@ import { MomentFactory } from 'shared/momentFactory'
 
 export class ClaimantResponseConverter {
 
-  public static convertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
+  public static convertToClaimantResponse (
+    draftClaimantResponse: DraftClaimantResponse,
+    isDefendantBusiness: boolean
+  ): ClaimantResponse {
     if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
       if (draftClaimantResponse.paidAmount) {
@@ -27,7 +30,7 @@ export class ClaimantResponseConverter {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
       return reject
-    } else return this.createResponseAcceptance(draftClaimantResponse)
+    } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
   }
 
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
@@ -43,10 +46,16 @@ export class ClaimantResponseConverter {
 
   }
 
-  private static createResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): ResponseAcceptance {
+  private static createResponseAcceptance (
+    draftClaimantResponse: DraftClaimantResponse,
+    isDefendentBusiness: boolean
+  ): ResponseAcceptance {
     const respAcceptance: ResponseAcceptance = new ResponseAcceptance()
     if (draftClaimantResponse.paidAmount) {
       respAcceptance.amountPaid = draftClaimantResponse.paidAmount.amount
+    }
+    if (isDefendentBusiness && draftClaimantResponse.alternatePaymentMethod) {
+      respAcceptance.formaliseOption = 'REFER_TO_JUDGE'
     }
     if (draftClaimantResponse.formaliseRepaymentPlan) {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
