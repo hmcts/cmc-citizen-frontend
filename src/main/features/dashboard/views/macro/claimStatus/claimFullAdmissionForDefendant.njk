@@ -19,7 +19,6 @@
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
     {% set claimant = claim.claimData.claimant %}
-    {% set defendant = claim.claimData.defendant %}
     {% set amount = claim.totalAmountTillToday | numeral %}
     {% set paymentIntention = claim.response.paymentIntention %}
     {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
@@ -50,7 +49,7 @@
     {% endif %}
 
     {% if paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY %}
-      {% if defendant.isBusiness() %}
+      {% if claim.claimData.defendant.isBusiness() %}
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
         {{ internalLink( t('Get {{ claimantName }}’s contact details.', { claimantName: claimant.name }),
           claimantDetailsPageURI ) }} </p>
