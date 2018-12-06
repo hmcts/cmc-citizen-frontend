@@ -30,7 +30,7 @@
 
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
-    <p>{% if paymentIntention.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    <p>{% if paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
         {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} immediately.',
           { amount: claim.response.amount | numeral, claimantName: claimant.name }) }}
       {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -48,7 +48,7 @@
       {% endif %}
 
       {% if paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY
-        and (defendant.type === PartyType.COMPANY.value or defendant.type === PartyType.ORGANISATION.value) %}
+        and claim.claimData.defendant.isBusiness() %}
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
         {{ internalLink('Get ' + claimant.name + '’s contact details.', claimantDetailsPageURI ) }}
       {% endif %}

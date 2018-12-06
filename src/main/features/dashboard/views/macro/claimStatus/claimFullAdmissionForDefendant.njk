@@ -35,7 +35,7 @@
       <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
         {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      <p>{{ t('You`ve said you owe {{ amount }} and offered to pay {{ claimantName }} by {{ paymentDate }}.',
+      <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} by {{ paymentDate }}.',
       { claimantName: claimantName, amount: amount, paymentDate: paymentDate }) }}
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
@@ -47,7 +47,7 @@
     {% endif %}
 
     {% if claim.response.paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY %}
-      {% if claim.claimData.defendant.type === PartyType.COMPANY.value or claim.claimData.defendant.type === PartyType.ORGANISATION.value %}
+      {% if claim.claimData.defendant.isBusiness() %}
         {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
         {{ internalLink('Get ' + claim.claimData.claimant.name + '’s contact details.', claimantDetailsPageURI ) }} </p>
       {% endif %}
