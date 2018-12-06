@@ -233,8 +233,17 @@ export class Claim {
     if (this.eligibleForCCJAfterBreachedSettlement) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
+
     if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
-      statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
+      if (this.isOfferSubmitted() || this.isResponseSubmitted() || (this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY)
+        && !(this.isFullAdmissionPayImmediatelyPastPaymentDate()) && !(this.isSettlementReachedThroughAdmission())
+      || !this.response) {
+        if (!(this.countyCourtJudgmentRequestedAt &&
+          (this.hasClaimantSuggestedAlternativePlanWithCCJ() ||
+            this.hasClaimantAcceptedAdmissionWithCCJ()))) {
+          statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
+        }
+      }
     }
 
     return statuses
