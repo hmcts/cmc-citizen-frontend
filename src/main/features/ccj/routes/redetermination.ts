@@ -64,6 +64,6 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
         await CCJClient.redetermination(claim.externalId, form.model, user, MadeBy.valueOf(req.params.madeBy))
-        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(Paths.redeterminationConfirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))
