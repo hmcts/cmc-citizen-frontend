@@ -2,11 +2,15 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, signAgreementLink, downloadAgreementLink %}
 
 {% macro settlementAgreementSignedByClaimantDefendantDashboard(claim) %}
-  {{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}
+  {{ t('{{ claimantName }} asked you to sign a settlement agreement.', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByBothDefendantDashboard(claim) %}
-  {{ t('You’ve both signed a settlement agreement') }}
+  {{ t('You’ve both signed a settlement agreement.') }}
+{% endmacro %}
+
+{% macro settlementAgreementRejectedForDefendantDashboard(claim) %}
+  {{ t('You rejected the settlement agreement.') }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByClaimantDefendantClaimDetails(claim) %}
@@ -39,7 +43,7 @@
     <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
     <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) +
-        ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
+        ' if you need their payment details. Make sure you get receipts for any payments.') }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}
@@ -60,7 +64,20 @@
     <p>{{ t('They asked you to sign a settlement agreement to formalise the plan.') }}</p>
     <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ t('If you don’t sign or respond by {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.claimantRespondedAt | addDays(7) | date) }}</p>
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.DEFENDANT.value })) }}</p>
+    <p>{{ internalLink('View the repayment plan', SettlementAgreementPaths.repaymentPlanSummary.evaluateUri({ externalId: claim.externalId })) }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}
+
+{% macro settlementAgreementRejectedDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('You rejected the settlement agreement') }}</h2>
+    <p>{{ t('{{ claimantName }} can request a County Court Judgment (CCJ) against you.', { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('A CCJ would order you to repay the money in line with the terms of the agreement.') }}</p>
+    <p>{{ t('The court has reviewed the repayment plan and believes you can afford it.') }}</p>
+    <p>{{ t('If {{ claimantName }} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.', { claimantName: claim.claimData.claimant.name}) }}</p>
+    <p>{{ t('We’ll email you when {{ defendantName }} responds', { defendantName: claim.claimData.claimant.name } )}}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+

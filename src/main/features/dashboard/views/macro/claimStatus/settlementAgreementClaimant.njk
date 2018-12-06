@@ -12,7 +12,12 @@
 {% endmacro %}
 
 {% macro settlementAgreementSignedByBothClaimantDashboard(claim) %}
-  {{ t('You’ve both signed a settlement agreement') }}
+  {{ t('You’ve both signed a settlement agreement.') }}
+{% endmacro %}
+
+{% macro settlementAgreementRejectedForClaimantDashboard(claim) %}
+  {{ t('{{ defendantName }} has rejected your settlement agreement. You can request a County Court Judgment against them.',
+    { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
@@ -65,6 +70,18 @@
     <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
     {{ paidInFullClaimantButtonClaimDetails(claim) }}
   </div>
+{% endmacro %}
+
+{% macro settlementAgreementRejectedClaimantClaimDetails(claim, csrf) %}
+    <h2 class="heading-small">{{ t('The defendant has rejected your settlement agreement') }}</h2>
+    <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.') }}</p>
+    <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay
+      it.') }}</p>
+    <p>{{ t('{{ defendantName }} can still sign the settlement agreement until you request a CCJ.', { defendantName: claim.claimData.defendant.name }) }}</p>
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        {{ submitButton('Request a County Court Judgment') }}
+      </form>
 {% endmacro %}
 
 {% macro requestCCJ(claim) %}

@@ -17,6 +17,7 @@ import { PartyType } from 'common/partyType'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 import { StatementType } from 'offer/form/models/statementType'
 
 interface State {
@@ -192,6 +193,8 @@ export class Claim {
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
+    } else if (this.isSettlementAgreementRejected()) {
+      return ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.admissionPayImmediatelyPastPaymentDate && !this.claimantResponse) {
@@ -252,10 +255,6 @@ export class Claim {
       (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
-  isSettlementReachedThroughAdmission (): boolean {
-    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
-  }
-
   isAdmissionsResponse (): boolean {
     return (this.response.responseType === ResponseType.FULL_ADMISSION
       || this.response.responseType === ResponseType.PART_ADMISSION)
@@ -283,6 +282,19 @@ export class Claim {
 
   private isCCJPaidWithinMonth (): boolean {
     return this.moneyReceivedOn.isSameOrBefore(calculateMonthIncrement(this.countyCourtJudgmentRequestedAt))
+  }
+
+  private isSettlementReachedThroughAdmission (): boolean {
+    return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+  }
+
+  private isSettlementAgreementRejected (): boolean {
+    if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
+      return false
+    }
+    const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
+    return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
+      && this.settlement && this.settlement.isOfferRejected()
   }
 
   private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
