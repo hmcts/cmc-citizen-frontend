@@ -15,7 +15,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
-Feature('Claimant Response: Part Admit') // .retry(3)
+Feature('Claimant Response: Part Admit').retry(3)
 
 Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and accepting defendants payment method @citizen @admissions', async (I: I) => {
 
