@@ -96,7 +96,7 @@ export class CCJModelConverter {
       )
     }
 
-    let ccjType: CountyCourtJudgmentType = undefined
+    let ccjType: CountyCourtJudgmentType
 
     if (!draft.paymentOption.option) {
       throw new Error('payment option cannot be undefined')
@@ -106,7 +106,7 @@ export class CCJModelConverter {
 
     const response: Response = claim.response
 
-    let defendantDateOfBirth: Moment = undefined
+    let defendantDateOfBirth: Moment
 
     if (claim.response && claim.isAdmissionsResponse()) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
