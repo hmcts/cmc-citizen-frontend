@@ -127,7 +127,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     const externalId: string = req.params.externalId
 
-    if (claim.response.defendant.type === PartyType.COMPANY.value) {
+    if (claim.response.defendant.isBusiness()) {
       return Paths.taskListPage.evaluateUri({ externalId: externalId })
     }
 
@@ -178,19 +178,32 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     locals.draft.document.courtDetermination = courtDetermination
 
-    if (!locals.claim.claimData.defendant.isBusiness()) {
-      locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
-    } else {
-      locals.draft.document.courtDetermination.disposableIncome = undefined
+    // if (! locals.claim.claimData.defendant.isBusiness()) {
+    //   locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
+    // } else {
+    //   locals.draft.document.courtDetermination.disposableIncome = undefined
+    //
+    //   if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY && !locals.claim.claimData.defendant.isBusiness()) {
+    //     const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
+    //
+    //     courtDetermination.decisionType = decisionType
+    //     courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+    //     courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+    //   }
+    // }
 
-      if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY && !locals.claim.claimData.defendant.isBusiness()) {
-        const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
+    // MASTER
+    locals.draft.document.courtDetermination = courtDetermination
+    locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
 
-        courtDetermination.decisionType = decisionType
-        courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-        courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-      }
+    if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
+      const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
+
+      courtDetermination.decisionType = decisionType
+      courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+      courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
+
     return super.saveDraft(locals)
   }
 }
