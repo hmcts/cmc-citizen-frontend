@@ -13,6 +13,7 @@ import { ClaimantCcjPaidAnyMoneyPage } from 'integration-test/tests/citizen/clai
 import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-option'
 import { ClaimantPaymentDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-date'
 import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-plan'
+import { ClaimantDefendantResponsePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-defendant-response'
 import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
 
@@ -29,6 +30,7 @@ const paymentDatePage: ClaimantPaymentDatePage = new ClaimantPaymentDatePage()
 const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
 const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
 const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
+const defendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
 
 export class ClaimantResponseSteps {
 
@@ -93,11 +95,15 @@ export class ClaimantResponseSteps {
     I.click(buttonText)
   }
 
-  acceptSettlement (): void {
+  acceptSettlement (isExpectingToSeeHowTheyWantToPayPage: boolean = false): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
-    I.click('Continue')
+    defendantsResponsePage.submit()
+    if (isExpectingToSeeHowTheyWantToPayPage) {
+      defendantsResponsePage.submitHowTheyWantToPay()
+    }
     I.see('COMPLETED')
+    I.wait(30)
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseYes()
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
