@@ -13,7 +13,6 @@ Feature('Dashboard').retry(3)
 Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-
   const claimRef: string = await claimSteps.makeAClaimAndSubmit(email, PartyType.COMPANY, PartyType.INDIVIDUAL, false)
 
   I.click('My account')
