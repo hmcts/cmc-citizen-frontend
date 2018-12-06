@@ -12,5 +12,6 @@ export class Paths {
   static readonly repaymentPlanPage = new RoutablePath(`${ccjPath}/repayment-plan`)
   static readonly repaymentPlanSummaryPage = new RoutablePath(`${ccjPath}/repayment-plan-summary/:madeBy`)
   static readonly redeterminationPage = new RoutablePath(`${ccjPath}/redetermination/:madeBy`)
-  static readonly confirmationPage = new RoutablePath(`${ccjPath}/confirmation`)
+  static readonly ccjConfirmationPage = new RoutablePath(`${ccjPath}/confirmation-ccj`)
+  static readonly redeterminationConfirmationPage = new RoutablePath(`${ccjPath}/confirmation-redetermination`)
 }
