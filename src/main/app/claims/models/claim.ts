@@ -213,6 +213,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
+      return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.hasClaimantRejectedDefendantResponse() &&
       (this.claimData.defendant.type === PartyType.COMPANY.value
         || this.claimData.defendant.type === PartyType.ORGANISATION.value)) {
@@ -350,5 +352,10 @@ export class Claim {
 
   private hasClaimantRejectedPartAdmission (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+  }
+
+  private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
   }
 }
