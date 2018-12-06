@@ -1,5 +1,4 @@
 import I = CodeceptJS.I
-
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
@@ -16,6 +15,7 @@ import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimant
 import { ClaimantDefendantResponsePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-defendant-response'
 import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
+import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -31,6 +31,7 @@ const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
 const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
 const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
 const defendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
+const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
 
 export class ClaimantResponseSteps {
 
@@ -46,11 +47,12 @@ export class ClaimantResponseSteps {
 
   acceptSettlementFromDashboardWhenAcceptPaymentMethod (
     testData: EndToEndTestData,
-    buttonText: string
+    buttonText: string,
+    isExpectingToSeeHowTheyWantToPayPage: boolean = false
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptSettlement()
+    this.acceptSettlement(testData, isExpectingToSeeHowTheyWantToPayPage)
   }
 
   acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod (
@@ -71,19 +73,19 @@ export class ClaimantResponseSteps {
     this.acceptCCJ(true)
   }
 
-  respondToOfferAndExpectBrokenTaskListPage (
-    testData: EndToEndTestData,
-    buttonText: string
-  ): void {
-    this.viewClaimFromDashboard(testData.claimRef)
-    this.respondToOffer(buttonText)
-    I.dontSee('COMPLETE')
-    // an empty tasklist page - only task: Check and submit your response
-    I.see('Your response')
-    I.seeNumberOfElements('//*[@class="task-group"]', 3)
-    I.seeNumberOfElements('//*[@class="task-list-heading"]', 3)
-    I.seeNumberOfElements('//*[@class="task"]', 1)
-  }
+  // respondToOfferAndExpectBrokenTaskListPage (
+  //   testData: EndToEndTestData,
+  //   buttonText: string
+  // ): void {
+  //   this.viewClaimFromDashboard(testData.claimRef)
+  //   this.respondToOffer(buttonText)
+  //   I.dontSee('COMPLETE')
+  //   // an empty tasklist page - only task: Check and submit your response
+  //   I.see('Your response')
+  //   I.seeNumberOfElements('//*[@class="task-group"]', 3)
+  //   I.seeNumberOfElements('//*[@class="task-list-heading"]', 3)
+  //   I.seeNumberOfElements('//*[@class="task"]', 1)
+  // }
 
   viewClaimFromDashboard (claimRef: string): void {
     I.click('My account')
@@ -95,7 +97,10 @@ export class ClaimantResponseSteps {
     I.click(buttonText)
   }
 
-  acceptSettlement (isExpectingToSeeHowTheyWantToPayPage: boolean = false): void {
+  acceptSettlement (
+    testData: EndToEndTestData,
+    isExpectingToSeeHowTheyWantToPayPage: boolean = false
+  ): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
@@ -103,7 +108,10 @@ export class ClaimantResponseSteps {
       defendantsResponsePage.submitHowTheyWantToPay()
     }
     I.see('COMPLETED')
-    I.wait(30)
+    if (!testData.defendantClaimsToHavePaidInFull) {
+      taskListPage.selectAcceptOrRejectSpecificAmount(50)
+      settleAdmittedPage.selectAdmittedYes()
+    }
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseYes()
     taskListPage.selectTaskChooseHowToFormaliseRepayment()

@@ -1,6 +1,6 @@
 {
   "name": "cmc-citizen-frontend",
-  "version": "1.1.1",
+  "version": "1.1.1.X",
   "private": true,
   "engines": {
     "node": ">=8.9.4 <10.0.0"

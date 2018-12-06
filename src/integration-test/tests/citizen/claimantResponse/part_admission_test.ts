@@ -17,7 +17,7 @@ const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 Feature('Claimant Response: Part Admit') // .retry(3)
 
-Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and accepting defendants payment method @citizen @admissions @debug', async (I: I) => {
+Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and accepting defendants payment method @citizen @admissions', async (I: I) => {
 
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.paymentOption = PaymentOption.IMMEDIATELY
@@ -28,7 +28,7 @@ Scenario('I can as a claimant accept the defendants part admission by instalment
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, 'View and respond')
+  claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, 'View and respond', true)
   checkAndSendPage.verifyFactsForSettlement()
   checkAndSendPage.checkFactsTrueAndSubmit()
   I.see('You’ve accepted the repayment plan')
