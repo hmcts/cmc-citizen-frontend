@@ -54,6 +54,7 @@ import { Disability } from 'response/form/models/statement-of-means/disability'
 import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 import { DecisionType } from 'common/court-calculations/courtDecision'
 import { MadeBy } from 'offer/form/models/madeBy'
+import { PartyType } from 'common/partyType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -164,6 +165,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('serviceName', `Money Claims`)
     nunjucksEnv.addGlobal('headingVisible', true)
     nunjucksEnv.addGlobal('DecisionType', DecisionType)
+    nunjucksEnv.addGlobal('PartyType', PartyType)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
