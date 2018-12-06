@@ -33,6 +33,11 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
 
+    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)
+      && (draft.isResponsePartiallyAdmitted() || draft.isResponseFullyAdmitted())) {
+      delete draft.response.type
+    }
+
     tasks.push(
       new TaskListItem(
         'Confirm your details',
