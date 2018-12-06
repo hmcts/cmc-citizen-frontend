@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths as Paths } from 'ccj/paths'
+import { Paths } from 'ccj/paths'
 
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
