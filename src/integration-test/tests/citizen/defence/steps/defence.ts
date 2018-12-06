@@ -26,6 +26,7 @@ import { DefendantViewClaimPage } from 'integration-test/tests/citizen/defence/p
 import { DefendantWhenWillYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
 import { DefendantYourDefencePage } from 'integration-test/tests/citizen/defence/pages/defendant-your-defence'
 import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
+import { DefendantSendCompanyFinancialDetails } from 'integration-test/tests/citizen/defence/pages/defendant-send-company-financial-details'
 import { StatementOfMeansSteps } from 'integration-test/tests/citizen/defence/steps/statementOfMeans'
 import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defendant'
@@ -65,6 +66,7 @@ const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const defendantPaymentDatePage: DefendantPaymentDatePage = new DefendantPaymentDatePage()
 const defendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentPlanPage()
 const defendantWhenWillYouPage: DefendantWhenWillYouPayPage = new DefendantWhenWillYouPayPage()
+const sendCompanyDetailsPage: DefendantSendCompanyFinancialDetails = new DefendantSendCompanyFinancialDetails()
 const defendantSteps: DefendantSteps = new DefendantSteps()
 const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
 const defendantHowMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
@@ -308,6 +310,11 @@ export class DefenceSteps {
       case DefenceType.PART_ADMISSION_NONE_PAID:
         this.admitPartOfTheClaim(defence)
         this.askForMediation()
+        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+          I.wait(30)
+          defendantTaskListPage.selectShareYourFinancialDetailsTask()
+          sendCompanyDetailsPage.continue()
+        }
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('How much money do you admit you owe?')
         break
