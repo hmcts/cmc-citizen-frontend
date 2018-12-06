@@ -176,32 +176,19 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
 
     const courtDetermination: CourtDetermination = new CourtDetermination()
 
-    locals.draft.document.courtDetermination = courtDetermination
+    if (locals.claim.claimData.defendant.isBusiness()) {
+      locals.draft.document.courtDetermination = undefined
+    } else {
+      locals.draft.document.courtDetermination = courtDetermination
+      locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
 
-    // if (! locals.claim.claimData.defendant.isBusiness()) {
-    //   locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
-    // } else {
-    //   locals.draft.document.courtDetermination.disposableIncome = undefined
-    //
-    //   if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY && !locals.claim.claimData.defendant.isBusiness()) {
-    //     const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
-    //
-    //     courtDetermination.decisionType = decisionType
-    //     courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-    //     courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-    //   }
-    // }
+      if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
+        const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
 
-    // MASTER
-    locals.draft.document.courtDetermination = courtDetermination
-    locals.draft.document.courtDetermination.disposableIncome = PaymentOptionPage.getMonthlyDisposableIncome(locals.claim)
-
-    if (locals.draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.IMMEDIATELY) {
-      const decisionType: DecisionType = PaymentOptionPage.getCourtDecision(locals.draft.document, locals.claim)
-
-      courtDetermination.decisionType = decisionType
-      courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-      courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+        courtDetermination.decisionType = decisionType
+        courtDetermination.courtPaymentIntention = PaymentOptionPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+        courtDetermination.courtDecision = PaymentOptionPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+      }
     }
 
     return super.saveDraft(locals)
