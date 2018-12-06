@@ -11,11 +11,9 @@
 
 {% macro signAgreementLink(claim, text = 'Sign the settlement agreement') %}
   {% if claim.settlement.isThroughAdmissions() %}
-    <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}"
-       class="button button-secondary">{{ t(text) }}</a>
+    {{ internalLink(t(text), SettlementAgreementPaths.signSettlementAgreement.evaluateUri({ externalId: claim.externalId }), "button button-secondary") }}
   {% else %}
-    <a href="{{ OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }) }}"
-       class="button button-secondary">{{ t(text) }}</a>
+    {{ internalLink(t(text), OfferPaths.countersignAgreementPage.evaluateUri({ externalId: claim.externalId }), "button button-secondary") }}
   {% endif %}
 {% endmacro %}
 

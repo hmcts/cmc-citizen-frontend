@@ -33,55 +33,32 @@
         <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
             { amount: amountToPay,
               paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date
-            }
-          )
-          }}</p>
-      {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS and paymentIntention.repaymentPlan is defined %}
+            }) }}</p>
+      {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS and paymentIntention.repaymentPlan is defined %}
         <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
             {
               instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
               paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
               firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
-            }
-          )
-          }}</p>
+            }) }}</p>
       {% endif %}
 
-      <p>
-        {{ t('The claimant can’t request a County Court Judgment against you if you pay by the agreed date.') }}
-      </p>
+      <p>{{ t('The claimant can’t request a County Court Judgment against you if you pay by the agreed date.') }}</p>
 
-      <p>
-        {{ downloadAgreementLink(claim) }}
-      </p>
+      <p>{{ downloadAgreementLink(claim) }}</p>
 
-    <p>
-      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
-      {{ t('if you need their payment details.') }}
-    </p>
-    <p>
-      {{ t('Make sure you get receipts for any payments.') }}
-    </p>
-    <p>
+    <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}{{ t('if you need their payment details.') }}</p>
+    <p>{{ t('Make sure you get receipts for any payments.') }}</p>
     <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
-    {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can ') }}
-    {{ _requestCCJLink(claim) }}
-    </p>
-    <p>
-      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
-      {{ t('if you need their payment details.') }}
-    </p>
-    <p>
-      {{ t('Make sure you get receipts for any payments.') }}
-    </p>
+      <p>{{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
+          + internalLink('request a County Court Judgment. ', CCJPaths.paidAmountPage.evaluateUri({
+            externalId:claim.externalId }) )) | safe }}</p>
+    <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}{{ t('if you need their payment details.') }}</p>
+    <p>{{ t('Make sure you get receipts for any payments.') }}</p>
     {% else %}
       <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
-      <p>
-        {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
-      </p>
-      <p>
-        {{ downloadAgreementLink(claim) }}
-      </p>
+      <p>{{ t('You’ve both signed a legal agreement. The claim is now settled.') }}</p>
+      <p>{{ downloadAgreementLink(claim) }}</p>
     {% endif %}
   </div>
 {% endmacro %}
@@ -105,54 +82,36 @@
         <p>{{ t('The agreement says the defendant will repay {{ amount }} by {{ paymentDate }}.',
             { amount: amountToPay,
               paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date
-            }
-          )
-          }}</p>
+            }) }}</p>
       {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS and paymentIntention.repaymentPlan is defined %}
         <p>{{ t('The agreement says the defendant will pay you in installments of {{ instalmentAmount }} {{ paymentSchedule }}, starting {{ firstPaymentDate }}.',
             {
               instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
               paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
               firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
-            }
-          )
-          }}</p>
+            }) }}</p>
       {% endif %}
 
-      <p> {{ t('The agreement explains what you can do if the defendant breaks the terms.') }} </p>
-      <p>
-        {{ downloadAgreementLink(claim) }}
-      </p>
+      <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
+      <p>{{ downloadAgreementLink(claim) }}</p>
 
       <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
       {{ paidInFullClaimantButtonClaimDetails(claim) }}
 
       {% if claim.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
         <hr>
-        <p>
         <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
-        {{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
-          + internalLink('request a County Court Judgment. ', ccjRequest )) | safe }}
-        </p>
+        <p>{{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
+          + internalLink('request a County Court Judgment. ', ccjRequest )) | safe }}</p>
 
-    <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
+        <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
         {{ paidInFullClaimantButtonClaimDetails(claim) }}
       {% endif %}
-
-
     {% else %}
       <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
-      <p>
-        {{ t('You’ve both signed a legal agreement. The claim is now settled.') }}
-      </p>
-      <p>
-        {{ downloadAgreementLink(claim) }}
-      </p>
+      <p>{{ t('You’ve both signed a legal agreement. The claim is now settled.') }}</p>
+      <p>{{ downloadAgreementLink(claim) }}</p>
     {% endif %}
   </div>
 {% endmacro %}
 
-{% macro _requestCCJLink(claim) %}
-<a class="block" href="{{ CCJPaths.paidAmountPage.evaluateUri({externalId: claim.externalId}) }}">
-  {{ t('request a County Court Judgment.') }}</a>
-{% endmacro %}

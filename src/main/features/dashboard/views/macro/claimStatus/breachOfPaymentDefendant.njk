@@ -18,11 +18,9 @@
 {% macro pastPaymentDeadlineDefendantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
-    {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      {% if claim.claimantResponse.courtDetermination %}
-        <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
-            { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
-      {% endif %}
+    {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and claim.claimantResponse.courtDetermination %}
+      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
+          { partAdmitAmount: claim.response.amount }) }}</p>
     {% endif %}
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
       <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
@@ -51,22 +49,19 @@
     <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       <p>{{ t('You agreed to pay the full {{ amount }} immediately.', { amount: claim.response.amount }) }}</p>
-      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+    {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
           { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
     {% endif %}
     <p>{{ t('Because you didn’t pay within 5 days, they requested a CCJ against you.') }}</p>
 
-    {{ admissionByCCJCommonInfoClaimDetails(claim) }}They requested the judgment because you
+    {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
 {% endmacro %}
 
 {% macro CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
-    {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-    {% endif %}
 
     <p>{{ t('{{ claimantName }} accepted your repayment plan.', { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('They asked you to sign a settlement agreement. Because you didn’t sign it, they requested a CCJ against you.') }}</p>

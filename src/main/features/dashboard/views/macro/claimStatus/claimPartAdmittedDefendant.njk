@@ -8,8 +8,8 @@
 {% endmacro %}
 
 {% macro partAdmittedClaimantAcceptsDefendantDashboard(claim) %}
-  {{ t('Jan Clark accepted your admission of {{ amount }}',
-    { amount: claim.response.amount }) }}
+  {{ t('{{ claimantName }} accepted your admission of {{ amount }}',
+    { amount: claim.response.amount, claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) %}

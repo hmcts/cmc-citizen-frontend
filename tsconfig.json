@@ -113,6 +113,9 @@
       "eligibility/*": [
         "main/features/eligibility/*"
       ],
+      "settlement-agreement/*": [
+        "main/features/settlement-agreement/*"
+      ],
       "services/*": [
         "main/services/*"
       ]
