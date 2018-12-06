@@ -161,11 +161,9 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
     const externalId: string = req.params.externalId
 
-    if (claim.claimData.defendant.isBusiness()) {
-      return Paths.taskListPage.evaluateUri({ externalId: externalId })
-    }
-
     switch (courtDecision) {
+      case DecisionType.NOT_APPLICABLE_IS_BUSINESS:
+        return Paths.taskListPage.evaluateUri({ externalId: externalId })
       case DecisionType.COURT: {
         return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
       }

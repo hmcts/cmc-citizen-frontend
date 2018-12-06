@@ -1,4 +1,5 @@
-<h2 class="heading-medium">Send financial details</h2>
+<h2 class="heading-medium">{{ t('Send financial details') }}</h2>
+
 <p>{{ t('You need to send the defendant’s financial details to the court.') }}</p>
 
 <p>{{ t('Make sure you include your claim number: {{ claimNumber }}.', { claimNumber: claim.claimNumber }) }}</p>
@@ -9,13 +10,12 @@
 
 <p>{{ t('The defendant should have sent you the details - send them to:') }}</p>
 
-<p>
-  {{ t('Civil Money Claims') }}<br />
-  {{ t('St. Katharine’s House') }}<br />
-  {{ t('21-27 St. Katharine’s Street') }}<br />
-  {{ t('Northampton') }}<br />
+<div class="keep-formatting panel">{{ t('Civil Money Claims') }}
+  {{ t('St. Katharine`s House') }}
+  {{ t('21-27 St. Katharine`s Street') }}
+  {{ t('Northampton') }}
   {{ t('NN1 2LH') }}
-</p>
+</div>
 
 <p>{{ t('Or email them to') }} <a href="mailto:moneyclaims@hmcts.gsi.gov.uk">moneyclaims@hmcts.gsi.gov.uk</a></p>
 
