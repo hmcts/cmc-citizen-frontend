@@ -311,7 +311,6 @@ export class DefenceSteps {
         this.admitPartOfTheClaim(defence)
         this.askForMediation()
         if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-          I.wait(30)
           defendantTaskListPage.selectShareYourFinancialDetailsTask()
           sendCompanyDetailsPage.continue()
         }

@@ -118,7 +118,6 @@ export class ClaimantResponseSteps {
     switch (testData.claimantPaymentOption) {
       case PaymentOption.IMMEDIATELY:
         paymentOptionPage.chooseImmediately()
-        I.wait(30)
         courtOfferedSetDataPage.accept()
         break
       case PaymentOption.BY_SET_DATE:
