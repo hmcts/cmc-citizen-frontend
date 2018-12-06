@@ -20,11 +20,13 @@ ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
-  claimPartAdmittedAlreadyPaidForDefendantClaimDetails %}
+  claimPartAdmittedAlreadyPaidForDefendantClaimDetails,
+  partAdmittedAcceptedPayImmediatelyDefendantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmissionClaimant.njk" import
   claimPartAdmittedToOweForClaimantClaimDetails,
-  claimPartAdmittedAlreadyPaidForClaimantClaimDetails %}
+  claimPartAdmittedAlreadyPaidForClaimantClaimDetails,
+  partAdmittedPayImmediatelyClaimantClaimDetails %}
 
 {% from "./claimStatus/settlementAgreementClaimant.njk" import
   settlementAgreementSignedByClaimantClaimDetails,
@@ -123,6 +125,8 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {% endif %}
       {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
         {{ offerSubmittedForClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
+        {{ partAdmittedPayImmediatelyClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_REJECTED %}
         {{ offerRejectedForClaimantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
@@ -195,6 +199,8 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
         {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
+        {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}
