@@ -51,7 +51,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions @debug', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
