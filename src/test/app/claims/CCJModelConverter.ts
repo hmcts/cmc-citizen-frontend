@@ -8,14 +8,12 @@ import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Moment } from 'moment'
-import { MomentFactory } from 'shared/momentFactory'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import {
   baseFullAdmissionData,
   baseResponseData,
   statementOfMeansWithAllFieldsData
 } from 'test/data/entity/responseData'
-import { Individual } from 'claims/models/details/yours/individual'
 import { StatementType } from 'offer/form/models/statementType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { RepaymentPlan } from 'claims/models/repaymentPlan'
@@ -34,9 +32,31 @@ const ccjDraft = new DraftCCJ().deserialize({
   }
 })
 
+const dob: LocalDate = new LocalDate(1999, 1, 1)
+
+const ccjDraftWithDefendantDOBKnown = new DraftCCJ().deserialize({
+  paymentOption: {
+    option: PaymentType.IMMEDIATELY
+  },
+  defendantDateOfBirth: {
+    known: true,
+    date: dob
+  },
+  paidAmount: {
+    option: {
+      value: 'no'
+    },
+    claimedAmount: 1060
+  }
+})
+
 const ccjDraftWithInstallments = new DraftCCJ().deserialize({
   paymentOption: {
     option: PaymentType.INSTALMENTS
+  },
+  defendantDateOfBirth: {
+    known: true,
+    date: dob
   },
   repaymentPlan: {
     remainingAmount: 4060,
@@ -53,6 +73,7 @@ const ccjDraftWithInstallments = new DraftCCJ().deserialize({
     },
     claimedAmount: 4060
   }
+
 })
 
 const fullAdmissionResponseWithSetDateAndPaymentDateElapsed = {
@@ -118,26 +139,26 @@ const sampleClaimWithFullAdmissionWithInstallmentsResponseObj = {
 
 describe('CCJModelConverter - convert CCJDraft to CountyCourtJudgement', () => {
 
-  it('should convert to CCJ - for a valid CCJ draft',() => {
+  it('should convert to CCJ - for a valid CCJ draft', () => {
     const draft: DraftCCJ = ccjDraft
     const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimIssueObj)
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draft, claim)
     expect(countyCourtJudgment).to.be.deep.equal(new CountyCourtJudgment(undefined, PaymentOption.IMMEDIATELY, undefined, undefined, undefined, undefined, CountyCourtJudgmentType.DEFAULT))
   })
 
-  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by set date on breach of payment terms',() => {
-    const draft: DraftCCJ = ccjDraft
+  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by set date on breach of payment terms', () => {
+    const draft: DraftCCJ = ccjDraftWithDefendantDOBKnown
     const claim: Claim = new Claim().deserialize(sampleClaimWithFullAdmissionWithSetDateResponseObj)
-    const DOB: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
+    const DOB: Moment = dob.toMoment()
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draft, claim)
     expect(countyCourtJudgment).to.be.deep.equal(new CountyCourtJudgment(DOB, PaymentOption.IMMEDIATELY, undefined, undefined, undefined, undefined, CountyCourtJudgmentType.ADMISSIONS))
   })
 
-  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by installments on breach of payment terms',() => {
+  it('should convert to CCJ - for a valid CCJ draft for full admission response paying by installments on breach of payment terms', () => {
     const draft: DraftCCJ = ccjDraftWithInstallments
     const claim: Claim = new Claim().deserialize(sampleClaimWithFullAdmissionWithInstallmentsResponseObj)
     const expectedRepaymentPlan: RepaymentPlan = new RepaymentPlan(100, new LocalDate(2010, 12, 30).toMoment(), 'EACH_WEEK')
-    const DOB: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
+    const DOB: Moment = dob.toMoment()
     const countyCourtJudgment: CountyCourtJudgment = CCJModelConverter.convertForRequest(draft, claim)
     expect(countyCourtJudgment).to.be.deep.equal(new CountyCourtJudgment(
       DOB,

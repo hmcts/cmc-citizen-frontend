@@ -19,7 +19,6 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
 import {
   CCJModelConverter, getRepaymentPlanForm,
-  retrieveDateOfBirthOfDefendant,
   retrievePaymentOptionsFromClaim
 } from 'claims/ccjModelConverter'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
@@ -50,14 +49,20 @@ function convertToPartyDetails (party: Party): PartyDetails {
   return plainToClass(PartyDetails, party)
 }
 
+function retrieveAndSetDateOfBirthIntoDraft (claim: Claim, draft: Draft<DraftCCJ>): Draft<DraftCCJ> {
+  const dateOfBirthFromResponse: DateOfBirth = claim.retrieveDateOfBirthOfDefendant
+  if (dateOfBirthFromResponse) {
+    draft.document.defendantDateOfBirth = dateOfBirthFromResponse
+  }
+  return draft
+}
+
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   let draft: Draft<DraftCCJ> = res.locals.ccjDraft
   const defendant = convertToPartyDetails(claim.claimData.defendant)
-  const DOBFromAdmissionResponse: DateOfBirth = retrieveDateOfBirthOfDefendant(claim)
-  if (DOBFromAdmissionResponse) {
-    draft.document.defendantDateOfBirth = DOBFromAdmissionResponse
-  }
+
+  draft = retrieveAndSetDateOfBirthIntoDraft(claim, draft)
 
   draft = retrieveAndSetValuesInDraft(claim, draft)
 
@@ -77,7 +82,6 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
 
 function retrieveAndSetValuesInDraft (claim: Claim, draft: Draft<DraftCCJ>): Draft<DraftCCJ> {
   const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
-
   if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
     draft.document.paymentOption = paymentOption
     draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
@@ -122,7 +126,11 @@ export default express.Router()
       } else {
         const claim: Claim = res.locals.claim
         let draft: Draft<DraftCCJ> = res.locals.ccjDraft
+
         draft = retrieveAndSetValuesInDraft(claim, draft)
+
+        draft = retrieveAndSetDateOfBirthIntoDraft(claim, draft)
+
         const user: User = res.locals.user
 
         if (form.model.type === SignatureType.QUALIFIED) {

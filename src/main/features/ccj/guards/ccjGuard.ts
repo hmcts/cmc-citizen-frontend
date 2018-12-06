@@ -11,7 +11,7 @@ export class CCJGuard {
     const claim: Claim = res.locals.claim
 
     if (!claim.eligibleForCCJ
-      && !(claim.eligibleForCCJAfterBreachedSettlementTerms || claim.admissionPayImmediatelyPastPaymentDate)) {
+      && !claim.eligibleForCCJAfterBreachedSettlementTerms && !claim.admissionPayImmediatelyPastPaymentDate) {
       logger.warn(`Claim ${claim.claimNumber} not eligible for a CCJ - redirecting to dashboard page`)
       res.redirect(Paths.dashboardPage.uri)
     } else {

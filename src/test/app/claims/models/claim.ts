@@ -9,7 +9,9 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { FreeMediationOption } from 'response/form/models/freeMediation'
-import { defenceWithDisputeData } from 'test/data/entity/responseData'
+import {
+  defenceWithDisputeData
+} from 'test/data/entity/responseData'
 import { offer, offerRejection } from 'test/data/entity/offer'
 import { individual, organisation } from 'test/data/entity/party'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
@@ -29,6 +31,9 @@ import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 import { DecisionType } from 'common/court-calculations/courtDecision'
+import * as claimStoreMock from 'test/http-mocks/claim-store'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { LocalDate } from 'forms/models/localDate'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -69,6 +74,20 @@ describe('Claim', () => {
       it('should return false', () => {
         expect(claim.eligibleForCCJ).to.be.equal(false)
       })
+    })
+  })
+
+  describe('Defendant date of birth', () => {
+
+    it('should return date of birth when response is present', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const dateOfBirth: DateOfBirth = claimWithResponse.retrieveDateOfBirthOfDefendant
+      expect(dateOfBirth).to.be.deep.eq(new DateOfBirth(true, new LocalDate(1999, 1, 1)))
+    })
+    it('should return undefined when response not present', () => {
+      const claimWithoutResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+      const dateOfBirth: DateOfBirth = claimWithoutResponse.retrieveDateOfBirthOfDefendant
+      expect(dateOfBirth).to.be.eq(undefined)
     })
   })
 

@@ -18,6 +18,9 @@ import { calculateMonthIncrement } from 'common/calculate-month-increment/calcul
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
 import { StatementType } from 'offer/form/models/statementType'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { Individual } from 'claims/models/details/yours/individual'
+import { LocalDate } from 'forms/models/localDate'
 
 interface State {
   status: ClaimStatus
@@ -154,20 +157,23 @@ export class Claim {
 
   get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
     if (this.response && this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
-      const paymentOption = this.settlement.getLastOffer().paymentIntention.paymentOption
-      switch (paymentOption) {
-        case PaymentOption.BY_SPECIFIED_DATE:
-          return !this.countyCourtJudgmentRequestedAt
-            && isPastDeadline(MomentFactory.currentDateTime(),
-              (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
-          break
-        case PaymentOption.INSTALMENTS:
-          return !this.countyCourtJudgmentRequestedAt
-            && isPastDeadline(MomentFactory.currentDateTime(),
-              (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.paymentIntention.repaymentPlan.firstPaymentDate))
-          break
-        default:
-          throw new Error(`Payment option ${paymentOption} is not supported`)
+      const lastOffer: Offer = this.settlement.getLastOffer()
+      if (lastOffer && lastOffer.paymentIntention) {
+        const paymentOption = lastOffer.paymentIntention.paymentOption
+        switch (paymentOption) {
+          case PaymentOption.BY_SPECIFIED_DATE:
+            return !this.countyCourtJudgmentRequestedAt
+              && isPastDeadline(MomentFactory.currentDateTime(),
+                (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
+            break
+          case PaymentOption.INSTALMENTS:
+            return !this.countyCourtJudgmentRequestedAt
+              && isPastDeadline(MomentFactory.currentDateTime(),
+                (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.paymentIntention.repaymentPlan.firstPaymentDate))
+            break
+          default:
+            throw new Error(`Payment option ${paymentOption} is not supported`)
+        }
       }
     }
     return false
@@ -250,6 +256,14 @@ export class Claim {
   get admissionPayImmediatelyPastPaymentDate (): boolean {
     return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
       (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+  }
+
+  get retrieveDateOfBirthOfDefendant (): DateOfBirth {
+    if (this.response && this.response.defendant.type === PartyType.INDIVIDUAL.value) {
+      const defendantDateOfBirth: Moment = MomentFactory.parse((this.response.defendant as Individual).dateOfBirth)
+      return new DateOfBirth(true, LocalDate.fromMoment(defendantDateOfBirth))
+    }
+    return undefined
   }
 
   isSettlementReachedThroughAdmission (): boolean {

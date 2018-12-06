@@ -9,16 +9,12 @@ import { StatementOfTruth } from 'claims/models/statementOfTruth'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Claim } from 'claims/models/claim'
-import { Response } from 'claims/models/response'
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { MomentFactory } from 'shared/momentFactory'
-import { PartyType } from 'common/partyType'
-import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
-import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Offer } from 'claims/models/offer'
 
 function convertRepaymentPlan (repaymentPlan: RepaymentPlanForm): RepaymentPlan {
@@ -43,14 +39,6 @@ function convertPaidAmount (draftCcj: DraftCCJ): number {
 function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
   return (draftCcj.paymentOption.option === PaymentType.BY_SPECIFIED_DATE)
     ? draftCcj.payBySetDate.date.toMoment() : undefined
-}
-
-export function retrieveDateOfBirthOfDefendant (claim: Claim): DateOfBirth {
-  if (claim.response && claim.isAdmissionsResponse() && claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
-    const defendantDateOfBirth: Moment = MomentFactory.parse((claim.response.defendant as Individual).dateOfBirth)
-    return new DateOfBirth(true, LocalDate.fromMoment(defendantDateOfBirth))
-  }
-  return undefined
 }
 
 export function retrievePaymentOptionsFromClaim (claim: Claim): CCJPaymentOption {
@@ -104,25 +92,18 @@ export class CCJModelConverter {
 
     const paymentOption: PaymentOption = draft.paymentOption.option.value as PaymentOption
 
-    const response: Response = claim.response
-
     let defendantDateOfBirth: Moment
 
     if (claim.response && claim.isAdmissionsResponse()) {
       ccjType = CountyCourtJudgmentType.ADMISSIONS
-      if (response.defendant.type === PartyType.INDIVIDUAL.value) {
-        defendantDateOfBirth = MomentFactory.parse((response.defendant as Individual).dateOfBirth)
-        if (!defendantDateOfBirth) {
-          throw new Error('Defendant date of birth cannot be undefined for Admissions response')
-        }
-      } else {
-        defendantDateOfBirth = undefined
+      if (!draft.defendantDateOfBirth.known) {
+        throw new Error('Defendant date of birth cannot be undefined for Admissions response')
       }
     } else {
       ccjType = CountyCourtJudgmentType.DEFAULT
-      defendantDateOfBirth = draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined
-
     }
+
+    defendantDateOfBirth = draft.defendantDateOfBirth.known ? draft.defendantDateOfBirth.date.toMoment() : undefined
 
     return new CountyCourtJudgment(
       defendantDateOfBirth,
