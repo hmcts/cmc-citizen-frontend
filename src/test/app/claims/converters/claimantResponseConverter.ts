@@ -72,7 +72,7 @@ function createDraftClaimantResponseWithCourtDecisionType (
   return draftClaimantResponse
 }
 
-describe('claimant response converter ', () => {
+describe('claimant response converter', () => {
   describe('Claimant Rejection', () => {
     it('rejection with mediation missing ', () => {
       expect(converter.convertToClaimantResponse(createDraftClaimantResponseForFullRejection(), false)).to.deep.eq({
@@ -82,7 +82,7 @@ describe('claimant response converter ', () => {
       })
     })
 
-    it('rejection with mediation ', () => {
+    it('rejection with mediation', () => {
       const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
       draftClaimantResponse.freeMediation = new FreeMediation('yes')
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
@@ -146,7 +146,7 @@ describe('claimant response converter ', () => {
   })
 
   describe('Claimant Acceptance', () => {
-    it(' Accept defendant offer with CCJ', () => {
+    it('Accept defendant offer with CCJ', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT)
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
@@ -157,7 +157,7 @@ describe('claimant response converter ', () => {
 
     })
 
-    it(' Accept defendant offer with settlement', () => {
+    it('Accept defendant offer with settlement', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(null,YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT)
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
@@ -168,7 +168,7 @@ describe('claimant response converter ', () => {
 
     })
 
-    it(' Accept defendant offer with unknown formalise option', () => {
+    it('Accept defendant offer with unknown formalise option', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.NO,YesNoOption.YES)
       draftClaimantResponse.courtDetermination = new CourtDetermination(null,null,null,null,DecisionType.DEFENDANT)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(new FormaliseRepaymentPlanOption('xyz', 'xyz'))
@@ -176,7 +176,7 @@ describe('claimant response converter ', () => {
       expect(() => converter.convertToClaimantResponse(draftClaimantResponse, false)).to.throw(Error, errMsg)
     })
 
-    it(' Accept defendant offer but propose a counter repayment plan to pay immediately', () => {
+    it('Accept defendant offer but propose a counter repayment plan to pay immediately', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.DEFENDANT,
@@ -201,7 +201,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it(' Accept defendant offer but propose a counter repayment plan to pay by set date', () => {
+    it('Accept defendant offer but propose a counter repayment plan to pay by set date', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payBySetDateIntent,
         DecisionType.DEFENDANT,
@@ -226,7 +226,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it(' Accept defendant offer but propose a counter repayment plan to pay by instalments', () => {
+    it('Accept defendant offer but propose a counter repayment plan to pay by instalments', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payByInstallmentsIntent,
         DecisionType.DEFENDANT,
@@ -257,7 +257,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it('Claimant proposes immediate payment court decides pay by set date ', () => {
+    it('Claimant proposes immediate payment court decides pay by set date', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -307,7 +307,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it(' Accept court decision favouring defendant payment intent ', () => {
+    it('Accept court decision favouring defendant payment intent', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payBySetDateIntent,
         DecisionType.DEFENDANT,
@@ -332,7 +332,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it(' Accept court decision favouring claimant payment intent ', () => {
+    it('Accept court decision favouring claimant payment intent', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payByInstallmentsIntent,
         DecisionType.CLAIMANT,
@@ -363,7 +363,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it(' Reject court decision to pay by set date and refer to judge ', () => {
+    it('Reject court decision to pay by set date and refer to judge', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -390,7 +390,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it(' Reject court decision to pay by instalments and refer to judge ', () => {
+    it('Reject court decision to pay by instalments and refer to judge', () => {
       const draftClaimantResponse = createDraftClaimantResponseWithCourtDecisionType(
         payImmediatelyIntent,
         DecisionType.COURT,
@@ -417,7 +417,7 @@ describe('claimant response converter ', () => {
         })
     })
 
-    it(' If defendant is a business and claimant rejects defendant payment plan for alternative means then refer to judge', () => {
+    it('If defendant is a business and claimant rejects defendant payment plan for alternative means then refer to judge', () => {
       const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.YES, undefined)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
       draftClaimantResponse.alternatePaymentMethod = payImmediatelyIntent
