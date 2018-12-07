@@ -79,74 +79,74 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
-      {% if state.status === ClaimStatus.PAID_IN_FULL_ELIGIBLE %}
-        {{ paidInFullClaimantClaimDetails(claim.externalId) }}
-      {% elif state.status === ClaimStatus.PAID_IN_FULL %}
-        {{ paidInFullClaimantClaimSettledDetails(claim) }}
-      {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
-        {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
-        {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.NO_RESPONSE %}
-        {{ noResponseForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
-        {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
-        {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
-      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
-        {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
-        state.status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
-        state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED %}
-        {{ admissionByCCJClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
-        {{ settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) }}
-      {% elif state.status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
-        {{ redeterminationClaimantClaimDetails(claim, csrf) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION or
-        state.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT %}
-        {{ settlementAgreementSignedByClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
-        {{ settlementAgreementSignedByBothClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
-        {{ ccjRequestedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
-        {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
-          {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
-            {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
-          {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-            {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
-          {% else %}
-            {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
-          {% endif %}
-        {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-          {% if claim.response.paymentDeclaration %}
-            {{ claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) }}
-          {% else %}
-            {{ claimPartAdmittedToOweForClaimantClaimDetails(claim) }}
-          {% endif %}
-        {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-          {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
+    {% if state.status === ClaimStatus.PAID_IN_FULL_ELIGIBLE %}
+      {{ paidInFullClaimantClaimDetails(claim.externalId) }}
+    {% elif state.status === ClaimStatus.PAID_IN_FULL %}
+      {{ paidInFullClaimantClaimSettledDetails(claim) }}
+    {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
+      {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
+      {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.NO_RESPONSE %}
+      {{ noResponseForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
+      {{ moreTimeRequestedForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
+      {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
+    {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
+      {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
+      state.status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
+      state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED %}
+      {{ admissionByCCJClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
+      {{ settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) }}
+    {% elif state.status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
+      {{ redeterminationClaimantClaimDetails(claim, csrf) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION or
+      state.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT %}
+      {{ settlementAgreementSignedByClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
+      {{ settlementAgreementSignedByBothClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CCJ_REQUESTED %}
+      {{ ccjRequestedForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
+      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+        {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+          {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
+        {% elif claim.response.freeMediation === FreeMediationOption.NO %}
+          {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
         {% endif %}
-      {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
-        {{ offerSubmittedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
-        {{ partAdmittedPayImmediatelyClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_REJECTED %}
-        {{ offerRejectedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
-        {{ offerAcceptedForClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ offerSettlementReachedForClaimant(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
-        {{ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus(claim) }}
-      {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
-        {{ requestCCJ(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
-        {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
-        {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
+      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+        {% if claim.response.paymentDeclaration %}
+          {{ claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) }}
+        {% else %}
+          {{ claimPartAdmittedToOweForClaimantClaimDetails(claim) }}
+        {% endif %}
+      {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+        {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
       {% endif %}
+    {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+      {{ offerSubmittedForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
+      {{ partAdmittedPayImmediatelyClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+      {{ offerRejectedForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {{ offerAcceptedForClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+      {{ offerSettlementReachedForClaimant(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
+      {{ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus(claim) }}
+    {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
+      {{ requestCCJ(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+      {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
+      {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
+    {% endif %}
   {% endfor %}
 {% endmacro %}
 
@@ -191,24 +191,25 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
         {% else %}
           {{ claimPartAdmittedToOweForDefendantClaimDetails(claim) }}
         {% endif %}
-      {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-        {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
-        {{ offerSubmittedForDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_REJECTED %}
-        {{ offerRejectedForDefendantClaimDetails() }}
-      {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
-        {{ offerAcceptedForDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
-        {{ offerSettlementReachedForDefendant(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
-        {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
-        {{ settlementAgreementRejectedDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
-        {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED %}
-        {{ CCJAfterBreakingSettlementAgreementClaimDetails(claim) }}
+      {% endif %}
+    {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+      {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
+      {{ offerSubmittedForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.OFFER_REJECTED %}
+      {{ offerRejectedForDefendantClaimDetails() }}
+    {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
+      {{ offerAcceptedForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
+      {{ offerSettlementReachedForDefendant(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+      {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
+      {{ settlementAgreementRejectedDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
+      {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED %}
+      {{ CCJAfterBreakingSettlementAgreementClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
