@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 import { CCJModelConverter, retrievePaymentOptionsFromClaim } from 'claims/ccjModelConverter'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
@@ -199,7 +200,7 @@ describe('CCJModelConverter - Unit test on ModelConverter', () => {
   it('should get undefined CCJPaymentOption when response not present', () => {
     const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimIssueObj)
     const ccjPaymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
-    expect(ccjPaymentOption).to.be.equal(undefined)
+    expect(ccjPaymentOption).to.be.undefined
   })
   it('should get defined CCJPaymentOption when response is present', () => {
     const claim: Claim = new Claim().deserialize(sampleClaimWithInstalments)
