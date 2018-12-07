@@ -2,25 +2,24 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 
-const fields = {
-  radioAdmittedYes: 'input[id=admittedyes]',
-  radioAdmittedNo: 'input[id=admittedno]'
+const radioButtons = {
+  optionYes: 'input[id=admittedyes]',
+  optionNo: 'input[id=admittedno]'
 }
 
 const buttons = {
-  saveAndContinue: 'input[id=saveAndContinue]'
+  submit: 'input[type=submit]'
 }
 
 export class ClaimantSettleAdmittedPage {
 
-  chooseAdmittedYes (): void {
-    I.checkOption(fields.radioAdmittedYes)
-    I.click(buttons.saveAndContinue)
+  selectAdmittedYes (): void {
+    I.checkOption(radioButtons.optionYes)
+    I.click(buttons.submit)
   }
 
-  chooseAdmittedNo (): void {
-    I.checkOption(fields.radioAdmittedNo)
-    I.click(buttons.saveAndContinue)
+  selectAdmittedNo (): void {
+    I.checkOption(radioButtons.optionNo)
+    I.click(buttons.submit)
   }
-
 }

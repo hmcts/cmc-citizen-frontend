@@ -32,6 +32,7 @@ ccjRequestedForDefendantClaimDetails %}
   settlementAgreementSignedByClaimantClaimDetails,
   settlementAgreementSignedByClaimantDeadlinePassedClaimDetails,
   settlementAgreementSignedByBothClaimantClaimDetails,
+  settlementAgreementRejectedClaimantClaimDetails,
   requestCCJ %}
 
 {% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
@@ -64,7 +65,8 @@ ccjRequestedForDefendantClaimDetails %}
 {% from "./claimStatus/settlementAgreementDefendant.njk" import
   settlementAgreementSignedByClaimantDefendantClaimDetails,
   settlementAgreementSignedByBothDefendantClaimDetails,
-  settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails %}
+  settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails,
+  settlementAgreementRejectedDefendantClaimDetails %}
 
 {% from "./claimStatus/redeterminationRequestedDefendant.njk" import redeterminationDefendnatClaimDetails %}
 {% from "./claimStatus/redeterminationRequestedClaimant.njk" import redeterminationClaimantClaimDetails %}
@@ -143,6 +145,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ requestCCJ(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
         {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
+        {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -207,6 +211,8 @@ ccjRequestedForDefendantClaimDetails %}
         {{ claimFullAdmissionForDefendantDashboard(claim) }}
       {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
         {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
+      {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
+        {{ settlementAgreementRejectedDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
         {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
       {% endif %}
