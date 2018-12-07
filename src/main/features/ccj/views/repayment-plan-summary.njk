@@ -1,6 +1,5 @@
 {% extends "layout.njk" %}
 {% from "internalLink.njk" import internalLink %}
-{% from "form.njk" import csrfProtection, submitButton %}
 {% from "paymentPlanTable.njk" import paymentPlanTable %}
 
 {% if requestedBy === MadeBy.DEFENDANT.value %}
@@ -45,7 +44,6 @@
     {% if claim.isEligibleForReDetermination() %}
       <p>{{ t(bottomMessage) }}{{ internalLink('ask a judge to make a new repayment plan.', CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId, madeBy: requestedBy })) }}</p>
     {% endif %}
-
   </div>
 </div>
 {% endblock %}

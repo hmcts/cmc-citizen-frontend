@@ -14,6 +14,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { PartyType } from 'common/partyType'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
@@ -172,7 +173,13 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-    if (this.countyCourtJudgmentRequestedAt) {
+    if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.moneyReceivedOn) {
+      return ClaimStatus.PAID_IN_FULL
+    } else if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
       } else if (this.hasClaimantSuggestedAlternativePlanWithCCJ()) {
@@ -206,6 +213,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
+      return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.hasClaimantRejectedDefendantResponse() &&
       (this.claimData.defendant.type === PartyType.COMPANY.value
         || this.claimData.defendant.type === PartyType.ORGANISATION.value)) {
@@ -226,10 +235,13 @@ export class Claim {
     } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
-
     if (this.eligibleForCCJAfterBreachedSettlement) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
+    if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
+      statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
+    }
+
     return statuses
   }
 
@@ -253,18 +265,21 @@ export class Claim {
     return this.settlement && !!this.settlementReachedAt
   }
 
+  private isCCJPaidWithinMonth (): boolean {
+    return this.moneyReceivedOn.isSameOrBefore(calculateMonthIncrement(this.countyCourtJudgmentRequestedAt))
+  }
+
   private isSettlementReachedThroughAdmission (): boolean {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
 
   private isSettlementAgreementRejected (): boolean {
-    if (this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION) {
-      const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
-      return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
-        && this.settlement && this.settlement.isOfferRejected()
-    } else {
+    if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
       return false
     }
+    const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
+    return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
+      && this.settlement && this.settlement.isOfferRejected()
   }
 
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
@@ -337,5 +352,10 @@ export class Claim {
 
   private hasClaimantRejectedPartAdmission (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+  }
+
+  private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
   }
 }

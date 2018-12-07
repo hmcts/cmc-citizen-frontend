@@ -3,10 +3,7 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "paymentPlanTable.njk" import paymentPlanTable %}
 
-  {% set heading = 'The claimant’s repayment plan' %}
-
-
-
+{% set heading = 'The claimant’s repayment plan' %}
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -24,15 +21,9 @@
           <p>{{ t('They’ve suggested you pay in full by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}
           <p>
       {% endif %}
-
       <p>{{ t('The claimant signed a settlement agreement based on their plan. You can choose to sign the agreement or not.') }}</p>
-
-      <form novalidate method="post">
-        {{ csrfProtection(csrf) }}
-        {{ submitButton('Respond to settlement agreement') }}
-      </form>
+      <p>{{ internalLink(t('Respond to settlement agreement'), SettlementAgreementPaths.signSettlementAgreement.evaluateUri({ externalId: claim.externalId }), "button") }}</p>
       <p>{{ t('If you do not respond, the claimant can request a County Court Judgment against you.') }}
-
     </div>
   </div>
 {% endblock %}

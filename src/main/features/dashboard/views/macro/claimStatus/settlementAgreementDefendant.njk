@@ -3,7 +3,7 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, signAgreementLink, downloadAgreementLink %}
 
 {% macro settlementAgreementSignedByClaimantDefendantDashboard(claim) %}
-  {{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}
+  {{ t('{{ claimantName }} asked you to sign a settlement agreement.', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByBothDefendantDashboard(claim) %}
@@ -45,7 +45,7 @@
     <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
     <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) +
-        ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
+        ' if you need their payment details. Make sure you get receipts for any payments.') }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}

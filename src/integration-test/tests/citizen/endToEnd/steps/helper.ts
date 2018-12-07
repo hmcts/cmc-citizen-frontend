@@ -38,7 +38,13 @@ export class Helper {
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.makeDefenceAndSubmit(testData.defendant, testData.defendantEmail, testData.defendantPartyType, testData.defenceType)
+    defenceSteps.makeDefenceAndSubmit(
+      testData.defendant,
+      testData.defendantEmail,
+      testData.defendantPartyType,
+      testData.defenceType,
+      testData.defendantClaimsToHavePaidInFull
+    )
   }
 
   // TODO: refactor with above ^^^

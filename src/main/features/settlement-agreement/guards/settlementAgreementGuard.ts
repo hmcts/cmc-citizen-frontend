@@ -20,6 +20,7 @@ export class SettlementAgreementGuard {
     if (!claimantResponse || claimantResponse.type !== ClaimantResponseType.ACCEPTATION
       || AcceptationClaimantResponse.deserialize(claimantResponse).formaliseOption !== FormaliseOption.SETTLEMENT) {
       logger.warn(`Claim ${claim.claimNumber} no acceptance claimant response for claim`)
+      res.redirect(Paths.dashboardPage.uri)
     } else if (!settlement || settlement.isSettled() || settlement.isOfferRejected()) {
       logger.warn(`Claim ${claim.claimNumber} no suitable settlement agreement for claim`)
       res.redirect(Paths.dashboardPage.uri)

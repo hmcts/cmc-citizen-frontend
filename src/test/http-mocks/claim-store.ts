@@ -119,6 +119,7 @@ export const sampleDefendantResponseObj = {
 
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
