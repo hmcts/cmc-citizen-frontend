@@ -1,6 +1,7 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 {% from "./utilityMacros.njk" import viewAndRespondOffer %}
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) %}
   {{ t('The defendant believes that they’ve paid the claim in full.') }}
@@ -53,7 +54,7 @@
     <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
         { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     <p>{{ t('You can settle for less than the full claim amount.') }}</p>
-    {{ internalLink('Tell us you’ve settled', AppPaths.contactUsPage.uri, 'button button-secondary form-group') }}
+    {{ paidInFullClaimantButtonClaimDetails(claim) }}
     {% if claim.admissionPayImmediatelyPastPaymentDate %}
       <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
       <p>{{ t('If the defendant has not paid you, you can '
