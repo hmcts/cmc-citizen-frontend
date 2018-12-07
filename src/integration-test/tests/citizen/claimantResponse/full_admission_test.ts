@@ -16,7 +16,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response').retry(3)
+  Feature('Claimant Response').retry(1)
 
   Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -71,6 +71,8 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
+    I.click(testData.claimRef)
+    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
@@ -90,6 +92,8 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
+    I.click(testData.claimRef)
+    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen', async (I: I) => {
@@ -109,6 +113,8 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
+    I.click(testData.claimRef)
+    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {
@@ -124,6 +130,10 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('County Court Judgment')
+    I.click(testData.claimRef)
+    I.see('Tell us you’ve been paid')
+    I.click('Tell us you’ve been paid')
+    I.see('When did you settle the claim?')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', async (I: I) => {
@@ -139,5 +149,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('County Court Judgment')
+    I.click(testData.claimRef)
+    I.see('If the defendant has paid you, you need to tell us.')
   })
 }
