@@ -44,8 +44,4 @@ export class ClaimantTaskListPage {
     I.click('Propose an alternative repayment plan')
   }
 
-  selectAcceptOrRejectSpecificAmount (amount: number): void {
-    I.click(`Accept or reject the £${Number(amount).toLocaleString()}`)
-  }
-
 }

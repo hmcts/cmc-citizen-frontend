@@ -29,7 +29,10 @@ export class Helper {
     I.click('Respond to claim')
   }
 
-  finishResponse (testData: EndToEndTestData): void {
+  finishResponse (
+    testData: EndToEndTestData,
+    isRequestMoreTimeToRespond: boolean = true
+  ): void {
     if (testData.defenceType === undefined) {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
     }
@@ -43,8 +46,8 @@ export class Helper {
       testData.defendantEmail,
       testData.defendantPartyType,
       testData.defenceType,
-      testData.defendantClaimsToHavePaidInFull,
-      testData.isRequestMoreTimeToRespond
+      isRequestMoreTimeToRespond,
+      testData.defendantClaimsToHavePaidInFull
     )
   }
 
