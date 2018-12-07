@@ -22,6 +22,8 @@ interface PageSpecificValues {
 
 export class ClaimantResponseTestData {
 
+  isExpectingToSeeHowTheyWantToPayPage: boolean = false
+  isExpectingToSeeCourtOfferedInstalmentsPage: boolean = false
   pageSpecificValues: PageSpecificValues = {
     paymentDatePageEnterDate: '2025-01-01',
     paymentPlanPageEnterRepaymentPlan: {
