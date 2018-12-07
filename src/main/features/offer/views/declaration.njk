@@ -39,9 +39,7 @@
         </ul>
 
         {% if not isThroughAdmissions %}
-          <p>{{ t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.', {
-              n244formUri: 'http://formfinder.hmctsformfinder.justice.gov.uk/n244-eng.pdf',
-              countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc' }) | safe }}</p>
+          <p>{{ t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.') }}</p>
         {% endif %}
       {% endif %}
 

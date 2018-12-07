@@ -54,7 +54,7 @@ Scenario('Claimant is telling us defendant has paid in full. NO CCJ has been req
   I.click('Sign out')
   // as claimant
   userSteps.login(testData.claimantEmail)
-  claimantResponseSteps.viewClaimFromDashboard(testData.claimRef, false)
+  claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.click('Tell us you’ve settled')
   paidInFullSteps.inputDatePaid('2017-01-01')
   I.see('The claim is now settled')
