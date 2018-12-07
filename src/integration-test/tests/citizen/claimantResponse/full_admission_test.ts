@@ -8,6 +8,7 @@ import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantRes
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
+import { PaidInFullSteps } from '../dashboard/steps/paid-in-full'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -120,6 +121,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    const paidInFullSteps: PaidInFullSteps = new PaidInFullSteps()
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
@@ -134,7 +136,8 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click(testData.claimRef)
     I.see('Tell us you’ve been paid')
     I.click('Tell us you’ve been paid')
-    I.see('When did you settle the claim?')
+    paidInFullSteps.inputDatePaid('2017-01-01')
+    I.see('The claim is now settled')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', async (I: I) => {
