@@ -146,7 +146,7 @@ export class Claim {
 
   get eligibleForCCJ (): boolean {
     return !this.countyCourtJudgmentRequestedAt
-      && (this.isFullAdmissionPayImmediatelyPastPaymentDate()
+      && (this.admissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
         )
@@ -193,7 +193,7 @@ export class Claim {
       return ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
-    } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
+    } else if (this.admissionPayImmediatelyPastPaymentDate) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.hasDefendantNotSignedSettlementAgreementInTime()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
@@ -241,7 +241,7 @@ export class Claim {
 
     if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
       if (this.isOfferSubmitted() || this.isResponseSubmitted() || (this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY)
-        && !(this.isFullAdmissionPayImmediatelyPastPaymentDate()) && !(this.isSettlementReachedThroughAdmission())
+        && !(this.admissionPayImmediatelyPastPaymentDate) && !(this.isSettlementReachedThroughAdmission())
       || !this.response) {
         if (!(this.countyCourtJudgmentRequestedAt &&
           (this.hasClaimantSuggestedAlternativePlanWithCCJ() ||
@@ -252,6 +252,11 @@ export class Claim {
     }
 
     return statuses
+  }
+
+  get admissionPayImmediatelyPastPaymentDate (): boolean {
+    return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
+      (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
   private isResponseSubmitted (): boolean {
@@ -289,16 +294,6 @@ export class Claim {
     const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
     return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
       && this.settlement && this.settlement.isOfferRejected()
-  }
-
-  private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
-    if (this.response && this.response.responseType === ResponseType.FULL_ADMISSION) {
-      const response: FullAdmissionResponse = this.response
-      return this.isResponseSubmitted() && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-        response.paymentIntention && response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
-    } else {
-      return false
-    }
   }
 
   private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
