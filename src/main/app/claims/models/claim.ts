@@ -17,6 +17,7 @@ import { PartyType } from 'common/partyType'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 
 interface State {
   status: ClaimStatus
@@ -188,6 +189,8 @@ export class Claim {
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
+    } else if (this.isSettlementAgreementRejected()) {
+      return ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
@@ -210,6 +213,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
+    } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
+      return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.hasClaimantRejectedDefendantResponse() &&
       (this.claimData.defendant.type === PartyType.COMPANY.value
         || this.claimData.defendant.type === PartyType.ORGANISATION.value)) {
@@ -266,6 +271,15 @@ export class Claim {
 
   private isSettlementReachedThroughAdmission (): boolean {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+  }
+
+  private isSettlementAgreementRejected (): boolean {
+    if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
+      return false
+    }
+    const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
+    return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
+      && this.settlement && this.settlement.isOfferRejected()
   }
 
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
@@ -338,5 +352,10 @@ export class Claim {
 
   private hasClaimantRejectedPartAdmission (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+  }
+
+  private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
   }
 }

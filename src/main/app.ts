@@ -18,6 +18,7 @@ import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
 import { Feature as DefendantResponseFeature } from 'response/index'
+import { Feature as SettlementAgreementFeature } from 'settlement-agreement/index'
 import { CsrfProtection } from 'modules/csrf'
 import { DashboardFeature } from 'dashboard/index'
 import { CCJFeature } from 'ccj/index'
@@ -68,6 +69,7 @@ new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
+new SettlementAgreementFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('paidInFull')) {
   new PaidInFullFeature().enableFor(app)
