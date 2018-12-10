@@ -142,14 +142,15 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
-    locals.draft.document.courtDetermination.decisionType = decisionType
+    if (decisionType !== DecisionType.NOT_APPLICABLE_IS_BUSINESS) {
+      locals.draft.document.courtDetermination.decisionType = decisionType
 
-    const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-    if (courtCalculatedPaymentIntention) {
-      locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+      const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+      if (courtCalculatedPaymentIntention) {
+        locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+      }
+      locals.draft.document.courtDetermination.courtDecision = PaymentPlanPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
-    locals.draft.document.courtDetermination.courtDecision = PaymentPlanPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-
     return super.saveDraft(locals)
   }
 

@@ -124,6 +124,23 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
+  acceptFullAdmitFromBusinessWithAlternativePaymentIntention (claimantResponseTestData: ClaimantResponseTestData): void {
+    I.dontSee('COMPLETE')
+    taskListPage.selectTaskViewDefendantResponse()
+    defendantsResponsePage.submit()
+    defendantsResponsePage.submitHowTheyWantToPay() // bug
+    I.see('COMPLETED')
+    taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+    settleAdmittedPage.selectAdmittedYes()
+    taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    acceptPaymentMethodPage.chooseNo()
+    taskListPage.selectProposeAnAlternativeRepaymentPlan()
+    paymentOptionPage.chooseInstalments()
+    paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
+    paymentDatePage.saveAndContinue()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
   acceptSettlement (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
