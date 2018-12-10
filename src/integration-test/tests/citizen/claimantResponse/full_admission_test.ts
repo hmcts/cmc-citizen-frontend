@@ -8,7 +8,7 @@ import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantRes
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
-import { PaidInFullSteps } from '../dashboard/steps/paid-in-full'
+import { PaidInFullSteps } from 'integration-test/tests/citizen/dashboard/steps/paid-in-full'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()

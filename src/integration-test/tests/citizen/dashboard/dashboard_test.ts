@@ -44,7 +44,7 @@ const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 const claimantType: PartyType = PartyType.COMPANY
 const defendantType: PartyType = PartyType.COMPANY
 
-Feature('Paid In Full')
+Feature('Paid In Full').retry(3)
 
 Scenario('Claimant is telling us defendant has paid in full. NO CCJ has been requested @citizen', async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
