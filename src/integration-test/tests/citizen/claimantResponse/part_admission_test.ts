@@ -106,7 +106,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve accepted the repayment plan')
+    I.see('You’ve signed a settlement agreement')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement.')
