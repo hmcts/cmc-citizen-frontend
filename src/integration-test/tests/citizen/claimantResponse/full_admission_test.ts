@@ -137,4 +137,15 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see(testData.claimRef)
     I.see('County Court Judgment')
   })
+
+  Scenario('I can as a claimant accept the defendants full admission by instalments and reject defendants payment method in favour of repayment plan, accepting court determination, requesting CCJ then finally settling', async (I: I) => {
+    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    testData.paymentOption = PaymentOption.INSTALMENTS
+    // as defendant
+    helperSteps.finishResponseWithFullAdmission(testData)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+
+  })
 }
