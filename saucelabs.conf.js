@@ -1,5 +1,5 @@
-require('ts-node/register')
-require('tsconfig-paths/register')
+require("ts-node/register");
+require("tsconfig-paths/register");
 
 const supportedBrowsers = require('@hmcts/cmc-supported-browsers').supportedBrowsers
 
