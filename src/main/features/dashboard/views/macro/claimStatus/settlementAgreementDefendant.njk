@@ -65,7 +65,7 @@
     <p>{{ t('They asked you to sign a settlement agreement to formalise the plan.') }}</p>
     <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ t('If you don’t sign or respond by {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.claimantRespondedAt | addDays(7) | date) }}</p>
-    <p>{{ internalLink('View the repayment plan', SettlementAgreementPaths.repaymentPlanSummary.evaluateUri({ externalId: claim.externalId })) }}</p>
+    <p>{{ internalLink('View the repayment plan', SettlementAgreementPaths.repaymentPlanSummary.evaluateUri({ externalId: claim.externalId }), class='button button-start') }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}
