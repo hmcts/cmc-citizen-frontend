@@ -28,7 +28,7 @@ export default express.Router()
         }
 
         const cookies = new Cookies(req, res)
-        cookies.set(sessionCookie, '', { sameSite: 'lax' })
+        cookies.set(sessionCookie, '')
       }
 
       res.redirect(Paths.homePage.uri)

@@ -28,12 +28,20 @@ export class ClaimantTaskListPage {
     I.click('Check and submit your response')
   }
 
+  selectTaskFreeMediation (): void {
+    I.click('Free mediation?')
+  }
+
   selectTaskRequestCountyCourtJudgment (): void {
     I.click('Request a County Court Judgment')
   }
 
   selectProposeAnAlternativeRepaymentPlan (): void {
     I.click('Propose an alternative repayment plan')
+  }
+
+  selectAcceptOrRejectSpecificAmount (amount: number): void {
+    I.click(`Accept or reject the £${Number(amount).toLocaleString()}`)
   }
 
 }

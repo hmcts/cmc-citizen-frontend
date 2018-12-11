@@ -1,6 +1,7 @@
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "internalLink.njk" import internalLink %}
 {% from "./utilityMacros.njk" import downloadAgreementLink %}
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro settlementAgreementSignedByClaimantDashboard(claim) %}
     {{ t('You’ve signed a settlement agreement. The defendant can choose to sign it or not.') }}
@@ -11,7 +12,12 @@
 {% endmacro %}
 
 {% macro settlementAgreementSignedByBothClaimantDashboard(claim) %}
-  {{ t('You’ve both signed a settlement agreement') }}
+  {{ t('You’ve both signed a settlement agreement.') }}
+{% endmacro %}
+
+{% macro settlementAgreementRejectedForClaimantDashboard(claim) %}
+  {{ t('{{ defendantName }} has rejected your settlement agreement. You can request a County Court Judgment against them.',
+    { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
 {% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
@@ -58,8 +64,20 @@
     <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>
     <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
     <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-    <a href="{{ AppPaths.contactUsPage.uri }}" class="button button-secondary form-group">Tell us you've been paid</a>
+    {{ paidInFullClaimantButtonClaimDetails(claim) }}
   </div>
+{% endmacro %}
+
+{% macro settlementAgreementRejectedClaimantClaimDetails(claim, csrf) %}
+    <h2 class="heading-small">{{ t('The defendant has rejected your settlement agreement') }}</h2>
+    <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.') }}</p>
+    <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay
+      it.') }}</p>
+    <p>{{ t('{{ defendantName }} can still sign the settlement agreement until you request a CCJ.', { defendantName: claim.claimData.defendant.name }) }}</p>
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        {{ submitButton('Request a County Court Judgment') }}
+      </form>
 {% endmacro %}
 
 {% macro requestCCJ(claim) %}
@@ -69,5 +87,5 @@
         + internalLink('request a County Court Judgment. ', CCJPaths.paidAmountPage.evaluateUri({externalId:claim.externalId}) )) | safe }}
     </p>
   </div>
+  {{ paidInFullClaimantButtonClaimDetails(claim,'Tell us you’ve been paid') }}
 {% endmacro %}
-

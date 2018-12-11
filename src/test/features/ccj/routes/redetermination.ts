@@ -17,11 +17,12 @@ import { MomentFactory } from 'shared/momentFactory'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { MadeBy } from 'offer/form/models/madeBy'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.redeterminationPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
-const confirmationPage = Paths.confirmationPage.evaluateUri({ externalId: externalId })
+const confirmationPage = Paths.redeterminationConfirmationPage.evaluateUri({ externalId: externalId })
 
 const validFormData = {
   text: 'I feel Defendant can pay earlier and I need money sooner'
@@ -65,7 +66,12 @@ describe('CCJ - re-determination page', () => {
               paymentLength: '12 months'
             },
             ccjType: CountyCourtJudgmentType.DETERMINATION
+          },
+          claimantResponse: {
+            type: ClaimantResponseType.ACCEPTATION,
+            amountPaid: 0
           }
+
         })
 
         await request(app)
@@ -114,11 +120,15 @@ describe('CCJ - re-determination page', () => {
                   paymentLength: '12 months'
                 },
                 ccjType: CountyCourtJudgmentType.DETERMINATION
+              },
+              claimantResponse: {
+                type: ClaimantResponseType.ACCEPTATION,
+                amountPaid: 0
               }
             })
           })
 
-          it('should redirect to check and send page', async () => {
+          it('should redirect to redetermination confirmation page', async () => {
 
             claimStoreServiceMock.resolveSaveReDeterminationForExternalId(validFormData.text)
             await request(app)
@@ -156,6 +166,10 @@ describe('CCJ - re-determination page', () => {
                   paymentLength: '12 months'
                 },
                 ccjType: CountyCourtJudgmentType.DETERMINATION
+              },
+              claimantResponse: {
+                type: ClaimantResponseType.ACCEPTATION,
+                amountPaid: 0
               }
             })
 

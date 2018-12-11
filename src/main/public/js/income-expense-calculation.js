@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  numeral.locale('en-gb')
+
   var feature = (function () {
     var config = {
       incomeExpenseCalculationApi: '/total-income-expense-calculation',
@@ -31,7 +33,7 @@ $(document).ready(function () {
     }
 
     var setTotalMonthlyIncomeExpense = function (totalAmount) {
-      totalMonthlyIncomeExpenseElement.text(totalAmount);
+      totalMonthlyIncomeExpenseElement.text(numeral(totalAmount).format('0,0.00'));
     }
 
     var csrfInputFieldElement,

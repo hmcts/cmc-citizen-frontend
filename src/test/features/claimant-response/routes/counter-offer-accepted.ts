@@ -135,7 +135,7 @@ describe('Claimant Response - Counter offer accepted', () => {
           request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment amount'))
+            .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment plan'))
       })
 
       it('should render page when defendant payment option is pay by set date and claimant response is accepted', async () => {

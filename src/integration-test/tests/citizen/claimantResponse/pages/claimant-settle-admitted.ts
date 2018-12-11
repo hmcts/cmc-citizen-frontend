@@ -11,7 +11,7 @@ const buttons = {
   submit: 'input[type=submit]'
 }
 
-export class ClaimantSettleTheClaimDefendantAdmittedPage {
+export class ClaimantSettleAdmittedPage {
 
   selectAdmittedYes (): void {
     I.checkOption(radioButtons.optionYes)

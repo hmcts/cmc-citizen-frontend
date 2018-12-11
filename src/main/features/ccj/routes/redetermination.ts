@@ -9,25 +9,39 @@ import { User } from 'idam/user'
 import { CCJClient } from 'claims/ccjClient'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { MadeBy } from 'offer/form/models/madeBy'
-import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  const repaymentPlan: RepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-  const coreRepaymentPlan: CoreRepaymentPlan = {
-    instalmentAmount: repaymentPlan.instalmentAmount,
-    firstPaymentDate: repaymentPlan.firstPaymentDate,
-    paymentSchedule: (repaymentPlan.paymentSchedule as PaymentSchedule).value,
-    completionDate: repaymentPlan.completionDate,
-    paymentLength: repaymentPlan.paymentLength
-  } as CoreRepaymentPlan
+  let paymentIntention: PaymentIntention
+
+  if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
+    const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
+    paymentIntention = {
+      repaymentPlan: ccjRepaymentPlan && {
+        instalmentAmount: ccjRepaymentPlan.instalmentAmount,
+        firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
+        paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
+        completionDate: ccjRepaymentPlan.completionDate,
+        paymentLength: ccjRepaymentPlan.paymentLength
+      } as CoreRepaymentPlan,
+      paymentDate: claim.countyCourtJudgment.payBySetDate,
+      paymentOption: claim.countyCourtJudgment.paymentOption
+    } as PaymentIntention
+
+  } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
+    paymentIntention = claim.settlement.getLastOffer().paymentIntention
+  }
+
+  const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
 
   res.render(Paths.redeterminationPage.associatedView, {
     form: form,
     claim: claim,
-    repaymentPlan: coreRepaymentPlan,
+    paymentIntention: paymentIntention,
+    remainingAmountToPay: claim.totalAmountTillDateOfIssue - amountPaid,
     madeBy: req.params.madeBy
   })
 }
@@ -50,6 +64,6 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
         await CCJClient.redetermination(claim.externalId, form.model, user, MadeBy.valueOf(req.params.madeBy))
-        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(Paths.redeterminationConfirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

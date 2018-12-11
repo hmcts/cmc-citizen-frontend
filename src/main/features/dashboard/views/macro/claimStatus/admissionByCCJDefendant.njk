@@ -4,16 +4,14 @@
 {% from "./utilityMacros.njk" import downloadResponseLink %}
 
 {% macro admissionByCCJDefendantDashboard(claim) %}
-  {{ t('A County Court Judgment has been issued against you') }}
+  {{ t('{{ claimantName }} requested a County Court Judgment against you', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro admissionByCCJDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
-    <p>{{ t('{{ claimantName }} accepted your repayment plan and requested a CCJ against you.',
-        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <p>{{ t('They accepted your repayment plan.') }}</p>
     <p>{{ t('If a defendant doesn’t pay immediately, claimants can request a CCJ even if they accept a repayment plan.') }}</p>
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.DEFENDANT.value })) }}</p>
 
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
@@ -24,7 +22,7 @@
     <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       <p>{{ t('You agreed to pay the full {{ amount }} immediately.', { amount: claim.response.amount }) }}</p>
-      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+    {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
           { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
     {% endif %}
@@ -62,27 +60,27 @@
 
 {% macro CCJByDeterminationDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
+    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-      <p>{{ t('{{ claimantName }} rejected your repayment plan and requested a CCJ against you.', { claimantName: claim.claimData.claimant.name }) }}</p>
+      <p>{{ t('They rejected your repayment plan.') }}</p>
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan and requested a CCJ against you.',
-          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
+      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount }) }}</p>
     {% endif %}
 
-    {% if acceptedByCourt %}
+    {% if claim.claimantResponse.courtDetermination.decisionType === DecisionType.CLAIMANT %}
       <p>{{ t('They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.') }}</p>
-      {% elif courtOffered %}
+    {% else %}
       <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>
     {% endif %}
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.DEFENDANT.value })) }}</p>
+    <p>{{ internalLink('View the repayment plan',
+        CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.DEFENDANT.value }), 'button button-secondary') }}</p>
 
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
 {% endmacro %}
 
 {% macro admissionByCCJCommonInfoClaimDetails(claim) %}
-  <p>{{ t('We’ll post a copy of the judgment to you and to {{ claimantName }}.', { claimantName: claim.claimData.claimant.name }) }}</p>
+  <p>{{ t('When we’ve processed the request we’ll post a copy of the judgment to you and to {{ claimantName }}.', { claimantName: claim.claimData.claimant.name }) }}</p>
   <p>{{ t('If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15 to ' +
       externalLink('apply for a certificate', 'https://www.gov.uk/government/publications/form-n443-application-for-a-certificate-of-satisfaction-or-cancellation') +
       ' that confirms this.') | safe }}</p>

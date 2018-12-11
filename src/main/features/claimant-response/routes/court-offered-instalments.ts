@@ -17,7 +17,7 @@ function renderView (form: Form<AcceptCourtOffer>, res: express.Response) {
   const claim: Claim = res.locals.claim
   const draft: Draft<DraftClaimantResponse> = res.locals.draft
 
-  res.render(ClaimantsResponsePaths.courtOfferPage.associatedView, {
+  res.render(ClaimantsResponsePaths.courtOfferedInstalmentsPage.associatedView, {
     form: form,
     claim: claim,
     courtOrderPaymentPlan: draft.document.courtDetermination.courtDecision.repaymentPlan
@@ -34,7 +34,7 @@ async function saveAndRedirect (res: express.Response, draft: Draft<DraftClaiman
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    ClaimantsResponsePaths.courtOfferPage.uri,
+    ClaimantsResponsePaths.courtOfferedInstalmentsPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
 
@@ -42,7 +42,7 @@ export default express.Router()
     }))
 
   .post(
-    ClaimantsResponsePaths.courtOfferPage.uri,
+    ClaimantsResponsePaths.courtOfferedInstalmentsPage.uri,
     FormValidator.requestHandler(AcceptCourtOffer, AcceptCourtOffer.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<AcceptCourtOffer> = req.body

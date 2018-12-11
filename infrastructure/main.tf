@@ -83,15 +83,18 @@ module "citizen-frontend" {
   asp_name = "${local.asp_name}"
   asp_rg = "${local.asp_name}"
   instance_size = "${local.sku_size}"
+  website_local_cache_sizeinmb = "${var.website_local_cache_sizeinmb}"
 
   app_settings = {
     // Node specific vars
+    NODE_DEBUG="${var.node_debug}"
     NODE_ENV = "${var.node_env}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src"
 
     // Logging vars
+    LOG_LEVEL = "${var.log_level}"
     REFORM_TEAM = "${var.product}"
     REFORM_SERVICE_NAME = "${var.microservice}"
     REFORM_ENVIRONMENT = "${var.env}"
