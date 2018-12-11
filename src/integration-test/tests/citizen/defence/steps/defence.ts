@@ -337,6 +337,7 @@ export class DefenceSteps {
           defendantTaskListPage.selectShareYourFinancialDetailsTask()
           sendCompanyDetailsPage.continue()
         }
+
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('How much money do you admit you owe?')
         break
