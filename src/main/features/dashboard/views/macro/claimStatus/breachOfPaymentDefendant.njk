@@ -19,17 +19,10 @@
   <div class="status-block">
     <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and claim.claimantResponse.courtDetermination %}
-      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
+      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.',
           { partAdmitAmount: claim.response.amount }) }}</p>
-    {% endif %}
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-      <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
-          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
-      <p>{{ t('Because you didn’t pay within 5 days, they requested the CCJ.') }}</p>
-    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      <p>{{ t('They’ve offered to pay by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
-    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-      <p>{{ t('They’ve offered to pay in instalments.') }}</p>
+    {% elseif claim.response.responseType === domain.ResponseType.FULL_ADMISSION and claim.claimantResponse.courtDetermination %}
+      <p>{{ t('They rejected your repayment plan.') }}</p>
     {% endif %}
 
     {% if claim.claimantResponse.courtDetermination.decisionType !== DecisionType.CLAIMANT %}
@@ -38,8 +31,6 @@
       <p>{{ t('They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.') }}</p>
     {% endif %}
 
-    <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
-        { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
     {{ admissionByCCJCommonInfoClaimDetails(claim) }}
   </div>
 {% endmacro %}

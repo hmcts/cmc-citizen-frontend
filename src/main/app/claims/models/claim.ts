@@ -196,6 +196,8 @@ export class Claim {
         return ClaimStatus.REDETERMINATION_BY_JUDGE
       } else if (this.hasCCJBeenRequestedAfterSettlementBreached()) {
         return ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED
+      } else if (this.hasCCJByDeterminationBeenRequestedAfterSettlementBreached()) {
+        return ClaimStatus.CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
@@ -374,7 +376,10 @@ export class Claim {
   }
 
   private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
-    return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt
+    return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt && !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+  }
+  private hasCCJByDeterminationBeenRequestedAfterSettlementBreached (): boolean {
+    return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt && !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
   private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {

@@ -76,7 +76,9 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
 {% from "./claimStatus/partAdmitRejectionClaimant.njk" import partAdmitRejectedByClaimantClaimDetails %}
 {% from "./claimStatus/partAdmitRejectionDefendant.njk" import partAdmitRejectedByClaimantDefendantClaimDetails %}
 
-{% from "./claimStatus/breachOfPaymentDefendant.njk" import CCJAfterBreakingSettlementAgreementClaimDetails %}
+{% from "./claimStatus/breachOfPaymentDefendant.njk" import
+  CCJAfterBreakingSettlementAgreementClaimDetails,
+  pastPaymentDeadlineDefendantClaimDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
@@ -211,6 +213,8 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
       {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED %}
       {{ CCJAfterBreakingSettlementAgreementClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED %}
+      {{ pastPaymentDeadlineDefendantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
