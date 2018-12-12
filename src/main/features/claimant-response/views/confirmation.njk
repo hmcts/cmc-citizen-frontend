@@ -15,9 +15,13 @@
           {% elseif claim.countyCourtJudgmentRequestedAt or claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
             {{ t('County Court Judgment requested') }}
           {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
-            {{ t('You’ve accepted the repayment plan') }}
+            {% if claim.claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT %}
+              {{ t('You’ve signed a settlement agreement') }}
+            {% else %}
+              {{ t('You’ve accepted the repayment plan') }}
+            {% endif %}
           {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
-            {{ t('You’ve proposed an alternative repayment plan') }}
+            {{ t('You’ve proposed a different repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
