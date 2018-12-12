@@ -54,6 +54,7 @@
   settlementAgreementRejectedForClaimantDashboard %}
 
 {% from "./claimStatus/paidInFullClaimant.njk" import paidInFullClaimantDashboard %}
+{% from "./claimStatus/paidInFullDefendant.njk" import paidInFullDefendantDashboard %}
 
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
@@ -137,7 +138,9 @@
 {% endmacro %}
 
 {% macro caseStatusForDefendant(status, claim) %}
-  {% if status === ClaimStatus.NO_RESPONSE %}
+  {% if status === ClaimStatus.PAID_IN_FULL %}
+    {{ paidInFullDefendantDashboard() }}
+  {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
     {{ moreTimeRequestedForDefendantDashboard(claim) }}
@@ -147,8 +150,8 @@
     {{ redeterminationDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
-  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
-    status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED %}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
+    or status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED %}
     {{ admissionByCCJDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION or status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     or status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
