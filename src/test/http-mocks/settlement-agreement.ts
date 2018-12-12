@@ -70,3 +70,9 @@ export function rejectRejectSettlementAgreement (reason: string = 'HTTP Error') 
     .post(new RegExp(`/${externalIdPattern}/settlement-agreement/reject`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
+
+export function resolveCountersignSettlementAgreement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/${externalIdPattern}/settlement-agreement/countersign`))
+    .reply(HttpStatus.CREATED)
+}
