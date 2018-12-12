@@ -503,7 +503,7 @@ describe('Claim issue: post payment callback receiver', () => {
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res.status).to.equal(404))
+              .expect(res => expect(res).to.be.notFound)
           })
 
           it('should return 500 and render error page when retrieve user roles fails', async () => {

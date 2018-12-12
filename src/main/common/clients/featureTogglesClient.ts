@@ -7,12 +7,13 @@ let featureTogglesApiUrl: string
 
 export class FeatureTogglesClient {
 
-  constructor (public featureTogglesApiBaseUrl?: string,
+  constructor (private featureTogglesApiBaseUrl?: string,
                private request: RequestPromiseAPI = requestPromiseApi) {
-    if (!featureTogglesApiBaseUrl) {
-      featureTogglesApiBaseUrl = `${config.get<string>('feature-toggles-api.url')}`
-    }
+
     featureTogglesApiUrl = `${featureTogglesApiBaseUrl}/api/ff4j/check`
+    if (!this.featureTogglesApiBaseUrl) {
+      featureTogglesApiUrl = `${config.get<string>('feature-toggles-api.url')}/api/ff4j/check`
+    }
   }
 
   async isAdmissionsAllowed (user: User, roles: string[]): Promise<boolean> {
@@ -28,10 +29,7 @@ export class FeatureTogglesClient {
         }
       })
       .then((value: any) => {
-        if (!value) {
-          return Promise.resolve(false)
-        }
-        return Promise.resolve(true)
+        return Promise.resolve(!!value)
       })
       .catch((error: any) => {
         trackCustomEvent('ff4J cmc_admissions failure', { errorValue: error })

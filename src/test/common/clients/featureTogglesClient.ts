@@ -10,21 +10,25 @@ const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient(serv
 const roles: string[] = []
 const user: User = new User('','','','',roles,'','')
 
+// tslint:disable:disable-next-line no-unused-expression allow chai to be used without ()
+
 describe('featureToggleClient', () => {
-  describe('when ff4j is available', () => {
+  context('when ff4j is available', () => {
     it('should return admission is off when feature toggle for admission is disabled', async () => {
 
       featureToggleApiMock.resolveIsAdmissionsAllowed(false)
-      expect(await featureTogglesClient.isAdmissionsAllowed(user, roles)).to.be.eqls(false)
+      const result = await featureTogglesClient.isAdmissionsAllowed(user, roles)
+      expect(result).to.be.false
     })
 
     it('should return admission is on when feature toggle for admission is enabled', async () => {
 
       featureToggleApiMock.resolveIsAdmissionsAllowed()
-      expect(await featureTogglesClient.isAdmissionsAllowed(user, roles)).to.be.eqls(true)
+      const result = await featureTogglesClient.isAdmissionsAllowed(user, roles)
+      expect(result).to.be.true
     })
   })
-  describe('when ff4j is not available', () => {
+  context('when ff4j is not available', () => {
     it('should throw error', async () => {
 
       featureToggleApiMock.rejectIsAdmissionsAllowed()
