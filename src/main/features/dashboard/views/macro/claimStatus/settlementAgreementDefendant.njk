@@ -28,10 +28,11 @@
 {% macro settlementAgreementSignedByBothDefendantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
+    {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
           { amount: amountToPay,
-            paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date })
+            paymentDate: paymentIntention.paymentDate | date })
         }}</p>
     {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
