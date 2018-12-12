@@ -30,7 +30,7 @@
     {% if claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
           { amount: amountToPay,
-            paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date })
+            paymentDate: paymentIntention.paymentDate | date })
         }}</p>
     {% elif claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
