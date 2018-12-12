@@ -58,6 +58,7 @@ ccjRequestedForDefendantClaimDetails %}
   claimantWithDefendantAsBusinessResponseDetailedStatus %}
 
 {% from "./claimStatus/paidInFullClaimant.njk" import paidInFullClaimantClaimSettledDetails, paidInFullClaimantClaimDetails, paidInFullCCJCancelledClaimantClaimDetails, paidInFullCCJSatisfiedClaimantClaimDetails %}
+{% from "./claimStatus/paidInFullDefendant.njk" import paidInFullDefendantClaimDetails %}
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import
   admissionByCCJDefendantClaimDetails,
@@ -155,6 +156,8 @@ ccjRequestedForDefendantClaimDetails %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PAID_IN_FULL %}
+      {{ paidInFullDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
