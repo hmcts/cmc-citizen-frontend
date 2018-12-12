@@ -24,8 +24,9 @@ import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Organisation } from 'claims/models/details/theirs/organisation'
 import {
-  baseAcceptationClaimantResponseData,
-  rejectionClaimantResponseData
+  baseDeterminationAcceptationClaimantResponseData,
+  rejectionClaimantResponseData,
+  baseAcceptationClaimantResponseData
 } from 'test/data/entity/claimantResponseData'
 import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
@@ -257,7 +258,7 @@ describe('Claim', () => {
         paymentIntention: paymentIntention,
         defendant: new Individual().deserialize(individual)
       }
-      claim.claimantResponse = baseAcceptationClaimantResponseData
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
       claim.claimantRespondedAt = MomentFactory.currentDate()
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
 
@@ -274,7 +275,7 @@ describe('Claim', () => {
         paymentIntention: paymentIntention,
         defendant: new Individual().deserialize(individual)
       }
-      claim.claimantResponse = baseAcceptationClaimantResponseData
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
       claim.claimantRespondedAt = MomentFactory.currentDate()
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
       claim.reDeterminationRequestedAt = MomentFactory.currentDate()
@@ -303,9 +304,28 @@ describe('Claim', () => {
         paymentIntention: paymentIntention,
         defendant: new Individual().deserialize(individual)
       }
+      claim.claimantResponse = baseAcceptationClaimantResponseData
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
 
       expect(claim.status).to.be.equal(ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED)
+    })
+
+    it('should return CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.settlement = prepareSettlementWithCounterSignature(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED)
     })
 
     it('should return PART_ADMIT_PAY_IMMEDIATELY when the claimant accepts a part admit with immediately as the payment option', () => {
