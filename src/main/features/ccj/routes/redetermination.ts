@@ -27,6 +27,10 @@ export function retrievePaymentIntention (paymentIntention: PaymentIntention, cc
   } as PaymentIntention
 }
 
+export function retrievePaidAmount (claim: Claim) {
+  return claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
+}
+
 function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   let paymentIntention: PaymentIntention
@@ -39,7 +43,7 @@ function renderView (form: Form<ReDetermination>, req: express.Request, res: exp
     paymentIntention = claim.settlement.getLastOffer().paymentIntention
   }
 
-  const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
+  const amountPaid = retrievePaidAmount(claim)
 
   res.render(Paths.redeterminationPage.associatedView, {
     form: form,
