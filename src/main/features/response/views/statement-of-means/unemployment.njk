@@ -28,8 +28,8 @@
                id="option-{{ UnemploymentType.UNEMPLOYED.value }}" aria-hidden="false">
 
             <p>{{ t('How long have you been unemployed?') }}</p>
-            {{ numericInput(label = 'Years', name = 'unemploymentDetails[years]', form = form) }}
-            {{ numericInput(label = 'Months', name = 'unemploymentDetails[months]', form = form) }}
+            {{ numericInput(label = 'Years', name = 'unemploymentDetails[years]', form = form, inputClass = 'form-control-1-8') }}
+            {{ numericInput(label = 'Months', name = 'unemploymentDetails[months]', form = form, inputClass = 'form-control-1-8') }}
           </div>
 
           {{
