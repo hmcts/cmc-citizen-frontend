@@ -18,7 +18,7 @@
         </ul>
 
         <input type="hidden" name="maxValue" value="{{ numberOfChildrenBetween16and19 | default(0) }}">
-        {{ numericInput('Enter number', 'value', form) }}
+        {{ numericInput('Enter number', 'value', form, inputClass = 'form-control-1-8') }}
 
         {{ saveAndContinueButton() }}
 
