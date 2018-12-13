@@ -3,16 +3,16 @@ import { User } from 'main/app/idam/user'
 import * as config from 'config'
 import { trackCustomEvent } from 'logging/customEventTracker'
 
-let featureTogglesApiUrl: string
-
 export class FeatureTogglesClient {
+
+  featureTogglesApiUrl: string
 
   constructor (private featureTogglesApiBaseUrl?: string,
                private request: RequestPromiseAPI = requestPromiseApi) {
 
-    featureTogglesApiUrl = `${featureTogglesApiBaseUrl}/api/ff4j/check`
+    this.featureTogglesApiUrl = `${featureTogglesApiBaseUrl}/api/ff4j/check`
     if (!this.featureTogglesApiBaseUrl) {
-      featureTogglesApiUrl = `${config.get<string>('feature-toggles-api.url')}/api/ff4j/check`
+      this.featureTogglesApiUrl = `${config.get<string>('feature-toggles-api.url')}/api/ff4j/check`
     }
   }
 
@@ -22,7 +22,7 @@ export class FeatureTogglesClient {
     }
 
     return this.request
-      .get(`${featureTogglesApiUrl}/cmc_admissions`, {
+      .get(`${this.featureTogglesApiUrl}/cmc_admissions`, {
         headers: {
           'X-USER-ID': `${user.email}`,
           'X-USER-PERMISSIONS': roles.join(',')
