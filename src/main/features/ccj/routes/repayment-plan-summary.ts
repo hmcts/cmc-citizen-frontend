@@ -6,7 +6,6 @@ import { Form } from 'forms/form'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { retrievePaidAmount, retrievePaymentIntention } from 'ccj/routes/redetermination'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -14,18 +13,16 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
 
   if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
     const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-    paymentIntention = retrievePaymentIntention(paymentIntention, ccjRepaymentPlan, claim)
+    paymentIntention = PaymentIntention.retrievePaymentIntention(ccjRepaymentPlan, claim)
   } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
     paymentIntention = claim.settlement.getLastOffer().paymentIntention
   }
-
-  const amountPaid = retrievePaidAmount(claim)
 
   res.render(Paths.repaymentPlanSummaryPage.associatedView, {
     form: form,
     claim: claim,
     paymentIntention: paymentIntention,
-    remainingAmountToPay: claim.totalAmountTillDateOfIssue - amountPaid,
+    remainingAmountToPay: claim.totalAmountTillDateOfIssue - claim.amountPaid(),
     requestedBy: req.params.madeBy
   })
 }
