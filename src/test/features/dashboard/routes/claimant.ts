@@ -30,10 +30,10 @@ describe('Dashboard - claimant page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
       })
 
-      describe('when claim is in draft stage', () => {
+      context('when claim is in draft stage', () => {
         it('should render page when everything is fine', async () => {
           await request(app)
             .get(draftPagePath)
@@ -42,7 +42,7 @@ describe('Dashboard - claimant page', () => {
         })
       })
 
-      describe('when claim is not in draft stage', () => {
+      context('when claim is not in draft stage', () => {
         it('should return 500 and render error page when cannot retrieve claims', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
@@ -60,6 +60,20 @@ describe('Dashboard - claimant page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
+
+        context('when accessor is not the claimant', () => {
+          it('should return forbidden', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+              submitterId: claimStoreServiceMock.sampleClaimObj.defendantId,
+              defendantId: claimStoreServiceMock.sampleClaimObj.submitterId
+            })
+
+            await request(app)
+              .get(claimPagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.forbidden)
+          })
+        })
       })
     })
   })
@@ -68,10 +82,10 @@ describe('Dashboard - claimant page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
       })
 
-      describe('when claim is in draft stage', () => {
+      context('when claim is in draft stage', () => {
         it(`should render error page`, async () => {
           await request(app)
             .post(draftPagePath)
@@ -80,8 +94,22 @@ describe('Dashboard - claimant page', () => {
         })
       })
 
-      describe('when claim is not in draft stage', () => {
-        describe('when defendant is an individual', () => {
+      context('when claim is not in draft stage', () => {
+        context('when accessor is not the claimant', () => {
+          it('should return forbidden', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+              submitterId: claimStoreServiceMock.sampleClaimObj.defendantId,
+              defendantId: claimStoreServiceMock.sampleClaimObj.submitterId
+            })
+
+            await request(app)
+              .post(claimPagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.forbidden)
+          })
+        })
+
+        context('when defendant is an individual', () => {
           it('should redirect to CCJ / defendant date of birth page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId({
               claim: {
@@ -99,7 +127,7 @@ describe('Dashboard - claimant page', () => {
           })
         })
 
-        describe('when defendant is not an individual', () => {
+        context('when defendant is not an individual', () => {
           [soleTrader, company, organisation].forEach(party => {
             it(`should redirect to CCJ paid amount page when defendant is ${party.type}`, async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId({
