@@ -1,4 +1,4 @@
-{% from "form.njk" import csrfProtection, submitButton %}
+{% from "form.njk" import csrfProtection, submitButton, linkButton %}
 {% from "internalLink.njk" import internalLink %}
 {% from "./utilityMacros.njk" import downloadAgreementLink %}
 {% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
@@ -77,7 +77,7 @@
     <p>{{ t('{{ defendantName }} can still sign the settlement agreement until you request a CCJ.', { defendantName: claim.claimData.defendant.name }) }}</p>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
-        {{ submitButton('Request a County Court Judgment') }}
+        {{ linkButton('Request a County Court Judgment (CCJ)', '', 'button button-secondary') }}
       </form>
 {% endmacro %}
 
