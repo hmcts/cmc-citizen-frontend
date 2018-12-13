@@ -13,23 +13,27 @@ import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
+export function retrievePaymentIntention (paymentIntention: PaymentIntention, ccjRepaymentPlan, claim: Claim): PaymentIntention {
+  return paymentIntention = {
+    repaymentPlan: ccjRepaymentPlan && {
+      instalmentAmount: ccjRepaymentPlan.instalmentAmount,
+      firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
+      paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
+      completionDate: ccjRepaymentPlan.completionDate,
+      paymentLength: ccjRepaymentPlan.paymentLength
+    } as CoreRepaymentPlan,
+    paymentDate: claim.countyCourtJudgment.payBySetDate,
+    paymentOption: claim.countyCourtJudgment.paymentOption
+  } as PaymentIntention
+}
+
 function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   let paymentIntention: PaymentIntention
 
   if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
     const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-    paymentIntention = {
-      repaymentPlan: ccjRepaymentPlan && {
-        instalmentAmount: ccjRepaymentPlan.instalmentAmount,
-        firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
-        paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
-        completionDate: ccjRepaymentPlan.completionDate,
-        paymentLength: ccjRepaymentPlan.paymentLength
-      } as CoreRepaymentPlan,
-      paymentDate: claim.countyCourtJudgment.payBySetDate,
-      paymentOption: claim.countyCourtJudgment.paymentOption
-    } as PaymentIntention
+    paymentIntention = retrievePaymentIntention(paymentIntention, ccjRepaymentPlan, claim)
 
   } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
     paymentIntention = claim.settlement.getLastOffer().paymentIntention

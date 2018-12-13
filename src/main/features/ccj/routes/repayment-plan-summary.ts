@@ -5,9 +5,8 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
-import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { retrievePaymentIntention } from 'ccj/routes/redetermination'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -15,18 +14,7 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
 
   if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
     const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-    paymentIntention = {
-      repaymentPlan: ccjRepaymentPlan && {
-        instalmentAmount: ccjRepaymentPlan.instalmentAmount,
-        firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
-        paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
-        completionDate: ccjRepaymentPlan.completionDate,
-        paymentLength: ccjRepaymentPlan.paymentLength
-      } as CoreRepaymentPlan,
-      paymentDate: claim.countyCourtJudgment.payBySetDate,
-      paymentOption: claim.countyCourtJudgment.paymentOption
-    } as PaymentIntention
-
+    paymentIntention = retrievePaymentIntention(paymentIntention, ccjRepaymentPlan, claim)
   } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
     paymentIntention = claim.settlement.getLastOffer().paymentIntention
   }
