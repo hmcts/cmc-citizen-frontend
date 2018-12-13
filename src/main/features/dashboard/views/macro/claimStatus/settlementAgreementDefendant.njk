@@ -28,10 +28,11 @@
 {% macro settlementAgreementSignedByBothDefendantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
+    {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
           { amount: amountToPay,
-            paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date })
+            paymentDate: paymentIntention.paymentDate | date })
         }}</p>
     {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
@@ -65,7 +66,7 @@
     <p>{{ t('They asked you to sign a settlement agreement to formalise the plan.') }}</p>
     <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ t('If you don’t sign or respond by {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.claimantRespondedAt | addDays(7) | date) }}</p>
-    <p>{{ internalLink('View the repayment plan', SettlementAgreementPaths.repaymentPlanSummary.evaluateUri({ externalId: claim.externalId })) }}</p>
+    <p>{{ internalLink('View the repayment plan', SettlementAgreementPaths.repaymentPlanSummary.evaluateUri({ externalId: claim.externalId }), class='button button-start') }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}

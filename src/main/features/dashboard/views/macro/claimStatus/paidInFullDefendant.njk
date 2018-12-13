@@ -1,0 +1,13 @@
+{% from "./utilityMacros.njk" import downloadResponseLink %}
+
+{% macro paidInFullDefendantDashboard() %}
+  {{ t('This claim is settled.') }}
+{% endmacro %}
+
+{% macro paidInFullDefendantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+  <p>{{ t('{{ claimantName }} confirmed you paid {{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
+      { claimantName: claim.claimData.claimant.name, totalAmountTillToday: claim.totalAmountTillToday | numeral,
+        moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
+  <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
