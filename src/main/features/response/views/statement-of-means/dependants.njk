@@ -36,9 +36,9 @@
             <p>{{ t('Enter how many for each age group.') }}</p>
           {% endif %}
 
-            {{ numericInput('Under 11', 'numberOfChildren[under11]', form) }}
-            {{ numericInput('11 to 15', 'numberOfChildren[between11and15]', form) }}
-            {{ numericInput('16 to 19', 'numberOfChildren[between16and19]', form) }}
+            {{ numericInput('Under 11', 'numberOfChildren[under11]', form, inputClass = 'form-control-1-8') }}
+            {{ numericInput('11 to 15', 'numberOfChildren[between11and15]', form, inputClass = 'form-control-1-8') }}
+            {{ numericInput('16 to 19', 'numberOfChildren[between16and19]', form, inputClass = 'form-control-1-8') }}
 
           </div>
 
