@@ -1,4 +1,5 @@
 {% from "./utilityMacros.njk" import signAgreementLink %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro offerAcceptedForClaimantDashboard(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}

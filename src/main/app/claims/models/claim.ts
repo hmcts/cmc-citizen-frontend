@@ -240,11 +240,11 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
+    if (this.isOfferRejected() && !this.isSettlementReached() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
-    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
+    } else if (this.isOfferAccepted() && !this.isSettlementReached() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
-    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
+    } else if (this.isOfferSubmitted() && !this.isSettlementReached() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
@@ -254,7 +254,6 @@ export class Claim {
     if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
     }
-
     return statuses
   }
 
