@@ -145,8 +145,6 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
       {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
         {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
       {% endif %}
-
-    {% if not loop.last %}<hr/>{% endif %}
   {% endfor %}
 {% endmacro %}
 

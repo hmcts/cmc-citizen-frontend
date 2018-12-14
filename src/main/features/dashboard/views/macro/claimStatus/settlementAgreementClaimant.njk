@@ -70,6 +70,7 @@
 {% endmacro %}
 
 {% macro settlementAgreementRejectedClaimantClaimDetails(claim, csrf) %}
+  <div class="status-block">
     <h2 class="heading-small">{{ t('The defendant has rejected your settlement agreement') }}</h2>
     <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.') }}</p>
     <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay
@@ -78,7 +79,8 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         {{ linkButton('Request a County Court Judgment (CCJ)', '', 'button button-secondary') }}
-      </form>
+        </form>
+  </div>
 {% endmacro %}
 
 {% macro requestCCJ(claim) %}
