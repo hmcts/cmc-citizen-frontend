@@ -185,10 +185,11 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
           {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}
         {% elif claim.response.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedFreeMediationNOForDefendantClaimDetails(claim) }}
-        {% elif not claim.settlement and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
-          {{ _settleOutOfCourtOption (claim) }}
         {% else %}
           {{ claimRejectedFreeMediationYESForDefendantClaimDetails(claim) }}
+        {% endif %}
+        {% if not claim.settlement and claim.response.defenceType !== DefenceType.ALREADY_PAID %}
+          {{ _settleOutOfCourtOption (claim) }}
         {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if claim.response.paymentDeclaration %}
@@ -220,8 +221,10 @@ claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus %}
 {% endmacro %}
 
 {% macro _settleOutOfCourtOption (claim) %}
-  <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-  <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
-      { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
-  <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
+    <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
+        { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+    <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
+  </div>
 {% endmacro %}
