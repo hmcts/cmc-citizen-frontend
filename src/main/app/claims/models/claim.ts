@@ -244,7 +244,7 @@ export class Claim {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
     } else if (this.isOfferAccepted() && !this.isSettlementReached() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
-    } else if (this.isOfferSubmitted() && !this.isSettlementReached() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
+    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
