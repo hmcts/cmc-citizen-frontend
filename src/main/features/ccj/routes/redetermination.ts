@@ -9,8 +9,6 @@ import { User } from 'idam/user'
 import { CCJClient } from 'claims/ccjClient'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { MadeBy } from 'offer/form/models/madeBy'
-import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function renderView (form: Form<ReDetermination>, req: express.Request, res: express.Response): void {
@@ -19,29 +17,17 @@ function renderView (form: Form<ReDetermination>, req: express.Request, res: exp
 
   if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
     const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-    paymentIntention = {
-      repaymentPlan: ccjRepaymentPlan && {
-        instalmentAmount: ccjRepaymentPlan.instalmentAmount,
-        firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
-        paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
-        completionDate: ccjRepaymentPlan.completionDate,
-        paymentLength: ccjRepaymentPlan.paymentLength
-      } as CoreRepaymentPlan,
-      paymentDate: claim.countyCourtJudgment.payBySetDate,
-      paymentOption: claim.countyCourtJudgment.paymentOption
-    } as PaymentIntention
+    paymentIntention = PaymentIntention.retrievePaymentIntention(ccjRepaymentPlan, claim)
 
   } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
     paymentIntention = claim.settlement.getLastOffer().paymentIntention
   }
 
-  const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
-
   res.render(Paths.redeterminationPage.associatedView, {
     form: form,
     claim: claim,
     paymentIntention: paymentIntention,
-    remainingAmountToPay: claim.totalAmountTillDateOfIssue - amountPaid,
+    remainingAmountToPay: claim.totalAmountTillDateOfIssue - claim.amountPaid(),
     madeBy: req.params.madeBy
   })
 }
