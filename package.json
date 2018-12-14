@@ -27,7 +27,7 @@
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.51.2",
+    "@hmcts/cmc-common-frontend": "^1.52.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/cmc-validators": "^0.2.0",
     "@hmcts/draft-store-client": "^1.1.1",
