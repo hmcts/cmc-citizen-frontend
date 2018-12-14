@@ -15,6 +15,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const heading: string = 'Enter organisation details'
 const input = {
   name: 'Anirudha Inc.',
   type: 'organisation',
@@ -37,7 +38,7 @@ describe('claimant as organisation details page', () => {
       await request(app)
         .get(ClaimPaths.claimantOrganisationDetailsPage.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Organisation details'))
+        .expect(res => expect(res).to.be.successful.withText(heading))
     })
   })
 
@@ -57,7 +58,7 @@ describe('claimant as organisation details page', () => {
           .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(nameMissingInput)
-          .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter name'))
+          .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter name'))
       })
       describe('should render page with error when address is invalid', () => {
         beforeEach(() => {
@@ -69,7 +70,7 @@ describe('claimant as organisation details page', () => {
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter first address line'))
+            .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter first address line'))
         })
         it('postcode is missing', async () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -77,7 +78,7 @@ describe('claimant as organisation details page', () => {
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter postcode'))
+            .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter postcode'))
         })
       })
 
@@ -91,7 +92,7 @@ describe('claimant as organisation details page', () => {
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter first correspondence address line'))
+            .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter first correspondence address line'))
         })
         it('postcode is missing', async () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
@@ -99,7 +100,7 @@ describe('claimant as organisation details page', () => {
             .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter correspondence address postcode'))
+            .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"', 'Enter correspondence address postcode'))
         })
       })
 
