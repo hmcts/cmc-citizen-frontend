@@ -11,7 +11,7 @@
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission.') }}</h2>
     <p>{{ t('They said they owe {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
 
-    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {% if claim.claimantResponse.freeMediation === true %}
       <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
       {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
     {% else %}
