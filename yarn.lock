@@ -1582,9 +1582,9 @@ config-chain@^1.1.11:
     ini "^1.3.4"
     proto-list "~1.2.1"
 
-config@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/config/-/config-3.0.0.tgz#a71cdbb22d225df9eff20b95178d65a63c452367"
+config@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/config/-/config-3.0.1.tgz#c3118e2eb45fdfd135277339f87e2492559cb147"
   dependencies:
     json5 "^1.0.1"
 
