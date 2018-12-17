@@ -91,9 +91,15 @@
 
 {% if draft.statementOfMeans.dependants.declared %}
   {% set noOfKids = draft.statementOfMeans.dependants.numberOfChildren %}
-  {{ row('Under 11', noOfKids.under11 | default('0'), '', not (noOfKids.between11and15 or noOfKids.between16and19), bold = true) }}
-  {{ row('11 to 15', noOfKids.between11and15 | default('0'), '', not noOfKids.between16and19, bold = true) }}
-  {{ row('16 to 19', noOfKids.between16and19 | default('0'), '', bold = true) }}
+  {% if noOfKids.under11 %}
+    {{ row('Under 11', noOfKids.under11 | default('0'), '', not (noOfKids.between11and15 != undefined or noOfKids.between16and19 != undefined), bold = true) }}
+  {% endif %}
+  {% if noOfKids.between11and15 %}
+    {{ row('11 to 15', noOfKids.between11and15 | default('0'), '', not (noOfKids.between16and19 != undefined), bold = true) }}
+  {% endif %}
+  {% if noOfKids.between16and19 %}
+    {{ row('16 to 19', noOfKids.between16and19 | default('0'), '', bold = true) }}
+  {% endif %}
 
   {% if draft.statementOfMeans.education.value %}
     {{ row('Number of children aged 16 to 19 full-time education or training', draft.statementOfMeans.education.value, bold = true, StatementOfMeansPaths.educationPage.evaluateUri({ externalId: claim.externalId })) }}
