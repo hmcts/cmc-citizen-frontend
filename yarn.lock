@@ -3587,9 +3587,9 @@ i18next-sprintf-postprocessor@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/i18next-sprintf-postprocessor/-/i18next-sprintf-postprocessor-0.2.2.tgz#2e409f1043579382698b6a2da70cdaa551d67ea4"
 
-i18next@^12.1.0:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-12.1.0.tgz#387bf4b94d05b0160b6a41d001a6b360e384bdb1"
+i18next@^13.0.0:
+  version "13.0.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-13.0.0.tgz#3d8de7ff3c2cf23cd6d91c4d5861c4756d8a73c6"
 
 iconv-lite@0.4.19, iconv-lite@^0.4.17, iconv-lite@~0.4.13:
   version "0.4.19"
