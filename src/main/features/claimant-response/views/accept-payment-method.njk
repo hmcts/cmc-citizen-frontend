@@ -15,8 +15,8 @@
         {{ csrfProtection(csrf) }}
 
         {% if paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-        <p>{{ t('{{ defendantFullName }} has offered to pay you in full by {{ paymentDate }}.', { defendantFullName: claim.claimData.defendant.name, paymentDate: paymentDate | date }) }}</p>
-        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS and paymentPlan is defined %}
+          <p>{{ t('{{ defendantFullName }} has offered to pay you in full by {{ paymentDate }}.', { defendantFullName: claim.claimData.defendant.name, paymentDate: paymentDate | date }) }}</p>
+        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS %}
           {{
           repaymentPlanBlock(
             heading = '',
