@@ -34,7 +34,7 @@ export default express.Router()
   .get(Paths.confirmationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
-      const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(res.locals.claim)
+      const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
       res.render(
         Paths.confirmationPage.associatedView,
