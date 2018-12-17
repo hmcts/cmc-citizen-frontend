@@ -67,13 +67,16 @@
         <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
         <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+        {% if claim.directionsQuestionnaireDeadline %}
         <p>
           {{ t('You need to')}}
           <a href="{{ DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }}">
-             {{ t('complete a directions questionnaire form ')}}</a> {{ t('to tell us more about the claim.')}}
+            {{ t('complete a directions questionnaire form ')}}</a> {{ t('to tell us more about the claim.')}}
         </p>
         <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
-            { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+            { deadline: claim.directionsQuestionnaireDeadline | date }) }}
+        </p>
+        {% endif %}
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}
