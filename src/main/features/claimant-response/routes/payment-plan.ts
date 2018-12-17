@@ -93,7 +93,9 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     if (decisionType === DecisionType.DEFENDANT) {
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        const paymentPlanWhenNoDisposableIncome: PaymentPlan = defendantPaymentPlan.convertTo(defendantPaymentPlan.frequency, claimantEnteredPaymentPlan.startDate)
+        const paymentPlanWhenNoDisposableIncome: PaymentPlan = defendantPaymentPlan.convertTo(
+          defendantPaymentPlan.frequency,
+          claimantEnteredPaymentPlan.startDate)
 
         if (paymentPlanFromDefendantFinancialStatement.instalmentAmount === 0) {
           courtOfferedPaymentIntention.repaymentPlan = {
