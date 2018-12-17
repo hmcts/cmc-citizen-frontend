@@ -87,7 +87,7 @@ describe('claimant response converter ', () => {
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'REJECTION',
         'amountPaid': 10,
-        'freeMediation': true,
+        'freeMediation': 'yes',
         'reason': 'Rejection reason is..'
       })
 
@@ -100,7 +100,7 @@ describe('claimant response converter ', () => {
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'REJECTION',
         'amountPaid': 10,
-        'freeMediation': true,
+        'freeMediation': 'yes',
         'reason': 'rejected'
       })
     })
@@ -119,7 +119,7 @@ describe('claimant response converter ', () => {
       expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
         'type': 'REJECTION',
         'amountPaid': 0,
-        'freeMediation': true,
+        'freeMediation': 'yes',
         'reason': 'Rejection reason is..'
       })
     })
