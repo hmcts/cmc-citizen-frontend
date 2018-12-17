@@ -39,9 +39,11 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtOfferedPaymentIntention = new PaymentIntention()
     const totalClaimAmount: number = AmountHelper.calculateTotalAmount(claim,draft)
+    const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
+    const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
+    const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
 
       courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
 
@@ -67,7 +69,6 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     }
 
     if (decisionType === DecisionType.COURT) {
-      const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
       const defendantFrequency: Frequency = Frequency.of(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
 
       if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
@@ -92,12 +93,9 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     if (decisionType === DecisionType.DEFENDANT) {
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
-        const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
-        const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
         const paymentPlanWhenNoDisposableIncome: PaymentPlan = defendantPaymentPlan.convertTo(defendantPaymentPlan.frequency, claimantEnteredPaymentPlan.startDate)
 
-        if (courtCalculatedPaymentPlan.instalmentAmount === 0) {
+        if (paymentPlanFromDefendantFinancialStatement.instalmentAmount === 0) {
           courtOfferedPaymentIntention.repaymentPlan = {
             firstPaymentDate: paymentPlanWhenNoDisposableIncome.startDate,
             instalmentAmount: _.round(paymentPlanWhenNoDisposableIncome.instalmentAmount, 2),
