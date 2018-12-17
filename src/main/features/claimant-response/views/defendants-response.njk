@@ -148,11 +148,8 @@
           {% endif %}
         {% elseif page === 1 %}
           {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-            {{
-              repaymentPlanBlock(
-                heading = 'How they want to pay',
-                repaymentPlan = claim.response.paymentIntention.repaymentPlan
-              )}}
+            <p>{{ t('The defendant suggested this repayment plan:') }}</p>
+            {{ repaymentPlanBlock(repaymentPlan = claim.response.paymentIntention.repaymentPlan) }}
 
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
 
