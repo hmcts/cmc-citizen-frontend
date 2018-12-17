@@ -92,8 +92,23 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     if (decisionType === DecisionType.DEFENDANT) {
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
-        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        const courtCalculatedPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
+        const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
+        const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
+        const paymentPlanWhenNoDisposableIncome: PaymentPlan = defendantPaymentPlan.convertTo(defendantPaymentPlan.frequency, claimantEnteredPaymentPlan.startDate)
+
+        if (courtCalculatedPaymentPlan.instalmentAmount === 0) {
+          courtOfferedPaymentIntention.repaymentPlan = {
+            firstPaymentDate: paymentPlanWhenNoDisposableIncome.startDate,
+            instalmentAmount: _.round(paymentPlanWhenNoDisposableIncome.instalmentAmount, 2),
+            paymentSchedule: Frequency.toPaymentSchedule(paymentPlanWhenNoDisposableIncome.frequency),
+            completionDate: paymentPlanWhenNoDisposableIncome.calculateLastPaymentDate(),
+            paymentLength: paymentPlanWhenNoDisposableIncome.calculatePaymentLength()
+          }
+        } else {
+          courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
+          courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        }
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
