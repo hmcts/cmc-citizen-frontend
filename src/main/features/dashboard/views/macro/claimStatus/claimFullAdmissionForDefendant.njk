@@ -4,8 +4,6 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, viewAndRespondOffer %}
 
 {% macro claimFullAdmissionForDefendantDashboard(claim) %}
-
-  {% if claim.claimData.defendant.isBusiness() %}
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
       {{ t('You’ve admitted all of the claim and said you’ll pay the full amount immediately.') }}
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
@@ -13,17 +11,6 @@
     {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       {{ t('You’ve admitted the claim and offered to pay in instalments.') }}
     {% endif %}
-  {% else %}
-    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-      {{ t('You’ve admitted all of the claim and said you’ll pay the full amount immediately.') }}
-    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      {{ t('You’ve admitted all of the claim and offered to pay the full amount by {{ paymentDate }}.',
-        { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
-    {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-      {{ t('You’ve admitted all of the claim and offered to pay the full amount in instalments.') }}
-    {% endif %}
-  {% endif %}
-
 {% endmacro %}
 
 {% macro claimFullAdmissionForDefendantClaimDetails(claim) %}
