@@ -238,8 +238,8 @@ export class Claim {
     if (this.eligibleForCCJAfterBreachedSettlement) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
-    if (this.isPaidInFullEligible()) {
-      statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
+    if (this.isPaidInFullLinkEligible()) {
+      statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
     return statuses
   }
@@ -249,7 +249,7 @@ export class Claim {
       (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
-  private isPaidInFullEligible (): boolean {
+  private isPaidInFullLinkEligible (): boolean {
     if (this.moneyReceivedOn || (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt)) {
       return false
     }
