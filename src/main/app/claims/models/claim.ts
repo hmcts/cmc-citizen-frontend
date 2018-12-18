@@ -262,7 +262,7 @@ export class Claim {
       return true
     }
 
-    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission()) {
+    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasRedeterminationBeenRequested()) {
       return true
     }
 
