@@ -446,9 +446,8 @@ describe('Claim', () => {
       }
       claim.claimantResponse = rejectionClaimantResponseData
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if claimant rejects company response', () => {
@@ -465,9 +464,8 @@ describe('Claim', () => {
         defendant: new Company().deserialize(organisation)
       }
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {

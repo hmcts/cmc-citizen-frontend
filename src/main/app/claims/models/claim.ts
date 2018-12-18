@@ -250,15 +250,28 @@ export class Claim {
   }
 
   private isPaidInFullEligible (): boolean {
-    if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
-      if (this.isOfferSubmitted() || this.isResponseSubmitted() || (this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY)
-        && !(this.admissionPayImmediatelyPastPaymentDate) && !(this.isSettlementReachedThroughAdmission()) || !this.response) {
-        if (!(this.countyCourtJudgmentRequestedAt && (this.hasClaimantSuggestedAlternativePlanWithCCJ() || this.hasClaimantAcceptedAdmissionWithCCJ()))) {
-          return true
-        }
-      }
+    if (this.moneyReceivedOn || (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt)) {
+      return false
     }
-    return false
+
+    if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
+      return true
+    }
+
+    if (this.isResponseSubmitted() && (this.response.responseType === ResponseType.FULL_DEFENCE || this.response.responseType === ResponseType.PART_ADMISSION)) {
+      return true
+    }
+
+    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission()) {
+      return true
+    }
+
+    if (this.claimantResponse && (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE) {
+      return true
+    }
+
+    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY && !this.isSettlementReachedThroughAdmission()
+      && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
   }
 
   private isResponseSubmitted (): boolean {
