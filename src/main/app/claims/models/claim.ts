@@ -228,11 +228,11 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions()) {
+    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
-    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions()) {
+    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
-    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
+    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
     if (this.eligibleForCCJAfterBreachedSettlement) {
@@ -376,5 +376,9 @@ export class Claim {
   private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
       this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
+  }
+
+  public amountPaid () {
+    return this.claimantResponse && this.claimantResponse.amountPaid ? this.claimantResponse.amountPaid : 0
   }
 }
