@@ -43,7 +43,6 @@ function defendantIsCounterClaiming (draft: Draft<ResponseDraft>): boolean {
 }
 
 function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
-  // const responseType: ResponseType = draft.document.response.type
   return !defendantIsCounterClaiming(draft)
 }
 
