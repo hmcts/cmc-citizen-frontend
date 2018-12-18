@@ -17,12 +17,13 @@ export class ClaimantResponseConverter {
   public static convertToClaimantResponse (draftClaimantResponse: DraftClaimantResponse): ClaimantResponse {
     if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
+
       if (draftClaimantResponse.paidAmount) {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
       }
-      if (draftClaimantResponse.freeMediation) {
-        reject.freeMediation = FreeMediationUtil.convertFreeMediation(draftClaimantResponse.freeMediation)
-      }
+
+      reject.freeMediation = FreeMediationUtil.convertFreeMediation(draftClaimantResponse.freeMediation)
+
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
