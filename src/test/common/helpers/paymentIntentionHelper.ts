@@ -138,6 +138,12 @@ describe('PaymentIntentionHelper', () => {
     it('should return payment intention with monthly instalments when claimant asks to pay immediately', () => {
       expect(PaymentOptionPage.generateCourtOfferedPaymentIntention(draftClaimantResponseImmediately, claimWithDefendantPayBySetDateResponse, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EVERY_MONTH)
     })
+
+    it('should return payment intention with payment option as pay by set date', () => {
+      const paymentIntention: PaymentIntention = PaymentDatePage.generateCourtOfferedPaymentIntention(draftClaimantResponsePayBySetDate, claimWithDefendantInstalmentsResponse, DecisionType.COURT)
+      expect(paymentIntention.paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
+      expect(paymentIntention.paymentDate.toISOString()).to.be.equal(MomentFactory.parse('2019-03-16').toISOString())
+    })
   })
 
   context('getCourtDecision', () => {
