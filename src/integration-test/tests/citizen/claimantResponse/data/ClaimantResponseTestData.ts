@@ -24,6 +24,7 @@ export class ClaimantResponseTestData {
 
   isExpectingToSeeHowTheyWantToPayPage: boolean = false
   isExpectingToSeeCourtOfferedInstalmentsPage: boolean = false
+  shouldPaySome: boolean = false
   pageSpecificValues: PageSpecificValues = {
     paymentDatePageEnterDate: '2025-01-01',
     paymentPlanPageEnterRepaymentPlan: {

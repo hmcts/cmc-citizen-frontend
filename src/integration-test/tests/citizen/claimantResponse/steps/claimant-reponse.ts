@@ -33,48 +33,50 @@ const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
 const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
 const courtOfferedInstalmentsPage: ClaimantCourtOfferedInstalmentsPage = new ClaimantCourtOfferedInstalmentsPage()
 const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
-const defendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
+const claimantDefendantResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
 const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
 const freeMediationPage: ClaimantFreeMediationPage = new ClaimantFreeMediationPage()
 
 export class ClaimantResponseSteps {
 
-  acceptSettlementFromDashboardWhenRejectPaymentMethod (
+  signSettlementFromDashboardWhenRejectPaymentMethod (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData,
     buttonText: string
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptSettlementWithClaimantPaymentOption(testData, claimantResponseTestData)
+    this.signSettlementWithClaimantPaymentOption(testData, claimantResponseTestData)
   }
 
-  acceptSettlementFromDashboardWhenAcceptPaymentMethod (
+  signSettlementFromDashboardWhenAcceptPaymentMethod (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData,
     buttonText: string
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptSettlement(testData, claimantResponseTestData)
+    this.signSettlementWithDefendantPaymentOption(testData, claimantResponseTestData)
   }
 
-  acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod (
+  requestCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod (
     testData: EndToEndTestData,
+    claimantResponseTestData: ClaimantResponseTestData,
     buttonText: string
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(false)
+    this.requestCCJ(testData, claimantResponseTestData)
   }
 
-  acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
+  requestCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
     testData: EndToEndTestData,
+    claimantResponseTestData: ClaimantResponseTestData,
     buttonText: string
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(true)
+    this.requestCCJ(testData, claimantResponseTestData)
   }
 
   viewClaimFromDashboard (claimRef: string): void {
@@ -93,9 +95,9 @@ export class ClaimantResponseSteps {
   ): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    claimantDefendantResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
-      defendantsResponsePage.submitHowTheyWantToPay()
+      claimantDefendantResponsePage.submitHowTheyWantToPay()
     }
     I.see('COMPLETED')
     if (!testData.defendantClaimsToHavePaidInFull) {
@@ -107,15 +109,15 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  acceptSettlement (
+  signSettlementWithDefendantPaymentOption (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    claimantDefendantResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
-      defendantsResponsePage.submitHowTheyWantToPay()
+      claimantDefendantResponsePage.submitHowTheyWantToPay()
     }
     I.see('COMPLETED')
     if (!testData.defendantClaimsToHavePaidInFull) {
@@ -135,15 +137,15 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  acceptSettlementWithClaimantPaymentOption (
+  signSettlementWithClaimantPaymentOption (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    claimantDefendantResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
-      defendantsResponsePage.submitHowTheyWantToPay()
+      claimantDefendantResponsePage.submitHowTheyWantToPay()
     }
     I.see('COMPLETED')
     if (!testData.defendantClaimsToHavePaidInFull) {
@@ -183,17 +185,27 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  acceptCCJ (shouldPaySome: boolean): void {
+  requestCCJ (testData: EndToEndTestData, claimantResponseTestData: ClaimantResponseTestData): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
-    I.click('Continue')
+    claimantDefendantResponsePage.submit()
+    if (claimantResponseTestData &&
+      claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
+      claimantDefendantResponsePage.submitHowTheyWantToPay()
+    }
     I.see('COMPLETED')
+
+    if (!testData.defendantClaimsToHavePaidInFull) {
+      taskListPage.selectAcceptOrRejectSpecificAmount(50)
+      settleAdmittedPage.selectAdmittedYes()
+    }
+
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseYes()  // no is covered in settlement journey
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
     chooseHowToProceedPage.chooseRequestCcj()
     taskListPage.selectTaskRequestCountyCourtJudgment()
-    if (shouldPaySome) {
+    if (claimantResponseTestData.shouldPaySome) {
       ccjPaidAnyMoneyPage.paidSome(10)
     } else {
       ccjPaidAnyMoneyPage.notPaidSome()

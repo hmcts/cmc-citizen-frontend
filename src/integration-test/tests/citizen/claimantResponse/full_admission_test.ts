@@ -43,7 +43,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
+    claimantResponseSteps.signSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve signed a settlement agreement')
@@ -62,7 +62,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
+    claimantResponseSteps.signSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     confirmationPage.clickGoToYourAccount()
@@ -80,7 +80,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
+    claimantResponseSteps.signSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve proposed a different repayment plan')
@@ -99,7 +99,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
+    claimantResponseSteps.signSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve proposed a different repayment plan')
@@ -116,7 +116,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData, 'View and respond to the offer')
+    claimantResponseSteps.requestCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(testData, null, 'View and respond to the offer')
     I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
@@ -131,7 +131,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData, 'View and respond to the offer')
+    claimantResponseSteps.requestCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod(testData, null, 'View and respond to the offer')
     I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)

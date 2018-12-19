@@ -9,6 +9,7 @@ import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantRes
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from './data/ClaimantResponseTestData'
+import { PaidInFullSteps } from 'integration-test/tests/citizen/dashboard/steps/paid-in-full'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -56,7 +57,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    claimantResponseSteps.signSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve signed a settlement agreement')
@@ -79,7 +80,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    claimantResponseSteps.signSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve signed a settlement agreement')
@@ -103,7 +104,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    claimantResponseSteps.signSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve signed a settlement agreement')
@@ -112,26 +113,55 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @citizen @admissions', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by set date but request CCJ @citizen @admissions', async (I: I) => {
 
-    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-    testData.paymentOption = PaymentOption.BY_SET_DATE
-    testData.defenceType = DefenceType.PART_ADMISSION
-    testData.claimantPaymentOption = PaymentOption.INSTALMENTS
-    testData.defendantClaimsToHavePaidInFull = false
+    const defendantPartAdmissionPayingBySetDate = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    defendantPartAdmissionPayingBySetDate.paymentOption = PaymentOption.BY_SET_DATE
+    defendantPartAdmissionPayingBySetDate.defenceType = DefenceType.PART_ADMISSION
+    defendantPartAdmissionPayingBySetDate.defendantClaimsToHavePaidInFull = false
     const claimantResponseTestData = new ClaimantResponseTestData()
+    const paidInFullSteps: PaidInFullSteps = new PaidInFullSteps()
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     // as defendant
-    helperSteps.finishResponse(testData)
+    helperSteps.finishResponse(defendantPartAdmissionPayingBySetDate)
     I.click('Sign out')
     // as claimant
-    userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
-    checkAndSendPage.verifyFactsForSettlement()
-    checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve proposed a different repayment plan')
+    userSteps.login(defendantPartAdmissionPayingBySetDate.claimantEmail)
+    claimantResponseSteps.requestCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(
+        defendantPartAdmissionPayingBySetDate, claimantResponseTestData,'View and respond')
+    I.see('County Court Judgment requested')
     confirmationPage.clickGoToYourAccount()
-    I.see(testData.claimRef)
-    I.see('You’ve signed a settlement agreement.')
+    I.click(defendantPartAdmissionPayingBySetDate.claimRef)
+    I.see(defendantPartAdmissionPayingBySetDate.claimRef)
+    I.see('Tell us you’ve been paid')
+    I.click('Tell us you’ve been paid')
+    paidInFullSteps.inputDatePaid('2017-01-01')
+    I.see('The claim is now settled')
+  })
+
+  Scenario('I can as a claimant accept the defendants part admission by installments but request CCJ @citizen @admissions', async (I: I) => {
+
+    const defendantPartAdmissionPayingByInstallments = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    defendantPartAdmissionPayingByInstallments.paymentOption = PaymentOption.INSTALMENTS
+    defendantPartAdmissionPayingByInstallments.defenceType = DefenceType.PART_ADMISSION
+    defendantPartAdmissionPayingByInstallments.defendantClaimsToHavePaidInFull = false
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    const paidInFullSteps: PaidInFullSteps = new PaidInFullSteps()
+    claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
+    // as defendant
+    helperSteps.finishResponse(defendantPartAdmissionPayingByInstallments)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(defendantPartAdmissionPayingByInstallments.claimantEmail)
+    claimantResponseSteps.requestCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod(
+        defendantPartAdmissionPayingByInstallments, claimantResponseTestData,'View and respond')
+    I.see('County Court Judgment requested')
+    confirmationPage.clickGoToYourAccount()
+    I.click(defendantPartAdmissionPayingByInstallments.claimRef)
+    I.see(defendantPartAdmissionPayingByInstallments.claimRef)
+    I.see('Tell us you’ve been paid')
+    I.click('Tell us you’ve been paid')
+    paidInFullSteps.inputDatePaid('2017-01-01')
+    I.see('The claim is now settled')
   })
 }
