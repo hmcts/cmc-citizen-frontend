@@ -86,6 +86,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
+        return courtOfferedPaymentIntention
       } else {
         const paymentPlanConvertedToMonthlyFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(Frequency.MONTHLY)
 

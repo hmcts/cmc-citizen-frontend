@@ -131,6 +131,10 @@ describe('PaymentIntentionHelper', () => {
       expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claimWithDefendantInstalmentsResponse, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EACH_WEEK)
     })
 
+    it('should return payment intention based on defendants financial statement with monthly frequency payments', () => {
+      expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claimWithDefendantPayBySetDateResponse, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EVERY_MONTH)
+    })
+
     it('should return payment intention with monthly instalments when claimant asks to pay immediately', () => {
       expect(PaymentOptionPage.generateCourtOfferedPaymentIntention(draftClaimantResponseImmediately, claimWithDefendantPayBySetDateResponse, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EVERY_MONTH)
     })
