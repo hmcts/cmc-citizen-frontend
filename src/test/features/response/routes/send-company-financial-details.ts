@@ -88,6 +88,7 @@ describe('Defendant company response', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
+            .send({ companyDefendantResponseViewed: true })
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
@@ -99,6 +100,7 @@ describe('Defendant company response', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
+            .send({ companyDefendantResponseViewed: true })
             .expect(res => expect(res).to.be.redirect
               .toLocation(Paths.taskListPage
                 .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
