@@ -136,22 +136,22 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim) {
     const courtCalculatedPaymentIntention = new PaymentIntention()
-    const paymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
-    if (!paymentPlan) {
+    const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
+    if (!paymentPlanFromDefendantFinancialStatement) {
       return undefined
     }
 
-    if (paymentPlan.startDate.isSame(MomentFactory.maxDate())) {
+    if (paymentPlanFromDefendantFinancialStatement.startDate.isSame(MomentFactory.maxDate())) {
       courtCalculatedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       courtCalculatedPaymentIntention.paymentDate = MomentFactory.maxDate()
     } else {
       courtCalculatedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
       courtCalculatedPaymentIntention.repaymentPlan = {
-        firstPaymentDate: paymentPlan.startDate,
-        instalmentAmount: _.round(paymentPlan.instalmentAmount,2),
-        paymentSchedule: Frequency.toPaymentSchedule(paymentPlan.frequency),
-        completionDate: paymentPlan.calculateLastPaymentDate(),
-        paymentLength: paymentPlan.calculatePaymentLength()
+        firstPaymentDate: paymentPlanFromDefendantFinancialStatement.startDate,
+        instalmentAmount: _.round(paymentPlanFromDefendantFinancialStatement.instalmentAmount,2),
+        paymentSchedule: Frequency.toPaymentSchedule(paymentPlanFromDefendantFinancialStatement.frequency),
+        completionDate: paymentPlanFromDefendantFinancialStatement.calculateLastPaymentDate(),
+        paymentLength: paymentPlanFromDefendantFinancialStatement.calculatePaymentLength()
       }
     }
     return courtCalculatedPaymentIntention
