@@ -58,7 +58,7 @@
   {% if statementOfMeansIsApplicable %}
     {{
       row(
-        label = 'Why you can’t pay now',
+        label = 'Briefly explain why you can’t pay immediately',
         value = explanation,
         changeLink = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: externalId }),
         bold = true
