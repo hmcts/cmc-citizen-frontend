@@ -113,6 +113,29 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement.')
   })
 
+  Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @citizen @admissions', async (I: I) => {
+
+    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    testData.paymentOption = PaymentOption.BY_SET_DATE
+    testData.defenceType = DefenceType.PART_ADMISSION
+    testData.claimantPaymentOption = PaymentOption.INSTALMENTS
+    testData.defendantClaimsToHavePaidInFull = false
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
+    // as defendant
+    helperSteps.finishResponse(testData)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.signSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.see('You’ve proposed a different repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement.')
+  })
+
   Scenario('I can as a claimant accept the defendants part admission by set date but request CCJ @citizen @admissions', async (I: I) => {
 
     const defendantPartAdmissionPayingBySetDate = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
