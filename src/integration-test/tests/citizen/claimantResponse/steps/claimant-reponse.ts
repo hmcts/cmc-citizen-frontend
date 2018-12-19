@@ -205,7 +205,8 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
     chooseHowToProceedPage.chooseRequestCcj()
     taskListPage.selectTaskRequestCountyCourtJudgment()
-    if (claimantResponseTestData.shouldPaySome) {
+    if (claimantResponseTestData &&
+      claimantResponseTestData.shouldPaySome) {
       ccjPaidAnyMoneyPage.paidSome(10)
     } else {
       ccjPaidAnyMoneyPage.notPaidSome()
