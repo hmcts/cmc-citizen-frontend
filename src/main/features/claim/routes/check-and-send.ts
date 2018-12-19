@@ -68,10 +68,10 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
 }
 
 function getStatementOfTruthClassFor (draft: Draft<DraftClaim>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
-  if (draft.document.claimant.partyDetails.isBusiness()) {
-    return QualifiedStatementOfTruth
-  } else {
+  if (draft.document.claimant.partyDetails.isIndividual()) {
     return StatementOfTruth
+  } else {
+    return QualifiedStatementOfTruth
   }
 }
 
@@ -117,7 +117,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         businessName: getBusinessName(draft.document.claimant.partyDetails),
         dateOfBirth: getDateOfBirth(draft.document.claimant.partyDetails),
         defendantBusinessName: getBusinessName(draft.document.defendant.partyDetails),
-        partyAsCompanyOrOrganisation: draft.document.claimant.partyDetails.isBusiness(),
+        partyAsCompanyOrOrganisation: !draft.document.claimant.partyDetails.isIndividual(),
         claimantPartyDetailsPageUri: getClaimantPartyDetailsPageUri(draft.document.claimant.partyDetails),
         defendantPartyDetailsPageUri: getDefendantPartyDetailsPageUri(draft.document.defendant.partyDetails),
         paths: Paths,

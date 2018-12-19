@@ -76,4 +76,8 @@ export class PartyDetails {
   isBusiness (): boolean {
     return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
   }
+
+  isIndividual (): boolean {
+    return this.type === PartyType.INDIVIDUAL.value
+  }
 }
