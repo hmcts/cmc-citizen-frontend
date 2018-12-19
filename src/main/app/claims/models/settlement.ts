@@ -40,6 +40,17 @@ export class Settlement {
     return partyStatement ? partyStatement.offer : undefined
   }
 
+  isLastOfferMadeByCourt (): boolean {
+    if (!this.partyStatements) {
+      return undefined
+    }
+
+    const partyStatement: PartyStatement = this.partyStatements.reverse()
+      .find(statement => statement.type === StatementType.OFFER.value)
+
+    return partyStatement ? partyStatement.madeBy === MadeBy.COURT.value : undefined
+  }
+
   isOfferAccepted (): boolean {
     if (!this.partyStatements) {
       return false

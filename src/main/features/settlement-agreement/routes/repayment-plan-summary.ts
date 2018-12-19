@@ -10,13 +10,14 @@ import { PaymentIntention } from 'main/app/claims/models/response/core/paymentIn
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   let paymentIntention: PaymentIntention = claim.settlement.getLastOffer().paymentIntention
-
+  let isPaymentIntentionMadeByCourt: boolean = claim.settlement.isLastOfferMadeByCourt()
   const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
 
   res.render(Paths.repaymentPlanSummary.associatedView, {
     form: form,
     claim: claim,
     paymentIntention: paymentIntention,
+    isPaymentIntentionMadeByCourt: isPaymentIntentionMadeByCourt,
     remainingAmountToPay: claim.totalAmountTillDateOfIssue - amountPaid,
     requestedBy: req.params.madeBy
   })
