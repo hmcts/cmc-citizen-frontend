@@ -101,18 +101,18 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     if (decisionType === DecisionType.DEFENDANT) {
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        const paymentPlanWhenNoDisposableIncome: PaymentPlan = defendantPaymentPlan.convertTo(
-          defendantPaymentPlan.frequency,
-          claimantEnteredPaymentPlan.startDate)
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
 
         if (paymentPlanFromDefendantFinancialStatement.instalmentAmount === 0) {
+          const defendantPaymentPlanWithClaimantStartDate: PaymentPlan = defendantPaymentPlan.convertTo(
+            defendantPaymentPlan.frequency,
+            claimantEnteredPaymentPlan.startDate)
           courtOfferedPaymentIntention.repaymentPlan = {
-            firstPaymentDate: paymentPlanWhenNoDisposableIncome.startDate,
-            instalmentAmount: _.round(paymentPlanWhenNoDisposableIncome.instalmentAmount, 2),
-            paymentSchedule: Frequency.toPaymentSchedule(paymentPlanWhenNoDisposableIncome.frequency),
-            completionDate: paymentPlanWhenNoDisposableIncome.calculateLastPaymentDate(),
-            paymentLength: paymentPlanWhenNoDisposableIncome.calculatePaymentLength()
+            firstPaymentDate: defendantPaymentPlanWithClaimantStartDate.startDate,
+            instalmentAmount: _.round(defendantPaymentPlanWithClaimantStartDate.instalmentAmount, 2),
+            paymentSchedule: Frequency.toPaymentSchedule(defendantPaymentPlanWithClaimantStartDate.frequency),
+            completionDate: defendantPaymentPlanWithClaimantStartDate.calculateLastPaymentDate(),
+            paymentLength: defendantPaymentPlanWithClaimantStartDate.calculatePaymentLength()
           }
         } else {
           courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
