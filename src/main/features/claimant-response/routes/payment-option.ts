@@ -40,12 +40,8 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     const admittedClaimAmount: number = AdmissionHelper.getAdmittedAmount(claim)
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
-      if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.IMMEDIATELY) {
-        courtOfferedPaymentIntention.paymentOption = PaymentOption.IMMEDIATELY
-        courtOfferedPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
-        return courtOfferedPaymentIntention
-      }
-      return undefined
+      courtOfferedPaymentIntention.paymentOption = PaymentOption.IMMEDIATELY
+      courtOfferedPaymentIntention.paymentDate = MomentFactory.currentDate().add(5, 'days')
     }
 
     if (decisionType === DecisionType.COURT) {
@@ -64,7 +60,6 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
         }
-        return courtOfferedPaymentIntention
       } else {
         const paymentPlanConvertedToMonthlyFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(Frequency.MONTHLY)
 
@@ -77,7 +72,6 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
           completionDate: paymentPlanConvertedToMonthlyFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToMonthlyFrequency.calculatePaymentLength()
         }
-        return courtOfferedPaymentIntention
       }
     }
 
@@ -86,18 +80,15 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
         courtOfferedPaymentIntention.paymentDate = claimResponse.paymentIntention.paymentDate
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
-        return courtOfferedPaymentIntention
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
 
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
-        return courtOfferedPaymentIntention
       }
-      return undefined
     }
-    return undefined
+    return courtOfferedPaymentIntention
   }
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {

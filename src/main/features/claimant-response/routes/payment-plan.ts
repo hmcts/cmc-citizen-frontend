@@ -62,7 +62,6 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
       } else {
         courtOfferedPaymentIntention.repaymentPlan = draft.alternatePaymentMethod.toDomainInstance().repaymentPlan
       }
-      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.COURT) {
@@ -97,7 +96,6 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
           paymentLength: paymentPlanConvertedToMonthlyFrequency.calculatePaymentLength()
         }
       }
-      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.DEFENDANT) {
@@ -125,9 +123,8 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentDate = claimResponse.paymentIntention.paymentDate
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
-
-      return courtOfferedPaymentIntention
     }
+    return courtOfferedPaymentIntention
   }
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim) {

@@ -31,7 +31,6 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentDate = draft.alternatePaymentMethod.toDomainInstance().paymentDate
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
-      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.COURT) {
@@ -42,8 +41,6 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentDate = lastPaymentDate
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
-
-      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.DEFENDANT) {
@@ -58,8 +55,8 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
       }
-      return courtOfferedPaymentIntention
     }
+    return courtOfferedPaymentIntention
   }
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim) {
