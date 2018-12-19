@@ -31,14 +31,14 @@ import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { AmountHelper } from 'claimant-response/helpers/amountHelper'
+import { AdmissionHelper } from 'shared/helpers/admissionHelper'
 
 export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
   static generateCourtOfferedPaymentIntention (draft: DraftClaimantResponse, claim: Claim, decisionType: DecisionType): PaymentIntention {
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const courtOfferedPaymentIntention = new PaymentIntention()
-    const totalClaimAmount: number = AmountHelper.calculateTotalAmount(claim,draft)
+    const admittedClaimAmount: number = AdmissionHelper.getAdmittedAmount(claim)
     const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
     const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
@@ -54,7 +54,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
         courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: instalmentAmount > totalClaimAmount ? totalClaimAmount : instalmentAmount,
+          instalmentAmount: instalmentAmount > admittedClaimAmount ? admittedClaimAmount : instalmentAmount,
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
@@ -69,22 +69,37 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     }
 
     if (decisionType === DecisionType.COURT) {
-      const defendantFrequency: Frequency = Frequency.of(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
-      const claimantRepaymentPlanStartDate: Moment = draft.alternatePaymentMethod.toDomainInstance().repaymentPlan.firstPaymentDate
-      const courtOfferedStartDate: Moment =
-          paymentPlanFromDefendantFinancialStatement.startDate < claimantRepaymentPlanStartDate ? claimantRepaymentPlanStartDate : paymentPlanFromDefendantFinancialStatement.startDate
-      const paymentPlanConvertedToDefendantFrequency: PaymentPlan =
-                      paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency, courtOfferedStartDate)
 
-      courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-      courtOfferedPaymentIntention.repaymentPlan = {
-        firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-        instalmentAmount: _.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount,2),
-        paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
-        completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
-        paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
+      if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+        const claimantRepaymentPlanStartDate: Moment = draft.alternatePaymentMethod.toDomainInstance().repaymentPlan.firstPaymentDate
+        const defendantFrequency: Frequency = Frequency.of(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
+        const courtOfferedStartDate: Moment =
+            paymentPlanFromDefendantFinancialStatement.startDate < claimantRepaymentPlanStartDate ? claimantRepaymentPlanStartDate : paymentPlanFromDefendantFinancialStatement.startDate
+        const paymentPlanConvertedToDefendantFrequency: PaymentPlan =
+                        paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency, courtOfferedStartDate)
+
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        courtOfferedPaymentIntention.repaymentPlan = {
+          firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
+          instalmentAmount: _.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount,2),
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
+          completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
+          paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
+        }
+      } else {
+        const paymentPlanConvertedToMonthlyFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(Frequency.MONTHLY)
+
+        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
+        courtOfferedPaymentIntention.repaymentPlan = {
+          firstPaymentDate: paymentPlanConvertedToMonthlyFrequency.startDate,
+          instalmentAmount: paymentPlanConvertedToMonthlyFrequency.instalmentAmount > admittedClaimAmount ?
+            admittedClaimAmount : _.round(paymentPlanConvertedToMonthlyFrequency.instalmentAmount, 2),
+          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToMonthlyFrequency.frequency),
+          completionDate: paymentPlanConvertedToMonthlyFrequency.calculateLastPaymentDate(),
+          paymentLength: paymentPlanConvertedToMonthlyFrequency.calculatePaymentLength()
+        }
+        return courtOfferedPaymentIntention
       }
-      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.DEFENDANT) {
