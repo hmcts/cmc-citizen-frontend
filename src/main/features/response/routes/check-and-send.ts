@@ -48,15 +48,11 @@ function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
 }
 
 function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
-  // tslint:disable-next-line
-  console.log('signatureTypeFor ' + isStatementOfTruthRequired(draft))
-  // tslint:disable-next-line
-  console.log('signatureTypeFor ' + claim.claimData.defendant.type)
   if (isStatementOfTruthRequired(draft)) {
-    if (claim.claimData.defendant.isIndividual()) {
-      return SignatureType.BASIC
-    } else {
+    if (claim.claimData.defendant.isBusiness(true)) {
       return SignatureType.QUALIFIED
+    } else {
+      return SignatureType.BASIC
     }
   } else {
     return SignatureType.NONE

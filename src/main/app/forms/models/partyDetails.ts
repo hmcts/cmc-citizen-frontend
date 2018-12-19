@@ -73,11 +73,8 @@ export class PartyDetails {
     return new Validator().validateSync(this, { groups: groups }).length === 0
   }
 
-  isBusiness (): boolean {
-    return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
-  }
-
-  isIndividual (): boolean {
-    return this.type === PartyType.INDIVIDUAL.value
+  isBusiness (includeSoleTrader: boolean = false): boolean {
+    return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value ||
+      (includeSoleTrader && this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
   }
 }

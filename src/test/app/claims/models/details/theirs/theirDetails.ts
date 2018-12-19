@@ -24,6 +24,26 @@ describe('TheirData', () => {
         expect(theirDetails.isBusiness()).to.equal(false)
       })
 
+      it('should return true for isBusiness when type is \'soleTrader\' and includeSoleTrade is false', () => {
+        const theirDetails = new TheirDetails().deserialize({
+          type: 'soleTrader',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        })
+        expect(theirDetails.isBusiness(false)).to.equal(false)
+      })
+
+      it('should return true for isBusiness when type is \'soleTrader\' and includeSoleTrade is true', () => {
+        const theirDetails = new TheirDetails().deserialize({
+          type: 'soleTrader',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        })
+        expect(theirDetails.isBusiness(true)).to.equal(true)
+      })
+
       it('should return true for isBusiness when type is \'company\'', () => {
         const theirDetails = new TheirDetails().deserialize({
           type: 'company',
