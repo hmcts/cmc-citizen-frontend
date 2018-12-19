@@ -12,7 +12,7 @@
         { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.claimData.amount.totalAmount() | numeral }) }}</p>
 
-    {% if claim.claimantResponse.freeMediation %}
+    {% if claim.claimantResponse.freeMediation === YesNoOption.YES %}
       <p>{{ t('They have agreed to try mediation. We’ll contact you with details of your appointment.') }}</p>
     {% else %}
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
