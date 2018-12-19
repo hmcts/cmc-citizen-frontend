@@ -162,7 +162,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('The claim is now settled')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by installments but request CCJ @citizen @admissions', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by instalments but request CCJ @citizen @admissions', async (I: I) => {
 
     const defendantPartAdmissionPayingByInstallments = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     defendantPartAdmissionPayingByInstallments.paymentOption = PaymentOption.INSTALMENTS
