@@ -27,6 +27,7 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
+import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -121,6 +122,17 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+        ) {
+          tasks.push(
+            new TaskListItem(
+              'Share your financial details',
+              Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+              ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+            )
+          )
         }
 
         if (draft.isResponseFullyAdmittedWithInstalments()) {
@@ -189,6 +201,17 @@ export class TaskListBuilder {
               'Share your financial details',
               StatementOfMeansPaths.introPage.evaluateUri({ externalId: externalId }),
               StatementOfMeansTask.isCompleted(draft)
+            )
+          )
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+          ) {
+          tasks.push(
+            new TaskListItem(
+              'Share your financial details',
+              Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+              ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
             )
           )
         }
