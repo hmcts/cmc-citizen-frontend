@@ -12,6 +12,10 @@ export class ClaimantTaskListPage {
     I.click('Accept or reject')
   }
 
+  selectTaskAcceptOrRejectSpecificAmount (amount: number): void {
+    I.click(`Accept or reject the £${Number(amount).toLocaleString()}`)
+  }
+
   selectTaskAcceptOrRejectTheirRepaymentPlan (): void {
     I.click('Accept or reject their repayment plan')
   }
@@ -38,10 +42,6 @@ export class ClaimantTaskListPage {
 
   selectProposeAnAlternativeRepaymentPlan (): void {
     I.click('Propose an alternative repayment plan')
-  }
-
-  selectAcceptOrRejectSpecificAmount (amount: number): void {
-    I.click(`Accept or reject the £${Number(amount).toLocaleString()}`)
   }
 
 }
