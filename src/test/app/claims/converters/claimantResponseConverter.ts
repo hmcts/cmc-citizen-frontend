@@ -421,7 +421,7 @@ describe('claimant response converter', () => {
     })
 
     it('If defendant is a business and claimant rejects defendant payment plan for alternative means then refer to judge', () => {
-      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.YES, undefined)
+      const draftClaimantResponse = createDraftClaimantResponseBaseForAcceptance(YesNoOption.YES, YesNoOption.YES)
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
       draftClaimantResponse.alternatePaymentMethod = payImmediatelyIntent
       draftClaimantResponse.paidAmount = undefined
