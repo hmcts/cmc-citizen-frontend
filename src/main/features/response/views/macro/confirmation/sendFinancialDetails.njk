@@ -1,0 +1,7 @@
+{% from "internalLink.njk" import internalLink %}
+
+{% macro sendFinancialDetailsForBusiness(claimantName, claimantDetailsPageURI) %}
+  <h2 class="heading-medium">{{ t('Send your financial details') }}</h2>
+  <p>{{ t('Send {{ claimantName }} your company or organisation’s most recent statement of accounts, if you haven’t already.', { claimantName: claimantName }) }}</p>
+  <p>{{ internalLink('Get ' + claimantName + '’s contact details.', claimantDetailsPageURI) }}</p>
+{% endmacro %}

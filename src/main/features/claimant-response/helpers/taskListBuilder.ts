@@ -137,7 +137,11 @@ export class TaskListBuilder {
       }
 
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (!claim.claimData.defendant.isBusiness()) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
@@ -165,7 +169,11 @@ export class TaskListBuilder {
         )
       )
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (!claim.claimData.defendant.isBusiness()) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }

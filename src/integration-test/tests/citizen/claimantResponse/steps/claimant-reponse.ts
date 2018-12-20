@@ -101,7 +101,7 @@ export class ClaimantResponseSteps {
     }
     I.see('COMPLETED')
     if (!testData.defendantClaimsToHavePaidInFull) {
-      taskListPage.selectAcceptOrRejectSpecificAmount(50)
+      taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
@@ -109,7 +109,42 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
+  acceptPartAdmitFromBusinessWithAlternativePaymentIntention (): void {
+    I.dontSee('COMPLETE')
+    taskListPage.selectTaskViewDefendantResponse()
+    claimantDefendantResponsePage.submit()
+    claimantDefendantResponsePage.submitHowTheyWantToPay() // bug
+    I.see('COMPLETED')
+    taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+    settleAdmittedPage.selectAdmittedYes()
+    taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    acceptPaymentMethodPage.chooseNo()
+    taskListPage.selectProposeAnAlternativeRepaymentPlan()
+    paymentOptionPage.chooseFullBySetDate()
+    paymentDatePage.enterDate('2024-01-01')
+    paymentDatePage.saveAndContinue()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
+  acceptFullAdmitFromBusinessWithAlternativePaymentIntention (claimantResponseTestData: ClaimantResponseTestData): void {
+    I.dontSee('COMPLETE')
+    taskListPage.selectTaskViewDefendantResponse()
+    claimantDefendantResponsePage.submit()
+    claimantDefendantResponsePage.submitHowTheyWantToPay() // bug
+    I.see('COMPLETED')
+    taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+    settleAdmittedPage.selectAdmittedYes()
+    taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    acceptPaymentMethodPage.chooseNo()
+    taskListPage.selectProposeAnAlternativeRepaymentPlan()
+    paymentOptionPage.chooseInstalments()
+    paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
+    paymentDatePage.saveAndContinue()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
   signSettlementWithDefendantPaymentOption (
+
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
@@ -121,7 +156,7 @@ export class ClaimantResponseSteps {
     }
     I.see('COMPLETED')
     if (!testData.defendantClaimsToHavePaidInFull) {
-      taskListPage.selectAcceptOrRejectSpecificAmount(50)
+      taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
       settleAdmittedPage.selectAdmittedYes()
     }
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
@@ -149,7 +184,7 @@ export class ClaimantResponseSteps {
     }
     I.see('COMPLETED')
     if (!testData.defendantClaimsToHavePaidInFull) {
-      taskListPage.selectAcceptOrRejectSpecificAmount(50)
+      taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
       settleAdmittedPage.selectAdmittedYes()
     }
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
@@ -196,7 +231,7 @@ export class ClaimantResponseSteps {
     I.see('COMPLETED')
 
     if (!testData.defendantClaimsToHavePaidInFull) {
-      taskListPage.selectAcceptOrRejectSpecificAmount(50)
+      taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
       settleAdmittedPage.selectAdmittedYes()
     }
 

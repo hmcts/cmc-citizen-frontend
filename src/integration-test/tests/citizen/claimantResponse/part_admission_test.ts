@@ -29,7 +29,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     // as defendant
-    helperSteps.finishResponse(testData)
+    helperSteps.finishResponse(testData, false)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
