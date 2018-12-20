@@ -24,7 +24,7 @@ import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { Frequency } from 'common/frequency/frequency'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
@@ -164,14 +164,15 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
     const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
-    locals.draft.document.courtDetermination.decisionType = decisionType
+    if (decisionType !== DecisionType.NOT_APPLICABLE_IS_BUSINESS) {
+      locals.draft.document.courtDetermination.decisionType = decisionType
 
-    const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-    if (courtCalculatedPaymentIntention) {
-      locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+      const courtCalculatedPaymentIntention = PaymentPlanPage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+      if (courtCalculatedPaymentIntention) {
+        locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+      }
+      locals.draft.document.courtDetermination.courtDecision = PaymentPlanPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     }
-    locals.draft.document.courtDetermination.courtDecision = PaymentPlanPage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
-
     return super.saveDraft(locals)
   }
 
@@ -182,7 +183,10 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     const claimResponse: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
+
     switch (courtDecision) {
+      case DecisionType.NOT_APPLICABLE_IS_BUSINESS:
+        return Paths.taskListPage.evaluateUri({ externalId: externalId })
       case DecisionType.COURT: {
         return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
       }
@@ -229,8 +233,10 @@ export default new PaymentPlanPage()
       const claim: Claim = res.locals.claim
       const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-      if (response.statementOfMeans === undefined) {
-        return next(new Error('Page cannot be rendered because response does not have statement of means'))
+      if (!claim.claimData.defendant.isBusiness()) {
+        if (response.statementOfMeans === undefined) {
+          return next(new Error('Page cannot be rendered because response does not have statement of means'))
+        }
       }
 
       next()
@@ -238,7 +244,6 @@ export default new PaymentPlanPage()
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
       const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-
       res.locals.monthlyIncomeAmount = response.statementOfMeans && response.statementOfMeans.incomes ? CalculateMonthlyIncomeExpense.calculateTotalAmount(
         response.statementOfMeans.incomes.map(income => IncomeExpenseSource.fromClaimIncome(income))
       ) : 0

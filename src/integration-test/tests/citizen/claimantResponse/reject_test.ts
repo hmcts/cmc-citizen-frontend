@@ -49,7 +49,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     })
 
   Scenario(
-    'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @admissions @error',
+    'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @admissions',
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)

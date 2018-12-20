@@ -15,14 +15,17 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { PartyType } from 'common/partyType'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
   if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
     return response.paymentIntention
-  } else {
+  } else if (claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
     return draft.courtDetermination.courtDecision
+  } else {
+    return draft.alternatePaymentMethod.toDomainInstance()
   }
 }
 

@@ -92,8 +92,6 @@
       {% endif %}
     {% endif %}
 
-    {% endif %}
-
     {{ tableEnd() }}
 
     {% set courtDetermination = draft.courtDetermination %}
@@ -166,7 +164,6 @@
         changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
       ) }}
       {{ tableEnd() }}
-    {% endif %}
 
     {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
@@ -236,6 +233,9 @@
 
       {{ tableEnd() }}
     {% endif %}
+
+    {% endif %}
+  {% endif %}
 
     {{ submitButton('Submit response') }}
 
