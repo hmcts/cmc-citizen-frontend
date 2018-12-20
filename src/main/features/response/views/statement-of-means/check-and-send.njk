@@ -126,7 +126,7 @@
 {% endif %}
 
 {{ row('Employment details', '', StatementOfMeansPaths.employmentPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
-{{ row('Are you currently working?', 'Yes' if draft.statementOfMeans.employment.employed else 'No', '', false, bold = true) }}
+{{ row('Do you have a job?', 'Yes' if draft.statementOfMeans.employment.employed else 'No', '', false, bold = true) }}
 {{ employmentStatus(draft.statementOfMeans) }}
 
 {% if draft.statementOfMeans.employment.employed %}
@@ -139,17 +139,17 @@
 {% endif %}
 
 {% if draft.statementOfMeans.employment.selfEmployed %}
-  {{ row('What are you self-employed as?', '', StatementOfMeansPaths.selfEmploymentPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
+  {{ row('Self employment details?', '', StatementOfMeansPaths.selfEmploymentPage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
   {{ row('Job title', draft.statementOfMeans.selfEmployment.jobTitle, '', false, bold = true ) }}
   {{ row('Annual turnover', draft.statementOfMeans.selfEmployment.annualTurnover | numeral, '', false, bold = true ) }}
-  {{ row('Are you behind on tax', 'Yes' if draft.statementOfMeans.onTaxPayments.declared else 'No', '', not draft.statementOfMeans.onTaxPayments.declared, bold = true ) }}
+  {{ row('Are you behind on tax payments?', 'Yes' if draft.statementOfMeans.onTaxPayments.declared else 'No', '', not draft.statementOfMeans.onTaxPayments.declared, bold = true ) }}
   {% if draft.statementOfMeans.onTaxPayments.declared %}
     {{ row('Amount you owe?', draft.statementOfMeans.onTaxPayments.amountYouOwe | numeral, '', false, bold = true ) }}
     {{ row('Reason', draft.statementOfMeans.onTaxPayments.reason, bold = true) }}
   {% endif %}
 {% endif %}
 
-{{ row('Are you paying money as a result of any court orders?', 'Yes' if draft.statementOfMeans.courtOrders.declared else 'No', bold = true, StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: claim.externalId }), not draft.statementOfMeans.courtOrders.declared) }}
+{{ row('Are you paying money as a result of any court orders?', 'Yes' if draft.statementOfMeans.courtOrders.declared else 'No', bold = true, StatementOfMeansPaths.courtOrdersPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
 {% set courtOrdersRows = draft.statementOfMeans.courtOrders.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = courtOrdersRows.length - 1 %}
 
@@ -197,7 +197,7 @@
   {{ row('Arrears repayment', priorityDebt.maintenance.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
 
-{{ row('Do you have loans or credit card debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = not draft.statementOfMeans.debts.declared, bold = true, topBorder = true) }}
+{{ row('Do you have loans or credit card debts?', 'Yes' if draft.statementOfMeans.debts.declared else 'No', StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
 {% set debtRows = draft.statementOfMeans.debts.getPopulatedRowsOnly() %}
 {% set indexOfLastRow = debtRows.length - 1 %}
 
@@ -213,7 +213,7 @@
 {% endfor %}
 
 {% set expenses = draft.statementOfMeans.monthlyExpenses %}
-{{ row('Monthly expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
+{{ row('Regular expenses', '', StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false, bold = true, topBorder = true) }}
 {% if expenses.mortgage.populated %}
 {{ row(MonthlyExpenseType.MORTGAGE.displayValue | capitalize, expenses.mortgage.amount | numeral, '', bottomBorder = false, bold = true) }}
 {% endif %}
@@ -261,7 +261,7 @@
 {% endif %}
 
 {% set income = draft.statementOfMeans.monthlyIncome %}
-{{ row('Monthly income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true) }}
+{{ row('Regular income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), false, bold = true, topBorder = true) }}
 {% if income.salarySource.populated %}
   {{ row(MonthlyIncomeType.JOB.displayValue | capitalize, income.salarySource.amount | numeral, '', false, bold = true) }}
 {% endif %}
