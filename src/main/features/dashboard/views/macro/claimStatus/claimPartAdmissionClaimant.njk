@@ -26,6 +26,7 @@
     { amount: claim.response.amount | numeral }) }}
 {% endmacro %}
 
+
 {% macro claimPartAdmittedToOweForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
@@ -34,14 +35,21 @@
       <p>{{ t('They said they don’t owe the full amount you claimed.') }}</p>
       <p>{{ t('They’ve offered to pay the {{ amount }} immediately.', { amount: claim.response.amount | numeral }) }}</p>
       <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
-          { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+        { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('They’ve offered to pay by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       <p>{{ t('They’ve offered to pay in instalments.') }}</p>
     {% endif %}
 
-    <p>{{ t('You can accept or reject their admission.') }}</p>
+    {% if claim.claimData.defendant.isBusiness() %}
+      <p>{{ t('They’ll send you their financial details. You can use these to decide whether to accept or reject what they say they owe') }}</p>
+    {% endif %}
+
+    {% if not claim.claimData.defendant.isBusiness() %}
+      <p>{{ t('You can accept or reject their admission.') }}</p>
+    {% endif %}
+
     {{ viewAndRespondOffer(claim, 'View and respond') }}
   </div>
 {% endmacro %}
