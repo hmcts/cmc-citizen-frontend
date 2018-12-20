@@ -238,7 +238,6 @@ export class ClaimStoreClient {
     const isDefendantBusiness = claim.claimData.defendant.isBusiness()
     const response = ClaimantResponseConverter.convertToClaimantResponse(draft.document, isDefendantBusiness)
     const externalId: string = claim.externalId
-
     return this.request
       .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {
         body: response,
