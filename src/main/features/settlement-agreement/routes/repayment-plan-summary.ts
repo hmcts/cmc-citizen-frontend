@@ -6,11 +6,14 @@ import { Form } from 'main/app/forms/form'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'main/app/claims/models/claim'
 import { PaymentIntention } from 'main/app/claims/models/response/core/paymentIntention'
+import { MadeBy } from 'offer/form/models/madeBy'
+import { PartyStatement } from 'claims/models/partyStatement'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  let paymentIntention: PaymentIntention = claim.settlement.getLastOffer().paymentIntention
-  let isPaymentIntentionMadeByCourt: boolean = claim.settlement.isLastOfferMadeByCourt()
+  let lastOfferAsPartyStatement: PartyStatement = claim.settlement.getLastOfferAsPartyStatement()
+  let paymentIntention: PaymentIntention = lastOfferAsPartyStatement.offer.paymentIntention
+  let isPaymentIntentionMadeByCourt: boolean = lastOfferAsPartyStatement.madeBy === MadeBy.COURT.value
   const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
 
   res.render(Paths.repaymentPlanSummary.associatedView, {
