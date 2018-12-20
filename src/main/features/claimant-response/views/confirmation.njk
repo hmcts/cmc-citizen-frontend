@@ -10,7 +10,9 @@
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
         <h1 class="bold-large">
-          {% if claim.countyCourtJudgmentRequestedAt or claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
+          {% if claim.claimData.defendant.isBusiness() and claim.claimantResponse.claimantPaymentIntention %}
+            {{ t('You’ve proposed a different repayment plan') }}
+          {% elseif claim.countyCourtJudgmentRequestedAt or claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
             {{ t('County Court Judgment requested') }}
           {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
             {% if claim.claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT %}
@@ -38,7 +40,9 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      {% if claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
+      {% if claim.claimData.defendant.isBusiness() and claim.claimantResponse.claimantPaymentIntention %}
+        {% include "./confirmation/proposed-alternate-payment-plan-to-business-defendant.njk" %}
+      {% elseif claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
           <p>{{ t('You’ve requested a County Court Judgment against {{ defendantName }}.',
               { defendantName: claim.claimData.defendant.name }) }}</p>
           <p>{{ t('When we’ve processed your request we’ll post a copy of the judgment to you and to {{ defendantName }}.',

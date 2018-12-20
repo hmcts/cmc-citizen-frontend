@@ -274,6 +274,23 @@ describe('Defendant response task list builder', () => {
         expect(taskList.tasks.map(task => task.name)).to.contain('Share your financial details')
       })
 
+      it('should be enabled when claim is fully admitted for an organisation with payment option by set date', () => {
+        isResponseFullyAdmittedStub.returns(true)
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(true)
+        isStatementOfMeansStub.returns(true)
+
+        const draft = new ResponseDraft()
+        draft.response = new Response(ResponseType.FULL_ADMISSION)
+        draft.defendantDetails.partyDetails = new PartyDetails()
+        draft.defendantDetails.partyDetails.type = PartyType.ORGANISATION.value
+        draft.fullAdmission = new FullAdmission()
+        draft.fullAdmission.paymentIntention = new PaymentIntention()
+        draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Share your financial details')
+      })
+
       it('should be disabled in remaining cases', () => {
         isResponseFullyAdmittedStub.returns(false)
         isResponseFullyAdmittedWithPayBySetDateStub.returns(false)
