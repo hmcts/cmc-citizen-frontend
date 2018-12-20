@@ -18,21 +18,12 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-  if (!draft.acceptPaymentMethod && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
-    return undefined
-  }
-  if (isSettleAdmittedAndAcceptedPaymentMethod(draft)) {
+
+  if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
     return response.paymentIntention
   } else {
     return draft.courtDetermination.courtDecision
   }
-}
-
-function isSettleAdmittedAndAcceptedPaymentMethod (draft: DraftClaimantResponse): boolean {
-  return (draft.settleAdmitted && draft.settleAdmitted.admitted &&
-            draft.settleAdmitted.admitted.option === YesNoOption.YES) &&
-         (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept &&
-            draft.acceptPaymentMethod.accept.option === YesNoOption.YES)
 }
 
 /* tslint:disable:no-default-export */
