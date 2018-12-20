@@ -26,6 +26,7 @@ import { DefendantViewClaimPage } from 'integration-test/tests/citizen/defence/p
 import { DefendantWhenWillYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
 import { DefendantYourDefencePage } from 'integration-test/tests/citizen/defence/pages/defendant-your-defence'
 import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
+import { DefendantSendCompanyFinancialDetails } from 'integration-test/tests/citizen/defence/pages/defendant-send-company-financial-details'
 import { StatementOfMeansSteps } from 'integration-test/tests/citizen/defence/steps/statementOfMeans'
 import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defendant'
@@ -65,6 +66,7 @@ const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const defendantPaymentDatePage: DefendantPaymentDatePage = new DefendantPaymentDatePage()
 const defendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentPlanPage()
 const defendantWhenWillYouPage: DefendantWhenWillYouPayPage = new DefendantWhenWillYouPayPage()
+const sendCompanyDetailsPage: DefendantSendCompanyFinancialDetails = new DefendantSendCompanyFinancialDetails()
 const defendantSteps: DefendantSteps = new DefendantSteps()
 const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
 const defendantHowMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
@@ -195,6 +197,23 @@ export class DefenceSteps {
     defendantHowMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(claimAmount.getTotal(), '2018-01-01', 'Paid Cash')
   }
 
+  admitPartOfTheClaim (defence: PartialDefence): void {
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitPartOfMoneyClaim()
+    alreadyPaidPage.chooseNo()
+    defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
+    defendantHowMuchYouOwePage.enterAmountOwed(50)
+    defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+    defendantYourDefencePage.enterYourDefence('I do not like it')
+    this.addTimeLineOfEvents(defence.timeline)
+    this.enterEvidence('description', 'They do not have evidence')
+    defendantTaskListPage.selectTaskWhenWillYouPay()
+    defendantWhenWillYouPage.chooseFullBySetDate()
+    defendantPaymentDatePage.enterDate('2025-01-01')
+    defendantPaymentDatePage.saveAndContinue()
+    I.see('Respond to a money claim')
+  }
+
   admitPartOfTheClaimAlreadyPaid (
     defence: PartialDefence,
     isClaimAlreadyPaid: boolean = true
@@ -273,6 +292,7 @@ export class DefenceSteps {
     defendantEmail: string,
     defendantType: PartyType,
     defenceType: DefenceType,
+    isRequestMoreTimeToRespond: boolean = true,
     isClaimAlreadyPaid: boolean = true
   ): void {
     I.see('Confirm your details')
@@ -283,8 +303,11 @@ export class DefenceSteps {
     this.confirmYourDetails(defendantParty)
     I.see('COMPLETED')
 
-    // this.requestMoreTimeToRespond()
-    this.requestNoExtraTimeToRespond()
+    if (isRequestMoreTimeToRespond) {
+      this.requestMoreTimeToRespond()
+    } else {
+      this.requestNoExtraTimeToRespond()
+    }
 
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_DISPUTE:
@@ -306,6 +329,17 @@ export class DefenceSteps {
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
+        break
+      case DefenceType.PART_ADMISSION_NONE_PAID:
+        this.admitPartOfTheClaim(defence)
+        this.askForMediation()
+        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+          defendantTaskListPage.selectShareYourFinancialDetailsTask()
+          sendCompanyDetailsPage.continue()
+        }
+
+        defendantSteps.selectCheckAndSubmitYourDefence()
+        I.see('How much money do you admit you owe?')
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)

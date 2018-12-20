@@ -77,6 +77,10 @@ export class PaymentPlanHelper {
   static createPaymentPlanFromDefendantFinancialStatement (claim: Claim, draft: DraftClaimantResponse): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
+    if (claim.claimData.defendant.isBusiness()) {
+      return undefined
+    }
+
     if (response === undefined) {
       throw new Error('Claim does not have response attached')
     }
