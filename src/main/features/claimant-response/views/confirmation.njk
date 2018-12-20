@@ -11,7 +11,7 @@
       <div class="govuk-box-highlight">
         <h1 class="bold-large">
           {% if claim.countyCourtJudgmentRequestedAt or claim.claimantResponse.formaliseOption === FormaliseOption.REFER_TO_JUDGE %}
-          {{ t('County Court Judgment requested') }}
+            {{ t('County Court Judgment requested') }}
           {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
             {% if claim.claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT %}
               {{ t('You’ve signed a settlement agreement') }}
@@ -49,12 +49,12 @@
               { defendantName: claim.claimData.defendant.name }) }}</p>
       {% elseif claim.countyCourtJudgmentRequestedAt %}
         {% if paymentIntentionAccepted %}
-          <p>{{ t('A County Court Judgment has been requested against the defendant.') }}</p>
-          <p>{{ t('When we’ve processed your request we’ll post a copy of the judgment to you and to {{ defendantName }}.',
-              { defendantName: claim.claimData.defendant.name }) }}</p>
+          <p>{{ t('You’ve requested a County Court Judgment against the defendant.') }}</p>
         {% else %}
           <p>{{ t('You’ve rejected the defendant’s repayment plan and a County Court Judgment has been requested against them.') }}</p>
         {% endif %}
+        <p>{{ t('When we’ve processed your request we’ll post a copy of the judgment to you and to {{ defendantName }}.',
+            { defendantName: claim.claimData.defendant.name }) }}</p>
       {% elseif repaymentPlanOrigin === 'DEFENDANT' %}
         {% include "./confirmation/accepted-payment-plan.njk" %}
       {% elseif repaymentPlanOrigin === 'CLAIMANT' %}
@@ -63,17 +63,18 @@
         {% include "./confirmation/court-suggested-payment-plan.njk" %}
       {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
         <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
-      {% elseif claim.claimantResponse.freeMediation %}
+      {% elseif claim.claimantResponse.freeMediation === YesNoOption.YES %}
         <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
         <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
-      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.directionsQuestionnaireDeadline %}
         <p>
           {{ t('You need to')}}
           <a href="{{ DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }) }}">
-             {{ t('complete a directions questionnaire form ')}}</a> {{ t('to tell us more about the claim.')}}
+            {{ t('complete a directions questionnaire form ')}}</a> {{ t('to tell us more about the claim.')}}
         </p>
         <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
-            { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+            { deadline: claim.directionsQuestionnaireDeadline | date }) }}
+        </p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}

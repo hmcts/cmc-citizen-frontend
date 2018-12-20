@@ -169,7 +169,7 @@
   dependencies:
     "@sinonjs/samsam" "^2 || ^3"
 
-"@sinonjs/samsam@^2 || ^3", "@sinonjs/samsam@^3.0.1":
+"@sinonjs/samsam@^2 || ^3", "@sinonjs/samsam@^3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@sinonjs/samsam/-/samsam-3.0.2.tgz#304fb33bd5585a0b2df8a4c801fcb47fa84d8e43"
   dependencies:
@@ -539,9 +539,9 @@ append-transform@^1.0.0:
   dependencies:
     default-require-extensions "^2.0.0"
 
-applicationinsights@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/applicationinsights/-/applicationinsights-1.0.7.tgz#f8d5758b99e5c3e5b2877cfa120c2164a5cf675b"
+applicationinsights@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/applicationinsights/-/applicationinsights-1.0.8.tgz#db6e3d983cf9f9405fe1ee5ba30ac6e1914537b5"
   dependencies:
     diagnostic-channel "0.2.0"
     diagnostic-channel-publishers "0.2.1"
@@ -1582,9 +1582,9 @@ config-chain@^1.1.11:
     ini "^1.3.4"
     proto-list "~1.2.1"
 
-config@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/config/-/config-3.0.0.tgz#a71cdbb22d225df9eff20b95178d65a63c452367"
+config@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/config/-/config-3.0.1.tgz#c3118e2eb45fdfd135277339f87e2492559cb147"
   dependencies:
     json5 "^1.0.1"
 
@@ -3551,9 +3551,9 @@ https-proxy-agent@^2.2.1:
     agent-base "^4.1.0"
     debug "^3.1.0"
 
-husky@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-1.2.1.tgz#33628f7013e345c1790a4dbe4642ad047f772dee"
+husky@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-1.3.0.tgz#fbb97b5e52739d945fd86c3bf92def0ea60175c4"
   dependencies:
     cosmiconfig "^5.0.7"
     execa "^1.0.0"
@@ -4151,9 +4151,9 @@ jquery@3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
-js-base64@^2.1.8, js-base64@^2.4.9:
-  version "2.4.9"
-  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.9.tgz#748911fb04f48a60c4771b375cac45a80df11c03"
+js-base64@^2.1.8, js-base64@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.5.0.tgz#42255ba183ab67ce59a0dee640afdc00ab5ae93e"
 
 js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
@@ -5219,9 +5219,9 @@ nunjucks-numeral-filter@0.0.2:
   dependencies:
     numeral "^2.0.4"
 
-nunjucks@^3.1.4:
-  version "3.1.4"
-  resolved "https://registry.yarnpkg.com/nunjucks/-/nunjucks-3.1.4.tgz#d15d7b6c4215d2525f991b948335e16502fa1bfa"
+nunjucks@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/nunjucks/-/nunjucks-3.1.6.tgz#6e3a3420c77ceae937ae323e9e2995383d6410fb"
   dependencies:
     a-sync-waterfall "^1.0.0"
     asap "^2.0.3"
@@ -6639,13 +6639,13 @@ sinon-express-mock@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/sinon-express-mock/-/sinon-express-mock-2.1.0.tgz#9ed521cd7480af780e4f615bc558ca826777061a"
 
-sinon@^7.2.0:
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/sinon/-/sinon-7.2.0.tgz#929472d3a85cb7e9ad7eec42b41e17bfa40fb165"
+sinon@^7.2.2:
+  version "7.2.2"
+  resolved "https://registry.yarnpkg.com/sinon/-/sinon-7.2.2.tgz#388ecabd42fa93c592bfc71d35a70894d5a0ca07"
   dependencies:
     "@sinonjs/commons" "^1.2.0"
     "@sinonjs/formatio" "^3.1.0"
-    "@sinonjs/samsam" "^3.0.1"
+    "@sinonjs/samsam" "^3.0.2"
     diff "^3.5.0"
     lolex "^3.0.0"
     nise "^1.4.7"
@@ -7363,9 +7363,9 @@ tslint-eslint-rules@^5.3.1:
     tslib "1.9.0"
     tsutils "2.8.0"
 
-tslint@^5.11.0:
-  version "5.11.0"
-  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.11.0.tgz#98f30c02eae3cde7006201e4c33cb08b48581eed"
+tslint@^5.12.0:
+  version "5.12.0"
+  resolved "https://registry.yarnpkg.com/tslint/-/tslint-5.12.0.tgz#47f2dba291ed3d580752d109866fb640768fca36"
   dependencies:
     babel-code-frame "^6.22.0"
     builtin-modules "^1.1.1"
