@@ -130,7 +130,7 @@ describe('claimant response converter', () => {
       const draftClaimantResponse = new DraftClaimantResponse()
       draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
 
-      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
+      expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
         'type': 'REJECTION',
         'freeMediation': 'no'
       })
@@ -140,7 +140,7 @@ describe('claimant response converter', () => {
       const draftClaimantResponse = new DraftClaimantResponse()
       draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
 
-      expect(converter.convertToClaimantResponse(draftClaimantResponse)).to.deep.eq({
+      expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
         'type': 'REJECTION',
         'freeMediation': 'no'
       })
