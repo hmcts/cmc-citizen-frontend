@@ -15,7 +15,7 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function getPaymentIntention (response: FullAdmissionResponse | PartialAdmissionResponse, draft: DraftClaimantResponse): PaymentIntention {
-  if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+  if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept === YesNoOption.YES) {
     return response.paymentIntention
   } else {
     return draft.courtDetermination.courtDecision
