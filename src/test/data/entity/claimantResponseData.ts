@@ -39,6 +39,6 @@ export const referToJudgeAcceptationClaimantResponseData = {
 
 export const rejectionClaimantResponseData = {
   ...baseRejectionClaimantResponseData,
-  freeMediation: true,
+  freeMediation: 'yes',
   reason: 'reason'
 }

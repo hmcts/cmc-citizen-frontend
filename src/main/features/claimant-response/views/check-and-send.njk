@@ -92,14 +92,14 @@
       {% endif %}
     {% endif %}
 
-    {% endif %}
-
     {{ tableEnd() }}
 
     {% set courtDetermination = draft.courtDetermination %}
     {% set courtDecisionPaymentIntention = courtDetermination.courtDecision %}
+    {% set courtDecisionType = courtDetermination.decisionType %}
 
-    {% if courtDetermination and courtDecisionPaymentIntention %}
+    {% if courtDetermination and courtDecisionPaymentIntention and
+      ( courtDecisionType !== DecisionType.CLAIMANT and courtDecisionType !== DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT ) %}
       {{ tableStart('courtDecision', 'Court decision') }}
         {{ row(
         label = 'Court decision',
@@ -165,7 +165,6 @@
         changeLink = ClaimantResponsePaths.chooseHowToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true
       ) }}
       {{ tableEnd() }}
-    {% endif %}
 
     {% if draft.formaliseRepaymentPlan.option.value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value %}
       {{ tableStart('settlementAgreement', 'Settlement agreement') }}
@@ -235,6 +234,9 @@
 
       {{ tableEnd() }}
     {% endif %}
+
+    {% endif %}
+  {% endif %}
 
     {{ submitButton('Submit response') }}
 

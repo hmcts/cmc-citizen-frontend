@@ -47,4 +47,10 @@ export class ClaimantCheckAndSendPage {
     I.see('Total to be paid by defendant')
   }
 
+  verifyFactsForPartAdmitFromBusiness (): void {
+    I.see('Your response')
+    I.see('Do you accept or reject the defendant’s admission?')
+    I.see('Do you accept the defendant’s repayment plan?')
+    I.see('How would you like the defendant to pay?')
+  }
 }

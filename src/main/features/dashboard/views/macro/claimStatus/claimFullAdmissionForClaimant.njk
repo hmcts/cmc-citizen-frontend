@@ -28,14 +28,24 @@
     <p>{{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', {
       paymentDate: paymentDate }) }}</p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-    <h2 class="heading-small">{{ t('The defendant has offered to pay by {{ paymentDate }}.',
-      { defendantName: claim.claimData.defendant.name, paymentDate: paymentDate }) }}</h2>
-    <p>{{ t('You can accept or reject their offer.') }}</p>
-    {{ viewAndRespondOffer(claim) }}
-    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    <h2 class="heading-small">{{ t('The defendant has offered to pay in instalments') }}</h2>
-    <p>{{ t('You can accept or reject their offer.') }}</p>
-    {{ viewAndRespondOffer(claim) }}
+      <h2 class="heading-small">{{ t('The defendant has offered to pay by {{ paymentDate }}.',
+          { paymentDate: paymentDate }) }}</h2>
+
+      {% if claim.claimData.defendant.isBusiness() %}
+        <p>{{ t('They’ll send you their financial details. You can use these to decide whether to to accept or reject their offer') }}</p>
+      {% else %}
+        <p>{{ t('You can accept or reject their offer.') }}</p>
+      {% endif %}
+
+      {{ viewAndRespondOffer(claim) }}
+    {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+      <h2 class="heading-small">{{ t('The defendant has offered to pay in instalments') }}</h2>
+      {% if claim.claimData.defendant.isBusiness() %}
+        <p>{{ t('They’ll send you their financial details. You can use these to decide whether to to accept or reject their offer') }}</p>
+      {% else %}
+        <p>{{ t('You can accept or reject their offer.') }}</p>
+      {% endif %}
+      {{ viewAndRespondOffer(claim) }}
     {% endif %}
   </div>
 {% endmacro %}

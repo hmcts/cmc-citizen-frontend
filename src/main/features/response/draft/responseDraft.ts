@@ -82,6 +82,7 @@ export class ResponseDraft extends DraftDocument {
   rejectAllOfClaim?: RejectAllOfClaim
 
   statementOfMeans?: StatementOfMeans
+  companyDefendantResponseViewed: boolean
 
   deserialize (input: any): ResponseDraft {
     if (input) {
@@ -116,22 +117,25 @@ export class ResponseDraft extends DraftDocument {
       if (input.statementOfMeans) {
         this.statementOfMeans = new StatementOfMeans().deserialize(input.statementOfMeans)
       }
-    }
-
-    const isImmediatePaymentOptionSelected = (data: FullAdmission | PartialAdmission): boolean => {
-      const isPaymentOptionPopulated = (): boolean => {
-        return data !== undefined
-          && data.paymentIntention !== undefined
-          && data.paymentIntention.paymentOption !== undefined
+      if (input.companyDefendantResponseViewed) {
+        this.companyDefendantResponseViewed = input.companyDefendantResponseViewed
       }
-      return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(PaymentType.IMMEDIATELY)
     }
 
-    if (isImmediatePaymentOptionSelected(this.fullAdmission) || isImmediatePaymentOptionSelected(this.partialAdmission)) {
+    if (this.isImmediatePaymentOptionSelected(this.fullAdmission) || this.isImmediatePaymentOptionSelected(this.partialAdmission)) {
       delete this.statementOfMeans
     }
 
     return this
+  }
+
+  public isImmediatePaymentOptionSelected (data: FullAdmission | PartialAdmission): boolean {
+    const isPaymentOptionPopulated = (): boolean => {
+      return data !== undefined
+        && data.paymentIntention !== undefined
+        && data.paymentIntention.paymentOption !== undefined
+    }
+    return isPaymentOptionPopulated() && data.paymentIntention.paymentOption.isOfType(PaymentType.IMMEDIATELY)
   }
 
   public isMoreTimeRequested (): boolean {
