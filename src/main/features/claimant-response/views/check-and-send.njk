@@ -96,8 +96,10 @@
 
     {% set courtDetermination = draft.courtDetermination %}
     {% set courtDecisionPaymentIntention = courtDetermination.courtDecision %}
+    {% set courtDecisionType = courtDetermination.decisionType %}
 
-    {% if courtDetermination and courtDecisionPaymentIntention %}
+    {% if courtDetermination and courtDecisionPaymentIntention and
+      ( courtDecisionType !== DecisionType.CLAIMANT and courtDecisionType !== DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT ) %}
       {{ tableStart('courtDecision', 'Court decision') }}
         {{ row(
         label = 'Court decision',
