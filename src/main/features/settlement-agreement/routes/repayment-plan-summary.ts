@@ -11,9 +11,9 @@ import { PartyStatement } from 'claims/models/partyStatement'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  let lastOfferAsPartyStatement: PartyStatement = claim.settlement.getLastOfferAsPartyStatement()
-  let paymentIntention: PaymentIntention = lastOfferAsPartyStatement.offer.paymentIntention
-  let isPaymentIntentionMadeByCourt: boolean = lastOfferAsPartyStatement.madeBy === MadeBy.COURT.value
+  const lastOfferAsPartyStatement: PartyStatement = claim.settlement.getLastOfferAsPartyStatement()
+  const paymentIntention: PaymentIntention = lastOfferAsPartyStatement.offer.paymentIntention
+  const isPaymentIntentionMadeByCourt: boolean = lastOfferAsPartyStatement.madeBy === MadeBy.COURT.value
   const amountPaid = claim.claimantResponse && claim.claimantResponse.amountPaid ? claim.claimantResponse.amountPaid : 0
 
   res.render(Paths.repaymentPlanSummary.associatedView, {

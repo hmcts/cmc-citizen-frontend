@@ -40,7 +40,7 @@ describe('Settlement agreement: repayment plan summary page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should render claimant repayment plan by default', async () => {
+        it('should render the claimants repayment plan when offer is not by court determination', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({
             ...claimStoreServiceMock.sampleClaimObj,
             settlement: {
@@ -60,7 +60,7 @@ describe('Settlement agreement: repayment plan summary page', () => {
             .expect(res => expect(res).to.be.successful.withText('The claimant’s repayment plan'))
         })
 
-        it('should render court repayment plan when courts offer has been accepted', async () => {
+        it('should render court repayment plan when offer from court determination has been accepted', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({
             ...claimStoreServiceMock.sampleClaimObj,
             settlement: {
