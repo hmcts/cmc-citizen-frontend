@@ -14,7 +14,7 @@
 
     <p>{{ t('Total claim amount is {{ totalAmount }}.', { totalAmount: totalAmount | numeral }) }} </p>
 
-    {% if featureToggles.testingSupport %}
+    {% if featureToggles.testingSupport and disposableIncome %}
       <p>Disposable Income value: {{ disposableIncome }}</p>
     {% endif %}
 

@@ -14,7 +14,7 @@
           </div>
         {% endif %}
 
-        {% if featureToggles.testingSupport %}
+        {% if featureToggles.testingSupport and disposableIncome !== undefined %}
           <p>Disposable Income value: {{ disposableIncome }}</p>
         {% endif %}
 

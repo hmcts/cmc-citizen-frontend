@@ -79,7 +79,7 @@ export abstract class AbstractPaymentDatePage<Draft> {
       heading: this.getHeading(),
       form: form,
       notice: notice ? notice : undefined,
-      disposableIncome: res.locals.draft.document.courtDetermination.disposableIncome
+      disposableIncome: res.locals.draft.document.courtDetermination ? res.locals.draft.document.courtDetermination.disposableIncome : undefined
     })
   }
 }
