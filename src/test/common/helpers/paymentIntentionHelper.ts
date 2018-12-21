@@ -1,7 +1,7 @@
 import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { PaymentOptionPage } from 'claimant-response/routes/payment-option'
 import { expect } from 'chai'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
@@ -131,8 +131,19 @@ describe('PaymentIntentionHelper', () => {
       expect(PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claimWithDefendantInstalmentsResponse, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EACH_WEEK)
     })
 
+    it('should return payment intention based on defendants financial statement with monthly frequency payments', () => {
+      const paymentIntention: PaymentIntention = PaymentPlanPage.generateCourtOfferedPaymentIntention(draftClaimantResponseInstalments, claimWithDefendantPayBySetDateResponse, DecisionType.COURT)
+      expect(paymentIntention.repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EVERY_MONTH)
+      expect(paymentIntention.paymentOption).to.be.equal(ClaimPaymentOption.INSTALMENTS)
+    })
+
     it('should return payment intention with monthly instalments when claimant asks to pay immediately', () => {
       expect(PaymentOptionPage.generateCourtOfferedPaymentIntention(draftClaimantResponseImmediately, claimWithDefendantPayBySetDateResponse, DecisionType.COURT).repaymentPlan.paymentSchedule).to.be.equal(PaymentSchedule.EVERY_MONTH)
+    })
+
+    it('should return payment intention with payment option as pay by set date', () => {
+      const paymentIntention: PaymentIntention = PaymentDatePage.generateCourtOfferedPaymentIntention(draftClaimantResponsePayBySetDate, claimWithDefendantInstalmentsResponse, DecisionType.COURT)
+      expect(paymentIntention.paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
     })
   })
 

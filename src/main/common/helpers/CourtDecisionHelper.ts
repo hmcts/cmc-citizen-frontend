@@ -1,4 +1,5 @@
-import { CourtDecision, DecisionType } from 'common/court-calculations/courtDecision'
+import { CourtDecision } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
@@ -12,6 +13,10 @@ import { PaymentOption } from 'claims/models/paymentOption'
 
 export class CourtDecisionHelper {
   static createCourtDecision (claim: Claim, draft: DraftClaimantResponse): DecisionType {
+    if (claim.response.defendant.isBusiness()) {
+      return DecisionType.NOT_APPLICABLE_IS_BUSINESS
+    }
+
     const defendantLastPaymentDate: Moment = CourtDecisionHelper.getDefendantLastPaymentDate(claim)
     const claimantLastPaymentDate: Moment = CourtDecisionHelper.getClaimantLastPaymentDate(draft)
     const courtOfferedLastDate = CourtDecisionHelper.getCourtOfferedLastDate(claim, draft)

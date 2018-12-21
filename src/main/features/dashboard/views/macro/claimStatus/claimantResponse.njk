@@ -1,10 +1,10 @@
-{% macro claimantRejectedDefendantAsCompanyOrOrganisationResponse() %}
+{% macro claimantWithDefendantAsBusinessResponse() %}
 <p>
   {{ t('You need to send the defendant’s financial details to the court.') }}
 </p>
 {% endmacro %}
 
-{% macro claimantRejectedDefendantAsCompanyOrOrganisationResponseDetailedStatus(claim) %}
+{% macro claimantWithDefendantAsBusinessResponseDetailedStatus(claim) %}
 
 {% set claimNumber = claim.claimNumber %}
 
