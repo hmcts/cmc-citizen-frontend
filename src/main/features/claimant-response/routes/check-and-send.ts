@@ -20,13 +20,24 @@ import { PartyType } from 'common/partyType'
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-  if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+  if (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
+    return undefined
+  }
+
+  if (isSettleAdmittedAndAcceptedPaymentMethod(draft)) {
     return response.paymentIntention
   } else if (claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
     return draft.courtDetermination.courtDecision
   } else {
     return draft.alternatePaymentMethod.toDomainInstance()
   }
+}
+
+function isSettleAdmittedAndAcceptedPaymentMethod (draft: DraftClaimantResponse): boolean {
+  return (draft.settleAdmitted && draft.settleAdmitted.admitted &&
+            draft.settleAdmitted.admitted.option === YesNoOption.YES) ||
+         (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept &&
+            draft.acceptPaymentMethod.accept.option === YesNoOption.YES)
 }
 
 /* tslint:disable:no-default-export */
