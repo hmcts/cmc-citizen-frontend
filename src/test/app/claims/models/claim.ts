@@ -31,7 +31,6 @@ import {
 import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
-import { DecisionType } from 'common/court-calculations/courtDecision'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { LocalDate } from 'forms/models/localDate'

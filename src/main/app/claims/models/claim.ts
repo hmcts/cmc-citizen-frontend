@@ -21,6 +21,7 @@ import { StatementType } from 'offer/form/models/statementType'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
+import { PartyType } from 'common/partyType'
 
 interface State {
   status: ClaimStatus
