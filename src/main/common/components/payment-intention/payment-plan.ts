@@ -92,7 +92,8 @@ export abstract class AbstractPaymentPlanPage<Draft> {
       heading: this.getHeading(),
       form,
       totalAmount: amount,
-      paymentLength
+      paymentLength,
+      disposableIncome: res.locals.draft.document.courtDetermination.disposableIncome
     })
   }
 }
