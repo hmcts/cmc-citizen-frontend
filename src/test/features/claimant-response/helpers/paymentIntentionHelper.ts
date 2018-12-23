@@ -7,6 +7,7 @@ import { PaymentOption as ClaimPaymentOption } from 'claims/models/paymentOption
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { PaymentIntentionHelper } from 'claimant-response/helpers/paymentIntentionHelper'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { MomentFactory } from 'shared/momentFactory'
 
 function draftClaimantResponseInstalmentsTestData (
   draftClaimantResponseInstalments: DraftClaimantResponse,
@@ -144,9 +145,11 @@ describe('PaymentIntentionHelper', () => {
     it('should return PaymentIntention with correct courts calculated PaymentIntention with ' +
       'PaymentOption as Pay By Set Date when claimant asks to Pay By Instalments and when ' +
       'defendant has no disposable income', () => {
-      expect(PaymentIntentionHelper.getCourtCalculatedPaymentIntention(
+      const paymentIntention: PaymentIntention = PaymentIntentionHelper.getCourtCalculatedPaymentIntention(
         draftClaimantResponseInstalmentsWithNegativeDisposableIncome,
-        claimWithDefendantPayBySetDateResponse).paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
+        claimWithDefendantPayBySetDateResponse)
+      expect(paymentIntention.paymentOption).to.be.equal(ClaimPaymentOption.BY_SPECIFIED_DATE)
+      expect(paymentIntention.paymentDate.toISOString()).to.be.equal(MomentFactory.maxDate().toISOString())
     })
   })
 })
