@@ -7,6 +7,8 @@ import { Frequency } from 'common/frequency/frequency'
 import { MomentFactory } from 'shared/momentFactory'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { ClaimData } from 'claims/models/claimData'
+import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 
 describe('PaymentPlanHelper', () => {
   let claim: Claim
@@ -34,6 +36,22 @@ describe('PaymentPlanHelper', () => {
         draft.courtDetermination.disposableIncome = parseFloat(Frequency.WEEKLY.monthlyRatio.toFixed(2)) + 0.01
         const paymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
         expect(paymentPlan.startDate.toISOString()).not.to.equal(MomentFactory.maxDate().toISOString())
+      })
+    })
+
+    context('when a defendant is a business', () => {
+      it('should return an undefined paymentPlan', () => {
+        draft.courtDetermination.disposableIncome = parseFloat(Frequency.WEEKLY.monthlyRatio.toFixed(2)) + 0.01
+        claim.claimData = new ClaimData().deserialize({
+          defendants: new Array(new TheirDetails().deserialize({
+            type: 'organisation',
+            name: undefined,
+            address: undefined,
+            email: undefined
+          }))
+        })
+        const paymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
+        expect(paymentPlan).eq(undefined)
       })
     })
   })

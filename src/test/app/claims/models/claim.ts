@@ -29,7 +29,9 @@ import {
 import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
+import { ClaimData } from 'claims/models/claimData'
+import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -444,10 +446,18 @@ describe('Claim', () => {
       claim.claimData = {
         defendant: new Organisation().deserialize(organisation)
       }
+      claim.claimData = new ClaimData().deserialize({
+        defendants: new Array(new TheirDetails().deserialize({
+          type: 'organisation',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        }))
+      })
       claim.claimantResponse = rejectionClaimantResponseData
 
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
     })
 
     it('should contain the claim status only if claimant rejects company response', () => {
@@ -460,12 +470,20 @@ describe('Claim', () => {
         }
       }
       claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimData = new ClaimData().deserialize({
+        defendants: new Array(new TheirDetails().deserialize({
+          type: 'organisation',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        }))
+      })
       claim.claimData = {
         defendant: new Company().deserialize(organisation)
       }
 
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {

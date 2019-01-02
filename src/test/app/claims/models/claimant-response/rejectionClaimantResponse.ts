@@ -2,7 +2,9 @@ import { expect } from 'chai'
 import { convertToRawObject } from 'test/rawObjectUtils'
 import { RejectionClaimantResponse } from 'claims/models/claimant-response/rejectionClaimantResponse'
 
-import { rejectionClaimantResponseData } from 'test/data/entity/claimantResponseData'
+import {
+  rejectionClaimantResponseData
+} from 'test/data/entity/claimantResponseData'
 
 describe('RejectionClaimantResponse', () => {
 
@@ -23,6 +25,7 @@ describe('RejectionClaimantResponse', () => {
     })
 
     it(`should deserialize valid JSON to valid RejectionClaimantResponse object`, () => {
+
       const actual: RejectionClaimantResponse = RejectionClaimantResponse.deserialize(rejectionClaimantResponseData)
       expect(convertToRawObject(actual)).to.be.deep.equal(rejectionClaimantResponseData)
     })

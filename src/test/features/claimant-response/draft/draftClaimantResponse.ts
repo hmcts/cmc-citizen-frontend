@@ -8,7 +8,7 @@ import { SettlementAgreement } from 'claimant-response/form/models/settlementAgr
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import {
   intentionOfImmediatePayment,
   intentionOfPaymentByInstalments
