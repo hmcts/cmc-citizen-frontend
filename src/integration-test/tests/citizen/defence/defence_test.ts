@@ -12,6 +12,9 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
   helperSteps.finishResponse(testData)
+  I.click('My account')
+  I.see(testData.claimRef)
+  I.see(`You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.`)
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
@@ -19,6 +22,9 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION
     helperSteps.finishResponse(testData)
+    I.click('My account')
+    I.see(testData.claimRef)
+    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim`)
   })
 
   Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions', async (I: I) => {

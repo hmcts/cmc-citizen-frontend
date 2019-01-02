@@ -12,4 +12,10 @@ export class AlreadyPaidPage {
     I.checkOption('Yes')
     I.click(buttons.submit)
   }
+
+  chooseNo (): void {
+    I.checkOption('No')
+    I.click(buttons.submit)
+  }
+
 }

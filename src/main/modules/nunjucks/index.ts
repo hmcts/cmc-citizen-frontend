@@ -35,6 +35,7 @@ import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as CCJPaths } from 'features/ccj/paths'
 import { Paths as StatePaidPaths } from 'features/paid-in-full/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
+import { Paths as SettlementAgreementPaths } from 'settlement-agreement/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -47,11 +48,13 @@ import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { MadeBy } from 'offer/form/models/madeBy'
+import { PartyType } from 'common/partyType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -136,6 +139,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
+    nunjucksEnv.addGlobal('FormaliseOption', FormaliseOption)
     nunjucksEnv.addGlobal('ClaimantResponseType', ClaimantResponseType)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
@@ -150,6 +154,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
+    nunjucksEnv.addGlobal('SettlementAgreementPaths', SettlementAgreementPaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('MonthlyIncomeType', MonthlyIncomeType)
     nunjucksEnv.addGlobal('MonthlyExpenseType', MonthlyExpenseType)
@@ -160,6 +165,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('serviceName', `Money Claims`)
     nunjucksEnv.addGlobal('headingVisible', true)
     nunjucksEnv.addGlobal('DecisionType', DecisionType)
+    nunjucksEnv.addGlobal('PartyType', PartyType)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

@@ -1,0 +1,54 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
+{% from "financialDetails.njk" import financialDetailsTable %}
+
+{% set heading = 'The defendant can’t afford your plan' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Based on the financial details provided by the defendant, we don’t believe they would be able to make these repayments.') }}</p>
+
+      <p>{{ t('The court affordability calculator has determined a new repayment plan as the most the defendant can repay.') }}</p>
+
+      {{
+      repaymentPlanBlock(
+        heading = 'The court’s proposed repayment plan',
+        repaymentPlan = courtOrderPaymentPlan
+      )
+      }}
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = 'Do you accept the court’s proposed repayment plan?',
+          labelForScreenReadersOnly = false,
+          form = form,
+          name = 'accept',
+          options = [
+          {
+            label: 'I want to accept this repayment plan',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor('accept') === YesNoOption.YES),
+            bold: false
+          },
+          {
+            label: 'I want a judge to make a repayment plan',
+            value:  YesNoOption.NO.option,
+            checked: (form.valueFor('accept') === YesNoOption.NO),
+            bold: false
+          }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

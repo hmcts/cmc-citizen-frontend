@@ -28,7 +28,7 @@
           <div class="form-group panel panel-border-narrow js-hidden {% if atLeastOfNumberShouldBeEnteredError %} form-group-error {% endif %}"
                id="declared-true" aria-hidden="false">
 
-            {{ numericInput(label = 'Number of people', name = 'numberOfPeople[value]', form = form) }}
+            {{ numericInput(label = 'Number of people', name = 'numberOfPeople[value]', form = form, inputClass = 'form-control-1-8') }}
             {{ textArea(label = 'Give details', name = 'numberOfPeople[details]', form = form) }}
 
           </div>

@@ -28,7 +28,11 @@
 {% endmacro %}
 
 {% macro residenceSection(residence) %}
-  {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType, bottomBorder = true) }}
+  {% if residence.type === ResidenceType.OWN_HOME.value  %}
+    {{ row(label = 'Where are they living?', value = 'Home that they own', bottomBorder = true) }}
+  {% else %}
+    {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType, bottomBorder = true) }}
+  {% endif %}
 {% endmacro %}
 
 {% macro childrenSection(children) %}

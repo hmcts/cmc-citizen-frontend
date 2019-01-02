@@ -5,27 +5,25 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
-import { RepaymentPlan as CoreRepaymentPlan } from 'claims/models/response/core/repaymentPlan'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { RepaymentPlan } from 'claims/models/repaymentPlan'
+import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
+  let paymentIntention: PaymentIntention
 
-  const repaymentPlan: RepaymentPlan = claim.countyCourtJudgment.repaymentPlan
-  const coreRepaymentPlan: CoreRepaymentPlan = {
-    instalmentAmount: repaymentPlan.instalmentAmount,
-    firstPaymentDate: repaymentPlan.firstPaymentDate,
-    paymentSchedule: (repaymentPlan.paymentSchedule as PaymentSchedule).value,
-    completionDate: repaymentPlan.completionDate,
-    paymentLength: repaymentPlan.paymentLength
-  } as CoreRepaymentPlan
+  if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
+    const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
+    paymentIntention = PaymentIntention.retrievePaymentIntention(ccjRepaymentPlan, claim)
+  } else if (claim.hasClaimantAcceptedDefendantResponseWithSettlement()) {
+    paymentIntention = claim.settlement.getLastOffer().paymentIntention
+  }
 
   res.render(Paths.repaymentPlanSummaryPage.associatedView, {
     form: form,
     claim: claim,
-    repaymentPlan: coreRepaymentPlan,
-    madeBy: req.params.madeBy
+    paymentIntention: paymentIntention,
+    remainingAmountToPay: claim.totalAmountTillDateOfIssue - claim.amountPaid(),
+    requestedBy: req.params.madeBy
   })
 }
 

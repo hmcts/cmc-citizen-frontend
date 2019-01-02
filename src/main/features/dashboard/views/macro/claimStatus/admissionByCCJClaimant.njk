@@ -1,5 +1,6 @@
 {% from "internalLink.njk" import internalLink %}
 {% from "form.njk" import linkButton %}
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro admissionByCCJClaimantDashboard(claim) %}
   {{ t('You requested a County Court Judgment against {{ defendantName }}.', { defendantName: claim.claimData.defendant.name }) }}
@@ -11,8 +12,8 @@
         { defendantName: claim.claimData.defendant.name }) }}</h2>
     <p>{{ t('When we’ve processed your request, we’ll post a copy of the judgment to you and to {{ defendantName }}',
         { defendantName: claim.claimData.defendant.name }) }}</p>
-    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.CLAIMANT.value })) }}</p>
+    <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.CLAIMANT.value }), 'button button-secondary') }}</p>
     <p>{{ t('When you’ve been paid in full, you need to let us know.') }}</p>
-    {{ internalLink('Tell us you’ve been paid', AppPaths.contactUsPage.uri, 'button button-secondary') }}
+    {{ paidInFullClaimantButtonClaimDetails(claim,'Tell us you’ve been paid') }}
   </div>
 {% endmacro %}

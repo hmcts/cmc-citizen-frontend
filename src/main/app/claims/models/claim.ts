@@ -13,9 +13,10 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
-import { PartyType } from 'common/partyType'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { ReDetermination } from 'claims/models/claimant-response/reDetermination'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 
 interface State {
   status: ClaimStatus
@@ -171,14 +172,24 @@ export class Claim {
   }
 
   get status (): ClaimStatus {
-    if (this.countyCourtJudgmentRequestedAt) {
+    if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt && this.isCCJPaidWithinMonth()) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
+    } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
+      return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.moneyReceivedOn) {
+      return ClaimStatus.PAID_IN_FULL
+    } else if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
       } else if (this.hasClaimantSuggestedAlternativePlanWithCCJ()) {
         return ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
+      } else if (this.hasRedeterminationBeenRequested()) {
+        return ClaimStatus.REDETERMINATION_BY_JUDGE
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
+    } else if (this.isSettlementAgreementRejected()) {
+      return ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.isFullAdmissionPayImmediatelyPastPaymentDate()) {
@@ -197,12 +208,18 @@ export class Claim {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.hasClaimantRejectedPartAdmission()) {
+      return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-    } else if (this.hasClaimantRejectedDefendantResponse() &&
-      (this.response.defendant.type === PartyType.COMPANY.value
-        || this.response.defendant.type === PartyType.ORGANISATION.value)) {
-      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE
+    } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
+    } else if (this.hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
+    } else if (this.hasClaimantAcceptedDefendantFullAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
+    } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
+      return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else {
@@ -212,18 +229,25 @@ export class Claim {
 
   get stateHistory (): State[] {
     const statuses = [{ status: this.status }]
-    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions()) {
+    if (this.isOfferRejected() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
-    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions()) {
+    } else if (this.isOfferAccepted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
-    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions()) {
+    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
-
     if (this.eligibleForCCJAfterBreachedSettlement) {
       statuses.push({ status: ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT })
     }
+    if (!this.moneyReceivedOn || (!this.moneyReceivedOn && !this.countyCourtJudgmentRequestedAt)) {
+      statuses.push({ status: ClaimStatus.PAID_IN_FULL_ELIGIBLE })
+    }
+
     return statuses
+  }
+
+  private isDefendantBusiness (): boolean {
+    return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
   }
 
   private isResponseSubmitted (): boolean {
@@ -246,8 +270,21 @@ export class Claim {
     return this.settlement && !!this.settlementReachedAt
   }
 
+  private isCCJPaidWithinMonth (): boolean {
+    return this.moneyReceivedOn.isSameOrBefore(calculateMonthIncrement(this.countyCourtJudgmentRequestedAt))
+  }
+
   private isSettlementReachedThroughAdmission (): boolean {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
+  }
+
+  private isSettlementAgreementRejected (): boolean {
+    if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
+      return false
+    }
+    const claimantResponse: AcceptationClaimantResponse = this.claimantResponse
+    return claimantResponse.formaliseOption === FormaliseOption.SETTLEMENT
+      && this.settlement && this.settlement.isOfferRejected()
   }
 
   private isFullAdmissionPayImmediatelyPastPaymentDate (): boolean {
@@ -278,15 +315,40 @@ export class Claim {
   hasClaimantAcceptedAdmissionWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
-      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
+  private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.claimantResponse.claimantPaymentIntention &&
+      this.response && this.response.responseType === ResponseType.PART_ADMISSION
+  }
+
+  private hasClaimantAcceptedDefendantFullAdmissionResponseWithAlternativePaymentIntention (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.claimantResponse.claimantPaymentIntention &&
+      this.response && this.response.responseType === ResponseType.FULL_ADMISSION
+  }
+
+  hasClaimantAcceptedDefendantResponseWithCCJ (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.countyCourtJudgmentRequestedAt !== undefined
+      && this.countyCourtJudgment !== undefined
+  }
+
+  hasClaimantAcceptedDefendantResponseWithSettlement (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.settlement !== undefined
+  }
+
   private isClaimantResponseSubmitted (): boolean {
-    return this.response !== undefined && this.claimantResponse !== undefined
+    return this.response !== undefined && this.claimantResponse !== undefined && !this.reDeterminationRequestedAt
   }
 
   isEligibleForReDetermination (): boolean {
@@ -297,7 +359,24 @@ export class Claim {
   }
 
   private hasClaimantSuggestedAlternativePlanWithCCJ (): boolean {
-    return this.claimantResponse && this.countyCourtJudgment &&
-      !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
+    return this.claimantResponse && this.countyCourtJudgmentRequestedAt &&
+      !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
+  }
+
+  private hasRedeterminationBeenRequested (): boolean {
+    return this.claimantResponse && this.countyCourtJudgmentRequestedAt && !!this.reDeterminationRequestedAt
+  }
+
+  private hasClaimantRejectedPartAdmission (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+  }
+
+  private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
+  }
+
+  public amountPaid () {
+    return this.claimantResponse && this.claimantResponse.amountPaid ? this.claimantResponse.amountPaid : 0
   }
 }

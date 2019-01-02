@@ -137,7 +137,11 @@ export class TaskListBuilder {
       }
 
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (!claim.claimData.defendant.isBusiness()) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
@@ -165,7 +169,11 @@ export class TaskListBuilder {
         )
       )
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (!claim.claimData.defendant.isBusiness()) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
@@ -215,9 +223,15 @@ export class TaskListBuilder {
 
   private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
     if (
-      (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
-        || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)
-        && (draft.courtDetermination.rejectionReason.text === undefined))))) {
+      draft.acceptPaymentMethod && (
+        draft.acceptPaymentMethod.accept.option === YesNoOption.YES || (
+          this.isFormaliseRepaymentPlanNotSetOrNotReferToJudge(draft) &&
+          draft.acceptPaymentMethod.accept.option === YesNoOption.NO &&
+          isDefinedAndValid(draft.alternatePaymentMethod) &&
+          draft.courtDetermination.rejectionReason.text === undefined
+        )
+      )
+    ) {
       tasks.push(
         new TaskListItem(
           'Choose how to formalise repayment',
@@ -226,6 +240,12 @@ export class TaskListBuilder {
         )
       )
     }
+  }
+
+  private static isFormaliseRepaymentPlanNotSetOrNotReferToJudge (draft: DraftClaimantResponse): boolean {
+    return draft.formaliseRepaymentPlan === undefined || (
+      draft.formaliseRepaymentPlan && draft.formaliseRepaymentPlan.option !== FormaliseRepaymentPlanOption.REFER_TO_JUDGE
+    )
   }
 
   static buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskList {
