@@ -13,6 +13,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
+import * as moment from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -66,7 +68,8 @@ describe('CCJ - Pay by set date', () => {
   })
 
   describe('on POST', () => {
-    const validFormData = { known: 'true', date: { day: '31', month: '12', year: '2018' } }
+    const today: moment.Moment = MomentFactory.currentDate().add(5, 'days')
+    const validFormData = { known: 'true', date: { day: today.date(), month: today.month() + 1, year: today.year() } }
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
