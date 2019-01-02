@@ -245,7 +245,6 @@ export class Claim {
     return statuses
   }
 
-
   get admissionPayImmediatelyPastPaymentDate (): boolean {
     return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
       (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
@@ -275,13 +274,13 @@ export class Claim {
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY && !this.isSettlementReachedThroughAdmission()
       && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
   }
-  
-  private isDefendantBusiness (): boolean {
-    return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
-  }
 
   private isResponseSubmitted (): boolean {
     return this.response !== undefined && !this.claimantResponse
+  }
+
+  private isDefendantBusiness (): boolean {
+    return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
   }
 
   private isOfferSubmitted (): boolean {
