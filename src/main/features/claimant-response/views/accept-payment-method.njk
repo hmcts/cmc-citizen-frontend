@@ -15,8 +15,8 @@
         {{ csrfProtection(csrf) }}
 
         {% if paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-        <p>{{ t('{{ defendantFullName }} has offered to pay you in full by {{ paymentDate }}.', { defendantFullName: claim.claimData.defendant.name, paymentDate: paymentDate | date }) }}</p>
-        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS and paymentPlan is defined %}
+          <p>{{ t('{{ defendantFullName }} has offered to pay you in full by {{ paymentDate }}.', { defendantFullName: claim.claimData.defendant.name, paymentDate: paymentDate | date }) }}</p>
+        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS %}
           {{
           repaymentPlanBlock(
             heading = '',
@@ -25,6 +25,9 @@
           }}
         {% endif %}
 
+        {% if claim.claimData.defendant.isBusiness() %}
+          {% set hint = 'The defendant should have sent you their financial details. You’ll need to send them to us. We’ll issue a CCJ against them. The terms of the CCJ will depend on whether we believe they can afford your suggested repayment plan.' %}
+        {% endif %}
         {{
         radioGroupWithHintPanel(
           form = form,
@@ -40,7 +43,8 @@
           {
             label: 'No - I’ll suggest my own',
             value: YesNoOption.NO.option,
-            checked: (form.valueFor('accept') === YesNoOption.NO)
+            checked: (form.valueFor('accept') === YesNoOption.NO),
+            hint: hint
           }
         ]
         )
