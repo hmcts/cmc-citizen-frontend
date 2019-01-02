@@ -15,7 +15,7 @@
         {% endif %}
 
         {% if featureToggles.testingSupport and disposableIncome !== undefined %}
-          <p>Disposable Income value: {{ disposableIncome }}</p>
+          <p>For testing use only: Disposable Income value: {{ disposableIncome }}</p>
         {% endif %}
 
         {{ dateInput(form = form, name = 'date', hint = t('For example, {{ nextMonth }}', { nextMonth : 'now' | addDays(30) | inputDate })) }}
