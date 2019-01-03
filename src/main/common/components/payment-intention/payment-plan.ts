@@ -97,7 +97,8 @@ export abstract class AbstractPaymentPlanPage<Draft> {
       form,
       partAdmit: partAdmit,
       totalAmount: amount,
-      paymentLength
+      paymentLength,
+      disposableIncome: res.locals.draft.document.courtDetermination ? res.locals.draft.document.courtDetermination.disposableIncome : undefined
     })
   }
 }
