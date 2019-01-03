@@ -105,7 +105,7 @@
     "HTML_CodeSniffer": "https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "codacy-coverage": "^3.4.0",
+    "codacy-coverage": "3.2.0",
     "codeceptjs": "^2.0.0",
     "codecov": "^3.1.0",
     "debug": "^4.1.1",
