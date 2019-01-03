@@ -21,11 +21,8 @@
           {{ radioOption(label = 'Yes', name = 'option', form = form, value = 'yes', checked = (selection == 'yes')) }}
 
           <div class="panel panel-border-narrow js-hidden" id="option-yes">
-            <p>{{ t('Total claim amount: £{{ totalAmount }}', { totalAmount: totalAmount }) }}</p>
-
             <input type="hidden" name="claimedAmount" value="{{ totalAmount }}" />
             {{ poundInput(label = 'Amount already paid', name = 'amount', form = form) }}
-
           </div>
 
           {{ radioOption(label = 'No', name = 'option', form = form, value = 'no', checked = (selection == 'no')) }}
