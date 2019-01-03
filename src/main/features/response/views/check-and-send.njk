@@ -239,7 +239,7 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if not draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+    {% if draft.isResponsePartiallyAdmitted() and not draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
       {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
         {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
         {{
