@@ -27,7 +27,7 @@
     <li>{{ t('pay {{ claimantName }} by {{ paymentDate }}', { claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</li>
     <li>{{ t('make sure any cheques or bank transfers are clear in their account by the deadline') }}</li>
     <li>
-      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+      {{ internalLink('contact ' + claimantName, claimantDetailsPageURI) }}
       {{ t('if you need their payment details.') }}
     </li>
     <li>{{ t('make sure you get a receipt for any payments') }}</li>
@@ -52,7 +52,7 @@
   <ul class="list list-bullet">
     <li>{{ t('set up your repayment plan to begin when you said it would') }}</li>
     <li>
-      {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+      {{ internalLink('contact ' + claimantName, claimantDetailsPageURI) }}
       {{ t('if you need their payment details.') }}
     </li>
     <li>{{ t('make sure you get a receipt for any payments') }}</li>
