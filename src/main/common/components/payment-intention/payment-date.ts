@@ -78,7 +78,8 @@ export abstract class AbstractPaymentDatePage<Draft> {
     res.render(this.getView(), {
       heading: this.getHeading(),
       form: form,
-      notice: notice ? notice : undefined
+      notice: notice ? notice : undefined,
+      disposableIncome: res.locals.draft.document.courtDetermination ? res.locals.draft.document.courtDetermination.disposableIncome : undefined
     })
   }
 }
