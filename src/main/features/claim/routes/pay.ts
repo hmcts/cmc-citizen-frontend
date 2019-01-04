@@ -84,7 +84,7 @@ async function successHandler (res, next) {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
     if (!roles.length) {
-      throw new Error('missing role for user')
+      throw new Error(`missing role for user, User Id : ${user.id}`)
     }
 
     if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
