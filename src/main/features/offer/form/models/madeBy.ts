@@ -1,6 +1,7 @@
 export class MadeBy {
   static readonly CLAIMANT = new MadeBy('CLAIMANT', 'Claimant')
   static readonly DEFENDANT = new MadeBy('DEFENDANT', 'Defendant')
+  static readonly COURT = new MadeBy('COURT', 'Court')
 
   readonly value: string
   readonly displayValue: string
