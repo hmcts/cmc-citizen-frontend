@@ -1,4 +1,4 @@
-import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/IncomeExpenseSchedule'
+import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { FrequencyBasedAmount } from 'claims/models/response/statement-of-means/frequencyBasedAmount'
 
 export namespace MonthlyAmountViewFilter {
