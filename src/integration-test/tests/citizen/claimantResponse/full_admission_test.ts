@@ -8,7 +8,6 @@ import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantRes
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
-import { PaidInFullSteps } from 'integration-test/tests/citizen/dashboard/steps/paid-in-full'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -30,8 +29,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
     I.see(testData.claimRef)
     I.see('The defendant said they’ll pay you immediately')
-    I.see('Settling the claim')
-    I.see('If the defendant has paid you, you need to tell us.')
     I.click('My account')
     I.see(testData.claimRef)
     I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
@@ -53,8 +50,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
-    I.see('Settling the claim')
-    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', async (I: I) => {
@@ -73,8 +68,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
-    I.click(testData.claimRef)
-    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
@@ -94,8 +87,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
-    I.click(testData.claimRef)
-    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen', async (I: I) => {
@@ -115,13 +106,10 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
-    I.click(testData.claimRef)
-    I.see('If the defendant has paid you, you need to tell us.')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-    const paidInFullSteps: PaidInFullSteps = new PaidInFullSteps()
     testData.paymentOption = PaymentOption.BY_SET_DATE
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
@@ -133,11 +121,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('County Court Judgment')
-    I.click(testData.claimRef)
-    I.see('Tell us you’ve been paid')
-    I.click('Tell us you’ve been paid')
-    paidInFullSteps.inputDatePaid('2017-01-01')
-    I.see('The claim is now settled')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', async (I: I) => {
@@ -153,7 +136,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('County Court Judgment')
-    I.click(testData.claimRef)
-    I.see('If the defendant has paid you, you need to tell us.')
   })
 }
