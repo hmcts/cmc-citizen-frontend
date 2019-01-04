@@ -14,7 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'paid-in-full/paths'
 
 import { app } from 'main/app'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
