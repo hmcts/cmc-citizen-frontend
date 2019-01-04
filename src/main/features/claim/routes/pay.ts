@@ -83,6 +83,10 @@ async function successHandler (res, next) {
   if (!claimIsAlreadyFullyPersisted) {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
+    if (!roles.length) {
+      throw new Error('missing role for user')
+    }
+
     if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
       await claimStoreClient.saveClaim(draft, user, 'admissions')
     } else {

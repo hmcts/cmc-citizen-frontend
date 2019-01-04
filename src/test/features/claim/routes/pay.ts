@@ -543,7 +543,8 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
-            claimStoreServiceMock.resolveRetrieveUserRoles()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-not-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed(false)
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
 
@@ -551,6 +552,20 @@ describe('Claim issue: post payment callback receiver', () => {
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+          })
+
+          it('should throw error when user has no new feature consent role', async () => {
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveSave()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
+            claimStoreServiceMock.resolveRetrieveUserRoles()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.serverError.withText('missing role for user'))
           })
 
           it('should redirect to confirmation page when feature toggle does not allows admission', async () => {
