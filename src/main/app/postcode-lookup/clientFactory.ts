@@ -1,4 +1,4 @@
-import { PostcodeInfoClient } from '@hmcts/postcodeinfo-client'
+import { PostcodeInfoClient } from '@hmcts/os-places-client'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { request } from 'client/request'
 import * as config from 'config'

@@ -136,9 +136,10 @@
     on-finished "^2.3.0"
     winston "^2.4.1"
 
-"@hmcts/postcodeinfo-client@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/postcodeinfo-client/-/postcodeinfo-client-1.1.0.tgz#d830d6e23511bc3e76df1e7509762c2a9b85dd65"
+"@hmcts/os-places-client@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.0.0.tgz#bd14709513ed64158ed6843d2daaf448e61df6a9"
+  integrity sha512-pVZTFosYq4H6wMqV0e8vIC9iZ9lCInJl2lvhRlzFsngEFDtoEXFwF0+yun1Lw8ynSs/vqmmB4Xm7mj6E2ULdSw==
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"
