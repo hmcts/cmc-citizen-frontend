@@ -22,13 +22,12 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
   throw new NotFoundError(req.path)
 })
 
-function renderView (res: express.Response, page: number): void {
+function renderView (res: express.Response): void {
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
   res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
-    page: page,
     alreadyPaid: alreadyPaid,
     partiallyPaid: alreadyPaid ? StatesPaidHelper.isAlreadyPaidLessThanAmount(claim) : undefined
   })
@@ -40,8 +39,7 @@ export default express.Router()
     Paths.defendantsResponsePage.uri,
     stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
-      const page: number = 0
-      renderView(res, page)
+      renderView(res)
     }
   )
   .post(
@@ -53,9 +51,8 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
-      if (req.body.action && req.body.action.showPage && !alreadyPaid) {
-        const page: number = +req.body.action.showPage
-        return renderView(res, page)
+      if (req.body.action && !alreadyPaid) {
+        return renderView(res)
       }
 
       draft.document.defendantResponseViewed = true

@@ -132,18 +132,7 @@ describe('Claimant response: view defendant response page', () => {
           })
         })
 
-        it('should render second part admission page when pagination was requested and everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(partialAdmissionWithPaymentBySetDate)
-          draftStoreServiceMock.resolveFind('claimantResponse')
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send({ action: { showPage: 1 } })
-            .expect(res => expect(res).to.be.successful.withText('How they want to pay'))
-        })
-
-        it('should redirect to task list page when pagination was not requested and everything is fine', async () => {
+        it('should redirect to task list page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
           draftStoreServiceMock.resolveFind('claimantResponse')
           draftStoreServiceMock.resolveSave()
