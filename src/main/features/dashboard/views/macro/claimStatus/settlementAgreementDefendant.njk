@@ -53,7 +53,7 @@
     <h2 class="heading-small">{{ t('{{ claimantName }} rejected your repayment plan.', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
-          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
+          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount | numeral }) }}</p>
     {% endif %}
     {% if claim.claimantResponse.courtDetermination.decisionType !== DecisionType.CLAIMANT %}
       <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>

@@ -39,7 +39,7 @@ ccjRequestedForDefendantClaimDetails %}
   claimFullAdmissionForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimFullAdmissionForClaimant.njk" import
-  claimFullAdmissionForClaimantClaimDetails,
+claimFullAdmissionForClaimantClaimDetails,
   claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
@@ -59,7 +59,7 @@ ccjRequestedForDefendantClaimDetails %}
   claimantWithDefendantAsBusinessResponseDetailedStatus %}
 
 {% from "./claimStatus/paidInFullClaimant.njk" import paidInFullClaimantClaimSettledDetails, paidInFullClaimantClaimDetails, paidInFullCCJCancelledClaimantClaimDetails, paidInFullCCJSatisfiedClaimantClaimDetails %}
-{% from "./claimStatus/paidInFullDefendant.njk" import paidInFullDefendantClaimDetails %}
+{% from "./claimStatus/paidInFullDefendant.njk" import paidInFullDefendantClaimDetails, paidInFullCCJSatisfiedDefendantClaimDetails, paidInFullCCJCancelledDefendantClaimDetails %}
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import
   admissionByCCJDefendantClaimDetails,
@@ -165,6 +165,10 @@ ccjRequestedForDefendantClaimDetails %}
       {{ noResponseForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL %}
       {{ paidInFullDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED %}
+      {{ paidInFullCCJCancelledDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
+      {{ paidInFullCCJSatisfiedDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
