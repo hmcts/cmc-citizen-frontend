@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
+import { PostcodeInfoResponse } from '@hmcts/os-places-client'
 
 import { Paths as AppPaths } from 'paths'
 import { Logger } from '@hmcts/nodejs-logging'

@@ -7,7 +7,7 @@ import {
 } from 'class-validator'
 import { Country } from 'common/country'
 import { ErrorLogger } from 'logging/errorLogger'
-import { PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
+import { PostcodeInfoResponse } from '@hmcts/os-places-client'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
 
 const postcodeClient = ClientFactory.createInstance()
@@ -33,7 +33,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
       if (!postcodeInfoResponse.valid) {
         return true
       }
-      const country = postcodeInfoResponse.country.name
+      const country = 'UK' // postcodeInfoResponse.country.name
       const countries: Country[] = args.constraints[0]
 
       return countries.filter(result => result.name.toLowerCase() === country.toLowerCase()).length > 0

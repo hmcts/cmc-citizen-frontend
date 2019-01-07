@@ -136,10 +136,10 @@
     on-finished "^2.3.0"
     winston "^2.4.1"
 
-"@hmcts/os-places-client@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.0.0.tgz#bd14709513ed64158ed6843d2daaf448e61df6a9"
-  integrity sha512-pVZTFosYq4H6wMqV0e8vIC9iZ9lCInJl2lvhRlzFsngEFDtoEXFwF0+yun1Lw8ynSs/vqmmB4Xm7mj6E2ULdSw==
+"@hmcts/os-places-client@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.0.1.tgz#7804d21cc7e747364f2faefce3fc43b5de608825"
+  integrity sha512-SPMvkVWQifkHLLz07JWsWBQagUlph1ExECEFunbZRI6FRc4IcQ862pOMo7m6zKeUa15SgLXr2uM5tPRWWwZoQg==
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"
