@@ -38,9 +38,6 @@ import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/intere
 import { InterestDateType } from 'common/interestDateType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { YesNoOption } from 'models/yesNoOption'
-import { Logger } from '@hmcts/nodejs-logging'
-
-const logger = Logger.getLogger('router/pay')
 
 const draftType = 'claim'
 
