@@ -42,11 +42,15 @@
         <p>{{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', { paymentDate: paymentDate }) }}</p>
       {% endif %}
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+
+    {% if not claim.claimData.defendant.isBusiness() %}
       <h2 class="heading-small">{{ t('The defendant has offered to pay by {{ paymentDate }}.',
           { defendantName: defendantName, paymentDate: paymentDate }) }}</h2>
+    {% endif %}
 
       {% if claim.claimData.defendant.isBusiness() %}
-        <p>{{ t('They’ll send you their financial details. You can use these to decide whether to to accept or reject their offer') }}</p>
+        <h2 class="heading-small">{{ t('The defendant has admitted they owe {{ amount}}', { amount: amount }) }}</h2>
+        <p>{{ t('The defendant has offered to pay by {{ paymentDate }}. They’ll send you their financial details. You can use these to decide whether to accept or reject what they say they owe',{ paymentDate: paymentDate }) }}</p>
       {% else %}
         <p>{{ t('You can accept or reject their offer.') }}</p>
       {% endif %}
