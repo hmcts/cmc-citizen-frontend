@@ -55,6 +55,7 @@ import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 import { DecisionType } from 'common/court-calculations/decisionType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { PartyType } from 'common/partyType'
+import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -166,6 +167,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('headingVisible', true)
     nunjucksEnv.addGlobal('DecisionType', DecisionType)
     nunjucksEnv.addGlobal('PartyType', PartyType)
+    nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

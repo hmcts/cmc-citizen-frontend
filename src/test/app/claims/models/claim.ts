@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-expression */
 import { Claim } from 'claims/models/claim'
 import { MomentFactory } from 'shared/momentFactory'
 import { expect } from 'chai'
@@ -43,12 +44,12 @@ describe('Claim', () => {
       })
 
       it('should return true when claim not responded to', () => {
-        expect(claim.eligibleForCCJ).to.be.equal(true)
+        expect(claim.eligibleForCCJ).to.be.true
       })
 
       it('should return false when claim responded to', () => {
         claim.respondedAt = MomentFactory.currentDateTime()
-        expect(claim.eligibleForCCJ).to.be.equal(false)
+        expect(claim.eligibleForCCJ).to.be.false
       })
     })
 
@@ -59,7 +60,7 @@ describe('Claim', () => {
       })
 
       it('should return false', () => {
-        expect(claim.eligibleForCCJ).to.be.equal(false)
+        expect(claim.eligibleForCCJ).to.be.false
       })
     })
 
@@ -69,7 +70,7 @@ describe('Claim', () => {
       })
 
       it('should return false', () => {
-        expect(claim.eligibleForCCJ).to.be.equal(false)
+        expect(claim.eligibleForCCJ).to.be.false
       })
     })
   })
@@ -331,7 +332,7 @@ describe('Claim', () => {
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(18, 'days')
 
-      expect(claim.isEligibleForReDetermination()).to.equal(true)
+      expect(claim.isEligibleForReDetermination()).to.be.true
     })
 
     it('should not be eligible when ccj requested date is 20 days before', () => {
@@ -342,7 +343,7 @@ describe('Claim', () => {
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
 
     it('should not be eligible when reDetermination already requested', () => {
@@ -354,7 +355,7 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
 
     it('should not be eligible when ccjType is Admissions', () => {
@@ -366,7 +367,7 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
 
     it('should not be eligible when ccjType is Default', () => {
@@ -378,7 +379,7 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
   })
 
@@ -390,7 +391,7 @@ describe('Claim', () => {
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
     })
 
-    it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_ELIGIBLE if an offer has been submitted.', () => {
+    it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_LINK_ELIGIBLE if an offer has been submitted.', () => {
       claim.settlement = new Settlement()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
@@ -403,7 +404,7 @@ describe('Claim', () => {
       expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
-      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
 
     it('should return OFFER_REJECTED when offer is rejected', () => {
@@ -415,13 +416,13 @@ describe('Claim', () => {
       expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
-      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
 
     it('should contain the claim status only if not responded to', () => {
       expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
 
     it('should contain the claim status only if response submitted but no offer made', () => {
@@ -430,7 +431,7 @@ describe('Claim', () => {
 
       expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
 
     it('should contain the claim status only if claimant rejects organisation response', () => {
@@ -455,9 +456,8 @@ describe('Claim', () => {
       })
       claim.claimantResponse = rejectionClaimantResponseData
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain the claim status only if claimant rejects company response', () => {
@@ -482,9 +482,8 @@ describe('Claim', () => {
         defendant: new Company().deserialize(organisation)
       }
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {
@@ -496,7 +495,7 @@ describe('Claim', () => {
       expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
-      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_ELIGIBLE)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
   })
 
@@ -510,13 +509,13 @@ describe('Claim', () => {
 
     it('should return true when CCJ is paid within month of countyCourtJudgmentRequestedAt', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().add(1, 'month')
-      expect(claim.isCCJPaidWithinMonth()).to.be.equal(true)
+      expect(claim.isCCJPaidWithinMonth()).to.be.true
     })
 
     it('should return false when CCJ is paid 2 months after countyCourtJudgmentRequestedAt', () => {
       claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
-      expect(claim.isCCJPaidWithinMonth()).to.be.equal(false)
+      expect(claim.isCCJPaidWithinMonth()).to.be.false
     })
   })
 })

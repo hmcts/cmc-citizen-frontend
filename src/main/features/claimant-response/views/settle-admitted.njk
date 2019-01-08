@@ -38,7 +38,7 @@
               value = YesNoOption.NO.option,
               label = 'No',
               bold = true,
-              hint = t('The claim will continue for the total amount you claimed: {{ claimAmount }}', { claimAmount: claim.totalAmountTillToday | numeral }),
+              hint = t('The claim will continue for the total amount you claimed: {{ claimAmount }}.', { claimAmount: claim.totalAmountTillToday | numeral }),
               checked = (form.valueFor('admitted') === YesNoOption.NO)
             ) }}
 

@@ -115,7 +115,7 @@
 {% macro monthlyIncomesSection(incomes) %}
   {% if incomes %}
     {% for income in incomes %}
-      {{ row(label = income.type | renderIncomeType | capitalize, value = income.amount | numeral, bottomBorder = loop.index0 === incomes.length - 1) }}
+      {{ row(label = income.type | renderIncomeType | capitalize, value = income | renderMonthlyAmount | numeral, bottomBorder = loop.index0 === incomes.length - 1) }}
     {% endfor %}
   {% else %}
     {{ row(label = 'Do they receive any income?', value = 'No', bottomBorder = true) }}
@@ -125,7 +125,7 @@
 {% macro monthlyExpensesSection(expenses) %}
   {% if expenses %}
     {% for expense in expenses %}
-      {{ row(label = expense.type | renderExpenseType | capitalize, value = expense.amount | numeral, bottomBorder = loop.index0 === expenses.length - 1) }}
+      {{ row(label = expense.type | renderExpenseType | capitalize, value = expense | renderMonthlyAmount | numeral, bottomBorder = loop.index0 === expenses.length - 1) }}
     {% endfor %}
   {% else %}
     {{ row(label = 'Do they pay any expenses?', value = 'No', bottomBorder = true) }}
