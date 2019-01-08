@@ -1,4 +1,5 @@
 {% from "./utilityMacros.njk" import downloadResponseLink %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro paidInFullDefendantDashboard() %}
   {{ t('This claim is settled.') }}
@@ -26,7 +27,7 @@
   {{ paidInFullDefendantClaimSettledDetails(claim) }}
   <p>{{ t('We’ll tell the Registry Trust to remove your County Court Judgment (CCJ) from the register of judgments.') }}</p>
   <p>{{ t('The CCJ won’t appear in credit agency searches, though some agencies may not update their records immediately.') }}</p>
-  <p>{{ t('If you need proof that the CCJ is cancelled you can pay £15 to get a certificate of cancellation.') }}</p>
+  <p>{{ paidInFullCCJCertificate() }}</p>
   <p>{{ downloadResponseLink(claim) }}</p>
 {% endmacro %}
 
@@ -35,6 +36,11 @@
   <p>{{ t('We’ll tell the Registry Trust to mark your County Court Judgment (CCJ) as paid on the register of judgments.') }}</p>
   <p>{{ t('Any credit agency that checks the register will see you’ve paid the money, though some may not update their records immediately.') }}</p>
   <p>{{ t('The judgment will remain on the register for 6 years but it’ll be marked as satisfied.') }}</p>
-  <p>{{ t('If you need proof that the CCJ is paid you can pay £15 to get a certificate of satisfaction.') }}</p>
+  <p>{{ paidInFullCCJCertificate() }}</p>
   <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro paidInFullCCJCertificate() %}
+  <p>{{ t('If you need proof that the CCJ is paid you can ' + internalLink('contact us to get a certificate of satisfaction',
+      AppPaths.contactUsPage.uri) + '. This costs £15.') | safe }}</p>
 {% endmacro %}
