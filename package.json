@@ -27,7 +27,7 @@
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/** -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info"
   },
   "dependencies": {
-    "@hmcts/cmc-common-frontend": "^1.53.0",
+    "@hmcts/cmc-common-frontend": "^1.53.1",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/cmc-validators": "^0.2.0",
     "@hmcts/draft-store-client": "^1.1.1",
@@ -106,7 +106,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.2.0",
-    "codeceptjs": "^2.0.1",
+    "codeceptjs": "^2.0.2",
     "codecov": "^3.1.0",
     "debug": "^4.1.1",
     "gulp-livereload": "^4.0.1",
