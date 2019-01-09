@@ -235,9 +235,9 @@ export class ClaimStoreClient {
   }
 
   saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<void> {
-    const response = ClaimantResponseConverter.convertToClaimantResponse(draft.document)
+    const isDefendantBusiness = claim.claimData.defendant.isBusiness()
+    const response = ClaimantResponseConverter.convertToClaimantResponse(draft.document, isDefendantBusiness)
     const externalId: string = claim.externalId
-
     return this.request
       .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {
         body: response,

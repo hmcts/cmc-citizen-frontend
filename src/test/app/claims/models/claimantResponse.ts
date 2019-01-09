@@ -2,7 +2,10 @@ import { expect } from 'chai'
 import { convertToRawObject } from 'test/rawObjectUtils'
 import { ClaimantResponse } from 'claims/models/claimantResponse'
 
-import { ccjAcceptationClaimantResponseData, rejectionClaimantResponseData } from 'test/data/entity/claimantResponseData'
+import {
+  ccjAcceptationClaimantResponseData,
+  rejectionClaimantResponseData
+} from 'test/data/entity/claimantResponseData'
 
 describe('ClaimantResponse', () => {
 
