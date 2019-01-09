@@ -1,3 +1,7 @@
+provider "azurerm" {
+  version = "1.19.0"
+}
+
 provider "vault" {
   //  # It is strongly recommended to configure this provider through the
   //  # environment variables described above, so that each user can have
@@ -86,6 +90,8 @@ module "citizen-frontend" {
   website_local_cache_sizeinmb = "${var.website_local_cache_sizeinmb}"
 
   app_settings = {
+    DUMMY="force-update"
+
     // Node specific vars
     NODE_DEBUG="${var.node_debug}"
     NODE_ENV = "${var.node_env}"
