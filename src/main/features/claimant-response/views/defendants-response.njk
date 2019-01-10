@@ -119,7 +119,7 @@
             </div>
             {% endif %}
 
-          {% if claim.response.evidence %}
+          {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
             {{ evidenceFragment(claim.response.evidence) }}
           {% endif %}
         {% elseif page === 1 %}
