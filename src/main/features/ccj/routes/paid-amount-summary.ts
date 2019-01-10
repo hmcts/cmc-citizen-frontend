@@ -7,6 +7,12 @@ import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
+import { User } from 'idam/user'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { DraftService } from 'services/draftService'
+import { retrievePaymentOptionsFromClaim } from 'claims/ccjModelConverter'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
@@ -16,11 +22,27 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
   buildRedirectUri (req: express.Request, res: express.Response): string {
     const { externalId } = req.params
-    return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+    const claim: Claim = res.locals.claim
+    const response = claim.response
+    if (response) {
+      const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
+      if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+        return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
+      } else {
+        return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+      }
+    } else {
+      return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+    }
   }
 
   amountSettledFor (claim: Claim, draft: DraftCCJ): number {
     return undefined
+  }
+
+  async saveDraft (locals: { user: User, draft: DraftWrapper<DraftCCJ> }): Promise<void> {
+    const user: User = locals.user
+    await new DraftService().save(locals.draft, user.bearerToken)
   }
 }
 
