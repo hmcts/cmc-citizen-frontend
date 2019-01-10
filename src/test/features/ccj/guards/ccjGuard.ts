@@ -28,17 +28,25 @@ describe('CCJ guard', () => {
     })
   })
 
-  it('should redirect to dashboard page when eligibleForCCJ is false', () => {
-    res.locals.claim = { eligibleForCCJ: false }
+  it('should redirect to dashboard page when eligibleForCCJ, admissionPayImmediatelyPastPaymentDate, eligibleForCCJAfterBreachedSettlementTerms is false', () => {
+    res.locals.claim = {
+      eligibleForCCJ: false,
+      admissionPayImmediatelyPastPaymentDate: false,
+      eligibleForCCJAfterBreachedSettlementTerms: false
+    }
 
     CCJGuard.requestHandler(req, res, next)
     chai.expect(res.redirect).to.have.been.calledWith(Paths.dashboardPage.uri)
   })
 
-  it('should pass when eligibleForCCJ is true', () => {
+  it('should pass when eligibleForCCJ, admissionPayImmediatelyPastPaymentDate, eligibleForCCJAfterBreachedSettlementTerms  is true', () => {
     const spy = sinon.spy(next)
 
-    res.locals.claim = { eligibleForCCJ: true }
+    res.locals.claim = {
+      eligibleForCCJ: true,
+      admissionPayImmediatelyPastPaymentDate: true,
+      eligibleForCCJAfterBreachedSettlementTerms: true
+    }
 
     CCJGuard.requestHandler(req, res, spy)
 
