@@ -14,9 +14,12 @@ export class TheirDetails {
     this.email = email
   }
 
-  isBusiness (includeSoleTrader: boolean = false): boolean {
-    return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value ||
-      (includeSoleTrader && this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value)
+  isBusiness (): boolean {
+    return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
+  }
+
+  isSoleTrader (): boolean {
+    return this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
   }
 
   deserialize (input: any): TheirDetails {

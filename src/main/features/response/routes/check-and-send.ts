@@ -48,7 +48,7 @@ function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
 
 function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
   if (isStatementOfTruthRequired(draft)) {
-    if (claim.claimData.defendant.isBusiness(true)) {
+    if (claim.claimData.defendant.isBusiness() || claim.claimData.defendant.isSoleTrader()) {
       return SignatureType.QUALIFIED
     } else {
       return SignatureType.BASIC
