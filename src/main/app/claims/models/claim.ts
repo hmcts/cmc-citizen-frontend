@@ -22,6 +22,7 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -228,6 +229,8 @@ export class Claim {
       return ClaimStatus.NO_RESPONSE
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
+    } else if (this.hasClaimantRejectedDefendantResponseWithMediation() && this.isDefendantBusiness()) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITH_MEDIATION
     } else if (this.hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedDefendantFullAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
@@ -366,7 +369,15 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION &&
+      this.response.freeMediation === YesNoOption.NO
+
+  }
+
+  private hasClaimantRejectedDefendantResponseWithMediation (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION &&
+      this.response.freeMediation === YesNoOption.YES &&
+      this.response && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
   private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {
