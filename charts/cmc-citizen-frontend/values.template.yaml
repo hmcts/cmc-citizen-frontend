@@ -11,6 +11,7 @@ feature-toggle-api:
   nameOverride: feature-toggle-api
   image: hmcts/feature-toggle-api
   applicationPort: 8580
+  buildID: feature-toggle-api
   environment:
     JAVA_OPTS: -Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
     APPINSIGHTS_INSTRUMENTATIONKEY: fake-key

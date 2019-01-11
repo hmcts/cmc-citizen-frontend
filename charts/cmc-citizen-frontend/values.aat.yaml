@@ -1,4 +1,4 @@
-java:
+nodejs:
   environment:
     IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
     IDAM_URL: https://preprod-idamapi.reform.hmcts.net:3511

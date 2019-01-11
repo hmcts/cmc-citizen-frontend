@@ -1,4 +1,4 @@
-description: A Helm chart for the HMCTS CMC Citizen Frontend service
+description: Helm chart for the HMCTS CMC Citizen Frontend service
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
 version: 0.0.1
