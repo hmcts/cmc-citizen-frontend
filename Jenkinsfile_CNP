@@ -58,6 +58,7 @@ withPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   enableDockerBuild()
-  enableDeployToAKS()
+//  enableDeployToAKS()
+  installCharts()
   setVaultName('cmc')
 }
