@@ -22,6 +22,10 @@ export class TheirDetails {
     return this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
   }
 
+  isBusinessOrSoleTrader (): boolean {
+    return this.isBusiness() || this.isSoleTrader()
+  }
+
   deserialize (input: any): TheirDetails {
     if (input) {
       this.type = input.type

@@ -117,8 +117,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response, next: 
         businessName: getBusinessName(draft.document.claimant.partyDetails),
         dateOfBirth: getDateOfBirth(draft.document.claimant.partyDetails),
         defendantBusinessName: getBusinessName(draft.document.defendant.partyDetails),
-        partyAsBusinessOrSoleTrader:
-          draft.document.claimant.partyDetails.isBusiness() || draft.document.claimant.partyDetails.isSoleTrader(),
+        partyAsBusinessOrSoleTrader: draft.document.claimant.partyDetails.isBusinessOrSoleTrader(),
         claimantPartyDetailsPageUri: getClaimantPartyDetailsPageUri(draft.document.claimant.partyDetails),
         defendantPartyDetailsPageUri: getDefendantPartyDetailsPageUri(draft.document.defendant.partyDetails),
         paths: Paths,

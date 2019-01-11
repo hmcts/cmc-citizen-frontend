@@ -80,4 +80,8 @@ export class PartyDetails {
   isSoleTrader (): boolean {
     return this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
   }
+
+  isBusinessOrSoleTrader (): boolean {
+    return this.isBusiness() || this.isSoleTrader()
+  }
 }
