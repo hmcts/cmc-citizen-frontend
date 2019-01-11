@@ -1,0 +1,11 @@
+dependencies:
+  - name: postgresql
+    version: ~2.6.5
+    repository: '@stable'
+  - name: java
+    version: 0.0.9
+    repository: '@hmcts'
+    alias: feature-toggle-api
+  - name: nodejs
+    version: 0.0.6
+    repository: '@hmcts'

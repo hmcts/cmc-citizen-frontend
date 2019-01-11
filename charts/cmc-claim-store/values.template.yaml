@@ -1,0 +1,59 @@
+postgresql:
+  nameOverride: postgres
+  initdbScripts:
+    init.sql: |-
+      CREATE USER features WITH PASSWORD features;
+      CREATE DATABASE features WITH OWNER = features ENCODING = UTF-8 CONNECTION LIMIT = -1;
+  persistence:
+    enabled: false
+
+feature-toggle-api:
+  nameOverride: feature-toggle-api
+  image: hmcts/feature-toggle-api
+  applicationPort: 8580
+  environment:
+    JAVA_OPTS: -Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+    APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
+    FLYWAY_ENABLED: true
+    FLYWAY_NOOP_STRATEGY: false
+    FEATURES_DB_HOST: postgres
+    FEATURES_DB_CONN_OPTIONS: 
+    FEATURES_DB_USER_NAME: features
+    FEATURES_DB_PASSWORD: features
+    ADMIN_USERNAME_TEST: admin@example.com
+    ADMIN_PASSWORD_TEST: Password12
+    EDITOR_USERNAME_TEST: editor@example.com
+    EDITOR_PASSWORD_TEST: Password12
+    LOGBACK_REQUIRE_THREAD: false
+    LOGBACK_REQUIRE_ALERT_LEVEL: false
+    LOGBACK_REQUIRE_ERROR_CODE: false
+
+nodejs:
+  image: ${IMAGE_NAME}
+  ingressHost: ${SERVICE_FQDN}
+  applicationPort: 3000
+  environment:    
+    REFORM_TEAM: cmc
+    REFORM_SERVICE_NAME: citizen-frontend
+    REFORM_ENVIRONMENT: preview
+    NODE_ENV: production
+    UV_THREADPOOL_SIZE: 64
+    GA_TRACKING_ID: UA-97111056-1
+    SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPT1/
+    FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPFB/
+    REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPPB/
+    FEATURE_TOGGLES_API_URL: http://feature-toggle-api:8580
+    FEATURE_TESTING_SUPPORT: true
+    FEATURE_NEW_FEATURES_CONSENT: true
+    FEATURE_ADMISSIONS: true
+    FEATURE_FINE_PRINT: true
+    FEATURE_RETURN_ERROR_TO_USER: true
+    FEATURE_MOCK_PAY: false
+    POSTCODE_LOOKUP_API_KEY: ${POSTCODE_LOOKUP_API_KEY}
+    APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+    OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
+    IDAM_S2S_TOTP_SECRET: ${IDAM_S2S_TOTP_SECRET}
+    DRAFT_STORE_SECRET_PRIMARY: ${DRAFT_STORE_SECRET_PRIMARY}
+    DRAFT_STORE_SECRET_SECONDARY: ${DRAFT_STORE_SECRET_SECONDARY}
+    COOKIE_ENCRYPTION_KEY: ${COOKIE_ENCRYPTION_KEY}
+    CONTACT_EMAIL: ${CONTACT_EMAIL}
