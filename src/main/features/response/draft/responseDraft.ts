@@ -67,6 +67,7 @@ export class ResponseDraft extends DraftDocument {
   response?: Response
   defence?: Defence
   freeMediation?: FreeMediation
+  willYouTryMediation: FreeMediation
   moreTimeNeeded?: MoreTimeNeeded
   defendantDetails?: Defendant = new Defendant()
   timeline: DefendantTimeline
@@ -90,6 +91,7 @@ export class ResponseDraft extends DraftDocument {
       this.response = Response.fromObject(input.response)
       this.defence = new Defence().deserialize(input.defence)
       this.freeMediation = new FreeMediation(input.freeMediation && input.freeMediation.option)
+      this.willYouTryMediation = new FreeMediation(input.willYouTryMediation && input.willYouTryMediation.option)
       this.moreTimeNeeded = new MoreTimeNeeded(input.moreTimeNeeded && input.moreTimeNeeded.option)
       this.defendantDetails = new Defendant().deserialize(input.defendantDetails)
       this.howMuchOwed = new HowMuchOwed().deserialize(input.howMuchOwed)
