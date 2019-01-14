@@ -100,6 +100,11 @@ describe('DecideHowYouWillPayTask', () => {
     it('should be completed', () => {
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
+
+    it('should not be completed when first payment date is in the past', () => {
+      responseDraft.fullAdmission.paymentIntention.paymentPlan.firstPaymentDate = localDateFrom(MomentFactory.currentDate().add(-10, 'day'))
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
+    })
   })
 
   context('when pay immediately is selected', () => {
