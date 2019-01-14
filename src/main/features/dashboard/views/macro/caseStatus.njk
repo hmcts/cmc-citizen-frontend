@@ -126,8 +126,8 @@
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}
-  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
-    {{ claimantRejectedDefendantAsCompanyOrOrganisationResponse() }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
+    {{ partAdmitRejectedByClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
     {{ partAdmitRejectedByClaimantDashboard(claim) }}
     {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
@@ -196,7 +196,9 @@
     {{ partAdmittedClaimantAcceptsDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
-  {{ offerSettlementReachedDashboard() }}
+    {{ offerSettlementReachedDashboard() }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
+    {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
   {{  claimFullAdmissionForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
