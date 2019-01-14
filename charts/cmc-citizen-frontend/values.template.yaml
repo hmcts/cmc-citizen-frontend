@@ -16,7 +16,7 @@ feature-toggle-api:
     APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
     FLYWAY_ENABLED: true
     FLYWAY_NOOP_STRATEGY: false
-    FEATURES_DB_HOST: postgres
+    FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
     FEATURES_DB_CONN_OPTIONS: 
     FEATURES_DB_USER_NAME: features
     FEATURES_DB_PASSWORD: features
