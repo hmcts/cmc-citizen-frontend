@@ -22,5 +22,11 @@
     {% endif %}
 
     <p>{{ downloadResponseLink(claim) }}</p>
+
+    <div class="status-block">
+      <h2 class="heading-small">{{ t('If you’ve been paid') }}</h2>
+      <p>{{ t(internalLink('Tell us if you want to end the claim', DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId })) + ' because the defendant has paid you.') | safe }}</p>
+    </div>
+
   </div>
 {% endmacro %}

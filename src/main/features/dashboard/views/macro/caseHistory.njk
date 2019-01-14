@@ -158,6 +158,8 @@ claimFullAdmissionForClaimantClaimDetails,
       {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITH_MEDIATION %}
       {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITHOUT_MEDIATION %}
+      {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
