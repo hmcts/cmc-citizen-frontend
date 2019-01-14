@@ -8,6 +8,7 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { YesNoOption } from 'models/yesNoOption'
 import { User } from 'idam/user'
 import { GuardFactory } from 'response/guards/guardFactory'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 const claimStoreClient = new ClaimStoreClient()
 
@@ -45,8 +46,10 @@ export default express.Router()
         let roleName
         if (form.model.consentResponse.option === YesNoOption.YES.option) {
           roleName = 'cmc-new-features-consent-given'
+          trackCustomEvent('Consent to use new CMC features given', {})
         } else {
           roleName = 'cmc-new-features-consent-not-given'
+          trackCustomEvent('Consent to use new CMC features not given', {})
         }
         await claimStoreClient.addRoleToUser(user, roleName)
         res.redirect(ClaimPaths.taskListPage.uri)
