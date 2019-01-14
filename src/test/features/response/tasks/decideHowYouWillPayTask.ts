@@ -85,6 +85,11 @@ describe('DecideHowYouWillPayTask', () => {
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 
+    it('should not be completed when payment date is not valid - date in the past', () => {
+      responseDraft.fullAdmission.paymentIntention.paymentDate.date = localDateFrom(MomentFactory.currentDate().add(-10, 'day'))
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
+    })
+
     it('should be completed when payment date is today', () => {
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.true
     })
