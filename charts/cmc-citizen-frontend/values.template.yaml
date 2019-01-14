@@ -8,7 +8,7 @@ postgresql:
     enabled: false
 
 feature-toggle-api:
-  nameOverride: feature-toggle-api
+  releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
   image: hmcts/feature-toggle-api
   applicationPort: 8580
   environment:
@@ -42,7 +42,7 @@ nodejs:
     SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPT1/
     FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPFB/
     REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPPB/
-    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}:8580
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl-api:8580
     FEATURE_TESTING_SUPPORT: true
     FEATURE_NEW_FEATURES_CONSENT: true
     FEATURE_ADMISSIONS: true
