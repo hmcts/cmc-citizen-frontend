@@ -91,7 +91,9 @@
           }}
         {% endif %}
 
-        {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+        {%  if claim.response.statementOfMeans.reason %}
+          {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+        {% endif %}
         {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
 
       {% endif %}
