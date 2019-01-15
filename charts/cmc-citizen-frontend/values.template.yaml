@@ -2,8 +2,8 @@ postgresql:
   nameOverride: postgres
   initdbScripts:
     init.sql: |-
-      CREATE USER features WITH PASSWORD features;
-      CREATE DATABASE features WITH OWNER = features ENCODING = UTF-8 CONNECTION LIMIT = -1;
+      CREATE USER features WITH PASSWORD 'features';
+      CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
   persistence:
     enabled: false
 
@@ -17,7 +17,6 @@ feature-toggle-api:
     FLYWAY_ENABLED: true
     FLYWAY_NOOP_STRATEGY: false
     FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
-    FEATURES_DB_CONN_OPTIONS: 
     FEATURES_DB_USER_NAME: features
     FEATURES_DB_PASSWORD: features
     ADMIN_USERNAME_TEST: admin@example.com
