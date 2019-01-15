@@ -82,7 +82,7 @@ claimFullAdmissionForClaimantClaimDetails,
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
-    {% if state.status === ClaimStatus.PAID_IN_FULL_ELIGIBLE %}
+    {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL %}
       {{ paidInFullClaimantClaimSettledDetails(claim) }}
