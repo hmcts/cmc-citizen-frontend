@@ -292,6 +292,9 @@ describe('Claim', () => {
       claim.claimData = {
         defendant: new Individual().deserialize(individual)
       }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION
+      }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
     })
 
@@ -493,7 +496,6 @@ describe('Claim', () => {
     it('should contain the claim status only if claimant rejects organisation response', () => {
       claim.respondedAt = moment()
       claim.response = {
-        responseType: ResponseType.PART_ADMISSION,
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
@@ -519,7 +521,6 @@ describe('Claim', () => {
     it('should contain the claim status only if claimant rejects company response', () => {
       claim.respondedAt = moment()
       claim.response = {
-        responseType: ResponseType.PART_ADMISSION,
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
@@ -540,61 +541,6 @@ describe('Claim', () => {
 
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
-    })
-
-    it('should contain the claim status only if claimant rejects organisation response and has mediation', () => {
-      claim.respondedAt = moment()
-      claim.response = {
-        responseType: ResponseType.PART_ADMISSION,
-        paymentIntention: {
-          paymentDate: MomentFactory.currentDate().add(60, 'days'),
-          paymentOption: 'BY_SPECIFIED_DATE'
-        },
-        freeMediation : 'yes'
-      }
-      claim.claimData = {
-        defendant: new Organisation().deserialize(organisation)
-      }
-      claim.claimData = new ClaimData().deserialize({
-        defendants: new Array(new TheirDetails().deserialize({
-          type: 'organisation',
-          name: undefined,
-          address: undefined,
-          email: undefined
-        }))
-      })
-      claim.claimantResponse = rejectionClaimantResponseData
-
-      expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITH_MEDIATION)
-    })
-
-    it('should contain the claim status only if claimant rejects organisation response and has no mediation', () => {
-      claim.respondedAt = moment()
-      claim.response = {
-        responseType: ResponseType.PART_ADMISSION,
-        paymentIntention: {
-          paymentDate: MomentFactory.currentDate().add(60, 'days'),
-          paymentOption: 'BY_SPECIFIED_DATE'
-        },
-        freeMediation : 'no'
-      }
-      claim.claimData = {
-        defendant: new Organisation().deserialize(organisation)
-      }
-      claim.claimData = new ClaimData().deserialize({
-        defendants: new Array(new TheirDetails().deserialize({
-          type: 'organisation',
-          name: undefined,
-          address: undefined,
-          email: undefined
-        }))
-      })
-      claim.claimantResponse = rejectionClaimantResponseData
-      claim.claimantResponse.freeMediation = 'no'
-
-      expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITHOUT_MEDIATION)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {

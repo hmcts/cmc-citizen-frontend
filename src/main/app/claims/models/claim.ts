@@ -22,7 +22,6 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -227,10 +226,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
-    } else if (this.hasClaimantRejectedDefendantResponseWithMediation() && this.isDefendantBusiness()) {
-      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITH_MEDIATION
-    } else if (this.hasClaimantRejectedDefendantResponseWithOutMediation() && this.isDefendantBusiness()) {
-      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITHOUT_MEDIATION
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
@@ -374,20 +369,6 @@ export class Claim {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
-  private hasClaimantRejectedDefendantResponseWithMediation (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION &&
-      this.response.freeMediation === YesNoOption.YES &&
-      this.claimantResponse.freeMediation === YesNoOption.YES &&
-      this.response && this.response.responseType === ResponseType.PART_ADMISSION
-  }
-
-  private hasClaimantRejectedDefendantResponseWithOutMediation (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION &&
-      this.response.freeMediation === YesNoOption.NO &&
-      this.claimantResponse.freeMediation === YesNoOption.NO &&
-      this.response && this.response.responseType === ResponseType.PART_ADMISSION
-  }
-
   private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
       this.claimantResponse.claimantPaymentIntention &&
@@ -434,7 +415,8 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
   private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
