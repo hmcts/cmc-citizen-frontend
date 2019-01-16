@@ -8,6 +8,8 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { DraftMediation } from 'mediation/draft/draftMediation'
+import { ResponseGuard } from 'response/guards/responseGuard'
+import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -25,6 +27,8 @@ export class MediationFeature {
     const allMediation = '/case/*/mediation/*'
     app.all(allMediation, requestHandler())
     app.all(allMediation, ClaimMiddleware.retrieveByExternalId)
+    app.all(allMediation, ResponseGuard.checkResponseDoesNotExist())
+    app.all(allMediation, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(/^\/case\/.+\/mediation\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): DraftMediation => {
         return new DraftMediation().deserialize(value)
