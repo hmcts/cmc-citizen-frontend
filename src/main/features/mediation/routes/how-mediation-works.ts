@@ -1,7 +1,7 @@
 import * as express from 'express'
 
-import { Paths } from 'response/paths'
-import { ErrorHandling } from 'shared/errorHandling'
+import { Paths } from 'mediation/paths'
+import { ErrorHandling } from 'main/common/errorHandling'
 
 function renderView (res: express.Response): void {
   res.render(Paths.howMediationWorksPage.associatedView)
@@ -16,5 +16,6 @@ export default express.Router()
     Paths.howMediationWorksPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const { externalId } = req.params
-      res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
+      // TODO: redirect to next page
+      res.redirect(Paths.howMediationWorksPage.evaluateUri({ externalId: externalId }))
     }))

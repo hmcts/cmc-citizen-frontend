@@ -7,7 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
 
-import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
 
 import { app } from 'main/app'
 
@@ -19,7 +19,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/r
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.howMediationWorksPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
 describe('Defendant response: how mediation works page', () => {
   attachDefaultHooks(app)
@@ -82,8 +82,7 @@ describe('Defendant response: how mediation works page', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(ResponsePaths.taskListPage
-                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+              .toLocation(pagePath))
         })
       })
     })
