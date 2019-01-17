@@ -46,12 +46,11 @@ export default express.Router()
         let roleName
         if (form.model.consentResponse.option === YesNoOption.YES.option) {
           roleName = 'cmc-new-features-consent-given'
-          trackCustomEvent('Consent to use new CMC features given', {})
         } else {
           roleName = 'cmc-new-features-consent-not-given'
-          trackCustomEvent('Consent to use new CMC features not given', {})
         }
         await claimStoreClient.addRoleToUser(user, roleName)
+        trackCustomEvent('New features consent - ' + roleName, {})
         res.redirect(ClaimPaths.taskListPage.uri)
       }
     }))
