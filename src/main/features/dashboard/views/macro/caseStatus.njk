@@ -201,7 +201,6 @@
   {{  claimFullAdmissionForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
   {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
-    {{ offerSettlementReachedDashboard() }}
   {% elif status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
     {{ settlementAgreementRejectedForDefendantDashboard() }}
   {% endif %}
