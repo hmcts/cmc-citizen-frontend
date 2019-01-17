@@ -39,7 +39,7 @@ export class PaymentPlanHelper {
         )
       case ResponseType.FULL_ADMISSION:
         return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as FullAdmissionResponse,
-          claim.claimData.amount.totalAmount(),
+          claim.totalAmountTillToday,
           draft
         )
       default:
