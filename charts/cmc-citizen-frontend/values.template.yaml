@@ -1,31 +1,12 @@
-postgresql:
-  nameOverride: postgres
-  initdbScripts:
-    init.sql: |-
-      CREATE USER features WITH PASSWORD 'features';
-      CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-  persistence:
-    enabled: false
-
 feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
-  image: hmcts/feature-toggle-api
-  applicationPort: 8580
-  environment:
-    JAVA_OPTS: -Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
-    APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
-    FLYWAY_ENABLED: true
-    FLYWAY_NOOP_STRATEGY: false
-    FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
-    FEATURES_DB_USER_NAME: features
-    FEATURES_DB_PASSWORD: features
-    ADMIN_USERNAME_TEST: admin@example.com
-    ADMIN_PASSWORD_TEST: Password12
-    EDITOR_USERNAME_TEST: editor@example.com
-    EDITOR_PASSWORD_TEST: Password12
-    LOGBACK_REQUIRE_THREAD: false
-    LOGBACK_REQUIRE_ALERT_LEVEL: false
-    LOGBACK_REQUIRE_ERROR_CODE: false
+  registerDns: false
+  importer:
+    enabled: true
+    command: >-
+      /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' admin@example.com Password12 &&
+      /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false admin@example.com Password12
+    permissions: cmc-new-features-consent-given
 
 nodejs:
   image: ${IMAGE_NAME}
