@@ -17,24 +17,26 @@
 {% macro paymentIntentionFragment(amount, paymentIntention) %}
   {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     {% if amount %}
-      {{ t('They’ve offered to pay you {{ amount }} by {{ paymentDate }}.', { amount: amount | numeral, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
+      <p>{{ t('They’ve offered to pay you {{ amount }} by {{ paymentDate }}.', { amount: amount | numeral, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% else %}
-      {{ t('They’ve offered to pay you this by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
+      <p>{{ t('They’ve offered to pay you this by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% endif %}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {% if amount %}
-      {{ t('They’ve offered to pay you {{ amount }} in instalments.', { amount: amount | numeral }) }}
+      <p>{{ t('They’ve offered to pay you {{ amount }} in instalments.', { amount: amount | numeral }) }}</p>
     {% else %}
-      {{ t('They’ve offered to pay you this in instalments.') }}
+      <p>{{ t('They’ve offered to pay you this in instalments.') }}</p>
     {% endif %}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    {{ t('They’ve offered to pay you {{ amount }} immediately.', { amount: amount | numeral }) }}
+    <p>{{ t('They’ve offered to pay you {{ amount }} immediately.', { amount: amount | numeral }) }}</p>
   {% endif %}
 {% endmacro %}
 
 {% macro paymentDateExplanationBlock(reason) %}
-  <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
-  <p>{{ t('"{{ reason }}"', { reason: reason }) }}</p>
+  {% if reason %}
+    <h3 class="heading-small form-group-related">{{ t('Why they can’t pay the full amount now') }}</h3>
+    <p>{{ t('"{{ reason }}"', { reason: reason }) }}</p>
+  {% endif %}
 {% endmacro %}
 
 {% macro paymentInformationFragment(paymentDeclaration) %}
@@ -91,9 +93,8 @@
           }}
         {% endif %}
 
-        {%  if claim.response.statementOfMeans.reason %}
-          {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-        {% endif %}
+        {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+
         {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
 
       {% endif %}
