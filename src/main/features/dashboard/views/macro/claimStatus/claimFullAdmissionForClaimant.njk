@@ -58,7 +58,7 @@
     { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
   <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
   <p>{{ t('You can settle for less than the full claim amount.') }}</p>
-  {{ internalLink('Tell us you’ve settled', AppPaths.contactUsPage.uri, 'button button-secondary form-group') }}
+  {{ internalLink('Tell us if you want to end the claim', DashboardPaths.datePaidPage.uri, 'button button-secondary form-group') }}
 
   <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
   <p>{{ t('If the defendant has not paid you, you can '
