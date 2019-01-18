@@ -90,7 +90,8 @@
     "admissions": false,
     "paidInFull": false,
     "returnErrorToUser": false,
-    "mockPay": false
+    "mockPay": false,
+    "mediation": true
   },
   "oauth": {
     "clientId": "cmc_citizen",
