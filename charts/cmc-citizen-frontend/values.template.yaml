@@ -15,6 +15,10 @@ nodejs:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   applicationPort: 3000
+  memoryRequests: 256Mi
+  cpuRequests: 0.2
+  memoryLimits: 512Mi
+  cpuLimits: 1
   environment:    
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
