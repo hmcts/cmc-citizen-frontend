@@ -153,6 +153,7 @@ export class Claim {
       && (this.admissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+        || this.isSettlementAgreementRejected()
         )
       )
   }
@@ -335,7 +336,7 @@ export class Claim {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
 
-  public isSettlementAgreementRejected (): boolean {
+  private isSettlementAgreementRejected (): boolean {
     if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
       return false
     }
