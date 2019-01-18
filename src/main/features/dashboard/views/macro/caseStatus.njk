@@ -134,8 +134,6 @@
     {{ claimantWithDefendantAsBusinessResponse() }}
     {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
     {{ claimantWithDefendantAsBusinessResponse() }}
-    {% elif ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE_WITH_MEDIATION %}
-    {{ partAdmitRejectedByClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
     {{ settlementAgreementRejectedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
