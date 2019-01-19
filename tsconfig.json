@@ -118,6 +118,9 @@
       ],
       "services/*": [
         "main/services/*"
+      ],
+      "mediation/*": [
+        "main/features/mediation/*"
       ]
     },
     "typeRoots": [
