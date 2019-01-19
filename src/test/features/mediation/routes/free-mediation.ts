@@ -116,12 +116,13 @@ describe('Mediation: Free mediation page', () => {
       context('when form is valid', () => {
         it('should redirect to task list page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(pagePath))
+              .toLocation(MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })
