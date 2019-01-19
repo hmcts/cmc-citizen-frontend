@@ -7,7 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
 import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
 
-import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
 
 import { app } from 'main/app'
 
@@ -17,11 +17,12 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = ResponsePaths.willYouTryMediation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Defendant response: will you try free mediation page', () => {
+describe('Free mediation: will you try free mediation page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -48,7 +49,7 @@ describe('Defendant response: will you try free mediation page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -88,7 +89,7 @@ describe('Defendant response: will you try free mediation page', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -101,29 +102,29 @@ describe('Defendant response: will you try free mediation page', () => {
           // TODO: update test when next page is ready
           it('should redirect to itself page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'yes' })
+              .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.willYouTryMediation
+                .toLocation(MediationPaths.willYouTryMediation
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
           // TODO: Update test when next page is ready
           it('should redirect to itself page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'no' })
+              .send({ option: FreeMediationOption.NO })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.willYouTryMediation
+                .toLocation(MediationPaths.willYouTryMediation
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

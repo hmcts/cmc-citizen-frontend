@@ -29,7 +29,6 @@ export class Paths {
   static readonly impactOfDisputePage = new RoutablePath(`${responsePath}/impact-of-dispute`)
   static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
   static readonly summaryPage = new RoutablePath(`${responsePath}/summary`)
-  static readonly willYouTryMediation = new RoutablePath(`${responsePath}/will-you-try-mediation`)
   static readonly sendCompanyFinancialDetailsPage = new RoutablePath(`${responsePath}/send-company-financial-details`)
 }
 

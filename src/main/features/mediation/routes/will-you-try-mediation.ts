@@ -1,14 +1,14 @@
 import * as express from 'express'
 
 import { Draft } from '@hmcts/draft-store-client'
-import { Paths } from 'response/paths'
-import { ErrorHandling } from 'shared/errorHandling'
-import { FormValidator } from 'forms/validation/formValidator'
-import { Form } from 'forms/form'
+import { Paths } from 'mediation/paths'
+import { ErrorHandling } from 'main/common/errorHandling'
+import { FormValidator } from 'main/app/forms/validation/formValidator'
+import { Form } from 'main/app/forms/form'
 import { DraftService } from 'services/draftService'
-import { User } from 'idam/user'
-import { ResponseDraft } from 'response/draft/responseDraft'
-import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
+import { User } from 'main/app/idam/user'
+import { DraftMediation } from 'mediation/draft/draftMediation'
+import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
 
 function renderView (form: Form<FreeMediation>, res: express.Response) {
   res.render(Paths.willYouTryMediation.associatedView, {
@@ -21,7 +21,7 @@ export default express.Router()
   .get(
     Paths.willYouTryMediation.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const draft: Draft<DraftMediation> = res.locals.mediationDraft
 
       renderView(new Form(draft.document.willYouTryMediation), res)
     }
@@ -34,7 +34,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const draft: Draft<DraftMediation> = res.locals.mediationDraft
         const user: User = res.locals.user
 
         draft.document.willYouTryMediation = form.model

@@ -82,7 +82,8 @@ describe('Defendant response: how mediation works page', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(pagePath))
+              .toLocation(MediationPaths.willYouTryMediation
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })
