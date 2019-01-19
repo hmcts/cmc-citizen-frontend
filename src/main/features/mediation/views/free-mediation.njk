@@ -1,0 +1,33 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton %}
+
+{% set heading = 'Free telephone mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>
+
+      <p>{{ t('The free service can help you:') }}</p>
+      <ul class="list list-bullet">
+        <li>{{ t('avoid a long wait for the claim to be resolved') }}</li>
+        <li>{{ t('avoid a court hearing, which can last a whole day') }}</li>
+        <li>{{ t('avoid a County Court Judgement') }}</li>
+        </li>
+      </ul>
+
+      <p>{{ t('You’ll only speak to a mediator about the claim, not to {{ otherParty }}.', { otherParty: otherParty }) }}</p>
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{ submitButton('How mediation works') }}
+        </div>
+      </form>
+
+      <p class="font-xsmall">{{ t('*Source: Small Claims Mediation Service statistics, November 2017 to October 2018.') }}</p>
+    </div>
+  </div>
+{% endblock %}
+
