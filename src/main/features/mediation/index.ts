@@ -29,7 +29,7 @@ export class MediationFeature {
     app.all(allMediation, ClaimMiddleware.retrieveByExternalId)
     app.all(allMediation, ResponseGuard.checkResponseDoesNotExist())
     app.all(allMediation, CountyCourtJudgmentRequestedGuard.requestHandler)
-    app.all(/^\/case\/.+\/mediation\/(?!confirmation).*$/,
+    app.all(allMediation,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): DraftMediation => {
         return new DraftMediation().deserialize(value)
       }),
