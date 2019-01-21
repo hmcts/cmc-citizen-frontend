@@ -2,6 +2,8 @@ import * as express from 'express'
 
 import { Draft } from '@hmcts/draft-store-client'
 import { Paths } from 'mediation/paths'
+import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { Form } from 'main/app/forms/form'
@@ -9,6 +11,7 @@ import { DraftService } from 'services/draftService'
 import { User } from 'main/app/idam/user'
 import { DraftMediation } from 'mediation/draft/draftMediation'
 import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
+import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<FreeMediation>, res: express.Response) {
   res.render(Paths.willYouTryMediation.associatedView, {
@@ -39,11 +42,11 @@ export default express.Router()
 
         draft.document.willYouTryMediation = form.model
 
-        switch (form.model.option) {
-          case FreeMediationOption.NO:
-            // TODO: Delete draft information from next pages
-            break
+        if (form.model.option === FreeMediationOption.NO) {
+          // TODO: Delete draft information from next pages
+
         }
+
         await new DraftService().save(draft, user.bearerToken)
 
         const externalId: string = req.params.externalId
@@ -51,7 +54,13 @@ export default express.Router()
         if (form.model.option === FreeMediationOption.YES) {
           res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
         } else {
-          res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
+          const claim: Claim = res.locals.claim
+          if (!claim.isResponseSubmitted()) {
+            res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+          } else {
+            res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+          }
+
         }
       }
     })
