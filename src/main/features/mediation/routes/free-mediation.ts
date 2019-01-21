@@ -22,6 +22,7 @@ export default express.Router()
   .post(
     Paths.freeMediationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const { externalId } = req.params
-      res.redirect(Paths.howMediationWorksPage.evaluateUri({ externalId: externalId }))
+      const claim: Claim = res.locals.claim
+
+      res.redirect(Paths.howMediationWorksPage.evaluateUri({ externalId: claim.externalId }))
     }))
