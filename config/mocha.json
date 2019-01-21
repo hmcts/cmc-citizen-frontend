@@ -30,7 +30,8 @@
     "newFeaturesConsent": true,
     "admissions": true,
     "paidInFull": true,
-    "returnErrorToUser": true
+    "returnErrorToUser": true,
+    "mediation": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
