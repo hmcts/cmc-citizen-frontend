@@ -8,6 +8,8 @@ import { checkAuthorizationGuards } from 'test/features/response/routes/checks/a
 import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
+import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
 
@@ -114,7 +116,7 @@ describe('Free mediation: will you try free mediation page', () => {
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
           // TODO: Update test when next page is ready
-          it('should redirect to itself page when everything is fine', async () => {
+          it('should redirect to response task list when No was chosen and no response is available', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
@@ -124,7 +126,21 @@ describe('Free mediation: will you try free mediation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.NO })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.willYouTryMediation
+                .toLocation(ResponsePaths.taskListPage
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to claimant response task list when No was chosen and there is a response', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.NO })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ClaimantResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
