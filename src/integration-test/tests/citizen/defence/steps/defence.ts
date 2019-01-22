@@ -1,43 +1,39 @@
-import { PaymentOption } from 'integration-test/data/payment-option'
-import {
-  claimAmount,
-  DEFAULT_PASSWORD,
-  defence
-} from 'integration-test/data/test-data'
-import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
-import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
-import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
-import { DefendantEnterClaimPinNumberPage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-pin-number'
-import { DefendantEnterClaimReferencePage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-reference'
-import { DefendantFreeMediationPage } from 'integration-test/tests/citizen/defence/pages/defendant-free-mediation'
-import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
-import { DefendantImpactOfDisputePage } from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
-import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
-import { DefendantMoreTimeRequestPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-request'
-import { DefendantNameAndAddressPage } from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
-import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
-import { DefendantPaymentPlanPage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
-import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
-import { DefendantRejectAllOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-all-of-claim'
-import { DefendantStartPage } from 'integration-test/tests/citizen/defence/pages/defendant-start'
-import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
-import { DefendantTimelineEventsPage } from 'integration-test/tests/citizen/defence/pages/defendant-timeline-events'
-import { DefendantViewClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-view-claim'
-import { DefendantWhenWillYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
-import { DefendantYourDefencePage } from 'integration-test/tests/citizen/defence/pages/defendant-your-defence'
-import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
-import { DefendantSendCompanyFinancialDetails } from 'integration-test/tests/citizen/defence/pages/defendant-send-company-financial-details'
-import { StatementOfMeansSteps } from 'integration-test/tests/citizen/defence/steps/statementOfMeans'
-import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
-import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defendant'
-import { PartyType } from 'integration-test/data/party-type'
-import { DefenceType } from 'integration-test/data/defence-type'
-import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
-import { IdamClient } from 'integration-test/helpers/clients/idamClient'
-import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
-import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
-import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
-import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
+import {PaymentOption} from 'integration-test/data/payment-option'
+import {claimAmount, DEFAULT_PASSWORD, defence} from 'integration-test/data/test-data'
+import {DefendantCheckAndSendPage} from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
+import {DefendantDefenceTypePage} from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
+import {DefendantDobPage} from 'integration-test/tests/citizen/defence/pages/defendant-dob'
+import {DefendantEnterClaimPinNumberPage} from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-pin-number'
+import {DefendantEnterClaimReferencePage} from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-reference'
+import {DefendantFreeMediationPage} from 'integration-test/tests/citizen/defence/pages/defendant-free-mediation'
+import {DefendantHowMuchHaveYouPaidPage} from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
+import {DefendantImpactOfDisputePage} from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
+import {DefendantMobilePage} from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
+import {DefendantMoreTimeRequestPage} from 'integration-test/tests/citizen/defence/pages/defendant-more-time-request'
+import {DefendantNameAndAddressPage} from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
+import {DefendantPaymentDatePage} from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
+import {DefendantPaymentPlanPage} from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
+import {DefendantRegisterPage} from 'integration-test/tests/citizen/defence/pages/defendant-register'
+import {DefendantRejectAllOfClaimPage} from 'integration-test/tests/citizen/defence/pages/defendant-reject-all-of-claim'
+import {DefendantStartPage} from 'integration-test/tests/citizen/defence/pages/defendant-start'
+import {DefendantTaskListPage} from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
+import {DefendantTimelineEventsPage} from 'integration-test/tests/citizen/defence/pages/defendant-timeline-events'
+import {DefendantViewClaimPage} from 'integration-test/tests/citizen/defence/pages/defendant-view-claim'
+import {DefendantWhenWillYouPayPage} from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
+import {DefendantYourDefencePage} from 'integration-test/tests/citizen/defence/pages/defendant-your-defence'
+import {DefendantMoreTimeConfirmationPage} from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
+import {DefendantSendCompanyFinancialDetails} from 'integration-test/tests/citizen/defence/pages/defendant-send-company-financial-details'
+import {StatementOfMeansSteps} from 'integration-test/tests/citizen/defence/steps/statementOfMeans'
+import {LoginPage} from 'integration-test/tests/citizen/home/pages/login'
+import {DefendantSteps} from 'integration-test/tests/citizen/home/steps/defendant'
+import {PartyType} from 'integration-test/data/party-type'
+import {DefenceType} from 'integration-test/data/defence-type'
+import {ClaimStoreClient} from 'integration-test/helpers/clients/claimStoreClient'
+import {IdamClient} from 'integration-test/helpers/clients/idamClient'
+import {DefendantEvidencePage} from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
+import {AlreadyPaidPage} from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
+import {DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage} from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
+import {DefendantHowMuchYouOwePage} from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -280,10 +276,10 @@ export class DefenceSteps {
   }
 
   checkAndSendAndSubmit (defendantType: PartyType): void {
-    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
-    } else {
+    if (defendantType === PartyType.INDIVIDUAL) {
       defendantCheckAndSendPage.checkFactsTrueAndSubmit()
+    } else {
+      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
     }
   }
 
