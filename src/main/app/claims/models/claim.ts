@@ -153,6 +153,7 @@ export class Claim {
       && (this.admissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+        || this.isSettlementAgreementRejected()
         )
       )
   }
