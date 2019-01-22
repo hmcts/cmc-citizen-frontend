@@ -5,7 +5,7 @@ import { Paths as AppPaths } from 'paths'
 import { Logger } from '@hmcts/nodejs-logging'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
 
-const postcodeClient = ClientFactory.createInstance()
+const postcodeClient = ClientFactory.createPostcodeInfoClient()
 const logger = Logger.getLogger('postcode-lookup')
 
 /* tslint:disable:no-default-export */

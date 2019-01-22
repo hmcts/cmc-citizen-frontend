@@ -10,7 +10,8 @@ import { ErrorLogger } from 'logging/errorLogger'
 import { PostcodeInfoResponse } from '@hmcts/os-places-client'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
 
-const postcodeClient = ClientFactory.createInstance()
+const postcodeClient = ClientFactory.createPostcodeInfoClient()
+const countryClient = ClientFactory.createPostcodeToCountryClient()
 
 enum BlockedPostcodes {
   ISLE_OF_MAN = 'IM'
@@ -33,7 +34,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
       if (!postcodeInfoResponse.valid) {
         return true
       }
-      const country = 'UK' // postcodeInfoResponse.country.name
+      const country = await countryClient.lookupCountry(postcodeInfoResponse.addresses[0].postcode)
       const countries: Country[] = args.constraints[0]
 
       return countries.filter(result => result.name.toLowerCase() === country.toLowerCase()).length > 0
