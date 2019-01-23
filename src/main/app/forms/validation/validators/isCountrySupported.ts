@@ -17,7 +17,7 @@ enum BlockedPostcodes {
   ISLE_OF_MAN = 'IM'
 }
 
-@ValidatorConstraint()
+@ValidatorConstraint({ async: true })
 export class CheckCountryConstraint implements ValidatorConstraintInterface {
 
   async validate (value: any | string, args?: ValidationArguments): Promise<boolean> {
