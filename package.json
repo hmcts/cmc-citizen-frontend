@@ -163,8 +163,5 @@
       "pre-commit": "yarn lint",
       "pre-push": "yarn test && yarn test:routes"
     }
-  },
-  "compilerOptions": {
-    "moduleResolution": "node"
   }
 }
