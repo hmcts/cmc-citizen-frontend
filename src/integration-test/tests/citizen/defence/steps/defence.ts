@@ -1,9 +1,5 @@
 import { PaymentOption } from 'integration-test/data/payment-option'
-import {
-  claimAmount,
-  DEFAULT_PASSWORD,
-  defence
-} from 'integration-test/data/test-data'
+import { claimAmount, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
@@ -280,10 +276,10 @@ export class DefenceSteps {
   }
 
   checkAndSendAndSubmit (defendantType: PartyType): void {
-    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
-    } else {
+    if (defendantType === PartyType.INDIVIDUAL) {
       defendantCheckAndSendPage.checkFactsTrueAndSubmit()
+    } else {
+      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
     }
   }
 
