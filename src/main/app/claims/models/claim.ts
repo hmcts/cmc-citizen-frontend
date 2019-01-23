@@ -416,7 +416,8 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
   private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
