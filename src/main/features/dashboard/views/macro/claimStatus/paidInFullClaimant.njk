@@ -27,13 +27,13 @@
 
 {% macro paidInFullClaimantClaimSettledDetails(claim) %}
   <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
-    {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-        <p>{{ t('{{ defendantName }} paid you {{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
-            { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday | numeral,
+    {% if claim.response.amount %}
+        <p>{{ t('{{ defendantName }} paid you {{ amount }} on {{ moneyReceivedOn }}.',
+            { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral,
               moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
-    {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      <p>{{ t('{{ defendantName }} paid you {{ amount }} on {{ moneyReceivedOn }}.',
-        { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral,
+    {% else %}
+      <p>{{ t('{{ defendantName }} paid you {{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
+        { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday | numeral,
           moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
     {% endif %}
 {% endmacro %}
