@@ -17,8 +17,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
 import { Claim } from 'claims/models/claim'
-import * as claimStoreMock from '../../../http-mocks/claim-store'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.freeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -52,7 +51,7 @@ describe('Mediation: Free mediation page', () => {
         it('should render page with the claimants name when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('mediation')
-          const claim: Claim = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj })
 
           await request(app)
             .get(pagePath)
@@ -86,7 +85,7 @@ describe('Mediation: Free mediation page', () => {
         it('should render page with the defendants name when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('mediation')
-          const claim: Claim = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj })
 
           await request(app)
             .get(pagePath)
