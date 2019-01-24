@@ -23,7 +23,7 @@
   </div>
 {% endmacro %}
 
-{% macro claimPartAdmittedToOweForDefendantDashboard(claim) %}
+{% macro claimPartAdmittedToOweForDefendantDashboard() %}
   {{ t('You’ve admitted part of the claim.') }}
 {% endmacro %}
 
@@ -33,7 +33,7 @@
   {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
+    <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
     <p>{% if paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
         {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} immediately.',
           { amount: claim.response.amount | numeral, claimantName: claimant.name }) }}

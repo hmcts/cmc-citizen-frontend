@@ -1,3 +1,7 @@
+provider "azurerm" {
+  version = "1.19.0"
+}
+
 provider "vault" {
   //  # It is strongly recommended to configure this provider through the
   //  # environment variables described above, so that each user can have
@@ -140,6 +144,7 @@ module "citizen-frontend" {
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
+    FEATURE_MEDIATION = "${var.feature_mediation}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 
