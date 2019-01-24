@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, submitButton %}
 
 {% set heading = 'Do you believe the person you’re claiming against is 18 or over?' %}
 
@@ -29,7 +29,7 @@
           )
         }}
 
-        {{ saveAndContinueButton() }}
+        {{ submitButton() }}
 
       </form>
     </div>
