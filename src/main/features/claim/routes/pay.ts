@@ -158,13 +158,6 @@ export default express.Router()
 
       res.redirect(payment._links.next_url.href)
     } catch (err) {
-
-      trackCustomEvent(`Pre payment error for externalId: ${externalId}`,{
-        externalId: externalId,
-        payment: draft.document.claimant.payment,
-        error: err
-      })
-
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }
@@ -209,12 +202,6 @@ export default express.Router()
           next(new Error(`Payment failed. Status ${status} is returned by the service`))
       }
     } catch (err) {
-      const { externalId } = req.params
-      trackCustomEvent(`Post payment error for externalId: ${externalId}`,{
-        externalId: externalId,
-        payment: draft.document.claimant.payment,
-        error: err
-      })
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }
