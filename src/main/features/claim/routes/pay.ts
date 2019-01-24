@@ -23,6 +23,7 @@ import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveRespo
 import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
@@ -74,7 +75,12 @@ async function successHandler (res, next) {
         draft.document.claimant.payment,
         `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${externalId}.`
       )
-
+      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
+        {
+          externalId: externalId,
+          payment: draft.document.claimant.payment,
+          error: err
+        })
       next(err)
       return
     }
@@ -89,8 +95,16 @@ async function successHandler (res, next) {
     }
   }
 
-  await new DraftService().delete(draft.id, user.bearerToken)
-  res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
+  try {
+    await new DraftService().delete(draft.id, user.bearerToken)
+    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
+  } catch (err) {
+    trackCustomEvent(`Successful payment error deleting draft: ${externalId}`,{
+      externalId: externalId,
+      payment: draft.document.claimant.payment,
+      error: err
+    })
+  }
 }
 
 /* tslint:disable:no-default-export */
@@ -136,8 +150,21 @@ export default express.Router()
       draft.document.claimant.payment = payment
       await new DraftService().save(draft, user.bearerToken)
 
+      trackCustomEvent(`Pre payment for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: payment,
+        caseReference: caseReference
+      })
+
       res.redirect(payment._links.next_url.href)
     } catch (err) {
+
+      trackCustomEvent(`Pre payment error for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: draft.document.claimant.payment,
+        error: err
+      })
+
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }
@@ -160,6 +187,12 @@ export default express.Router()
 
       await new DraftService().save(draft, user.bearerToken)
 
+      trackCustomEvent(`Post payment for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: payment,
+        paymentStatus: payment.status
+      })
+
       const status: string = payment.status
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference
       switch (status) {
@@ -176,6 +209,12 @@ export default express.Router()
           next(new Error(`Payment failed. Status ${status} is returned by the service`))
       }
     } catch (err) {
+      const { externalId } = req.params
+      trackCustomEvent(`Post payment error for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: draft.document.claimant.payment,
+        error: err
+      })
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }
