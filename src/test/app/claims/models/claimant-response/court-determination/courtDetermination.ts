@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { convertToRawObject } from 'test/rawObjectUtils'
 import { CourtDetermination } from 'claims/models/claimant-response/court-determination/courtDetermination'
-import { DecisionType } from 'claims/models/claimant-response/court-determination/decisionType'
+import { DecisionType } from 'common/court-calculations/decisionType'
 
 import { courtDeterminationData } from 'test/data/entity/courtDeterminationData'
 

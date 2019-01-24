@@ -1,0 +1,25 @@
+{% macro evidenceFragment(evidence) %}
+  <div class="form-group">
+    <h3 class="heading-small form-group-related">{{ t('Their evidence') }}</h3>
+    <table>
+      <thead>
+      <tr>
+        <th scope="col">{{ t('Type') }}</th>
+        <th scope="col">{{ t('Description') }}</th>
+      </tr>
+      </thead>
+      <tbody>
+        {% for evidenceRow in evidence.rows %}
+          <tr>
+            <td>{{ EvidenceType.valueOf(evidenceRow.type).displayValue }}</td>
+            <td>{{ evidenceRow.description | default('') }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if evidence.comment %}
+      <h3 class="heading-small form-group-related">{{ t('Why they disagree with your evidence') }}</h3>
+      <p>{{ t('"{{ comment }}"', { comment: evidence.comment }) }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}

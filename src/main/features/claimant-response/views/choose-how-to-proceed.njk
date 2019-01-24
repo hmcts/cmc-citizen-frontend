@@ -28,14 +28,18 @@
               value: FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value,
               checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT.value),
               bold: true,
-              hint: 'This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment (CCJ). We’ll show you a suggested format for the agreement.'
+              greyHint: false,
+              hint: 'This is a legal agreement between you and the defendant agreeing to the repayment plan. If they break it you can request a County Court Judgment (CCJ). We’ll show you a suggested format for the agreement.',
+              className: 'column-four-fifths'
             },
             {
               label: 'Request a CCJ',
               value:  FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value,
               checked: (form.valueFor(name).value === FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT.value),
               bold: true,
-              hint: 'You can ask the court to make a formal order binding the defendant to the repayment plan. This adds the defendant to the CCJ register, which may make it more difficult for them to borrow money to repay you.'
+              greyHint: false,
+              hint: 'You can ask the court to make a formal order binding the defendant to the repayment plan. This adds the defendant to the CCJ register, which may make it more difficult for them to borrow money to repay you.',
+              className: 'column-four-fifths'
             }
           ]
         )

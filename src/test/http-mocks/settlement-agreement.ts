@@ -21,6 +21,20 @@ export const sampleSettlementAgreementOffer = {
   ]
 }
 
+export const sampleSettlementAgreementOfferMadeByCourt = {
+  partyStatements: [
+    {
+      type: StatementType.OFFER.value,
+      madeBy: MadeBy.COURT.value,
+      offer: { content: 'offer text', completionDate: '2017-08-08' }
+    },
+    {
+      type: StatementType.ACCEPTATION.value,
+      madeBy: MadeBy.CLAIMANT.value
+    }
+  ]
+}
+
 export const sampleSettlementAgreementAcceptation = {
   partyStatements: [
     {
@@ -69,4 +83,10 @@ export function rejectRejectSettlementAgreement (reason: string = 'HTTP Error') 
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp(`/${externalIdPattern}/settlement-agreement/reject`))
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function resolveCountersignSettlementAgreement () {
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp(`/${externalIdPattern}/settlement-agreement/countersign`))
+    .reply(HttpStatus.CREATED)
 }

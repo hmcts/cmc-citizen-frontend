@@ -167,10 +167,10 @@ export class ClaimSteps {
   checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
     claimantCheckAndSendPage.verifyCheckAndSendAnswers(claimantType, defendantType, enterDefendantEmail)
 
-    if (claimantType === PartyType.COMPANY || claimantType === PartyType.ORGANISATION) {
-      claimantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
-    } else {
+    if (claimantType === PartyType.INDIVIDUAL) {
       claimantCheckAndSendPage.checkFactsTrueAndSubmit()
+    } else {
+      claimantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
     }
   }
 

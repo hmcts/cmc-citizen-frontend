@@ -43,13 +43,12 @@ function defendantIsCounterClaiming (draft: Draft<ResponseDraft>): boolean {
 }
 
 function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
-  const responseType: ResponseType = draft.document.response.type
-  return (responseType === ResponseType.DEFENCE && !defendantIsCounterClaiming(draft))
+  return !defendantIsCounterClaiming(draft)
 }
 
 function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
   if (isStatementOfTruthRequired(draft)) {
-    if (claim.claimData.defendant.isBusiness()) {
+    if (claim.claimData.defendant.isBusinessOrSoleTrader()) {
       return SignatureType.QUALIFIED
     } else {
       return SignatureType.BASIC

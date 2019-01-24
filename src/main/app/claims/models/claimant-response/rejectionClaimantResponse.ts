@@ -1,9 +1,10 @@
 import { ClaimantResponseCommon } from 'claims/models/claimant-response/claimantResponseCommon'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 export interface RejectionClaimantResponse extends ClaimantResponseCommon {
   type: ClaimantResponseType.REJECTION
-  freeMediation?: boolean,
+  freeMediation?: YesNoOption,
   reason?: string
 }
 

@@ -39,7 +39,7 @@ export class PaymentPlanHelper {
         )
       case ResponseType.FULL_ADMISSION:
         return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as FullAdmissionResponse,
-          claim.claimData.amount.totalAmount(),
+          claim.totalAmountTillToday,
           draft
         )
       default:
@@ -76,6 +76,10 @@ export class PaymentPlanHelper {
 
   static createPaymentPlanFromDefendantFinancialStatement (claim: Claim, draft: DraftClaimantResponse): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    if (claim.claimData.defendant.isBusiness()) {
+      return undefined
+    }
 
     if (response === undefined) {
       throw new Error('Claim does not have response attached')

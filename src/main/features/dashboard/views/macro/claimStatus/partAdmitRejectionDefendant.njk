@@ -16,10 +16,12 @@
       <p>{{ t('They have agreed to try mediation. We’ll contact you with details of your appointment.') }}</p>
     {% else %}
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+      {% if claim.directionsQuestionnaireDeadline %}
       <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
       <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before {{ deadline }}.',
           { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+      {% endif %}
     {% endif %}
 
     <p>{{ downloadResponseLink(claim) }}</p>
