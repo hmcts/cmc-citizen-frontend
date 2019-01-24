@@ -88,7 +88,12 @@ async function successHandler (res, next) {
 
   if (!claimIsAlreadyFullyPersisted) {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
-    if (roles.length > 0 && await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
+
+    if (!roles.length) {
+      logger.error(`missing consent not given role for user, User Id : ${user.id}`)
+    }
+
+    if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
       await claimStoreClient.saveClaim(draft, user, 'admissions')
     } else {
       await claimStoreClient.saveClaim(draft, user)

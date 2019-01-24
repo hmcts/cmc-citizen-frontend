@@ -50,7 +50,7 @@
       {{ linkButton('Calculate length of repayment plan', 'action[calculatePaymentPlan]', 'button button-secondary calculateLengthOfRepayment') }}
 
       <h2 class="heading-small">Length of repayment plan</h2>
-      <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
+      <p id="lengthOfRepayment" class="lengthOfRepayment">{{ paymentLength | default('-') }}</p>
 
       {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | monthIncrement | inputDate }), label = 'When will you make the first payment?') }}
 
