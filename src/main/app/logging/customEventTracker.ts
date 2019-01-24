@@ -1,8 +1,13 @@
 import * as appInsights from 'applicationinsights'
 
 export function trackCustomEvent (eventName: string, trackingProperties: {}) {
-  appInsights.defaultClient.trackEvent({
-    name: eventName,
-    properties: trackingProperties
-  })
+  try {
+    appInsights.defaultClient.trackEvent({
+      name: eventName,
+      properties: trackingProperties
+    })
+  } catch (err) {
+    return
+  }
+
 }

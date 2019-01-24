@@ -95,16 +95,8 @@ async function successHandler (res, next) {
     }
   }
 
-  try {
-    await new DraftService().delete(draft.id, user.bearerToken)
-    res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
-  } catch (err) {
-    trackCustomEvent(`Successful payment error deleting draft: ${externalId}`,{
-      externalId: externalId,
-      payment: draft.document.claimant.payment,
-      error: err
-    })
-  }
+  await new DraftService().delete(draft.id, user.bearerToken)
+  res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
 
 /* tslint:disable:no-default-export */
@@ -150,16 +142,21 @@ export default express.Router()
       draft.document.claimant.payment = payment
       await new DraftService().save(draft, user.bearerToken)
 
-      if (!externalId) {
-        trackCustomEvent(`Pre payment for externalId: ${externalId}`, {
-          externalId: externalId,
-          payment: payment,
-          caseReference: caseReference
-        })
-      }
+      trackCustomEvent(`Pre payment for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: payment,
+        caseReference: caseReference
+      })
 
       res.redirect(payment._links.next_url.href)
     } catch (err) {
+
+      trackCustomEvent(`Pre payment error for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: draft.document.claimant.payment,
+        error: err
+      })
+
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }
@@ -182,13 +179,11 @@ export default express.Router()
 
       await new DraftService().save(draft, user.bearerToken)
 
-      if (!externalId) {
-        trackCustomEvent(`Post payment for externalId: ${externalId}`, {
-          externalId: externalId,
-          payment: payment,
-          paymentStatus: payment.status
-        })
-      }
+      trackCustomEvent(`Post payment for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: payment,
+        paymentStatus: payment.status
+      })
 
       const status: string = payment.status
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference
@@ -206,6 +201,12 @@ export default express.Router()
           next(new Error(`Payment failed. Status ${status} is returned by the service`))
       }
     } catch (err) {
+      const { externalId } = req.params
+      trackCustomEvent(`Post payment error for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: draft.document.claimant.payment,
+        error: err
+      })
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }
