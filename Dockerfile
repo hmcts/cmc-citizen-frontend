@@ -1,23 +1,23 @@
-FROM node:8.11.1-alpine
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-COPY package.json yarn.lock /usr/src/app/
-
+# ---- Base image ----
+FROM node:8.12.0-slim as base
 RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_proxy"
+ENV WORKDIR /usr/src/app
+WORKDIR ${WORKDIR}
+COPY package.json yarn.lock ./
+RUN yarn install --production \
+  && yarn cache clean
 
+# ---- Build image ----
+FROM base as build
 RUN yarn install
-
-COPY config /usr/src/app/config
-COPY tsconfig.json gulpfile.js server.js /usr/src/app/
-COPY src/main /usr/src/app/src/main
-
+COPY tsconfig.json gulpfile.js server.js ./
+COPY src/main ./src/main
 RUN yarn setup
 
-RUN rm -rf node_modules \
-    && yarn install --production \
-    && yarn cache clean
-
+# ---- Runtime image ----
+FROM base as runtime
+COPY --from=build $WORKDIR/src/main ./src/main
+COPY --from=build $WORKDIR/server.js $WORKDIR/tsconfig.json ./
+COPY config ./config
 EXPOSE 3000
 CMD [ "yarn", "start" ]
