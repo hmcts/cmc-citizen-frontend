@@ -147,12 +147,6 @@ export default express.Router()
       draft.document.claimant.payment = payment
       await new DraftService().save(draft, user.bearerToken)
 
-      trackCustomEvent(`Pre payment for externalId: ${externalId}`,{
-        externalId: externalId,
-        payment: payment,
-        caseReference: caseReference
-      })
-
       res.redirect(payment._links.next_url.href)
     } catch (err) {
 
@@ -183,12 +177,6 @@ export default express.Router()
       draft.document.claimant.payment = payment
 
       await new DraftService().save(draft, user.bearerToken)
-
-      trackCustomEvent(`Post payment for externalId: ${externalId}`,{
-        externalId: externalId,
-        payment: payment,
-        paymentStatus: payment.status
-      })
 
       const status: string = payment.status
       // https://gds-payments.gelato.io/docs/versions/1.0.0/api-reference

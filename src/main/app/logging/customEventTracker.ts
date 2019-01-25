@@ -1,4 +1,7 @@
 import * as appInsights from 'applicationinsights'
+import { Logger } from '@hmcts/nodejs-logging'
+
+const logger = Logger.getLogger('customEventTracker')
 
 export function trackCustomEvent (eventName: string, trackingProperties: {}) {
   try {
@@ -9,6 +12,6 @@ export function trackCustomEvent (eventName: string, trackingProperties: {}) {
       })
     }
   } catch (err) {
-    return
+    logger.logError(err.stack)
   }
 }
