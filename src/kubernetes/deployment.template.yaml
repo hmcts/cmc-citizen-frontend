@@ -55,7 +55,7 @@ spec:
         - name: FEATURE_MOCK_PAY
           value: 'false'
         - name: FEATURE_MEDIATION
-            value: 'false'
+          value: 'false'
         - name: POSTCODE_LOOKUP_API_KEY
           value: ${POSTCODE_LOOKUP_API_KEY}
         - name: APPINSIGHTS_INSTRUMENTATIONKEY
