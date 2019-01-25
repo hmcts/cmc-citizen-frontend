@@ -1,6 +1,6 @@
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn, ValidateIf } from 'class-validator'
 import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
 import { MonthlyIncomeType } from './monthlyIncomeType'
 
@@ -32,6 +32,7 @@ export class IncomeSource {
   @Min(0, { message: withMessage(ValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED) })
   amount?: number
 
+  @ValidateIf(o => o.isAtLeastAmountFieldPopulated())
   @IsDefined({ message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
   @IsIn(IncomeExpenseSchedule.all(), { message: withMessage(ValidationErrors.SCHEDULE_SELECT_AN_OPTION) })
   schedule?: IncomeExpenseSchedule
@@ -70,6 +71,10 @@ export class IncomeSource {
 
   reset (): void {
     this.name = this.amount = this.schedule = undefined
+  }
+
+  isAtLeastAmountFieldPopulated (): boolean {
+    return this.amount !== undefined
   }
 
 }

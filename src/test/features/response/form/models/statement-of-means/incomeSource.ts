@@ -69,9 +69,8 @@ describe('IncomeSource', () => {
     describe('when not successful', () => {
       it('should return errors when all expect `name` are undefined', () => {
         const errors = validator.validateSync(new IncomeSource('Source name', undefined))
-        expect(errors.length).to.equal(2)
+        expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED('Source name'))
-        expectValidationError(errors, ValidationErrors.SCHEDULE_SELECT_AN_OPTION('Source name'))
       })
 
       it('should return an error when `amount` is undefined', () => {
