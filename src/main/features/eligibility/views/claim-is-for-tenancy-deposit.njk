@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioGroup, errorSummary, saveAndContinueButton %}
+{% from "form.njk" import csrfProtection, radioGroup, errorSummary, submitButton %}
 
 {% set heading = 'Is your claim for a tenancy deposit?' %}
 {% set additionalInformation = t('You could be a tenant or a landlord.') %}
@@ -31,7 +31,7 @@
           )
         }}
 
-        {{ saveAndContinueButton() }}
+        {{ submitButton() }}
 
       </form>
     </div>
