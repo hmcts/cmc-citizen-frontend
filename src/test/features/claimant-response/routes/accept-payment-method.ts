@@ -65,7 +65,7 @@ describe('Claimant response: accept payment method page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Accept or reject their repayment plan'))
+          .expect(res => expect(res).to.be.successful.withText('How they want to pay'))
       })
     })
 
@@ -137,7 +137,7 @@ describe('Claimant response: accept payment method page', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ accept: undefined })
-              .expect(res => expect(res).to.be.successful.withText('Accept or reject their repayment plan', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('How they want to pay', 'div class="error-summary"'))
           })
         })
       })

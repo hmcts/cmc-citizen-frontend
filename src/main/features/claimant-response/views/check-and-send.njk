@@ -123,12 +123,8 @@
           bottomBorder = true, bold = true) }}
         {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
           {{ row(label = 'Court repayment plan',
-          value = t('{{ defendantFullName }} will pay {{ totalAmount }}, no later than {{ paymentDate }}',
-          {
-          defendantFullName: claim.response.defendant.name,
-          totalAmount: totalAmount | numeral,
-          paymentDate: courtDecisionPaymentIntention.paymentDate | date
-          }),
+          value = t('Repayment in full by {{ paymentDate }}',
+          { paymentDate: courtDecisionPaymentIntention.paymentDate | date }),
           bottomBorder = true,
           bold = true,
           bottomBorder = false

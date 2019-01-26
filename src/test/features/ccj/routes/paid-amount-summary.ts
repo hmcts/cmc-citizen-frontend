@@ -60,6 +60,15 @@ describe('CCJ - paid amount summary page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
       })
+      it('should render page when everything is fine when settlement is broken', async () => {
+        draftStoreServiceMock.resolveFind('ccj')
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement(claimStoreServiceMock.settlementAndSettlementReachedAt)
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Judgment amount'))
+      })
     })
   })
 })

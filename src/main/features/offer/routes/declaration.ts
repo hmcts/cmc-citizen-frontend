@@ -48,7 +48,7 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
 
-        if (user.id === claim.defendantId) {
+        if (user.id === claim.defendantId && claim.settlement.isOfferAccepted()) {
           await OfferClient.countersignOffer(claim.externalId, user)
 
           res.redirect(Paths.settledPage.evaluateUri({ externalId: claim.externalId }))
