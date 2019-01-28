@@ -20,6 +20,8 @@ import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettl
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/partPaymentReceivedTask'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { FeatureToggles } from 'utils/featureToggles'
+import { Paths as MediationPaths } from 'mediation/paths'
 
 const validator: Validator = new Validator()
 
@@ -81,10 +83,16 @@ export class TaskListBuilder {
     if (claim.response.freeMediation === YesNoOption.YES) {
       if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
         (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
+        let path: string
+        if (FeatureToggles.isEnabled('mediation')) {
+          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        } else {
+          path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        }
         tasks.push(
           new TaskListItem(
             'Consider free mediation',
-            Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
+            path,
             draft.freeMediation !== undefined
           ))
       }

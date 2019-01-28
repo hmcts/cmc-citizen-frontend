@@ -1,3 +1,4 @@
+import { Logger } from '@hmcts/nodejs-logging'
 import * as express from 'express'
 import * as config from 'config'
 import * as path from 'path'
@@ -36,6 +37,8 @@ app.locals.ENV = env
 
 const developmentMode = env === 'development'
 
+const logger = Logger.getLogger('applicationRunner')
+
 const i18next = I18Next.enableFor(app)
 
 new Nunjucks(developmentMode, i18next)
@@ -73,18 +76,22 @@ new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('mediation')) {
+  logger.info('FeatureToggles.mediation enabled')
   new MediationFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('paidInFull')) {
+  logger.info('FeatureToggles.paidInFull enabled')
   new PaidInFullFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('testingSupport')) {
+  logger.info('FeatureToggles.testingSupport enabled')
   new TestingSupportFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('admissions')) {
+  logger.info('FeatureToggles.admissions enabled')
   new ClaimantResponseFeature().enableFor(app)
 }
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
