@@ -16,6 +16,7 @@ import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -128,4 +129,5 @@ describe('Accessibility', () => {
   checkPaths(FullAdmissionPaths)
   checkPaths(ClaimantResponsePaths)
   checkPaths(PaidInFullPaths)
+  checkPaths(MediationPaths)
 })
