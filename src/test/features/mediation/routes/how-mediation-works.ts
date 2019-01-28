@@ -102,6 +102,7 @@ describe('Defendant response: how mediation works page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('mediation')
 
+          // TODO: point to next page when ready
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -115,6 +116,7 @@ describe('Defendant response: how mediation works page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('mediation')
 
+          // TODO: point to next page when ready
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
