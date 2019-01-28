@@ -56,6 +56,7 @@ import { DecisionType } from 'common/court-calculations/decisionType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { PartyType } from 'common/partyType'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
+import { FreeMediationOption } from 'response/form/models/freeMediation'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -168,6 +169,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DecisionType', DecisionType)
     nunjucksEnv.addGlobal('PartyType', PartyType)
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
+    nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
