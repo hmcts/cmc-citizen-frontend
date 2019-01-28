@@ -5,7 +5,7 @@
     "admissions": true,
     "paidInFull": true,
     "returnErrorToUser": true,
-    "mediation": true
+    "mediation": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
