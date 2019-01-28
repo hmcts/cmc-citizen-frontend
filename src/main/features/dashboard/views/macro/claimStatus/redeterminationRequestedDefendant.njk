@@ -4,9 +4,10 @@
   {{ t('{{ claimantName }} requested a County Court Judgment against you', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
-{% macro redeterminationDefendnatClaimDetails(claim) %}
+{% macro redeterminationDefendantClaimDetails(claim) %}
   <div class="status-block">
-    {% if claim.reDetermination.partyType === MadeBy.CLAIMANT %}
+    {% if claim.reDetermination.partyType === MadeBy.CLAIMANT
+      or claim.isInterlocutoryJudgmentRequestedOnFullAdmission() %}
       <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you',
           { claimantName: claim.claimData.claimant.name }) }}</h2>
       {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
