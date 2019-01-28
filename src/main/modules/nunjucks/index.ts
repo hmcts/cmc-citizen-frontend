@@ -36,6 +36,7 @@ import { Paths as CCJPaths } from 'features/ccj/paths'
 import { Paths as StatePaidPaths } from 'features/paid-in-full/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
 import { Paths as SettlementAgreementPaths } from 'settlement-agreement/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -154,6 +155,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('CCJPaths', CCJPaths)
     nunjucksEnv.addGlobal('StatePaidPaths', StatePaidPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
+    nunjucksEnv.addGlobal('MediationPaths', MediationPaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
     nunjucksEnv.addGlobal('SettlementAgreementPaths', SettlementAgreementPaths)
