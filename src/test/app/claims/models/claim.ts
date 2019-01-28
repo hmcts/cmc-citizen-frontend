@@ -38,6 +38,7 @@ import { LocalDate } from 'forms/models/localDate'
 import { DecisionType } from 'common/court-calculations/decisionType'
 import { ClaimData } from 'claims/models/claimData'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
+import { User } from 'idam/user'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -93,6 +94,27 @@ describe('Claim', () => {
       const dateOfBirth: DateOfBirth = claimWithoutResponse.retrieveDateOfBirthOfDefendant
       expect(dateOfBirth).to.be.eq(undefined)
     })
+  })
+
+  describe('otherParty', () => {
+
+    it('should return the claimant name when the defendant user is given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const user: User = new User('1','','John','Doe', [],'','')
+      expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.defendant.name)
+    })
+
+    it('should return the defendant name when the claimant user is given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const user: User = new User('123','','John','Smith', [],'','')
+      expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.claimant.name)
+    })
+
+    it('should throw an error when a user is not given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      expect(() => claimWithResponse.otherPartyName(undefined)).to.throw(Error, 'user must be provided')
+    })
+
   })
 
   describe('defendantOffer', () => {

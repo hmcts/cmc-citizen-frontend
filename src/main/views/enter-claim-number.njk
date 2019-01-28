@@ -13,7 +13,7 @@
         {{ csrfProtection(csrf) }}
 
         {{ claimReferenceInput('Claim number', 'reference', form) }}
-        {{ submitButton('Continue') }}
+        {{ submitButton() }}
 
         <p>
           {{ internalLink(t('Don’t have a claim number?'), AppPaths.noClaimNumberPage.uri) }}

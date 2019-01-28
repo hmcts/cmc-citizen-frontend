@@ -435,4 +435,12 @@ export class Claim {
   public amountPaid () {
     return this.claimantResponse && this.claimantResponse.amountPaid ? this.claimantResponse.amountPaid : 0
   }
+
+  public otherPartyName (user: User): string {
+    if (!user || !user.id) {
+      throw new Error('user must be provided')
+    }
+
+    return this.claimantId === user.id ? this.claimData.defendant.name : this.claimData.claimant.name
+  }
 }
