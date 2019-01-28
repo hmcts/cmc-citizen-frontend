@@ -60,7 +60,6 @@ export default express.Router()
           } else {
             res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
           }
-
         }
       }
     })

@@ -4,7 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as ResponsePaths } from 'response/paths'
@@ -16,7 +16,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
