@@ -2,7 +2,7 @@ import { IsDefined, IsIn, MaxLength, ValidateIf } from 'class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'models/task'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
