@@ -310,7 +310,7 @@ export class Claim {
     return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
   }
 
-  private isResponseSubmitted (): boolean {
+  public isResponseSubmitted (): boolean {
     return !!this.response && !this.claimantResponse
   }
 
