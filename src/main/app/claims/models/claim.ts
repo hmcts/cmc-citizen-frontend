@@ -153,6 +153,7 @@ export class Claim {
       && (this.admissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
+        || this.isSettlementAgreementRejected()
         )
       )
   }
@@ -415,7 +416,8 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION && !this.claimData.defendant.isBusiness()
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
   private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
@@ -432,5 +434,13 @@ export class Claim {
 
   public amountPaid () {
     return this.claimantResponse && this.claimantResponse.amountPaid ? this.claimantResponse.amountPaid : 0
+  }
+
+  public otherPartyName (user: User): string {
+    if (!user || !user.id) {
+      throw new Error('user must be provided')
+    }
+
+    return this.claimantId === user.id ? this.claimData.defendant.name : this.claimData.claimant.name
   }
 }
