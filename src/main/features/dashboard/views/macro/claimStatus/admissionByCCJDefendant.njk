@@ -4,7 +4,7 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, admissionByCCJCommonInfoClaimDetails %}
 
 {% macro admissionByCCJDefendantDashboard(claim) %}
-  {{ t('{{ claimantName }} requested a County Court Judgment against you', { claimantName: claim.claimData.claimant.name }) }}
+  {{ t('{{ claimantName }} requested a County Court Judgment against you.', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro admissionByCCJDefendantClaimDetails(claim) %}
