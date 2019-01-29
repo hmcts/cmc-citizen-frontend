@@ -3,7 +3,7 @@ import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 import { ResponseType } from 'response/form/models/responseType'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { InterestRateOption } from 'features/claim/form/models/interestRateOption'
 import { Defendant } from 'drafts/models/defendant'

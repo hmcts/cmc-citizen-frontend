@@ -102,12 +102,11 @@ describe('Defendant response: how mediation works page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('mediation')
 
-          // TODO: point to next page when ready
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(MediationPaths.freeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+              .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
         it('should redirect to the free mediation page when everything is fine for the claimant', async () => {
@@ -116,12 +115,11 @@ describe('Defendant response: how mediation works page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('mediation')
 
-          // TODO: point to next page when ready
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(MediationPaths.freeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+              .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })
