@@ -1,5 +1,5 @@
 import { Response } from 'response/form/models/response'
-import { FreeMediation } from 'response/form/models/freeMediation'
+import { FreeMediation } from 'forms/models/freeMediation'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { Defence } from 'response/form/models/defence'
