@@ -16,5 +16,5 @@ export default express.Router()
     Paths.howMediationWorksPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const { externalId } = req.params
-      res.redirect(Paths.freeMediationPage.evaluateUri({ externalId: externalId }))
+      res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
     }))
