@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { CheckCountryConstraint } from 'forms/validation/validators/isCountrySupported'
 import { Country } from 'common/country'
-import { ValidationArguments } from 'class-validator'
+import { ValidationArguments } from '@hmcts/class-validator'
 import * as nock from 'nock'
 import { mockAddressResponse } from 'test/data/entity/mockAddressResponse'
 import { mockPostcodeLookupResponse, mockScottishPostcodeLookupResponse } from 'test/data/entity/mockPostcodeLookupResponse'

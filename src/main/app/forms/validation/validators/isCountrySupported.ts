@@ -4,7 +4,7 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface
-} from 'class-validator'
+} from '@hmcts/class-validator'
 import { Country } from 'common/country'
 import { ErrorLogger } from 'logging/errorLogger'
 import { PostcodeInfoResponse } from '@hmcts/os-places-client'
