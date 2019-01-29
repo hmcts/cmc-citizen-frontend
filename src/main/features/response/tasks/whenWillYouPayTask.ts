@@ -14,5 +14,6 @@ export class WhenWillYouPayTask {
     return responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
       && responseDraft.partialAdmission.paymentIntention !== undefined
       && isValid(responseDraft.partialAdmission.paymentIntention.paymentOption)
+      && isValid(responseDraft.partialAdmission.paymentIntention.paymentDate.date)
   }
 }
