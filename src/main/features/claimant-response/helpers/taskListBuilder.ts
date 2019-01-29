@@ -22,6 +22,7 @@ import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/par
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as MediationPaths } from 'mediation/paths'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 const validator: Validator = new Validator()
 
@@ -45,7 +46,7 @@ export class TaskListBuilder {
     return new TaskList('Before you start', tasks)
   }
 
-  static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
+  static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft?: MediationDraft): TaskList {
     const tasks: TaskListItem[] = []
     const response: FullDefenceResponse | PartialAdmissionResponse = claim.response as FullDefenceResponse | PartialAdmissionResponse
     const externalId: string = claim.externalId
@@ -93,7 +94,7 @@ export class TaskListBuilder {
           new TaskListItem(
             'Consider free mediation',
             path,
-            draft.freeMediation !== undefined
+            FreeMediationTask.isCompleted(draft, mediationDraft)
           ))
       }
     }
@@ -102,10 +103,10 @@ export class TaskListBuilder {
 
   }
 
-  static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
+  static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft?: MediationDraft): TaskList {
 
     if (StatesPaidHelper.isResponseAlreadyPaid(claim)) {
-      return this.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+      return this.buildStatesPaidHowYouWantToRespondSection(draft, claim, mediationDraft)
     }
 
     const externalId: string = claim.externalId
@@ -156,11 +157,17 @@ export class TaskListBuilder {
       if (claim.response.freeMediation === YesNoOption.YES
         && draft.settleAdmitted
         && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
+        let path: string
+        if (FeatureToggles.isEnabled('mediation')) {
+          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        } else {
+          path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        }
         tasks.push(
           new TaskListItem(
             'Free mediation?',
-            Paths.freeMediationPage.evaluateUri({ externalId: externalId }),
-            FreeMediationTask.isCompleted(draft.freeMediation)
+            path,
+            FreeMediationTask.isCompleted(draft, mediationDraft)
           )
         )
       }
@@ -268,10 +275,10 @@ export class TaskListBuilder {
     return new TaskList('Submit', tasks)
   }
 
-  static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim): TaskListItem[] {
+  static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim, mediationDraft?: MediationDraft): TaskListItem[] {
     return [].concat(
       TaskListBuilder.buildDefendantResponseSection(draft, claim).tasks,
-      TaskListBuilder.buildHowYouWantToRespondSection(draft, claim).tasks
+      TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft).tasks
     )
       .filter(item => !item.completed)
   }

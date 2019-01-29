@@ -7,6 +7,7 @@ import * as moment from 'moment'
 
 import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/responseDraft'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { TaskList } from 'drafts/tasks/taskList'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
@@ -526,14 +527,14 @@ describe('Defendant response task list builder', () => {
     it('Should return "Consider free mediation" when not completed for fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
       expect(tasks.map(task => task.name)).to.contain('Consider free mediation')
     })
 
     it('Should not return "Consider free mediation" when not fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
       expect(tasks.map(task => task.name)).to.not.contain('Consider free mediation')
     })
   })

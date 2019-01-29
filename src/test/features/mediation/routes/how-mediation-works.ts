@@ -19,7 +19,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Defendant response: how mediation works page', () => {
+describe('Mediation: how mediation works page', () => {
   attachDefaultHooks(app)
 
   describe('on GET for defendant', () => {

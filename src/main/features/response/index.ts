@@ -24,6 +24,7 @@ import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToCla
 import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -87,6 +88,10 @@ export class Feature {
       },
       initiatePartyFromClaimHandler
     )
+    app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
+        return new MediationDraft().deserialize(value)
+      }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }

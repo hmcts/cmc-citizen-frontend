@@ -6,8 +6,8 @@ import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
-import { DraftMediation } from 'mediation/draft/draftMediation'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { DraftService } from 'services/draftService'
 
 function renderView (res: express.Response): void {
@@ -29,11 +29,11 @@ export default express.Router()
     Paths.mediationAgreementPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
-      if (req.body.reject) {
-        const draft: Draft<DraftMediation> = res.locals.mediationDraft
-        const user: User = res.locals.user
+      const draft: Draft<MediationDraft> = res.locals.mediationDraft
+      const user: User = res.locals.user
 
-        draft.document.willYouTryMediation = FreeMediationOption.NO
+      if (req.body.reject) {
+        draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
 
         await new DraftService().save(draft, user.bearerToken)
 
@@ -43,6 +43,10 @@ export default express.Router()
           res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
         }
       } else {
+        draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
+
+        await new DraftService().save(draft, user.bearerToken)
+        // TODO update to point to next page when it is ready
         res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
