@@ -26,8 +26,8 @@
 {% endmacro %}
 
 {% macro paidInFullClaimantClaimSettledDetails(claim) %}
-  {% set defendantName: claim.claimData.defendant.name %}
-  {% set moneyReceivedOn: claim.moneyReceivedOn | date %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  {% set moneyReceivedOn = claim.moneyReceivedOn | date %}
 
   <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
     {% if claim.response.amount %}
