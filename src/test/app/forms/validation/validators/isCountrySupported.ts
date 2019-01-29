@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 import { CheckCountryConstraint } from 'forms/validation/validators/isCountrySupported'
 import { Country } from 'common/country'
