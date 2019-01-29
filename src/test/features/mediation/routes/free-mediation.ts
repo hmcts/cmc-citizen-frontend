@@ -4,8 +4,7 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
 
@@ -14,8 +13,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { Claim } from 'claims/models/claim'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
@@ -28,14 +26,12 @@ describe('Mediation: Free mediation page', () => {
   describe('on GET', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when defendant is authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
@@ -69,7 +65,6 @@ describe('Mediation: Free mediation page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
       })
 
-      checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
@@ -102,19 +97,26 @@ describe('Mediation: Free mediation page', () => {
   describe('on POST', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
-    checkNotDefendantInCaseGuard(app, method, pagePath)
 
     context('when user authorised', () => {
-      beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-      })
-
-      checkAlreadySubmittedGuard(app, method, pagePath)
-      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-
       context('when form is valid', () => {
-        it('should redirect to task list page when everything is fine', async () => {
+        it('should redirect to how mediation works page when everything is fine for defendant', async () => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+          checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('mediation')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
+
+        it('should redirect to how mediation works page when everything is fine for claimant', async () => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
           draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
