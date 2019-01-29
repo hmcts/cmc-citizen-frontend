@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
-import { FreeMediation } from 'response/form/models/freeMediation'
+import { FreeMediation } from 'forms/models/freeMediation'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 describe('FreeMediationUtil', () => {

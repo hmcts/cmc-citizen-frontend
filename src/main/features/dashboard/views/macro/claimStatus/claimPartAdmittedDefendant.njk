@@ -14,7 +14,7 @@
 
 {% macro claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
+    <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
     <p>{{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
