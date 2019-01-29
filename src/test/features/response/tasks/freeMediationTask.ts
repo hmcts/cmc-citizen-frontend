@@ -3,7 +3,7 @@ import { expect } from 'chai'
 
 import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { FreeMediation, FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 
 describe('Free mediation task', () => {
   it('should not be completed when free mediation object is undefined', () => {

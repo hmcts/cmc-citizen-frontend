@@ -9,7 +9,7 @@ import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   defenceWithDisputeData
 } from 'test/data/entity/responseData'
@@ -38,6 +38,7 @@ import { LocalDate } from 'forms/models/localDate'
 import { DecisionType } from 'common/court-calculations/decisionType'
 import { ClaimData } from 'claims/models/claimData'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
+import { User } from 'idam/user'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -93,6 +94,27 @@ describe('Claim', () => {
       const dateOfBirth: DateOfBirth = claimWithoutResponse.retrieveDateOfBirthOfDefendant
       expect(dateOfBirth).to.be.eq(undefined)
     })
+  })
+
+  describe('otherParty', () => {
+
+    it('should return the claimant name when the defendant user is given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const user: User = new User('1','','John','Doe', [],'','')
+      expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.defendant.name)
+    })
+
+    it('should return the defendant name when the claimant user is given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const user: User = new User('123','','John','Smith', [],'','')
+      expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.claimant.name)
+    })
+
+    it('should throw an error when a user is not given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      expect(() => claimWithResponse.otherPartyName(undefined)).to.throw(Error, 'user must be provided')
+    })
+
   })
 
   describe('defendantOffer', () => {
@@ -190,6 +212,24 @@ describe('Claim', () => {
       claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION)
+    })
+
+    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant and Court repayment plan', () => {
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(100, 'days'),
+          paymentOption: PaymentOption.BY_SPECIFIED_DATE
+        },
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.REFER_TO_JUDGE
+      }
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
+
+      expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
     })
 
     it('should return CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT when a claimant has signed a settlement agreement', () => {
@@ -291,6 +331,9 @@ describe('Claim', () => {
       claim.claimantRespondedAt = MomentFactory.currentDate()
       claim.claimData = {
         defendant: new Individual().deserialize(individual)
+      }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION
       }
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
     })
@@ -493,7 +536,6 @@ describe('Claim', () => {
     it('should contain the claim status only if claimant rejects organisation response', () => {
       claim.respondedAt = moment()
       claim.response = {
-        responseType: ResponseType.PART_ADMISSION,
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
@@ -519,7 +561,6 @@ describe('Claim', () => {
     it('should contain the claim status only if claimant rejects company response', () => {
       claim.respondedAt = moment()
       claim.response = {
-        responseType: ResponseType.PART_ADMISSION,
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(60, 'days'),
           paymentOption: 'BY_SPECIFIED_DATE'
