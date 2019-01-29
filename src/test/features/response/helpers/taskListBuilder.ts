@@ -411,7 +411,7 @@ describe('Defendant response task list builder', () => {
           isResponsePartiallyAdmitted.returns(false)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
-            new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
+            new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new MediationDraft()
           )
 
           expect(taskList.tasks.map(task => task.name)).to.contain('Consider free mediation')
@@ -422,7 +422,7 @@ describe('Defendant response task list builder', () => {
           isResponsePartiallyAdmitted.returns(true)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
-            new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim
+            new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
 
           expect(taskList.tasks.map(task => task.name)).to.contain('Consider free mediation')

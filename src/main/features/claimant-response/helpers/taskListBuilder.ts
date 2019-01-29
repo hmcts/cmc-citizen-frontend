@@ -46,7 +46,7 @@ export class TaskListBuilder {
     return new TaskList('Before you start', tasks)
   }
 
-  static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft?: MediationDraft): TaskList {
+  static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): TaskList {
     const tasks: TaskListItem[] = []
     const response: FullDefenceResponse | PartialAdmissionResponse = claim.response as FullDefenceResponse | PartialAdmissionResponse
     const externalId: string = claim.externalId
@@ -103,7 +103,7 @@ export class TaskListBuilder {
 
   }
 
-  static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft?: MediationDraft): TaskList {
+  static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): TaskList {
 
     if (StatesPaidHelper.isResponseAlreadyPaid(claim)) {
       return this.buildStatesPaidHowYouWantToRespondSection(draft, claim, mediationDraft)

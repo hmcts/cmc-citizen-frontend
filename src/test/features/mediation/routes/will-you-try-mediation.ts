@@ -95,7 +95,6 @@ describe('Free mediation: will you try free mediation page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          // TODO: update test when next page is ready
           it('should redirect to itself page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
@@ -106,7 +105,7 @@ describe('Free mediation: will you try free mediation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.willYouTryMediation
+                .toLocation(MediationPaths.mediationAgreementPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 

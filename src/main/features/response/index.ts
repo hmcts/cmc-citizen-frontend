@@ -88,7 +88,7 @@ export class Feature {
       },
       initiatePartyFromClaimHandler
     )
-    app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
+    app.all(/^\/case\/.+\/response\/task-list|check-and-send|incomplete-submission.*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
         return new MediationDraft().deserialize(value)
       }))
