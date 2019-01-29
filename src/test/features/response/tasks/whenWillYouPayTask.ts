@@ -12,7 +12,9 @@ import { Defendant } from 'drafts/models/defendant'
 import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { WhenWillYouPayTask } from 'response/tasks/whenWillYouPayTask'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { LocalDate } from 'forms/models/localDate'
+import { localDateFrom } from 'test/localDateUtils'
+import { MomentFactory } from 'shared/momentFactory'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 
 function validResponseDraft (paymentType: PaymentType): ResponseDraft {
   const responseDraft: ResponseDraft = new ResponseDraft()
@@ -40,7 +42,8 @@ describe('WhenWillYouPayTask', () => {
     it('paymentOption is defined but payment date is in the past', () => {
       const draft: ResponseDraft = validResponseDraft(PaymentType.BY_SET_DATE)
       draft.partialAdmission.paymentIntention.paymentOption.option = PaymentType.BY_SET_DATE
-      draft.partialAdmission.paymentIntention.paymentDate = new LocalDate(2018,1,1)
+      draft.partialAdmission.paymentIntention.paymentDate =
+        new PaymentDate(localDateFrom(MomentFactory.currentDate().add(-10, 'day')))
 
       expect(WhenWillYouPayTask.isCompleted(draft)).to.be.false
     })
