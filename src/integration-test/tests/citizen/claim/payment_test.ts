@@ -25,7 +25,5 @@ Scenario('I can cancel payment, attempt payment with declined card and finally i
 
   claimSteps.checkClaimFactsAreTrueAndSubmit(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   paymentSteps.payWithWorkingCard()
-  claimSteps.reloadPage() // reload gets over the ESOCKETTIMEDOUT Error
-  claimSteps.reloadPage() // reload gets over the 409 Duplicate Key value violates unique constraint Error
   I.waitForText('Claim submitted')
 })
