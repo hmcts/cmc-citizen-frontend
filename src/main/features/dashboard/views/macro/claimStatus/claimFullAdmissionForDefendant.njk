@@ -41,7 +41,7 @@
       {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
       {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
       {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
-      <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ installmentAmount }}
+      <p>{{ t('You’ve offered to pay {{ claimantName }} {{ installmentAmount }}
             {{ paymentSchedule }} starting {{ paymentDate }}.',
           { amount: amount, claimantName: claimant.name, installmentAmount: installmentAmount,
             paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
