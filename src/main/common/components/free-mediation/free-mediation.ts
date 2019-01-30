@@ -4,7 +4,7 @@ import { Paths as FreeMediationPaths } from 'shared/components/free-mediation/pa
 
 import { Form } from 'main/app/forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { FreeMediation } from 'main/features/response/form/models/freeMediation'
+import { FreeMediation } from 'forms/models/freeMediation'
 
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'

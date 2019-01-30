@@ -16,6 +16,5 @@ export default express.Router()
     Paths.howMediationWorksPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const { externalId } = req.params
-      // TODO: redirect to next page
-      res.redirect(Paths.howMediationWorksPage.evaluateUri({ externalId: externalId }))
+      res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
     }))
