@@ -88,7 +88,7 @@
     "serve-favicon": "^2.5.0",
     "string.prototype.startswith": "^0.2.0",
     "to-boolean": "^1.0.0",
-    "ts-node": "^8.0.1",
+    "ts-node": "^8.0.2",
     "tsconfig-paths": "^3.7.0",
     "typescript": "^3.1.6",
     "uuid": "^3.3.2"
@@ -106,7 +106,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.2.0",
-    "codeceptjs": "^2.0.2",
+    "codeceptjs": "^2.0.3",
     "codecov": "^3.1.0",
     "debug": "^4.1.1",
     "gulp-livereload": "^4.0.1",
