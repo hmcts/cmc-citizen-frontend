@@ -80,6 +80,16 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@hmcts/class-validator@^0.9.1-b":
+  version "0.9.1-b"
+  resolved "https://registry.yarnpkg.com/@hmcts/class-validator/-/class-validator-0.9.1-b.tgz#656006d3569b68743344bd3e407f67d916cc2af3"
+  integrity sha512-f+1QZd/FU1JEcGjiJF7mym6XtiSHL9aZ0DznHaAW9aAkz8+JREF7FaRuTbm5y503sGlSGiPqIqO8waEsR9CiwA==
+  dependencies:
+    "@typed/is-promise" "^1.0.0"
+    "@types/validator" "9.4.2"
+    google-libphonenumber "^3.1.6"
+    validator "10.4.0"
+
 "@hmcts/cmc-common-frontend@^1.54.0":
   version "1.54.0"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.54.0.tgz#5683aa0fc4ba712c3516a09fb18defbb55ce9495"
@@ -96,11 +106,12 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
 
-"@hmcts/cmc-validators@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.0.tgz#74bc1c46724e96334767ee6668741bb03331363f"
+"@hmcts/cmc-validators@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.1.tgz#12bf22f747237ec931cbf8af441f8e75ccb1fd55"
+  integrity sha512-rIlbm5FLl6NyE18pw9ZcL+f7NqwCgIBM1CpbFwnAIVWYyTNmBf6eX5LZn5IGOebyLjKbqHIv/w/31NbghF1VMg==
   dependencies:
-    class-validator "^0.9.1"
+    "@hmcts/class-validator" "^0.9.1-b"
 
 "@hmcts/draft-store-client@^1.1.1", "@hmcts/draft-store-client@^1.2.1":
   version "1.2.1"
@@ -177,6 +188,11 @@
     "@sinonjs/commons" "^1.0.2"
     array-from "^2.1.1"
     lodash.get "^4.4.2"
+
+"@typed/is-promise@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@typed/is-promise/-/is-promise-1.0.0.tgz#12eaf3866056321f81325db6e35206f136737683"
+  integrity sha1-EurzhmBWMh+BMl2241IG8TZzdoM=
 
 "@types/body-parser@*":
   version "1.16.8"
@@ -390,6 +406,11 @@
   resolved "https://registry.yarnpkg.com/@types/supertest/-/supertest-2.0.7.tgz#46ff6508075cd4519736be060f0d6331a5c8ca7b"
   dependencies:
     "@types/superagent" "*"
+
+"@types/validator@9.4.2":
+  version "9.4.2"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-9.4.2.tgz#9fec264b35f0ea21d0967eeec2dcd6a798b34350"
+  integrity sha512-v6H2QH+oXVdLKp9keOJi5LQSt6X5/XIOtK1YmbCzvkAT2kHW9WyQkixit9w1UgJpBGrDCqqCZlQ+Qucpmsf8hA==
 
 "HTML_CodeSniffer@https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz":
   version "2.0.7"
