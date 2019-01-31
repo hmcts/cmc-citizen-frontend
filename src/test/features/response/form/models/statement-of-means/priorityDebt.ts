@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { PriorityDebt } from 'response/form/models/statement-of-means/priorityDebt'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'

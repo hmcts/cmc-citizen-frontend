@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { CourtOrders, ValidationErrors } from 'response/form/models/statement-of-means/courtOrders'
 import { CourtOrderRow } from 'response/form/models/statement-of-means/courtOrderRow'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { INIT_ROW_COUNT } from 'forms/models/multiRowForm'
 
