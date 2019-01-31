@@ -13,6 +13,8 @@ export class WhenWillYouPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
     return responseDraft.partialAdmission.alreadyPaid.option === YesNoOption.NO
       && responseDraft.partialAdmission.paymentIntention !== undefined
+      && (isValid(responseDraft.partialAdmission.paymentIntention.paymentDate)
+        || isValid(responseDraft.partialAdmission.paymentIntention.paymentPlan))
       && isValid(responseDraft.partialAdmission.paymentIntention.paymentOption)
   }
 }
