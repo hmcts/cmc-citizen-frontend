@@ -115,21 +115,12 @@ export class ClaimantResponseConverter {
   private static addStatesPaidOptions (draftClaimantResponse: DraftClaimantResponse,
                                        claimantResponse: ClaimantResponse) {
     if (draftClaimantResponse.partPaymentReceived) {
-      claimantResponse.paymentReceived =
-        this.convertYesNoString(draftClaimantResponse.partPaymentReceived.received.option)
+      claimantResponse.paymentReceived = draftClaimantResponse.partPaymentReceived.received.option as YesNoOption
     }
 
     if (draftClaimantResponse.accepted) {
-      claimantResponse.settleForAmount = this.convertYesNoString(draftClaimantResponse.accepted.accepted.option)
+      claimantResponse.settleForAmount = draftClaimantResponse.accepted.accepted.option as YesNoOption
     }
 
-  }
-
-  private static convertYesNoString (option: string): YesNoOption {
-    if (option === 'yes') {
-      return YesNoOption.YES
-    } else {
-      return YesNoOption.NO
-    }
   }
 }
