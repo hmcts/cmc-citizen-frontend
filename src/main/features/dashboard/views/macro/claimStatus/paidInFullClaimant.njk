@@ -26,10 +26,19 @@
 {% endmacro %}
 
 {% macro paidInFullClaimantClaimSettledDetails(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  {% set moneyReceivedOn = claim.moneyReceivedOn | date %}
+
   <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
-  <p>{{ t('{{ defendantName }} paid you {{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
-      { defendantName: claim.claimData.defendant.name, totalAmountTillToday: claim.totalAmountTillToday | numeral,
-        moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
+    {% if claim.response.amount %}
+        <p>{{ t('{{ defendantName }} paid you {{ amount }} on {{ moneyReceivedOn }}.',
+            { defendantName: defendantName, amount: claim.response.amount | numeral,
+              moneyReceivedOn: moneyReceivedOn }) }}</p>
+    {% else %}
+      <p>{{ t('{{ defendantName }} paid you {{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
+        { defendantName: defendantName, totalAmountTillToday: claim.totalAmountTillToday | numeral,
+          moneyReceivedOn: moneyReceivedOn }) }}</p>
+    {% endif %}
 {% endmacro %}
 
 {% macro paidInFullCCJCancelledClaimantClaimDetails(claim) %}
