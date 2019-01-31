@@ -9,7 +9,7 @@ import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   defenceWithDisputeData
 } from 'test/data/entity/responseData'
@@ -212,6 +212,24 @@ describe('Claim', () => {
       claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION)
+    })
+
+    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant and Court repayment plan', () => {
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(100, 'days'),
+          paymentOption: PaymentOption.BY_SPECIFIED_DATE
+        },
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.REFER_TO_JUDGE
+      }
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
+
+      expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
     })
 
     it('should return CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT when a claimant has signed a settlement agreement', () => {
