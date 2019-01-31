@@ -1,5 +1,5 @@
 import { LocalDate } from 'forms/models/localDate'
-import { IsDefined, ValidateNested } from 'class-validator'
+import { IsDefined, ValidateNested } from '@hmcts/class-validator'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
 

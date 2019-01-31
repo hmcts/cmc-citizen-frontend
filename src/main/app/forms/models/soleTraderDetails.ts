@@ -1,4 +1,4 @@
-import { MaxLength } from 'class-validator'
+import { MaxLength } from '@hmcts/class-validator'
 import { PartyDetails } from './partyDetails'
 import { PartyType } from 'common/partyType'
 
