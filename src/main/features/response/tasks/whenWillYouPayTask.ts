@@ -14,7 +14,8 @@ export class WhenWillYouPayTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
 
     if (responseDraft.partialAdmission.paymentIntention
-      && responseDraft.partialAdmission.paymentIntention.paymentOption.option === PaymentType.BY_SET_DATE) {
+      && responseDraft.partialAdmission.paymentIntention.paymentOption
+      && responseDraft.partialAdmission.paymentIntention.paymentOption.isOfType(PaymentType.BY_SET_DATE)) {
       return isValid(responseDraft.partialAdmission.paymentIntention.paymentDate)
     }
 
