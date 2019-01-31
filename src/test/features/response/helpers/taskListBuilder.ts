@@ -383,7 +383,6 @@ describe('Defendant response task list builder', () => {
         draft.partialAdmission.alreadyPaid = new AlreadyPaid(YesNoOption.NO)
         draft.partialAdmission.howMuchDoYouOwe = new HowMuchDoYouOwe(100, 200)
         draft.partialAdmission.paymentIntention = new PaymentIntention()
-        draft.partialAdmission.paymentIntention.paymentOption = new PaymentOption(PaymentType.INSTALMENTS)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('When will you pay the £100?')

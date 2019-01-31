@@ -30,7 +30,6 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
 import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
 import { FeatureToggles } from 'utils/featureToggles'
-import { YesNoOption } from 'models/yesNoOption'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -219,9 +218,7 @@ export class TaskListBuilder {
           )
         }
 
-        if (howMuchDoYouOweTask
-          && draft.partialAdmission.alreadyPaid.option === YesNoOption.NO
-          && draft.partialAdmission.paymentIntention !== undefined
+        if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
           && draft.partialAdmission.paymentIntention.paymentOption.isOfType(PaymentType.INSTALMENTS)) {
           tasks.push(
             new TaskListItem(
