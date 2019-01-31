@@ -10,7 +10,7 @@
     <div class="form-group">
       {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
 
-      <p>{{ t('Judgement will be entered against the defendant for this amount.') }}</p>
+      <p>{{ t('Judgment will be entered against the defendant for this amount.') }}</p>
 
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
@@ -80,6 +80,3 @@
   </div>
 </div>
 {% endblock %}
-
-
-
