@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { YesNoOption } from 'models/yesNoOption'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 

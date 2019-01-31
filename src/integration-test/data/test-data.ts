@@ -28,7 +28,7 @@ export const claimAmount: Amount = {
 
 export const postcodeLookupQuery: PostcodeLookupQuery = {
   postcode: 'M13 9PL',
-  address: 'University of Manchester, Oxford Road, Manchester, M13 9PL'
+  address: 'UNIVERSITY OF MANCHESTER, OXFORD ROAD, MANCHESTER, M13 9PL'
 }
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
