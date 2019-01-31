@@ -56,6 +56,7 @@ export class ClaimantResponseFeature {
       app.settings.nunjucksEnv.filters.renderExpenseType = ExpenseTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderMonthlyAmount = MonthlyAmountViewFilter.render
       app.settings.nunjucksEnv.filters.renderPriorityDebtType = PriorityDebtTypeViewFilter.render
+      app.settings.nunjucksEnv.filters.renderPaymentFrequencyView = FrequencyViewFilter.renderPaymentFrequency
     }
 
     const allClaimantResponse = '/case/*/claimant-response/*'
