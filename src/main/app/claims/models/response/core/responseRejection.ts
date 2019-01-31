@@ -5,6 +5,8 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 export class ResponseRejection implements ClaimantResponse {
   type: string
   amountPaid: number
+  paymentReceived: YesNoOption
+  settleForAmount: YesNoOption
   freeMediation?: YesNoOption
   reason?: string
   claimantPaymentIntention?: PaymentIntention

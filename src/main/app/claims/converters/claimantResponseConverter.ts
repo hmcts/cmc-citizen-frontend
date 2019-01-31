@@ -30,6 +30,9 @@ export class ClaimantResponseConverter {
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
+
+      this.addStatesPaidOptions(draftClaimantResponse, reject)
+
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
   }
@@ -67,6 +70,8 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.alternatePaymentMethod) {
       respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
     }
+
+    this.addStatesPaidOptions(draftClaimantResponse, respAcceptance)
     return respAcceptance
   }
 
@@ -104,6 +109,27 @@ export class ClaimantResponseConverter {
         return 'REFER_TO_JUDGE'
       default:
         throw new Error(`Unknown formalise repayment option ${repaymentPlan.option.value}`)
+    }
+  }
+
+  private static addStatesPaidOptions (draftClaimantResponse: DraftClaimantResponse,
+                                       claimantResponse: ClaimantResponse) {
+    if (draftClaimantResponse.partPaymentReceived) {
+      claimantResponse.paymentReceived =
+        this.convertYesNoString(draftClaimantResponse.partPaymentReceived.received.option)
+    }
+
+    if (draftClaimantResponse.accepted) {
+      claimantResponse.settleForAmount = this.convertYesNoString(draftClaimantResponse.accepted.accepted.option)
+    }
+
+  }
+
+  private static convertYesNoString (option: string): YesNoOption {
+    if (option === 'yes') {
+      return YesNoOption.YES
+    } else {
+      return YesNoOption.NO
     }
   }
 }
