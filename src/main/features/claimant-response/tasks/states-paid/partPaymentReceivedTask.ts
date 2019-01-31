@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
 const validator = new Validator()

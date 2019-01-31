@@ -7,7 +7,7 @@ i18next.use(postProcessor).init()
 
 import { expect } from 'chai'
 import * as moment from 'moment'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 

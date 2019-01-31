@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, IsPositive, ValidateIf } from '@hmcts/class-validator'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
 import { Fractions, IsLessThan } from '@hmcts/cmc-validators'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'

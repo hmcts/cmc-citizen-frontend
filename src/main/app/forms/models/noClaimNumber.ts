@@ -1,5 +1,5 @@
 import { ValidationErrors } from 'forms/validation/validationErrors'
-import { IsIn } from 'class-validator'
+import { IsIn } from '@hmcts/class-validator'
 import { Service } from 'models/service'
 
 export class NoClaimNumber {
