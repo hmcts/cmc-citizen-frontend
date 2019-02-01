@@ -3,7 +3,7 @@
 
 import { expect } from 'chai'
 import * as randomstring from 'randomstring'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { HowMuchOwed } from 'features/response/form/models/howMuchOwed'
 import { ValidationErrors } from 'forms/validation/validationErrors'
