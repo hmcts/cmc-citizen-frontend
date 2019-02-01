@@ -263,7 +263,7 @@
         var townOrCity = lines[lines.length - 2].trim()
         var postCode = lines[lines.length - 1].trim()
 
-        if (address.organisationName === "") {
+        if (!address.organisationName || address.organisationName === "") {
           valueFormattedAddress = [
             lines[0].trim(),
             lines.length > 3 ? lines[1].trim() : '',

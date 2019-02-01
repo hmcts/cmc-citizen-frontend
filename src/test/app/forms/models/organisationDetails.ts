@@ -8,7 +8,7 @@ import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/
 import { PartyType } from 'common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
-import { ValidationError, Validator } from 'class-validator'
+import { ValidationError, Validator } from '@hmcts/class-validator'
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'bb127nq')
