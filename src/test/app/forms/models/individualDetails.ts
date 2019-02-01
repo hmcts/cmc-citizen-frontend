@@ -5,7 +5,7 @@ import { ValidationErrors as PartyDetailsValidationErrors } from 'forms/models/p
 import { PartyType } from 'common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
-import { ValidationError, Validator } from 'class-validator'
+import { ValidationError, Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { LocalDate } from 'forms/models/localDate'
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'bb127nq')

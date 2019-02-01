@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'

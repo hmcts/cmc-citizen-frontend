@@ -56,12 +56,6 @@ const paymentSteps: PaymentSteps = new PaymentSteps()
 
 export class ClaimSteps {
 
-  reloadPage (): void {
-    I.executeScript(() => {
-      document.location.reload(true)
-    })
-  }
-
   enterTestDataClaimAmount (): void {
     claimantClaimAmountPage.enterAmount(claimAmount.rows[0].amount, claimAmount.rows[1].amount, claimAmount.rows[2].amount)
     claimantClaimAmountPage.calculateTotal()
@@ -211,8 +205,6 @@ export class ClaimSteps {
   makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {
     this.makeAClaimAndSubmitStatementOfTruth(email, claimantType, defendantType, enterDefendantEmail)
     paymentSteps.payWithWorkingCard()
-    this.reloadPage() // reload gets over the ESOCKETTIMEDOUT Error
-    this.reloadPage() // reload gets over the 409 Duplicate Key value violates unique constraint Error
     I.waitForText('Claim submitted')
     return claimantClaimConfirmedPage.getClaimReference()
   }
@@ -271,8 +263,8 @@ export class ClaimSteps {
     this.enterClaimEvidence()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
-    I.see('Oxford Road')
-    I.see('Manchester')
+    I.see('OXFORD ROAD')
+    I.see('MANCHESTER')
     I.see('M13 9PL')
     I.see('07700000001')
     I.see(claimReason)
