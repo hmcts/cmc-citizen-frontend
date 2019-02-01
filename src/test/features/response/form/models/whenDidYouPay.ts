@@ -3,7 +3,7 @@
 
 import { expect } from 'chai'
 import * as randomstring from 'randomstring'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectNumberOfValidationErrors, expectValidationError } from 'test/app/forms/models/validationUtils'
 import { WhenDidYouPay, ValidationErrors } from 'response/form/models/whenDidYouPay'
 import * as moment from 'moment'

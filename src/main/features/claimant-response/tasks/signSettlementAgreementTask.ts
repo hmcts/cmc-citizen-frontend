@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 
 const validator = new Validator()
