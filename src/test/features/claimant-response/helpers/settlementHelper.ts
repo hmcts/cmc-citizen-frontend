@@ -30,7 +30,7 @@ describe('settlementHelper', () => {
     })
 
     it('should return defendant party statement by installment option', () => {
-      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
+      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim, draft)
       expect(partyStatement).is.not.undefined
       expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
       expect(partyStatement.type).to.be.eql('OFFER')
@@ -39,17 +39,18 @@ describe('settlementHelper', () => {
       expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('INSTALMENTS')
       expect(partyStatement.offer.paymentIntention.repaymentPlan).is.not.undefined
       expect(partyStatement.offer.paymentIntention.paymentDate).is.undefined
+      expect(partyStatement.offer.content).to.be.eql('John Smith will repay £200 in instalments of £100 each week. The first instalment will be paid by 31 December 2050.')
 
     })
 
     it('should return defendant party statement by set date option', () => {
       claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
-      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim)
+      const partyStatement: PartyStatement = prepareDefendantPartyStatement(claim, draft)
       expect(partyStatement).is.not.undefined
       expect(partyStatement.madeBy).to.be.eql('DEFENDANT')
       expect(partyStatement.type).to.be.eql('OFFER')
       expect(partyStatement.offer).is.not.undefined
-      expect(partyStatement.offer.content).to.be.eql('John Smith will pay the full amount, no later than 31 December 2050')
+      expect(partyStatement.offer.content).to.be.eql('John Smith will pay £200, no later than 31 December 2050')
       expect(partyStatement.offer.completionDate).to.be.eql(MomentFactory.parse('2050-12-31'))
       expect(partyStatement.offer.paymentIntention).is.not.undefined
       expect(partyStatement.offer.paymentIntention.paymentOption).to.be.eql('BY_SPECIFIED_DATE')

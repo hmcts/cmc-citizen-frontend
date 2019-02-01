@@ -1,6 +1,5 @@
 import { MultiRowForm } from 'forms/models/multiRowForm'
 import { BankAccountRow } from 'response/form/models/statement-of-means/bankAccountRow'
-import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
 
 export const MAX_NUMBER_OF_ROWS: number = 10
 export const INIT_ROW_COUNT: number = 2
@@ -11,14 +10,12 @@ export class ValidationErrors {
 
 export class BankAccounts extends MultiRowForm<BankAccountRow> {
 
-  @AtLeastOnePopulatedRow({ message: ValidationErrors.AT_LEAST_ONE_ROW_REQUIRED })
   rows: BankAccountRow[]
 
   static fromObject (value?: any): BankAccounts {
     if (!value) {
       return value
     }
-
     return new BankAccounts(value.rows ? value.rows.map(BankAccountRow.fromObject) : [])
   }
 

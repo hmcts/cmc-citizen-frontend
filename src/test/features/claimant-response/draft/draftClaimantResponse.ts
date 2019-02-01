@@ -8,11 +8,10 @@ import { SettlementAgreement } from 'claimant-response/form/models/settlementAgr
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
-import { DecisionType } from 'common/court-calculations/courtDecision'
-import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import {
   intentionOfImmediatePayment,
-  intentionOfPaymentByInstallments
+  intentionOfPaymentByInstalments
 } from 'test/data/draft/paymentIntentionDraft'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 
@@ -52,9 +51,15 @@ describe('DraftClaimantResponse', () => {
           amount: 999,
           claimedAmount: 1000
         },
+        partPaymentReceived: {
+          received: YesNoOption.YES
+        },
+        accepted: {
+          accepted: YesNoOption.NO
+        },
         courtDetermination: new CourtDetermination(
-          PaymentIntention.deserialize(intentionOfImmediatePayment),
-          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
+          intentionOfImmediatePayment,
+          intentionOfPaymentByInstalments,
           undefined,
           1000,
           DecisionType.COURT)
@@ -74,6 +79,8 @@ describe('DraftClaimantResponse', () => {
       expect(draft.paidAmount.option).to.be.equal(PaidAmountOption.YES)
       expect(draft.paidAmount.amount).to.be.equal(999)
       expect(draft.paidAmount.claimedAmount).to.be.equal(1000)
+      expect(draft.partPaymentReceived.received.option).to.be.equal(YesNoOption.YES.option)
+      expect(draft.accepted.accepted.option).to.be.equal(YesNoOption.NO.option)
       expect(draft.courtDetermination).to.be.instanceOf(CourtDetermination)
     })
 
@@ -82,8 +89,8 @@ describe('DraftClaimantResponse', () => {
       const draft: DraftClaimantResponse = new DraftClaimantResponse().deserialize({
         externalId: myExternalId,
         courtDetermination: new CourtDetermination(
-          PaymentIntention.deserialize(intentionOfImmediatePayment),
-          PaymentIntention.deserialize(intentionOfPaymentByInstallments),
+          intentionOfImmediatePayment,
+          intentionOfPaymentByInstalments,
           undefined,
           1000,
           DecisionType.COURT)

@@ -28,7 +28,7 @@ export const claimAmount: Amount = {
 
 export const postcodeLookupQuery: PostcodeLookupQuery = {
   postcode: 'M13 9PL',
-  address: 'University of Manchester, Oxford Road, Manchester, M13 9PL'
+  address: 'UNIVERSITY OF MANCHESTER, OXFORD ROAD, MANCHESTER, M13 9PL'
 }
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
@@ -58,7 +58,8 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         case InterestType.BREAKDOWN:
           return this.amount.getClaimTotal() + fixedInterestAmount + claimFee
       }
-    }
+    },
+    moneyReceivedOn: null
   } as ClaimData
 
   switch (interestType) {
@@ -140,7 +141,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
       postcode: 'M13 9PL'
     },
     mobilePhone: '07700000002',
-    email: hasEmailAddress ? 'civilmoneyclaims+adefendant@gmail.com' : undefined
+    email: hasEmailAddress ? 'civilmoneyclaims+automatedtest-defendant@gmail.com' : undefined
   }
 
   switch (type) {

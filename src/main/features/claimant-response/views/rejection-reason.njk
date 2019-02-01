@@ -1,7 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary, textArea %}
 
-{% set heading = 'Why did you reject the repayment plan?' %}
+{% if alreadyPaid %}
+  {% set heading = 'Why did you reject their response?' %}
+{% else %}
+  {% set heading = 'Why did you reject the repayment plan?' %}
+{% endif %}
 
 {% block content %}
   <div class="grid-row">
@@ -9,7 +13,9 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p> {{ t('Explain why you believe the defendant can afford to pay more or to pay sooner.') }} </p>
+        {% if not alreadyPaid %}
+          <p> {{ t('Explain why you believe the defendant can afford to pay more or to pay sooner.') }} </p>
+        {% endif %}
 
         {{ textArea(name = 'text', form = form) }}
 

@@ -1,0 +1,51 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
+
+{% if paidInFull %}
+  {% set heading =  "Do you agree the defendant has paid the " + totalAmount | numeral +  " in full?" %}
+{%  else %}
+  {% set heading =  "Do you want to settle the claim for the " + totalAmount | numeral +  " the defendant has paid?" %}
+{% endif %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger"
+            data-event-action="Claimant Response: Settle claim for paid amount"
+            data-event-label-from="accepted"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = "Do you agree the defendant has paid the " + totalAmount +  " in full?",
+          name = "accepted",
+          options = [
+          {
+            label: 'Yes',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor("accepted") === YesNoOption.YES),
+            hint: "Settle the claim",
+            bold: true
+          },
+          {
+            label: 'No',
+            value: YesNoOption.NO.option,
+            checked: (form.valueFor("accepted") === YesNoOption.NO),
+            hint: "Proceed with the claim",
+            bold: true
+          }
+        ],
+          form = form,
+          legendHidden = true
+        )
+        }}
+        <div class="form-group">
+          {{ saveAndContinueButton() }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

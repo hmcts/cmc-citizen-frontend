@@ -136,7 +136,7 @@ Assertion.addMethod('cookie', function (cookieName: string, cookieValue: string)
   const actualCookies: object[] = res.header['set-cookie'].map(_ => cookie.parse(_))
 
   // Lax due to https://github.com/aspnet/Security/issues/1231
-  const expectedCookie: object = { [cookieName]: cookieValue, path: '/', samesite: 'lax' }
+  const expectedCookie: object = { [cookieName]: cookieValue, path: '/' }
   if (cookieValue === '') {
     expectedCookie['expires'] = 'Thu, 01 Jan 1970 00:00:00 GMT'
   }

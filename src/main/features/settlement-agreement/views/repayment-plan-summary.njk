@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+{% from "internalLink.njk" import internalLink %}
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "paymentPlanTable.njk" import paymentPlanTable %}
+
+{% set heading = 'The court’s repayment plan' if isPaymentIntentionMadeByCourt else 'The claimant’s repayment plan' %}
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {% if isPaymentIntentionMadeByCourt %}
+        {% if paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+          <p>{{ t('The court has suggested this repayment plan based on the financial details you gave:') }}</p>
+          {{ paymentPlanTable(
+            id = 'payment-table',
+            instalmentAmount = paymentIntention.repaymentPlan.instalmentAmount,
+            paymentSchedule = paymentIntention.repaymentPlan.paymentSchedule,
+            firstPaymentDate = paymentIntention.repaymentPlan.firstPaymentDate,
+            completionDate = paymentIntention.repaymentPlan.completionDate,
+            paymentLength = paymentIntention.repaymentPlan.paymentLength
+          ) }}
+        {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+          <p>
+            {{ t('They’ve suggested you pay in full by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}
+          </p>
+        {% endif %}
+        <p>{{ t('The claimant has agreed to the court’s plan and signed a settlement agreement based on the plan. You can choose to sign the agreement or not') }}</p>
+      {% else %}
+        {% if paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+          <p>{{ t('They’ve suggested this repayment plan based on the financial details you gave:') }}</p>
+          {{ paymentPlanTable(
+            id = 'payment-table',
+            instalmentAmount = paymentIntention.repaymentPlan.instalmentAmount,
+            paymentSchedule = paymentIntention.repaymentPlan.paymentSchedule,
+            firstPaymentDate = paymentIntention.repaymentPlan.firstPaymentDate,
+            completionDate = paymentIntention.repaymentPlan.completionDate,
+            paymentLength = paymentIntention.repaymentPlan.paymentLength
+          ) }}
+        {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+          <p>
+            {{ t('They’ve suggested you pay in full by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}
+          </p>
+        {% endif %}
+        <p>{{ t('The claimant signed a settlement agreement based on their plan. You can choose to sign the agreement or not.') }}</p>
+      {% endif %}
+
+      <p>{{ internalLink(t('Respond to settlement agreement'), SettlementAgreementPaths.signSettlementAgreement.evaluateUri({ externalId: claim.externalId }), "button") }}</p>
+      <p>{{ t('If you do not respond, the claimant can request a County Court Judgment against you.') }}
+    </div>
+  </div>
+{% endblock %}

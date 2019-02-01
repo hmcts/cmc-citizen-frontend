@@ -1,50 +1,23 @@
-import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { MomentFactory } from 'shared/momentFactory'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 export const intentionOfImmediatePayment = {
-  paymentOption: {
-    option: {
-      value: PaymentType.IMMEDIATELY.value
-    }
-  }
+  paymentOption: PaymentOption.IMMEDIATELY
 }
 
 export const intentionOfPaymentInFullBySetDate = {
-  paymentOption: {
-    option: {
-      value: PaymentType.BY_SET_DATE.value
-    }
-  },
-  paymentDate: {
-    date: {
-      year: 2018,
-      month: 12,
-      day: 31
-    }
-  }
+  paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+  paymentDate: MomentFactory.parse('2018-12-31')
 }
 
-export const intentionOfPaymentByInstallments = {
-  paymentOption: {
-    option: {
-      value: PaymentType.INSTALMENTS.value
-    }
-  },
-  paymentPlan: {
+export const intentionOfPaymentByInstalments = {
+  paymentOption: PaymentOption.INSTALMENTS,
+  repaymentPlan: {
     instalmentAmount: 100,
-    paymentSchedule: {
-      value: PaymentSchedule.EVERY_MONTH.value
-    },
-    firstPaymentDate: {
-      year: 2018,
-      month: 12,
-      day: 31
-    },
-    completionDate: {
-      year: 2019,
-      month: 12,
-      day: 30
-    },
+    firstPaymentDate: MomentFactory.parse('2018-12-31'),
+    paymentSchedule: PaymentSchedule.EVERY_MONTH,
+    completionDate: MomentFactory.parse('2019-12-30'),
     paymentLength: ''
   }
 }

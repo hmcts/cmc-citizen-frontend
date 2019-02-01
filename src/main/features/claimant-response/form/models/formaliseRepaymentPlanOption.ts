@@ -14,7 +14,8 @@ export class FormaliseRepaymentPlanOption {
   static all (): FormaliseRepaymentPlanOption[] {
     return [
       FormaliseRepaymentPlanOption.SIGN_SETTLEMENT_AGREEMENT,
-      FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT
+      FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
+      FormaliseRepaymentPlanOption.REFER_TO_JUDGE
     ]
   }
 

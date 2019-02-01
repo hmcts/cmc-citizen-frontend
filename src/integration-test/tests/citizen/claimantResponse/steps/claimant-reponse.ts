@@ -1,12 +1,10 @@
 import I = CodeceptJS.I
-
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { ClaimantAcceptPaymentMethod } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-accept-payment-method'
 import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-task-list'
 import { ClaimantChooseHowToProceed } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-choose-how-to-proceed'
-import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { ClaimantSignSettlementAgreement } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-sign-settlement-agreement'
 import { ClaimantCcjPaidAmountSummaryPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-ccj-paid-amount-summary'
@@ -14,65 +12,150 @@ import { ClaimantCcjPaidAnyMoneyPage } from 'integration-test/tests/citizen/clai
 import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-option'
 import { ClaimantPaymentDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-date'
 import { ClaimantPaymentPlanPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-plan'
-import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
-import { ClaimantCounterOfferAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-counter-offer-accepted'
+import { ClaimantDefendantResponsePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-defendant-response'
 import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-set-date'
+import { ClaimantCourtOfferedInstalmentsPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-instalments'
+import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
+import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
+import { ClaimantFreeMediationPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-free-mediation'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
 const acceptPaymentMethodPage: ClaimantAcceptPaymentMethod = new ClaimantAcceptPaymentMethod()
 const chooseHowToProceedPage: ClaimantChooseHowToProceed = new ClaimantChooseHowToProceed()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
-const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 const signSettlementAgreementPage: ClaimantSignSettlementAgreement = new ClaimantSignSettlementAgreement()
 const ccjPaidAmountSummaryPage: ClaimantCcjPaidAmountSummaryPage = new ClaimantCcjPaidAmountSummaryPage()
 const ccjPaidAnyMoneyPage: ClaimantCcjPaidAnyMoneyPage = new ClaimantCcjPaidAnyMoneyPage()
 const paymentOptionPage: ClaimantPaymentOptionPage = new ClaimantPaymentOptionPage()
 const paymentDatePage: ClaimantPaymentDatePage = new ClaimantPaymentDatePage()
 const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
-const counterOfferAcceptedPage: ClaimantCounterOfferAcceptedPage = new ClaimantCounterOfferAcceptedPage()
-const payBySetDateAcceptedPage: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
 const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
+const courtOfferedInstalmentsPage: ClaimantCourtOfferedInstalmentsPage = new ClaimantCourtOfferedInstalmentsPage()
+const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
+const defendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
+const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
+const freeMediationPage: ClaimantFreeMediationPage = new ClaimantFreeMediationPage()
 
 export class ClaimantResponseSteps {
 
   acceptSettlementFromDashboardWhenRejectPaymentMethod (
     testData: EndToEndTestData,
-    claimantResponseTestData: ClaimantResponseTestData
+    claimantResponseTestData: ClaimantResponseTestData,
+    buttonText: string
   ): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
     this.acceptSettlementWithClaimantPaymentOption(testData, claimantResponseTestData)
   }
 
-  acceptSettlementFromDashboardWhenAcceptPaymentMethod (testData: EndToEndTestData): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
-    this.acceptSettlement()
+  acceptSettlementFromDashboardWhenAcceptPaymentMethod (
+    testData: EndToEndTestData,
+    claimantResponseTestData: ClaimantResponseTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
+    this.acceptSettlement(testData, claimantResponseTestData)
   }
 
-  acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod (testData: EndToEndTestData): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
+  acceptCcjFromDashboardWhenDefendantHasPaidNoneAndAcceptPaymentMethod (
+    testData: EndToEndTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
     this.acceptCCJ(false)
   }
 
-  acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (testData: EndToEndTestData): void {
-    this.viewClaimFromDashboard(testData.claimRef, true)
+  acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
+    testData: EndToEndTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
     this.acceptCCJ(true)
   }
 
-  viewClaimFromDashboard (claimRef: string, shouldRespondToOffer: boolean): void {
+  viewClaimFromDashboard (claimRef: string): void {
     I.click('My account')
     I.see('Your money claims account')
     I.click(claimRef)
-    if (shouldRespondToOffer) {
-      I.click('View and respond to the offer')
-    }
   }
 
-  acceptSettlement (): void {
+  respondToOffer (buttonText: string): void {
+    I.click(buttonText)
+  }
+
+  reject (
+    testData: EndToEndTestData,
+    claimantResponseTestData: ClaimantResponseTestData
+  ): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
-    I.click('Continue')
+    defendantsResponsePage.submit()
+    if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
+      defendantsResponsePage.submitHowTheyWantToPay()
+    }
     I.see('COMPLETED')
+    if (!testData.defendantClaimsToHavePaidInFull) {
+      taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+      settleAdmittedPage.selectAdmittedNo()
+    }
+    taskListPage.selectTaskFreeMediation()
+    freeMediationPage.accept()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
+  acceptPartAdmitFromBusinessWithAlternativePaymentIntention (): void {
+    I.dontSee('COMPLETE')
+    taskListPage.selectTaskViewDefendantResponse()
+    defendantsResponsePage.submit()
+    defendantsResponsePage.submitHowTheyWantToPay() // bug
+    I.see('COMPLETED')
+    taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+    settleAdmittedPage.selectAdmittedYes()
+    taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    acceptPaymentMethodPage.chooseNo()
+    taskListPage.selectProposeAnAlternativeRepaymentPlan()
+    paymentOptionPage.chooseFullBySetDate()
+    paymentDatePage.enterDate('2024-01-01')
+    paymentDatePage.saveAndContinue()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
+  acceptFullAdmitFromBusinessWithAlternativePaymentIntention (claimantResponseTestData: ClaimantResponseTestData): void {
+    I.dontSee('COMPLETE')
+    taskListPage.selectTaskViewDefendantResponse()
+    defendantsResponsePage.submit()
+    defendantsResponsePage.submitHowTheyWantToPay() // bug
+    I.see('COMPLETED')
+    taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+    settleAdmittedPage.selectAdmittedYes()
+    taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    acceptPaymentMethodPage.chooseNo()
+    taskListPage.selectProposeAnAlternativeRepaymentPlan()
+    paymentOptionPage.chooseInstalments()
+    paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
+    paymentDatePage.saveAndContinue()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
+  acceptSettlement (
+    testData: EndToEndTestData,
+    claimantResponseTestData: ClaimantResponseTestData
+  ): void {
+    I.dontSee('COMPLETE')
+    taskListPage.selectTaskViewDefendantResponse()
+    defendantsResponsePage.submit()
+    if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
+      defendantsResponsePage.submitHowTheyWantToPay()
+    }
+    I.see('COMPLETED')
+    if (!testData.defendantClaimsToHavePaidInFull) {
+      taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+      settleAdmittedPage.selectAdmittedYes()
+    }
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseYes()
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
@@ -92,8 +175,15 @@ export class ClaimantResponseSteps {
   ): void {
     I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
-    I.click('Continue')
+    defendantsResponsePage.submit()
+    if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
+      defendantsResponsePage.submitHowTheyWantToPay()
+    }
     I.see('COMPLETED')
+    if (!testData.defendantClaimsToHavePaidInFull) {
+      taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
+      settleAdmittedPage.selectAdmittedYes()
+    }
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseNo()
     taskListPage.selectProposeAnAlternativeRepaymentPlan()
@@ -106,13 +196,16 @@ export class ClaimantResponseSteps {
         paymentOptionPage.chooseFullBySetDate()
         paymentDatePage.enterDate(claimantResponseTestData.pageSpecificValues.paymentDatePageEnterDate)
         paymentDatePage.saveAndContinue()
-        payBySetDateAcceptedPage.continue()
+        payBySetDateAccepted.continue()
+        if (claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage) {
+          courtOfferedInstalmentsPage.accept()
+        }
         break
       case PaymentOption.INSTALMENTS:
         paymentOptionPage.chooseInstalments()
         paymentPlanPage.enterRepaymentPlan(claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
         paymentPlanPage.saveAndContinue()
-        counterOfferAcceptedPage.continue()
+        payBySetDateAccepted.continue()
         break
       default:
         throw new Error(`Unknown payment option: ${testData.claimantPaymentOption}`)
@@ -143,8 +236,6 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('County Court Judgment issued')
-    confirmationPage.clickGoToYourAccount()
   }
 
 }

@@ -5,7 +5,7 @@ import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { ResponseType } from 'claims/models/response/responseType'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { TaskList } from 'drafts/tasks/taskList'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { NumberFormatter } from 'utils/numberFormatter'
@@ -15,6 +15,13 @@ import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/form
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
 import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettledTask'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/partPaymentReceivedTask'
+import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { FeatureToggles } from 'utils/featureToggles'
+import { Paths as MediationPaths } from 'mediation/paths'
 
 const validator: Validator = new Validator()
 
@@ -27,21 +34,80 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
 
-    if (claim.response.responseType === ResponseType.FULL_ADMISSION
-      || (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined)) {
-      tasks.push(
-        new TaskListItem(
-          'View the defendant’s response',
-          Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
-          ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
-        )
+    tasks.push(
+      new TaskListItem(
+        'View the defendant’s response',
+        Paths.defendantsResponsePage.evaluateUri({ externalId: externalId }),
+        ViewDefendantResponseTask.isCompleted(draft.defendantResponseViewed)
       )
-    }
+    )
 
     return new TaskList('Before you start', tasks)
   }
 
+  static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
+    const tasks: TaskListItem[] = []
+    const response: FullDefenceResponse | PartialAdmissionResponse = claim.response as FullDefenceResponse | PartialAdmissionResponse
+    const externalId: string = claim.externalId
+
+    if (response.responseType === ResponseType.FULL_DEFENCE) {
+      tasks.push(
+        new TaskListItem('Accept or reject their response',
+          Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
+          ClaimSettledTask.isCompleted(draft)
+        ))
+    } else {
+      if (StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)) {
+        tasks.push(
+          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(response.amount) }?`,
+            Paths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
+            PartPaymentReceivedTask.isCompleted(draft)
+          ))
+
+        if (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.YES) {
+          tasks.push(
+            new TaskListItem(`Settle the claim for ${ NumberFormatter.formatMoney(response.amount) }?`,
+              Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
+              ClaimSettledTask.isCompleted(draft)
+            ))
+        }
+      } else {
+        tasks.push(
+          new TaskListItem(`Have you been paid the full ${ NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue) }?`,
+            Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
+            ClaimSettledTask.isCompleted(draft)
+          ))
+      }
+    }
+
+    if (claim.response.freeMediation === YesNoOption.YES) {
+      if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
+        (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
+        let path: string
+        if (FeatureToggles.isEnabled('mediation')) {
+          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        } else {
+          path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        }
+        tasks.push(
+          new TaskListItem(
+            'Consider free mediation',
+            path,
+            draft.freeMediation !== undefined
+          ))
+      }
+    }
+
+    return new TaskList('Your response', tasks)
+
+  }
+
   static buildHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim): TaskList {
+
+    if (StatesPaidHelper.isResponseAlreadyPaid(claim)) {
+      return this.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+    }
+
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
 
@@ -79,7 +145,11 @@ export class TaskListBuilder {
       }
 
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (!claim.claimData.defendant.isBusiness()) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
@@ -107,7 +177,11 @@ export class TaskListBuilder {
         )
       )
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
-      this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+
+      if (!claim.claimData.defendant.isBusiness()) {
+        this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
+      }
+
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
@@ -157,9 +231,15 @@ export class TaskListBuilder {
 
   private static buildFormaliseRepaymentPlan (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
     if (
-      (draft.acceptPaymentMethod && (draft.acceptPaymentMethod.accept.option === YesNoOption.YES
-        || (draft.acceptPaymentMethod.accept.option === YesNoOption.NO && isDefinedAndValid(draft.alternatePaymentMethod)
-        && (draft.rejectionReason === undefined))))) {
+      draft.acceptPaymentMethod && (
+        draft.acceptPaymentMethod.accept.option === YesNoOption.YES || (
+          this.isFormaliseRepaymentPlanNotSetOrNotReferToJudge(draft) &&
+          draft.acceptPaymentMethod.accept.option === YesNoOption.NO &&
+          isDefinedAndValid(draft.alternatePaymentMethod) &&
+          draft.courtDetermination.rejectionReason.text === undefined
+        )
+      )
+    ) {
       tasks.push(
         new TaskListItem(
           'Choose how to formalise repayment',
@@ -168,6 +248,12 @@ export class TaskListBuilder {
         )
       )
     }
+  }
+
+  private static isFormaliseRepaymentPlanNotSetOrNotReferToJudge (draft: DraftClaimantResponse): boolean {
+    return draft.formaliseRepaymentPlan === undefined || (
+      draft.formaliseRepaymentPlan && draft.formaliseRepaymentPlan.option !== FormaliseRepaymentPlanOption.REFER_TO_JUDGE
+    )
   }
 
   static buildSubmitSection (draft: DraftClaimantResponse, externalId: string): TaskList {

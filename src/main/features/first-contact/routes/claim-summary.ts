@@ -28,6 +28,6 @@ export default express.Router()
       })
     })
   .post(Paths.claimSummaryPage.uri, (req: express.Request, res: express.Response): void => {
-    new Cookies(req, res).set(sessionCookie, '', { sameSite: 'lax' })
+    new Cookies(req, res).set(sessionCookie, '')
     res.redirect(receiverPath(req, res))
   })

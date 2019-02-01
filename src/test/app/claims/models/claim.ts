@@ -1,3 +1,4 @@
+/* tslint:disable:no-unused-expression */
 import { Claim } from 'claims/models/claim'
 import { MomentFactory } from 'shared/momentFactory'
 import { expect } from 'chai'
@@ -8,10 +9,12 @@ import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
-import { defenceWithDisputeData } from 'test/data/entity/responseData'
+import { FreeMediationOption } from 'forms/models/freeMediation'
+import {
+  defenceWithDisputeData
+} from 'test/data/entity/responseData'
 import { offer, offerRejection } from 'test/data/entity/offer'
-import { individual } from 'test/data/entity/party'
+import { individual, organisation } from 'test/data/entity/party'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Individual } from 'claims/models/details/yours/individual'
 import { PartyStatement } from 'claims/models/partyStatement'
@@ -20,6 +23,22 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { Organisation } from 'claims/models/details/theirs/organisation'
+import {
+  baseDeterminationAcceptationClaimantResponseData,
+  rejectionClaimantResponseData,
+  baseAcceptationClaimantResponseData
+} from 'test/data/entity/claimantResponseData'
+import { Company } from 'claims/models/details/theirs/company'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
+import * as claimStoreMock from 'test/http-mocks/claim-store'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { LocalDate } from 'forms/models/localDate'
+import { DecisionType } from 'common/court-calculations/decisionType'
+import { ClaimData } from 'claims/models/claimData'
+import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
+import { User } from 'idam/user'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -32,12 +51,12 @@ describe('Claim', () => {
       })
 
       it('should return true when claim not responded to', () => {
-        expect(claim.eligibleForCCJ).to.be.equal(true)
+        expect(claim.eligibleForCCJ).to.be.true
       })
 
       it('should return false when claim responded to', () => {
         claim.respondedAt = MomentFactory.currentDateTime()
-        expect(claim.eligibleForCCJ).to.be.equal(false)
+        expect(claim.eligibleForCCJ).to.be.false
       })
     })
 
@@ -48,7 +67,7 @@ describe('Claim', () => {
       })
 
       it('should return false', () => {
-        expect(claim.eligibleForCCJ).to.be.equal(false)
+        expect(claim.eligibleForCCJ).to.be.false
       })
     })
 
@@ -58,9 +77,44 @@ describe('Claim', () => {
       })
 
       it('should return false', () => {
-        expect(claim.eligibleForCCJ).to.be.equal(false)
+        expect(claim.eligibleForCCJ).to.be.false
       })
     })
+  })
+
+  describe('Defendant date of birth', () => {
+
+    it('should return date of birth when response is present', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const dateOfBirth: DateOfBirth = claimWithResponse.retrieveDateOfBirthOfDefendant
+      expect(dateOfBirth).to.be.deep.eq(new DateOfBirth(true, new LocalDate(1999, 1, 1)))
+    })
+    it('should return undefined when response not present', () => {
+      const claimWithoutResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj })
+      const dateOfBirth: DateOfBirth = claimWithoutResponse.retrieveDateOfBirthOfDefendant
+      expect(dateOfBirth).to.be.eq(undefined)
+    })
+  })
+
+  describe('otherParty', () => {
+
+    it('should return the claimant name when the defendant user is given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const user: User = new User('1','','John','Doe', [],'','')
+      expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.defendant.name)
+    })
+
+    it('should return the defendant name when the claimant user is given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      const user: User = new User('123','','John','Smith', [],'','')
+      expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.claimant.name)
+    })
+
+    it('should throw an error when a user is not given', () => {
+      const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
+      expect(() => claimWithResponse.otherPartyName(undefined)).to.throw(Error, 'user must be provided')
+    })
+
   })
 
   describe('defendantOffer', () => {
@@ -150,10 +204,63 @@ describe('Claim', () => {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
         paymentDate: MomentFactory.currentDate()
       }
-      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.SETTLEMENT
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION)
+    })
+
+    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant and Court repayment plan', () => {
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(100, 'days'),
+          paymentOption: PaymentOption.BY_SPECIFIED_DATE
+        },
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.REFER_TO_JUDGE
+      }
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
+
+      expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
+    })
+
+    it('should return CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT when a claimant has signed a settlement agreement', () => {
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.SETTLEMENT,
+        courtDetermination: {
+          decisionType: DecisionType.CLAIMANT,
+          courtDecision: {
+            paymentDate: MomentFactory.currentDate().add('1 year'),
+            paymentOption: PaymentOption.BY_SPECIFIED_DATE
+          },
+          disposableIncome: 0,
+          courtPaymentIntention: {
+            paymentDate: MomentFactory.currentDate().add('6 months'),
+            paymentOption: PaymentOption.BY_SPECIFIED_DATE
+          }
+        },
+        claimantPaymentIntention: {
+          paymentDate: MomentFactory.currentDate().add('1 year'),
+          paymentOption: PaymentOption.BY_SPECIFIED_DATE
+        }
+      }
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate()
+      }
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.CLAIMANT)
+      claim.respondedAt = MomentFactory.currentDateTime()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT)
     })
 
     it('should return CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED when a claimant has signed a settlement agreement but defendant has not', () => {
@@ -161,8 +268,9 @@ describe('Claim', () => {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
         paymentDate: MomentFactory.currentDate()
       }
-      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.respondedAt = MomentFactory.currentDateTime().subtract(2, 'months')
+      claim.claimantRespondedAt = MomentFactory.currentDate().subtract('8', 'days')
 
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED)
     })
@@ -172,7 +280,7 @@ describe('Claim', () => {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
         paymentDate: MomentFactory.currentDate().subtract(1, 'days')
       }
-      claim.settlement = prepareSettlement(PaymentIntention.deserialize(paymentIntention))
+      claim.settlement = prepareSettlementWithCounterSignatureWithDatePassed(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
       claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
       claim.response = {
         responseType: ResponseType.FULL_ADMISSION,
@@ -180,7 +288,106 @@ describe('Claim', () => {
         defendant: new Individual().deserialize(individual)
       }
 
-      expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
+      expect(claim.stateHistory.map(state => state.status)).includes(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
+    })
+
+    it('should return CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ when there is a CCJ and a claimant response with a court decision', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ)
+    })
+
+    it('should return REDETERMINATION_BY_JUDGE when there is a CCJ and a redetermination requested at', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+      claim.reDeterminationRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
+    })
+
+    it('should return CLAIMANT_REJECTS_PART_ADMISSION when the claimant rejects the part admission', () => {
+      claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.claimData = {
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION
+      }
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
+    })
+
+    it('should return CCJ_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.settlement = prepareSettlementWithCounterSignature(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED)
+    })
+
+    it('should return CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().subtract(1, 'days')
+      }
+      claim.settlement = prepareSettlementWithCounterSignature(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.status).to.be.equal(ClaimStatus.CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED)
+    })
+
+    it('should return PART_ADMIT_PAY_IMMEDIATELY when the claimant accepts a part admit with immediately as the payment option', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        paymentDate: MomentFactory.currentDate().add(5, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION
+      }
+      expect(claim.status).to.be.equal(ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY)
     })
   })
 
@@ -224,7 +431,7 @@ describe('Claim', () => {
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(18, 'days')
 
-      expect(claim.isEligibleForReDetermination()).to.equal(true)
+      expect(claim.isEligibleForReDetermination()).to.be.true
     })
 
     it('should not be eligible when ccj requested date is 20 days before', () => {
@@ -235,7 +442,7 @@ describe('Claim', () => {
       } as CountyCourtJudgment
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
 
     it('should not be eligible when reDetermination already requested', () => {
@@ -247,7 +454,7 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
 
     it('should not be eligible when ccjType is Admissions', () => {
@@ -259,7 +466,7 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
 
     it('should not be eligible when ccjType is Default', () => {
@@ -271,7 +478,7 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDateTime().subtract(20, 'days')
       claim.reDeterminationRequestedAt = MomentFactory.currentDateTime()
 
-      expect(claim.isEligibleForReDetermination()).to.equal(false)
+      expect(claim.isEligibleForReDetermination()).to.be.false
     })
   })
 
@@ -283,7 +490,7 @@ describe('Claim', () => {
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
     })
 
-    it('should return OFFER_SUBMITTED and RESPONSE_SUBMITTED if an offer has been submitted.', () => {
+    it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_LINK_ELIGIBLE if an offer has been submitted.', () => {
       claim.settlement = new Settlement()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
@@ -293,9 +500,10 @@ describe('Claim', () => {
         defendant: new Individual().deserialize(individual)
       }
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
 
     it('should return OFFER_REJECTED when offer is rejected', () => {
@@ -304,22 +512,75 @@ describe('Claim', () => {
         partyStatements: [offer, offerRejection]
       })
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
+      expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
 
     it('should contain the claim status only if not responded to', () => {
-      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.NO_RESPONSE)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
 
     it('should contain the claim status only if response submitted but no offer made', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
 
-      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory).to.have.lengthOf(2)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+    })
+
+    it('should contain the claim status only if claimant rejects organisation response', () => {
+      claim.respondedAt = moment()
+      claim.response = {
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(60, 'days'),
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      }
+      claim.claimData = {
+        defendant: new Organisation().deserialize(organisation)
+      }
+      claim.claimData = new ClaimData().deserialize({
+        defendants: new Array(new TheirDetails().deserialize({
+          type: 'organisation',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        }))
+      })
+      claim.claimantResponse = rejectionClaimantResponseData
+
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
+    })
+
+    it('should contain the claim status only if claimant rejects company response', () => {
+      claim.respondedAt = moment()
+      claim.response = {
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(60, 'days'),
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      }
+      claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimData = new ClaimData().deserialize({
+        defendants: new Array(new TheirDetails().deserialize({
+          type: 'organisation',
+          name: undefined,
+          address: undefined,
+          email: undefined
+        }))
+      })
+      claim.claimData = {
+        defendant: new Company().deserialize(organisation)
+      }
+
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
     })
 
     it('should contain multiple statuses when response submitted and offers exchanged', () => {
@@ -328,19 +589,40 @@ describe('Claim', () => {
       claim.settlement = new Settlement()
       claim.settlementReachedAt = moment()
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory).to.have.lengthOf(3)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
+      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+    })
+  })
+
+  describe('paidInFullCCJPaidWithinMonth', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+      claim.moneyReceivedOn = MomentFactory.currentDate()
+    })
+
+    it('should return true when CCJ is paid within month of countyCourtJudgmentRequestedAt', () => {
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate().add(1, 'month')
+      expect(claim.isCCJPaidWithinMonth()).to.be.true
+    })
+
+    it('should return false when CCJ is paid 2 months after countyCourtJudgmentRequestedAt', () => {
+      claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+      expect(claim.isCCJPaidWithinMonth()).to.be.false
     })
   })
 })
 
-function prepareSettlement (paymentIntention: PaymentIntention): Settlement {
+function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
   const settlement = {
     partyStatements: [
       {
         type: StatementType.OFFER.value,
-        madeBy: MadeBy.DEFENDANT.value,
+        madeBy: party.value,
         offer: {
           content: 'My offer contents here.',
           completionDate: '2020-10-10',
@@ -350,6 +632,56 @@ function prepareSettlement (paymentIntention: PaymentIntention): Settlement {
       {
         madeBy: MadeBy.CLAIMANT.value,
         type: StatementType.ACCEPTATION.value
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}
+
+function prepareSettlementWithCounterSignature (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: party.value,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2020-10-10',
+          paymentIntention: paymentIntention
+        }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
+      },
+      {
+        type: 'COUNTERSIGNATURE',
+        madeBy: 'DEFENDANT'
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}
+
+function prepareSettlementWithCounterSignatureWithDatePassed (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: party.value,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2010-10-10',
+          paymentIntention: paymentIntention
+        }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
+      },
+      {
+        type: 'COUNTERSIGNATURE',
+        madeBy: 'DEFENDANT'
       }
     ]
   }

@@ -30,7 +30,8 @@ const draftOverride: object = {
         value: PaymentType.BY_SET_DATE.value
       }
     }
-  }
+  },
+  courtDetermination: { disposableIncome: 100 }
 }
 
 describe('Claimant response: payment date', () => {

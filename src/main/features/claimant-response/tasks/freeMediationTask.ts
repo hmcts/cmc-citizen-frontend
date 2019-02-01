@@ -1,6 +1,6 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
-import { FreeMediation } from 'response/form/models/freeMediation'
+import { FreeMediation } from 'forms/models/freeMediation'
 
 const validator = new Validator()
 

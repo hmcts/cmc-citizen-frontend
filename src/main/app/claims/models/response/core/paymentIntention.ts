@@ -1,8 +1,10 @@
 import { Moment } from 'moment'
 
 import { PaymentOption } from 'claims/models/paymentOption'
-import { RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
+import { RepaymentPlan as CoreRepaymentPlan, RepaymentPlan } from 'claims/models/response/core/repaymentPlan'
 import { MomentFactory } from 'shared/momentFactory'
+import { Claim } from 'claims/models/claim'
+import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 
 export class PaymentIntention {
   paymentOption?: PaymentOption
@@ -28,8 +30,17 @@ export class PaymentIntention {
     return instance
   }
 
-  get isPastPaymentDeadline (): boolean {
-    const currentDateSetTo4PM = MomentFactory.currentDate().hour(15)
-    return this.paymentDate && currentDateSetTo4PM > this.paymentDate
+  static retrievePaymentIntention (ccjRepaymentPlan, claim: Claim): PaymentIntention {
+    return {
+      repaymentPlan: ccjRepaymentPlan && {
+        instalmentAmount: ccjRepaymentPlan.instalmentAmount,
+        firstPaymentDate: ccjRepaymentPlan.firstPaymentDate,
+        paymentSchedule: (ccjRepaymentPlan.paymentSchedule as PaymentSchedule).value,
+        completionDate: ccjRepaymentPlan.completionDate,
+        paymentLength: ccjRepaymentPlan.paymentLength
+      } as CoreRepaymentPlan,
+      paymentDate: claim.countyCourtJudgment.payBySetDate,
+      paymentOption: claim.countyCourtJudgment.paymentOption
+    } as PaymentIntention
   }
 }

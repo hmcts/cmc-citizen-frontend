@@ -4,6 +4,7 @@ import { createClaimData } from 'integration-test/data/test-data'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { DefenceType } from 'integration-test/data/defence-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
+import { Moment } from 'moment'
 
 const helperSteps: Helper = new Helper()
 
@@ -21,6 +22,8 @@ export class EndToEndTestData {
   claimantEmail: string
   claimantPartyType: PartyType
   claimantPaymentOption: PaymentOption
+  defendantClaimsToHavePaidInFull: boolean
+  moneyReceivedOn: Moment
 
   public static async prepareData (
     I: I,
@@ -48,11 +51,12 @@ export class EndToEndTestData {
   ) {
     const claimantEmail: string = await I.createCitizenUser()
     const defendantEmail: string = await I.createCitizenUser()
-    const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
+    const claimRef: string = await I.createClaimWithFeaturesAndRole(claimData, claimantEmail,'cmc-new-features-consent-given', ['admissions'])
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
     const testData = new EndToEndTestData()
+    testData.defendantClaimsToHavePaidInFull = true
     testData.defendantName = claimData.defendants[0].name
     testData.defendant = claimData.defendants[0]
     testData.claimantName = claimData.claimants[0].name

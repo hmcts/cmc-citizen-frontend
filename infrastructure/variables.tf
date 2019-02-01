@@ -49,6 +49,10 @@ variable "feature_paid_in_full" {
   default = "false"
 }
 
+variable "feature_mediation" {
+  default = "false"
+}
+
 variable "feature_new_features_consent" {
   default = "false"
 }
@@ -98,4 +102,18 @@ variable "capacity" {
 
 variable "common_tags" {
   type = "map"
+}
+
+// overriding the default module-webapp setting to debug intermittent 502 issue (outage: 23/11/18)
+// will update when determined what we should set value to - or remove...
+variable "website_local_cache_sizeinmb" {
+  default = "300"
+}
+
+variable "log_level" {
+  default = "INFO"
+}
+
+variable "node_debug" {
+  default = ""
 }

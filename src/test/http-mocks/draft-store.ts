@@ -3,7 +3,7 @@ import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 import { ResponseType } from 'response/form/models/responseType'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { InterestRateOption } from 'features/claim/form/models/interestRateOption'
 import { Defendant } from 'drafts/models/defendant'
@@ -409,18 +409,24 @@ export const sampleClaimantResponseDraftObj = {
       }
     }
   },
-  courtOfferedPaymentIntention: {
-    paymentOption: {
-      value: 'INSTALMENTS'
+  courtDetermination: {
+    courtDecision: {
+      paymentOption: {
+        value: 'INSTALMENTS'
+      },
+      repaymentPlan: {
+        instalmentAmount: 4.3333335,
+        firstPaymentDate: '2019-01-01T00:00:00.000',
+        paymentSchedule: 'EVERY_MONTH',
+        completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
+        paymentLength: '20 years 5 months'
+      }
     },
-    repaymentPlan: {
-      instalmentAmount: 4.3333335,
-      firstPaymentDate: '2019-01-01T00:00:00.000',
-      paymentSchedule: 'EVERY_MONTH',
-      completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
-      paymentLength: '20 years 5 months'
+    rejectionReason: {
+      text: 'i reject repayment plan because ...'
     }
-  },
+  }
+  ,
   formaliseRepaymentPlan: {
     option: {
       value: 'signSettlementAgreement',
@@ -432,9 +438,6 @@ export const sampleClaimantResponseDraftObj = {
   },
   freeMediation: {
     option: FreeMediationOption.NO
-  },
-  rejectionReason: {
-    text: 'i reject repayment plan because ...'
   }
 }
 

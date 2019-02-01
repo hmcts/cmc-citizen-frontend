@@ -9,6 +9,7 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 
 function hasAcceptedDefendantsPaymentIntention (claim: Claim): boolean {
   const paymentIntentionFromResponse: PaymentIntention = (claim.response as FullAdmissionResponse | PartialAdmissionResponse).paymentIntention
@@ -33,13 +34,14 @@ export default express.Router()
   .get(Paths.confirmationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
+      const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
       res.render(
         Paths.confirmationPage.associatedView,
         {
-          claim: claim,
           confirmationDate: MomentFactory.currentDate(),
-          repaymentPlanOrigin: claim.settlement && getRepaymentPlanOrigin(claim.settlement),
-          paymentIntentionAccepted: hasAcceptedDefendantsPaymentIntention(claim)
+          repaymentPlanOrigin: alreadyPaid ? undefined : claim.settlement && getRepaymentPlanOrigin(claim.settlement),
+          paymentIntentionAccepted: alreadyPaid ? undefined : hasAcceptedDefendantsPaymentIntention(claim)
         })
+
     }))

@@ -3,6 +3,7 @@ import * as config from 'config'
 import * as healthcheck from '@hmcts/nodejs-healthcheck'
 import * as fs from 'fs'
 import * as path from 'path'
+import { FeatureToggles } from 'utils/featureToggles'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -13,8 +14,7 @@ export default express.Router()
       'fees': basicHealthCheck('fees'),
       'pay': basicHealthCheck('pay'),
       'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
-      'idam-api': basicHealthCheck('idam.api'),
-      'idam-authentication-web': basicHealthCheck('idam.authentication-web')
+      'idam-api': basicHealthCheck('idam.api')
     }
   }))
 
@@ -26,6 +26,9 @@ function basicHealthCheck (serviceName) {
   if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'dockertests' || !process.env.NODE_ENV) {
     const sslDirectory = path.join(__dirname, '..', 'resources', 'localhost-ssl')
     options['ca'] = fs.readFileSync(path.join(sslDirectory, 'localhost-ca.crt'))
+  }
+  if (serviceName === 'pay' && FeatureToggles.isEnabled('mockPay')) {
+    return healthcheck.raw(() => { return healthcheck.up() })
   }
   return healthcheck.web(url(serviceName), options)
 }

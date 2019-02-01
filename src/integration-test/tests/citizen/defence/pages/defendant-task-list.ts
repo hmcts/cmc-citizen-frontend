@@ -9,7 +9,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskMoreTimeNeededToRespond (): void {
-    I.click('Do you want more time to respond?')
+    I.click('Decide if you need more time to respond')
   }
 
   selectChooseAResponse (): void {

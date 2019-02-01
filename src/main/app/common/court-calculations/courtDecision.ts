@@ -1,21 +1,11 @@
 import { Moment } from 'moment'
-
-export enum DecisionType {
-  CLAIMANT_IN_FAVOUR_OF_DEFENDANT = 'CLAIMANT_IN_FAVOUR_OF_DEFENDANT',
-  CLAIMANT = 'CLAIMANT',
-  DEFENDANT = 'DEFENDANT',
-  COURT = 'COURT'
-}
+import { DecisionType } from 'common/court-calculations/decisionType'
 
 export class CourtDecision {
 
   static calculateDecision (defendantPaymentDate: Moment,
                             claimantPaymentDate: Moment,
                             courtGeneratedPaymentDate: Moment): DecisionType {
-    if (!courtGeneratedPaymentDate) {
-      return DecisionType.DEFENDANT
-    }
-
     if (!defendantPaymentDate || !claimantPaymentDate) {
       throw new Error('Input should be a moment, cannot be empty')
     }

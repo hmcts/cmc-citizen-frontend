@@ -4,7 +4,7 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import { addDaysFilter, dateFilter, dateInputFilter } from 'modules/nunjucks/filters/dateFilter'
+import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -13,7 +13,10 @@ import * as toBoolean from 'to-boolean'
 
 import { NUMBER_FORMAT } from 'utils/numberFormatter'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { PaymentOption as DefendantPaymentOption, PaymentType as DefendantPaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import {
+  PaymentOption as DefendantPaymentOption,
+  PaymentType as DefendantPaymentType
+} from 'shared/components/payment-intention/model/paymentOption'
 import { SignatureType } from 'common/signatureType'
 import { ResponseType } from 'response/form/models/responseType'
 import { YesNoOption } from 'models/yesNoOption'
@@ -32,6 +35,8 @@ import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { Paths as CCJPaths } from 'features/ccj/paths'
 import { Paths as StatePaidPaths } from 'features/paid-in-full/paths'
 import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths'
+import { Paths as SettlementAgreementPaths } from 'settlement-agreement/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
@@ -43,8 +48,15 @@ import { InterestType } from 'claims/models/interestType'
 import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
-import { Disability } from 'response/form/models/statement-of-means/disability'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
+import { Disability } from 'response/form/models/statement-of-means/disability'
+import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
+import { DecisionType } from 'common/court-calculations/decisionType'
+import { MadeBy } from 'offer/form/models/madeBy'
+import { PartyType } from 'common/partyType'
+import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -102,7 +114,9 @@ export class Nunjucks {
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
     nunjucksEnv.addFilter('addDays', addDaysFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
+    nunjucksEnv.addFilter('monthIncrement', monthIncrementFilter)
     nunjucksEnv.addFilter('numeral', numeralFilter)
+    nunjucksEnv.addFilter('yesNo', yesNoFilter)
     nunjucksEnv.addGlobal('isAfter4pm', isAfter4pm)
     nunjucksEnv.addGlobal('betaFeedbackSurveyUrl', config.get('feedback.feedbackSurvey.url'))
     nunjucksEnv.addGlobal('reportProblemSurveyUrl', config.get('feedback.reportProblemSurvey.url'))
@@ -117,6 +131,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestRateOption', InterestRateOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('ResponseType', ResponseType)
+    nunjucksEnv.addGlobal('MadeBy', MadeBy)
     nunjucksEnv.addGlobal('CountyCourtJudgmentType', CountyCourtJudgmentType)
     nunjucksEnv.addGlobal('YesNoOption', YesNoOption)
     nunjucksEnv.addGlobal('EvidenceType', EvidenceType)
@@ -126,6 +141,8 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
+    nunjucksEnv.addGlobal('FormaliseOption', FormaliseOption)
+    nunjucksEnv.addGlobal('ClaimantResponseType', ClaimantResponseType)
     nunjucksEnv.addGlobal('ResidenceType', ResidenceType)
     nunjucksEnv.addGlobal('PaymentSchedule', PaymentSchedule)
     nunjucksEnv.addGlobal('UnemploymentType', UnemploymentType)
@@ -137,8 +154,10 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('CCJPaths', CCJPaths)
     nunjucksEnv.addGlobal('StatePaidPaths', StatePaidPaths)
     nunjucksEnv.addGlobal('ResponsePaths', ResponsePaths)
+    nunjucksEnv.addGlobal('MediationPaths', MediationPaths)
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
+    nunjucksEnv.addGlobal('SettlementAgreementPaths', SettlementAgreementPaths)
     nunjucksEnv.addGlobal('HowMuchPaidClaimantOption', HowMuchPaidClaimantOption)
     nunjucksEnv.addGlobal('MonthlyIncomeType', MonthlyIncomeType)
     nunjucksEnv.addGlobal('MonthlyExpenseType', MonthlyExpenseType)
@@ -148,6 +167,9 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('cookieText', `GOV.UK uses cookies make the site simpler. <a href="${AppPaths.cookiesPage.uri}">Find out more about cookies</a>`)
     nunjucksEnv.addGlobal('serviceName', `Money Claims`)
     nunjucksEnv.addGlobal('headingVisible', true)
+    nunjucksEnv.addGlobal('DecisionType', DecisionType)
+    nunjucksEnv.addGlobal('PartyType', PartyType)
+    nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

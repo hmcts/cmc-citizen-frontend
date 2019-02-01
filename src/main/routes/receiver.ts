@@ -22,7 +22,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
-import * as appInsights from 'applicationinsights'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 const logger = Logger.getLogger('router/receiver')
 
@@ -36,20 +36,20 @@ const eligibilityStore = new CookieEligibilityStore()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
-    appInsights.defaultClient.trackEvent({
-      name: 'State cookie mismatch (citizen)',
-      properties: {
+    trackCustomEvent('State cookie mismatch (citizen)',
+      {
         requestValue: req.query.state,
         cookieValue: OAuthHelper.getStateCookie(req)
-      }
-    })
+      })
   }
-
   const authToken: AuthToken = await IdamClient.exchangeCode(
     req.query.code,
     buildURL(req, receiver.uri)
   )
-  return authToken.accessToken
+  if (authToken) {
+    return authToken.accessToken
+  }
+  return Promise.reject()
 }
 
 async function getAuthToken (req: express.Request,
@@ -75,11 +75,11 @@ function loginErrorHandler (req: express.Request,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    cookies.set(sessionCookie, '', { sameSite: 'lax' })
+    cookies.set(sessionCookie)
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(OAuthHelper.forLogin(req, res, receiver))
   }
-  cookies.set(stateCookieName, '', { sameSite: 'lax' })
+  cookies.set(stateCookieName, '')
   return next(err)
 }
 
@@ -103,8 +103,8 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
-  cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
-  cookies.set(stateCookieName, '', { sameSite: 'lax' })
+  cookies.set(sessionCookie, authenticationToken)
+  cookies.set(stateCookieName, '')
 }
 
 /* tslint:disable:no-default-export */
@@ -131,13 +131,17 @@ export default express.Router()
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
           // re-set state cookie as it was cleared above, we need it in this case
-          cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
+          cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
           await claimStoreClient.linkDefendant(user)
           res.redirect(await retrieveRedirectForLandingPage(req, res))
         }
       } else {
+        if (res.locals.code) {
+          trackCustomEvent('Authentication token undefined (jwt defined)',
+            { requestValue: req.query.state })
+        }
         res.redirect(OAuthHelper.forLogin(req, res))
       }
     }))

@@ -16,8 +16,11 @@ import {
   fullAdmissionWithPaymentByInstalmentsData,
   partialAdmissionWithPaymentBySetDateData,
   partialAdmissionWithPaymentByInstalmentsData,
-  fullAdmissionWithImmediatePaymentData, partialAdmissionAlreadyPaidData, partialAdmissionWithImmediatePaymentData
+  fullAdmissionWithImmediatePaymentData,
+  partialAdmissionAlreadyPaidData,
+  partialAdmissionWithImmediatePaymentData, defenceWithAmountClaimedAlreadyPaidData
 } from 'test/data/entity/responseData'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 describe('Claimant response task list builder', () => {
   let claim: Claim
@@ -38,6 +41,147 @@ describe('Claimant response task list builder', () => {
   })
 
   describe('"How do you want to respond?" section', () => {
+
+    describe('States paid task', () => {
+      describe('"Accept or reject their response" task', () => {
+        it('should be available when full defence response with already paid', () => {
+          const claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimObj,
+            response: defenceWithAmountClaimedAlreadyPaidData
+          })
+
+          const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(task => task.name === 'Accept or reject their response')).not.to.be.undefined
+        })
+      })
+
+      describe('Have you been paid amount', () => {
+        it('should be available for part admission of less than total claim amount', () => {
+          const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue - 1
+          const claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimObj,
+            response: {
+              ...partialAdmissionAlreadyPaidData,
+              amount: amount
+            }
+          })
+
+          const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(
+            task => task.name === `Have you been paid the ${ NumberFormatter.formatMoney(amount)}?`))
+            .to.not.be.undefined
+        })
+      })
+
+      describe('Settle the claim for amount task', () => {
+        it('should be available for part admission of less than total claim where payment has been made', () => {
+          const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue - 1
+          claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimObj,
+            response: {
+              ...partialAdmissionAlreadyPaidData,
+              amount: amount
+            }
+          })
+
+          draft = new DraftClaimantResponse().deserialize({
+            ...draftStoreServiceMock.sampleClaimantResponseDraftObj,
+            partPaymentReceived: { received: { option: YesNoOption.YES } }
+          })
+          const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+
+          expect(taskList.tasks.find(
+            task => task.name === `Settle the claim for ${NumberFormatter.formatMoney(amount)}?`
+          )).to.not.be.undefined
+        })
+      })
+
+      describe('Have you been paid the full amount task', () => {
+        it('should be available for part admission when payment is equal to total claim', () => {
+          const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue
+          claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimObj,
+            response: {
+              ...partialAdmissionAlreadyPaidData,
+              amount: amount
+            }
+          })
+
+          const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(
+            task => task.name === `Have you been paid the full ${ NumberFormatter.formatMoney(amount) }?`
+          )).to.not.be.undefined
+        })
+      })
+
+      describe('Free mediation task', () => {
+        it('Should be available when part payment has been stated as not paid', () => {
+          const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue - 1
+          claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimObj,
+            response: {
+              ...partialAdmissionAlreadyPaidData,
+              amount: amount,
+              freeMediation: 'yes'
+            }
+          })
+          draft = new DraftClaimantResponse().deserialize({
+            ...draftStoreServiceMock.sampleClaimantResponseDraftObj,
+            partPaymentReceived: { received: { option: YesNoOption.NO } }
+          })
+
+          const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(
+            task => task.name === `Consider free mediation`
+          )).to.not.be.undefined
+        })
+
+        it('Should be available when settle the claim has been rejected', () => {
+          const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue - 1
+          claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimObj,
+            response: {
+              ...partialAdmissionAlreadyPaidData,
+              amount: amount,
+              freeMediation: 'yes'
+            }
+          })
+          draft = new DraftClaimantResponse().deserialize({
+            ...draftStoreServiceMock.sampleClaimantResponseDraftObj,
+            partPaymentReceived: { received: { option: YesNoOption.YES } },
+            accepted: { accepted: { option: YesNoOption.NO } }
+          })
+
+          const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(
+            task => task.name === `Consider free mediation`
+          )).to.not.be.undefined
+        })
+
+        it('Should be available when "Have you been paid the full amount" is rejected', () => {
+          const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue
+          claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimObj,
+            response: {
+              ...partialAdmissionAlreadyPaidData,
+              amount: amount,
+              freeMediation: 'yes'
+            }
+          })
+
+          draft = new DraftClaimantResponse().deserialize({
+            ...draftStoreServiceMock.sampleClaimantResponseDraftObj,
+            accepted: { accepted: { option: YesNoOption.NO } }
+          })
+
+          const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim)
+          expect(taskList.tasks.find(
+            task => task.name === `Consider free mediation`
+          )).to.not.be.undefined
+        })
+      })
+    })
+
     describe('"Accept or reject their response" task', () => {
       it('should be available when full defence response and no free mediation', () => {
         claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleDefendantResponseObj })

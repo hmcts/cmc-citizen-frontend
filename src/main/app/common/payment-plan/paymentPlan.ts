@@ -1,6 +1,7 @@
 import * as moment from 'moment'
 import 'moment-precise-range-plugin'
 import { MomentFactory } from 'shared/momentFactory'
+import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 import { Frequency } from 'common/frequency/frequency'
 import { FrequencyConversions } from 'common/frequency/frequencyConversions'
@@ -40,11 +41,23 @@ export class PaymentPlan {
   }
 
   calculateLastPaymentDate (): moment.Moment {
-    const timeToCompletePaymentsInWeeks: number = this.numberOfInstalments * this.frequency.inWeeks
-    return this.startDate.clone().add(timeToCompletePaymentsInWeeks, 'weeks')
+    let lastPaymentDate = this.startDate.clone()
+
+    switch (this.frequency) {
+      case (Frequency.WEEKLY):
+        lastPaymentDate.add(this.numberOfInstalments - 1, 'weeks')
+        break
+      case (Frequency.TWO_WEEKLY):
+        lastPaymentDate.add((this.numberOfInstalments - 1) * 2, 'weeks')
+        break
+      case (Frequency.MONTHLY):
+        lastPaymentDate = calculateMonthIncrement(lastPaymentDate, this.numberOfInstalments - 1)
+        break
+    }
+    return lastPaymentDate
   }
 
-  convertTo (frequency: Frequency): PaymentPlan {
+  convertTo (frequency: Frequency, startDate?: moment.Moment): PaymentPlan {
     let monthlyInstalmentAmount
     switch (frequency) {
       case Frequency.WEEKLY:
@@ -62,8 +75,8 @@ export class PaymentPlan {
       default:
         throw new Error(`Incompatible Frequency: ${frequency}`)
     }
-
-    return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, this.startDate)
+    const paymentPlanStartDate = startDate ? startDate : this.startDate
+    return PaymentPlan.create(this.totalAmount, monthlyInstalmentAmount, frequency, paymentPlanStartDate)
   }
 
   private pluralize (num: number, word: string) {

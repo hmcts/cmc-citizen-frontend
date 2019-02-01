@@ -29,6 +29,7 @@ import { StatementOfMeans } from 'response/draft/statementOfMeans'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
+import { TaskListItem } from 'drafts/tasks/taskListItem'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
@@ -42,31 +43,32 @@ describe('Defendant response task list builder', () => {
   describe('"Before you start" section', () => {
     describe('"Do you need more time to respond?" task', () => {
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
+      const taskListItemText: string = 'Decide if you need more time to respond'
 
       it('should be available when defendant tries to respond before due day', () => {
         claim.responseDeadline = MomentFactory.currentDate().add(1, 'days')
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).not.to.be.undefined
       })
 
       it('should be available when defendant tries to respond on due day before 4 PM', () => {
         claim.responseDeadline = MomentFactory.currentDate()
         const now: moment.Moment = MomentFactory.currentDateTime().hour(15)
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).not.to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).not.to.be.undefined
       })
 
       it('should not be available when defendant tries to respond on due day after 4 PM', () => {
         claim.responseDeadline = MomentFactory.currentDate()
         const now: moment.Moment = MomentFactory.currentDateTime().hour(17)
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, now)
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).to.be.undefined
       })
 
       it('should not be available when defendant tries to respond after due day', () => {
         claim.responseDeadline = MomentFactory.currentDate().subtract(1, 'days')
         const taskList: TaskList = TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
-        expect(taskList.tasks.find(task => task.name === 'Do you want more time to respond?')).to.be.undefined
+        expect(taskList.tasks.find(task => task.name === taskListItemText)).to.be.undefined
       })
     })
   })
@@ -264,6 +266,23 @@ describe('Defendant response task list builder', () => {
         draft.response = new Response(ResponseType.FULL_ADMISSION)
         draft.defendantDetails.partyDetails = new PartyDetails()
         draft.defendantDetails.partyDetails.type = PartyType.INDIVIDUAL.value
+        draft.fullAdmission = new FullAdmission()
+        draft.fullAdmission.paymentIntention = new PaymentIntention()
+        draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
+
+        const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
+        expect(taskList.tasks.map(task => task.name)).to.contain('Share your financial details')
+      })
+
+      it('should be enabled when claim is fully admitted for an organisation with payment option by set date', () => {
+        isResponseFullyAdmittedStub.returns(true)
+        isResponseFullyAdmittedWithPayBySetDateStub.returns(true)
+        isStatementOfMeansStub.returns(true)
+
+        const draft = new ResponseDraft()
+        draft.response = new Response(ResponseType.FULL_ADMISSION)
+        draft.defendantDetails.partyDetails = new PartyDetails()
+        draft.defendantDetails.partyDetails.type = PartyType.ORGANISATION.value
         draft.fullAdmission = new FullAdmission()
         draft.fullAdmission.paymentIntention = new PaymentIntention()
         draft.fullAdmission.paymentIntention.paymentOption = new PaymentOption(PaymentType.BY_SET_DATE)
@@ -490,6 +509,32 @@ describe('Defendant response task list builder', () => {
 
       const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
       expect(taskList).to.be.equal(undefined)
+    })
+  })
+
+  describe('buildRemainingTasks', () => {
+    let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
+
+    beforeEach(() => {
+      isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
+    })
+
+    afterEach(() => {
+      isResponseRejectedFullyWithDisputeStub.restore()
+    })
+
+    it('Should return "Consider free mediation" when not completed for fully reject', () => {
+      isResponseRejectedFullyWithDisputeStub.returns(true)
+
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      expect(tasks.map(task => task.name)).to.contain('Consider free mediation')
+    })
+
+    it('Should not return "Consider free mediation" when not fully reject', () => {
+      isResponseRejectedFullyWithDisputeStub.returns(false)
+
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim)
+      expect(tasks.map(task => task.name)).to.not.contain('Consider free mediation')
     })
   })
 

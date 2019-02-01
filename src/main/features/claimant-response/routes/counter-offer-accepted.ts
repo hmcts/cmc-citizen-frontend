@@ -27,7 +27,7 @@ export default express.Router()
 
       const claimantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft.document)
       const defendantPaymentOption: PaymentOption = response.paymentIntention.paymentOption
-      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim)
+      const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft.document)
 
       const differentPaymentFrequency: boolean = claimantPaymentPlan.frequency !== defendantPaymentPlan.frequency
 
@@ -37,7 +37,8 @@ export default express.Router()
       res.render(Paths.counterOfferAcceptedPage.associatedView, {
         isCourtOrderPaymentPlanConvertedByDefendantFrequency: isCourtOrderPaymentPlanConvertedByDefendantFrequency,
         claimantPaymentPlan: claimantPaymentPlan,
-        courtOrderPaymentPlan: draft.document.courtOfferedPaymentIntention.repaymentPlan
+        courtOrderPaymentPlan: draft.document.courtDetermination.courtDecision ?
+          draft.document.courtDetermination.courtDecision.repaymentPlan : undefined
       })
     }))
   .post(
@@ -49,7 +50,7 @@ export default express.Router()
 
       draft.document.settlementAgreement = undefined
       draft.document.formaliseRepaymentPlan = undefined
-      draft.document.rejectionReason = undefined
+      draft.document.courtDetermination.rejectionReason = undefined
 
       await new DraftService().save(draft, user.bearerToken)
 

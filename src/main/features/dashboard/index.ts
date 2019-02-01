@@ -24,14 +24,14 @@ export class DashboardFeature {
   enableFor (app: express.Express) {
     if (app.settings.nunjucksEnv) {
       if (app.settings.nunjucksEnv.filters) {
-        app.settings.nunjucksEnv.filters.renderPaymentSchedule = (value: string) => {
+        app.settings.nunjucksEnv.filters.renderPaymentSchedule = (value: string, adverbial: boolean = false) => {
           switch (value) {
             case PaymentSchedule.EACH_WEEK:
-              return 'every week'
+              return adverbial ? 'Weekly' : 'Every week'
             case PaymentSchedule.EVERY_TWO_WEEKS:
-              return 'every two weeks'
+              return 'Every 2 weeks'
             case PaymentSchedule.EVERY_MONTH:
-              return 'every month'
+              return adverbial ? 'Monthly' : 'Every month'
           }
         }
       }

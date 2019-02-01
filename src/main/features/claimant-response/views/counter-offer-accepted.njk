@@ -10,26 +10,20 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
+        <p> {{ t('The court has accepted your repayment plan.') }} </p>
         {% if isCourtOrderPaymentPlanConvertedByDefendantFrequency %}
-          <p> {{ t('The court has accepted your repayment amount, but the frequency will be set by the defendant.
-          We’ve converted the {{ claimantAmount }} payment {{ claimantFrequency }} to
-          {{ courtOrderAmount }} {{ courtOrderFrequency }}.', {
-              claimantAmount: claimantPaymentPlan.instalmentAmount | numeral,
-              claimantFrequency: claimantPaymentPlan.frequency | renderFrequencyViewType | lower,
-              courtOrderAmount: courtOrderPaymentPlan.instalmentAmount | numeral,
-              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule
-            }) }}</p>
-
+          <p> {{ t('The defendant asked to pay {{ courtOrderFrequency }} and the court accepted this.
+              Here is the revised repayment plan:', {
+              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule | lower
+            }) }} </p>
           {{
           repaymentPlanBlock(
             heading = '',
             repaymentPlan = courtOrderPaymentPlan
           )
           }}
-          
-        {% else %}
-          <p> {{ t('The court has accepted your repayment plan.') }} </p>
         {% endif %}
+        
         {{ submitButton() }}
       </form>
     </div>

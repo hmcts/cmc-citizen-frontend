@@ -15,10 +15,12 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { MadeBy } from 'offer/form/models/madeBy'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.repaymentPlanSummaryPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.repaymentPlanSummaryPage.evaluateUri({ externalId: externalId, madeBy: MadeBy.CLAIMANT.value })
 
 describe('CCJ - repayment plan summary page', () => {
   attachDefaultHooks(app)
@@ -58,6 +60,10 @@ describe('CCJ - repayment plan summary page', () => {
               paymentLength: '12 months'
             },
             ccjType: CountyCourtJudgmentType.DETERMINATION
+          },
+          claimantResponse: {
+            type: ClaimantResponseType.ACCEPTATION,
+            amountPaid: 0
           }
         })
 

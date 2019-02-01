@@ -12,22 +12,16 @@ import { ResponseDraft } from 'features/response/draft/responseDraft'
 
 import { PaymentPlan as DraftPaymentPlan } from 'main/common/components/payment-intention/model/paymentPlan'
 import { PaymentPlan as FormPaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
-import { StatementOfMeansCalculations } from 'common/statement-of-means/statementOfMeansCalculations'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { PaymentIntention as PI } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { AdmissionHelper } from 'shared/helpers/admissionHelper'
-import { Party } from 'claims/models/details/yours/party'
-import { PartyType } from 'common/partyType'
-import { Individual } from 'claims/models/details/theirs/individual'
-import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
-import { AllowanceCalculations } from 'common/allowances/allowanceCalculations'
 
 export class PaymentPlanHelper {
 
-  static createPaymentPlanFromClaim (claim: Claim): PaymentPlan {
+  static createPaymentPlanFromClaim (claim: Claim, draft: DraftClaimantResponse): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     if (!response) {
@@ -40,25 +34,29 @@ export class PaymentPlanHelper {
       case ResponseType.PART_ADMISSION:
         let partialAdmissionResponse = response as PartialAdmissionResponse
         return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(partialAdmissionResponse,
-          partialAdmissionResponse.amount
+          partialAdmissionResponse.amount,
+          draft
         )
       case ResponseType.FULL_ADMISSION:
         return PaymentPlanHelper.createPaymentPlanFromClaimAdmission(response as FullAdmissionResponse,
-          claim.claimData.amount.totalAmount()
+          claim.totalAmountTillToday,
+          draft
         )
       default:
         throw new Error(`Incompatible response type: ${responseType}`)
     }
   }
 
-  private static createPaymentPlanFromClaimAdmission (response: FullAdmissionResponse | PartialAdmissionResponse, totalAmount: number): PaymentPlan {
+  private static createPaymentPlanFromClaimAdmission (response: FullAdmissionResponse | PartialAdmissionResponse,
+                                                      totalAmount: number,
+                                                      draft: DraftClaimantResponse): PaymentPlan {
     const paymentIntention: PI = response.paymentIntention
     if (!paymentIntention) {
       return undefined
     }
 
     if (paymentIntention.repaymentPlan) {
-      return PaymentPlanHelper.createPaymentPlan(
+      return PaymentPlanHelper.createPaymentPlanFromInstallment(
         totalAmount,
         paymentIntention.repaymentPlan.instalmentAmount,
         Frequency.of(paymentIntention.repaymentPlan.paymentSchedule),
@@ -66,21 +64,22 @@ export class PaymentPlanHelper {
       )
     }
 
-    if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      const repository: AllowanceRepository = new ResourceAllowanceRepository()
-      const allowanceHelper = new AllowanceCalculations(repository)
-      const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
+    if (draft.courtDetermination.disposableIncome <= 0) {
+      return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
+    }
 
-      const instalmentAmount: number = statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
-        response.statementOfMeans,
-        response.defendant.type,
-        PaymentPlanHelper.getDateOfBirth(response.defendant)) / Frequency.WEEKLY.monthlyRatio
-      return PaymentPlanHelper.createPaymentPlan(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+    if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+      const instalmentAmount: number = draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio
+      return PaymentPlanHelper.createPaymentPlanFromInstallment(totalAmount, instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
     }
   }
 
-  static createPaymentPlanFromDefendantFinancialStatement (claim: Claim): PaymentPlan {
+  static createPaymentPlanFromDefendantFinancialStatement (claim: Claim, draft: DraftClaimantResponse): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+
+    if (claim.claimData.defendant.isBusiness()) {
+      return undefined
+    }
 
     if (response === undefined) {
       throw new Error('Claim does not have response attached')
@@ -89,22 +88,12 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    const repository: AllowanceRepository = new ResourceAllowanceRepository()
-    const allowanceHelper = new AllowanceCalculations(repository)
-    const statementOfMeansCalculations: StatementOfMeansCalculations = new StatementOfMeansCalculations(allowanceHelper)
-
-    const calculatedMonthlyDisposableIncome = Math.max(statementOfMeansCalculations.calculateTotalMonthlyDisposableIncome(
-      response.statementOfMeans,
-      response.defendant.type,
-      PaymentPlanHelper.getDateOfBirth(response.defendant)), 0)
-
-    // No Payment plan when calculated disposable income is negative / zero
-    if (calculatedMonthlyDisposableIncome === 0) {
-      return undefined
+    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
+    if (instalmentAmount < 1) {
+      return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
-    const instalmentAmount: number = Math.min(calculatedMonthlyDisposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
-    return PaymentPlanHelper.createPaymentPlan(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+    return PaymentPlanHelper.createPaymentPlanFromInstallment(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
   static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {
@@ -123,7 +112,7 @@ export class PaymentPlanHelper {
       return undefined
     }
 
-    return PaymentPlanHelper.createPaymentPlan(
+    return PaymentPlanHelper.createPaymentPlanFromInstallment(
       paymentPlanForm.totalAmount,
       paymentPlanForm.instalmentAmount,
       paymentPlanForm.paymentSchedule ? Frequency.of(paymentPlanForm.paymentSchedule.value) : undefined,
@@ -144,7 +133,7 @@ export class PaymentPlanHelper {
       return undefined
     }
 
-    return PaymentPlanHelper.createPaymentPlan(
+    return PaymentPlanHelper.createPaymentPlanFromInstallment(
       paymentPlan.totalAmount,
       paymentPlan.instalmentAmount,
       paymentPlan.paymentSchedule ? Frequency.of(paymentPlan.paymentSchedule.value) : undefined,
@@ -152,7 +141,7 @@ export class PaymentPlanHelper {
     )
   }
 
-  private static createPaymentPlan (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
+  private static createPaymentPlanFromInstallment (totalAmount: number, instalmentAmount: number, frequency: Frequency, firstPaymentDate: Moment): PaymentPlan {
     if (!totalAmount || !instalmentAmount || !frequency) {
       return undefined
     }
@@ -160,10 +149,7 @@ export class PaymentPlanHelper {
     return PaymentPlan.create(totalAmount, instalmentAmount, frequency, firstPaymentDate)
   }
 
-  private static getDateOfBirth (defendant: Party): Moment {
-    if (defendant.type === PartyType.INDIVIDUAL.value) {
-      return MomentFactory.parse((defendant as Individual).dateOfBirth)
-    }
-    return undefined
+  private static createPaymentPlanFromStartDate (firstPaymentDate: Moment): PaymentPlan {
+    return PaymentPlan.create(0, 0, Frequency.WEEKLY, firstPaymentDate)
   }
 }

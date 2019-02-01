@@ -22,7 +22,7 @@ const billingDetails: Address = {
   postcode: 'NW1 6XE'
 }
 
-const email = 'civilmoneyclaims+payment@gmail.com'
+const email = 'civilmoneyclaims+automatedtest-payment@gmail.com'
 
 export class PaymentSteps {
 

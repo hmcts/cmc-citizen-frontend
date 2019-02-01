@@ -1,4 +1,7 @@
+{% from "../macro/confirmation/sendFinancialDetails.njk" import sendFinancialDetailsForBusiness %}
+
 {% set claimantName = claim.claimData.claimant.name %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
 {% set amount = claim.response.amount | numeral %}
 
 {% if claim.response.paymentDeclaration %}
@@ -20,4 +23,10 @@
 
   <p>{{ t('We’ve also sent them your explanation of why you don’t believe you owe the amount claimed.') }}</p>
   <p>{{ t('We’ll contact you when they respond.') }}</p>
+
+  {% if (claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or
+    claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS) and
+    claim.claimData.defendant.isBusiness() %}
+    {{ sendFinancialDetailsForBusiness(claimantName, claimantDetailsPageURI) }}
+  {% endif  %}
 {% endif %}

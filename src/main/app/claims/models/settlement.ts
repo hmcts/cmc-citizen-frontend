@@ -30,14 +30,12 @@ export class Settlement {
   }
 
   getLastOffer (): Offer {
-    if (!this.partyStatements) {
-      return undefined
-    }
-
-    const partyStatement: PartyStatement = this.partyStatements.reverse()
-      .find(statement => statement.type === StatementType.OFFER.value)
-
+    const partyStatement = this.getOfferedPartyStatement()
     return partyStatement ? partyStatement.offer : undefined
+  }
+
+  getLastOfferAsPartyStatement (): PartyStatement {
+    return this.getOfferedPartyStatement()
   }
 
   isOfferAccepted (): boolean {
@@ -74,7 +72,11 @@ export class Settlement {
   }
 
   isThroughAdmissionsAndSettled (): boolean {
-    return this.partyStatements && this.partyStatements.some(statement => statement.type === 'COUNTERSIGNATURE') && this.isThroughAdmissions()
+    return this.isSettled() && this.isThroughAdmissions()
+  }
+
+  isSettled (): boolean {
+    return this.partyStatements && this.partyStatements.some(statement => statement.type === 'COUNTERSIGNATURE')
   }
 
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
@@ -86,5 +88,15 @@ export class Settlement {
       return settlements
     }
     return settlements.map(settlement => new PartyStatement(undefined, undefined).deserialize(settlement))
+  }
+
+  private getOfferedPartyStatement (): PartyStatement {
+    if (!this.partyStatements) {
+      return undefined
+    }
+
+    const partyStatement: PartyStatement = this.partyStatements.reverse()
+      .find(statement => statement.type === StatementType.OFFER.value)
+    return partyStatement
   }
 }

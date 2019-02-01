@@ -33,7 +33,8 @@ export default express.Router()
 
           draft.document.paymentOption = form.model
           if (form.model.option === PaymentType.IMMEDIATELY) {
-            draft.document.repaymentPlan = draft.document.payBySetDate = undefined
+            draft.document.repaymentPlan = undefined
+            draft.document.payBySetDate = undefined
           }
           await new DraftService().save(draft, user.bearerToken)
 

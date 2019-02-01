@@ -70,6 +70,7 @@ export default express.Router()
         draft.document.acceptPaymentMethod = form.model
         draft.document.alternatePaymentMethod = undefined
         draft.document.formaliseRepaymentPlan = undefined
+        draft.document.courtDetermination = undefined
 
         await new DraftService().save(draft, user.bearerToken)
 

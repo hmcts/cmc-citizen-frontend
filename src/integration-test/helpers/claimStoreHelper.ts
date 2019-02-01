@@ -3,9 +3,24 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 class ClaimStoreHelper extends codecept_helper {
 
-  async createClaim (claimData: ClaimData, submitterEmail: string, features: string[]): Promise<string> {
+  async createClaim (claimData: ClaimData, submitterEmail: string): Promise<string> {
+    const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
+    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, ['admissions'])
+
+    return referenceNumber
+  }
+
+  async createClaimWithFeatures (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions']): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
+
+    return referenceNumber
+  }
+
+  async createClaimWithFeaturesAndRole (claimData: ClaimData, submitterEmail: string, role: string, features: string[] = ['admissions']): Promise<string> {
+    const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
+    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
+    await ClaimStoreClient.addRoleToUser(submitter.bearerToken, role)
 
     return referenceNumber
   }

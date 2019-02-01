@@ -5,7 +5,7 @@ import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/va
 import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 import { generateString, expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 const validLocalDate = LocalDate.fromObject({ day: 1, month: 1, year: 2010 })
 const validAmount = 100
