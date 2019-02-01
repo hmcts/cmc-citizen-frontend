@@ -138,9 +138,9 @@
     {% if debts.length === 1 %}
       {{ row(label = 'Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
     {% else %}
-      {{ row(label = loop.index0 + 1 + '. Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
+      {{ row(label = loop.index + '. Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
     {% endif %}
-    {{ row(label = 'Payments', value = (debt.amount | numeral) + ' ' + (debt.frequency | renderPaymentFrequencyView | lower) , bottomBorder = loop.index0 === debts.length - 1) }}
+    {{ row(label = 'Payments', value = (debt.amount | numeral) + ' ' + (debt.frequency | renderPaymentFrequencyView | lower) , bottomBorder = loop.index === debts.length ) }}
   {% endfor %}
 {% endmacro %}
 
