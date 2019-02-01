@@ -23,6 +23,7 @@ import {
   baseResponseData
 } from 'test/data/entity/responseData'
 import { baseAcceptationClaimantResponseData } from 'test/data/entity/claimantResponseData'
+import { sampleClaimIndividualVsIndividualIssueObj } from '../../../data/entity/claimIssueData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -61,13 +62,6 @@ describe('Dashboard page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
         })
-      })
-
-      context('when at least one claim issued', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1')
-        })
 
         it('should render page with continue claim button when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('claim')
@@ -77,6 +71,12 @@ describe('Dashboard page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Continue with claim'))
         })
+      })
+
+      context('Claimant status', () => {
+        beforeEach(() => {
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+        })
 
         it('should render page with start claim button when everything is fine', async () => {
           draftStoreServiceMock.resolveFindNoDraftFound()
@@ -85,6 +85,16 @@ describe('Dashboard page', () => {
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+        })
+
+        it('should render page with claim number and status', async () => {
+          draftStoreServiceMock.resolveFindNoDraftFound()
+          claimStoreServiceMock.resolveRetrieveBySampleData(sampleClaimIndividualVsIndividualIssueObj)
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('000MC050', 'Your claim has been sent'))
         })
       })
 
