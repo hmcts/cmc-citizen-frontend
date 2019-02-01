@@ -13,7 +13,7 @@ import { Draft as DraftWrapper, Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { Moment } from 'moment'
 import { getEarliestPaymentDateForPaymentPlan } from 'claimant-response/helpers/paydateHelper'
-import { ValidationError } from 'class-validator'
+import { ValidationError } from '@hmcts/class-validator'
 
 class RepaymentPlanPage {
   getHeading (): string {

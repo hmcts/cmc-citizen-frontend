@@ -1,6 +1,6 @@
 import { MonthlyExpenseType } from './monthlyExpenseType'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
-import { ValidateIf, ValidateNested } from 'class-validator'
+import { ValidateIf, ValidateNested } from '@hmcts/class-validator'
 
 export class MonthlyExpenses {
 
