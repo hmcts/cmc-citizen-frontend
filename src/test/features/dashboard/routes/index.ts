@@ -76,11 +76,11 @@ describe('Dashboard page', () => {
       context('Claimant status', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+          draftStoreServiceMock.resolveFindNoDraftFound()
         })
 
         it('should render page with start claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-
+          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
@@ -88,7 +88,6 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with claim number and status', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
           claimStoreServiceMock.resolveRetrieveBySampleData(sampleClaimIndividualVsIndividualIssueObj)
 
           await request(app)
