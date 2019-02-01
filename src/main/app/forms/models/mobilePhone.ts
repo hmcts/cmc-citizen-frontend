@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength } from 'class-validator'
+import { IsDefined, MaxLength } from '@hmcts/class-validator'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {

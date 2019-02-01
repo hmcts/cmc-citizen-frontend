@@ -1,3 +1,4 @@
+import { Logger } from '@hmcts/nodejs-logging'
 import * as express from 'express'
 import * as config from 'config'
 import * as path from 'path'
@@ -27,6 +28,7 @@ import { TestingSupportFeature } from 'testing-support/index'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 import { PaidInFullFeature } from 'paid-in-full/index'
+import { MediationFeature } from 'mediation/index'
 
 export const app: express.Express = express()
 
@@ -34,6 +36,8 @@ const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
 const developmentMode = env === 'development'
+
+const logger = Logger.getLogger('applicationRunner')
 
 const i18next = I18Next.enableFor(app)
 
@@ -71,15 +75,23 @@ new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
 
+if (FeatureToggles.isEnabled('mediation')) {
+  logger.info('FeatureToggles.mediation enabled')
+  new MediationFeature().enableFor(app)
+}
+
 if (FeatureToggles.isEnabled('paidInFull')) {
+  logger.info('FeatureToggles.paidInFull enabled')
   new PaidInFullFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('testingSupport')) {
+  logger.info('FeatureToggles.testingSupport enabled')
   new TestingSupportFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('admissions')) {
+  logger.info('FeatureToggles.admissions enabled')
   new ClaimantResponseFeature().enableFor(app)
 }
 // Below method overrides the moment's toISOString method, which is used by RequestPromise

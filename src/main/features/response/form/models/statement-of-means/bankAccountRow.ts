@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, ValidateIf } from '@hmcts/class-validator'
 
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'

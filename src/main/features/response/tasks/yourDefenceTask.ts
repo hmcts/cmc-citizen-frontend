@@ -1,5 +1,5 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 const validator = new Validator()
 

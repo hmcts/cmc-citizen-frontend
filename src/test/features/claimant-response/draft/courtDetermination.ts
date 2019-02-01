@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
-import { DecisionType } from 'claimant-response/draft/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import {
   intentionOfPaymentByInstalments,
   intentionOfPaymentInFullBySetDate

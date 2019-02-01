@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@cmc-increase-functional-timeout-to-80")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -8,7 +8,7 @@ String component = "citizen-frontend"
 List<LinkedHashMap<String, Object>> secrets = [
   secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
   secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
-  secret('postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
+  secret('os-postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
   secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
   secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
   secret('cmc-s2s-secret', 'IDAM_S2S_TOTP_SECRET'),
@@ -58,6 +58,6 @@ withPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   enableDockerBuild()
-  enableDeployToAKS()
+  installCharts()
   setVaultName('cmc')
 }

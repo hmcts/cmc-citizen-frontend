@@ -3,7 +3,7 @@ import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { expect } from 'chai'
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { YesNoOption } from 'models/yesNoOption'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 describe('AcceptCourtOffer', () => {
 

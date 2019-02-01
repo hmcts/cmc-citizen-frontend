@@ -1,5 +1,5 @@
-import { IsDefined, Max } from 'class-validator'
-import { IsNotBlank, Fractions, MaxLength } from '@hmcts/cmc-validators'
+import { IsDefined, Max } from '@hmcts/class-validator'
+import { IsNotBlank, Fractions, MaxLength, Min } from '@hmcts/cmc-validators'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
@@ -19,6 +19,7 @@ export class SelfEmployment {
 
   @IsDefined({ message: ValidationErrors.ANNUAL_TURNOVER_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @Min(0, { message: GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED })
   @Max(GlobalValidationConstants.MAX_VALUE, { message: GlobalValidationErrors.AMOUNT_TOO_HIGH })
   annualTurnover?: number
 

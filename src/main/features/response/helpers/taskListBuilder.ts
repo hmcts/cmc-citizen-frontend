@@ -7,6 +7,7 @@ import {
   Paths,
   StatementOfMeansPaths
 } from 'response/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -27,11 +28,18 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
+import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
+
+    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)
+      && (draft.isResponsePartiallyAdmitted() || draft.isResponseFullyAdmitted())) {
+      delete draft.response.type
+    }
 
     tasks.push(
       new TaskListItem(
@@ -116,6 +124,17 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+        ) {
+          tasks.push(
+            new TaskListItem(
+              'Share your financial details',
+              Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+              ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+            )
+          )
         }
 
         if (draft.isResponseFullyAdmittedWithInstalments()) {
@@ -186,6 +205,17 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+          ) {
+          tasks.push(
+            new TaskListItem(
+              'Share your financial details',
+              Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+              ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+            )
+          )
         }
 
         if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
@@ -208,11 +238,17 @@ export class TaskListBuilder {
     if (draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
+      let path: string
+      if (FeatureToggles.isEnabled('mediation')) {
+        path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+      } else {
+        path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+      }
       return new TaskList(
         'Resolving the claim', [
           new TaskListItem(
             'Consider free mediation',
-            Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            path,
             FreeMediationTask.isCompleted(draft)
           )
         ]

@@ -1,6 +1,6 @@
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
-import { ValidateNested } from 'class-validator'
+import { ValidateNested } from '@hmcts/class-validator'
 import { LocalDate } from 'forms/models/localDate'
 import { IsNotInFuture } from 'forms/validation/validators/notInFuture'
 

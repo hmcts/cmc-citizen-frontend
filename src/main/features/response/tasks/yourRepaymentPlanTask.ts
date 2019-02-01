@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
 
 const validator = new Validator()

@@ -4,12 +4,11 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, viewAndRespondOffer %}
 
 {% macro claimFullAdmissionForDefendantDashboard(claim) %}
-
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {{ t('You’ve admitted all of the claim and said you’ll pay the full amount immediately.') }}
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     {{ t('You’ve admitted all of the claim and offered to pay the full amount by {{ paymentDate }}.',
-      { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
+    { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     {{ t('You’ve admitted all of the claim and offered to pay the full amount in instalments.') }}
   {% endif %}
@@ -17,7 +16,7 @@
 
 {% macro claimFullAdmissionForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You’ve responded to the claim') }}</h2>
+    <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
     {% set claimant = claim.claimData.claimant %}
     {% set amount = claim.totalAmountTillToday | numeral %}
     {% set paymentIntention = claim.response.paymentIntention %}
