@@ -1,4 +1,4 @@
-import { IsArray, ValidateNested } from 'class-validator'
+import { IsArray, ValidateNested } from '@hmcts/class-validator'
 import { IncomeExpenseSource } from 'common/calculate-monthly-income-expense/incomeExpenseSource'
 import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
