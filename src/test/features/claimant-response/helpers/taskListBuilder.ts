@@ -116,7 +116,7 @@ describe('Claimant response task list builder', () => {
       })
 
       describe('Free mediation task', () => {
-        const taskLabel = 'Consider free mediation'
+        const taskLabel = 'Free telephone mediation'
         it('Should be available when part payment has been stated as not paid', () => {
           const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue - 1
           claim = new Claim().deserialize({
