@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { FreeMediation, FreeMediationOption, ValidationErrors } from 'response/form/models/freeMediation'
+import { FreeMediation, FreeMediationOption, ValidationErrors } from 'forms/models/freeMediation'
 
 describe('FreeMediation', () => {
   describe('validation', () => {

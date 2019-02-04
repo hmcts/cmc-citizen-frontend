@@ -56,8 +56,8 @@ data "azurerm_key_vault_secret" "draft_store_secondary" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "postcode_lookup_api_key" {
-  name = "postcode-lookup-api-key"
+data "azurerm_key_vault_secret" "os_postcode_lookup_api_key" {
+  name = "os-postcode-lookup-api-key"
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
@@ -105,7 +105,7 @@ module "citizen-frontend" {
 
     // Application vars
     GA_TRACKING_ID = "${var.ga_tracking_id}"
-    POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.postcode_lookup_api_key.value}"
+    POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.os_postcode_lookup_api_key.value}"
     COOKIE_ENCRYPTION_KEY = "${data.azurerm_key_vault_secret.cookie_encryption_key.value}"
 
     // IDAM

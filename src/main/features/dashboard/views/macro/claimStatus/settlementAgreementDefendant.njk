@@ -19,7 +19,7 @@
     <p>{{ t('They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.') }}</p>
     <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ t('If you don’t sign or respond by {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.claimantRespondedAt | addDays(7) | date) }}</p>
-    <p>{{ signAgreementLink(claim, 'View and sign the settlement agreement') }}</p>
+    <p>{{ signAgreementLink(claim, 'View the repayment plan') }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}

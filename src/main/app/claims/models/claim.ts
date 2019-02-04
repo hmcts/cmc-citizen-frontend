@@ -241,6 +241,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
+    } else if (this.isInterlocutoryJudgmentRequestedOnFullAdmission()) {
+      return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
     } else {
@@ -316,7 +318,7 @@ export class Claim {
     return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
   }
 
-  private isResponseSubmitted (): boolean {
+  public isResponseSubmitted (): boolean {
     return !!this.response && !this.claimantResponse
   }
 
@@ -446,6 +448,13 @@ export class Claim {
     return this.isStatesPaid() &&
       this.claimantResponse &&
       this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+  }
+
+  private isInterlocutoryJudgmentRequestedOnFullAdmission (): boolean {
+    return this.response
+      && this.response.responseType === ResponseType.FULL_ADMISSION
+      && this.claimantResponse
+      && (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
   }
 
   private hasClaimantRejectedStatesPaid (): boolean {
