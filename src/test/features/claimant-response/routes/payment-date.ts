@@ -221,7 +221,6 @@ describe('Claimant response: payment date', () => {
         context('when form is invalid', async () => {
           it(`should render page with heading '${heading}'`, async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj)
-            draftStoreServiceMock.resolveSave()
             draftStoreServiceMock.resolveFind('claimantResponse', claimantResponseDraftOverrideWithDisposableIncome)
 
             await request(app)
