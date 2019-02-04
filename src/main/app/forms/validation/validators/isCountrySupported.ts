@@ -7,10 +7,10 @@ import {
 } from '@hmcts/class-validator'
 import { Country } from 'common/country'
 import { ErrorLogger } from 'logging/errorLogger'
-import { PostcodeInfoResponse } from '@hmcts/os-places-client'
+import { AddressInfoResponse } from '@hmcts/os-places-client'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
 
-const postcodeClient = ClientFactory.createPostcodeInfoClient()
+const postcodeClient = ClientFactory.createOSPlacesClient()
 const countryClient = ClientFactory.createPostcodeToCountryClient()
 
 enum BlockedPostcodes {
@@ -30,14 +30,14 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
     }
 
     try {
-      const postcodeInfoResponse: PostcodeInfoResponse = await postcodeClient.lookupPostcode(value)
-      if (!postcodeInfoResponse.valid) {
+      const addressInfoResponse: AddressInfoResponse = await postcodeClient.lookupByPostcode(value)
+      if (!addressInfoResponse.valid) {
         return true
       }
-      const country = await countryClient.lookupCountry(postcodeInfoResponse.addresses[0].postcode)
+      const country = await countryClient.lookupCountry(addressInfoResponse.addresses[0].postcode)
       const countries: Country[] = args.constraints[0]
 
-      return countries.filter(result => result.name.toLowerCase() === country.toLowerCase()).length > 0
+      return countries.some(result => result.name.toLowerCase() === country.toLowerCase())
     } catch (err) {
       const errorLogger = new ErrorLogger()
       errorLogger.log(err)
