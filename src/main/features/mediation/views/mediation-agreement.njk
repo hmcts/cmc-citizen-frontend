@@ -22,7 +22,9 @@
         {{ csrfProtection(csrf) }}
 
         <div class="form-group">
-          {{ submitButton('I agree') }}
+          {{ linkButton('I agree', 'accept', 'link-button button') }}
+        </div>
+        <div class="form-group-related">
           {{ linkButton('I don’t agree', 'reject', 'link-button no-padding') }}
         </div>
       </form>

@@ -10,7 +10,7 @@ describe('Free mediation task', () => {
   it('should not be completed when free mediation object is undefined', () => {
     const draft = new ResponseDraft()
     const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = undefined
+    mediationDraft.willYouOptOutOfMediation = undefined
 
     expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.false
   })
@@ -18,7 +18,7 @@ describe('Free mediation task', () => {
   it('should not be completed when willYouTryMediation is yes and youCanOnlyUseMediation is undefined', () => {
     const draft = new ResponseDraft()
     const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+    mediationDraft.willYouOptOutOfMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = undefined
 
     expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.false
@@ -27,7 +27,7 @@ describe('Free mediation task', () => {
   it('should be completed when willYouTryMediation is no and youCanOnlyUseMediation is undefined', () => {
     const draft = new ResponseDraft()
     const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.NO)
+    mediationDraft.willYouOptOutOfMediation = new FreeMediation(FreeMediationOption.NO)
     mediationDraft.youCanOnlyUseMediation = undefined
 
     expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
@@ -36,7 +36,7 @@ describe('Free mediation task', () => {
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is yes', () => {
     const draft = new ResponseDraft()
     const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+    mediationDraft.willYouOptOutOfMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
 
     expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
@@ -45,7 +45,7 @@ describe('Free mediation task', () => {
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is no', () => {
     const draft = new ResponseDraft()
     const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+    mediationDraft.willYouOptOutOfMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
 
     expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true

@@ -10,8 +10,8 @@ const validator = new Validator()
 export class FreeMediationTask {
   static isCompleted (responseDraft: ResponseDraft, mediationDraft: MediationDraft): boolean {
     if (FeatureToggles.isEnabled('mediation')) {
-      return (!!mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.NO) ||
-        !!mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.YES &&
+      return (!!mediationDraft.willYouOptOutOfMediation && mediationDraft.willYouOptOutOfMediation.option === FreeMediationOption.NO) ||
+        !!mediationDraft.willYouOptOutOfMediation && mediationDraft.willYouOptOutOfMediation.option === FreeMediationOption.YES &&
         !!mediationDraft.youCanOnlyUseMediation &&
         (mediationDraft.youCanOnlyUseMediation.option === FreeMediationOption.YES ||
           mediationDraft.youCanOnlyUseMediation.option === FreeMediationOption.NO)

@@ -32,7 +32,13 @@ export default express.Router()
       const draft: Draft<MediationDraft> = res.locals.mediationDraft
       const user: User = res.locals.user
 
-      if (req.body.reject) {
+      if (req.body.accept) {
+        draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
+
+        await new DraftService().save(draft, user.bearerToken)
+        // TODO update to point to next page when it is ready
+        res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }))
+      } else {
         draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
 
         await new DraftService().save(draft, user.bearerToken)
@@ -42,11 +48,5 @@ export default express.Router()
         } else {
           res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
         }
-      } else {
-        draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
-
-        await new DraftService().save(draft, user.bearerToken)
-        // TODO update to point to next page when it is ready
-        res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

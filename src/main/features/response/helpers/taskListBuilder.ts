@@ -242,18 +242,28 @@ export class TaskListBuilder {
       let path: string
       if (FeatureToggles.isEnabled('mediation')) {
         path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Try to resolve the claim', [
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            )
+          ]
+        )
       } else {
         path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Resolving the claim', [
+            new TaskListItem(
+              'Consider free mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            )
+          ]
+        )
       }
-      return new TaskList(
-        'Resolving the claim', [
-          new TaskListItem(
-            'Consider free mediation',
-            path,
-            FreeMediationTask.isCompleted(draft, mediationDraft)
-          )
-        ]
-      )
+
     }
 
     return undefined
