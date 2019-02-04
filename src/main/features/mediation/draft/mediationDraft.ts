@@ -2,7 +2,7 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { FreeMediation } from 'forms/models/freeMediation'
 
 export class MediationDraft extends DraftDocument {
-  willYouOptOutOfMediation: FreeMediation
+  willYouTryMediation: FreeMediation
   youCanOnlyUseMediation: FreeMediation
 
   constructor () {
@@ -13,8 +13,8 @@ export class MediationDraft extends DraftDocument {
     if (input) {
       this.externalId = input.externalId
 
-      if (input.willYouOptOutOfMediation) {
-        this.willYouOptOutOfMediation = new FreeMediation(input.willYouOptOutOfMediation.option)
+      if (input.willYouTryMediation) {
+        this.willYouTryMediation = new FreeMediation(input.willYouTryMediation.option)
       }
       if (input.youCanOnlyUseMediation) {
         this.youCanOnlyUseMediation = new FreeMediation(input.youCanOnlyUseMediation.option)

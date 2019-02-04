@@ -26,7 +26,7 @@ export default express.Router()
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<MediationDraft> = res.locals.mediationDraft
 
-      renderView(new Form(draft.document.willYouOptOutOfMediation), res)
+      renderView(new Form(draft.document.willYouTryMediation), res)
     }
   )
   .post(
@@ -40,7 +40,7 @@ export default express.Router()
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
 
-        draft.document.willYouOptOutOfMediation = form.model
+        draft.document.willYouTryMediation = form.model
 
         if (form.model.option === FreeMediationOption.NO) {
           draft.document.youCanOnlyUseMediation = undefined

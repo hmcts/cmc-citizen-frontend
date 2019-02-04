@@ -8,6 +8,7 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
+import { Paths as ResponsePaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -16,7 +17,6 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
-import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -137,7 +137,7 @@ describe('Free mediation: mediation agreement page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: FreeMediationOption.YES })
+              .send({ accept: 'I agree' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.mediationAgreementPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
@@ -153,9 +153,9 @@ describe('Free mediation: mediation agreement page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: FreeMediationOption.NO })
+              .send({ reject: 'I don’t agree' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(pagePath))
+                .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to claimant response task list when No was chosen and it is claimant', async () => {

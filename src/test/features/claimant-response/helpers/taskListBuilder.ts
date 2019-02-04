@@ -116,6 +116,7 @@ describe('Claimant response task list builder', () => {
       })
 
       describe('Free mediation task', () => {
+        const taskLabel = 'Consider free mediation'
         it('Should be available when part payment has been stated as not paid', () => {
           const amount: number = claimStoreServiceMock.sampleClaimObj.totalAmountTillDateOfIssue - 1
           claim = new Claim().deserialize({
@@ -133,7 +134,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(
-            task => task.name === `Consider free mediation`
+            task => task.name === taskLabel
           )).to.not.be.undefined
         })
 
@@ -155,7 +156,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(
-            task => task.name === `Consider free mediation`
+            task => task.name === taskLabel
           )).to.not.be.undefined
         })
 
@@ -177,7 +178,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(
-            task => task.name === `Consider free mediation`
+            task => task.name === taskLabel
           )).to.not.be.undefined
         })
       })

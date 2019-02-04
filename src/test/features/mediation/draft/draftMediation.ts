@@ -23,7 +23,7 @@ describe('MediationDraft', () => {
         }
       })
       expect(draft.externalId).to.eql(myExternalId)
-      expect(draft.willYouOptOutOfMediation.option).to.eql(FreeMediationOption.YES)
+      expect(draft.willYouTryMediation.option).to.eql(FreeMediationOption.YES)
     })
   })
 })

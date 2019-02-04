@@ -84,18 +84,23 @@ export class TaskListBuilder {
     if (claim.response.freeMediation === YesNoOption.YES) {
       if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
         (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
-        let path: string
         if (FeatureToggles.isEnabled('mediation')) {
-          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            ))
         } else {
-          path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Consider free mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            ))
         }
-        tasks.push(
-          new TaskListItem(
-            'Consider free mediation',
-            path,
-            FreeMediationTask.isCompleted(draft, mediationDraft)
-          ))
       }
     }
 
@@ -157,19 +162,23 @@ export class TaskListBuilder {
       if (claim.response.freeMediation === YesNoOption.YES
         && draft.settleAdmitted
         && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
-        let path: string
         if (FeatureToggles.isEnabled('mediation')) {
-          path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            ))
         } else {
-          path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Consider free mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            ))
         }
-        tasks.push(
-          new TaskListItem(
-            'Free mediation?',
-            path,
-            FreeMediationTask.isCompleted(draft, mediationDraft)
-          )
-        )
       }
     }
 
