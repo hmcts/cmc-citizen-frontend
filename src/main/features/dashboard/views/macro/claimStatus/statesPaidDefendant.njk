@@ -1,0 +1,43 @@
+{% from "./utilityMacros.njk" import downloadResponseLink %}
+{% from "internalLink.njk" import internalLink %}
+
+{% macro statesPaidAcceptedDefendantDashboard() %}
+  {{ t('This claim is settled.') }}
+{% endmacro %}
+
+{% macro statesPaidRejectedDefendantDashboard(claim) %}
+  {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+    claimantName: claim.claimData.claimant.name,
+    amount: claim.response.amount | numeral
+  }) }}
+{% endmacro %}
+
+{% macro statesPaidAcceptedDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+    <p>{{ t('{{ claimantName }} confirmed you paid {{ amount }} on {{ date }}.', {
+        claimantName: claim.claimData.claimant.name,
+        amount: claim.response.amount | numeral,
+        date: claim.response.paymentDeclaration.paidDate | date
+      }) }}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro statesPaidRejectedDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+      claimantName: claim.claimData.claimant.name,
+      amount: claim.response.amount | numeral }) }}</h2>
+    <p>{{ t('They said you didn’t pay them {{ amount }}.', {
+        amount: claim.response.amount | numeral
+      }) }}</p>
+    <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+    <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
+      DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
+    <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before 4pm on {{ date }}.', {
+        date: claim.directionsQuestionnaireDeadline | date
+      }) }}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}

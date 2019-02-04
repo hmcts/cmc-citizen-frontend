@@ -80,6 +80,14 @@ claimFullAdmissionForClaimantClaimDetails,
   CCJAfterBreakingSettlementAgreementClaimDetails,
   pastPaymentDeadlineDefendantClaimDetails %}
 
+{% from "./claimStatus/statesPaidClaimant.njk" import
+  statesPaidAcceptedClaimantClaimDetails,
+  statesPaidRejectedClaimantClaimDetails %}
+
+{% from "./claimStatus/statesPaidDefendant.njk" import
+  statesPaidAcceptedDefendantClaimDetails,
+  statesPaidRejectedDefendantClaimDetails %}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
@@ -90,6 +98,10 @@ claimFullAdmissionForClaimantClaimDetails,
       {{ paidInFullCCJCancelledClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+      {{ statesPaidAcceptedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+      {{ statesPaidRejectedClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -169,6 +181,10 @@ claimFullAdmissionForClaimantClaimDetails,
       {{ paidInFullCCJCancelledDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
       {{ paidInFullCCJSatisfiedDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+      {{ statesPaidAcceptedDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+      {{ statesPaidRejectedDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.MORE_TIME_REQUESTED %}
       {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}

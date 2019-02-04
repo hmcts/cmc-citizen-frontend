@@ -1,0 +1,34 @@
+{% from "internalLink.njk" import internalLink %}
+
+{% macro statesPaidAcceptedClaimantDashboard() %}
+  {{ t('This claim is settled.') }}
+{% endmacro %}
+
+{% macro statesPaidRejectedClaimantDashboard() %}
+  {{ t('You’ve rejected the defendant’s admission') }}
+{% endmacro %}
+
+{% macro statesPaidAcceptedClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+    <p>{{ t('{{ defendantName }} paid you {{ amount }} on {{ date }}.', {
+        defendantName: claim.claimData.defendant.name,
+        amount: claim.response.amount | numeral,
+        date: claim.response.paymentDeclaration.paidDate | date
+      }) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro statesPaidRejectedClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
+    <p>{{ t('They said they owe {{ amount }}.', {
+        amount: claim.response.amount | numeral
+      }) }}</p>
+    <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
+      DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
+    <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ date }}.', {
+        date: claim.directionsQuestionnaireDeadline | date
+      }) }}</p>
+  </div>
+{% endmacro %}

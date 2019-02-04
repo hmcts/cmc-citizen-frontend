@@ -22,6 +22,10 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
+import { Error } from 'tslint/lib/error'
+import { DefenceType } from 'claims/models/response/defenceType'
 
 interface State {
   status: ClaimStatus
@@ -189,6 +193,10 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
+    } else if (this.hasClaimantAcceptedStatesPaid()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
+    } else if (this.hasClaimantRejectedStatesPaid()) {
+      return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.countyCourtJudgmentRequestedAt) {
       if (this.hasClaimantAcceptedAdmissionWithCCJ()) {
         return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ
@@ -300,7 +308,9 @@ export class Claim {
       return true
     }
 
-    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY && !this.isSettlementReachedThroughAdmission()
+    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention &&
+      (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY &&
+      !this.isSettlementReachedThroughAdmission()
       && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
   }
 
@@ -429,9 +439,37 @@ export class Claim {
 
   private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
-      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
+      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention &&
+      this.response.paymentIntention.paymentOption &&
+      this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
   }
 
+  private hasClaimantAcceptedStatesPaid (): boolean {
+    return this.isStatesPaid() &&
+      this.claimantResponse &&
+      this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+  }
+
+  private hasClaimantRejectedStatesPaid (): boolean {
+    return this.isStatesPaid() &&
+      this.claimantResponse &&
+      this.claimantResponse.type === ClaimantResponseType.REJECTION
+  }
+
+  private isStatesPaid (): boolean {
+    if (!this.response) {
+      return false
+    }
+
+    if (this.response.responseType === ResponseType.PART_ADMISSION) {
+      return (this.response as PartialAdmissionResponse).paymentDeclaration !== undefined
+    } else if (this.response.responseType === ResponseType.FULL_DEFENCE) {
+      return (this.response as FullDefenceResponse).defenceType === DefenceType.ALREADY_PAID
+    } else {
+      return false
+    }
+
+  }
   public amountPaid () {
     return this.claimantResponse && this.claimantResponse.amountPaid ? this.claimantResponse.amountPaid : 0
   }
