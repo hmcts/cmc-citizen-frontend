@@ -5,6 +5,7 @@ import { FreeMediationTask } from 'response/tasks/freeMediationTask'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Free mediation task', () => {
   it('should not be completed when free mediation object is undefined', () => {
@@ -24,30 +25,32 @@ describe('Free mediation task', () => {
     expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.false
   })
 
-  it('should be completed when willYouTryMediation is no and youCanOnlyUseMediation is undefined', () => {
-    const draft = new ResponseDraft()
-    const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.NO)
-    mediationDraft.youCanOnlyUseMediation = undefined
+  if (FeatureToggles.isEnabled('mediation')) {
+    it('should be completed when willYouTryMediation is no and youCanOnlyUseMediation is no', () => {
+      const draft = new ResponseDraft()
+      const mediationDraft = new MediationDraft()
+      mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.NO)
+      mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
 
-    expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
-  })
+      expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
+    })
 
-  it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is yes', () => {
-    const draft = new ResponseDraft()
-    const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
-    mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
+    it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is yes', () => {
+      const draft = new ResponseDraft()
+      const mediationDraft = new MediationDraft()
+      mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+      mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
 
-    expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
-  })
+      expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
+    })
 
-  it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is no', () => {
-    const draft = new ResponseDraft()
-    const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
-    mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
+    it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is no', () => {
+      const draft = new ResponseDraft()
+      const mediationDraft = new MediationDraft()
+      mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+      mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
 
-    expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
-  })
+      expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
+    })
+  }
 })
