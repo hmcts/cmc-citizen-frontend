@@ -22,8 +22,6 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
-import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { Error } from 'tslint/lib/error'
 import { DefenceType } from 'claims/models/response/defenceType'
 
@@ -462,9 +460,9 @@ export class Claim {
     }
 
     if (this.response.responseType === ResponseType.PART_ADMISSION) {
-      return (this.response as PartialAdmissionResponse).paymentDeclaration !== undefined
+      return this.response.paymentDeclaration !== undefined
     } else if (this.response.responseType === ResponseType.FULL_DEFENCE) {
-      return (this.response as FullDefenceResponse).defenceType === DefenceType.ALREADY_PAID
+      return this.response.defenceType === DefenceType.ALREADY_PAID
     } else {
       return false
     }
