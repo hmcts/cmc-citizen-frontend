@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { ValidationErrors, OnTaxPayments } from 'response/form/models/statement-of-means/onTaxPayments'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'

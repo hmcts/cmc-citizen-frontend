@@ -1,4 +1,4 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 

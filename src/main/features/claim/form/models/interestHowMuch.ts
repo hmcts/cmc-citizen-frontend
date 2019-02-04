@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, IsPositive, ValidateIf } from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
