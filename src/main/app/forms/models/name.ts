@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength } from 'class-validator'
+import { IsDefined, MaxLength } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'models/task'
 

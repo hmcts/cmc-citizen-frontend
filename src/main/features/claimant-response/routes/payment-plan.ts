@@ -18,7 +18,7 @@ import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
 import { FormValidationError } from 'forms/form'
 import { getEarliestPaymentDateForPaymentPlan } from 'claimant-response/helpers/paydateHelper'
-import { ValidationError } from 'class-validator'
+import { ValidationError } from '@hmcts/class-validator'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'

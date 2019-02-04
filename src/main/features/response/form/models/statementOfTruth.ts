@@ -1,4 +1,4 @@
-import { IsDefined } from 'class-validator'
+import { IsDefined } from '@hmcts/class-validator'
 import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import { SignatureType } from 'common/signatureType'
 
