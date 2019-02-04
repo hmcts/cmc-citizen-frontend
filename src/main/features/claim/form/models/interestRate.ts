@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, IsPositive, MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'models/task'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'

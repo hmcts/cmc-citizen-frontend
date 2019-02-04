@@ -1,4 +1,4 @@
-import { IsDefined } from 'class-validator'
+import { IsDefined } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { IsClaimReferenceNumber } from 'forms/validation/validators/isClaimReferenceNumber'
 

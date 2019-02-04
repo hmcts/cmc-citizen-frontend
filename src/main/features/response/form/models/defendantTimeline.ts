@@ -1,7 +1,7 @@
 import { TimelineRow } from 'forms/models/timelineRow'
 import { Timeline } from 'forms/models/timeline'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { MaxLength, ValidateIf } from 'class-validator'
+import { MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 
 export class DefendantTimeline extends Timeline {

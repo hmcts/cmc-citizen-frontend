@@ -2,7 +2,7 @@
 
 import { expect } from 'chai'
 import * as _ from 'lodash'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { InterestTotal, ValidationErrors } from 'claim/form/models/interestTotal'

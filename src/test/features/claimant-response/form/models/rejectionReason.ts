@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { RejectionReason, ValidationErrors } from 'claimant-response/form/models/rejectionReason'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 

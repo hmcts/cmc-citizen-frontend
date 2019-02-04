@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
