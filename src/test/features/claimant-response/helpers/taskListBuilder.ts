@@ -318,7 +318,7 @@ describe('Claimant response task list builder', () => {
     })
 
     describe('"Free mediation?" task', () => {
-      const taskName = 'Free mediation?'
+      const taskName = 'Free telephone mediation'
 
       describe('when response type is part admission', () => {
         it('should be available when payment will be made by set date, defendant requested free mediation and claimant rejected response', () => {
