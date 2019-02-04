@@ -34,7 +34,7 @@
       <p>{{ internalLink( t('Contact {{ claimantName }}' , { claimantName: claimant.name } ), claimantDetailsPageURI) }}
         {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} by {{ paymentDate }}.',
+      <p>{{ t('You’ve offered to pay {{ claimantName }} by {{ paymentDate }}.',
       { claimantName: claimant.name, amount: amount, paymentDate: paymentDate }) }}
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       {% set repaymentPlan = paymentIntention.repaymentPlan %}
