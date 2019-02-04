@@ -1,0 +1,47 @@
+feature-toggle-api:
+  releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
+  registerDns: false
+  importer:
+    cron:
+      enabled: false
+    oneoff:
+      enabled: true
+      command: >-
+        /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' admin@example.com Password12 &&
+        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false admin@example.com Password12
+      permissions: cmc-new-features-consent-given
+
+nodejs:
+  image: ${IMAGE_NAME}
+  ingressHost: ${SERVICE_FQDN}
+  applicationPort: 3000
+  memoryRequests: 256Mi
+  cpuRequests: 0.2
+  memoryLimits: 512Mi
+  cpuLimits: 1
+  environment:    
+    REFORM_TEAM: cmc
+    REFORM_SERVICE_NAME: citizen-frontend
+    REFORM_ENVIRONMENT: preview
+    NODE_ENV: production
+    UV_THREADPOOL_SIZE: 64
+    GA_TRACKING_ID: UA-97111056-1
+    SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPT1/
+    FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPFB/
+    REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/CMCMVPPB/
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl-api:8580
+    FEATURE_TESTING_SUPPORT: true
+    FEATURE_NEW_FEATURES_CONSENT: true
+    FEATURE_ADMISSIONS: true
+    FEATURE_FINE_PRINT: true
+    FEATURE_RETURN_ERROR_TO_USER: true
+    FEATURE_MOCK_PAY: false
+    FEATURE_MEDIATION: false
+    POSTCODE_LOOKUP_API_KEY: ${POSTCODE_LOOKUP_API_KEY}
+    APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
+    OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
+    IDAM_S2S_TOTP_SECRET: ${IDAM_S2S_TOTP_SECRET}
+    DRAFT_STORE_SECRET_PRIMARY: ${DRAFT_STORE_SECRET_PRIMARY}
+    DRAFT_STORE_SECRET_SECONDARY: ${DRAFT_STORE_SECRET_SECONDARY}
+    COOKIE_ENCRYPTION_KEY: ${COOKIE_ENCRYPTION_KEY}
+    CONTACT_EMAIL: ${CONTACT_EMAIL}
