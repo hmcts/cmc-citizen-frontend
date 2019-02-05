@@ -15,7 +15,7 @@ rpe-feature-toggle-api:
     environment:
       FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
       ADMIN_USERNAME_TEST: admin@example.com
-      ADMIN_PASSWORD_TEST: Paassword12
+      ADMIN_PASSWORD_TEST: Password12
       EDITOR_USERNAME_TEST: editor@example.com
       EDITOR_PASSWORD_TEST: Password12
   postgresql:
