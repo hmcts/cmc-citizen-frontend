@@ -12,7 +12,7 @@ import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import {
   fullAdmissionWithSoMPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate,
+  fullAdmissionWithSoMPaymentBySetDate, partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
@@ -245,6 +245,12 @@ export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithSoMPaymentBySetDateData
+}
+
+export const samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithPaymentBySetDateCompanyData
 }
 
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
