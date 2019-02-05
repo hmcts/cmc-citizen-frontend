@@ -56,18 +56,5 @@ describe('Claim issue: task list page', () => {
         .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.newFeaturesConsentPage.uri))
     })
 
-    it('should render page and show a tag marking incomplete tasks', async () => {
-      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-      draftStoreServiceMock.resolveFind('claim', { claimant: {} })
-      claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-
-      await request(app)
-        .get(ClaimPaths.taskListPage.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => {
-          expect(res).to.be.successful.withText('Make a money claim')
-          expect(res.text.match(/INCOMPLETE/g)).length(2)
-        })
-    })
   })
 })

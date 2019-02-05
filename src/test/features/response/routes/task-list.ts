@@ -56,6 +56,19 @@ describe('Defendant response: task list page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Respond to a money claim'))
         })
+
+        it('should render page and show a tag marking incomplete tasks', async () => {
+          draftStoreServiceMock.resolveFind('response', { response: {} })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => {
+              expect(res).to.be.successful.withText('Respond to a money claim')
+              expect(res.text.match(/INCOMPLETE/g)).length(2)
+            })
+        })
       })
     })
   })
