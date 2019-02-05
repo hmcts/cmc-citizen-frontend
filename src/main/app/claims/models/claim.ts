@@ -22,7 +22,6 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
-import { Error } from 'tslint/lib/error'
 import { DefenceType } from 'claims/models/response/defenceType'
 
 interface State {
