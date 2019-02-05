@@ -62,7 +62,8 @@ main {
 }
 
 div {
-  &.task-finished {
+  &.task-tag {
+    background-color: $link-colour;
     float: right;
 
     strong {
@@ -70,7 +71,6 @@ div {
         font-size: 14px;
       }
 
-      background-color: $link-colour;
       color: $white;
       display: inline-block;
       font-size: 16px;
@@ -81,11 +81,16 @@ div {
     }
   }
 
+  .unfinished {
+    background-color: $grey-2;
+  }
+
   .due-or-overdue {
     color: $error-colour;
     font-weight: bold;
   }
 }
+
 
 // Stop collapsing divs when empty
 .if-empty {
