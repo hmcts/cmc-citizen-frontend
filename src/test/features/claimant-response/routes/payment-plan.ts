@@ -179,7 +179,7 @@ describe('Claimant response: payment plan', () => {
           }
         }
 
-        function dataToSend (firstPaymentDate: moment.Moment) {
+        function dataToSend (firstPaymentDate: moment.Moment): object {
           return {
             totalAmount: 100,
             instalmentAmount: 50,
