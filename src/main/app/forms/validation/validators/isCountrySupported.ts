@@ -31,7 +31,7 @@ export class CheckCountryConstraint implements ValidatorConstraintInterface {
 
     try {
       const addressInfoResponse: AddressInfoResponse = await postcodeClient.lookupByPostcode(value)
-      if (!addressInfoResponse.valid) {
+      if (!addressInfoResponse.isValid) {
         return true
       }
       const country = await countryClient.lookupCountry(addressInfoResponse.addresses[0].postcode)
