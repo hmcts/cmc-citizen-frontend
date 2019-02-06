@@ -179,6 +179,19 @@ describe('Claimant response: payment plan', () => {
           }
         }
 
+        function dataToSend (firstPaymentDate: moment.Moment) {
+          return {
+            totalAmount: 100,
+            instalmentAmount: 50,
+            firstPaymentDate: {
+              day: firstPaymentDate.date(),
+              month: firstPaymentDate.month() + 1,
+              year: firstPaymentDate.year()
+            },
+            paymentSchedule: 'EVERY_MONTH'
+          }
+        }
+
         context('when form is valid', async () => {
           beforeEach(() => {
             draftStoreServiceMock.resolveSave()
@@ -222,12 +235,7 @@ describe('Claimant response: payment plan', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                totalAmount: 100,
-                instalmentAmount: 50,
-                firstPaymentDate: setFirstPaymentDate(firstPaymentDate),
-                paymentSchedule: 'EVERY_MONTH'
-              })
+              .send(dataToSend(firstPaymentDate))
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
           })
 
@@ -240,12 +248,7 @@ describe('Claimant response: payment plan', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                totalAmount: 100,
-                instalmentAmount: 50,
-                firstPaymentDate: setFirstPaymentDate(firstPaymentDate),
-                paymentSchedule: 'EVERY_MONTH'
-              })
+              .send(dataToSend(firstPaymentDate))
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
           })
 
@@ -258,12 +261,7 @@ describe('Claimant response: payment plan', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                totalAmount: 100,
-                instalmentAmount: 50,
-                firstPaymentDate: setFirstPaymentDate(firstPaymentDate),
-                paymentSchedule: 'EVERY_MONTH'
-              })
+              .send(dataToSend(firstPaymentDate))
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
           })
 
@@ -276,12 +274,7 @@ describe('Claimant response: payment plan', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                totalAmount: 100,
-                instalmentAmount: 50,
-                firstPaymentDate: setFirstPaymentDate(firstPaymentDate),
-                paymentSchedule: 'EVERY_MONTH'
-              })
+              .send(dataToSend(firstPaymentDate))
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
           })
         })
