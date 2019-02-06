@@ -25,7 +25,8 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
   }
 
   if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept &&
-    draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+    draft.acceptPaymentMethod.accept.option === YesNoOption.YES ||
+    (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES)) {
     return response.paymentIntention
   } else if (claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
     return draft.courtDetermination.courtDecision
