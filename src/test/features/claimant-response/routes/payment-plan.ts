@@ -17,7 +17,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
-import moment = require('moment')
+import { Moment } from 'moment'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -171,7 +171,7 @@ describe('Claimant response: payment plan', () => {
 
       context('when service is healthy', () => {
 
-        function setFirstPaymentDate (firstPaymentDate: moment.Moment): object {
+        function setFirstPaymentDate (firstPaymentDate: Moment): object {
           return {
             day: firstPaymentDate.date(),
             month: firstPaymentDate.month() + 1,
@@ -179,7 +179,7 @@ describe('Claimant response: payment plan', () => {
           }
         }
 
-        function dataToSend (firstPaymentDate: moment.Moment): object {
+        function dataToSend (firstPaymentDate: Moment): object {
           return {
             totalAmount: 100,
             instalmentAmount: 50,
@@ -209,7 +209,7 @@ describe('Claimant response: payment plan', () => {
           })
 
           it('should redirect to counter offer accepted page when decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT', async () => {
-            const firstPaymentDate = MomentFactory.currentDate().add(100, 'years')
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(100, 'years')
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
@@ -227,7 +227,7 @@ describe('Claimant response: payment plan', () => {
           })
 
           it('should redirect to court offered set date page when decision type is DEFENDANT', async () => {
-            const firstPaymentDate = MomentFactory.currentDate().add(32, 'days')
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(32, 'days')
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithReasonablePaymentBySetDateResponseObjAndNoDisposableIncome)
             draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
@@ -240,7 +240,7 @@ describe('Claimant response: payment plan', () => {
           })
 
           it('should redirect to court offered instalments page when decision type is DEFENDANT', async () => {
-            const firstPaymentDate = MomentFactory.currentDate().add(35, 'days')
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(35, 'days')
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome)
             draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
@@ -253,7 +253,7 @@ describe('Claimant response: payment plan', () => {
           })
 
           it('should redirect to court offered instalments page when decision type is COURT', async () => {
-            const firstPaymentDate = MomentFactory.currentDate().add(32, 'days')
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(32, 'days')
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule)
             draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
@@ -266,7 +266,7 @@ describe('Claimant response: payment plan', () => {
           })
 
           it('should redirect to tasks list page when defendant is business', async () => {
-            const firstPaymentDate: moment.Moment = MomentFactory.currentDate().add(70, 'days')
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(70, 'days')
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjCompanyData)
             draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
@@ -282,7 +282,7 @@ describe('Claimant response: payment plan', () => {
         context('when form is invalid', async () => {
 
           it(`should render page with heading '${heading}'`, async () => {
-            const firstPaymentDate = MomentFactory.currentDate().add(32, 'days')
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(32, 'days')
 
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule)
             draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
