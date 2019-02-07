@@ -24,6 +24,11 @@ import {
 } from 'test/data/entity/responseData'
 import { baseAcceptationClaimantResponseData } from 'test/data/entity/claimantResponseData'
 import { sampleClaimIndividualVsIndividualIssueObj } from '../../../data/entity/claimIssueData'
+import { sampleClaimIndividualVsIndividualRequestingMoreTimeObj } from '../../../data/entity/claimIssueData'
+import { sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj } from '../../../data/entity/claimIssueData'
+import { sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj } from '../../../data/entity/claimIssueData'
+import { sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj } from '../../../data/entity/claimIssueData'
+
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -88,7 +93,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render page with claim number and status', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleData(sampleClaimIndividualVsIndividualIssueObj)
+          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(sampleClaimIndividualVsIndividualIssueObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -282,7 +287,68 @@ describe('Dashboard page', () => {
                 response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
                 responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
               })
+      context('Defendant status', () => {
+        beforeEach(() => {
+          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+          draftStoreServiceMock.resolveFindNoDraftFound()
+        })
 
+        it('should render page with start claim button when everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+        })
+
+        it('should render page with claim number and status', async () => {
+          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(sampleClaimIndividualVsIndividualIssueObj)
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            //.expect(res => expect(res).to.be.successful.withText('000MC050', 'Your claim has been sent'))
+            .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim.'))
+        })
+        it('should render dashboard when defendant has requested more time', async () => {
+          claimStoreServiceMock.requestMoreTimeDataDefendant(sampleClaimIndividualVsIndividualRequestingMoreTimeObj)
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('000MC050', 'You need to respond before'))
+
+        })
+        it('should render dashboard when defendant has respond with a pay immediately admission', async () => {
+          claimStoreServiceMock.fullAdmissionPayImmediatelyDefendant(sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj)
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('000MC050', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.'))
+
+        })
+        it('should render dashboard when defendant has respond with a pay by a set date', async () => {
+          claimStoreServiceMock.fullAdmissionPayBySetDateDefendant(sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj)
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('000MC050', 'You’ve admitted all of the claim and offered to pay the full amount by'))
+
+        })
+        it.only('should render dashboard when defendant has respond with a pay by repayment plan', async () => {
+          claimStoreServiceMock.fullAdmissionPayRepaymentPlan(sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj)
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('000MC050', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.'))
+
+        })
+      })
+    })
               await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
@@ -385,3 +451,4 @@ describe('Dashboard page', () => {
     })
   })
 })
+

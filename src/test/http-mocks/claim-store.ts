@@ -302,6 +302,7 @@ export const sampleDefendantResponseObj = {
   }
 }
 
+
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
@@ -640,8 +641,44 @@ export function resolveSavePaidInFull () {
     .reply(HttpStatus.OK)
 }
 
-export function resolveRetrieveBySampleData (sampleData?: object) {
+export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
     .reply(HttpStatus.OK, [{ ...sampleData }])
 }
+
+export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function requestMoreTimeDataDefendant (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function fullAdmissionPayImmediatelyDefendant (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function fullAdmissionPayBySetDateDefendant (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function fullAdmissionPayRepaymentPlan (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+//part admission - immediately 
+
+// part admission - by a set date 
+
+// part admission - repayment plan 
