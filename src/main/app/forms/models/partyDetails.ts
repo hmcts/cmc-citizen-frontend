@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
@@ -75,5 +75,13 @@ export class PartyDetails {
 
   isBusiness (): boolean {
     return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
+  }
+
+  isSoleTrader (): boolean {
+    return this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
+  }
+
+  isBusinessOrSoleTrader (): boolean {
+    return this.isBusiness() || this.isSoleTrader()
   }
 }

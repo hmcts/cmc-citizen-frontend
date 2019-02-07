@@ -4,7 +4,7 @@ import { AcceptPaymentMethod } from 'claimant-response/form/models/acceptPayment
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { PaymentIntention as DraftPaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
-import { FreeMediation } from 'response/form/models/freeMediation'
+import { FreeMediation } from 'forms/models/freeMediation'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PartPaymentReceived } from 'claimant-response/form/models/states-paid/partPaymentReceived'
 import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSettled'

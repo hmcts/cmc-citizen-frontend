@@ -1,4 +1,4 @@
-import { IsDefined, IsPositive, MaxLength } from 'class-validator'
+import { IsDefined, IsPositive, MaxLength } from '@hmcts/class-validator'
 import { IsNotBlank, Fractions } from '@hmcts/cmc-validators'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

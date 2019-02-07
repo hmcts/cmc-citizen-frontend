@@ -22,6 +22,8 @@ import { AgeGroupTypeViewFilter } from 'claimant-response/filters/age-group-type
 import { YesNoViewFilter } from 'claimant-response/filters/yes-no-view-filter'
 import { ClaimantResponseGuard } from 'claimant-response/guards/claimantResponseGuard'
 import { FrequencyViewFilter } from 'claimant-response/filters/frequency-view-filter'
+import { MonthlyAmountViewFilter } from 'claimant-response/filters/monthly-amount-view-filter'
+import { PriorityDebtTypeViewFilter } from 'claimant-response/filters/priority-debts-type-view-filter'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -52,6 +54,9 @@ export class ClaimantResponseFeature {
       app.settings.nunjucksEnv.filters.renderFrequencyViewType = FrequencyViewFilter.render
       app.settings.nunjucksEnv.filters.renderIncomeType = IncomeTypeViewFilter.render
       app.settings.nunjucksEnv.filters.renderExpenseType = ExpenseTypeViewFilter.render
+      app.settings.nunjucksEnv.filters.renderMonthlyAmount = MonthlyAmountViewFilter.render
+      app.settings.nunjucksEnv.filters.renderPriorityDebtType = PriorityDebtTypeViewFilter.render
+      app.settings.nunjucksEnv.filters.renderPaymentFrequencyView = FrequencyViewFilter.renderPaymentFrequency
     }
 
     const allClaimantResponse = '/case/*/claimant-response/*'

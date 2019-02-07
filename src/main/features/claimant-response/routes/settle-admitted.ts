@@ -11,12 +11,16 @@ import { Paths } from 'claimant-response/paths'
 import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Claim } from 'claims/models/claim'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 function renderView (form: Form<SettleAdmitted>, res: express.Response) {
   const claim: Claim = res.locals.claim
+  const hasPaymentIntention: boolean = (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY
   res.render(Paths.settleAdmittedPage.associatedView, {
     form: form,
-    claim: claim
+    claim: claim,
+    hasPaymentIntention: hasPaymentIntention
   })
 }
 

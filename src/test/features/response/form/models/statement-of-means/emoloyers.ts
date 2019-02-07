@@ -5,7 +5,7 @@ import {
   ValidationErrors as RowValidationErrors
 } from 'response/form/models/statement-of-means/employerRow'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 describe('Employers', () => {
 
