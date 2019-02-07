@@ -29,6 +29,7 @@ import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -52,6 +53,7 @@ const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const testSupportSteps: TestingSupportSteps = new TestingSupportSteps()
 
 export class ClaimSteps {
 
@@ -234,6 +236,9 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
+    testSupportSteps.deleteDrafts()
+    I.click('My account')
+    I.click('Make a new money claim')
     this.completeEligibility()
     if (fillInNewFeaturesPage) {
       this.optIntoNewFeatures()
@@ -262,8 +267,8 @@ export class ClaimSteps {
     this.enterClaimEvidence()
     userSteps.selectCheckAndSubmitYourClaim()
     I.see('John Smith')
-    I.see('OXFORD ROAD')
-    I.see('MANCHESTER')
+    I.see('Oxford Road')
+    I.see('Manchester')
     I.see('M13 9PL')
     I.see('07700000001')
     I.see(claimReason)
