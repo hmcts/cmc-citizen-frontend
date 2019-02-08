@@ -61,16 +61,16 @@ export class PaymentPlan {
     let monthlyInstalmentAmount
     switch (frequency) {
       case Frequency.WEEKLY:
-        monthlyInstalmentAmount = FrequencyConversions.convertAmountToWeekly(this.instalmentAmount, this.frequency) < 1 ? 1 : FrequencyConversions.convertAmountToWeekly(this.instalmentAmount, this.frequency)
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToWeekly(this.instalmentAmount, this.frequency)
         break
       case Frequency.TWO_WEEKLY:
-        monthlyInstalmentAmount = FrequencyConversions.convertAmountToTwoWeekly(this.instalmentAmount, this.frequency) < 1 ? 1 : FrequencyConversions.convertAmountToTwoWeekly(this.instalmentAmount, this.frequency)
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToTwoWeekly(this.instalmentAmount, this.frequency)
         break
       case Frequency.FOUR_WEEKLY:
-        monthlyInstalmentAmount = FrequencyConversions.convertAmountToFourWeekly(this.instalmentAmount, this.frequency) < 1 ? 1 : FrequencyConversions.convertAmountToFourWeekly(this.instalmentAmount, this.frequency)
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToFourWeekly(this.instalmentAmount, this.frequency)
         break
       case Frequency.MONTHLY:
-        monthlyInstalmentAmount = FrequencyConversions.convertAmountToMonthly(this.instalmentAmount, this.frequency) < 1 ? 1 : FrequencyConversions.convertAmountToMonthly(this.instalmentAmount, this.frequency)
+        monthlyInstalmentAmount = FrequencyConversions.convertAmountToMonthly(this.instalmentAmount, this.frequency)
         break
       default:
         throw new Error(`Incompatible Frequency: ${frequency}`)

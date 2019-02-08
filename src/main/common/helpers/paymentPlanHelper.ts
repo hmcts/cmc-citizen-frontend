@@ -88,10 +88,11 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
-    if (instalmentAmount < 1) {
+    if (draft.courtDetermination.disposableIncome < 1) {
       return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
+
+    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
 
     return PaymentPlanHelper.createPaymentPlanFromInstallment(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
