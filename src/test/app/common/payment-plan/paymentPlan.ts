@@ -177,15 +177,5 @@ describe('PaymentPlan', () => {
       expect(convertedPaymentPlan.instalmentAmount).to.equal(433.3333333333333)
       expect(convertedPaymentPlan.frequency).to.equal(Frequency.MONTHLY)
     })
-
-    it('should return the payment plan converted to monthly when disposable income is less than 0', () => {
-      const instalmentAmount = 0.2
-
-      const paymentPlan = PaymentPlan.create(TOTAL_AMOUNT, instalmentAmount, Frequency.WEEKLY)
-      const convertedPaymentPlan = paymentPlan.convertTo(Frequency.MONTHLY)
-
-      expect(convertedPaymentPlan.instalmentAmount).to.equal(1)
-      expect(convertedPaymentPlan.frequency).to.equal(Frequency.MONTHLY)
-    })
   })
 })
