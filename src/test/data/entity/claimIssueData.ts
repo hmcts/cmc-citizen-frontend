@@ -155,11 +155,11 @@ export const sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj = {
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   response: {
-    responseType: "FULL_ADMISSION",
-    freeMediation: "no",
+    responseType: 'FULL_ADMISSION',
+    freeMediation: 'no',
     paymentIntention: {
-      paymentDate: "2019-02-11",
-      paymentOption: "IMMEDIATELY"
+      paymentDate: '2019-02-11',
+      paymentOption: 'IMMEDIATELY'
     },
     features: ['admissions']
   }
@@ -204,19 +204,19 @@ export const sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj = {
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   response: {
-    responseType: "FULL_ADMISSION",
-    freeMediation: "no",
+    responseType: 'FULL_ADMISSION',
+    freeMediation: 'no',
     paymentIntention: {
-      paymentDate: "2888-12-20",
-      paymentOption: "BY_SPECIFIED_DATE"
+      paymentDate: '2888-12-20',
+      paymentOption: 'BY_SPECIFIED_DATE'
     },
     statementOfMeans: {
       carer: false,
-      reason: "I can't afford this right now with my current income.",
+      reason: 'I cannot afford this right now with my current income.',
       residence: {
-        type: "OWN_HOME"
+        type: 'OWN_HOME'
       },
-      disability: "NO",
+      disability: 'NO',
       employment: {
         unemployment: {
           retired: false,
@@ -228,7 +228,7 @@ export const sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj = {
       },
       bankAccounts: [
         {
-          type: "CURRENT_ACCOUNT",
+          type: 'CURRENT_ACCOUNT',
           joint: true,
           balance: 100
         }
@@ -277,24 +277,24 @@ export const sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj = {
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   response: {
-    responseType: "FULL_ADMISSION",
-    freeMediation: "no",
+    responseType: 'FULL_ADMISSION',
+    freeMediation: 'no',
     paymentIntention: {
-      paymentOption: "INSTALMENTS",
+      paymentOption: 'INSTALMENTS',
       repaymentPlan: {
-        paymentLength: "10 months",
-        completionDate: "3000-03-20",
-        paymentSchedule: "EVERY_MONTH",
-        firstPaymentDate: "2999-06-20",
+        paymentLength: '10 months',
+        completionDate: '3000-03-20',
+        paymentSchedule: 'EVERY_MONTH',
+        firstPaymentDate: '2999-06-20',
         instalmentAmount: 10
       },
       statementOfMeans: {
         carer: false,
-        reason: "I can't afford this right now with my current income.",
+        reason: 'I cannot afford this right now with my current income.',
         residence: {
-          type: "OWN_HOME"
+          type: 'OWN_HOME'
         },
-        disability: "NO",
+        disability: 'NO',
         employment: {
           unemployment: {
             retired: false,
@@ -306,7 +306,7 @@ export const sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj = {
         },
         bankAccounts: [
           {
-            type: "CURRENT_ACCOUNT",
+            type: 'CURRENT_ACCOUNT',
             joint: true,
             balance: 100
           }
@@ -316,6 +316,3 @@ export const sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj = {
     features: ['admissions']
   }
 }
-
-
-

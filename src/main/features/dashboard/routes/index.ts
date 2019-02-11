@@ -23,8 +23,6 @@ export default express.Router()
 
     const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user)
 
-    console.log(JSON.stringify(claimDraft))
-
     res.render(Paths.dashboardPage.associatedView, {
       claimsAsClaimant: claimsAsClaimant,
       claimDraftSaved: claimDraftSaved,
