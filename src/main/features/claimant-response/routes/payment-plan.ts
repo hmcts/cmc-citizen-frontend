@@ -32,6 +32,7 @@ import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { AdmissionHelper } from 'shared/helpers/admissionHelper'
+import { CourtOfferedInstalmentHelper } from 'claimant-response/helpers/courtOfferedInstalmentHelper'
 
 export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantResponse> {
 
@@ -76,19 +77,11 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
         const paymentPlanConvertedToDefendantFrequency: PaymentPlan =
                         paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency, courtOfferedStartDate)
 
-        const amount: number = paymentPlanConvertedToDefendantFrequency.instalmentAmount > admittedClaimAmount ?
-          admittedClaimAmount : _.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount,2)
-        let instalmentAmount = 0
-
-        if (amount < Frequency.WEEKLY.monthlyRatio && defendantFrequency === Frequency.MONTHLY) {
-          instalmentAmount = amount
-        } else {
-          instalmentAmount = defendantPaymentPlan.instalmentAmount
-        }
+        const instalmentAmount: number = CourtOfferedInstalmentHelper.getCourtOfferedInstalmentAmount(paymentPlanConvertedToDefendantFrequency, defendantPaymentPlan)
 
         courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: instalmentAmount,
+          instalmentAmount: instalmentAmount > admittedClaimAmount ? admittedClaimAmount : _.round(instalmentAmount, 2),
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()

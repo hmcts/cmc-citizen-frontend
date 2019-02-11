@@ -31,6 +31,7 @@ import { PartyType } from 'common/partyType'
 import { Individual } from 'claims/models/details/theirs/individual'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 import { AdmissionHelper } from 'shared/helpers/admissionHelper'
+import { CourtOfferedInstalmentHelper } from 'claimant-response/helpers/courtOfferedInstalmentHelper'
 
 export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantResponse> {
 
@@ -38,6 +39,7 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
     const courtOfferedPaymentIntention = new PaymentIntention()
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
     const admittedClaimAmount: number = AdmissionHelper.getAdmittedAmount(claim)
+    const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
       courtOfferedPaymentIntention.paymentOption = PaymentOption.IMMEDIATELY
@@ -50,12 +52,13 @@ export class PaymentOptionPage extends AbstractPaymentOptionPage<DraftClaimantRe
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
         const defendantFrequency: Frequency = Frequency.of(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
         const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
+        const instalmentAmount: number = CourtOfferedInstalmentHelper.getCourtOfferedInstalmentAmount(paymentPlanConvertedToDefendantFrequency, defendantPaymentPlan)
 
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtOfferedPaymentIntention.repaymentPlan = {
           firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: paymentPlanConvertedToDefendantFrequency.instalmentAmount > admittedClaimAmount ?
-            admittedClaimAmount : _.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount,2),
+          instalmentAmount: instalmentAmount > admittedClaimAmount ?
+            admittedClaimAmount : _.round(instalmentAmount,2),
           paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
           completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
           paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
