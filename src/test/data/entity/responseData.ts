@@ -137,6 +137,15 @@ export const fullAdmissionWithPaymentBySetDateData = {
   }
 }
 
+export const fullAdmissionWithReasonablePaymentBySetDateData = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: MomentFactory.currentDate().add(65, 'days').toISOString()
+  }
+}
+
 export const partialAdmissionWithPaymentBySetDateData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
@@ -164,16 +173,46 @@ export const fullAdmissionWithPaymentByInstalmentsData = {
   }
 }
 
-export const fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule = {
+export const fullAdmissionWithPaymentByInstalmentsDataCompany = {
+  ...baseCompanyResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31',
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2051-12-31',
+      paymentLength: '1'
+    }
+  }
+}
+
+export const fullAdmissionWithPaymentByInstalmentsDataWithReasonablePaymentSchedule = {
   ...baseResponseData,
   ...baseFullAdmissionData,
   paymentIntention: {
     paymentOption: PaymentOption.INSTALMENTS,
     repaymentPlan: {
       instalmentAmount: 100,
-      firstPaymentDate: '2018-10-01',
+      firstPaymentDate: MomentFactory.currentDate().add(80, 'days').toISOString(),
       paymentSchedule: PaymentSchedule.EACH_WEEK,
-      completionDate: '2019-02-01',
+      completionDate: MomentFactory.currentDate().add(100, 'days').toISOString(),
+      paymentLength: '1'
+    }
+  }
+}
+
+export const fullAdmissionWithPaymentByInstalmentsDataWithUnReasonablePaymentSchedule = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: MomentFactory.maxDate().toISOString(),
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: MomentFactory.maxDate().toISOString(),
       paymentLength: '1'
     }
   }
@@ -247,7 +286,7 @@ export const statementOfMeansWithMandatoryFieldsAndNoDisposableIncome = {
     }
   },
   incomes: [{
-    amount: 0,
+    amount: 10,
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
@@ -314,6 +353,13 @@ export const fullAdmissionWithSoMPaymentBySetDate = {
   }
 }
 
+export const fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome = {
+  ...fullAdmissionWithReasonablePaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsAndNoDisposableIncome
+  }
+}
+
 export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   ...fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeans: {
@@ -321,15 +367,29 @@ export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   }
 }
 
+export const fullAdmissionWithSoMPaymentByInstalmentsDataCompany = {
+  ...fullAdmissionWithPaymentByInstalmentsDataCompany,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
 export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule = {
-  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  ...fullAdmissionWithPaymentByInstalmentsDataWithReasonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsOnlyData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithUnReasonablePaymentSchedule,
   statementOfMeans: {
     ...statementOfMeansWithMandatoryFieldsOnlyData
   }
 }
 
 export const fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome = {
-  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  ...fullAdmissionWithPaymentByInstalmentsDataWithReasonablePaymentSchedule,
   statementOfMeans: {
     ...statementOfMeansWithMandatoryFieldsAndNoDisposableIncome
   }
