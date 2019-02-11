@@ -13,11 +13,11 @@ describe('CourtOfferedInstalmentHelper', () => {
     const paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount = PaymentPlan.create(TOTAL_AMOUNT, Frequency.WEEKLY.monthlyRatio + 0.1, Frequency.MONTHLY)
 
     it('should return correct defendant instalment amount because defendant selected WEEKLY frequency', () => {
-      expect(defendantWeeklyPaymentPlan.instalmentAmount).equal(CourtOfferedInstalmentHelper.getCourtOfferedInstalmentAmount(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount, defendantWeeklyPaymentPlan))
+      expect(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount.instalmentAmount).equal(CourtOfferedInstalmentHelper.getCourtOfferedInstalmentAmount(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount, defendantWeeklyPaymentPlan))
     })
 
     it('should return correct defendant instalment amount because instalment amount is above than threshold', () => {
-      expect(defendantMonthlyPaymentPlan.instalmentAmount).equal(CourtOfferedInstalmentHelper.getCourtOfferedInstalmentAmount(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount, defendantMonthlyPaymentPlan))
+      expect(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount.instalmentAmount).equal(CourtOfferedInstalmentHelper.getCourtOfferedInstalmentAmount(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount, defendantMonthlyPaymentPlan))
     })
   })
 

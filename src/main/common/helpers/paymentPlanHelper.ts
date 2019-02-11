@@ -88,7 +88,7 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    if (draft.courtDetermination.disposableIncome <= 0) {
+    if (draft.courtDetermination.disposableIncome <= 1) {
       return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
