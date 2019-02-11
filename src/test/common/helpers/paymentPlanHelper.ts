@@ -35,7 +35,7 @@ describe('PaymentPlanHelper', () => {
       it('same as threshold', () => {
         draft.courtDetermination.disposableIncome = 1
         const paymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
-        expect(paymentPlan.startDate.toISOString()).to.equal(MomentFactory.maxDate().toISOString())
+        expect(paymentPlan.startDate.toISOString()).not.to.equal(MomentFactory.maxDate().toISOString())
       })
 
       it('just over the threshold', () => {
