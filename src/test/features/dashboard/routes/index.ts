@@ -79,7 +79,7 @@ describe('Dashboard page', () => {
         })
       })
 
-      context.only('Claimant status', () => {
+      context('Claimant status', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()

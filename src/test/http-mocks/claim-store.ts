@@ -651,5 +651,3 @@ export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
     .get(new RegExp('/defendant/[0-9]+'))
     .reply(HttpStatus.OK, [{ ...sampleData }])
 }
-
-
