@@ -10,9 +10,14 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
+  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentByInstalmentsDataCompany,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate, partialAdmissionWithPaymentBySetDateCompanyData,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
+  fullAdmissionWithSoMPaymentBySetDate,
+  fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
+  partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
@@ -258,9 +263,19 @@ export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
   response: fullAdmissionWithSoMPaymentBySetDate
 }
 
+export const sampleFullAdmissionWithReasonablePaymentBySetDateResponseObjAndNoDisposableIncome = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome
+}
+
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjCompanyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataCompany
 }
 
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome = {
@@ -271,6 +286,11 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposa
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
