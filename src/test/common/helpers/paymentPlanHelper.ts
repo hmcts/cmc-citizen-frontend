@@ -25,15 +25,21 @@ describe('PaymentPlanHelper', () => {
         .equal(PaymentPlan.create(200, 200, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate())))
     })
 
-    context('should return max date for instalments less than a pound a week', () => {
+    context('should return max date for instalments less than or equal to zero a week', () => {
       it('just under the threshold', () => {
-        draft.courtDetermination.disposableIncome = parseFloat(Frequency.WEEKLY.monthlyRatio.toFixed(2)) - 0.01
+        draft.courtDetermination.disposableIncome = -0.1
+        const paymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
+        expect(paymentPlan.startDate.toISOString()).to.equal(MomentFactory.maxDate().toISOString())
+      })
+
+      it('same as threshold', () => {
+        draft.courtDetermination.disposableIncome = 0
         const paymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
         expect(paymentPlan.startDate.toISOString()).to.equal(MomentFactory.maxDate().toISOString())
       })
 
       it('just over the threshold', () => {
-        draft.courtDetermination.disposableIncome = parseFloat(Frequency.WEEKLY.monthlyRatio.toFixed(2)) + 0.01
+        draft.courtDetermination.disposableIncome = 0.1
         const paymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
         expect(paymentPlan.startDate.toISOString()).not.to.equal(MomentFactory.maxDate().toISOString())
       })
