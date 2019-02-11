@@ -90,7 +90,7 @@ export class PaymentPlanHelper {
 
     const amount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
 
-    if (draft.courtDetermination.disposableIncome < 0 || amount < 1) {
+    if (draft.courtDetermination.disposableIncome < 0) {
       return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
