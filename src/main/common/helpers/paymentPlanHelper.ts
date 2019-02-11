@@ -94,8 +94,6 @@ export class PaymentPlanHelper {
       return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
-    // const instalmentAmount = amount < 1 ? 1 : amount
-
     return PaymentPlanHelper.createPaymentPlanFromInstallment(AdmissionHelper.getAdmittedAmount(claim), amount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
