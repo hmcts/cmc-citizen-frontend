@@ -50,6 +50,14 @@ export class OrganisationDetailsPage {
     I.selectOption(fields.address.addressList, postcodeLookupQuery.address)
   }
 
+  enterAddress (address: Address): void {
+    I.click(fields.address.enterManually)
+    I.fillField(fields.address.line1, address.line1)
+    I.fillField(fields.address.line2, address.line2)
+    I.fillField(fields.address.city, address.city)
+    I.fillField(fields.address.postcode, address.postcode)
+  }
+
   enterAddresses (address: Address, correspondenceAddress: Address): void {
     I.click(fields.address.enterManually)
     I.fillField(fields.address.line1, address.line1)
