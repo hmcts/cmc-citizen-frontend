@@ -134,12 +134,10 @@ export default express.Router()
         }
       }
 
-      const caseReference: string = await claimStoreClient.savePrePayment(externalId, user)
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(
         user,
-        caseReference,
         externalId,
         [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
