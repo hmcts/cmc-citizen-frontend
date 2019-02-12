@@ -4,7 +4,7 @@ import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPl
 const validator = new Validator()
 
 function isValid (input): boolean {
-  return input !== undefined && validator.validateSync(input, { groups: ['default'] }).length === 0
+  return !!input && validator.validateSync(input).length === 0
 }
 
 export class YourRepaymentPlanTask {
