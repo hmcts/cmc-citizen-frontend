@@ -11,7 +11,7 @@ describe('CourtOfferedInstalmentHelper', () => {
   const defendantTwoWeeklyPaymentPlan = PaymentPlan.create(TOTAL_AMOUNT, 20, Frequency.TWO_WEEKLY)
 
   context('should return defendant entered instalment amount', () => {
-    const paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount = PaymentPlan.create(TOTAL_AMOUNT, Frequency.WEEKLY.monthlyRatio + 0.1, Frequency.MONTHLY)
+    const paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount = PaymentPlan.create(TOTAL_AMOUNT, Frequency.MONTHLY.monthlyRatio + 0.1, Frequency.MONTHLY)
 
     it('should return correct defendant instalment amount because defendant selected WEEKLY frequency', () => {
       expect(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount.instalmentAmount).equal(CourtOfferedInstalmentHelper.getCourtOfferedInstalmentAmount(paymentPlanConvertedToDefendantFrequencyAboveThresholdAmount, defendantWeeklyPaymentPlan))

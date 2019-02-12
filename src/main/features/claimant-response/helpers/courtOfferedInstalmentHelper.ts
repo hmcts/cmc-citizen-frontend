@@ -7,7 +7,7 @@ export class CourtOfferedInstalmentHelper {
     paymentPlanConvertedToDefendantFrequency: PaymentPlan,
     defendantPaymentPlan: PaymentPlan): number {
 
-    if (paymentPlanConvertedToDefendantFrequency.instalmentAmount >= Frequency.WEEKLY.monthlyRatio) {
+    if (paymentPlanConvertedToDefendantFrequency.instalmentAmount >= Frequency.MONTHLY.monthlyRatio) {
       return paymentPlanConvertedToDefendantFrequency.instalmentAmount
     } else {
       if (_.inRange(paymentPlanConvertedToDefendantFrequency.instalmentAmount, 1, Frequency.WEEKLY.monthlyRatio)
