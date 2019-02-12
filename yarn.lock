@@ -104,9 +104,9 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
 
-"@hmcts/cmc-validators@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.1.tgz#12bf22f747237ec931cbf8af441f8e75ccb1fd55"
+"@hmcts/cmc-validators@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.2.tgz#c99b88776f68d95cc14ab6bce562da7f123bb518"
   dependencies:
     "@hmcts/class-validator" "^0.9.1-b"
 
@@ -7701,9 +7701,10 @@ ts-node@^8.0.2:
     source-map-support "^0.5.6"
     yn "^3.0.0"
 
-tsconfig-paths@^3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.7.0.tgz#02ae978db447b22e09dafcd4198be95c4885ceb2"
+tsconfig-paths@^3.8.0:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/tsconfig-paths/-/tsconfig-paths-3.8.0.tgz#4e34202d5b41958f269cf56b01ed95b853d59f72"
+  integrity sha512-zZEYFo4sjORK8W58ENkRn9s+HmQFkkwydDG7My5s/fnfr2YYCaiyXe/HBUcIgU8epEKOXwiahOO+KZYjiXlWyQ==
   dependencies:
     "@types/json5" "^0.0.29"
     deepmerge "^2.0.1"

@@ -46,14 +46,6 @@ export class IndividualDetailsPage {
     I.fillField(fields.address.city, address.city)
   }
 
-  lookupAddress (postcodeLookupQuery: PostcodeLookupQuery): void {
-    I.fillField(fields.address.postcodeLookUp, postcodeLookupQuery.postcode)
-    I.click(buttons.postCodeLookUp)
-    I.waitForVisible(fields.address.selectAddressList)
-    I.click(fields.address.selectAddressList)
-    I.selectOption(fields.address.selectAddressList, postcodeLookupQuery.address)
-  }
-
   enterAddresses (address: Address, correspondenceAddress: Address): void {
     I.click(fields.address.enterManually)
     I.fillField(fields.address.line1, address.line1)
