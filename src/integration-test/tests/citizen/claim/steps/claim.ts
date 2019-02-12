@@ -1,8 +1,8 @@
 import { PartyType } from 'integration-test/data/party-type'
 import {
   claimAmount,
-  claimReason,
   createClaimant,
+  claimReason,
   createDefendant,
   SMOKE_TEST_CITIZEN_USERNAME,
   SMOKE_TEST_USER_PASSWORD
@@ -24,12 +24,12 @@ import { EligibilitySteps } from 'integration-test/tests/citizen/claim/steps/eli
 import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/interest'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
+import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
 import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
-import I = CodeceptJS.I
 import { FeatureToggles } from 'utils/featureToggles'
 
 const I: I = actor()
@@ -237,7 +237,7 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
-    if (FeatureToggles.isEnabled("testingSupport")) {
+    if (FeatureToggles.isEnabled('testingSupport')) {
       testSupportSteps.deleteDrafts()
       I.click('My account')
       I.click('Make a new money claim')
