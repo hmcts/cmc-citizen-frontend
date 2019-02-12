@@ -104,9 +104,10 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
 
-"@hmcts/cmc-validators@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.1.tgz#12bf22f747237ec931cbf8af441f8e75ccb1fd55"
+"@hmcts/cmc-validators@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.2.tgz#c99b88776f68d95cc14ab6bce562da7f123bb518"
+  integrity sha512-wOym/MFIZwTkZSlSx3bu0ebHK1hZlGykUjW72k4L15+lNzoamjh5m+oRgydvYwydlRtSm1X6NucfJsDI127u+A==
   dependencies:
     "@hmcts/class-validator" "^0.9.1-b"
 
