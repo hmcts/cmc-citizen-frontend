@@ -68,10 +68,10 @@ export class ClaimantCheckAndSendPage {
   verifyDefendantCheckAndSendAnswers (defendantType: PartyType, enterDefendantEmail: boolean = true): void {
     const defendant: Party = createDefendant(defendantType, enterDefendantEmail)
 
-    I.see(defendant.address.line1.toUpperCase())
-    I.see(defendant.address.line2.toUpperCase())
-    I.see(defendant.address.city.toUpperCase())
-    I.see(defendant.address.postcode.toUpperCase())
+    I.see(defendant.address.line1)
+    I.see(defendant.address.line2)
+    I.see(defendant.address.city)
+    I.see(defendant.address.postcode)
     switch (defendantType) {
 
       case PartyType.INDIVIDUAL:
