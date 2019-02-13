@@ -18,4 +18,3 @@ COPY --from=build $WORKDIR/src/main ./src/main
 COPY --from=build $WORKDIR/server.js $WORKDIR/tsconfig.json ./
 COPY config ./config
 EXPOSE 3000
-USER hmcts
