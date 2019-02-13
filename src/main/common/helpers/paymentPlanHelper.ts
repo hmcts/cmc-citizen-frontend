@@ -18,7 +18,6 @@ import { PaymentIntention as PI } from 'claims/models/response/core/paymentInten
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { AdmissionHelper } from 'shared/helpers/admissionHelper'
-import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 export class PaymentPlanHelper {
 
@@ -75,28 +74,10 @@ export class PaymentPlanHelper {
     }
   }
 
-  static intendedCourtPlanFrequency (response: FullAdmissionResponse | PartialAdmissionResponse,
-                                     draft: DraftClaimantResponse): Frequency {
-    if (draft.alternatePaymentMethod && draft.alternatePaymentMethod.toDomainInstance().paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-      return Frequency.WEEKLY
-    }
-    if (response.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-      return this.toFrequency(response.paymentIntention.repaymentPlan.paymentSchedule)
-    }
-    return Frequency.WEEKLY
-  }
-
-  static toFrequency (schedule: PaymentSchedule): Frequency {
-    switch (schedule) {
-      case PaymentSchedule.EACH_WEEK: return Frequency.WEEKLY
-      case PaymentSchedule.EVERY_TWO_WEEKS: return Frequency.TWO_WEEKLY
-      case PaymentSchedule.EVERY_MONTH: return Frequency.MONTHLY
-    }
-  }
-
   static createPaymentPlanFromDefendantFinancialStatement (claim: Claim, draft: DraftClaimantResponse): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
-    const frequency: Frequency = PaymentPlanHelper.intendedCourtPlanFrequency(response, draft)
+    const frequency: Frequency = response.paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
+      Frequency.of(response.paymentIntention.repaymentPlan.paymentSchedule) : Frequency.WEEKLY
 
     if (claim.claimData.defendant.isBusiness()) {
       return undefined
