@@ -83,7 +83,7 @@ export class PaymentPlanHelper {
     if (response.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
       return this.toFrequency(response.paymentIntention.repaymentPlan.paymentSchedule)
     }
-    return Frequency.MONTHLY
+    return Frequency.WEEKLY
   }
 
   static toFrequency (schedule: PaymentSchedule): Frequency {
