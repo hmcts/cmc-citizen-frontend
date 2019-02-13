@@ -20,12 +20,15 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { FeatureToggles } from 'utils/featureToggles'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
+  const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -33,7 +36,9 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
-    admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim)
+    admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim),
+    mediationEnabled: FeatureToggles.isEnabled('mediation'),
+    mediationDraft: mediationDraft.document
   })
 }
 

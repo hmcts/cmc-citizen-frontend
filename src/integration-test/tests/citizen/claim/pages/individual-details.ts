@@ -39,7 +39,7 @@ export class IndividualDetailsPage {
   }
 
   enterAddress (address: Address): void {
-    I.click(fields.address.enterManually)
+    this.ignoreErrors(() => I.click(fields.address.enterManually))
     I.fillField(fields.address.line1, address.line1)
     I.fillField(fields.address.line2, address.line2)
     I.fillField(fields.address.postcode, address.postcode)
@@ -47,7 +47,7 @@ export class IndividualDetailsPage {
   }
 
   enterAddresses (address: Address, correspondenceAddress: Address): void {
-    I.click(fields.address.enterManually)
+    this.ignoreErrors(() => I.click(fields.address.enterManually))
     I.fillField(fields.address.line1, address.line1)
     I.fillField(fields.address.line2, address.line2)
     I.fillField(fields.address.city, address.city)
@@ -55,7 +55,7 @@ export class IndividualDetailsPage {
 
     I.checkOption(fields.hasCorrespondenceAddress)
 
-    I.click(fields.correspondenceAddress.enterManually)
+    this.ignoreErrors(() => I.click(fields.correspondenceAddress.enterManually))
     I.fillField(fields.correspondenceAddress.line1, correspondenceAddress.line1)
     I.fillField(fields.correspondenceAddress.line2, correspondenceAddress.line2)
     I.fillField(fields.correspondenceAddress.city, correspondenceAddress.city)
@@ -66,4 +66,11 @@ export class IndividualDetailsPage {
     I.click(buttons.submit)
   }
 
+  private ignoreErrors (ops: () => boolean): boolean {
+    try {
+      return ops()
+    } catch (error) {
+      return false
+    }
+  }
 }
