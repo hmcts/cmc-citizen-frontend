@@ -37,6 +37,7 @@ describe('Defendant response: incomplete submission page', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       draftStoreServiceMock.resolveFind('response')
+      draftStoreServiceMock.resolveFind('mediation')
       claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
       await request(app)

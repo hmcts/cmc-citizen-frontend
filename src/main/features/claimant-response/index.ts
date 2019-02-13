@@ -24,6 +24,7 @@ import { ClaimantResponseGuard } from 'claimant-response/guards/claimantResponse
 import { FrequencyViewFilter } from 'claimant-response/filters/frequency-view-filter'
 import { MonthlyAmountViewFilter } from 'claimant-response/filters/monthly-amount-view-filter'
 import { PriorityDebtTypeViewFilter } from 'claimant-response/filters/priority-debts-type-view-filter'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -73,6 +74,10 @@ export class ClaimantResponseFeature {
         res.locals.draft = res.locals.claimantResponseDraft
         next()
       })
+    app.all(/^\/case\/.+\/claimant-response\/task-list|check-and-send.*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
+        return new MediationDraft().deserialize(value)
+      }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

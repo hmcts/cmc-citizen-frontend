@@ -45,6 +45,7 @@ describe('Defendant response: check and send page', () => {
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveFind(draftType, { defendantDetails: undefined })
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -65,6 +66,7 @@ describe('Defendant response: check and send page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind(draftType)
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -92,6 +94,7 @@ describe('Defendant response: check and send page', () => {
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveFind(draftType, { defendantDetails: undefined })
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -115,6 +118,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -138,6 +142,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should return 500 and render error page when form is valid and cannot save response', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
 
@@ -150,6 +155,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.rejectDelete()
@@ -163,6 +169,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
@@ -175,11 +182,12 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to counter-claim handoff page when defendant is counter claiming', async () => {
+          it('should redirect to counter-claim hand off page when defendant is counter claiming', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               response: { type: ResponseType.DEFENCE },
               rejectAllOfClaim: { option: RejectAllOfClaimOption.COUNTER_CLAIM }
             })
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
