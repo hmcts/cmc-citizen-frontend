@@ -278,14 +278,14 @@
     var streetLine = extractStreetLine(address)
     var localityLine = extractLocalityLine(address)
 
+    if (!buildingNameLine && (!streetLine || !address.buildingNumber) && address.organisationName && address.organisationName !== '') {
+      valueFormattedAddress.addressLines.push(address.organisationName)
+    }
     if (buildingNameLine) {
       valueFormattedAddress.addressLines.push(buildingNameLine)
     }
     if (streetLine) {
       valueFormattedAddress.addressLines.push(streetLine)
-    }
-    if (!buildingNameLine && !streetLine && address.organisationName && address.organisationName !== '') {
-      valueFormattedAddress.addressLines.push(address.organisationName)
     }
     if (localityLine) {
       valueFormattedAddress.addressLines.push(localityLine)
@@ -306,7 +306,8 @@
         return `${address.subBuildingName}, ${address.buildingName}`
       }
       return `${address.buildingName}`
-    } else if (address.subBuildingName && address.subBuildingName !== "") {
+    }
+    if (address.subBuildingName && address.subBuildingName !== "") {
       return address.subBuildingName
     }
     return undefined
