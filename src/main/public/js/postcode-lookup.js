@@ -303,9 +303,9 @@
   function extractBuildingNameLine (address) {
     if (address.buildingName && address.buildingName !== "") {
       if (address.subBuildingName && address.subBuildingName !== "") {
-        return `${address.subBuildingName}, ${address.buildingName}`
+        return address.subBuildingName + ', ' + address.buildingName
       }
-      return `${address.buildingName}`
+      return address.buildingName
     }
     if (address.subBuildingName && address.subBuildingName !== "") {
       return address.subBuildingName
@@ -315,7 +315,7 @@
 
   function extractStreetLine (address) {
     if (address.thoroughfareName && address.thoroughfareName !== '') {
-      return `${address.buildingNumber ? address.buildingNumber + ', ' : ''}${address.thoroughfareName}`
+      return (address.buildingNumber ? address.buildingNumber + ', ' : '') + address.thoroughfareName
     }
     return undefined
   }
