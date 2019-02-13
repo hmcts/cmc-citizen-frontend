@@ -9,12 +9,12 @@ import { FeatureToggles } from 'utils/featureToggles'
 export default express.Router()
   .get('/health', healthcheck.configure({
     checks: {
-      'claimstore': basicHealthCheck('claim-store'),
-      'draft-store': basicHealthCheck('draft-store'),
-      'fees': basicHealthCheck('fees'),
-      'pay': basicHealthCheck('pay'),
-      'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
-      'idam-api': basicHealthCheck('idam.api')
+      'claimstore': basicHealthCheck('claim-store')
+      // 'draft-store': basicHealthCheck('draft-store'),
+      // 'fees': basicHealthCheck('fees'),
+      // 'pay': basicHealthCheck('pay'),
+      // 'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
+      // 'idam-api': basicHealthCheck('idam.api')
     }
   }))
 

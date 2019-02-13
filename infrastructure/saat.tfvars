@@ -1,4 +1,5 @@
 feature_fine_print = "true"
+feature_mock_pay = "true"
 feature_admissions = "true"
 external_host_name = "moneyclaims.saat.platform.hmcts.net"
 
