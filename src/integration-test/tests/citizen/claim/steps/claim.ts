@@ -30,7 +30,6 @@ import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
 import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
-import { FeatureToggles } from 'utils/featureToggles'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -237,7 +236,7 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
-    if (FeatureToggles.isEnabled('testingSupport')) {
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testSupportSteps.deleteDrafts()
       I.click('My account')
       I.click('Make a new money claim')
