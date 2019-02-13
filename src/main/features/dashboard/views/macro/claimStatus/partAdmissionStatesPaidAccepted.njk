@@ -14,9 +14,13 @@
 
 <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
 
-<p>{{ t('{{ claimantName }} confirmed you paid {{ amount }} on {{ moneyReceivedOn }}.',
-  { claimantName: claim.claimData.claimant.name, amount: claim.response.amount | numeral,
-  moneyReceivedOn: claim.response.paymentDeclaration.paidDate | date}) }}</p>
+<p>
+  {{ t('{{ claimantName }} confirmed you paid {{ amount }} on {{ moneyReceivedOn }}.',
+  { claimantName: claim.claimData.claimant.name,
+    amount: claim.response.amount | numeral,
+    moneyReceivedOn: claim.response.paymentDeclaration.paidDate | date })
+  }}
+</p>
 <p>{{ downloadResponseLink(claim) }}</p>
 
 {% endmacro %}
