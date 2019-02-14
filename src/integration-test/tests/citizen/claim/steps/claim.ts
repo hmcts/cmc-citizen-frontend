@@ -236,9 +236,11 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
-    testSupportSteps.deleteDrafts()
-    I.click('My account')
-    I.click('Make a new money claim')
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testSupportSteps.deleteDrafts()
+      I.click('My account')
+      I.click('Make a new money claim')
+    }
     this.completeEligibility()
     if (fillInNewFeaturesPage) {
       this.optIntoNewFeatures()
