@@ -16,7 +16,7 @@ import {
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
-  fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
+  fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome, fullDefenceWithPaidInFullGreaterThanClaimAmount,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
@@ -291,6 +291,11 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonabl
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
+}
+
+export const sampleFullDefenceWithPaidInFullGreaterThanClaimAmount = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithPaidInFullGreaterThanClaimAmount
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {

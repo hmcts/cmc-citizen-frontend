@@ -23,6 +23,7 @@ const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ extern
 const fullAdmissionResponseWithPaymentBySetDate = claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
 const fullAdmissionResponseWithPaymentByInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
 const partialAdmissionWithPaymentBySetDate = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
+const fullDefenceWithPaidInFull = claimStoreServiceMock.sampleFullDefenceWithPaidInFullGreaterThanClaimAmount
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
@@ -84,6 +85,16 @@ describe('Claimant response: view defendant response page', () => {
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
+      })
+
+      it('should render paid in full with stated amount when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithPaidInFull)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(`£20,000`))
       })
     })
 
