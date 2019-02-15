@@ -37,6 +37,12 @@ export const referToJudgeAcceptationClaimantResponseData = {
   formaliseOption: FormaliseOption.REFER_TO_JUDGE
 }
 
+export const partAdmissionStatesPaidClaimantResponseData = {
+  ...baseAcceptationClaimantResponseData,
+  claimantPaymentIntention: null,
+  formaliseOption: FormaliseOption.SETTLEMENT
+}
+
 export const rejectionClaimantResponseData = {
   ...baseRejectionClaimantResponseData,
   freeMediation: 'yes',
