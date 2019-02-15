@@ -5,7 +5,7 @@ import {
   claimReason,
   createDefendant,
   SMOKE_TEST_CITIZEN_USERNAME,
-  SMOKE_TEST_USER_PASSWORD
+  SMOKE_TEST_USER_PASSWORD, postcodeLookupQuery
 } from 'integration-test/data/test-data'
 import { CitizenCompletingClaimInfoPage } from 'integration-test/tests/citizen/claim/pages/citizen-completing-claim-info'
 import { CitizenDobPage } from 'integration-test/tests/citizen/claim/pages/citizen-dob'
@@ -29,7 +29,6 @@ import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
-import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -53,7 +52,6 @@ const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
-const testSupportSteps: TestingSupportSteps = new TestingSupportSteps()
 
 export class ClaimSteps {
 
@@ -218,13 +216,18 @@ export class ClaimSteps {
     newFeaturesPage.optIn()
   }
 
-  enterClaimantDetails (claimantType: PartyType): void {
+  enterClaimantDetails (claimantType: PartyType, byLookup: boolean = false): void {
     const claimant = createClaimant(claimantType)
     switch (claimantType) {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
         individualDetailsPage.enterName(claimant.name)
-        individualDetailsPage.enterAddress(claimant.address)
+        let manualEntryLink = true
+        if (byLookup) {
+          individualDetailsPage.lookupAddress(postcodeLookupQuery)
+          manualEntryLink = false
+        }
+        individualDetailsPage.enterAddress(claimant.address, manualEntryLink)
         individualDetailsPage.submit()
         citizenDOBPage.enterDOB(claimant.dateOfBirth)
         break
@@ -236,11 +239,6 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
-    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
-      testSupportSteps.deleteDrafts()
-      I.click('My account')
-      I.click('Make a new money claim')
-    }
     this.completeEligibility()
     if (fillInNewFeaturesPage) {
       this.optIntoNewFeatures()
@@ -250,7 +248,7 @@ export class ClaimSteps {
     userSteps.selectCompletingYourClaim()
     this.readCompletingYourClaim()
     userSteps.selectYourDetails()
-    this.enterClaimantDetails(claimantType)
+    this.enterClaimantDetails(claimantType, true)
     userSteps.selectTheirDetails()
     this.enterTheirDetails(defendantType, enterDefendantEmail)
     userSteps.selectClaimAmount()
