@@ -336,7 +336,6 @@ describe('Dashboard page', () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()
         })
-
         it('should render page with start claim button when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
@@ -345,7 +344,6 @@ describe('Dashboard page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
         })
-
         it('should render page with claim number and status', async () => {
           claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.sampleClaimIndividualVsIndividualIssueObj)
 
