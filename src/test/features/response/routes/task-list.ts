@@ -49,6 +49,7 @@ describe('Defendant response: task list page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)

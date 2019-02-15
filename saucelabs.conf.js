@@ -1,3 +1,6 @@
+require("ts-node/register");
+require("tsconfig-paths/register");
+
 const supportedBrowsers = require('@hmcts/cmc-supported-browsers').supportedBrowsers
 
 const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')

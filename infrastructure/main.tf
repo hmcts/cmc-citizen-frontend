@@ -136,7 +136,7 @@ module "citizen-frontend" {
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
-    FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_TESTING_SUPPORT = "${var.feature_testing_support}"
     // Enabled everywhere except prod
     FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
