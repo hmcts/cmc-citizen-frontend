@@ -104,31 +104,48 @@ export class ClaimSteps {
     citizenMobilePage.enterMobile(claimant.mobilePhone)
   }
 
-  enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true): void {
+  enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): void {
     const defendant = createDefendant(defendantType, enterDefendantEmail)
 
+    let manualEntryLink = true
     switch (defendantType) {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
         individualDetailsPage.enterName(defendant.name)
-        individualDetailsPage.enterAddress(defendant.address)
+        if (byLookup) {
+          individualDetailsPage.lookupAddress(postcodeLookupQuery)
+          manualEntryLink = false
+        }
+        individualDetailsPage.enterAddress(defendant.address, manualEntryLink)
         individualDetailsPage.submit()
         break
       case PartyType.SOLE_TRADER:
         partyTypePage.selectSoleTrader()
         individualDetailsPage.enterName(defendant.name)
-        individualDetailsPage.enterAddress(defendant.address)
+        if (byLookup) {
+          individualDetailsPage.lookupAddress(postcodeLookupQuery)
+          manualEntryLink = false
+        }
+        individualDetailsPage.enterAddress(defendant.address, manualEntryLink)
         individualDetailsPage.submit()
         break
       case PartyType.COMPANY:
         partyTypePage.selectCompany()
         companyDetailsPage.enterCompanyName(defendant.name)
-        companyDetailsPage.enterAddress(defendant.address)
+        if (byLookup) {
+          individualDetailsPage.lookupAddress(postcodeLookupQuery)
+          manualEntryLink = false
+        }
+        companyDetailsPage.enterAddress(defendant.address, manualEntryLink)
         companyDetailsPage.submit()
         break
       case PartyType.ORGANISATION:
         partyTypePage.selectOrganisationl()
         organisationDetailsPage.enterOrganisationName(defendant.name)
+        if (byLookup) {
+          individualDetailsPage.lookupAddress(postcodeLookupQuery)
+          manualEntryLink = false
+        }
         organisationDetailsPage.enterAddress(defendant.address)
         organisationDetailsPage.submit()
         break
@@ -250,7 +267,7 @@ export class ClaimSteps {
     userSteps.selectYourDetails()
     this.enterClaimantDetails(claimantType, true)
     userSteps.selectTheirDetails()
-    this.enterTheirDetails(defendantType, enterDefendantEmail)
+    this.enterTheirDetails(defendantType, enterDefendantEmail, true)
     userSteps.selectClaimAmount()
     this.enterTestDataClaimAmount()
     I.see('£80.50')
