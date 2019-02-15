@@ -75,6 +75,33 @@ export const sampleClaimIndividualVsIndividualIssueObj = {
   features: ['admissions']
 }
 
+export const sampleStatementOfMeans = {
+  statementOfMeans: {
+    carer: false,
+    reason: 'I cannot afford this right now with my current income.',
+    residence: {
+      type: 'OWN_HOME'
+    },
+    disability: 'NO',
+    employment: {
+      unemployment: {
+        retired: false,
+        unemployed: {
+          numberOfYears: 1,
+          numberOfMonths: 2
+        }
+      }
+    },
+    bankAccounts: [
+      {
+        type: 'CURRENT_ACCOUNT',
+        joint: true,
+        balance: 100
+      }
+    ]
+  }
+}
+
 export const sampleClaimIndividualVsIndividualRequestingMoreTimeObj = {
   id: 1,
   submitterId: '1',
@@ -117,43 +144,7 @@ export const sampleClaimIndividualVsIndividualRequestingMoreTimeObj = {
 }
 
 export const sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj = {
-  id: 1,
-  submitterId: '1',
-  submitterEmail: 'claimant@example.com',
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6da',
-  defendantId: '123',
-  referenceNumber: '000MC050',
-  createdAt: MomentFactory.currentDate(),
-  issuedOn: MomentFactory.currentDate(),
-  totalAmountTillToday: 200,
-  totalAmountTillDateOfIssue: 200,
-  moreTimeRequested: true,
-  claim: {
-    ...sampleIndividualClaimant,
-    ...sampleIndividualDefendant,
-    payment: {
-      id: '12',
-      amount: 2500,
-      state: { status: 'failed' }
-    },
-    amount: {
-      type: 'breakdown',
-      rows: [{ reason: 'Reason', amount: 200 }]
-    },
-    interest: {
-      type: ClaimInterestType.STANDARD,
-      rate: 10,
-      reason: 'Special case',
-      interestDate: {
-        type: InterestDateType.SUBMISSION,
-        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-      } as InterestDate
-    } as Interest,
-    reason: 'Interest Reason',
-    feeAmountInPennies: 2500,
-    timeline: { rows: [{ date: 'a', description: 'b' }] }
-  },
-  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+  ...sampleClaimIndividualVsIndividualIssueObj,
   response: {
     responseType: 'FULL_ADMISSION',
     freeMediation: 'no',
@@ -165,154 +156,87 @@ export const sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj = {
   }
 }
 
+export const sampleInstallements = {
+  paymentOption: 'INSTALMENTS',
+  repaymentPlan: {
+    paymentLength: '10 months',
+    completionDate: '3000-03-20',
+    paymentSchedule: 'EVERY_MONTH',
+    firstPaymentDate: '2999-06-20',
+    instalmentAmount: 10
+  }
+}
+
+export const sampleSetByDate = {
+  paymentDate: '2888-12-20',
+  paymentOption: 'BY_SPECIFIED_DATE'
+}
+
 export const sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj = {
-  id: 1,
-  submitterId: '1',
-  submitterEmail: 'claimant@example.com',
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6da',
-  defendantId: '123',
-  referenceNumber: '000MC050',
-  createdAt: MomentFactory.currentDate(),
-  issuedOn: MomentFactory.currentDate(),
-  totalAmountTillToday: 200,
-  totalAmountTillDateOfIssue: 200,
-  moreTimeRequested: true,
-  claim: {
-    ...sampleIndividualClaimant,
-    ...sampleIndividualDefendant,
-    payment: {
-      id: '12',
-      amount: 2500,
-      state: { status: 'failed' }
-    },
-    amount: {
-      type: 'breakdown',
-      rows: [{ reason: 'Reason', amount: 200 }]
-    },
-    interest: {
-      type: ClaimInterestType.STANDARD,
-      rate: 10,
-      reason: 'Special case',
-      interestDate: {
-        type: InterestDateType.SUBMISSION,
-        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-      } as InterestDate
-    } as Interest,
-    reason: 'Interest Reason',
-    feeAmountInPennies: 2500,
-    timeline: { rows: [{ date: 'a', description: 'b' }] }
-  },
-  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+  ...sampleClaimIndividualVsIndividualIssueObj,
   response: {
     responseType: 'FULL_ADMISSION',
     freeMediation: 'no',
     paymentIntention: {
-      paymentDate: '2888-12-20',
-      paymentOption: 'BY_SPECIFIED_DATE'
+      ...sampleSetByDate,
+      ...sampleStatementOfMeans
     },
-    statementOfMeans: {
-      carer: false,
-      reason: 'I cannot afford this right now with my current income.',
-      residence: {
-        type: 'OWN_HOME'
-      },
-      disability: 'NO',
-      employment: {
-        unemployment: {
-          retired: false,
-          unemployed: {
-            numberOfYears: 1,
-            numberOfMonths: 2
-          }
-        }
-      },
-      bankAccounts: [
-        {
-          type: 'CURRENT_ACCOUNT',
-          joint: true,
-          balance: 100
-        }
-      ]
-    }
+    features: ['admissions']
+  }
+}
+
+export const sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    responseType: 'FULL_ADMISSION',
+    freeMediation: 'no',
+    paymentIntention: {
+      ...sampleInstallements,
+      ...sampleStatementOfMeans
+    },
+    features: ['admissions']
+  }
+}
+
+export const partialAdmissionWithImmediatePaymentData = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    responseType: 'PART_ADMISSION',
+    freeMediation: 'no',
+    defence: 'i have paid more than enough',
+    paymentIntention: {
+      PaymentOption: 'IMMEDIATELY',
+      paymentDate: '2050-12-31'
+    },
+    amount: 50
   },
   features: ['admissions']
 }
 
-export const sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj = {
-  id: 1,
-  submitterId: '1',
-  submitterEmail: 'claimant@example.com',
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6da',
-  defendantId: '123',
-  referenceNumber: '000MC050',
-  createdAt: MomentFactory.currentDate(),
-  issuedOn: MomentFactory.currentDate(),
-  totalAmountTillToday: 200,
-  totalAmountTillDateOfIssue: 200,
-  moreTimeRequested: true,
-  claim: {
-    ...sampleIndividualClaimant,
-    ...sampleIndividualDefendant,
-    payment: {
-      id: '12',
-      amount: 2500,
-      state: { status: 'failed' }
-    },
-    amount: {
-      type: 'breakdown',
-      rows: [{ reason: 'Reason', amount: 200 }]
-    },
-    interest: {
-      type: ClaimInterestType.STANDARD,
-      rate: 10,
-      reason: 'Special case',
-      interestDate: {
-        type: InterestDateType.SUBMISSION,
-        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-      } as InterestDate
-    } as Interest,
-    reason: 'Interest Reason',
-    feeAmountInPennies: 2500,
-    timeline: { rows: [{ date: 'a', description: 'b' }] }
-  },
-  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+export const partialAdmissionWithSetDate = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
   response: {
-    responseType: 'FULL_ADMISSION',
+    responseType: 'PART_ADMISSION',
     freeMediation: 'no',
+    defence: 'i have paid more than enough',
     paymentIntention: {
-      paymentOption: 'INSTALMENTS',
-      repaymentPlan: {
-        paymentLength: '10 months',
-        completionDate: '3000-03-20',
-        paymentSchedule: 'EVERY_MONTH',
-        firstPaymentDate: '2999-06-20',
-        instalmentAmount: 10
-      },
-      statementOfMeans: {
-        carer: false,
-        reason: 'I cannot afford this right now with my current income.',
-        residence: {
-          type: 'OWN_HOME'
-        },
-        disability: 'NO',
-        employment: {
-          unemployment: {
-            retired: false,
-            unemployed: {
-              numberOfYears: 1,
-              numberOfMonths: 2
-            }
-          }
-        },
-        bankAccounts: [
-          {
-            type: 'CURRENT_ACCOUNT',
-            joint: true,
-            balance: 100
-          }
-        ]
-      }
+      ...sampleSetByDate,
+      ...sampleStatementOfMeans,
+      amount: 50
     },
     features: ['admissions']
   }
+}
+
+export const partialAdmissionWithRepayment = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    responseType: 'PART_ADMISSION',
+    freeMediation: 'no',
+    defence: 'i have paid more than enough',
+    ...sampleInstallements,
+    ...sampleStatementOfMeans,
+    amount: 50
+  },
+  features: ['admissions']
 }
