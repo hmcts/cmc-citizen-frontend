@@ -146,7 +146,7 @@ export class ClaimSteps {
           individualDetailsPage.lookupAddress(postcodeLookupQuery)
           manualEntryLink = false
         }
-        organisationDetailsPage.enterAddress(defendant.address)
+        organisationDetailsPage.enterAddress(defendant.address, manualEntryLink)
         organisationDetailsPage.submit()
         break
       default:
