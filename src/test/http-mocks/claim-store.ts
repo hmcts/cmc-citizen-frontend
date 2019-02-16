@@ -15,7 +15,7 @@ import {
   fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate,
+  fullAdmissionWithSoMPaymentBySetDate, fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
@@ -261,6 +261,11 @@ export const samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData = 
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentBySetDate
+}
+
+export const sampleFullAdmissionWithPaymentBySetDateInNext2daysResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentBySetDateInNext2Days
 }
 
 export const sampleFullAdmissionWithReasonablePaymentBySetDateResponseObjAndNoDisposableIncome = {
