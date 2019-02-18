@@ -156,7 +156,7 @@ export const sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj = {
   }
 }
 
-export const sampleInstallements = {
+export const sampleInstalements = {
   paymentOption: 'INSTALMENTS',
   repaymentPlan: {
     paymentLength: '10 months',
@@ -191,7 +191,7 @@ export const sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj = {
     responseType: 'FULL_ADMISSION',
     freeMediation: 'no',
     paymentIntention: {
-      ...sampleInstallements,
+      ...sampleInstalements,
       ...sampleStatementOfMeans
     },
     features: ['admissions']
@@ -234,7 +234,7 @@ export const partialAdmissionWithRepayment = {
     responseType: 'PART_ADMISSION',
     freeMediation: 'no',
     defence: 'i have paid more than enough',
-    ...sampleInstallements,
+    ...sampleInstalements,
     ...sampleStatementOfMeans,
     amount: 50
   },

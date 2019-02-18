@@ -31,6 +31,7 @@ import { sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj } from '
 
 import { sampleClaimIndividualVsIndividualIssueObj, sampleClaimIndividualVsIndividualRequestingMoreTimeObj, sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj, sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj, sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj } from '../../../data/entity/claimIssueData'
 import * as claimIssueData from '../../../data/entity/claimIssueData'
+import * as claimIssueData from 'test/data/entity/claimIssueData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
