@@ -38,8 +38,18 @@ export class IndividualDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  enterAddress (address: Address): void {
-    this.ignoreErrors(() => I.click(fields.address.enterManually))
+  lookupAddress (postcodeLookupQuery: PostcodeLookupQuery): void {
+    I.fillField(fields.address.postcodeLookUp, postcodeLookupQuery.postcode)
+    I.click(buttons.postCodeLookUp)
+    I.waitForVisible(fields.address.selectAddressList)
+    I.click(fields.address.selectAddressList)
+    I.selectOption(fields.address.selectAddressList, postcodeLookupQuery.address)
+  }
+
+  enterAddress (address: Address, clickManualLink: boolean = true): void {
+    if (clickManualLink) {
+      I.click(fields.address.enterManually)
+    }
     I.fillField(fields.address.line1, address.line1)
     I.fillField(fields.address.line2, address.line2)
     I.fillField(fields.address.postcode, address.postcode)
@@ -47,7 +57,7 @@ export class IndividualDetailsPage {
   }
 
   enterAddresses (address: Address, correspondenceAddress: Address): void {
-    this.ignoreErrors(() => I.click(fields.address.enterManually))
+    I.click(fields.address.enterManually)
     I.fillField(fields.address.line1, address.line1)
     I.fillField(fields.address.line2, address.line2)
     I.fillField(fields.address.city, address.city)
@@ -55,7 +65,7 @@ export class IndividualDetailsPage {
 
     I.checkOption(fields.hasCorrespondenceAddress)
 
-    this.ignoreErrors(() => I.click(fields.correspondenceAddress.enterManually))
+    I.click(fields.correspondenceAddress.enterManually)
     I.fillField(fields.correspondenceAddress.line1, correspondenceAddress.line1)
     I.fillField(fields.correspondenceAddress.line2, correspondenceAddress.line2)
     I.fillField(fields.correspondenceAddress.city, correspondenceAddress.city)
@@ -64,13 +74,5 @@ export class IndividualDetailsPage {
 
   submit (): void {
     I.click(buttons.submit)
-  }
-
-  private ignoreErrors (ops: () => boolean): boolean {
-    try {
-      return ops()
-    } catch (error) {
-      return false
-    }
   }
 }
