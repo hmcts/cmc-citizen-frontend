@@ -34,9 +34,32 @@
           changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
-      {% if draft.freeMediation %}
+      {% if draft.freeMediation and mediationEnabled !== true %}
         {{ row(label = 'Will you try free mediation?', bold = true, value = draft.freeMediation.option | yesNo,
           changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+      {% endif %}
+
+      {% if mediationEnabled %}
+        {{ tableStart('freeMediation', 'Free telephone mediation') }}
+        {{
+        row(
+          label = 'Will you try free mediation?',
+          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        )
+        }}
+        {% if mediationDraft.youCanOnlyUseMediation %}
+          {{
+          row(
+            label = 'Do you agree to the mediation conditions?',
+            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+          }}
+        {% endif %}
+        {{ tableEnd() }}
       {% endif %}
     {% else %}
       {% if draft.settleAdmitted %}

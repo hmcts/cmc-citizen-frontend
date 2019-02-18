@@ -19,10 +19,4 @@ export class TestingSupportSteps {
     I.click('Create Claim Draft')
     createClaimDraftPage.createClaimDraft()
   }
-
-  deleteDrafts (): void {
-    I.click('Testing support')
-    I.click('Delete Drafts')
-    I.click('Delete claim draft')
-  }
 }
