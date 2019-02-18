@@ -138,6 +138,15 @@ export const fullAdmissionWithPaymentBySetDateData = {
   }
 }
 
+export const fullAdmissionWithPaymentBySetDateDataInNext2days = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: MomentFactory.currentDate().add(2, 'days').toISOString()
+  }
+}
+
 export const fullAdmissionWithReasonablePaymentBySetDateData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
@@ -349,6 +358,13 @@ export const statementOfMeansWithAllFieldsData = {
 
 export const fullAdmissionWithSoMPaymentBySetDate = {
   ...fullAdmissionWithPaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentBySetDateInNext2Days = {
+  ...fullAdmissionWithPaymentBySetDateDataInNext2days,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }
