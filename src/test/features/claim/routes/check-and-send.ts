@@ -58,9 +58,11 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Check your answers'))
       })
+
       it('Should validate the hyperlink (Change) available on checkAndSendPage  with correct location and span', async () => {
         draftStoreServiceMock.resolveFind('claim')
         feesServiceMock.resolveCalculateIssueFee()
+
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
