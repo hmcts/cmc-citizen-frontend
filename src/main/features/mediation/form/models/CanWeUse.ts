@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, MaxLength, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'models/task'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'

@@ -1,7 +1,8 @@
-import { PostcodeInfoClient } from '@hmcts/postcodeinfo-client'
+import { OSPlacesClient } from '@hmcts/os-places-client'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { request } from 'client/request'
 import * as config from 'config'
+import { PostcodeToCountryClient } from '@hmcts/os-names-client'
 
 const postcodeLookupApiKey = config.get<string>('postcodeLookup.apiKey')
 
@@ -10,8 +11,15 @@ const requestOptionsOverride = {
 } as RequestPromiseOptions
 
 export class ClientFactory {
-  static createInstance (): PostcodeInfoClient {
-    return new PostcodeInfoClient(
+  static createOSPlacesClient (): OSPlacesClient {
+    return new OSPlacesClient(
+      postcodeLookupApiKey,
+      request.defaults(requestOptionsOverride)
+    )
+  }
+
+  static createPostcodeToCountryClient (): PostcodeToCountryClient {
+    return new PostcodeToCountryClient(
       postcodeLookupApiKey,
       request.defaults(requestOptionsOverride)
     )

@@ -12,7 +12,7 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { CanWeUse } from 'mediation/form/models/CanWeUse'
-import { DraftMediation } from 'mediation/draft/draftMediation'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 
@@ -35,7 +35,7 @@ function renderView (form: Form<CanWeUse>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.canWeUsePage.uri, (req: express.Request, res: express.Response): void => {
-    const draft: Draft<DraftMediation> = res.locals.mediationDraft
+    const draft: Draft<MediationDraft> = res.locals.mediationDraft
 
     renderView(new Form(draft.document.canWeUse), res)
   })
@@ -49,7 +49,7 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const draft: Draft<DraftMediation> = res.locals.mediationDraft
+        const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
 
         draft.document.canWeUse = form.model

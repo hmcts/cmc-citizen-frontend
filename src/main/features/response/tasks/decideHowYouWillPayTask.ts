@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
@@ -19,8 +19,9 @@ export class DecideHowYouWillPayTask {
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
     switch (responseDraft.fullAdmission.paymentIntention.paymentOption.option) {
       case PaymentType.IMMEDIATELY:
-      case PaymentType.INSTALMENTS:
         return true
+      case PaymentType.INSTALMENTS:
+        return isValid(responseDraft.fullAdmission.paymentIntention.paymentPlan)
       case PaymentType.BY_SET_DATE:
         return isValid(responseDraft.fullAdmission.paymentIntention.paymentDate)
       default:
