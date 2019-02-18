@@ -24,6 +24,8 @@ import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { Claim } from 'claims/models/claim'
+import { isNull } from 'util'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
@@ -53,16 +55,17 @@ function logError (id: string, payment: Payment, message: string) {
   logger.error(`${message} (User Id : ${id}, Payment: ${JSON.stringify(payment)})`)
 }
 
-async function successHandler (res, next) {
+async function successHandler (req, res, next) {
   const draft: Draft<DraftClaim> = res.locals.claimDraft
   const user: User = res.locals.user
   const externalId: string = draft.document.externalId
+  let savedClaim: Claim
 
   let claimIsAlreadyFullyPersisted: boolean
 
   try {
-    claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user)
-      .then(() => true)
+    savedClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
+    claimIsAlreadyFullyPersisted = !isNull(savedClaim)
   } catch (err) {
     /**
      * NOT_FOUND -> claim was not submitted yet -> migrate draft
@@ -94,12 +97,15 @@ async function successHandler (res, next) {
     }
 
     if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
-      await claimStoreClient.saveClaim(draft, user, 'admissions')
+      savedClaim = await claimStoreClient.saveClaim(draft, user, 'admissions')
     } else {
-      await claimStoreClient.saveClaim(draft, user)
+      savedClaim = await claimStoreClient.saveClaim(draft, user)
     }
   }
+  const payClient: PayClient = await getPayClient(req)
+  const paymentReference = draft.document.claimant.payment.reference
 
+  payClient.update(user, paymentReference, savedClaim.externalId, savedClaim.claimNumber)
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
@@ -185,7 +191,7 @@ export default express.Router()
           res.redirect(Paths.checkAndSendPage.uri)
           break
         case 'Success':
-          await successHandler(res, next)
+          await successHandler(req, res, next)
           break
         default:
           logPaymentError(user.id, payment)
