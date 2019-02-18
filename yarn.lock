@@ -2631,11 +2631,7 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
-extend@3.0.1, extend@^3.0.0, extend@~3.0.0:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.1.tgz#a755ea7bc1adfcc5a31ce7e762dbaadc5e636444"
-
-extend@~3.0.2:
+extend@3.0.2, extend@^3.0.0, extend@~3.0.0, extend@~3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
 
@@ -7021,12 +7017,13 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-sonarqube-scanner@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/sonarqube-scanner/-/sonarqube-scanner-2.1.2.tgz#fd8bc6857a507178b0193da3de949d609597e3bf"
+sonarqube-scanner@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/sonarqube-scanner/-/sonarqube-scanner-2.2.0.tgz#6921dd5fce144a4a7ef5a87af185691e45744b38"
+  integrity sha512-gGwUoeeQW67KVgR2oYMyk6CIKfTxahuiMmrB0Is00vUPef92DYS+S3d1TZd+v/oT2PvlY693zr1hEfuEzor/tA==
   dependencies:
     download "7.0.0"
-    extend "3.0.1"
+    extend "3.0.2"
     fancy-log "^1.1.0"
     lodash.get "^4.4.2"
     lodash.uniq "^4.5.0"
