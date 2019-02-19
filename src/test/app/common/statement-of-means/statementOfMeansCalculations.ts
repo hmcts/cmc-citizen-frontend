@@ -526,7 +526,8 @@ describe('StatementOfMeansCalculations', () => {
       describe('when a valid personal input is supplied ',() => {
         it('should return valid data', () => {
           const input = {
-            personal : [ { item: 'SINGLE_18_TO_24', weekly: 10, monthly: 50 } ]
+            personal : [ { item: 'SINGLE_18_TO_24', weekly: 10, monthly: 50 } ],
+            startDate : moment()
           }
           const allowance: Allowance = new Allowance().deserialize(input)
           expect(allowance.personal[0].monthly).to.equal(50)
