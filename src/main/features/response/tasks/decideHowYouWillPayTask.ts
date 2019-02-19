@@ -21,7 +21,7 @@ export class DecideHowYouWillPayTask {
       case PaymentType.IMMEDIATELY:
         return true
       case PaymentType.INSTALMENTS:
-        return isValid(responseDraft.fullAdmission.paymentIntention.paymentPlan)
+        return true
       case PaymentType.BY_SET_DATE:
         return isValid(responseDraft.fullAdmission.paymentIntention.paymentDate)
       default:
