@@ -108,7 +108,7 @@ describe('Free mediation: will you try free mediation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.canWeUsePage
+                .toLocation(MediationPaths.mediationAgreementPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
