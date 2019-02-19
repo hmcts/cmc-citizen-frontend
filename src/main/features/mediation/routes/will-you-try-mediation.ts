@@ -50,7 +50,7 @@ export default express.Router()
 
         const externalId: string = req.params.externalId
         if (form.model.option === FreeMediationOption.YES) {
-          res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: externalId }))
         } else {
           const claim: Claim = res.locals.claim
           if (!claim.isResponseSubmitted()) {
