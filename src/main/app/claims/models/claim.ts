@@ -175,7 +175,7 @@ export class Claim {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.hasClaimantAcceptedPartAdmitAndStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID
-    } else if (this.isInterlocutoryJudgmentRequestedOnFullAdmission()) {
+    } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
@@ -459,9 +459,10 @@ export class Claim {
       this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentDeclaration !== undefined
   }
 
-  private isInterlocutoryJudgmentRequestedOnFullAdmission (): boolean {
+  private isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {
     return this.response
-      && this.response.responseType === ResponseType.FULL_ADMISSION
+      && (this.response.responseType === ResponseType.FULL_ADMISSION
+        || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.claimantResponse
       && (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
   }
