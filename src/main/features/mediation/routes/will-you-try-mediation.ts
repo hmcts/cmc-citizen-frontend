@@ -9,7 +9,7 @@ import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { Form } from 'main/app/forms/form'
 import { DraftService } from 'services/draftService'
 import { User } from 'main/app/idam/user'
-import { DraftMediation } from 'mediation/draft/draftMediation'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { Claim } from 'claims/models/claim'
 
@@ -24,7 +24,7 @@ export default express.Router()
   .get(
     Paths.willYouTryMediation.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-      const draft: Draft<DraftMediation> = res.locals.mediationDraft
+      const draft: Draft<MediationDraft> = res.locals.mediationDraft
 
       renderView(new Form(draft.document.willYouTryMediation), res)
     }
@@ -37,22 +37,20 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const draft: Draft<DraftMediation> = res.locals.mediationDraft
+        const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
 
         draft.document.willYouTryMediation = form.model
 
         if (form.model.option === FreeMediationOption.NO) {
-          // TODO: Delete draft information from next pages
-
+          draft.document.youCanOnlyUseMediation = undefined
         }
 
         await new DraftService().save(draft, user.bearerToken)
 
         const externalId: string = req.params.externalId
-        // TODO: redirect to next page when they are ready
         if (form.model.option === FreeMediationOption.YES) {
-          res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
+          res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: externalId }))
         } else {
           const claim: Claim = res.locals.claim
           if (!claim.isResponseSubmitted()) {

@@ -129,10 +129,13 @@ describe('claimant response converter', () => {
     it('rejection from non acceptance of states paid', () => {
       const draftClaimantResponse = new DraftClaimantResponse()
       draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
+      draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
 
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
         'type': 'REJECTION',
-        'freeMediation': 'no'
+        'freeMediation': 'no',
+        'paymentReceived': 'yes',
+        'settleForAmount': 'no'
       })
     })
 
@@ -142,7 +145,8 @@ describe('claimant response converter', () => {
 
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
         'type': 'REJECTION',
-        'freeMediation': 'no'
+        'freeMediation': 'no',
+        'paymentReceived': 'no'
       })
     })
 
