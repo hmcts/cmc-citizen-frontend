@@ -77,6 +77,8 @@ describe('Free mediation: can we use phone number page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+
       context('when response not submitted', () => {
         context('when form is invalid', () => {
           it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -91,7 +93,7 @@ describe('Free mediation: can we use phone number page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.rejectSave()
@@ -104,7 +106,7 @@ describe('Free mediation: can we use phone number page', () => {
           })
 
           it('should redirect to defendant task list when defendant says yes', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
@@ -119,7 +121,7 @@ describe('Free mediation: can we use phone number page', () => {
           })
 
           it('should redirect to response task list when No was chosen and a phone number is given', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave()
