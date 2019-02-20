@@ -38,8 +38,18 @@ export class IndividualDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  enterAddress (address: Address): void {
-    I.click(fields.address.enterManually)
+  lookupAddress (postcodeLookupQuery: PostcodeLookupQuery): void {
+    I.fillField(fields.address.postcodeLookUp, postcodeLookupQuery.postcode)
+    I.click(buttons.postCodeLookUp)
+    I.waitForVisible(fields.address.selectAddressList)
+    I.click(fields.address.selectAddressList)
+    I.selectOption(fields.address.selectAddressList, postcodeLookupQuery.address)
+  }
+
+  enterAddress (address: Address, clickManualLink: boolean = true): void {
+    if (clickManualLink) {
+      I.click(fields.address.enterManually)
+    }
     I.fillField(fields.address.line1, address.line1)
     I.fillField(fields.address.line2, address.line2)
     I.fillField(fields.address.postcode, address.postcode)
@@ -65,5 +75,4 @@ export class IndividualDetailsPage {
   submit (): void {
     I.click(buttons.submit)
   }
-
 }
