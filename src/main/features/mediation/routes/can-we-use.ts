@@ -52,6 +52,7 @@ export default express.Router()
       } else {
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
+        draft.document.canWeUse = form.model
 
         if (form.model.option === FreeMediationOption.YES) {
           let phoneNumber: string
@@ -62,9 +63,8 @@ export default express.Router()
             phoneNumber = claim.claimData.claimant.mobilePhone
           }
           draft.document.canWeUse.mediationPhoneNumber = phoneNumber
-        }
 
-        draft.document.canWeUse = form.model
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         if (!claim.isResponseSubmitted()) {

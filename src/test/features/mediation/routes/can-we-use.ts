@@ -34,36 +34,33 @@ describe('Free mediation: can we use phone number page', () => {
       })
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
-      context('when response not submitted', () => {
-        it('should return 500 and render error page when cannot retrieve claim', async () => {
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+      it('should return 500 and render error page when cannot retrieve claim', async () => {
+        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+      it('should render page when everything is fine and no defendant phone number is provided', async () => {
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('response')
+        claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ defendant: { number: '07777777777' } })
 
-        it('should render page when everything is fine and no defendant phone number is provided', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
-          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ defendant: { number: '07777777777' } })
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Can the mediation service use'))
+      })
+      it('should render page when everything is fine and defendant phone number is not provided', async () => {
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('response',{ defendantDetails: { mobilePhone: { number: undefined } } })
+        claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Can the mediation service use'))
-        })
-        it('should render page when everything is fine and defendant phone number is not provided', async () => {
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response',{ defendantDetails: { mobilePhone: { number: undefined } } })
-          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Enter a phone number'))
-        })
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Enter a phone number'))
       })
     })
   })
@@ -80,63 +77,61 @@ describe('Free mediation: can we use phone number page', () => {
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
-        context('when form is invalid', () => {
-          it('should return 500 and render error page when cannot retrieve claim', async () => {
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+        it('should return 500 and render error page when cannot retrieve claim', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+      })
+
+      context('when form is valid', () => {
+        it('should return 500 and render error page when cannot save draft', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.rejectSave()
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FreeMediationOption.YES, mediationPhoneNumber: undefined })
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        context('when form is valid', () => {
-          it('should return 500 and render error page when cannot save draft', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.rejectSave()
+        it('should redirect to defendant task list when defendant says yes', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: FreeMediationOption.YES })
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ option: FreeMediationOption.YES })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+        })
 
-          it('should redirect to defendant task list when defendant says yes', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+        it('should redirect to response task list when No was chosen and a phone number is given', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: FreeMediationOption.YES })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
-
-          it('should redirect to response task list when No was chosen and a phone number is given', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({
-                option: FreeMediationOption.NO,
-                mediationPhoneNumber: '07777777777'
-              })
-              .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          })
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({
+              option: FreeMediationOption.NO,
+              mediationPhoneNumber: '07777777777'
+            })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(ResponsePaths.taskListPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })
