@@ -15,6 +15,7 @@ import { CanWeUse } from 'mediation/form/models/CanWeUse'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 function renderView (form: Form<CanWeUse>, res: express.Response): void {
   const claim: Claim = res.locals.claim
@@ -51,6 +52,17 @@ export default express.Router()
       } else {
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
+
+        if (form.model.option === FreeMediationOption.YES) {
+          let phoneNumber: string
+          if (!claim.isResponseSubmitted()) {
+            const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
+            phoneNumber = draftResponse.document.defendantDetails.mobilePhone ? draftResponse.document.defendantDetails.mobilePhone.number : undefined
+          } else {
+            phoneNumber = claim.claimData.claimant.mobilePhone
+          }
+          draft.document.canWeUse.mediationPhoneNumber = phoneNumber
+        }
 
         draft.document.canWeUse = form.model
         await new DraftService().save(draft, user.bearerToken)
