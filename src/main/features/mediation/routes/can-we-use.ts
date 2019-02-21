@@ -46,8 +46,8 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const claim: Claim = res.locals.claim
       const form: Form<CanWeUse> = req.body
-
       if (form.hasErrors()) {
+
         renderView(form, res)
       } else {
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
@@ -63,8 +63,8 @@ export default express.Router()
             phoneNumber = claim.claimData.claimant.mobilePhone
           }
           draft.document.canWeUse.mediationPhoneNumber = phoneNumber
-
         }
+
         await new DraftService().save(draft, user.bearerToken)
 
         if (!claim.isResponseSubmitted()) {
