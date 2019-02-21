@@ -32,7 +32,7 @@ import * as moment from 'moment'
 import { AllowanceRepository, ResourceAllowanceRepository } from 'common/allowances/allowanceRepository'
 import { AllowanceCalculations } from 'main/app/common/allowances/allowanceCalculations'
 import { join } from 'path'
-import { Allowance } from 'common/allowances/allowance'
+import { Allowance, Allowances } from 'common/allowances/allowance'
 import { AllowanceItem } from 'common/allowances/allowanceItem'
 
 let statementOfMeansCalculations: StatementOfMeansCalculations
@@ -517,6 +517,65 @@ describe('StatementOfMeansCalculations', () => {
     describe('when defendant is single and not a pensioner', () => {
       it('should return single pensioner allowance', () => {
         expect(allowanceCalculations.getMonthlyPensionerAllowance(sampleIncomesData.incomes, undefined)).to.equal(0)
+      })
+    })
+  })
+
+  describe('allowances', () => {
+    describe('deserialize', () => {
+      context('when there is a single allowance present', () => {
+        it('should return valid data', () => {
+          const input = {
+            allowances :  [{
+              personal : [ { item: 'item1', weekly: 10, monthly: 50 } ],
+              dependant : [ { item: 'item2', weekly: 10, monthly: 50 } ],
+              pensioner : [ { item: 'item3', weekly: 10, monthly: 50 } ],
+              disability : [ { item: 'item4', weekly: 10, monthly: 50 } ],
+              startDate : '2018-05-01T00:00:00.000Z'
+            }]
+          }
+          const allowance: Allowance = new Allowances().deserialize(input)
+          expect(allowance.personal[0].monthly).to.equal(50)
+        })
+      })
+      context('when there is a single allowance present but start date in the future', () => {
+        it('should return no data', () => {
+          const input = {
+            allowances :  [{
+              personal : [ { item: 'item1', weekly: 10, monthly: 50 } ],
+              dependant : [ { item: 'item2', weekly: 10, monthly: 50 } ],
+              pensioner : [ { item: 'item3', weekly: 10, monthly: 50 } ],
+              disability : [ { item: 'item4', weekly: 10, monthly: 50 } ],
+              startDate : moment().add(1, 'day').toISOString()
+            }]
+          }
+          const allowance: Allowance = new Allowances().deserialize(input)
+          expect(allowance).to.equal(undefined)
+        })
+      })
+      context('when there is multiple data present', () => {
+        it('should return valid data that is not in the future', () => {
+          const input = {
+            allowances :  [
+              {
+                personal : [ { item: 'item1', weekly: 10, monthly: 50 } ],
+                dependant : [ { item: 'item2', weekly: 10, monthly: 50 } ],
+                pensioner : [ { item: 'item3', weekly: 10, monthly: 50 } ],
+                disability : [ { item: 'item4', weekly: 10, monthly: 50 } ],
+                startDate : '2018-05-01T00:00:00.000Z'
+              },
+              {
+                personal : [ { item: 'item1', weekly: 10, monthly: 100 } ],
+                dependant : [ { item: 'item2', weekly: 10, monthly: 100 } ],
+                pensioner : [ { item: 'item3', weekly: 10, monthly: 100 } ],
+                disability : [ { item: 'item4', weekly: 10, monthly: 100 } ],
+                startDate : moment().add(1, 'day').toISOString()
+              }
+            ]
+          }
+          const allowance: Allowance = new Allowances().deserialize(input)
+          expect(allowance.personal[0].monthly).to.equal(50)
+        })
       })
     })
   })

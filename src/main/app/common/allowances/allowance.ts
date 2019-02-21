@@ -1,7 +1,6 @@
 import { AllowanceItem } from 'common/allowances/allowanceItem'
 import { MomentFactory } from 'shared/momentFactory'
-import { Moment } from 'moment'
-import moment = require('moment')
+import * as moment from 'moment'
 
 export enum DependantAllowanceType {
   PER_DEPENDANT = 'EACH'
@@ -45,7 +44,6 @@ export class Allowances {
   }
 
   private deserializeRows (rows: any): Allowance[] {
-
     let allowanceRows: Allowance[] = rows.map(row => new Allowance().deserialize(row))
     return allowanceRows
   }
@@ -58,7 +56,7 @@ export class Allowance {
                public dependant?: AllowanceItem[],
                public pensioner?: AllowanceItem[],
                public disability?: AllowanceItem[],
-               public startDate?: Moment) {
+               public startDate?: moment.Moment) {
   }
 
   deserialize (input?: any): Allowance {

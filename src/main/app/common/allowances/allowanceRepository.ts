@@ -24,8 +24,6 @@ export class ResourceAllowanceRepository implements AllowanceRepository {
   constructor (public path?: string) {
     const resourcePath = path || join(__dirname, '..', '..', '..','resources','meansAllowance.json')
     this.allowances = new Allowances().deserialize(require(resourcePath))
-    // tslint:disable-next-line
-    console.log(this.allowances)
   }
 
   getDependantAllowance (dependantAllowanceType: DependantAllowanceType): AllowanceItem {
