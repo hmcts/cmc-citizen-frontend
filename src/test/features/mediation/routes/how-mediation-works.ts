@@ -47,6 +47,7 @@ if (FeatureToggles.isEnabled('mediation')) {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -81,6 +82,7 @@ if (FeatureToggles.isEnabled('mediation')) {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -103,6 +105,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
 
             await request(app)
               .post(pagePath)
@@ -116,6 +119,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
 
             await request(app)
               .post(pagePath)
