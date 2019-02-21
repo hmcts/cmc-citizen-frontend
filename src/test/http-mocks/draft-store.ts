@@ -447,6 +447,10 @@ export const sampleMediationDraftObj = {
   },
   youCanOnlyUseMediation: {
     option: FreeMediationOption.YES
+  },
+  canWeUse: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777'
   }
 }
 
