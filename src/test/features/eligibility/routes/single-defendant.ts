@@ -13,7 +13,7 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.singleDefendantPage.uri
-const pageRedirect: string = Paths.governmentDepartmentPage.uri
+const pageRedirect: string = Paths.defendantAddressPage.uri
 const expectedTextOnPage: string = 'Is this claim against more than one person or organisation?'
 
 describe('Claim eligibility: single defendant page', () => {
