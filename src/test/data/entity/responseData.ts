@@ -15,7 +15,8 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: '07777777777'
 }
 
 const baseCompanyResponseData = {

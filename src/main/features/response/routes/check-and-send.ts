@@ -100,6 +100,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
@@ -124,7 +125,7 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        await claimStoreClient.saveResponseForUser(claim, draft, user)
+        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }

@@ -65,27 +65,28 @@ import { CohabitingOption } from 'response/form/models/statement-of-means/cohabi
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 export class ResponseModelConverter {
 
-  static convert (draft: ResponseDraft, claim: Claim): Response {
+  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, claim: Claim): Response {
     switch (draft.response.type) {
       case FormResponseType.DEFENCE:
         if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
-          return this.convertFullDefenceAsPartialAdmission(draft)
+          return this.convertFullDefenceAsPartialAdmission(draft, mediationDraft)
         }
-        return this.convertFullDefence(draft)
+        return this.convertFullDefence(draft, mediationDraft)
       case FormResponseType.FULL_ADMISSION:
-        return this.convertFullAdmission(draft)
+        return this.convertFullAdmission(draft, mediationDraft)
       case FormResponseType.PART_ADMISSION:
-        return this.convertPartAdmission(draft)
+        return this.convertPartAdmission(draft, mediationDraft)
       default:
         throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
+  private static convertFullDefence (draft: ResponseDraft, mediationDraft: MediationDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -100,6 +101,7 @@ export class ResponseModelConverter {
         comment: draft.evidence.comment
       } as DefendantEvidence,
       freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      mediationPhoneNumber: mediationDraft.canWeUse.mediationPhoneNumber,
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
         draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
@@ -107,7 +109,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, mediationDraft: MediationDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -125,15 +127,17 @@ export class ResponseModelConverter {
         comment: draft.evidence.comment
       } as DefendantEvidence,
       freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      mediationPhoneNumber: mediationDraft.canWeUse.mediationPhoneNumber,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
   }
 
-  private static convertFullAdmission (draft: ResponseDraft): FullAdmissionResponse {
+  private static convertFullAdmission (draft: ResponseDraft, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
       freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      mediationPhoneNumber: mediationDraft.canWeUse.mediationPhoneNumber,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -141,7 +145,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertPartAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+  private static convertPartAdmission (draft: ResponseDraft, mediationDraft: MediationDraft): PartialAdmissionResponse {
     let amount
     if (draft.partialAdmission.alreadyPaid.option === DraftYesNoOption.YES) {
       amount = draft.partialAdmission.howMuchHaveYouPaid.amount
@@ -170,6 +174,7 @@ export class ResponseModelConverter {
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
       freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      mediationPhoneNumber: mediationDraft.canWeUse.mediationPhoneNumber,
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
