@@ -37,7 +37,6 @@ export class Allowances {
     this.allowance = this.deserializeRows(input.allowances)
     return this.allowance
       .sort((a, b) => {
-        // return a.startDate.toDate().getTime() - b.startDate.toDate().getTime()
         return a.startDate.diff(b.startDate, 'days')
       })
       .filter(date => date.startDate.isSameOrBefore(moment()))
