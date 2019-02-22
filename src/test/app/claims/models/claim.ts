@@ -215,9 +215,28 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION)
     })
 
-    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant and Court repayment plan', () => {
+    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant FULL ADMISSION and Court repayment plan', () => {
       claim.response = {
         responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(100, 'days'),
+          paymentOption: PaymentOption.BY_SPECIFIED_DATE
+        },
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.REFER_TO_JUDGE
+      }
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
+
+      expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
+    })
+
+    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant PART ADMISSION and Court repayment plan', () => {
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION,
+        amount: 150,
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(100, 'days'),
           paymentOption: PaymentOption.BY_SPECIFIED_DATE
