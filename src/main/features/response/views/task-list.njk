@@ -12,7 +12,7 @@
         {{ taskListHeading(beforeYouStartSection.name) }}
 
         {% for item in beforeYouStartSection.tasks %}
-          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+          {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
         {% endfor %}
       </div>
 
@@ -20,7 +20,7 @@
         {{ taskListHeading(respondToClaimSection.name) }}
 
         {% for item in respondToClaimSection.tasks %}
-          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+          {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
         {% endfor %}
       </div>
 
@@ -29,7 +29,7 @@
           {{ taskListHeading(resolvingClaimSection.name) }}
 
           {% for item in resolvingClaimSection.tasks %}
-            {{ task(item.startPageUrl, t(item.name), item.completed) }}
+            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
           {% endfor %}
         </div>
       {% endif %}
@@ -39,7 +39,7 @@
           {{ taskListHeading(submitSection.name) }}
 
           {% for item in submitSection.tasks %}
-            {{ task(item.startPageUrl, t(item.name), item.completed) }}
+            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
           {% endfor %}
         </div>
       {% endif %}
