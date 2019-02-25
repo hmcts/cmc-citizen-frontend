@@ -65,7 +65,7 @@ export class ClaimantResponseConverter {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
     if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.courtDecision) {
-      respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
+      respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse)
     }
     if (draftClaimantResponse.alternatePaymentMethod) {
       respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
@@ -75,7 +75,8 @@ export class ClaimantResponseConverter {
     return respAcceptance
   }
 
-  private static getCourtDetermination (courtDetermination: CourtDetermination): DomainCourtDetermination {
+  private static getCourtDetermination (draftClaimantResponse: DraftClaimantResponse): DomainCourtDetermination {
+    const courtDetermination: CourtDetermination = draftClaimantResponse.courtDetermination
     if (!courtDetermination.courtPaymentIntention && !courtDetermination.courtDecision) {
       throw new Error('Court payment intention and court decision are missing in court Determination')
     }
@@ -83,8 +84,8 @@ export class ClaimantResponseConverter {
     const responseCourtDetermination: DomainCourtDetermination = new DomainCourtDetermination()
     responseCourtDetermination.courtDecision = courtDetermination.courtDecision
     responseCourtDetermination.courtPaymentIntention = courtDetermination.courtPaymentIntention
-    if (courtDetermination.rejectionReason) {
-      responseCourtDetermination.rejectionReason = courtDetermination.rejectionReason.text
+    if (draftClaimantResponse.rejectionReason) {
+      responseCourtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
     responseCourtDetermination.disposableIncome = courtDetermination.disposableIncome ? courtDetermination.disposableIncome : 0
     responseCourtDetermination.decisionType = courtDetermination.decisionType
