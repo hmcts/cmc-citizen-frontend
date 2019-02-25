@@ -1,10 +1,10 @@
 #!groovy
 
 properties([
-        pipelineTriggers([cron('H 05 * * *')]),
-        parameters([
-                string(name: 'URL_TO_TEST', defaultValue: 'https://cmc-citizen-frontend-aat.service.core-compute-aat.internal/', description: 'The URL you want to run these tests against'),
-        ])
+  pipelineTriggers([cron('H 05 * * *')]),
+  parameters([
+    string(name: 'URL_TO_TEST', defaultValue: 'https://cmc-citizen-frontend-aat.service.core-compute-aat.internal/', description: 'The URL you want to run these tests against'),
+  ])
 ])
 
 @Library("Infrastructure")
@@ -13,11 +13,12 @@ def product = "cmc"
 def component = "citizen-frontend"
 
 withNightlyPipeline("nodejs", product, component) {
-    env.TEST_URL = params.URL_TO_TEST
+  env.TEST_URL = params.URL_TO_TEST
 
-    enableCrossBrowserTest()
-    enableSecurityScan()
+  enableCrossBrowserTest()
+  enableSecurityScan()
 
-    after('crossBrowserTest') {
-        steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
-    }
+  after('crossBrowserTest') {
+    steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
+  }
+}
