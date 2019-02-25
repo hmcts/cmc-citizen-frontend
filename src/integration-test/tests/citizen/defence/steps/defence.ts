@@ -294,8 +294,6 @@ export class DefenceSteps {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
     I.see('COMPLETED')
 
@@ -360,8 +358,6 @@ export class DefenceSteps {
     paymentOption: PaymentOption,
     claimantName: string
   ): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -414,8 +410,6 @@ export class DefenceSteps {
   }
 
   makePartialAdmission (defendantParty: Party): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -488,7 +482,6 @@ export class DefenceSteps {
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     I.dontSee('Your defence')
-    I.dontSee('COMPLETE')
 
     this.confirmYourDetails(defendant)
     I.see('COMPLETE')
