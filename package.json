@@ -38,6 +38,7 @@
     "@hmcts/os-names-client": "^1.0.4",
     "@hmcts/os-places-client": "^1.0.4",
     "@hmcts/requestretry": "^1.1.2",
+    "@hmcts/properties-volume": "./hmcts-properties-volume-0.0.7.tgz",
     "@types/config": "^0.0.34",
     "@types/cookies": "^0.7.1",
     "@types/csurf": "^1.9.33",

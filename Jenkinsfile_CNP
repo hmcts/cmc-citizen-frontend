@@ -4,28 +4,14 @@
 
 String product = "cmc"
 String component = "citizen-frontend"
+String notificationsChannel = '#cmc-tech-notification'
 
 List<LinkedHashMap<String, Object>> secrets = [
+  //for smoke tests
   secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
   secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
-  secret('os-postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
-  secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
   secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
-  secret('cmc-s2s-secret', 'IDAM_S2S_TOTP_SECRET'),
-  secret('citizen-draft-store-primary', 'DRAFT_STORE_SECRET_PRIMARY'),
-  secret('citizen-draft-store-secondary', 'DRAFT_STORE_SECRET_SECONDARY'),
-  secret('citizen-cookie-encryption-key', 'COOKIE_ENCRYPTION_KEY'),
-  secret('staff-email', 'CONTACT_EMAIL')
 ]
-
-static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
-  [ $class: 'AzureKeyVaultSecret',
-    secretType: 'Secret',
-    name: secretName,
-    version: '',
-    envVariable: envVar
-  ]
-}
 
 // Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
@@ -36,7 +22,7 @@ env.FEATURE_ADMISSIONS = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
-String notificationsChannel = '#cmc-tech-notification'
+
 
 withPipeline("nodejs", product, component) {
   afterCheckout {

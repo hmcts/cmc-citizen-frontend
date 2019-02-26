@@ -15,6 +15,7 @@
     },
     "service-2-service-auth": {
       "url": "IDAM_S2S_AUTH",
+      //secrets.cmc.cmc-s2s-secret
       "totpSecret": "IDAM_S2S_TOTP_SECRET"
     }
   },
@@ -28,7 +29,9 @@
     "url": "DRAFT_STORE_URL",
     "apiVersion": "DRAFT_STORE_API_VERSION",
     "secrets": {
+      //secrets.cmc.citizen-draft-store-primary
       "primary": "DRAFT_STORE_SECRET_PRIMARY",
+      //secrets.seccmc.citizen-draft-store-secondary
       "secondary": "DRAFT_STORE_SECRET_SECONDARY"
     }
   },
@@ -37,6 +40,7 @@
   },
   "session": {
     "cookieName": "JWT_COOKIE_NAME",
+    //secrets.cmc.encryptionKey
     "encryptionKey": "COOKIE_ENCRYPTION_KEY"
   },
   "fees": {
@@ -57,6 +61,7 @@
     }
   },
   "support": {
+    //secrets.cmc.staff-email
     "contact-email": "CONTACT_EMAIL"
   },
   "feedback": {
@@ -86,14 +91,20 @@
     "mockPay": "FEATURE_MOCK_PAY",
     "mediation": "FEATURE_MEDIATION"
   },
+
   "oauth": {
+    //where does this come from ?
     "clientId": "OAUTH_CLIENT_ID",
+    //cmc.citizen-oauth-client-secret
     "clientSecret": "OAUTH_CLIENT_SECRET"
   },
+
   "postcodeLookup": {
+    //cmc.os-postcode-lookup-api-key
     "apiKey": "POSTCODE_LOOKUP_API_KEY"
   },
   "appInsights": {
+    //secrets.cmc.AppInsightsInstrumentationKey
     "instrumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY",
     "roleName": "APPINSIGHTS_ROLE_NAME"
   }

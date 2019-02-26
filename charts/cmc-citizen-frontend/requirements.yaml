@@ -3,5 +3,5 @@ dependencies:
     version: 0.0.3
     repository: '@hmcts'
   - name: nodejs
-    version: 0.0.11
+    version: 0.1.3
     repository: '@hmcts'
