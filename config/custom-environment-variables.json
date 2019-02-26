@@ -14,9 +14,7 @@
       "url": "IDAM_API_URL"
     },
     "service-2-service-auth": {
-      "url": "IDAM_S2S_AUTH",
-      //secrets.cmc.cmc-s2s-secret
-      "totpSecret": "IDAM_S2S_TOTP_SECRET"
+      "url": "IDAM_S2S_AUTH"
     }
   },
   "claim-store": {
@@ -27,21 +25,13 @@
   },
   "draft-store": {
     "url": "DRAFT_STORE_URL",
-    "apiVersion": "DRAFT_STORE_API_VERSION",
-    "secrets": {
-      //secrets.cmc.citizen-draft-store-primary
-      "primary": "DRAFT_STORE_SECRET_PRIMARY",
-      //secrets.seccmc.citizen-draft-store-secondary
-      "secondary": "DRAFT_STORE_SECRET_SECONDARY"
-    }
+    "apiVersion": "DRAFT_STORE_API_VERSION"
   },
   "analytics": {
     "gaTrackingId": "GA_TRACKING_ID"
   },
   "session": {
-    "cookieName": "JWT_COOKIE_NAME",
-    //secrets.cmc.encryptionKey
-    "encryptionKey": "COOKIE_ENCRYPTION_KEY"
+    "cookieName": "JWT_COOKIE_NAME"
   },
   "fees": {
     "url": "FEES_URL",
@@ -59,10 +49,6 @@
     "cookie": {
       "timeToLiveInMinutes": "ELIGIBILITY_COOKIE_TIME_TO_LIVE_IN_MINUTES"
     }
-  },
-  "support": {
-    //secrets.cmc.staff-email
-    "contact-email": "CONTACT_EMAIL"
   },
   "feedback": {
     "serviceSurvey": {
@@ -93,19 +79,24 @@
   },
 
   "oauth": {
-    //where does this come from ?
-    "clientId": "OAUTH_CLIENT_ID",
-    //cmc.citizen-oauth-client-secret
-    "clientSecret": "OAUTH_CLIENT_SECRET"
+    "clientId": "OAUTH_CLIENT_ID"
   },
 
-  "postcodeLookup": {
-    //cmc.os-postcode-lookup-api-key
-    "apiKey": "POSTCODE_LOOKUP_API_KEY"
-  },
   "appInsights": {
-    //secrets.cmc.AppInsightsInstrumentationKey
-    "instrumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY",
     "roleName": "APPINSIGHTS_ROLE_NAME"
+  },
+
+  "secrets":{
+    "cmc":{
+      "cmc-s2s-secret": "IDAM_S2S_TOTP_SECRET",
+      "citizen-draft-store-primary": "DRAFT_STORE_SECRET_PRIMARY",
+      "citizen-draft-store-secondary": "DRAFT_STORE_SECRET_SECONDARY",
+      "staff-email": "CONTACT_EMAIL",
+      "citizen-oauth-client-secret": "OAUTH_CLIENT_SECRET",
+      "os-postcode-lookup-api-key": "POSTCODE_LOOKUP_API_KEY",
+      //session.encryptionKey check this in the mocha reports
+      "encryptionKey": "COOKIE_ENCRYPTION_KEY",
+      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
+    }
   }
 }
