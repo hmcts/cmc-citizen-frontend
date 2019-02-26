@@ -104,7 +104,6 @@
       "staff-email": "CONTACT_EMAIL",
       "citizen-oauth-client-secret": "123456",
       "os-postcode-lookup-api-key": "AAAAAAA",
-      //session.encryptionKey check this in the mocha reports
       "encryptionKey": "not-a-real-32-bit-encryption-key",
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
     }
