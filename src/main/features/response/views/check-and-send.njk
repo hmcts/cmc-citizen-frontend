@@ -317,7 +317,17 @@
       {% if mediationDraft.youCanOnlyUseMediation %}
         {{
           row(
-            label = 'Do you agree to the mediation conditions?',
+            label = 'Agree to mediation conditions',
+            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+        }}
+      {% endif %}
+      {% if mediationDraft.youCanOnlyUseMediation %}
+        {{
+          row(
+            label = 'Contact number',
             value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
             changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
             bold = true

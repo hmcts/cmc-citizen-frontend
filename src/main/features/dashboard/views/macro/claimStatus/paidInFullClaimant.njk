@@ -30,15 +30,7 @@
   {% set moneyReceivedOn = claim.moneyReceivedOn | date %}
 
   <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
-    {% if claim.response.amount %}
-        <p>{{ t('{{ defendantName }} paid you {{ amount }} on {{ moneyReceivedOn }}.',
-            { defendantName: defendantName, amount: claim.response.amount | numeral,
-              moneyReceivedOn: moneyReceivedOn }) }}</p>
-    {% else %}
-      <p>{{ t('{{ defendantName }} paid you {{ totalAmountTillToday }} on {{ moneyReceivedOn }}.',
-        { defendantName: defendantName, totalAmountTillToday: claim.totalAmountTillToday | numeral,
-          moneyReceivedOn: moneyReceivedOn }) }}</p>
-    {% endif %}
+  <p>{{ t('{{ defendantName }} paid you on {{ moneyReceivedOn }}.', { defendantName: defendantName, moneyReceivedOn: moneyReceivedOn }) }}</p>
 {% endmacro %}
 
 {% macro paidInFullCCJCancelledClaimantClaimDetails(claim) %}
