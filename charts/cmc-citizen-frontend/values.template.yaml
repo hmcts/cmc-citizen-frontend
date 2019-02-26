@@ -29,20 +29,6 @@ nodejs:
   cpuRequests: 0.2
   memoryLimits: 512Mi
   cpuLimits: 1
-  keyVault:
-    'cmc':
-      resourceGroup: 'cmc'
-      secrets:
-        - smoke-test-citizen-username
-        - smoke-test-user-password
-        - os-postcode-lookup-api-key
-        - AppInsightsInstrumentationKey
-        - citizen-oauth-client-secret
-        - cmc-s2s-secret
-        - citizen-draft-store-primary
-        - citizen-draft-store-secondary
-        - citizen-cookie-encryption-key
-        - staff-email
   environment:    
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
@@ -61,3 +47,15 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     FEATURE_MOCK_PAY: false
     FEATURE_MEDIATION: false
+  keyVault:
+    cmc:
+      resourceGroup: cmc
+      secrets:
+      - os-postcode-lookup-api-key
+      - AppInsightsInstrumentationKey
+      - citizen-oauth-client-secret
+      - cmc-s2s-secret
+      - citizen-draft-store-primary
+      - citizen-draft-store-secondary
+      - citizen-cookie-encryption-key
+      - staff-email
