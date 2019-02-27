@@ -32,6 +32,7 @@ import { sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj } from '
 import { sampleClaimIndividualVsIndividualIssueObj, sampleClaimIndividualVsIndividualRequestingMoreTimeObj, sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj, sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj, sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj } from '../../../data/entity/claimIssueData'
 import * as claimIssueData from '../../../data/entity/claimIssueData'
 import * as claimIssueData from 'test/data/entity/claimIssueData'
+import * as respondData from 'test/data/entity/responseData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -105,7 +106,7 @@ describe('Dashboard page', () => {
         })
 
         it('should render dashboard when defendant has respond with a pay immediately admission', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(claimIssueData.sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj)
+          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(respondData.fullAdmissionPayImmediatelyObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -114,31 +115,43 @@ describe('Dashboard page', () => {
         })
 
         it('should render dashboard when defendant has respond with a pay by a set date', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(claimIssueData.sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj)
+          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(respondData.fullAdmissionPayBySetDateObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'The defendant has offered to pay by a set date. You can accept or reject their offer.'))
         })
+
         it('should render dashboard when defendant has respond with a pay by repayment plan', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(claimIssueData.sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj)
+          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(respondData.fullAdmissionRepaymentPlanObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'The defendant has offered to pay in instalments. You can accept or reject their offer.'))
         })
+
         it('should render dashboard when defendant has respond with part admit & pay immediately', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(claimIssueData.partialAdmissionWithImmediatePaymentData)
+          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(respondData.partialAdmissionPayImmediatelyObj)
+
+          await request(app)
+            .get(Paths.dashboardPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('000MC050', 'The defendant believes they owe you £50.'))
+        })
+
+        it('should render dashboard when defendant has respond with part admit & pay by a set date', async () => {
+          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(respondData.partialAdmissionPayBySetDateObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'The defendant believes they owe you £50. You can accept or reject that this is the amount owed.'))
         })
+
         it('should render dashboard when defendant has respond with part admit & repayment plan', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(claimIssueData.partialAdmissionWithRepayment)
+          claimStoreServiceMock.resolveRetrieveBySampleDataClaimant(respondData.partialAdmissionRepaymentPlanObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -337,6 +350,7 @@ describe('Dashboard page', () => {
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           draftStoreServiceMock.resolveFindNoDraftFound()
         })
+
         it('should render page with start claim button when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
 
@@ -345,6 +359,7 @@ describe('Dashboard page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
         })
+
         it('should render page with claim number and status', async () => {
           claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.sampleClaimIndividualVsIndividualIssueObj)
 
@@ -353,6 +368,7 @@ describe('Dashboard page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim.'))
         })
+
         it('should render dashboard when defendant has requested more time', async () => {
           claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.sampleClaimIndividualVsIndividualRequestingMoreTimeObj)
 
@@ -360,28 +376,28 @@ describe('Dashboard page', () => {
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'You need to respond before'))
-
         })
+
         it('should render dashboard when defendant has respond with a pay immediately admission', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.sampleClaimIndividualVsIndividualFullAdmissionPayImmediatelyObj)
+          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(respondData.fullAdmissionPayImmediatelyObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.'))
-
         })
+
         it('should render dashboard when defendant has respond with a pay by a set date', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.sampleClaimIndividualVsIndividualFullAdmissionPayBySetDateObj)
+          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(respondData.fullAdmissionPayBySetDateObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'You’ve admitted all of the claim and offered to pay the full amount by'))
-
         })
+
         it('should render dashboard when defendant has respond with a pay by repayment plan', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.sampleClaimIndividualVsIndividualFullAdmissionRepaymentPlanObj)
+          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(respondData.fullAdmissionRepaymentPlanObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
@@ -389,24 +405,27 @@ describe('Dashboard page', () => {
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.'))
 
         })
+
         it('should render dashboard when defendant has respond with part admit & pay immediately', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.partialAdmissionWithImmediatePaymentData)
+          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(respondData.partialAdmissionPayImmediatelyObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'admitted part of the claim.'))
         })
+
         it('should render dashboard when defendant has respond with part admit & pay by a set date', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.partialAdmissionWithSetDate)
+          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(respondData.partialAdmissionPayBySetDateObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('000MC050', 'admitted part of the claim.'))
         })
+
         it('should render dashboard when defendant has respond with part admit & repayment plan', async () => {
-          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(claimIssueData.partialAdmissionWithRepayment)
+          claimStoreServiceMock.resolveRetrieveBySampleDataDefendant(respondData.partialAdmissionRepaymentPlanObj)
 
           await request(app)
             .get(Paths.dashboardPage.uri)

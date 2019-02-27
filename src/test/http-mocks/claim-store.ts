@@ -8,6 +8,7 @@ import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { MomentFactory } from 'shared/momentFactory'
 
 import {
   fullAdmissionWithSoMPaymentByInstalmentsData,
@@ -142,7 +143,7 @@ export const sampleClaimIssueObj = {
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
-  responseDeadline: '2017-08-08',
+  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   features: ['admissions']
 }
 

@@ -11,7 +11,7 @@ import { Income, IncomeType } from 'claims/models/response/statement-of-means/in
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 import { DisabilityStatus } from 'claims/models/response/statement-of-means/disabilityStatus'
-
+import { sampleClaimIndividualVsIndividualIssueObj } from 'test/data/entity/claimIssueData'
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
@@ -478,5 +478,98 @@ export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
     paidDate: '2017-12-31',
     paidAmount: '20000',
     explanation: 'I paid in cash'
+  }
+}
+export const sampleSetByDateObj = {
+  paymentDate: '2888-12-20',
+  paymentOption: 'BY_SPECIFIED_DATE'
+}
+
+export const sampleImmediately = {
+  paymentDate: MomentFactory.currentDate().add(5, 'days'),
+  paymentOption: 'IMMEDIATELY'
+}
+
+export const sampleInstalments = {
+  paymentOption: 'INSTALMENTS',
+  repaymentPlan: {
+    paymentLength: '10 months',
+    completionDate: '3000-03-20',
+    paymentSchedule: 'EVERY_MONTH',
+    firstPaymentDate: '2999-06-20',
+    instalmentAmount: 10
+  }
+}
+
+export const fullAdmissionPayImmediatelyObj = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    ...baseFullAdmissionData,
+    paymentIntention: {
+      ...sampleImmediately
+    },
+    features: ['admissions']
+  }
+}
+
+export const partialAdmissionPayImmediatelyObj = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    ...basePartialAdmissionData,
+    paymentIntention: {
+      ...sampleImmediately
+    },
+    amount: 50,
+    features: ['admissions']
+  }
+}
+
+export const fullAdmissionPayBySetDateObj = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    ...baseFullAdmissionData,
+    paymentIntention: {
+      ...sampleSetByDateObj,
+      ...statementOfMeansWithAllFieldsData
+    },
+    features: ['admissions']
+  }
+}
+
+export const partialAdmissionPayBySetDateObj = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    ...basePartialAdmissionData,
+    paymentIntention: {
+      ...sampleSetByDateObj,
+      ...statementOfMeansWithAllFieldsData
+    },
+    amount: 50,
+    features: ['admissions']
+  }
+}
+
+export const fullAdmissionRepaymentPlanObj = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    ...baseFullAdmissionData,
+    paymentIntention: {
+      ...sampleInstalments,
+      ...statementOfMeansWithAllFieldsData
+    },
+    features: ['admissions']
+  }
+}
+
+export const partialAdmissionRepaymentPlanObj = {
+  ...sampleClaimIndividualVsIndividualIssueObj,
+  response: {
+    ...basePartialAdmissionData,
+    paymentIntention: {
+      ...sampleInstalments,
+      ...statementOfMeansWithAllFieldsData
+    },
+    amount: 50,
+    features: ['admissions']
   }
 }
