@@ -15,6 +15,12 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as feesServiceMock from 'test/http-mocks/fees'
 import { SignatureType } from 'common/signatureType'
+import {
+  companyDetails,
+  individualDetails,
+  organisationDetails,
+  soleTraderDetails
+} from 'test/data/draft/partyDetails'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -60,7 +66,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate the hyperlink (Change) available on checkAndSendPage  with correct location and span', async () => {
-        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...sampleClaimDraftObj.defendant, partyDetails: individualDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -81,6 +87,82 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/reason" class="bold">Change <span class="visuallyhidden">why you believe you’re owed the money:</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/timeline" class="bold">Change <span class="visuallyhidden">timeline of what happened</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/evidence" class="bold">Change <span class="visuallyhidden">your evidence (optional)</span></a>'))
+      })
+
+      it('should validate individual to soleTrader flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { defendant: { ...sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
+        feesServiceMock.resolveCalculateIssueFee()
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<span class="form-label-bold">Business name</span>'))
+          .expect(res => expect(res).to.be.successful.withText('<span>Trading as SoleTrader Inc.</span>'))
+      })
+
+      it('should validate individual to Company flow with lable Company Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { defendant: { ...sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+        feesServiceMock.resolveCalculateIssueFee()
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<span>Company Inc.</span>'))
+        // ROC-5326 and ROC-5315 test should be added once the jira closed
+      })
+
+      it('should validate individual to organisation flow with lable organisation Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { defendant: { ...sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+        feesServiceMock.resolveCalculateIssueFee()
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<span>Organisation Inc.</span>'))
+      })
+
+      it('should validate soleTrader to individual flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+            { claimant: { ...sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails } })
+        feesServiceMock.resolveCalculateIssueFee()
+
+        await request(app)
+            .get(ClaimPaths.checkAndSendPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+            .expect(res => expect(res).to.be.successful.withText('<span class="form-label-bold">Business name</span>'))
+            .expect(res => expect(res).to.be.successful.withText('<span>Trading as SoleTrader Inc.</span>'))
+      })
+
+      it('should validate Company to individual to Company flow with lable Company Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...sampleClaimDraftObj.claimant, partyDetails: companyDetails } })
+        feesServiceMock.resolveCalculateIssueFee()
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<span>Company Inc.</span>'))
+        // ROC-5326 and ROC-5315 test should be added once the jira closed
+      })
+
+      it('should validate organisation to individual flow with lable organisation Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...sampleClaimDraftObj.claimant, partyDetails: organisationDetails } })
+        feesServiceMock.resolveCalculateIssueFee()
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<span>Organisation Inc.</span>'))
       })
     })
   })
