@@ -15,7 +15,8 @@ export class FreeMediationTask {
         !!mediationDraft.youCanOnlyUseMediation &&
         (mediationDraft.youCanOnlyUseMediation.option === FreeMediationOption.YES ||
           mediationDraft.youCanOnlyUseMediation.option === FreeMediationOption.NO) &&
-        (mediationDraft.canWeUse.isCompleted() || mediationDraft.canWeUseCompany.isCompleted())
+        ((!!mediationDraft.canWeUse && mediationDraft.canWeUse.isCompleted()) ||
+          (mediationDraft.canWeUseCompany && mediationDraft.canWeUseCompany.isCompleted()))
     } else {
       return responseDraft.freeMediation !== undefined && validator.validateSync(responseDraft.freeMediation).length === 0
     }
