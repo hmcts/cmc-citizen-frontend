@@ -199,7 +199,7 @@ export class ResponseModelConverter {
           return claim.claimData.claimant.mobilePhone
         }
       } else {
-        return mediationDraft.canWeUse && mediationDraft.canWeUse.mediationPhoneNumber ? mediationDraft.canWeUse.mediationPhoneNumber : undefined
+        return mediationDraft.canWeUse.mediationPhoneNumber
       }
     }
     return undefined
