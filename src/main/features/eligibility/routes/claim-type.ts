@@ -7,7 +7,7 @@ import { EligibilityCheck, eligible, notEligible } from 'eligibility/model/eligi
 
 class ClaimTypeEligibilityPage extends EligibilityPage<ClaimType> {
   constructor () {
-    super(Paths.claimTypePage, Paths.singleDefendantPage, 'claimType')
+    super(Paths.claimTypePage, Paths.claimantAddressPage, 'claimType')
   }
 
   checkEligibility (value: ClaimType): EligibilityCheck {
