@@ -66,7 +66,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate the hyperlink (Change) available on checkAndSendPage  with correct location and span', async () => {
-        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...sampleClaimDraftObj.defendant, partyDetails: individualDetails } })
+        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: individualDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -91,7 +91,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should validate individual to soleTrader flow with lable Business and trading name', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
+          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -104,7 +104,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should validate individual to Company flow with lable Company Name and Contact persion Name', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -117,7 +117,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should validate individual to organisation flow with lable organisation Name and Contact persion Name', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -129,7 +129,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should validate soleTrader to individual flow with lable Business and trading name', async () => {
         draftStoreServiceMock.resolveFind('claim',
-            { claimant: { ...sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails } })
+            { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -142,7 +142,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should validate Company to individual to Company flow with lable Company Name and Contact persion Name', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...sampleClaimDraftObj.claimant, partyDetails: companyDetails } })
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -155,7 +155,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should validate organisation to individual flow with lable organisation Name and Contact persion Name', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...sampleClaimDraftObj.claimant, partyDetails: organisationDetails } })
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
