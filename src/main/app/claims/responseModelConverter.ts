@@ -68,6 +68,7 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 export class ResponseModelConverter {
 
@@ -192,11 +193,11 @@ export class ResponseModelConverter {
 
   private static convertMediationPhoneNumber (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
     if (FeatureToggles.isEnabled('mediation')) {
-      if (mediationDraft.canWeUse.option === 'yes') {
+      if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted()) {
-          return draft.defendantDetails.mobilePhone ? draft.defendantDetails.mobilePhone.number : undefined
+          return draft.defendantDetails.mobilePhone.number
         } else {
-          return claim.claimData.claimant.mobilePhone
+          //TO-DO:
         }
       } else {
         return mediationDraft.canWeUse.mediationPhoneNumber
