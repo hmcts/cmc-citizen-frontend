@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+{% from "externalLink.njk" import externalLink %}
+
+{% set heading = 'Contact the court' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('If you are under 18 you need to email or phone the court. Claimants cannot submit a claim against someone under 18 so you may be able to have the claim stopped.') }}</p>
+
+      <p>
+        <strong>{{ t('Money Claim Online helpdesk') }}</strong><br/>
+        <a href="mailto:moneyclaims@justice.gov.uk">moneyclaims@justice.gov.uk</a><br/>
+        {{ t('Telephone: 0300 123 1057') }}<br/>
+        {{ t('Telephone: 01604 619 402') }}<br/>
+        {{ t('Monday to Friday, 8:30am to 5pm') }}<br/>
+        {{ externalLink('Find out about call charges', 'https://www.gov.uk/call-charges') }}
+      </p>
+      <p>
+        {{ t('You might be able to get advice about the claim from') }}
+        {{ externalLink('Citizens Advice', 'https://www.citizensadvice.org.uk/about-us/contact-us/') }}.
+      </p>
+    </div>
+  </div>
+
+{% endblock %}
