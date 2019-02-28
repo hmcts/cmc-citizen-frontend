@@ -25,7 +25,7 @@ describe('Dashboard - defendant page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -38,18 +38,25 @@ describe('Dashboard - defendant page', () => {
       })
 
       context('when at least one claim issued', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        })
-
         it('should render page when everything is fine', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           await request(app)
             .get(defendantPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
         })
+
+        it('should return forbidden when accessor is not the defendant', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+            submitterId: claimStoreServiceMock.sampleClaimObj.defendantId,
+            defendantId: claimStoreServiceMock.sampleClaimObj.submitterId
+          })
+          await request(app)
+            .get(defendantPage)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.forbidden)
+        })
       })
     })
-
   })
 })

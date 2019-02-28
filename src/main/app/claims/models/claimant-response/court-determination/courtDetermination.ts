@@ -1,5 +1,5 @@
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { DecisionType } from 'claims/models/claimant-response/court-determination/decisionType'
+import { DecisionType } from 'common/court-calculations/decisionType'
 
 export interface CourtDetermination {
   courtDecision: PaymentIntention

@@ -9,6 +9,7 @@ import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/author
 import { Paths as CCJPaths } from 'ccj/paths'
 
 import { app } from 'main/app'
+import { Paths } from 'dashboard/paths'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
@@ -17,11 +18,13 @@ import { SignatureType } from 'common/signatureType'
 import { ValidationErrors as BasicValidationErrors } from 'ccj/form/models/declaration'
 import { ValidationErrors as QualifiedValidationErrors } from 'ccj/form/models/qualifiedDeclaration'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
-const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
+const dashboardUri = Paths.dashboardPage.uri
+const confirmationPage = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: check and send page', () => {
   attachDefaultHooks(app)
@@ -64,6 +67,50 @@ describe('CCJ: check and send page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+        })
+
+        it('should render page when everything is fine when settlement is broken with instalments - cannot change DOB and Payment options', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement(claimStoreServiceMock.settlementAndSettlementReachedAt)
+          draftStoreServiceMock.resolveFind('ccj')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers', 'Date of birth', 'By instalments'))
+            .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options', '/ccj/date-of-birth'))
+
+        })
+
+        it('should render page when everything is fine when settlement is broken with by set date - cannot change DOB but can change Payment options', async () => {
+          const responseAndSettlementOverride: object = {
+            ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
+            ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
+            settlementReachedAt: '2017-07-25T22:45:51.785'
+          }
+          const draftOverride: object = {
+            paymentOption: {
+              option: PaymentType.BY_SET_DATE
+            }
+          }
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(responseAndSettlementOverride)
+          draftStoreServiceMock.resolveFind('ccj', draftOverride)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers', 'Date of birth', 'By a set date', '/ccj/payment-options'))
+            .expect(res => expect(res).to.be.successful.withoutText('/ccj/date-of-birth'))
+
+        })
+
+        it('should redirect to dashboard when claim is not eligible for CCJ', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.redirect.toLocation(dashboardUri))
+
         })
       })
     })

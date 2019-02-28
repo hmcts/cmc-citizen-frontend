@@ -14,6 +14,10 @@
 
     <p>{{ t('Total claim amount is {{ totalAmount }}.', { totalAmount: totalAmount | numeral }) }} </p>
 
+    {% if featureToggles.testingSupport and disposableIncome !== undefined %}
+      <p>For testing use only: Disposable Income value: {{ disposableIncome }}</p>
+    {% endif %}
+
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
 
@@ -28,7 +32,8 @@
           <fieldset id="paymentSchedule[label]">
             <legend>
               <span class="form-label-bold">{{ t('How often do you want to receive payments?') }}</span>
-              <span class="form-hint">{{ t('The payment frequency is set by the defendant, but if the plan is set by a judge they will consider your preferred frequency.') }}</span>
+              <span class="form-hint">{{ t('The court will accept the defendant`s payment frequency.
+                  We`ll only consider your preferred frequency if a different plan is set by a judge later.') }}</span>
               {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
             </legend>
 
@@ -67,7 +72,7 @@
       <h2 class="heading-small">{{ t('Length of repayment plan') }}</h2>
       <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
 
-      {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
+      {{ dateInput('firstPaymentDate', form, hint = t('This must be no sooner than {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
 
       {{ saveAndContinueButton() }}
     </form>

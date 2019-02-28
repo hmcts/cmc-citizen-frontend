@@ -9,7 +9,11 @@
 {% block content %}
   <div class="column-two-thirds">
 
-    <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.', { totalAmount: totalAmount | numeral }) }} </p>
+    {% if partAdmit %}
+      <p>{{ t('You admit you owe {{ totalAmount }}.', { totalAmount: totalAmount | numeral }) }}</p>
+    {% else %}
+      <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.', { totalAmount: totalAmount | numeral }) }} </p>
+    {% endif %}
 
     <form method="post" novalidate class="payment-plan-calculation">
       {{ csrfProtection(csrf) }}
@@ -46,7 +50,7 @@
       {{ linkButton('Calculate length of repayment plan', 'action[calculatePaymentPlan]', 'button button-secondary calculateLengthOfRepayment') }}
 
       <h2 class="heading-small">Length of repayment plan</h2>
-      <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
+      <p id="lengthOfRepayment" class="lengthOfRepayment">{{ paymentLength | default('-') }}</p>
 
       {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | monthIncrement | inputDate }), label = 'When will you make the first payment?') }}
 

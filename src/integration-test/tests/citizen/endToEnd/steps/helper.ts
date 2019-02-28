@@ -29,7 +29,10 @@ export class Helper {
     I.click('Respond to claim')
   }
 
-  finishResponse (testData: EndToEndTestData): void {
+  finishResponse (
+    testData: EndToEndTestData,
+    isRequestMoreTimeToRespond: boolean = true
+  ): void {
     if (testData.defenceType === undefined) {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
     }
@@ -38,7 +41,14 @@ export class Helper {
     defenceSteps.loginAsDefendant(testData.defendantEmail)
     I.click(testData.claimRef)
     I.click('Respond to claim')
-    defenceSteps.makeDefenceAndSubmit(testData.defendant, testData.defendantEmail, testData.defendantPartyType, testData.defenceType)
+    defenceSteps.makeDefenceAndSubmit(
+      testData.defendant,
+      testData.defendantEmail,
+      testData.defendantPartyType,
+      testData.defenceType,
+      isRequestMoreTimeToRespond,
+      testData.defendantClaimsToHavePaidInFull
+    )
   }
 
   // TODO: refactor with above ^^^

@@ -113,8 +113,14 @@
       "eligibility/*": [
         "main/features/eligibility/*"
       ],
+      "settlement-agreement/*": [
+        "main/features/settlement-agreement/*"
+      ],
       "services/*": [
         "main/services/*"
+      ],
+      "mediation/*": [
+        "main/features/mediation/*"
       ]
     },
     "typeRoots": [

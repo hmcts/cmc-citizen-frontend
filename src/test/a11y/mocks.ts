@@ -14,6 +14,7 @@ import {
   statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
@@ -46,7 +47,12 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
     },
     ccjType: CountyCourtJudgmentType.DETERMINATION
   },
-  settlementReachedAt: '2017-08-10T15:27:32.917'
+  settlementReachedAt: '2017-08-10T15:27:32.917',
+  claimantResponse: {
+    type: ClaimantResponseType.ACCEPTATION,
+    amountPaid: 0
+  },
+  reDeterminationRequestedAt: '2018-12-01T12:34:56.789'
 }).persist()
 
 claimStoreMock.mockCalculateInterestRate(0).persist()

@@ -1,0 +1,44 @@
+{% from "internalLink.njk" import internalLink %}
+
+{% macro paidInFullClaimantClaimDetails(externalId) %}
+  {% if featureToggles.paidInFull %}
+    <div class="status-block">
+      <h2 class="heading-small">{{ t('If you’ve been paid') }}</h2>
+      <p>{{ t(internalLink('Tell us if you want to end the claim', DashboardPaths.datePaidPage.evaluateUri({ externalId: externalId })) + ' because the defendant has paid you.') | safe }}</p>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro paidInFullClaimantButtonClaimDetails(claim, text='Tell us you’ve settled') %}
+  {% if featureToggles.paidInFull %}
+    <div class="form-group">
+      <p>{{ internalLink(text, DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }), "button button-secondary") | safe }}</p>
+    </div>
+    {% else %}
+      <div class="form-group">
+        <p>{{ internalLink(text, AppPaths.contactUsPage.uri, "button button-secondary") | safe }}</p>
+      </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro paidInFullClaimantDashboard() %}
+  {{ t('This claim is settled.') }}
+{% endmacro %}
+
+{% macro paidInFullClaimantClaimSettledDetails(claim) %}
+  {% set defendantName = claim.claimData.defendant.name %}
+  {% set moneyReceivedOn = claim.moneyReceivedOn | date %}
+
+  <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+  <p>{{ t('{{ defendantName }} paid you on {{ moneyReceivedOn }}.', { defendantName: defendantName, moneyReceivedOn: moneyReceivedOn }) }}</p>
+{% endmacro %}
+
+{% macro paidInFullCCJCancelledClaimantClaimDetails(claim) %}
+  {{ paidInFullClaimantClaimSettledDetails(claim) }}
+  <p>{{ t('The defendant’s County Court Judgment will be cancelled.') }}</p>
+{% endmacro %}
+
+{% macro paidInFullCCJSatisfiedClaimantClaimDetails(claim) %}
+  {{ paidInFullClaimantClaimSettledDetails(claim) }}
+  <p>{{ t('The defendant’s County Court Judgment will be marked as paid.') }}</p>
+{% endmacro %}

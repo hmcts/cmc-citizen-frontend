@@ -28,7 +28,11 @@
 {% endmacro %}
 
 {% macro residenceSection(residence) %}
-  {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType, bottomBorder = true) }}
+  {% if residence.type === ResidenceType.OWN_HOME.value  %}
+    {{ row(label = 'Where are they living?', value = 'Home that they own', bottomBorder = true) }}
+  {% else %}
+    {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType, bottomBorder = true) }}
+  {% endif %}
 {% endmacro %}
 
 {% macro childrenSection(children) %}
@@ -111,7 +115,7 @@
 {% macro monthlyIncomesSection(incomes) %}
   {% if incomes %}
     {% for income in incomes %}
-      {{ row(label = income.type | renderIncomeType | capitalize, value = income.amount | numeral, bottomBorder = loop.index0 === incomes.length - 1) }}
+      {{ row(label = income.type | renderIncomeType | capitalize, value = income | renderMonthlyAmount | numeral, bottomBorder = loop.index0 === incomes.length - 1) }}
     {% endfor %}
   {% else %}
     {{ row(label = 'Do they receive any income?', value = 'No', bottomBorder = true) }}
@@ -121,15 +125,27 @@
 {% macro monthlyExpensesSection(expenses) %}
   {% if expenses %}
     {% for expense in expenses %}
-      {{ row(label = expense.type | renderExpenseType | capitalize, value = expense.amount | numeral, bottomBorder = loop.index0 === expenses.length - 1) }}
+      {{ row(label = expense.type | renderExpenseType | capitalize, value = expense | renderMonthlyAmount | numeral, bottomBorder = loop.index0 === expenses.length - 1) }}
     {% endfor %}
   {% else %}
     {{ row(label = 'Do they pay any expenses?', value = 'No', bottomBorder = true) }}
   {% endif %}
 {% endmacro %}
 
+{% macro priorityDebtsSection(debts) %}
+   {{ row(label = 'Do they have any debts they are behind on?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
+  {% for debt in debts %}
+    {% if debts.length === 1 %}
+      {{ row(label = 'Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
+    {% else %}
+      {{ row(label = loop.index + '. Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
+    {% endif %}
+    {{ row(label = 'Payments', value = (debt.amount | numeral) + ' ' + (debt.frequency | renderPaymentFrequencyView | lower) , bottomBorder = loop.index === debts.length ) }}
+  {% endfor %}
+{% endmacro %}
+
 {% macro debtsSection(debts) %}
-  {{ row(label = 'Do they have any debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
+  {{ row(label = 'Do they have loan or credit card debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
   {% for debt in debts %}
     {% if debts.length === 1 %}
       {{ row(label = 'Debt' , value = debt.description) }}
@@ -182,11 +198,13 @@
       {{ heading('Monthly expenses') }}
       {{ monthlyExpensesSection(statementOfMeans.expenses) }}
 
-      {{ heading('Debts') }}
-      {{ debtsSection(statementOfMeans.debts) }}
-
       {{ heading('Court orders') }}
       {{ courtOrdersSection(statementOfMeans.courtOrders) }}
+
+      {{ heading('Debts' ) }}
+      {{ priorityDebtsSection(statementOfMeans.priorityDebts) }}
+      {{ debtsSection(statementOfMeans.debts) }}
+
     </div>
   </details>
 {% endmacro %}

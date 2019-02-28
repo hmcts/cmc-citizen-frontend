@@ -7,6 +7,7 @@ import {
   Paths,
   StatementOfMeansPaths
 } from 'response/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -27,11 +28,19 @@ import { PaymentType } from 'shared/components/payment-intention/model/paymentOp
 import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
+import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
+import { FeatureToggles } from 'utils/featureToggles'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
+
+    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)
+      && (draft.isResponsePartiallyAdmitted() || draft.isResponseFullyAdmitted())) {
+      delete draft.response.type
+    }
 
     tasks.push(
       new TaskListItem(
@@ -116,6 +125,17 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+        ) {
+          tasks.push(
+            new TaskListItem(
+              'Share your financial details',
+              Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+              ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+            )
+          )
         }
 
         if (draft.isResponseFullyAdmittedWithInstalments()) {
@@ -186,6 +206,17 @@ export class TaskListBuilder {
               StatementOfMeansTask.isCompleted(draft)
             )
           )
+        } else if (draft.defendantDetails.partyDetails.isBusiness() &&
+            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+          ) {
+          tasks.push(
+            new TaskListItem(
+              'Share your financial details',
+              Paths.sendCompanyFinancialDetailsPage.evaluateUri({ externalId: externalId }),
+              ViewSendCompanyFinancialDetailsTask.isCompleted(draft)
+            )
+          )
         }
 
         if (howMuchDoYouOweTask && WhenWillYouPayTask.isCompleted(draft)
@@ -204,19 +235,35 @@ export class TaskListBuilder {
     return new TaskList('Respond to claim', tasks)
   }
 
-  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft): TaskList {
     if (draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
-      return new TaskList(
-        'Resolving the claim', [
-          new TaskListItem(
-            'Consider free mediation',
-            Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
-            FreeMediationTask.isCompleted(draft)
-          )
-        ]
-      )
+      let path: string
+      if (FeatureToggles.isEnabled('mediation')) {
+        path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Try to resolve the claim', [
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            )
+          ]
+        )
+      } else {
+        path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Resolving the claim', [
+            new TaskListItem(
+              'Consider free mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            )
+          ]
+        )
+      }
+
     }
 
     return undefined
@@ -267,8 +314,8 @@ export class TaskListBuilder {
       && ValidationUtils.isValid(draft.rejectAllOfClaim.whyDoYouDisagree)
   }
 
-  static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
-    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim)
+  static buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): TaskListItem[] {
+    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
 
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,

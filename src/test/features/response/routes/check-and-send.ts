@@ -4,9 +4,9 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -19,7 +19,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { ResponseType } from 'response/form/models/responseType'
 import { SignatureType } from 'common/signatureType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -45,6 +45,7 @@ describe('Defendant response: check and send page', () => {
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveFind(draftType, { defendantDetails: undefined })
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -65,6 +66,7 @@ describe('Defendant response: check and send page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind(draftType)
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -92,6 +94,7 @@ describe('Defendant response: check and send page', () => {
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
           draftStoreServiceMock.resolveFind(draftType, { defendantDetails: undefined })
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -115,6 +118,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -138,6 +142,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should return 500 and render error page when form is valid and cannot save response', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
 
@@ -150,6 +155,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.rejectDelete()
@@ -163,6 +169,7 @@ describe('Defendant response: check and send page', () => {
 
           it('should redirect to confirmation page when form is valid and a non handoff response type is picked', async () => {
             draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
@@ -175,11 +182,12 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to counter-claim handoff page when defendant is counter claiming', async () => {
+          it('should redirect to counter-claim hand off page when defendant is counter claiming', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
               response: { type: ResponseType.DEFENCE },
               rejectAllOfClaim: { option: RejectAllOfClaimOption.COUNTER_CLAIM }
             })
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)

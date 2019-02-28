@@ -10,14 +10,85 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
+  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentByInstalmentsDataCompany,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
+  fullAdmissionWithSoMPaymentBySetDate, fullAdmissionWithSoMPaymentBySetDateInNext2Days,
+  fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
+  partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+
+export const sampleClaimIssueObj = {
+  id: 1,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  referenceNumber: '000MC050',
+  createdAt: '2017-07-25T22:45:51.785',
+  issuedOn: '2017-07-25',
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: 200,
+  moreTimeRequested: false,
+  claim: {
+    claimants: [
+      {
+        type: 'individual',
+        name: 'John Smith',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        },
+        dateOfBirth: '1990-02-17'
+      }
+    ],
+    defendants: [
+      {
+        type: 'individual',
+        name: 'John Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
+  },
+  responseDeadline: '2017-08-08',
+  features: ['admissions']
+}
 
 export const sampleClaimObj = {
   id: 1,
@@ -97,6 +168,64 @@ export const sampleClaimObj = {
   features: ['admissions']
 }
 
+export const settlementWithInstalmentsAndAcceptation = {
+  settlement: {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: {
+          content: 'offer text',
+          completionDate: '2017-08-08',
+          paymentIntention: {
+            paymentOption: PaymentOption.INSTALMENTS,
+            repaymentPlan: {
+              instalmentAmount: 100,
+              firstPaymentDate: '2018-10-01',
+              paymentSchedule: PaymentSchedule.EACH_WEEK,
+              completionDate: '2019-02-01',
+              paymentLength: '1'
+            }
+          }
+        }
+      },
+      {
+        madeBy: MadeBy.DEFENDANT.value,
+        type: 'COUNTERSIGNATURE'
+      }
+    ]
+  }
+}
+
+export const settlementWithSetDateAndAcceptation = {
+  settlement: {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT.value,
+        offer: {
+          content: 'offer text',
+          completionDate: '2017-08-08',
+          paymentIntention: {
+            paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+            paymentDate: '2010-12-31'
+          }
+        }
+      },
+      {
+        madeBy: MadeBy.DEFENDANT.value,
+        type: 'COUNTERSIGNATURE'
+      }
+    ]
+  }
+}
+
+export const settlementAndSettlementReachedAt: object = {
+  settlementReachedAt: '2017-07-25T22:45:51.785',
+  ...this.settlementWithInstalmentsAndAcceptation
+
+}
+
 export const sampleDefendantResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: {
@@ -119,7 +248,14 @@ export const sampleDefendantResponseObj = {
 
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithSoMPaymentBySetDateData
+}
+
+export const samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithPaymentBySetDateCompanyData
 }
 
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
@@ -127,9 +263,24 @@ export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
   response: fullAdmissionWithSoMPaymentBySetDate
 }
 
+export const sampleFullAdmissionWithPaymentBySetDateInNext2daysResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentBySetDateInNext2Days
+}
+
+export const sampleFullAdmissionWithReasonablePaymentBySetDateResponseObjAndNoDisposableIncome = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome
+}
+
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjCompanyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataCompany
 }
 
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome = {
@@ -142,11 +293,22 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonabl
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule
 }
 
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
+}
+
 export function mockCalculateInterestRate (expected: number): mock.Scope {
   return mock(serviceBaseURL)
     .get('/interest/calculate')
     .query(true)
     .reply(HttpStatus.OK, { amount: expected })
+}
+
+export function resolveRetrieveClaimIssueByExternalId (claimOverride?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleClaimIssueObj, ...claimOverride })
 }
 
 export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.Scope {
@@ -159,6 +321,12 @@ export function resolveRetrieveClaimByExternalIdWithResponse (override?: object)
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleDefendantResponseObj, ...override })
+}
+
+export function resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement (override?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleClaimObj, ...sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonablePaymentSchedule, ...override })
 }
 
 export function rejectRetrieveClaimByExternalId (reason: string = 'Error') {

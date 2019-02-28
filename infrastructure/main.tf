@@ -1,3 +1,7 @@
+provider "azurerm" {
+  version = "1.19.0"
+}
+
 provider "vault" {
   //  # It is strongly recommended to configure this provider through the
   //  # environment variables described above, so that each user can have
@@ -52,8 +56,8 @@ data "azurerm_key_vault_secret" "draft_store_secondary" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "postcode_lookup_api_key" {
-  name = "postcode-lookup-api-key"
+data "azurerm_key_vault_secret" "os_postcode_lookup_api_key" {
+  name = "os-postcode-lookup-api-key"
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
@@ -83,22 +87,25 @@ module "citizen-frontend" {
   asp_name = "${local.asp_name}"
   asp_rg = "${local.asp_name}"
   instance_size = "${local.sku_size}"
+  website_local_cache_sizeinmb = "${var.website_local_cache_sizeinmb}"
 
   app_settings = {
     // Node specific vars
+    NODE_DEBUG="${var.node_debug}"
     NODE_ENV = "${var.node_env}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src"
 
     // Logging vars
+    LOG_LEVEL = "${var.log_level}"
     REFORM_TEAM = "${var.product}"
     REFORM_SERVICE_NAME = "${var.microservice}"
     REFORM_ENVIRONMENT = "${var.env}"
 
     // Application vars
     GA_TRACKING_ID = "${var.ga_tracking_id}"
-    POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.postcode_lookup_api_key.value}"
+    POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.os_postcode_lookup_api_key.value}"
     COOKIE_ENCRYPTION_KEY = "${data.azurerm_key_vault_secret.cookie_encryption_key.value}"
 
     // IDAM
@@ -129,7 +136,7 @@ module "citizen-frontend" {
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
-    FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_TESTING_SUPPORT = "${var.feature_testing_support}"
     // Enabled everywhere except prod
     FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
@@ -137,6 +144,7 @@ module "citizen-frontend" {
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
+    FEATURE_MEDIATION = "${var.feature_mediation}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 

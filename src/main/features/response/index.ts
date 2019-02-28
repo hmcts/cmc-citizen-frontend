@@ -13,7 +13,7 @@ import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import { ResponseGuard } from 'response/guards/responseGuard'
 import { ClaimMiddleware } from 'claims/claimMiddleware'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
@@ -24,6 +24,7 @@ import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToCla
 import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -87,6 +88,10 @@ export class Feature {
       },
       initiatePartyFromClaimHandler
     )
+    app.all(/^\/case\/.+\/response\/task-list|check-and-send|incomplete-submission.*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
+        return new MediationDraft().deserialize(value)
+      }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
 }

@@ -66,32 +66,7 @@
 
     {% endif %}
 
-    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-
-      {{
-        whenWillYouPayRow(
-          value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
-          url = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
-        )
-      }}
-    {% endif %}
-
     {{ tableEnd() }}
-
-    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-
-      {{
-        notImmediatePayment(
-          type = draft.fullAdmission.paymentIntention.paymentOption,
-          paymentDate = draft.fullAdmission.paymentIntention.paymentDate,
-          paymentPlan = draft.fullAdmission.paymentIntention.paymentPlan,
-          explanation = draft.statementOfMeans.explanation.text,
-          Paths = FullAdmissionPaths,
-          externalId = claim.externalId,
-          statementOfMeansIsApplicable = statementOfMeansIsApplicable
-        )
-      }}
-    {% endif %}
 
     {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
 
@@ -168,29 +143,6 @@
           )
         }}
         {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
-      {% else %}
-        {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-          {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
-          {{
-            whenWillYouPayRow(
-              value = t(draft.partialAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
-              url = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
-            )
-          }}
-          {{ tableEnd() }}
-        {% else %}
-          {{
-            notImmediatePayment(
-              type = draft.partialAdmission.paymentIntention.paymentOption,
-              paymentDate = draft.partialAdmission.paymentIntention.paymentDate,
-              paymentPlan = draft.partialAdmission.paymentIntention.paymentPlan,
-              explanation = draft.statementOfMeans.explanation.text,
-              Paths = PartAdmissionPaths,
-              externalId = claim.externalId,
-              statementOfMeansIsApplicable = statementOfMeansIsApplicable
-            )
-          }}
-        {% endif %}
       {% endif %}
     {% endif %}
 
@@ -287,8 +239,59 @@
       {% include "./statement-of-means/check-and-send.njk" %}
     {% endif %}
 
-    {% if (admissionsApplicable and (draft.isResponsePartiallyAdmitted() or (draft.isResponseRejectedFullyBecausePaidWhatOwed() and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
-      or draft.isResponseRejectedFullyWithDispute() %}
+    {% if draft.isResponsePartiallyAdmitted() and not draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+      {% if draft.partialAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+        {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
+        {{
+        whenWillYouPayRow(
+          value = t(draft.partialAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
+          url = PartAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+        )
+        }}
+        {{ tableEnd() }}
+      {% else %}
+        {{
+        notImmediatePayment(
+          type = draft.partialAdmission.paymentIntention.paymentOption,
+          paymentDate = draft.partialAdmission.paymentIntention.paymentDate,
+          paymentPlan = draft.partialAdmission.paymentIntention.paymentPlan,
+          explanation = draft.statementOfMeans.explanation.text,
+          Paths = PartAdmissionPaths,
+          externalId = claim.externalId,
+          statementOfMeansIsApplicable = statementOfMeansIsApplicable
+        )
+        }}
+      {% endif %}
+    {% endif %}
+
+    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+      {{
+      whenWillYouPayRow(
+        value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
+        url = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+      )
+      }}
+    {% endif %}
+
+    {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+      {{
+      notImmediatePayment(
+        type = draft.fullAdmission.paymentIntention.paymentOption,
+        paymentDate = draft.fullAdmission.paymentIntention.paymentDate,
+        paymentPlan = draft.fullAdmission.paymentIntention.paymentPlan,
+        explanation = draft.statementOfMeans.explanation.text,
+        Paths = FullAdmissionPaths,
+        externalId = claim.externalId,
+        statementOfMeansIsApplicable = statementOfMeansIsApplicable
+      )
+      }}
+    {% endif %}
+
+    {% if ((admissionsApplicable
+           and (draft.isResponsePartiallyAdmitted()
+                or (draft.isResponseRejectedFullyBecausePaidWhatOwed()
+                    and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
+          or draft.isResponseRejectedFullyWithDispute()) and mediationEnabled !== true %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(
@@ -298,6 +301,39 @@
             bold = true
           )
       }}
+      {{ tableEnd() }}
+    {% endif %}
+
+    {% if mediationEnabled %}
+      {{ tableStart('freeMediation', 'Free telephone mediation') }}
+      {{
+        row(
+          label = 'Will you try free mediation?',
+          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        )
+      }}
+      {% if mediationDraft.youCanOnlyUseMediation %}
+        {{
+          row(
+            label = 'Agree to mediation conditions',
+            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+        }}
+      {% endif %}
+      {% if mediationDraft.youCanOnlyUseMediation %}
+        {{
+          row(
+            label = 'Contact number',
+            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+        }}
+      {% endif %}
       {{ tableEnd() }}
     {% endif %}
 

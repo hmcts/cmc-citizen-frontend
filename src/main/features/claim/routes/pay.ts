@@ -23,6 +23,7 @@ import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveRespo
 import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
@@ -74,7 +75,12 @@ async function successHandler (res, next) {
         draft.document.claimant.payment,
         `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${externalId}.`
       )
-
+      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
+        {
+          externalId: externalId,
+          payment: draft.document.claimant.payment,
+          error: err
+        })
       next(err)
       return
     }
@@ -82,7 +88,12 @@ async function successHandler (res, next) {
 
   if (!claimIsAlreadyFullyPersisted) {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
-    if (roles.length > 0 && await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
+
+    if (!roles.length) {
+      logger.error(`missing consent not given role for user, User Id : ${user.id}`)
+    }
+
+    if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
       await claimStoreClient.saveClaim(draft, user, 'admissions')
     } else {
       await claimStoreClient.saveClaim(draft, user)
@@ -138,6 +149,13 @@ export default express.Router()
 
       res.redirect(payment._links.next_url.href)
     } catch (err) {
+
+      trackCustomEvent(`Pre payment error for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: draft.document.claimant.payment,
+        error: err
+      })
+
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }
@@ -176,6 +194,12 @@ export default express.Router()
           next(new Error(`Payment failed. Status ${status} is returned by the service`))
       }
     } catch (err) {
+      const { externalId } = req.params
+      trackCustomEvent(`Post payment error for externalId: ${externalId}`,{
+        externalId: externalId,
+        payment: draft.document.claimant.payment,
+        error: err
+      })
       logPaymentError(user.id, draft.document.claimant.payment)
       next(err)
     }

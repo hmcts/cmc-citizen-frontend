@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@cmc-increase-functional-timeout-to-80")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -8,7 +8,7 @@ String component = "citizen-frontend"
 List<LinkedHashMap<String, Object>> secrets = [
   secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
   secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
-  secret('postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
+  secret('os-postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
   secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
   secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
   secret('cmc-s2s-secret', 'IDAM_S2S_TOTP_SECRET'),
@@ -33,6 +33,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
+env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
@@ -40,13 +41,15 @@ String notificationsChannel = '#cmc-tech-notification'
 withPipeline("nodejs", product, component) {
   afterCheckout {
     onMaster {
-      try {
-        sh """
-          git fetch origin demo:demo
-          git push --force origin HEAD:demo
-        """
-      } catch (err) {
-        notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+      withCredentials([usernamePassword(credentialsId: 'jenkins-github-hmcts-api-token', passwordVariable: 'BEARER_TOKEN', usernameVariable: 'USERNAME')]) {
+        try {
+          def url = sh(returnStdout: true, script: 'git config remote.origin.url').replace('github.com', '${BEARER_TOKEN}@github.com')
+          sh('git remote set-url origin ' + url)
+          sh('git fetch origin demo:demo')
+          sh('git push --force origin HEAD:demo')
+        } catch (err) {
+          notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+        }
       }
     }
   }
@@ -58,6 +61,6 @@ withPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   enableDockerBuild()
-  enableDeployToAKS()
+  installCharts()
   setVaultName('cmc')
 }

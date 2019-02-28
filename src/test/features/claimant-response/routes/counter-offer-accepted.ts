@@ -12,8 +12,8 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentSchedule } from 'features/ccj/form/models/paymentSchedule'
 
@@ -135,7 +135,7 @@ describe('Claimant Response - Counter offer accepted', () => {
           request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment amount'))
+            .expect(res => expect(res).to.be.successful.withText('The court has accepted your repayment plan'))
       })
 
       it('should render page when defendant payment option is pay by set date and claimant response is accepted', async () => {

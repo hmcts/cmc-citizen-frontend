@@ -7,6 +7,7 @@ import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPl
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { localDateFrom } from 'test/localDateUtils'
 import { YourRepaymentPlanTask } from 'features/response/tasks/yourRepaymentPlanTask'
+import { LocalDate } from 'forms/models/localDate'
 
 describe('YourRepaymentPlanTask', () => {
 
@@ -31,6 +32,19 @@ describe('YourRepaymentPlanTask', () => {
               undefined,
               undefined,
               undefined
+            )
+
+            expect(YourRepaymentPlanTask.isCompleted(draft[admission.type].paymentPlan)).to.be.false
+          })
+
+          it('when payment plan has first payment date in the past', () => {
+            const draft: ResponseDraft = new ResponseDraft()
+            draft[admission.type] = new admission.clazz()
+            draft[admission.type].paymentPlan = new PaymentPlan(
+              100,
+              10,
+              LocalDate.fromMoment(MomentFactory.currentDate().subtract(1,'day')),
+              PaymentSchedule.EVERY_MONTH
             )
 
             expect(YourRepaymentPlanTask.isCompleted(draft[admission.type].paymentPlan)).to.be.false

@@ -4,10 +4,16 @@ import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption
 import { monthlyInstalmentPaymentIntentionData } from 'test/data/entity/paymentIntentionData'
 import { courtDeterminationData } from 'test/data/entity/courtDeterminationData'
 
-const baseAcceptationClaimantResponseData = {
+export const baseDeterminationAcceptationClaimantResponseData = {
   type: ClaimantResponseType.ACCEPTATION,
   claimantPaymentIntention: monthlyInstalmentPaymentIntentionData,
   courtDetermination: courtDeterminationData,
+  amountPaid: 100
+}
+
+export const baseAcceptationClaimantResponseData = {
+  type: ClaimantResponseType.ACCEPTATION,
+  claimantPaymentIntention: monthlyInstalmentPaymentIntentionData,
   amountPaid: 100
 }
 
@@ -17,22 +23,28 @@ const baseRejectionClaimantResponseData = {
 }
 
 export const ccjAcceptationClaimantResponseData = {
-  ...baseAcceptationClaimantResponseData,
+  ...baseDeterminationAcceptationClaimantResponseData,
   formaliseOption: FormaliseOption.CCJ
 }
 
 export const settlementAcceptationClaimantResponseData = {
-  ...baseAcceptationClaimantResponseData,
+  ...baseDeterminationAcceptationClaimantResponseData,
   formaliseOption: FormaliseOption.SETTLEMENT
 }
 
 export const referToJudgeAcceptationClaimantResponseData = {
-  ...baseAcceptationClaimantResponseData,
+  ...baseDeterminationAcceptationClaimantResponseData,
   formaliseOption: FormaliseOption.REFER_TO_JUDGE
+}
+
+export const partAdmissionStatesPaidClaimantResponseData = {
+  ...baseAcceptationClaimantResponseData,
+  claimantPaymentIntention: null,
+  formaliseOption: FormaliseOption.SETTLEMENT
 }
 
 export const rejectionClaimantResponseData = {
   ...baseRejectionClaimantResponseData,
-  freeMediation: true,
+  freeMediation: 'yes',
   reason: 'reason'
 }

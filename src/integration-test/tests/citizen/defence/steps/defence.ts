@@ -1,9 +1,5 @@
 import { PaymentOption } from 'integration-test/data/payment-option'
-import {
-  claimAmount,
-  DEFAULT_PASSWORD,
-  defence
-} from 'integration-test/data/test-data'
+import { claimAmount, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
@@ -26,6 +22,7 @@ import { DefendantViewClaimPage } from 'integration-test/tests/citizen/defence/p
 import { DefendantWhenWillYouPayPage } from 'integration-test/tests/citizen/defence/pages/defendant-when-will-you-pay'
 import { DefendantYourDefencePage } from 'integration-test/tests/citizen/defence/pages/defendant-your-defence'
 import { DefendantMoreTimeConfirmationPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-confirmation'
+import { DefendantSendCompanyFinancialDetails } from 'integration-test/tests/citizen/defence/pages/defendant-send-company-financial-details'
 import { StatementOfMeansSteps } from 'integration-test/tests/citizen/defence/steps/statementOfMeans'
 import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defendant'
@@ -65,6 +62,7 @@ const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const defendantPaymentDatePage: DefendantPaymentDatePage = new DefendantPaymentDatePage()
 const defendantPaymentPlanPage: DefendantPaymentPlanPage = new DefendantPaymentPlanPage()
 const defendantWhenWillYouPage: DefendantWhenWillYouPayPage = new DefendantWhenWillYouPayPage()
+const sendCompanyDetailsPage: DefendantSendCompanyFinancialDetails = new DefendantSendCompanyFinancialDetails()
 const defendantSteps: DefendantSteps = new DefendantSteps()
 const statementOfMeansSteps: StatementOfMeansSteps = new StatementOfMeansSteps()
 const defendantHowMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
@@ -195,24 +193,63 @@ export class DefenceSteps {
     defendantHowMuchHaveYouPaidPage.enterAmountPaidWithDateAndExplanation(claimAmount.getTotal(), '2018-01-01', 'Paid Cash')
   }
 
-  admitPartOfTheClaimAlreadyPaid (defence: PartialDefence): void {
+  admitPartOfTheClaim (defence: PartialDefence): void {
     defendantSteps.selectTaskChooseAResponse()
     defendantDefenceTypePage.admitPartOfMoneyClaim()
-    alreadyPaidPage.chooseYes()
-    I.see('How much have you paid?')
-
-    defendantSteps.selectTaskHowMuchHaveYouPaid()
-
-    defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
-      100,
-      '1990-01-01',
-      'I will not pay that much!'
-    )
-
+    alreadyPaidPage.chooseNo()
+    defendantTaskListPage.selectTaskHowMuchMoneyBelieveYouOwe()
+    defendantHowMuchYouOwePage.enterAmountOwed(50)
     defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
     defendantYourDefencePage.enterYourDefence('I do not like it')
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
+    defendantTaskListPage.selectTaskWhenWillYouPay()
+    defendantWhenWillYouPage.chooseFullBySetDate()
+    defendantPaymentDatePage.enterDate('2025-01-01')
+    defendantPaymentDatePage.saveAndContinue()
+    I.see('Respond to a money claim')
+  }
+
+  admitPartOfTheClaimAlreadyPaid (
+    defence: PartialDefence,
+    isClaimAlreadyPaid: boolean = true
+  ): void {
+    defendantSteps.selectTaskChooseAResponse()
+    defendantDefenceTypePage.admitPartOfMoneyClaim()
+
+    if (isClaimAlreadyPaid) {
+      alreadyPaidPage.chooseYes()
+      I.see('How much have you paid?')
+      defendantSteps.selectTaskHowMuchHaveYouPaid()
+      defendantHowMuchHaveYouPaidTheClaimant.enterAmountPaidWithDateAndExplanation(
+        100,
+        '1990-01-01',
+        'I will not pay that much!'
+      )
+      defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+      defendantYourDefencePage.enterYourDefence('I do not like it')
+      this.addTimeLineOfEvents(defence.timeline)
+      this.enterEvidence('description', 'They do not have evidence')
+    } else {
+      alreadyPaidPage.chooseNo()
+      I.see('How much money do you admit you owe?')
+      defendantSteps.selectTaskHowMuchMoneyBelieveYouOwe()
+      defendantHowMuchYouOwePage.enterAmountOwed(50)
+      defendantSteps.selectTaskWhyDoYouDisagreeWithTheAmountClaimed()
+      defendantYourDefencePage.enterYourDefence('I paid half')
+      this.addTimeLineOfEvents(defence.timeline)
+      this.enterEvidence('description', 'Some evidence')
+      I.see('When will you pay the £50?')
+      defendantSteps.selectTaskWhenYouWillPay()
+      defendantWhenWillYouPage.chooseInstalments()
+      defendantTaskListPage.selectYourRepaymentPlanTask()
+      defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
+      defendantPaymentPlanPage.saveAndContinue()
+      defendantTaskListPage.selectShareYourFinancialDetailsTask()
+      statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+      this.askForMediation()
+    }
+
     I.see('Respond to a money claim')
   }
 
@@ -239,10 +276,10 @@ export class DefenceSteps {
   }
 
   checkAndSendAndSubmit (defendantType: PartyType): void {
-    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
-    } else {
+    if (defendantType === PartyType.INDIVIDUAL) {
       defendantCheckAndSendPage.checkFactsTrueAndSubmit()
+    } else {
+      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
     }
   }
 
@@ -250,17 +287,21 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantEmail: string,
     defendantType: PartyType,
-    defenceType: DefenceType
+    defenceType: DefenceType,
+    isRequestMoreTimeToRespond: boolean = true,
+    isClaimAlreadyPaid: boolean = true
   ): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
     I.see('COMPLETED')
 
-    this.requestMoreTimeToRespond()
+    if (isRequestMoreTimeToRespond) {
+      this.requestMoreTimeToRespond()
+    } else {
+      this.requestNoExtraTimeToRespond()
+    }
 
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_DISPUTE:
@@ -283,21 +324,32 @@ export class DefenceSteps {
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
         break
+      case DefenceType.PART_ADMISSION_NONE_PAID:
+        this.admitPartOfTheClaim(defence)
+        this.askForMediation()
+        if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+          defendantTaskListPage.selectShareYourFinancialDetailsTask()
+          sendCompanyDetailsPage.continue()
+        }
+
+        defendantSteps.selectCheckAndSubmitYourDefence()
+        I.see('How much money do you admit you owe?')
+        break
       case DefenceType.PART_ADMISSION:
-        this.admitPartOfTheClaimAlreadyPaid(defence)
+        this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)
         this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
-        I.see('How much money have you paid?')
-        return
+        if (isClaimAlreadyPaid) {
+          I.see('How much money have you paid?')
+        } else {
+          I.see('How much money do you admit you owe?')
+        }
+        break
       default:
         throw new Error('Unknown DefenceType')
     }
     this.checkAndSendAndSubmit(defendantType)
-    if (defenceType === DefenceType.FULL_REJECTION_WITH_DISPUTE || defenceType === DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID) {
-      I.see('You’ve submitted your response')
-    } else {
-      I.see('Next steps')
-    }
+    I.see('You’ve submitted your response')
   }
 
   makeFullAdmission (
@@ -306,8 +358,6 @@ export class DefenceSteps {
     paymentOption: PaymentOption,
     claimantName: string
   ): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -360,8 +410,6 @@ export class DefenceSteps {
   }
 
   makePartialAdmission (defendantParty: Party): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -434,7 +482,6 @@ export class DefenceSteps {
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     I.dontSee('Your defence')
-    I.dontSee('COMPLETE')
 
     this.confirmYourDetails(defendant)
     I.see('COMPLETE')

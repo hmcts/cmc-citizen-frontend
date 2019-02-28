@@ -11,16 +11,15 @@ import { claimantResponsePath, Paths } from 'claimant-response/paths'
 import { Claim } from 'claims/models/claim'
 import { PaymentPlanHelper } from 'shared/helpers/paymentPlanHelper'
 import { Moment } from 'moment'
-import { DecisionType } from 'common/court-calculations/courtDecision'
+import { DecisionType } from 'common/court-calculations/decisionType'
 import { PaymentPlan } from 'common/payment-plan/paymentPlan'
-import { Frequency } from 'common/frequency/frequency'
 import { Draft } from '@hmcts/draft-store-client'
 import { User } from 'idam/user'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { CourtDecisionHelper } from 'shared/helpers/CourtDecisionHelper'
 import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionResponse'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
+import { PartyType } from 'common/partyType'
 
 export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantResponse> {
 
@@ -33,7 +32,6 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentDate = draft.alternatePaymentMethod.toDomainInstance().paymentDate
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
-      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.COURT) {
@@ -44,21 +42,6 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentDate = lastPaymentDate
         courtOfferedPaymentIntention.paymentOption = PaymentOption.BY_SPECIFIED_DATE
       }
-
-      if (draft.alternatePaymentMethod.paymentOption.option.value === PaymentOption.INSTALMENTS) {
-        const defendantFrequency: Frequency = PaymentSchedule.toFrequency(claimResponse.paymentIntention.repaymentPlan.paymentSchedule)
-        const paymentPlanConvertedToDefendantFrequency: PaymentPlan = paymentPlanFromDefendantFinancialStatement.convertTo(defendantFrequency)
-        courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-        courtOfferedPaymentIntention.repaymentPlan = {
-          firstPaymentDate: paymentPlanConvertedToDefendantFrequency.startDate,
-          instalmentAmount: Math.round(paymentPlanConvertedToDefendantFrequency.instalmentAmount * 100) / 100,
-          paymentSchedule: Frequency.toPaymentSchedule(paymentPlanConvertedToDefendantFrequency.frequency),
-          completionDate: paymentPlanConvertedToDefendantFrequency.calculateLastPaymentDate(),
-          paymentLength: paymentPlanConvertedToDefendantFrequency.calculatePaymentLength()
-        }
-      }
-
-      return courtOfferedPaymentIntention
     }
 
     if (decisionType === DecisionType.DEFENDANT) {
@@ -73,8 +56,8 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
         courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
       }
-      return courtOfferedPaymentIntention
     }
+    return courtOfferedPaymentIntention
   }
 
   static generateCourtCalculatedPaymentIntention (draft: DraftClaimantResponse, claim: Claim) {
@@ -103,15 +86,19 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
 
   async saveDraft (locals: { user: User; draft: Draft<DraftClaimantResponse>, claim: Claim }): Promise<void> {
 
-    const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
-    locals.draft.document.courtDetermination.decisionType = decisionType
+    if (locals.claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
+      const decisionType: DecisionType = CourtDecisionHelper.createCourtDecision(locals.claim, locals.draft.document)
+      if (decisionType !== DecisionType.NOT_APPLICABLE_IS_BUSINESS) {
+        locals.draft.document.courtDetermination.decisionType = decisionType
 
-    const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
-    if (courtCalculatedPaymentIntention) {
-      locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+        const courtCalculatedPaymentIntention = PaymentDatePage.generateCourtCalculatedPaymentIntention(locals.draft.document, locals.claim)
+        if (courtCalculatedPaymentIntention) {
+          locals.draft.document.courtDetermination.courtPaymentIntention = courtCalculatedPaymentIntention
+        }
+
+        locals.draft.document.courtDetermination.courtDecision = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
+      }
     }
-
-    locals.draft.document.courtDetermination.courtDecision = PaymentDatePage.generateCourtOfferedPaymentIntention(locals.draft.document, locals.claim, decisionType)
     return super.saveDraft(locals)
   }
 
@@ -121,15 +108,17 @@ export class PaymentDatePage extends AbstractPaymentDatePage<DraftClaimantRespon
     const claimResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
     const externalId: string = req.params.externalId
-    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
 
+    const courtDecision = CourtDecisionHelper.createCourtDecision(claim, draft)
     switch (courtDecision) {
+      case DecisionType.NOT_APPLICABLE_IS_BUSINESS:
+        return Paths.taskListPage.evaluateUri({ externalId: externalId })
       case DecisionType.COURT: {
         return Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })
       }
       case DecisionType.DEFENDANT: {
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-          return Paths.courtOfferPage.evaluateUri({ externalId: externalId })
+          return Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })
         }
 
         if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {

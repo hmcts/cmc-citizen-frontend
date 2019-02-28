@@ -1,0 +1,23 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "internalLink.njk" import internalLink %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+
+{% set claimantFullName = claim.claimData.claimant.name %}
+{% set heading = 'Send ' + claimantFullName + ' your financial details' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <p>{{ t('You need to send {{ claimantName }} your company or organisation’s most recent statement of accounts.', { claimantName: claimantFullName }) }}</p>
+        <p>{{ t('They’ll review your accounts and can reject your suggested repayment plan if they believe you can pay sooner.') }}</p>
+        <p>{{ t('If they reject your plan, the court will make a new plan based on your financial details.') }}</p>
+        {{ submitButton() }}
+        {{ internalLink( t('Get {{ claimantName }}’s contact details.', { claimantName: claimantFullName }),
+        claimantDetailsPageURI ) }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

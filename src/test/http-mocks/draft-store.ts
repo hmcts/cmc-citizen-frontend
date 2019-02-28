@@ -3,7 +3,7 @@ import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 
 import { ResponseType } from 'response/form/models/responseType'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import { MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { InterestRateOption } from 'features/claim/form/models/interestRateOption'
 import { Defendant } from 'drafts/models/defendant'
@@ -441,6 +441,15 @@ export const sampleClaimantResponseDraftObj = {
   }
 }
 
+export const sampleMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.YES
+  },
+  youCanOnlyUseMediation: {
+    option: FreeMediationOption.YES
+  }
+}
+
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
@@ -465,6 +474,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'claimantResponse':
       documentDocument = { ...sampleClaimantResponseDraftObj, ...draftOverride }
+      break
+    case 'mediation':
+      documentDocument = { ...sampleMediationDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }

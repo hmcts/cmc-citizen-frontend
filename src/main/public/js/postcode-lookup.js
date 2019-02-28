@@ -25,13 +25,13 @@
           .addEventListener('change', function (event) {
             enterManuallyLink(postcodeLookupWidget).classList.add('hidden')
 
-            var addressDetails = this.value.split(', ')
+            var addressDetails = JSON.parse(this.value)
             var addressElement = postcodeLookupWidget.querySelector('.address')
-            addressLine1(addressElement).value = addressDetails[0]
-            addressLine2(addressElement).value = addressDetails[1]
-            addressLine3(addressElement).value = addressDetails[2]
-            addressTownOrCity(addressElement).value = addressDetails[3]
-            addressPostcode(addressElement).value = addressDetails[4]
+            addressLine1(addressElement).value = addressDetails.addressLines[0]
+            addressLine2(addressElement).value = addressDetails.addressLines[1]
+            addressLine3(addressElement).value = addressDetails.addressLines[2]
+            addressTownOrCity(addressElement).value = addressDetails.townOrCity
+            addressPostcode(addressElement).value = addressDetails.postCode
             show(addressSection(postcodeLookupWidget))
           })
 
@@ -257,32 +257,7 @@
       postcodeSelectDropdown.appendChild(nonSelectableOption)
 
       postcodeResponse.addresses.forEach(function (address) {
-        var formattedAddress = address.formattedAddress.replace(/\r?\n|\r/g, ', ')
-        var lines = formattedAddress.split(',')
-        var valueFormattedAddress = []
-        var townOrCity = lines[lines.length - 2].trim()
-        var postCode = lines[lines.length - 1].trim()
-
-        if (address.organisationName === "") {
-          valueFormattedAddress = [
-            lines[0].trim(),
-            lines.length > 3 ? lines[1].trim() : '',
-            lines.length > 4 ? lines[2].trim() : '',
-            townOrCity,
-            postCode
-          ]
-        } else {
-          valueFormattedAddress = [
-            lines.length > 3 ? lines[1].trim() : '',
-            lines.length > 4 ? lines[2].trim() : '',
-            lines.length > 5 ? lines[3].trim() : '',
-            townOrCity,
-            postCode
-          ]
-        }
-        var option = document.createElement('option')
-        option.value = valueFormattedAddress.join(', ')
-        option.text = formattedAddress
+        var option = postcodeDropdownOption(address)
         postcodeSelectDropdown.appendChild(option)
       })
 
@@ -290,5 +265,65 @@
       hideAddressError(postcodeLookupWidget)
     }
     xhr.send()
+  }
+
+  function postcodeDropdownOption (address) {
+    var formattedAddress = address.formattedAddress.replace(/\r?\n|\r/g, ', ')
+    var valueFormattedAddress = {
+      'addressLines': [],
+      'townOrCity': address.postTown,
+      'postCode': address.postcode
+    }
+    var buildingNameLine = extractBuildingNameLine(address)
+    var streetLine = extractStreetLine(address)
+    var localityLine = extractLocalityLine(address)
+
+    if (!buildingNameLine && (!streetLine || !address.buildingNumber) && address.organisationName && address.organisationName !== '') {
+      valueFormattedAddress.addressLines.push(address.organisationName)
+    }
+    if (buildingNameLine) {
+      valueFormattedAddress.addressLines.push(buildingNameLine)
+    }
+    if (streetLine) {
+      valueFormattedAddress.addressLines.push(streetLine)
+    }
+    if (localityLine) {
+      valueFormattedAddress.addressLines.push(localityLine)
+    }
+    while (valueFormattedAddress.addressLines.length < 3) {
+      valueFormattedAddress.addressLines.push('')
+    }
+
+    var option = document.createElement('option')
+    option.value = JSON.stringify(valueFormattedAddress)
+    option.text = formattedAddress
+    return option
+  }
+
+  function extractBuildingNameLine (address) {
+    if (address.buildingName && address.buildingName !== "") {
+      if (address.subBuildingName && address.subBuildingName !== "") {
+        return address.subBuildingName + ', ' + address.buildingName
+      }
+      return address.buildingName
+    }
+    if (address.subBuildingName && address.subBuildingName !== "") {
+      return address.subBuildingName
+    }
+    return undefined
+  }
+
+  function extractStreetLine (address) {
+    if (address.thoroughfareName && address.thoroughfareName !== '') {
+      return (address.buildingNumber ? address.buildingNumber + ', ' : '') + address.thoroughfareName
+    }
+    return undefined
+  }
+
+  function extractLocalityLine (address) {
+    if (address.dependentLocality && address.dependentLocality !== "") {
+      return address.dependentLocality
+    }
+    return undefined
   }
 })()

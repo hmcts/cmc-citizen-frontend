@@ -10,6 +10,8 @@
     <div class="form-group">
       {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
 
+      <p>{{ t('Judgment will be entered against the defendant for this amount.') }}</p>
+
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
         <thead>
@@ -28,7 +30,7 @@
           </tr>
         {% else %}
           <tr>
-            <th scope="row">{{ t('Amount you are settling for') }}</th>
+            <th scope="row">{{ t('Amount you’re settling for') }}</th>
             <td class="numeric last">
               <span class="font-small">{{ amountSettledFor | numeral }}</span>
             </td>
@@ -53,7 +55,7 @@
         </tr>
         {% if alreadyPaid %}
           <tr>
-            <th scope="col" class="bold-small">{{ t('Sub total') }}</th>
+            <th scope="col" class="bold-small">{{ t('Subtotal') }}</th>
             <td class="numeric last bold-small"><span id="sub-total">{{ total | numeral }}</span></td>
           </tr>
           <tr>
@@ -78,6 +80,3 @@
   </div>
 </div>
 {% endblock %}
-
-
-
