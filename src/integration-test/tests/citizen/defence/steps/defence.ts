@@ -385,7 +385,7 @@ export class DefenceSteps {
         defendantPaymentPlanPage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
         statementOfMeansFullDataSet ? statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
-          : statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSetAndHealthyDisposableIncome()
+          : statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet('50')
         break
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
