@@ -4,35 +4,7 @@ import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { MomentFactory } from 'shared/momentFactory'
-
-export const sampleIndividualClaimant = {
-  claimants: [{
-    type: 'individual',
-    name: 'John Smith',
-    address: {
-      line1: 'line1',
-      line2: 'line2',
-      city: 'city',
-      postcode: 'bb127nq'
-    },
-    dateOfBirth: '1990-02-17'
-  }]
-}
-
-export const sampleIndividualDefendant = {
-  defendants: [
-    {
-      type: 'individual',
-      name: 'John Doe',
-      address: {
-        line1: 'line1',
-        line2: 'line2',
-        city: 'city',
-        postcode: 'bb127nq'
-      }
-    }
-  ]
-}
+import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 
 export const sampleClaimIndividualVsIndividualIssueObj = {
   id: 1,
@@ -47,8 +19,8 @@ export const sampleClaimIndividualVsIndividualIssueObj = {
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
   claim: {
-    ...sampleIndividualClaimant,
-    ...sampleIndividualDefendant,
+    ...sampleClaimIssueObj.claim.claimants,
+    ...sampleClaimIssueObj.claim.defendants,
     payment: {
       id: '12',
       amount: 2500,
@@ -75,33 +47,6 @@ export const sampleClaimIndividualVsIndividualIssueObj = {
   features: ['admissions']
 }
 
-export const sampleStatementOfMeans = {
-  statementOfMeans: {
-    carer: false,
-    reason: 'I cannot afford this right now with my current income.',
-    residence: {
-      type: 'OWN_HOME'
-    },
-    disability: 'NO',
-    employment: {
-      unemployment: {
-        retired: false,
-        unemployed: {
-          numberOfYears: 1,
-          numberOfMonths: 2
-        }
-      }
-    },
-    bankAccounts: [
-      {
-        type: 'CURRENT_ACCOUNT',
-        joint: true,
-        balance: 100
-      }
-    ]
-  }
-}
-
 export const sampleClaimIndividualVsIndividualRequestingMoreTimeObj = {
   id: 1,
   submitterId: '1',
@@ -115,8 +60,8 @@ export const sampleClaimIndividualVsIndividualRequestingMoreTimeObj = {
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: true,
   claim: {
-    ...sampleIndividualClaimant,
-    ...sampleIndividualDefendant,
+    ...sampleClaimIssueObj.claim.claimants,
+    ...sampleClaimIssueObj.claim.defendants,
     payment: {
       id: '12',
       amount: 2500,
