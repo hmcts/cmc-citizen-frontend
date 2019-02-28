@@ -56,7 +56,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   })
 
   // @overnight
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @overnight @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
@@ -75,7 +75,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   })
 
   // @overnight
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @overnight', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.BY_SET_DATE
@@ -95,7 +95,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   })
 
   // @overnight
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @citizen', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of instalments @admissions @overnight', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
@@ -115,7 +115,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   })
 
   // Only claimant response scenario to run in pipeline, everything else can be moved to overnight
-  Scenario('I can as a claimant accept the defendants full admission by instalments with settlement agreement and rejecting defendants payment method in favour of courts proposed repayment plan @overnight @admissions', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by instalments with settlement agreement and rejecting defendants payment method in favour of courts proposed repayment plan @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
