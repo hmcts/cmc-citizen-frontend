@@ -114,7 +114,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
-  // Only claimant response scenario to run in pipeline, everything else can be moved to overnight
+  // This is the only claimant response scenario to run in pipeline, everything else can be moved to overnight
   Scenario('I can as a claimant accept the defendants full admission by instalments with settlement agreement and rejecting defendants payment method in favour of courts proposed repayment plan @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS

@@ -59,9 +59,9 @@ export class UnReasonableClaimantResponseTestData {
   pageSpecificValues: PageSpecificValues = {
     paymentDatePageEnterDate: '2025-01-01',
     paymentPlanPageEnterRepaymentPlan: {
-      equalInstalment: 5.00,
+      equalInstalment: 50.00,
       firstPaymentDate: moment().add(50, 'days').toISOString(),
-      frequency: 'everyMonth'
+      frequency: 'everyWeek'
     },
     howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation: {
       paidAmount: 0,

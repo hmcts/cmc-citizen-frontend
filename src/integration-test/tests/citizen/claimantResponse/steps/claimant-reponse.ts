@@ -240,7 +240,7 @@ export class ClaimantResponseSteps {
     paymentOptionPage.chooseInstalments()
     paymentPlanPage.enterRepaymentPlan(unReasonableClaimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
     paymentPlanPage.saveAndContinue()
-    courtOfferedInstalmentsPage.accept()
+    courtOfferedInstalmentsPage.checkingCourtOfferedPlanAndAccept()
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
     chooseHowToProceedPage.chooseSettlement()
     taskListPage.selectTaskSignASettlementAgreement()
