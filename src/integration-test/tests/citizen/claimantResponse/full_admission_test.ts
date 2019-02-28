@@ -7,7 +7,10 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
+import {
+  ClaimantResponseTestData,
+  UnReasonableClaimantResponseTestData
+} from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -52,6 +55,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
+  // @overnight
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
@@ -70,6 +74,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve signed a settlement agreement')
   })
 
+  // @overnight
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and rejecting defendants payment method in favour of set date @citizen @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
@@ -100,6 +105,27 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     // as claimant
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
+    checkAndSendPage.verifyFactsForSettlement()
+    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.see('You’ve proposed a different repayment plan')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
+  })
+
+  // @overnight
+  Scenario('I can as a claimant accept the defendants full admission by instalments with settlement agreement and rejecting defendants payment method in favour of courts proposed repayment plan @citizen @admissions', async (I: I) => {
+    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    testData.paymentOption = PaymentOption.INSTALMENTS
+    testData.claimantPaymentOption = PaymentOption.INSTALMENTS
+    const unReasonableClaimantResponseTestDate = new UnReasonableClaimantResponseTestData()
+    // as defendant
+    helperSteps.finishResponseWithFullAdmission(testData)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.acceptCourtOfferedRepaymentPlan(testData, unReasonableClaimantResponseTestDate, 'View and respond to the offer')
+    I.wait(60)
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve proposed a different repayment plan')

@@ -1,7 +1,10 @@
 import I = CodeceptJS.I
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
+import {
+  ClaimantResponseTestData,
+  UnReasonableClaimantResponseTestData
+} from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { ClaimantAcceptPaymentMethod } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-accept-payment-method'
 import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-task-list'
 import { ClaimantChooseHowToProceed } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-choose-how-to-proceed'
@@ -47,6 +50,16 @@ export class ClaimantResponseSteps {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
     this.acceptSettlementWithClaimantPaymentOption(testData, claimantResponseTestData)
+  }
+
+  acceptCourtOfferedRepaymentPlan (
+    testData: EndToEndTestData,
+    unReasonableClaimantResponseTestData: UnReasonableClaimantResponseTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
+    this.acceptCourtOffer(testData, unReasonableClaimantResponseTestData)
   }
 
   acceptSettlementFromDashboardWhenAcceptPaymentMethod (
@@ -210,6 +223,29 @@ export class ClaimantResponseSteps {
       default:
         throw new Error(`Unknown payment option: ${testData.claimantPaymentOption}`)
     }
+    taskListPage.selectTaskChooseHowToFormaliseRepayment()
+    chooseHowToProceedPage.chooseSettlement()
+    taskListPage.selectTaskSignASettlementAgreement()
+    signSettlementAgreementPage.confirm()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
+  acceptCourtOffer (
+    testData: EndToEndTestData,
+    unReasonableClaimantResponseTestData: UnReasonableClaimantResponseTestData
+  ): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    defendantsResponsePage.submit()
+    if (unReasonableClaimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
+      defendantsResponsePage.submitHowTheyWantToPay()
+    }
+    taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    acceptPaymentMethodPage.chooseNo()
+    taskListPage.selectProposeAnAlternativeRepaymentPlan()
+    paymentOptionPage.chooseInstalments()
+    paymentPlanPage.enterRepaymentPlan(unReasonableClaimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
+    paymentPlanPage.saveAndContinue()
+    courtOfferedInstalmentsPage.accept()
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
     chooseHowToProceedPage.chooseSettlement()
     taskListPage.selectTaskSignASettlementAgreement()
