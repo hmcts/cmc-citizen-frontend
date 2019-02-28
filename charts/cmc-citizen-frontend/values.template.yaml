@@ -47,11 +47,15 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     FEATURE_MOCK_PAY: false
     FEATURE_MEDIATION: false
-    POSTCODE_LOOKUP_API_KEY: ${POSTCODE_LOOKUP_API_KEY}
-    APPINSIGHTS_INSTRUMENTATIONKEY: ${APPINSIGHTS_INSTRUMENTATIONKEY}
-    OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
-    IDAM_S2S_TOTP_SECRET: ${IDAM_S2S_TOTP_SECRET}
-    DRAFT_STORE_SECRET_PRIMARY: ${DRAFT_STORE_SECRET_PRIMARY}
-    DRAFT_STORE_SECRET_SECONDARY: ${DRAFT_STORE_SECRET_SECONDARY}
-    COOKIE_ENCRYPTION_KEY: ${COOKIE_ENCRYPTION_KEY}
-    CONTACT_EMAIL: ${CONTACT_EMAIL}
+  keyVaults:
+    cmc:
+      resourceGroup: cmc
+      secrets:
+      - os-postcode-lookup-api-key
+      - AppInsightsInstrumentationKey
+      - citizen-oauth-client-secret
+      - cmc-s2s-secret
+      - citizen-draft-store-primary
+      - citizen-draft-store-secondary
+      - citizen-cookie-encryption-key
+      - staff-email

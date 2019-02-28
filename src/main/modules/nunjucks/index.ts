@@ -106,7 +106,7 @@ export class Nunjucks {
 
     nunjucksEnv.addGlobal('asset_paths', appAssetPaths)
     nunjucksEnv.addGlobal('serviceName', 'Money Claims')
-    nunjucksEnv.addGlobal('supportEmailAddress', config.get('support.contact-email'))
+    nunjucksEnv.addGlobal('supportEmailAddress', config.get('secrets.cmc.staff-email'))
     nunjucksEnv.addGlobal('development', this.developmentMode)
     nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies.govuk_template_jinja)
     nunjucksEnv.addGlobal('gaTrackingId', config.get<string>('analytics.gaTrackingId'))
