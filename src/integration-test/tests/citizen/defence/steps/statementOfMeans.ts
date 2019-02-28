@@ -82,6 +82,36 @@ export class StatementOfMeansSteps {
     explanationPage.clickContinue()
   }
 
+  fillStatementOfMeansWithMinimalDataSetAndHealthyDisposableIncome (): void {
+    startPage.clickContinue()
+    bankAccountsPage.enterBankAccount('Current account', false, 1000)
+    bankAccountsPage.clickContinue()
+    disabilityPage.selectNoOption()
+    residencePage.selectOwnHome()
+    residencePage.clickContinue()
+    cohabitingPage.selectNoOption()
+    dependantsPage.selectNotDeclared()
+    dependantsPage.clickContinue()
+    otherDependantsPage.selectNotDeclared()
+    otherDependantsPage.clickContinue()
+    carerPage.selectNoOption()
+    employmentPage.selectNotDeclared()
+    employmentPage.clickContinue()
+    unemploymentPage.selectRetired()
+    unemploymentPage.clickContinue()
+    courtOrdersPage.selectNotDeclared()
+    courtOrdersPage.clickContinue()
+    priorityDebtsPage.clickContinue()
+    debtsPage.selectNotDeclared()
+    debtsPage.clickContinue()
+    expensesPage.fillOutSomeFields()
+    expensesPage.clickContinue()
+    incomePage.fillOutSomeFields('50')
+    incomePage.clickContinue()
+    explanationPage.enterExplanation('I cannot pay immediately')
+    explanationPage.clickContinue()
+  }
+
   fillStatementOfMeansWithFullDataSet (): void {
     startPage.clickContinue()
     bankAccountsPage.enterBankAccount('Saving account', true, 10000)
