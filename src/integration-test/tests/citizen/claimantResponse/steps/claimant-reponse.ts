@@ -104,7 +104,6 @@ export class ClaimantResponseSteps {
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -121,7 +120,6 @@ export class ClaimantResponseSteps {
   }
 
   acceptPartAdmitFromBusinessWithAlternativePaymentIntention (): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     defendantsResponsePage.submitHowTheyWantToPay() // bug
@@ -138,7 +136,6 @@ export class ClaimantResponseSteps {
   }
 
   acceptFullAdmitFromBusinessWithAlternativePaymentIntention (claimantResponseTestData: ClaimantResponseTestData): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     defendantsResponsePage.submitHowTheyWantToPay() // bug
@@ -158,7 +155,6 @@ export class ClaimantResponseSteps {
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -186,7 +182,6 @@ export class ClaimantResponseSteps {
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -254,7 +249,6 @@ export class ClaimantResponseSteps {
   }
 
   acceptCCJ (shouldPaySome: boolean): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     I.click('Continue')
     I.see('COMPLETED')

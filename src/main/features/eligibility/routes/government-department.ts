@@ -7,7 +7,7 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 class GovernmentDepartmentEligiblityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.governmentDepartmentPage, Paths.claimIsForTenancyDepositPage, 'governmentDepartment')
+    super(Paths.governmentDepartmentPage, Paths.defendantAgePage, 'governmentDepartment')
   }
 
   checkEligibility (value: YesNoOption): EligibilityCheck {

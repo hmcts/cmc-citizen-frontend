@@ -7,7 +7,7 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 
 class Over18EligibilityPage extends EligibilityPage<YesNoOption> {
   constructor () {
-    super(Paths.over18Page, Paths.defendantAgePage, 'eighteenOrOver')
+    super(Paths.over18Page, Paths.eligiblePage, 'eighteenOrOver')
   }
 
   checkEligibility (value: YesNoOption): EligibilityCheck {
