@@ -359,8 +359,6 @@ export class DefenceSteps {
     claimantName: string,
     statementOfMeansFullDataSet: boolean = true
   ): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
