@@ -11,7 +11,6 @@
     },
     "service-2-service-auth": {
       "url": "http://localhost:4552",
-      "totpSecret": "AAAAAAAAAAAAAAAA",
       "microservice": "cmc"
     }
   },
@@ -22,15 +21,10 @@
     "url": "http://localhost:8580"
   },
   "draft-store": {
-    "url": "http://localhost:8800",
-    "secrets": {
-      "primary": "not-a-real-primary-secret",
-      "secondary": "not-a-real-secondary-secret"
-    }
+    "url": "http://localhost:8800"
   },
   "session": {
-    "cookieName": "SESSION_ID",
-    "encryptionKey": "not-a-real-32-bit-encryption-key"
+    "cookieName": "SESSION_ID"
   },
   "analytics": {
     "gaTrackingId": ""
@@ -94,16 +88,24 @@
     "mediation": true
   },
   "oauth": {
-    "clientId": "cmc_citizen",
-    "clientSecret": "123456"
-  },
-  "postcodeLookup": {
-    "apiKey": "AAAAAAA"
+    "clientId": "cmc_citizen"
   },
   "mcol": {
     "url": "https://www.moneyclaim.gov.uk/web/mcol/welcome"
   },
   "appInsights": {
     "roleName": "citizen-frontend"
+  },
+  "secrets":{
+    "cmc":{
+      "cmc-s2s-secret": "AAAAAAAAAAAAAAAA",
+      "citizen-draft-store-primary": "not-a-real-primary-secret",
+      "citizen-draft-store-secondary": "not-a-real-secondary-secret",
+      "staff-email": "CONTACT_EMAIL",
+      "citizen-oauth-client-secret": "123456",
+      "os-postcode-lookup-api-key": "AAAAAAA",
+      "encryptionKey": "not-a-real-32-bit-encryption-key",
+      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
+    }
   }
 }
