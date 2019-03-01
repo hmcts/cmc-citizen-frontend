@@ -124,7 +124,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.acceptCourtOfferedRepaymentPlan(testData, unreasonableClaimantResponseTestDate, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve proposed a different repayment plan')
+    I.see('The court rejected your repayment plan and calculated a more affordable one')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement')
