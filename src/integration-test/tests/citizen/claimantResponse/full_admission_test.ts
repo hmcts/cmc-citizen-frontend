@@ -9,7 +9,7 @@ import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claiman
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import {
   ClaimantResponseTestData,
-  UnReasonableClaimantResponseTestData
+  UnreasonableClaimantResponseTestData
 } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 
 const helperSteps: Helper = new Helper()
@@ -115,13 +115,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
-    const unReasonableClaimantResponseTestDate = new UnReasonableClaimantResponseTestData()
+    const unreasonableClaimantResponseTestDate = new UnreasonableClaimantResponseTestData()
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
-    claimantResponseSteps.acceptCourtOfferedRepaymentPlan(testData, unReasonableClaimantResponseTestDate, 'View and respond to the offer')
+    claimantResponseSteps.acceptCourtOfferedRepaymentPlan(testData, unreasonableClaimantResponseTestDate, 'View and respond to the offer')
     checkAndSendPage.verifyFactsForSettlement()
     checkAndSendPage.checkFactsTrueAndSubmit()
     I.see('You’ve proposed a different repayment plan')

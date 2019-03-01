@@ -3,7 +3,7 @@ import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import {
   ClaimantResponseTestData,
-  UnReasonableClaimantResponseTestData
+  UnreasonableClaimantResponseTestData
 } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { ClaimantAcceptPaymentMethod } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-accept-payment-method'
 import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-task-list'
@@ -54,7 +54,7 @@ export class ClaimantResponseSteps {
 
   acceptCourtOfferedRepaymentPlan (
     testData: EndToEndTestData,
-    unReasonableClaimantResponseTestData: UnReasonableClaimantResponseTestData,
+    unReasonableClaimantResponseTestData: UnreasonableClaimantResponseTestData,
     buttonText: string
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
@@ -227,7 +227,7 @@ export class ClaimantResponseSteps {
 
   acceptCourtOffer (
     testData: EndToEndTestData,
-    unReasonableClaimantResponseTestData: UnReasonableClaimantResponseTestData
+    unReasonableClaimantResponseTestData: UnreasonableClaimantResponseTestData
   ): void {
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()

@@ -52,7 +52,7 @@ export class ClaimantResponseTestData {
 
 }
 
-export class UnReasonableClaimantResponseTestData {
+export class UnreasonableClaimantResponseTestData {
 
   isExpectingToSeeHowTheyWantToPayPage: boolean = false
   isExpectingToSeeCourtOfferedInstalmentsPage: boolean = false
