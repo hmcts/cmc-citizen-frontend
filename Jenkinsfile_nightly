@@ -17,6 +17,7 @@ withNightlyPipeline("nodejs", product, component) {
 
   enableCrossBrowserTest()
   enableSecurityScan()
+  enableFullFunctionalTest()
 
   after('crossBrowserTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
