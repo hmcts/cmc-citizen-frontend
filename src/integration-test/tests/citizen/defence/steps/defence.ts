@@ -354,7 +354,8 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantType: PartyType,
     paymentOption: PaymentOption,
-    claimantName: string
+    claimantName: string,
+    statementOfMeansFullDataSet: boolean = true
   ): void {
     this.confirmYourDetails(defendantParty)
 
@@ -381,7 +382,8 @@ export class DefenceSteps {
         defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
         defendantPaymentPlanPage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
-        statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+        statementOfMeansFullDataSet ? statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+          : statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet('50')
         break
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
