@@ -52,7 +52,7 @@ const explanationPage: ExplanationPage = new ExplanationPage()
 
 export class StatementOfMeansSteps {
 
-  fillStatementOfMeansWithMinimalDataSet (): void {
+  fillStatementOfMeansWithMinimalDataSet (amount?: string): void {
     startPage.clickContinue()
     bankAccountsPage.enterBankAccount('Current account', false, 1000)
     bankAccountsPage.clickContinue()
@@ -76,7 +76,7 @@ export class StatementOfMeansSteps {
     debtsPage.clickContinue()
     expensesPage.fillOutSomeFields()
     expensesPage.clickContinue()
-    incomePage.fillOutSomeFields()
+    incomePage.fillOutSomeFields(amount)
     incomePage.clickContinue()
     explanationPage.enterExplanation('I cannot pay immediately')
     explanationPage.clickContinue()
