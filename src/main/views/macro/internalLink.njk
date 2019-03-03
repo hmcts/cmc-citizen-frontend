@@ -1,2 +1,3 @@
-{% macro internalLink(text, href, class='') %}
-  <a href="{{ href }}" class="{{ class }}">{{ text }}</a>{% endmacro %}
+{% macro internalLink(text, href, class='', id='', dataEventLabel='') %}
+  <a href="{{ href }}" class="{{ class }}"{{ ' ' + id if id else '' }}{{ ' ' + dataEventLabel if dataEventLabel else '' }}>{{ text }}</a>
+{% endmacro %}
