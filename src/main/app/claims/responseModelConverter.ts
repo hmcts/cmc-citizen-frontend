@@ -198,6 +198,7 @@ export class ResponseModelConverter {
           return draft.defendantDetails.mobilePhone.number
         } else {
           //TO-DO:
+          return claim.claimData.claimant.mobilePhone
         }
       } else {
         return mediationDraft.canWeUse.mediationPhoneNumber
