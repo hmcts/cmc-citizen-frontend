@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "externalLink.njk" import externalLink %}
-{% from "support.njk" import mcolSupportWidget, citizensAdviceWidget %}
+{% from "support.njk" import supportWidget, citizensAdviceWidget %}
 
 {% set heading = 'Contact the court' %}
 
@@ -10,7 +10,7 @@
     <div class="column-two-thirds">
       <p>{{ t('If you are under 18 you need to email or phone the court. Claimants cannot submit a claim against someone under 18 so you may be able to have the claim stopped.') }}</p>
 
-      {{ mcolSupportWidget(label='') }}
+      {{ supportWidget(label='Money Claims') }}
       {{ citizensAdviceWidget() }}
 
     </div>

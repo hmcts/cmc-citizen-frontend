@@ -9,9 +9,7 @@
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
-  {% if label %}
-    <h2 class="heading-medium">{{ t(label) }}</h2>
-  {% endif %}
+  <h2 class="heading-medium">{{ t(label) }}</h2>
   <pre>{{ t('Money Claim Online helpdesk') }}</pre>
   <pre>{{ t('Email: ccbc@hmcts.gsi.gov.uk') }}</pre>
   <pre>{{ t('Telephone: 0300 123 1057') }}</pre>
