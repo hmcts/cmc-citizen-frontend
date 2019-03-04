@@ -27,9 +27,9 @@ const buttons = {
 
 export class MonthlyIncomePage {
 
-  fillOutSomeFields (): void {
-    this.fillGenericField(fields.salary, '10')
-    this.fillGenericField(fields.universalCredit, '10')
+  fillOutSomeFields (amount: string = '10'): void {
+    this.fillGenericField(fields.salary, amount)
+    this.fillGenericField(fields.universalCredit, amount)
   }
 
   fillGenericField (field: GenericMonthyIncomeField, amount: string): void {
