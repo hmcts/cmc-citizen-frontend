@@ -53,7 +53,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }))
 app.use(cookieParser())
-app.use(cookieEncrypter(config.get('session.encryptionKey'), {
+app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   options: {
     algorithm: 'aes128'
   }
