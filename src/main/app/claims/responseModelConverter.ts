@@ -105,6 +105,7 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       freeMediation: this.convertFreeMediation(mediationDraft, draft),
       mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
         draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
@@ -131,6 +132,7 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       freeMediation: this.convertFreeMediation(mediationDraft, draft),
       mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -141,6 +143,7 @@ export class ResponseModelConverter {
       responseType: ResponseType.FULL_ADMISSION,
       freeMediation: this.convertFreeMediation(mediationDraft, draft),
       mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -178,6 +181,7 @@ export class ResponseModelConverter {
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
       freeMediation: this.convertFreeMediation(mediationDraft, draft),
       mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -197,11 +201,25 @@ export class ResponseModelConverter {
         if (!claim.isResponseSubmitted()) {
           return draft.defendantDetails.mobilePhone.number
         } else {
-          //TO-DO:
           return claim.claimData.claimant.mobilePhone
         }
       } else {
         return mediationDraft.canWeUse.mediationPhoneNumber
+      }
+    }
+    return undefined
+  }
+
+  private static convertMediationContactPerson (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
+    if (FeatureToggles.isEnabled('mediation')) {
+      if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
+        if (!claim.isResponseSubmitted()) {
+          return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson
+        } else {
+          return (claim.claimData.claimant as CompanyDetails).contactPerson
+        }
+      } else {
+        return mediationDraft.canWeUseCompany.mediationContactPerson
       }
     }
     return undefined
