@@ -43,6 +43,7 @@ import { AlreadyPaid } from 'response/form/models/alreadyPaid'
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { MomentFactory } from 'shared/momentFactory'
 import * as moment from 'moment'
+import { CompanyDetails } from 'forms/models/companyDetails'
 
 const serviceBaseURL: string = `${config.get('draft-store.url')}`
 
@@ -50,60 +51,22 @@ export const samplePaidInFullDraftObj = {
   datePaid: moment()
 }
 
-export const sampleClaimDraftObj = {
+const commonClaimObject = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
-  claimant: {
-    partyDetails: {
-      type: 'individual',
-      name: 'John Smith',
-      address: {
-        line1: 'Apt 99',
-        line2: '',
-        line3: '',
-        city: 'London',
-        postcode: 'bb127nq'
-      } as Address,
-      hasCorrespondenceAddress: false,
-      dateOfBirth: {
-        known: true,
-        date: {
-          day: 31,
-          month: 12,
-          year: 1980
-        } as LocalDate
-      } as DateOfBirth
-    } as IndividualDetails,
-    mobilePhone: {
-      number: '07000000000'
-    } as MobilePhone,
-    payment: {
-      reference: '123',
-      date_created: 12345,
-      amount: 2500,
-      status: 'Success',
-      _links: {
-        next_url: {
-          href: 'any href',
-          method: 'POST'
-        }
-      }
-    } as Payment
-  } as Claimant,
-  defendant: {
-    partyDetails: {
-      type: 'individual',
-      name: 'Rose Smith',
-      address: {
-        line1: 'Apt 99',
-        line2: '',
-        line3: '',
-        city: 'London',
-        postcode: 'bb127nq'
-      },
-      hasCorrespondenceAddress: false
-    } as IndividualDetails,
-    email: { address: 'example@example.com' }
-  } as Defendant,
+  eligibility: {
+    claimValue: ClaimValue.UNDER_10000,
+    helpWithFees: YesNoOption.NO,
+    claimantAddress: YesNoOption.YES,
+    defendantAddress: YesNoOption.YES,
+    eighteenOrOver: YesNoOption.YES,
+    defendantAge: DefendantAgeOption.YES,
+    claimType: ClaimType.PERSONAL_CLAIM,
+    singleDefendant: YesNoOption.NO,
+    governmentDepartment: YesNoOption.NO,
+    claimIsForTenancyDeposit: YesNoOption.NO
+  } as Eligibility,
+  readResolveDispute: true,
+  readCompletingClaim: true,
   amount: {
     rows: [
       {
@@ -140,29 +103,116 @@ export const sampleClaimDraftObj = {
   reason: {
     reason: 'Valid reason'
   } as Reason,
-  readResolveDispute: true,
-  readCompletingClaim: true,
-  eligibility: {
-    claimValue: ClaimValue.UNDER_10000,
-    helpWithFees: YesNoOption.NO,
-    claimantAddress: YesNoOption.YES,
-    defendantAddress: YesNoOption.YES,
-    eighteenOrOver: YesNoOption.YES,
-    defendantAge: DefendantAgeOption.YES,
-    claimType: ClaimType.PERSONAL_CLAIM,
-    singleDefendant: YesNoOption.NO,
-    governmentDepartment: YesNoOption.NO,
-    claimIsForTenancyDeposit: YesNoOption.NO
-  } as Eligibility,
   timeline: {
     rows: [{ date: 'aaa', description: 'bb' }]
   } as ClaimantTimeline,
   evidence: {
     rows: [{ type: EvidenceType.OTHER, description: 'bb' }]
   } as Evidence
+}
+
+const commonIndividualClaimant = {
+  claimant: {
+    partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
+      address: {
+        line1: 'Apt 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'bb127nq'
+      } as Address,
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        known: true,
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
+    } as IndividualDetails,
+    mobilePhone: {
+      number: '07000000000'
+    } as MobilePhone,
+    payment: {
+      reference: '123',
+      date_created: 12345,
+      amount: 2500,
+      status: 'Success',
+      _links: {
+        next_url: {
+          href: 'any href',
+          method: 'POST'
+        }
+      }
+    } as Payment
+  } as Claimant
+}
+
+const commonCompanyClaimant = {
+  claimant: {
+    partyDetails: {
+      type: 'company',
+      name: 'Monsters Inc.',
+      contactPerson: 'Sully',
+      address: { line1: 'Apartment 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'SE28 0JE' } as Address,
+      hasCorrespondenceAddress: false
+    } as CompanyDetails,
+    mobilePhone: {
+      number: '07000000000'
+    } as MobilePhone,
+    payment: {
+      reference: '123',
+      date_created: 12345,
+      amount: 2500,
+      status: 'Success',
+      _links: {
+        next_url: {
+          href: 'any href',
+          method: 'POST'
+        }
+      }
+    } as Payment
+  }
+}
+
+const commonIndividualDefendant = {
+  defendant: {
+    partyDetails: {
+      type: 'individual',
+      name: 'Rose Smith',
+      address: {
+        line1: 'Apt 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'bb127nq'
+      },
+      hasCorrespondenceAddress: false
+    } as IndividualDetails,
+    email: { address: 'example@example.com' }
+  } as Defendant
+}
+
+export const sampleClaimDraftObj = {
+  ...commonClaimObject,
+  ...commonIndividualClaimant,
+  ...commonIndividualDefendant
 } as DraftClaim
 
-const commonResponsePartial = {
+export const sampleCompanyClaimDraftObj = {
+  ...commonClaimObject,
+  ...commonCompanyClaimant,
+  ...commonIndividualDefendant
+} as DraftClaim
+
+const commonIndividualResponsePartial = {
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
     mobilePhone: { number: '01223344444' } as MobilePhone,
@@ -186,8 +236,28 @@ const commonResponsePartial = {
   }
 }
 
-export const sampleResponseDraftObj = {
-  ...commonResponsePartial,
+const commonCompanyResponsePartial = {
+  defendantDetails: {
+    email: { address: 'example@example.com' } as Email,
+    mobilePhone: { number: '01223344444' } as MobilePhone,
+    partyDetails: {
+      type: 'company',
+      name: 'Monsters Inc.',
+      contactPerson: 'Sully',
+      address: { line1: 'Apartment 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'SE28 0JE' } as Address,
+      hasCorrespondenceAddress: false
+    } as CompanyDetails
+  } as Defendant,
+  moreTimeNeeded: {
+    option: MoreTimeNeededOption.YES
+  }
+}
+
+const commonDefenceResponse = {
   response: {
     type: ResponseType.DEFENCE
   },
@@ -204,10 +274,20 @@ export const sampleResponseDraftObj = {
   freeMediation: {
     option: FreeMediationOption.NO
   }
+}
+
+export const sampleResponseDraftObj = {
+  ...commonIndividualResponsePartial,
+  ...commonDefenceResponse
+} as ResponseDraft
+
+export const sampleCompanyResponseDraftObj = {
+  ...commonCompanyResponsePartial,
+  ...commonDefenceResponse
 } as ResponseDraft
 
 export const sampleFullAdmissionResponseDraftObj = {
-  ...commonResponsePartial,
+  ...commonIndividualResponsePartial,
   response: {
     type: ResponseType.FULL_ADMISSION
   },
@@ -279,7 +359,7 @@ export const sampleFullAdmissionResponseDraftObj = {
 }
 
 export const sampleFullRejectionDraftObj = {
-  ...commonResponsePartial,
+  ...commonIndividualResponsePartial,
   response: {
     type: ResponseType.DEFENCE
   },
@@ -301,7 +381,7 @@ export const sampleFullRejectionDraftObj = {
 }
 
 export const samplePartialAdmissionResponseDraftObj = {
-  ...commonResponsePartial,
+  ...commonIndividualResponsePartial,
   response: {
     type: ResponseType.PART_ADMISSION
   },
@@ -457,8 +537,16 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
     case 'claim':
       documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
       break
+    case 'claim:company':
+      documentDocument = { ...sampleCompanyClaimDraftObj, ...draftOverride }
+      break
     case 'response':
       documentDocument = { ...sampleResponseDraftObj, ...draftOverride }
+      break
+    case 'response:company':
+      documentDocument = { ...sampleCompanyResponseDraftObj, ...draftOverride }
+      // tslint:disable-next-line
+      console.log(documentDocument)
       break
     case 'response:full-admission':
       documentDocument = { ...sampleFullAdmissionResponseDraftObj, ...draftOverride }

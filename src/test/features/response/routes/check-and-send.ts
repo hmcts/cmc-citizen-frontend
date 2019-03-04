@@ -74,6 +74,38 @@ describe('Defendant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
+
+        context('for individual and sole traders', () => {
+          it('should return statement of truth with a tick box', async () => {
+            draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+          })
+        })
+        context('for company and organisation', () => {
+          it('should return statement of truth with a tick box', async () => {
+
+            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('mediation')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
+              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+          })
+        })
       })
     })
   })
