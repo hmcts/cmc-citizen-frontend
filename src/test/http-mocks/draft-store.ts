@@ -50,6 +50,14 @@ export const samplePaidInFullDraftObj = {
   datePaid: moment()
 }
 
+export const sampleOrganisationDetails = {
+  type: 'organisation',
+  name: 'John Smith',
+  address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
+  hasCorrespondenceAddress: false,
+  contactPerson: 'Mary Richards'
+}
+
 export const sampleClaimDraftObj = {
   externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   claimant: {
