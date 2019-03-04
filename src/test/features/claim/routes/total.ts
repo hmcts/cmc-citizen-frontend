@@ -89,6 +89,19 @@ describe('Claim issue: total page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(pageContent))
       })
+
+      it('should throw error when claim value is above £10000 including interest', async () => {
+        draftStoreServiceMock.resolveFind('claim', draftStoreServiceMock.aboveAllowedAmountWithInterest)
+        feesServiceMock.resolveCalculateIssueFee()
+        feesServiceMock.resolveCalculateHearingFee()
+        feesServiceMock.resolveGetIssueFeeRangeGroup()
+        feesServiceMock.resolveGetHearingFeeRangeGroup()
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.serverError.withText('Excess Money claim'))
+      })
     })
   })
 
