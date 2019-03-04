@@ -36,6 +36,8 @@ env.FEATURE_TESTING_SUPPORT = 'true'
 withNightlyPipeline("nodejs", product, component) {
   env.TEST_URL = params.URL_TO_TEST
 
+  loadVaultSecrets(secrets)
+  setVaultName('cmc')
   enableCrossBrowserTest()
   enableSecurityScan()
   enableFullFunctionalTest()
