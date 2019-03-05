@@ -31,7 +31,7 @@ export const individualDetails = {
 export const soleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
   name: 'SoleTrader Smith',
-  businessName: 'SoleTrader Inc.',
+  businessName: 'SoleTrader Ltd.',
   address: {
     line1: 'Flat 2',
     line2: 'Street 2',
@@ -51,7 +51,7 @@ export const soleTraderDetails = {
 
 export const companyDetails = {
   type: PartyType.COMPANY.value,
-  name: 'Company Inc.',
+  name: 'Company Ltd.',
   contactPerson: 'Company Smith',
   address: {
     line1: 'Flat 3',
@@ -72,7 +72,7 @@ export const companyDetails = {
 
 export const organisationDetails = {
   type: PartyType.ORGANISATION.value,
-  name: 'Organisation Inc.',
+  name: 'Organisation.',
   contactPerson: 'Organisation Smith',
   address: {
     line1: 'Flat 4',
