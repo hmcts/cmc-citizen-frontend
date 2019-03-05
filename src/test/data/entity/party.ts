@@ -24,8 +24,8 @@ export const individual = {
 
 export const soleTrader = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-  name: 'Rosa Smith',
-  businessName: 'Example Inc.',
+  name: 'SoleTrader Smith',
+  businessName: 'SoleTrader Ltd.',
   address: {
     line1: 'Flat 2',
     line2: 'Street 2',
@@ -46,8 +46,8 @@ export const soleTrader = {
 
 export const company = {
   type: PartyType.COMPANY.value,
-  name: 'Example Inc.',
-  contactPerson: 'John Smith',
+  name: 'Company Ltd.',
+  contactPerson: 'Company Smith',
   address: {
     line1: 'Flat 3',
     line2: 'Street 3',
@@ -68,8 +68,8 @@ export const company = {
 
 export const organisation = {
   type: PartyType.ORGANISATION.value,
-  name: 'Example Inc.',
-  contactPerson: 'John Smith',
+  name: 'Organisation.',
+  contactPerson: 'Organisation Smith',
   address: {
     line1: 'Flat 4',
     line2: 'Street 4',
