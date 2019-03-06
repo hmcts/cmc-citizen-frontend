@@ -74,7 +74,8 @@
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.directionsQuestionnaireDeadline %}
         <p>
           {{ t('You need to') }}
-          {{ internalLink(t('complete a directions questionnaire form'), DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) }}.
+          {{ internalLink(t('complete a directions questionnaire form'), DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) }}
+          {{ t('to tell us more about the claim.') }}.
         </p>
         <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
             { deadline: claim.directionsQuestionnaireDeadline | date }) }}
