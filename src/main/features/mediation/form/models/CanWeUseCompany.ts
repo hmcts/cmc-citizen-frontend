@@ -60,6 +60,6 @@ export class CanWeUseCompany implements CompletableTask {
   }
 
   isCompleted (): boolean {
-    return !!this.option && !!this.mediationPhoneNumber && !!this.mediationContactPerson
+    return !!this.option && ((!!this.mediationPhoneNumber && !!this.mediationContactPerson) || !!this.mediationPhoneNumberConfirmation)
   }
 }

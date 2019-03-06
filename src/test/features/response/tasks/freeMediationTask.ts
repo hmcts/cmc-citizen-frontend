@@ -7,6 +7,7 @@ import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'
 import { CanWeUse } from 'mediation/form/models/CanWeUse'
+import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 
 describe('Free mediation task', () => {
   it('should not be completed when free mediation object is undefined', () => {
@@ -61,6 +62,26 @@ describe('Free mediation task', () => {
       mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
       mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
       mediationDraft.canWeUse = new CanWeUse(FreeMediationOption.NO, '07777777777')
+
+      expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
+    })
+
+    it('should be completed when WeCanUseCompany is yes and phone number confirmation is provided', () => {
+      const draft = new ResponseDraft()
+      const mediationDraft = new MediationDraft()
+      mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+      mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
+      mediationDraft.canWeUseCompany = new CanWeUseCompany(FreeMediationOption.YES, '', '', '07777777777')
+
+      expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
+    })
+
+    it('should be completed when WeCanUseCompany is no and phone number and contact person is provided', () => {
+      const draft = new ResponseDraft()
+      const mediationDraft = new MediationDraft()
+      mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+      mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
+      mediationDraft.canWeUseCompany = new CanWeUseCompany(FreeMediationOption.YES, '07777777777', 'Mary Richards', '')
 
       expect(FreeMediationTask.isCompleted(draft, mediationDraft)).to.be.true
     })
