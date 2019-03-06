@@ -80,8 +80,9 @@ claimFullAdmissionForClaimantClaimDetails,
   CCJAfterBreakingSettlementAgreementClaimDetails,
   pastPaymentDeadlineDefendantClaimDetails %}
 
-{% from "./claimStatus/partAdmissionStatesPaidAccepted.njk" import partAdmissionStatesPaidClaimSettledClaimantDetails,
-partAdmissionStatesPaidClaimSettledDefendantsDetails %}
+{% from "./claimStatus/statesPaidAccepted.njk" import
+  statesPaidClaimSettledClaimantDetails,
+  statesPaidClaimSettledDefendantsDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
@@ -158,8 +159,8 @@ partAdmissionStatesPaidClaimSettledDefendantsDetails %}
       {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
       {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
-    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID %}
-      {{ partAdmissionStatesPaidClaimSettledClaimantDetails(claim, csrf) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+      {{ statesPaidClaimSettledClaimantDetails(claim, csrf) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -235,8 +236,8 @@ partAdmissionStatesPaidClaimSettledDefendantsDetails %}
         {{ settlementAgreementRejectedDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
         {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID %}
-        {{ partAdmissionStatesPaidClaimSettledDefendantsDetails(claim, csrf) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+        {{ statesPaidClaimSettledDefendantsDetails(claim, csrf) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}

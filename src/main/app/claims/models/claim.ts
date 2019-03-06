@@ -22,6 +22,7 @@ import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
+import { DefenceType } from 'claims/models/response/defenceType'
 
 interface State {
   status: ClaimStatus
@@ -106,12 +107,12 @@ export class Claim {
             return !this.countyCourtJudgmentRequestedAt
               && isPastDeadline(MomentFactory.currentDateTime(),
                 (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
-            break
+
           case PaymentOption.INSTALMENTS:
             return !this.countyCourtJudgmentRequestedAt
               && isPastDeadline(MomentFactory.currentDateTime(),
                 (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.paymentIntention.repaymentPlan.firstPaymentDate))
-            break
+
           default:
             throw new Error(`Payment option ${paymentOption} is not supported`)
         }
@@ -173,8 +174,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
-    } else if (this.hasClaimantAcceptedPartAdmitAndStatesPaid()) {
-      return ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID
+    } else if (this.hasClaimantAcceptedStatesPaid()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
@@ -351,7 +352,7 @@ export class Claim {
       return true
     }
 
-    if (this.hasClaimantAcceptedPartAdmitAndStatesPaid()) {
+    if (this.hasClaimantAcceptedStatesPaid()) {
       return false
     }
 
@@ -454,9 +455,10 @@ export class Claim {
       this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
   }
 
-  private hasClaimantAcceptedPartAdmitAndStatesPaid (): boolean {
+  private hasClaimantAcceptedStatesPaid (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
-      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentDeclaration !== undefined
+      ((this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentDeclaration !== undefined)
+        || (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID && this.response.paymentDeclaration !== undefined))
   }
 
   private isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {

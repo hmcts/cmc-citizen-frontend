@@ -410,7 +410,7 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY)
     })
 
-    it('should contain the claim status CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID only when part admission states paid is accepted', () => {
+    it('should contain the claim status CLAIMANT_ACCEPTED_STATES_PAID only when part admission states paid is accepted', () => {
       claim.respondedAt = moment()
       claim.response = {
         paymentIntention: null,
@@ -424,7 +424,7 @@ describe('Claim', () => {
       claim.claimantResponse = partAdmissionStatesPaidClaimantResponseData
 
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID)
     })
   })
 
