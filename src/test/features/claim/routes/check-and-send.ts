@@ -115,7 +115,6 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
-        // ROC-5326 and ROC-5315 test should be added once the jira closed
       })
 
       it('should validate individual to organisation flow with lable organisation Name and Contact persion Name', async () => {
@@ -171,7 +170,6 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Trading as SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
-        // ROC-5326 and ROC-5315 test should be added once the jira closed
       })
 
       it('should validate soleTrader to organisation flow with lable organisation Name and Contact persion Name', async () => {
@@ -203,7 +201,6 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Types of senior position'))
-        // ROC-5326 and ROC-5315 test should be added once the jira closed
       })
 
       it('should validate Company to individual flow with lable Business and trading name', async () => {
@@ -260,7 +257,6 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
-        // ROC-5326 and ROC-5315 test should be added once the jira closed
       })
 
       it('should validate organisation to individual flow with lable Business and trading name', async () => {
