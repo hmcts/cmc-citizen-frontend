@@ -26,11 +26,13 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
     return undefined
   }
 
-  if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept &&
-    draft.acceptPaymentMethod.accept.option === YesNoOption.YES ||
-    (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES)) {
+  if ((draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES)
+    && (draft.acceptPaymentMethod &&
+      draft.acceptPaymentMethod.accept.option === YesNoOption.YES)) {
     return response.paymentIntention
-  } else if (claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
+  } else if ((draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES) &&
+    (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.NO) &&
+    claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
     return draft.courtDetermination.courtDecision
   } else {
     return draft.alternatePaymentMethod.toDomainInstance()
@@ -47,12 +49,12 @@ export default express.Router()
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
-
+      const paymentIntention: PaymentIntention = alreadyPaid ? undefined : getPaymentIntention(draft.document, claim)
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
         totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
-        paymentIntention: alreadyPaid ? undefined : getPaymentIntention(draft.document, claim),
+        paymentIntention: paymentIntention,
         alreadyPaid: alreadyPaid,
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
         mediationEnabled: FeatureToggles.isEnabled('mediation'),

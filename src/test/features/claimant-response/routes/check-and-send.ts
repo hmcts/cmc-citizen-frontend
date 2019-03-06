@@ -103,6 +103,73 @@ describe('Claimant response: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
         })
 
+        it('should render page when everything fine when Comp/Org as Defendant admission is accepted ' +
+          'but payment plan is rejected to be paid IMMEDIATELY', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
+          draftStoreServiceMock.resolveFind(draftType, {
+            courtDetermination: undefined,
+            alternatePaymentMethod: {
+              paymentOption: {
+                option: {
+                  value: 'IMMEDIATELY',
+                  displayValue: 'Immediately'
+                }
+              }
+            }
+          })
+          draftStoreServiceMock.resolveFind('mediation')
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withoutText('How would you like the defendant to pay'))
+            .expect(res => expect(res).to.be.successful.withoutText('Immediately'))
+            .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
+        })
+
+        it('should render page when everything fine when Comp/Org as Defendant admission is accepted ' +
+          'but payment plan is rejected to be paid BY SET DATE', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
+          draftStoreServiceMock.resolveFind(draftType, {
+            courtDetermination: undefined,
+            alternatePaymentMethod: {
+              paymentOption: {
+                option: {
+                  value: 'BY_SPECIFIED_DATE',
+                  displayValue: 'By a set date'
+                }
+              }
+            }
+          })
+          draftStoreServiceMock.resolveFind('mediation')
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withoutText('How would you like the defendant to pay'))
+            .expect(res => expect(res).to.be.successful.withoutText('In full by'))
+            .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
+        })
+
+        it('should render page when everything fine when Comp/Org as Defendant admission is accepted ' +
+          'but payment plan is rejected to be paid BY INSTALMENTS', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
+          draftStoreServiceMock.resolveFind(draftType, {
+            courtDetermination: undefined
+          })
+          draftStoreServiceMock.resolveFind('mediation')
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withoutText('How would you like the defendant to pay'))
+            .expect(res => expect(res).to.be.successful.withoutText('By instalments'))
+            .expect(res => expect(res).to.be.successful.withoutText('Regular payments of'))
+            .expect(res => expect(res).to.be.successful.withoutText('Frequency of payments'))
+            .expect(res => expect(res).to.be.successful.withoutText('Date for first instalment'))
+            .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
+        })
+
         it('should redirect to incomplete submission when response is accepted but rest is incomplete', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind(draftType,
