@@ -14,7 +14,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as feesServiceMock from 'test/http-mocks/fees'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pageContent: string = 'Total amount you’re claiming'

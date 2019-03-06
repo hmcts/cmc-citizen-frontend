@@ -56,7 +56,7 @@ describe('Claim issue: interest rate page', () => {
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
-      it('should render the page when form when a different rate is selected but no rate is entered', async () => {
+      it('should render the page when a different rate is selected but no rate is entered', async () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
@@ -69,7 +69,7 @@ describe('Claim issue: interest rate page', () => {
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
-      it('should render the page when form when a different rate is selected but no reason is entered', async () => {
+      it('should render the page when a different rate is selected but no reason is entered', async () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
