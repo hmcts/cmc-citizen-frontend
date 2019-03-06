@@ -45,7 +45,7 @@
         {% endif %}
         {% for claim in claimsAsClaimant %}
           <tr class="claims default mobile-table">
-            <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId) }}</td>
+            <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant') }}</td>
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
