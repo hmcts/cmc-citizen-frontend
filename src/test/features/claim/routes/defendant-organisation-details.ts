@@ -107,7 +107,7 @@ describe('defendant as organisation details page', () => {
             .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidCorrespondenceAddressInput)
-            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter a valid town/city'))
+            .expect(res => expect(res).to.be.successful.withText('Organisation details', 'div class="error-summary"', 'Enter correspondence town/city'))
         })
         it('postcode is missing', async () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }

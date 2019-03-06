@@ -167,7 +167,7 @@ export const aboveAllowedAmountWithInterest = {
     rows: [
       {
         reason: 'Valid reason',
-        amount: 9500
+        amount: 9800
       } as ClaimAmountRow
     ]
   } as ClaimAmountBreakdown,

@@ -7,13 +7,14 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { ErrorPaths, Paths as ClaimPaths } from 'claim/paths'
 
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as feesServiceMock from 'test/http-mocks/fees'
+import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pageContent: string = 'Total amount you’re claiming'
@@ -92,15 +93,13 @@ describe('Claim issue: total page', () => {
 
       it('should throw error when claim value is above £10000 including interest', async () => {
         draftStoreServiceMock.resolveFind('claim', draftStoreServiceMock.aboveAllowedAmountWithInterest)
-        feesServiceMock.resolveCalculateIssueFee()
-        feesServiceMock.resolveCalculateHearingFee()
-        feesServiceMock.resolveGetIssueFeeRangeGroup()
-        feesServiceMock.resolveGetHearingFeeRangeGroup()
+        claimStoreServiceMock.mockCalculateInterestRate(0)
+        claimStoreServiceMock.mockCalculateInterestRate(500)
 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Excess Money claim'))
+          .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.amountExceededPage.uri))
       })
     })
   })
