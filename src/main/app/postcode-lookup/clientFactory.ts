@@ -4,7 +4,7 @@ import { request } from 'client/request'
 import * as config from 'config'
 import { PostcodeToCountryClient } from '@hmcts/os-names-client'
 
-const postcodeLookupApiKey = config.get<string>('postcodeLookup.apiKey')
+const postcodeLookupApiKey = config.get<string>('secrets.cmc.os-postcode-lookup-api-key')
 
 const requestOptionsOverride = {
   fullResponse: true
