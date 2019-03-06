@@ -360,6 +360,186 @@ describe('Claim issue: check and send page', () => {
           .send({ signed: 'true' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
       })
+
+      it('should validate individual to soleTrader flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate individual to Company flow with lable Company Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate individual to organisation flow with lable organisation Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate soleTrader to soleTrader flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate soleTrader to individual flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate soleTrader to Company flow with lable Company Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate soleTrader to organisation flow with lable organisation Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate Company to Company flow with lable Company Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate Company to individual flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate Company to soleTrader flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate Company to organisation flow with lable organisation Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate organisation to organisation flow with lable Company Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate organisation to individual flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate organisation to soleTrader flow with lable Business and trading name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
+
+      it('should validate organisation to Company flow with lable organisation Name and Contact persion Name', async () => {
+        draftStoreServiceMock.resolveFind('claim',
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
+
+        await request(app)
+          .post(ClaimPaths.checkAndSendPage.uri)
+          .send({ type: SignatureType.BASIC })
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ signed: 'true' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
+      })
     })
   })
 })
