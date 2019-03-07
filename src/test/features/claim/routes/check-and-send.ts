@@ -99,6 +99,9 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('Full name'))
+          .expect(res => expect(res).to.be.successful.withText('John Smith'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Business name'))
           .expect(res => expect(res).to.be.successful.withText('Trading as SoleTrader Ltd.'))
@@ -112,6 +115,9 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('Full name'))
+          .expect(res => expect(res).to.be.successful.withText('John Smith'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
@@ -125,6 +131,9 @@ describe('Claim issue: check and send page', () => {
         await request(app)
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('Full name'))
+          .expect(res => expect(res).to.be.successful.withText('John Smith'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
       })
@@ -138,6 +147,8 @@ describe('Claim issue: check and send page', () => {
           .get(ClaimPaths.checkAndSendPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('Business name'))
+          .expect(res => expect(res).to.be.successful.withText('Trading as SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-sole-trader-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Business name'))
           .expect(res => expect(res).to.be.successful.withText('Trading as SoleTrader Ltd.'))
@@ -155,6 +166,8 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Business name'))
           .expect(res => expect(res).to.be.successful.withText('Trading as SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('Full name'))
+          .expect(res => expect(res).to.be.successful.withText('Rose Smith'))
       })
 
       it('Should validate that a claim made by soleTrader against company and displays their details on check-and-send page', async () => {
@@ -214,6 +227,8 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('Full name'))
+          .expect(res => expect(res).to.be.successful.withText('Rose Smith'))
       })
 
       it('Should validate that a claim made by company against soleTrader and displays their details on check-and-send page', async () => {
@@ -270,6 +285,8 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('Full name'))
+          .expect(res => expect(res).to.be.successful.withText('Rose Smith'))
       })
 
       it('Should validate that a claim made by organisation against soleTrader and displays their details on check-and-send page', async () => {
@@ -348,186 +365,6 @@ describe('Claim issue: check and send page', () => {
 
       it('should redirect to payment page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by individual against soleTrader and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by individual against company and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by individual against organisation and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by soleTrader against soleTrader and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by soleTrader against individual and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by soleTrader against company and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by soleTrader against organisation and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: soleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by company against company and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by company against individual and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by company against soleTrader and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by company against organisation and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by organisation against organisation and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by organisation against individual and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by organisation against soleTrader and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: soleTraderDetails } })
-
-        await request(app)
-          .post(ClaimPaths.checkAndSendPage.uri)
-          .send({ type: SignatureType.BASIC })
-          .set('Cookie', `${cookieName}=ABC`)
-          .send({ signed: 'true' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
-      })
-
-      it('Should validate that a claim made by organisation against company and redirect to payment page', async () => {
-        draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails } })
 
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
