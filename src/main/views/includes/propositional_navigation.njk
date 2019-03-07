@@ -5,12 +5,12 @@
     {{ internalLink(t('Menu'), '#proposition-links', 'js-header-toggle menu') }}
     <nav id="proposition-menu">
       {% if serviceName %}
-        {{ internalLink(t(serviceName), '/', id='proposition-name') }}
+        {{ internalLink(t(serviceName), AppPaths.homePage.uri, id='proposition-name') }}
       {% endif %}
       <ul id="proposition-links" class="pull-right">
         {% if isLoggedIn %}
-          <li>{{ internalLink(t('My account'), '/dashboard') }}</li>
-          <li>{{ internalLink(t('Sign out'), '/logout') }}</li>
+          <li>{{ internalLink(t('My account'), DashboardPaths.dashboardPage.uri) }}</li>
+          <li>{{ internalLink(t('Sign out'), AppPaths.logoutReceiver.uri) }}</li>
         {% endif %}
       </ul>
     </nav>

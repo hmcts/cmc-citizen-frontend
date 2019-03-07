@@ -7,8 +7,8 @@
 {% block content %}
   <p>
     {{ t('You can return to {{ homepage }} and start your claim or defence again.',
-      { homepage: internalLink(t('Civil Money Claims'), '/') }) | safe }}
+      { homepage: internalLink(t('Civil Money Claims'), AppPaths.homePage.uri) }) | safe }}
   </p>
 
-  {{ internalLink(t('Start again'), '/', 'button') }}
+  {{ internalLink(t('Start again'), AppPaths.homePage.uri, 'button') }}
 {% endblock %}
