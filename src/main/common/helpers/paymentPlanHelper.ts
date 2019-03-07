@@ -76,6 +76,8 @@ export class PaymentPlanHelper {
 
   static createPaymentPlanFromDefendantFinancialStatement (claim: Claim, draft: DraftClaimantResponse): PaymentPlan {
     const response = claim.response as FullAdmissionResponse | PartialAdmissionResponse
+    const frequency: Frequency = response.paymentIntention.paymentOption === PaymentOption.INSTALMENTS ?
+      Frequency.of(response.paymentIntention.repaymentPlan.paymentSchedule) : Frequency.WEEKLY
 
     if (claim.claimData.defendant.isBusiness()) {
       return undefined
@@ -88,12 +90,12 @@ export class PaymentPlanHelper {
       throw new Error(`Claim response does not have financial statement attached`)
     }
 
-    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / Frequency.WEEKLY.monthlyRatio, claim.totalAmountTillToday)
+    const instalmentAmount: number = Math.min(draft.courtDetermination.disposableIncome / frequency.monthlyRatio, claim.totalAmountTillToday)
     if (instalmentAmount < 1) {
       return PaymentPlanHelper.createPaymentPlanFromStartDate(MomentFactory.maxDate())
     }
 
-    return PaymentPlanHelper.createPaymentPlanFromInstallment(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, Frequency.WEEKLY, calculateMonthIncrement(MomentFactory.currentDate()))
+    return PaymentPlanHelper.createPaymentPlanFromInstallment(AdmissionHelper.getAdmittedAmount(claim), instalmentAmount, frequency, calculateMonthIncrement(MomentFactory.currentDate()))
   }
 
   static createPaymentPlanFromDraft (draft: DraftClaimantResponse | ResponseDraft): PaymentPlan {

@@ -57,6 +57,7 @@ import { DecisionType } from 'common/court-calculations/decisionType'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { PartyType } from 'common/partyType'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
+import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -105,7 +106,7 @@ export class Nunjucks {
 
     nunjucksEnv.addGlobal('asset_paths', appAssetPaths)
     nunjucksEnv.addGlobal('serviceName', 'Money Claims')
-    nunjucksEnv.addGlobal('supportEmailAddress', config.get('support.contact-email'))
+    nunjucksEnv.addGlobal('supportEmailAddress', config.get('secrets.cmc.staff-email'))
     nunjucksEnv.addGlobal('development', this.developmentMode)
     nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies.govuk_template_jinja)
     nunjucksEnv.addGlobal('gaTrackingId', config.get<string>('analytics.gaTrackingId'))
@@ -170,6 +171,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('DecisionType', DecisionType)
     nunjucksEnv.addGlobal('PartyType', PartyType)
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
+    nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
