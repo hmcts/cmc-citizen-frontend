@@ -40,7 +40,7 @@ withNightlyPipeline("nodejs", product, component) {
   setVaultName('cmc')
   enableCrossBrowserTest()
   enableSecurityScan()
-  enableFullFunctionalTest()
+  enableFullFunctionalTest(180)
 
   after('crossBrowserTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
