@@ -56,6 +56,18 @@ describe('Claim issue: interest how much page', () => {
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
+      it('should render page when specify the daily amount is chosen and an amount is not entered', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: InterestRateOption.DIFFERENT
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.rejectSave()
