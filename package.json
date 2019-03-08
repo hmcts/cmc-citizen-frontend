@@ -101,7 +101,7 @@
     "@types/chai": "^4.1.7",
     "@types/chai-as-promised": "^7.1.0",
     "@types/chai-spies": "^1.0.0",
-    "@types/jsonwebtoken": "^8.3.0",
+    "@types/jsonwebtoken": "^8.3.2",
     "@types/mocha": "*",
     "@types/sinon-chai": "^3.2.1",
     "@types/supertest": "*",
