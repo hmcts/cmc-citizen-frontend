@@ -197,14 +197,25 @@ export class ResponseModelConverter {
 
   private static convertMediationPhoneNumber (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
     if (FeatureToggles.isEnabled('mediation')) {
-      if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
-        if (!claim.isResponseSubmitted()) {
-          return draft.defendantDetails.mobilePhone.number
+
+      if (mediationDraft.canWeUseCompany) {
+        if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
+          return mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation
         } else {
-          return claim.claimData.claimant.mobilePhone
+          return mediationDraft.canWeUseCompany.mediationPhoneNumber
         }
-      } else {
-        return mediationDraft.canWeUse.mediationPhoneNumber
+      }
+
+      if (mediationDraft.canWeUse) {
+        if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
+          if (!claim.isResponseSubmitted()) {
+            return draft.defendantDetails.mobilePhone.number
+          } else {
+            return claim.claimData.claimant.mobilePhone ? claim.claimData.claimant.mobilePhone : mediationDraft.canWeUse.mediationPhoneNumber
+          }
+        } else {
+          return mediationDraft.canWeUse.mediationPhoneNumber
+        }
       }
     }
     return undefined
@@ -212,7 +223,7 @@ export class ResponseModelConverter {
 
   private static convertMediationContactPerson (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
     if (FeatureToggles.isEnabled('mediation')) {
-      if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
+      if (mediationDraft.canWeUseCompany && mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted()) {
           return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson
         } else {
