@@ -182,6 +182,42 @@ const commonCompanyClaimant = {
   }
 }
 
+export const aboveAllowedAmountWithInterest = {
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: 9800
+      } as ClaimAmountRow
+    ]
+  } as ClaimAmountBreakdown,
+  interest: {
+    option: YesNoOption.YES
+  } as Interest,
+  interestType: {
+    option: InterestTypeOption.SAME_RATE
+  } as InterestType,
+  interestRate: {
+    type: InterestRateOption.DIFFERENT,
+    rate: 10,
+    reason: 'Special case'
+  } as InterestRate,
+  interestDate: {
+    type: InterestDateType.CUSTOM
+  } as InterestDate,
+  interestStartDate: {
+    date: {
+      day: 10,
+      month: 12,
+      year: 2016
+    },
+    reason: 'reason'
+  } as InterestStartDate,
+  interestEndDate: {
+    option: InterestEndDateOption.SETTLED_OR_JUDGMENT
+  } as InterestEndDate
+}
+
 const commonIndividualDefendant = {
   defendant: {
     partyDetails: {

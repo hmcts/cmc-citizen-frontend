@@ -64,6 +64,26 @@ describe('Claim issue: timeline page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
+      it('should render page with error when description missing', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ rows: [{ date: 'may' }] })
+          .expect(res => expect(res).to.be.successful.withText('Timeline of events', 'div class="error-summary"'))
+      })
+
+      it('should render page with error when date missing', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ rows: [{ description: 'ok' }] })
+          .expect(res => expect(res).to.be.successful.withText('Timeline of events', 'div class="error-summary"'))
+      })
+
       it('should redirect to timeline when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
@@ -71,8 +91,20 @@ describe('Claim issue: timeline page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ rows: [{ 'date': 'may', 'description': 'ok' }] })
+          .send({ rows: [{ date: 'may', description: 'ok' }] })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.evidencePage.uri))
+      })
+
+      describe('add row action', () => {
+        it('should render page when valid input', async () => {
+          draftStoreServiceMock.resolveFind('claim')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ action: { addRow: 'Add row' } })
+            .expect(res => expect(res).to.be.successful.withText('Timeline of events'))
+        })
       })
     })
   })
