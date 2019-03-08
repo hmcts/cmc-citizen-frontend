@@ -6,16 +6,10 @@ String product = "cmc"
 String component = "citizen-frontend"
 
 List<LinkedHashMap<String, Object>> secrets = [
+  //for smoke/functional tests
   secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
   secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
-  secret('os-postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
-  secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
   secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
-  secret('cmc-s2s-secret', 'IDAM_S2S_TOTP_SECRET'),
-  secret('citizen-draft-store-primary', 'DRAFT_STORE_SECRET_PRIMARY'),
-  secret('citizen-draft-store-secondary', 'DRAFT_STORE_SECRET_SECONDARY'),
-  secret('citizen-cookie-encryption-key', 'COOKIE_ENCRYPTION_KEY'),
-  secret('staff-email', 'CONTACT_EMAIL')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -39,15 +33,17 @@ env.FEATURE_TESTING_SUPPORT = 'true'
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
-  afterCheckout {
+  after('checkout') {
     onMaster {
-      try {
-        sh """
-          git fetch origin demo:demo
-          git push --force origin HEAD:demo
-        """
-      } catch (err) {
-        notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+      withCredentials([usernamePassword(credentialsId: 'jenkins-github-hmcts-api-token', passwordVariable: 'BEARER_TOKEN', usernameVariable: 'USERNAME')]) {
+        try {
+          def url = sh(returnStdout: true, script: 'git config remote.origin.url').replace('github.com', '${BEARER_TOKEN}@github.com')
+          sh('git remote set-url origin ' + url)
+          sh('git fetch origin demo:demo')
+          sh('git push --force origin HEAD:demo')
+        } catch (err) {
+          notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+        }
       }
     }
   }

@@ -36,8 +36,7 @@ export default express.Router()
         draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
 
         await new DraftService().save(draft, user.bearerToken)
-        // TODO update to point to next page when it is ready
-        res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))
       } else {
         draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
 
