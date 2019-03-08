@@ -434,11 +434,7 @@ export const sampleClaimantResponseDraftObj = {
     paymentPlan: {
       totalAmount: 3326.59,
       instalmentAmount: 10,
-      firstPaymentDate: {
-        year: 2019,
-        month: 1,
-        day: 1
-      },
+      firstPaymentDate: LocalDate.fromMoment(MomentFactory.currentDate().add(50, 'days')),
       paymentSchedule: {
         value: 'EACH_WEEK',
         displayValue: 'Each week'
