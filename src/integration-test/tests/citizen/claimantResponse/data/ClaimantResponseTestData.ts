@@ -80,7 +80,8 @@ export class UnreasonableClaimantResponseTestData {
       type: 'CONTRACTS_AND_AGREEMENTS',
       description: 'correspondence',
       comment:  'have this evidence'
-    }
+    },
+    settleClaimEnterDate: undefined
   }
 
 }
