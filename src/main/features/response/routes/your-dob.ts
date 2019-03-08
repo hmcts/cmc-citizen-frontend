@@ -42,7 +42,7 @@ export default express.Router()
       const form: Form<DateOfBirth> = req.body
       const claim: Claim = res.locals.claim
       if (form.hasErrors()) {
-        if (form.errors.length === 1 && form.errors[0].message.match(dateUnder18Pattern)) {
+        if (form.errors.some(error => error.message.search(dateUnder18Pattern) >= 0)) {
           res.redirect(Paths.under18Page.evaluateUri({ externalId: claim.externalId }))
         } else {
           renderView(form, res)
