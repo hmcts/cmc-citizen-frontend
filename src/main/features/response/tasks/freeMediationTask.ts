@@ -10,16 +10,26 @@ const validator = new Validator()
 export class FreeMediationTask {
   static isCompleted (responseDraft: ResponseDraft, mediationDraft: MediationDraft): boolean {
     if (FeatureToggles.isEnabled('mediation')) {
-      return (!!mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.NO) ||
-        !!mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.YES &&
-        !!mediationDraft.youCanOnlyUseMediation &&
-        (mediationDraft.youCanOnlyUseMediation.option === FreeMediationOption.YES ||
-          mediationDraft.youCanOnlyUseMediation.option === FreeMediationOption.NO) &&
-        ((!mediationDraft.canWeUse && !mediationDraft.canWeUseCompany) ||
-          (!!mediationDraft.canWeUse && mediationDraft.canWeUse.isCompleted()) ||
-          (!!mediationDraft.canWeUseCompany && mediationDraft.canWeUseCompany.isCompleted()))
+      return (this.isWillYouTryMediationCompleted(mediationDraft)) ||
+        this.isYouCanOnlyUseMediationCompleted(mediationDraft) &&
+        this.isCanWeUseCompleted(mediationDraft)
     } else {
       return responseDraft.freeMediation !== undefined && validator.validateSync(responseDraft.freeMediation).length === 0
     }
+  }
+
+  private static isWillYouTryMediationCompleted (mediationDraft: MediationDraft): boolean {
+    return !!mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.NO
+  }
+
+  private static isYouCanOnlyUseMediationCompleted (mediationDraft: MediationDraft): boolean {
+    return !!mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.YES &&
+      !!mediationDraft.youCanOnlyUseMediation
+  }
+
+  private static isCanWeUseCompleted (mediationDraft: MediationDraft): boolean {
+    return ((!mediationDraft.canWeUse && !mediationDraft.canWeUseCompany) ||
+      (!!mediationDraft.canWeUse && mediationDraft.canWeUse.isCompleted()) ||
+      (!!mediationDraft.canWeUseCompany && mediationDraft.canWeUseCompany.isCompleted()))
   }
 }
