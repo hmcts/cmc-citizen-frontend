@@ -56,6 +56,32 @@ describe('Claim issue: interest rate page', () => {
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
+      it('should render the page when a different rate is selected but no rate is entered', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: InterestRateOption.DIFFERENT,
+            reason: 'Special case'
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
+      it('should render the page when a different rate is selected but no reason is entered', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: InterestRateOption.DIFFERENT,
+            rate: '10'
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.rejectSave()

@@ -3,7 +3,7 @@ import { PartyDetails } from './partyDetails'
 import { PartyType } from 'common/partyType'
 
 export class ValidationErrors {
-  static readonly ORGANISATION_NAME_TOO_LONG: string = 'Enter organization name no longer than $constraint1 characters'
+  static readonly ORGANISATION_NAME_TOO_LONG: string = 'Enter trading as name no longer than $constraint1 characters'
 }
 
 export class SoleTraderDetails extends PartyDetails {

@@ -64,7 +64,18 @@ describe('Claim issue: claimant mobile page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to task list when form is valid and everything is fine', async () => {
+      it('should redirect to task list when form is valid and nothing is submitted', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+
+        await request(app)
+          .post(ClaimPaths.claimantMobilePage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ number: '' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+      })
+
+      it('should redirect to task list when form is valid and number is provided', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
 
