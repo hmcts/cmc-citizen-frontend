@@ -72,6 +72,14 @@ describe('defendant as soleTrader details page', () => {
             .send(invalidAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter first address line'))
         })
+        it('city is missing', async () => {
+          const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: '', postcode: 'SE28 0JE' } } }
+          await request(app)
+            .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(invalidAddressInput)
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter a valid town/city'))
+        })
         it('postcode is missing', async () => {
           const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
@@ -94,6 +102,14 @@ describe('defendant as soleTrader details page', () => {
             .send(invalidCorrespondenceAddressInput)
             .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter first correspondence address line'))
         })
+        it('city is missing', async () => {
+          const invalidAddressInput = { ...input, ...{ address: { line1: 'Apartment 99', line2: '', line3: '', city: '', postcode: 'SE28 0JE' } } }
+          await request(app)
+            .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(invalidAddressInput)
+            .expect(res => expect(res).to.be.successful.withText(theirName, 'div class="error-summary"', 'Enter a valid town/city'))
+        })
         it('postcode is missing', async () => {
           const invalidCorrespondenceAddressInput = { ...input, ...{ hasCorrespondenceAddress: 'true', correspondenceAddress: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: '' } } }
           await request(app)
@@ -104,13 +120,24 @@ describe('defendant as soleTrader details page', () => {
         })
       })
 
-      it('should redirect to data of birth page when everything is fine ', async () => {
+      it('should redirect to data of birth page when trading as name provided', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveSave()
         await request(app)
           .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(input)
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantEmailPage.uri))
+      })
+
+      it('should redirect to data of birth page when no trading as provided', async () => {
+        const invalidCorrespondenceAddressInput = { ...input, ...{ businessName: '' } }
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+        await request(app)
+          .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(invalidCorrespondenceAddressInput)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantEmailPage.uri))
       })
     })
