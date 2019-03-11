@@ -3,7 +3,7 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import { GovPayClient, MockPayClient, PayClient } from 'payment-hub-client/payClient'
+import { GovPayClient, PayClient } from 'payment-hub-client/payClient'
 import { Payment } from 'payment-hub-client/payment'
 
 import { FeesClient } from 'fees/feesClient'
@@ -26,6 +26,7 @@ import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { Claim } from 'claims/models/claim'
 import { isNull } from 'util'
+import { MockPayClient } from 'mock-clients/mockPayClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
