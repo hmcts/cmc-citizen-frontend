@@ -61,7 +61,7 @@ describe('Claim issue: claimant date of birth page', () => {
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ known: 'true', date: { day: date.day(), month: date.month(), year: date.year() } })
+          .send({ known: 'true', date: { day: date.date(), month: date.month(), year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a date of birth before', 'div class="error-summary"'))
       })
 
