@@ -198,7 +198,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('Trading as SoleTrader Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
-          .expect(res => expect(res).to.be.successful.withText('Types of senior position'))
+          .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this claim are true'))
 
       })
 
