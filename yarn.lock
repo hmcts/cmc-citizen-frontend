@@ -7058,10 +7058,10 @@ sntp@1.x.x:
   dependencies:
     hoek "2.x.x"
 
-sonarqube-scanner@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/sonarqube-scanner/-/sonarqube-scanner-2.2.0.tgz#6921dd5fce144a4a7ef5a87af185691e45744b38"
-  integrity sha512-gGwUoeeQW67KVgR2oYMyk6CIKfTxahuiMmrB0Is00vUPef92DYS+S3d1TZd+v/oT2PvlY693zr1hEfuEzor/tA==
+sonarqube-scanner@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/sonarqube-scanner/-/sonarqube-scanner-2.4.0.tgz#a44ec1be5eb1916344cff348c2a5f62fd87fd149"
+  integrity sha512-iuupCnLGJBjz3UfCtWsz2yCqRmdP2KvKVjM8GQFmsZOt8i/nWrAnqhdni38uyw8m+HzbRR4Rwu9VlN1ZE9XPpQ==
   dependencies:
     download "7.0.0"
     extend "3.0.2"
