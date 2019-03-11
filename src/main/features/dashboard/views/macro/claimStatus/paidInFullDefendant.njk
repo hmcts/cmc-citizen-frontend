@@ -43,34 +43,3 @@
   <p>{{ t('If you need proof that the CCJ is paid you can ' + internalLink('contact us to get a certificate of satisfaction',
       AppPaths.contactUsPage.uri) + '. This costs £15.') | safe }}</p>
 {% endmacro %}
-
-{% macro statesPaidRejectedDefendantDashboard(claim) %}
-  {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
-    claimantName: claim.claimData.claimant.name,
-    amount: claim.response.paymentDeclaration.paidAmount | numeral
-  }) }}
-{% endmacro %}
-
-{% macro statesPaidRejectedDefendantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
-      claimantName: claim.claimData.claimant.name,
-      amount: claim.response.paymentDeclaration.paidAmount | numeral
-    }) }}</h2>
-  <p>{{ t('They said you didn’t pay them {{ amount }}.', { amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
-  <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
-  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
-  <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {
-      dqDeadline: claim.directionsQuestionnaireDeadline | date
-    }) }}</p>
-  <p>{{ downloadResponseLink(claim) }}</p>
-{% endmacro %}
-
-{% macro _linkToDirectionsQuestionnairePage(externalId) %}
-  <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
-      { completeDQ: internalLink(
-        'complete a directions questionnaire',
-        DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
-      }
-    ) | safe
-    }}</p>
-{% endmacro %}

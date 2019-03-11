@@ -53,12 +53,12 @@
   settlementAgreementSignedByBothClaimantDashboard,
   settlementAgreementRejectedForClaimantDashboard %}
 
-{% from "./claimStatus/paidInFullClaimant.njk" import
-  claimIsSettledClaimantDashboard,
-  statesPaidInFullRejectedClaimantDashboard %}
+{% from "./claimStatus/paidInFullClaimant.njk" import claimIsSettledClaimantDashboard %}
 {% from "./claimStatus/paidInFullDefendant.njk" import
   claimSettledDashboard,
-  paidInFullCancelledOrSatisfiedDefendantDashboard,
+  paidInFullCancelledOrSatisfiedDefendantDashboard %}
+{% from "./claimStatus/statesPaidRejected.njk" import
+  statesPaidInFullRejectedClaimantDashboard,
   statesPaidRejectedDefendantDashboard %}
 
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}

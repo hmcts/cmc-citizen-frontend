@@ -67,14 +67,16 @@
 {% from "./claimStatus/paidInFullClaimant.njk" import
   paidInFullClaimantClaimSettledDetails,
   paidInFullClaimantClaimDetails,
-  statesPaidInFullRejectedClaimantClaimDetails,
   paidInFullCCJCancelledClaimantClaimDetails,
   paidInFullCCJSatisfiedClaimantClaimDetails %}
 {% from "./claimStatus/paidInFullDefendant.njk" import
   paidInFullDefendantClaimDetails,
-  statesPaidRejectedDefendantClaimDetails,
   paidInFullCCJSatisfiedDefendantClaimDetails,
   paidInFullCCJCancelledDefendantClaimDetails %}
+{% from "./claimStatus/statesPaidRejected.njk" import
+  statesPaidRejectedDefendantClaimDetails,
+  statesPaidInFullRejectedClaimantClaimDetails %}
+
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import
   admissionByCCJDefendantClaimDetails,
