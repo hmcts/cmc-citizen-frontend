@@ -17,18 +17,19 @@ export default express.Router()
 
       const beforeYouStartSection = TaskListBuilder
         .buildDefendantResponseSection(draft.document, claim)
-
       const howYouWantToRespondSection = TaskListBuilder
         .buildHowYouWantToRespondSection(draft.document, claim, mediationDraft.document)
-
       const submitSection = TaskListBuilder
         .buildSubmitSection(draft.document, claim.externalId)
+      const directionsQuestionnaireSection = TaskListBuilder
+        .buildDirectionsQuestionnaireSection(draft.document, claim)
 
       res.render(Paths.taskListPage.associatedView,
         {
           beforeYouStartSection: beforeYouStartSection,
           howYouWantToRespondSection: howYouWantToRespondSection,
           submitSection: submitSection,
+          directionsQuestionnaireSection: directionsQuestionnaireSection,
           claim: claim
         })
     })

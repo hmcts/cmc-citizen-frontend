@@ -8,6 +8,7 @@ import {
   StatementOfMeansPaths
 } from 'response/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
+import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -31,6 +32,8 @@ import { ValidationUtils } from 'shared/ValidationUtils'
 import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -266,6 +269,23 @@ export class TaskListBuilder {
 
     }
 
+    return undefined
+  }
+
+  static buildDirectionsQuestionnaireSection (draft: ResponseDraft, claim: Claim, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      let path: string
+      path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
+      return new TaskList(
+      'Tell us more about the claim', [
+        new TaskListItem(
+          'Give us details in case there\'s a hearing',
+          path,
+          DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+        )
+      ]
+    )
+    }
     return undefined
   }
 

@@ -1,14 +1,14 @@
 import * as express from 'express'
 import * as path from 'path'
-import {OAuthHelper} from 'idam/oAuthHelper'
-import {AuthorizationMiddleware} from 'idam/authorizationMiddleware'
-import {ClaimMiddleware} from 'claims/claimMiddleware'
-import {CountyCourtJudgmentRequestedGuard} from 'response/guards/countyCourtJudgmentRequestedGuard'
-import {DraftMiddleware} from '@hmcts/cmc-draft-store-middleware'
-import {DraftService} from 'services/draftService'
-import {MediationDraft} from 'mediation/draft/mediationDraft'
-import {ResponseDraft} from 'response/draft/responseDraft'
-import {RouterFinder} from 'shared/router/routerFinder'
+import { OAuthHelper } from 'idam/oAuthHelper'
+import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
+import { ClaimMiddleware } from 'claims/claimMiddleware'
+import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
+import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
+import { DraftService } from 'services/draftService'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/DirectionsQuestionnaireDraft'
+import { ResponseDraft } from 'response/draft/responseDraft'
+import { RouterFinder } from 'shared/router/routerFinder'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -27,11 +27,11 @@ export class DirectionsQuestionnaireFeature {
     app.all(allDQs, ClaimMiddleware.retrieveByExternalId)
     app.all(allDQs, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(allDQs,
-      DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
-        return new MediationDraft().deserialize(value)
+      DraftMiddleware.requestHandler(new DraftService(), 'directionsQuestionnaire', 100, (value: any): DirectionsQuestionnaireDraft => {
+        return new DirectionsQuestionnaireDraft().deserialize(value)
       }),
       (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        res.locals.draft = res.locals.mediationDraft
+        res.locals.draft = res.locals.directionsQuestionnaireDraft
         next()
       })
     app.all(allDQs,
