@@ -8,10 +8,9 @@ String component = "citizen-frontend"
 def secrets = [
   'cmc-${env}':
     [
-      secret('citizen-oauth-client-secret', 'OAUTH2_CLIENT_SECRET'),
+      secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
       secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
-      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
-      secret('generated-user-email-pattern', 'GENERATED_USER_EMAIL_PATTERN')
+      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
     ],
   'rpe-ft-api-${env}' :
     [
