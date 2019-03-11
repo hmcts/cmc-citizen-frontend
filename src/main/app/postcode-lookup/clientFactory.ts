@@ -1,4 +1,4 @@
-import { PostcodeInfoClient } from '@hmcts/os-places-client'
+import { OSPlacesClient } from '@hmcts/os-places-client'
 import { RequestPromiseOptions } from 'request-promise-native'
 import { request } from 'client/request'
 import * as config from 'config'
@@ -11,8 +11,8 @@ const requestOptionsOverride = {
 } as RequestPromiseOptions
 
 export class ClientFactory {
-  static createPostcodeInfoClient (): PostcodeInfoClient {
-    return new PostcodeInfoClient(
+  static createOSPlacesClient (): OSPlacesClient {
+    return new OSPlacesClient(
       postcodeLookupApiKey,
       request.defaults(requestOptionsOverride)
     )

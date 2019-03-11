@@ -287,11 +287,11 @@
       }}
     {% endif %}
 
-    {% if (admissionsApplicable
+    {% if ((admissionsApplicable
            and (draft.isResponsePartiallyAdmitted()
                 or (draft.isResponseRejectedFullyBecausePaidWhatOwed()
                     and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
-          or draft.isResponseRejectedFullyWithDispute() %}
+          or draft.isResponseRejectedFullyWithDispute()) and mediationEnabled !== true %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(
@@ -301,6 +301,39 @@
             bold = true
           )
       }}
+      {{ tableEnd() }}
+    {% endif %}
+
+    {% if mediationEnabled %}
+      {{ tableStart('freeMediation', 'Free telephone mediation') }}
+      {{
+        row(
+          label = 'Will you try free mediation?',
+          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        )
+      }}
+      {% if mediationDraft.youCanOnlyUseMediation %}
+        {{
+          row(
+            label = 'Agree to mediation conditions',
+            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+        }}
+      {% endif %}
+      {% if mediationDraft.youCanOnlyUseMediation %}
+        {{
+          row(
+            label = 'Contact number',
+            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+        }}
+      {% endif %}
       {{ tableEnd() }}
     {% endif %}
 

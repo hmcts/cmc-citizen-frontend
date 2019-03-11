@@ -49,12 +49,27 @@ describe('Defendant response: task list page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Respond to a money claim'))
+        })
+
+        it('should render page and show a tag marking incomplete tasks', async () => {
+          draftStoreServiceMock.resolveFind('response', { response: {} })
+          draftStoreServiceMock.resolveFind('mediation')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => {
+              expect(res).to.be.successful.withText('Respond to a money claim')
+              expect(res.text.match(/INCOMPLETE/g)).length(2)
+            })
         })
       })
     })

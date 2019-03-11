@@ -16,6 +16,8 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PartyType } from 'common/partyType'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { FeatureToggles } from 'utils/featureToggles'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -42,6 +44,7 @@ export default express.Router()
     AllClaimantResponseTasksCompletedGuard.requestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+      const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
 
@@ -51,7 +54,9 @@ export default express.Router()
         totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
         paymentIntention: alreadyPaid ? undefined : getPaymentIntention(draft.document, claim),
         alreadyPaid: alreadyPaid,
-        amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined
+        amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
+        mediationEnabled: FeatureToggles.isEnabled('mediation'),
+        mediationDraft: mediationDraft.document
       })
     })
   )

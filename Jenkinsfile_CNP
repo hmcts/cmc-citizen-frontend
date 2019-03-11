@@ -33,6 +33,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
+env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
