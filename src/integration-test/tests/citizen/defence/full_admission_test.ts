@@ -27,16 +27,16 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name)
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name, false)
   })
 
   Scenario('I can complete the journey when I fully admit all of the claim with full payment by set date @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name)
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
   })
 
   Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name)
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false)
   })
 }

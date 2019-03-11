@@ -30,6 +30,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
 import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -234,25 +235,35 @@ export class TaskListBuilder {
     return new TaskList('Respond to claim', tasks)
   }
 
-  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
+  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft): TaskList {
     if (draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
       let path: string
       if (FeatureToggles.isEnabled('mediation')) {
         path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Try to resolve the claim', [
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            )
+          ]
+        )
       } else {
         path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Resolving the claim', [
+            new TaskListItem(
+              'Consider free mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            )
+          ]
+        )
       }
-      return new TaskList(
-        'Resolving the claim', [
-          new TaskListItem(
-            'Consider free mediation',
-            path,
-            FreeMediationTask.isCompleted(draft)
-          )
-        ]
-      )
+
     }
 
     return undefined
@@ -303,8 +314,8 @@ export class TaskListBuilder {
       && ValidationUtils.isValid(draft.rejectAllOfClaim.whyDoYouDisagree)
   }
 
-  static buildRemainingTasks (draft: ResponseDraft, claim: Claim): TaskListItem[] {
-    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim)
+  static buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): TaskListItem[] {
+    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
 
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,

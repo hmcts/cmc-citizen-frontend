@@ -58,68 +58,6 @@ export class Claim {
   reDetermination: ReDetermination
   reDeterminationRequestedAt: Moment
 
-  deserialize (input: any): Claim {
-    if (input) {
-      this.id = input.id
-      this.claimantId = input.submitterId
-      this.externalId = input.externalId
-      this.defendantId = input.defendantId
-      this.claimNumber = input.referenceNumber
-      this.createdAt = MomentFactory.parse(input.createdAt)
-      this.responseDeadline = MomentFactory.parse(input.responseDeadline)
-      this.issuedOn = MomentFactory.parse(input.issuedOn)
-      this.claimData = new ClaimData().deserialize(input.claim)
-      this.moreTimeRequested = input.moreTimeRequested
-      if (input.respondedAt) {
-        this.respondedAt = MomentFactory.parse(input.respondedAt)
-      }
-      if (input.defendantEmail) {
-        this.defendantEmail = input.defendantEmail
-      }
-      if (input.response) {
-        this.response = Response.deserialize(input.response)
-      }
-      this.claimantEmail = input.submitterEmail
-      this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
-      if (input.countyCourtJudgmentRequestedAt) {
-        this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
-      }
-      if (input.countyCourtJudgmentIssuedAt) {
-        this.countyCourtJudgmentIssuedAt = MomentFactory.parse(input.countyCourtJudgmentIssuedAt)
-      }
-      if (input.settlement) {
-        this.settlement = new Settlement().deserialize(input.settlement)
-      }
-      if (input.settlementReachedAt) {
-        this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
-      }
-      if (input.claimantResponse) {
-        this.claimantResponse = ClaimantResponse.deserialize(input.claimantResponse)
-      }
-      if (input.claimantRespondedAt) {
-        this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
-      }
-      this.totalAmountTillToday = input.totalAmountTillToday
-      this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
-      this.totalInterest = input.totalInterest
-      this.features = input.features
-      if (input.directionsQuestionnaireDeadline) {
-        this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
-      }
-      if (input.moneyReceivedOn) {
-        this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
-      }
-      if (input.reDetermination) {
-        this.reDetermination = ReDetermination.deserialize(input.reDetermination)
-      }
-      if (input.reDeterminationRequestedAt) {
-        this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
-      }
-    }
-
-    return this
-  }
-
   get defendantOffer (): Offer {
     if (!this.settlement) {
       return undefined
@@ -235,7 +173,9 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
-    } else if (this.isInterlocutoryJudgmentRequestedOnFullAdmission()) {
+    } else if (this.hasClaimantAcceptedPartAdmitAndStatesPaid()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID
+    } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
@@ -276,9 +216,118 @@ export class Claim {
     return undefined
   }
 
+  deserialize (input: any): Claim {
+    if (input) {
+      this.id = input.id
+      this.claimantId = input.submitterId
+      this.externalId = input.externalId
+      this.defendantId = input.defendantId
+      this.claimNumber = input.referenceNumber
+      this.createdAt = MomentFactory.parse(input.createdAt)
+      this.responseDeadline = MomentFactory.parse(input.responseDeadline)
+      this.issuedOn = MomentFactory.parse(input.issuedOn)
+      this.claimData = new ClaimData().deserialize(input.claim)
+      this.moreTimeRequested = input.moreTimeRequested
+      if (input.respondedAt) {
+        this.respondedAt = MomentFactory.parse(input.respondedAt)
+      }
+      if (input.defendantEmail) {
+        this.defendantEmail = input.defendantEmail
+      }
+      if (input.response) {
+        this.response = Response.deserialize(input.response)
+      }
+      this.claimantEmail = input.submitterEmail
+      this.countyCourtJudgment = new CountyCourtJudgment().deserialize(input.countyCourtJudgment)
+      if (input.countyCourtJudgmentRequestedAt) {
+        this.countyCourtJudgmentRequestedAt = MomentFactory.parse(input.countyCourtJudgmentRequestedAt)
+      }
+      if (input.countyCourtJudgmentIssuedAt) {
+        this.countyCourtJudgmentIssuedAt = MomentFactory.parse(input.countyCourtJudgmentIssuedAt)
+      }
+      if (input.settlement) {
+        this.settlement = new Settlement().deserialize(input.settlement)
+      }
+      if (input.settlementReachedAt) {
+        this.settlementReachedAt = MomentFactory.parse(input.settlementReachedAt)
+      }
+      if (input.claimantResponse) {
+        this.claimantResponse = ClaimantResponse.deserialize(input.claimantResponse)
+      }
+      if (input.claimantRespondedAt) {
+        this.claimantRespondedAt = MomentFactory.parse(input.claimantRespondedAt)
+      }
+      this.totalAmountTillToday = input.totalAmountTillToday
+      this.totalAmountTillDateOfIssue = input.totalAmountTillDateOfIssue
+      this.totalInterest = input.totalInterest
+      this.features = input.features
+      if (input.directionsQuestionnaireDeadline) {
+        this.directionsQuestionnaireDeadline = MomentFactory.parse(input.directionsQuestionnaireDeadline)
+      }
+      if (input.moneyReceivedOn) {
+        this.moneyReceivedOn = MomentFactory.parse(input.moneyReceivedOn)
+      }
+      if (input.reDetermination) {
+        this.reDetermination = ReDetermination.deserialize(input.reDetermination)
+      }
+      if (input.reDeterminationRequestedAt) {
+        this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
+      }
+    }
+
+    return this
+  }
+
   isAdmissionsResponse (): boolean {
     return (this.response.responseType === ResponseType.FULL_ADMISSION
       || this.response.responseType === ResponseType.PART_ADMISSION)
+  }
+
+  public isResponseSubmitted (): boolean {
+    return !!this.response && !this.claimantResponse
+  }
+
+  hasDefendantNotSignedSettlementAgreementInTime (): boolean {
+    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
+      this.claimantRespondedAt && this.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
+  }
+
+  hasClaimantAcceptedAdmissionWithCCJ (): boolean {
+    return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementReachedThroughAdmission() &&
+      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
+      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
+  }
+
+  hasClaimantAcceptedDefendantResponseWithCCJ (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.countyCourtJudgmentRequestedAt !== undefined
+      && this.countyCourtJudgment !== undefined
+  }
+
+  hasClaimantAcceptedDefendantResponseWithSettlement (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && this.settlement !== undefined
+  }
+
+  isEligibleForReDetermination (): boolean {
+    const dateAfter19Days = this.countyCourtJudgmentRequestedAt && this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
+    return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === CountyCourtJudgmentType.DETERMINATION
+      && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
+      && this.reDeterminationRequestedAt === undefined
+  }
+
+  public amountPaid () {
+    return this.claimantResponse && this.claimantResponse.amountPaid ? this.claimantResponse.amountPaid : 0
+  }
+
+  public otherPartyName (user: User): string {
+    if (!user || !user.id) {
+      throw new Error('user must be provided')
+    }
+
+    return this.claimantId === user.id ? this.claimData.defendant.name : this.claimData.claimant.name
   }
 
   private isPaidInFullLinkEligible (): boolean {
@@ -302,16 +351,16 @@ export class Claim {
       return true
     }
 
+    if (this.hasClaimantAcceptedPartAdmitAndStatesPaid()) {
+      return false
+    }
+
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY && !this.isSettlementReachedThroughAdmission()
       && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
   }
 
   private isDefendantBusiness (): boolean {
     return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
-  }
-
-  public isResponseSubmitted (): boolean {
-    return !!this.response && !this.claimantResponse
   }
 
   private isOfferSubmitted (): boolean {
@@ -357,17 +406,6 @@ export class Claim {
       this.claimantResponse && !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
-  hasDefendantNotSignedSettlementAgreementInTime (): boolean {
-    return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
-      this.claimantRespondedAt && this.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
-  }
-
-  hasClaimantAcceptedAdmissionWithCCJ (): boolean {
-    return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementReachedThroughAdmission() &&
-      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
-      !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
-  }
-
   private hasClaimantRejectedDefendantResponse (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
@@ -382,26 +420,6 @@ export class Claim {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
       this.claimantResponse.claimantPaymentIntention &&
       this.response && this.response.responseType === ResponseType.FULL_ADMISSION
-  }
-
-  hasClaimantAcceptedDefendantResponseWithCCJ (): boolean {
-    return this.claimantResponse
-      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
-      && this.countyCourtJudgmentRequestedAt !== undefined
-      && this.countyCourtJudgment !== undefined
-  }
-
-  hasClaimantAcceptedDefendantResponseWithSettlement (): boolean {
-    return this.claimantResponse
-      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
-      && this.settlement !== undefined
-  }
-
-  isEligibleForReDetermination (): boolean {
-    const dateAfter19Days = this.countyCourtJudgmentRequestedAt && this.countyCourtJudgmentRequestedAt.clone().add(19, 'days')
-    return this.countyCourtJudgment && this.countyCourtJudgment.ccjType === CountyCourtJudgmentType.DETERMINATION
-      && MomentFactory.currentDateTime().isBefore(dateAfter19Days)
-      && this.reDeterminationRequestedAt === undefined
   }
 
   private isClaimantResponseSubmitted (): boolean {
@@ -419,37 +437,33 @@ export class Claim {
 
   private hasClaimantRejectedPartAdmission (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
-    && this.response.responseType === ResponseType.PART_ADMISSION
+      && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
   private hasCCJBeenRequestedAfterSettlementBreached (): boolean {
     return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt && !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
+
   private hasCCJByDeterminationBeenRequestedAfterSettlementBreached (): boolean {
     return this.isSettlementReachedThroughAdmission() && !!this.countyCourtJudgmentRequestedAt && !!(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
   }
 
   private hasClaimantAcceptedPartAdmitPayImmediately (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
-      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
+      this.response.responseType === ResponseType.PART_ADMISSION && !this.response.paymentDeclaration &&
+      this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
   }
 
-  private isInterlocutoryJudgmentRequestedOnFullAdmission (): boolean {
+  private hasClaimantAcceptedPartAdmitAndStatesPaid (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+      this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentDeclaration !== undefined
+  }
+
+  private isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {
     return this.response
-      && this.response.responseType === ResponseType.FULL_ADMISSION
+      && (this.response.responseType === ResponseType.FULL_ADMISSION
+        || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.claimantResponse
       && (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
-  }
-
-  public amountPaid () {
-    return this.claimantResponse && this.claimantResponse.amountPaid ? this.claimantResponse.amountPaid : 0
-  }
-
-  public otherPartyName (user: User): string {
-    if (!user || !user.id) {
-      throw new Error('user must be provided')
-    }
-
-    return this.claimantId === user.id ? this.claimData.defendant.name : this.claimData.claimant.name
   }
 }

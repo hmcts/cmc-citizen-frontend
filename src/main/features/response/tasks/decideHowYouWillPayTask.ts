@@ -19,6 +19,7 @@ export class DecideHowYouWillPayTask {
   private static paymentDetailsAreProvidedFor (responseDraft: ResponseDraft): boolean {
     switch (responseDraft.fullAdmission.paymentIntention.paymentOption.option) {
       case PaymentType.IMMEDIATELY:
+        return true
       case PaymentType.INSTALMENTS:
         return true
       case PaymentType.BY_SET_DATE:

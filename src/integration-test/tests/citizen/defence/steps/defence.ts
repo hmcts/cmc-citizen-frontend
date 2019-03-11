@@ -276,10 +276,10 @@ export class DefenceSteps {
   }
 
   checkAndSendAndSubmit (defendantType: PartyType): void {
-    if (defendantType === PartyType.INDIVIDUAL) {
-      defendantCheckAndSendPage.checkFactsTrueAndSubmit()
-    } else {
+    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
       defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
+    } else {
+      defendantCheckAndSendPage.checkFactsTrueAndSubmit()
     }
   }
 
@@ -294,8 +294,6 @@ export class DefenceSteps {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
     I.see('COMPLETED')
 
@@ -358,10 +356,9 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantType: PartyType,
     paymentOption: PaymentOption,
-    claimantName: string
+    claimantName: string,
+    statementOfMeansFullDataSet: boolean = true
   ): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -387,7 +384,8 @@ export class DefenceSteps {
         defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
         defendantPaymentPlanPage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
-        statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+        statementOfMeansFullDataSet ? statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+          : statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet('50')
         break
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
@@ -414,8 +412,6 @@ export class DefenceSteps {
   }
 
   makePartialAdmission (defendantParty: Party): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -488,7 +484,6 @@ export class DefenceSteps {
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     I.dontSee('Your defence')
-    I.dontSee('COMPLETE')
 
     this.confirmYourDetails(defendant)
     I.see('COMPLETE')

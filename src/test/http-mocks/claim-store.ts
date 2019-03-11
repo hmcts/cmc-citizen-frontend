@@ -10,9 +10,14 @@ import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 
 import {
-  fullAdmissionWithSoMPaymentByInstalmentsData, fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
+  fullAdmissionWithSoMPaymentByInstalmentsData,
+  fullAdmissionWithSoMPaymentByInstalmentsDataCompany,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate,
+  fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
+  fullAdmissionWithSoMPaymentBySetDate, fullAdmissionWithSoMPaymentBySetDateInNext2Days,
+  fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
+  partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
@@ -25,7 +30,7 @@ export const sampleClaimIssueObj = {
   id: 1,
   submitterId: '1',
   submitterEmail: 'claimant@example.com',
-  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6da',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC050',
   createdAt: '2017-07-25T22:45:51.785',
@@ -247,14 +252,35 @@ export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
+export const samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithPaymentBySetDateCompanyData
+}
+
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentBySetDate
 }
 
+export const sampleFullAdmissionWithPaymentBySetDateInNext2daysResponseObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentBySetDateInNext2Days
+}
+
+export const sampleFullAdmissionWithReasonablePaymentBySetDateResponseObjAndNoDisposableIncome = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome
+}
+
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsData
+}
+
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjCompanyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataCompany
 }
 
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome = {
@@ -267,11 +293,22 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonabl
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule
 }
 
+export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
+}
+
 export function mockCalculateInterestRate (expected: number): mock.Scope {
   return mock(serviceBaseURL)
     .get('/interest/calculate')
     .query(true)
     .reply(HttpStatus.OK, { amount: expected })
+}
+
+export function resolveRetrieveClaimIssueByExternalId (claimOverride?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleClaimIssueObj, ...claimOverride })
 }
 
 export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.Scope {

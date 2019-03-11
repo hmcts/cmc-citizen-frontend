@@ -58,6 +58,63 @@ describe('Claim issue: check and send page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('Check your answers'))
       })
+
+      it('Should validate the hyperlink (Change) available on checkAndSendPage  with correct location and span', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        feesServiceMock.resolveCalculateIssueFee()
+
+        await request(app)
+          .get(ClaimPaths.checkAndSendPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-individual-details" class="bold">Change <span class="visuallyhidden">address</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-dob" class="bold">Change <span class="visuallyhidden">date of birth</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/claimant-mobile" class="bold">Change <span class="visuallyhidden">contact number (optional)</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">address</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-email" class="bold">Change <span class="visuallyhidden">email</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/amount" class="bold">Change <span class="visuallyhidden">claim amount breakdown</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/interest" class="bold">Change <span class="visuallyhidden">claim interest</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/interest-rate" class="bold">Change <span class="visuallyhidden">how do you want to claim interest?</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/interest-date" class="bold">Change <span class="visuallyhidden">when are you claiming interest from?</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/reason" class="bold">Change <span class="visuallyhidden">why you believe you’re owed the money:</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/timeline" class="bold">Change <span class="visuallyhidden">timeline of what happened</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/evidence" class="bold">Change <span class="visuallyhidden">your evidence (optional)</span></a>'))
+          .expect(res => expect(res).to.be.successful.withText('<a href="/claim/evidence" class="bold">Change <span class="visuallyhidden">your evidence (optional)</span></a>'))
+
+      })
+
+      context('for individual and sole traders', () => {
+        it('should return statement of truth with a tick box', async () => {
+          draftStoreServiceMock.resolveFind('claim')
+          feesServiceMock.resolveCalculateIssueFee()
+
+          await request(app)
+            .get(ClaimPaths.checkAndSendPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+            .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this claim are true.'))
+            .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+        })
+      })
+
+      context('for company and organisation', () => {
+        it('should return statement of truth with signer name, signer role and tick box', async () => {
+
+          draftStoreServiceMock.resolveFind('claim:company')
+          feesServiceMock.resolveCalculateIssueFee()
+
+          await request(app)
+            .get(ClaimPaths.checkAndSendPage.uri)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+            .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
+            .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
+            .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this claim are true.'))
+            .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+        })
+      })
     })
   })
 

@@ -80,7 +80,7 @@ describe('CourtDecisionHelper', () => {
           }
         }
       },
-      courtDetermination: { disposableIncome: 100 }
+      courtDetermination: { disposableIncome: 0 }
     })
     expect(CourtDecisionHelper.createCourtDecision(claim, draft)).to.equal(DecisionType.DEFENDANT)
   })

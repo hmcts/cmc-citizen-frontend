@@ -27,7 +27,8 @@ import { Organisation } from 'claims/models/details/theirs/organisation'
 import {
   baseDeterminationAcceptationClaimantResponseData,
   rejectionClaimantResponseData,
-  baseAcceptationClaimantResponseData
+  baseAcceptationClaimantResponseData,
+  partAdmissionStatesPaidClaimantResponseData
 } from 'test/data/entity/claimantResponseData'
 import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
@@ -214,9 +215,28 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION)
     })
 
-    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant and Court repayment plan', () => {
+    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant FULL ADMISSION and Court repayment plan', () => {
       claim.response = {
         responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().add(100, 'days'),
+          paymentOption: PaymentOption.BY_SPECIFIED_DATE
+        },
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION,
+        formaliseOption: FormaliseOption.REFER_TO_JUDGE
+      }
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
+
+      expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
+    })
+
+    it('should return REDETERMINATION_BY_JUDGE when a claimant refer to Judge after rejecting Defendant PART ADMISSION and Court repayment plan', () => {
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION,
+        amount: 150,
         paymentIntention: {
           paymentDate: MomentFactory.currentDate().add(100, 'days'),
           paymentOption: PaymentOption.BY_SPECIFIED_DATE
@@ -388,6 +408,23 @@ describe('Claim', () => {
         type: ClaimantResponseType.ACCEPTATION
       }
       expect(claim.status).to.be.equal(ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY)
+    })
+
+    it('should contain the claim status CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID only when part admission states paid is accepted', () => {
+      claim.respondedAt = moment()
+      claim.response = {
+        paymentIntention: null,
+        responseType: 'PART_ADMISSION',
+        freeMediation: 'no',
+        paymentDeclaration: {
+          paidDate: '2010-12-31',
+          explanation: 'Paid by cash'
+        }
+      }
+      claim.claimantResponse = partAdmissionStatesPaidClaimantResponseData
+
+      expect(claim.stateHistory).to.have.lengthOf(1)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID)
     })
   })
 
@@ -615,6 +652,7 @@ describe('Claim', () => {
       expect(claim.isCCJPaidWithinMonth()).to.be.false
     })
   })
+
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {

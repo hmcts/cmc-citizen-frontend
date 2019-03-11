@@ -30,6 +30,9 @@ export class ClaimantResponseConverter {
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
+
+      this.addStatesPaidOptions(draftClaimantResponse, reject)
+
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
   }
@@ -62,15 +65,18 @@ export class ClaimantResponseConverter {
       respAcceptance.formaliseOption = this.getFormaliseOption(draftClaimantResponse.formaliseRepaymentPlan)
     }
     if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.courtDecision) {
-      respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse.courtDetermination)
+      respAcceptance.courtDetermination = this.getCourtDetermination(draftClaimantResponse)
     }
     if (draftClaimantResponse.alternatePaymentMethod) {
       respAcceptance.claimantPaymentIntention = this.getClaimantPaymentIntention(draftClaimantResponse)
     }
+
+    this.addStatesPaidOptions(draftClaimantResponse, respAcceptance)
     return respAcceptance
   }
 
-  private static getCourtDetermination (courtDetermination: CourtDetermination): DomainCourtDetermination {
+  private static getCourtDetermination (draftClaimantResponse: DraftClaimantResponse): DomainCourtDetermination {
+    const courtDetermination: CourtDetermination = draftClaimantResponse.courtDetermination
     if (!courtDetermination.courtPaymentIntention && !courtDetermination.courtDecision) {
       throw new Error('Court payment intention and court decision are missing in court Determination')
     }
@@ -78,8 +84,8 @@ export class ClaimantResponseConverter {
     const responseCourtDetermination: DomainCourtDetermination = new DomainCourtDetermination()
     responseCourtDetermination.courtDecision = courtDetermination.courtDecision
     responseCourtDetermination.courtPaymentIntention = courtDetermination.courtPaymentIntention
-    if (courtDetermination.rejectionReason) {
-      responseCourtDetermination.rejectionReason = courtDetermination.rejectionReason.text
+    if (draftClaimantResponse.rejectionReason) {
+      responseCourtDetermination.rejectionReason = draftClaimantResponse.rejectionReason.text
     }
     responseCourtDetermination.disposableIncome = courtDetermination.disposableIncome ? courtDetermination.disposableIncome : 0
     responseCourtDetermination.decisionType = courtDetermination.decisionType
@@ -105,5 +111,17 @@ export class ClaimantResponseConverter {
       default:
         throw new Error(`Unknown formalise repayment option ${repaymentPlan.option.value}`)
     }
+  }
+
+  private static addStatesPaidOptions (draftClaimantResponse: DraftClaimantResponse,
+                                       claimantResponse: ClaimantResponse) {
+    if (draftClaimantResponse.partPaymentReceived) {
+      claimantResponse.paymentReceived = draftClaimantResponse.partPaymentReceived.received.option as YesNoOption
+    }
+
+    if (draftClaimantResponse.accepted) {
+      claimantResponse.settleForAmount = draftClaimantResponse.accepted.accepted.option as YesNoOption
+    }
+
   }
 }

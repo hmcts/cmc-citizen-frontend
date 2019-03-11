@@ -1,7 +1,10 @@
 import I = CodeceptJS.I
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
+import {
+  ClaimantResponseTestData,
+  UnreasonableClaimantResponseTestData
+} from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { ClaimantAcceptPaymentMethod } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-accept-payment-method'
 import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-task-list'
 import { ClaimantChooseHowToProceed } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-choose-how-to-proceed'
@@ -49,6 +52,16 @@ export class ClaimantResponseSteps {
     this.acceptSettlementWithClaimantPaymentOption(testData, claimantResponseTestData)
   }
 
+  acceptCourtOfferedRepaymentPlan (
+    testData: EndToEndTestData,
+    unReasonableClaimantResponseTestData: UnreasonableClaimantResponseTestData,
+    buttonText: string
+  ): void {
+    this.viewClaimFromDashboard(testData.claimRef)
+    this.respondToOffer(buttonText)
+    this.acceptCourtOffer(testData, unReasonableClaimantResponseTestData)
+  }
+
   acceptSettlementFromDashboardWhenAcceptPaymentMethod (
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData,
@@ -91,7 +104,6 @@ export class ClaimantResponseSteps {
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -108,7 +120,6 @@ export class ClaimantResponseSteps {
   }
 
   acceptPartAdmitFromBusinessWithAlternativePaymentIntention (): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     defendantsResponsePage.submitHowTheyWantToPay() // bug
@@ -125,7 +136,6 @@ export class ClaimantResponseSteps {
   }
 
   acceptFullAdmitFromBusinessWithAlternativePaymentIntention (claimantResponseTestData: ClaimantResponseTestData): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     defendantsResponsePage.submitHowTheyWantToPay() // bug
@@ -145,7 +155,6 @@ export class ClaimantResponseSteps {
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -173,7 +182,6 @@ export class ClaimantResponseSteps {
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
@@ -217,8 +225,30 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
+  acceptCourtOffer (
+    testData: EndToEndTestData,
+    unReasonableClaimantResponseTestData: UnreasonableClaimantResponseTestData
+  ): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    defendantsResponsePage.submit()
+    if (unReasonableClaimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
+      defendantsResponsePage.submitHowTheyWantToPay()
+    }
+    taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    acceptPaymentMethodPage.chooseNo()
+    taskListPage.selectProposeAnAlternativeRepaymentPlan()
+    paymentOptionPage.chooseInstalments()
+    paymentPlanPage.enterRepaymentPlan(unReasonableClaimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan)
+    paymentPlanPage.saveAndContinue()
+    courtOfferedInstalmentsPage.checkingCourtOfferedPlanAndAccept()
+    taskListPage.selectTaskChooseHowToFormaliseRepayment()
+    chooseHowToProceedPage.chooseSettlement()
+    taskListPage.selectTaskSignASettlementAgreement()
+    signSettlementAgreementPage.confirm()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
   acceptCCJ (shouldPaySome: boolean): void {
-    I.dontSee('COMPLETE')
     taskListPage.selectTaskViewDefendantResponse()
     I.click('Continue')
     I.see('COMPLETED')
