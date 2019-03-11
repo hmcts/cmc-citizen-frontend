@@ -23,6 +23,9 @@ import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
+import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
 
 const validator: Validator = new Validator()
 
@@ -290,5 +293,24 @@ export class TaskListBuilder {
       TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft).tasks
     )
       .filter(item => !item.completed)
+  }
+
+  static buildDirectionsQuestionnaireSection (draft: DraftClaimantResponse,
+                                              claim: Claim,
+                                              directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      let path: string
+      path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
+      return new TaskList(
+        'Tell us more about the claim', [
+          new TaskListItem(
+            'Give us details in case there\'s a hearing',
+            path,
+            DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+          )
+        ]
+      )
+    }
+    return undefined
   }
 }

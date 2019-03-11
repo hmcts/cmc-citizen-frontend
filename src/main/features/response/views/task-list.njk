@@ -35,6 +35,18 @@
         </div>
       {% endif %}
 
+
+      {% if directionsQuestionnaireSection %}
+        <div class="task-group">
+          {{ taskListHeading(directionsQuestionnaireSection.name) }}
+
+          {% for item in directionsQuestionnaireSection.tasks %}
+            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+
       {% if submitSection %}
         <div class="task-group">
           {{ taskListHeading(submitSection.name) }}
