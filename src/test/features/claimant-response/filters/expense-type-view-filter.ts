@@ -10,11 +10,11 @@ describe('Monthly expense type view filter', () => {
       })
     })
 
-  it('should map anything else to undefined', () => {
+  it('should throw an error for anything else', () => {
     expect(() => ExpenseTypeViewFilter.render('PET_TOYS')).to.throw(TypeError)
   })
 
-  it('should map null to undefined', () => {
+  it('should throw an error for null', () => {
     expect(() => ExpenseTypeViewFilter.render(null)).to.throw(TypeError)
   })
 })

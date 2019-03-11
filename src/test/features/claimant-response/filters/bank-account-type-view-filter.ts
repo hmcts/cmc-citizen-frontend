@@ -10,11 +10,11 @@ describe('Bank account type view filter', () => {
       })
     })
 
-  it('should map anything else to undefined', () => {
+  it('should throw an error for anything else', () => {
     expect(() => BankAccountTypeViewFilter.render('RIVER_BANK')).to.throw(TypeError)
   })
 
-  it('should map null to undefined', () => {
+  it('should throw and error for null', () => {
     expect(() => BankAccountTypeViewFilter.render(null)).to.throw(TypeError)
   })
 })
