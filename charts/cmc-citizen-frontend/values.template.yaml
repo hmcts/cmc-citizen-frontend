@@ -9,8 +9,8 @@ rpe-feature-toggle-api:
       enabled: false
     oneoff:
       command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0'
-        admin@example.com Password12 && /scripts/add-toggle.sh cmc_defence_reminders
-        'CMC defence reminders' false admin@example.com Password12
+        ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST} && /scripts/add-toggle.sh cmc_defence_reminders
+        'CMC defence reminders' false ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST}
       enabled: true
       permissions: cmc-new-features-consent-given
   java:
@@ -18,10 +18,6 @@ rpe-feature-toggle-api:
     releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
     environment:
       FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
-      ADMIN_USERNAME_TEST: admin@example.com
-      ADMIN_PASSWORD_TEST: Password12
-      EDITOR_USERNAME_TEST: editor@example.com
-      EDITOR_PASSWORD_TEST: Password12
   postgresql:
     postgresqlDatabase: hmcts
 
