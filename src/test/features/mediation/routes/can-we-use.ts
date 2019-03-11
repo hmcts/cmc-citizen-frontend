@@ -45,7 +45,7 @@ describe('Free mediation: can we use phone number page', () => {
       it('should render page when everything is fine and no defendant phone number is provided', async () => {
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveFind('response')
-        claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ defendant: { number: '07777777777' } })
+        claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
         await request(app)
           .get(pagePath)

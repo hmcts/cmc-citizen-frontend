@@ -16,47 +16,66 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { FreeMediationOption } from 'forms/models/freeMediation'
+import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
+import { CompanyDetails } from 'forms/models/companyDetails'
 
 function renderView (form: Form<CanWeUse>, res: express.Response): void {
-  const claim: Claim = res.locals.claim
-  let phoneNumber: string
+  res.render(Paths.canWeUseCompanyPage.associatedView, {
+    form: form,
+    contactName: getContactName(res)
+  })
+}
 
+function getPhoneNumber (res: express.Response) {
+  const claim: Claim = res.locals.claim
   if (!claim.isResponseSubmitted()) {
     const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
-    phoneNumber = draftResponse.document.defendantDetails.mobilePhone ? draftResponse.document.defendantDetails.mobilePhone.number : undefined
+    return draftResponse.document.defendantDetails.mobilePhone ? draftResponse.document.defendantDetails.mobilePhone.number : undefined
   } else {
-    phoneNumber = claim.claimData.claimant.mobilePhone
+    return claim.claimData.claimant.mobilePhone
   }
-  res.render(Paths.canWeUsePage.associatedView, {
-    form: form,
-    phoneNumber: phoneNumber
-  })
+}
+
+function getContactName (res: express.Response) {
+  const claim: Claim = res.locals.claim
+  if (!claim.isResponseSubmitted()) {
+    const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
+    return (draftResponse.document.defendantDetails.partyDetails as CompanyDetails).contactPerson ? (draftResponse.document.defendantDetails.partyDetails as CompanyDetails).contactPerson : undefined
+  } else {
+    return (claim.claimData.claimant as CompanyDetails).contactPerson
+  }
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.canWeUsePage.uri, (req: express.Request, res: express.Response): void => {
+  .get(Paths.canWeUseCompanyPage.uri, (req: express.Request, res: express.Response): void => {
     const draft: Draft<MediationDraft> = res.locals.mediationDraft
 
-    renderView(new Form(draft.document.canWeUse), res)
+    if (!draft.document.canWeUseCompany) {
+      draft.document.canWeUseCompany = CanWeUseCompany.fromObject({ mediationPhoneNumberConfirmation: getPhoneNumber(res) })
+    }
+
+    renderView(new Form(draft.document.canWeUseCompany), res)
   })
   .post(
-    Paths.canWeUsePage.uri,
-    FormValidator.requestHandler(CanWeUse, CanWeUse.fromObject),
+    Paths.canWeUseCompanyPage.uri,
+    FormValidator.requestHandler(CanWeUseCompany, CanWeUseCompany.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const form: Form<CanWeUse> = req.body
+      const claim: Claim = res.locals.claim
+      const form: Form<CanWeUseCompany> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const claim: Claim = res.locals.claim
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
-
-        draft.document.canWeUse = form.model
+        draft.document.canWeUseCompany = form.model
 
         if (form.model.option === FreeMediationOption.YES) {
-          draft.document.canWeUse.mediationPhoneNumber = undefined
+          draft.document.canWeUseCompany.mediationContactPerson = undefined
+          draft.document.canWeUseCompany.mediationPhoneNumber = undefined
+        } else {
+          draft.document.canWeUseCompany.mediationPhoneNumberConfirmation = undefined
         }
         await new DraftService().save(draft, user.bearerToken)
 

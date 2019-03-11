@@ -24,9 +24,63 @@ import {
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { organisation } from 'test/data/entity/party'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+
+export const sampleClaimIssueCommonObj = {
+  id: 1,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  referenceNumber: '000MC050',
+  createdAt: '2017-07-25T22:45:51.785',
+  issuedOn: '2017-07-25',
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: 200,
+  moreTimeRequested: false,
+  responseDeadline: '2017-08-08',
+  features: ['admissions']
+}
+
+export const sampleClaimIssueOrgVOrgObj = {
+  ...sampleClaimIssueCommonObj,
+  claim: {
+    claimants: [
+      {
+        ...organisation
+      }
+    ],
+    defendants: [
+      {
+        ...organisation
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
+  }
+}
 
 export const sampleClaimIssueObj = {
   id: 1,
@@ -324,6 +378,12 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
 
+export function resolveRetrieveClaimBySampleExternalId (sampleData?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleData })
+}
+
 export function resolveRetrieveClaimByExternalIdWithResponse (override?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
@@ -578,4 +638,10 @@ export function resolveSavePaidInFull () {
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
+}
+
+export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
 }
