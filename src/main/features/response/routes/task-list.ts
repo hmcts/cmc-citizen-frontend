@@ -9,6 +9,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { MomentFactory } from 'shared/momentFactory'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+// import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -16,6 +17,7 @@ export default express.Router()
     try {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const draftMediation: Draft<MediationDraft> = res.locals.mediationDraft
+      // const draftDirectionsQuestionnaire: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
       const claim: Claim = res.locals.claim
 
       const beforeYouStartSection = TaskListBuilder
