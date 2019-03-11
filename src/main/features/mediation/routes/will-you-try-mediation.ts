@@ -44,6 +44,8 @@ export default express.Router()
 
         if (form.model.option === FreeMediationOption.NO) {
           draft.document.youCanOnlyUseMediation = undefined
+          draft.document.canWeUse = undefined
+          draft.document.canWeUseCompany = undefined
         }
 
         await new DraftService().save(draft, user.bearerToken)
