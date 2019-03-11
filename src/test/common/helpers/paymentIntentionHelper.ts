@@ -117,7 +117,7 @@ describe('PaymentIntentionHelper', () => {
         draftClaimantResponseInstalmentsWithNegativeDisposableIncome,
         claimWithDefendantInstalmentsResponseNoDisposableIncome,
         DecisionType.DEFENDANT).repaymentPlan.firstPaymentDate.toISOString()).to.be.deep.equal(
-          MomentFactory.parse('2018-12-31').toISOString())
+          MomentFactory.currentDate().add(80, 'days').toISOString())
     })
 
     it('should return payment intention with Claimants Payment Option', () => {
