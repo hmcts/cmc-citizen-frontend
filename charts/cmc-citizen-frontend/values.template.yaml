@@ -1,3 +1,6 @@
+tags:
+  - rpe-feature-toggle-api
+
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
   registerDns: false
