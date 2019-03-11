@@ -163,7 +163,7 @@ export class Claim {
     } else if (this.moreTimeRequested) {
       return ClaimStatus.MORE_TIME_REQUESTED
     } else if (this.hasClaimantRejectedPartAdmission()) {
-      return ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION
+      return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
@@ -176,6 +176,8 @@ export class Claim {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
+    } else if (this.hasClaimantRejectedPaidInFull()) {
+      return ClaimStatus.CLAIMANT_REJECTED_PAID_IN_FULL
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
@@ -352,7 +354,7 @@ export class Claim {
       return true
     }
 
-    if (this.hasClaimantAcceptedStatesPaid()) {
+    if (this.hasClaimantRespondedToStatesPaid()) {
       return false
     }
 
@@ -456,9 +458,21 @@ export class Claim {
   }
 
   private hasClaimantAcceptedStatesPaid (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION &&
+    return this.hasClaimantRespondedToStatesPaid() && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+  }
+
+  private hasClaimantRespondedToStatesPaid (): boolean {
+    return !!this.claimantResponse && !!this.claimantResponse.type &&
       ((this.response.responseType === ResponseType.PART_ADMISSION && this.response.paymentDeclaration !== undefined)
         || (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID && this.response.paymentDeclaration !== undefined))
+  }
+
+  private hasClaimantRejectedPaidInFull (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && this.response.responseType === ResponseType.FULL_DEFENCE
+      && this.response.defenceType === DefenceType.ALREADY_PAID
+      && this.response.paymentDeclaration !== undefined
   }
 
   private isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {

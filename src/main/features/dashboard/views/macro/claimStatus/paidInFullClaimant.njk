@@ -21,7 +21,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro paidInFullClaimantDashboard() %}
+{% macro paidInFullAcceptedClaimantDashboard() %}
   {{ t('This claim is settled.') }}
 {% endmacro %}
 
@@ -41,4 +41,34 @@
 {% macro paidInFullCCJSatisfiedClaimantClaimDetails(claim) %}
   {{ paidInFullClaimantClaimSettledDetails(claim) }}
   <p>{{ t('The defendant’s County Court Judgment will be marked as paid.') }}</p>
+{% endmacro %}
+
+{% macro paidInFullRejectedClaimantDashboard() %}
+  {{ t('You’ve rejected the defendant’s admission.') }}
+{% endmacro %}
+
+{% macro paidInFullRejectedClaimantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
+  <p>{{ t('They said they owe {{ amount }}.', { amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
+
+  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
+  <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {
+      dqDeadline: claim.directionsQuestionnaireDeadline | date
+    }) }}</p>
+
+  <p>{{ _downloadResponseLink(claim, 'Download their response') }} {{ t('(PDF)') }}</p>
+{% endmacro %}
+
+{% macro _linkToDirectionsQuestionnairePage(externalId) %}
+  <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
+      { completeDQ: internalLink(
+        'complete a directions questionnaire',
+        DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
+      }
+    ) | safe
+    }}</p>
+{% endmacro %}
+
+{% macro _downloadResponseLink(claim, text) %}
+  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
 {% endmacro %}
