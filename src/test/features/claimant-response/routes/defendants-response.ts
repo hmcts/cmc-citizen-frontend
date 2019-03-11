@@ -23,7 +23,7 @@ const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ extern
 const fullAdmissionResponseWithPaymentBySetDate = claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
 const fullAdmissionResponseWithPaymentByInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
 const partialAdmissionWithPaymentBySetDate = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
-const fullDefenceWithPaidInFull = claimStoreServiceMock.sampleFullDefenceWithPaidInFullGreaterThanClaimAmount
+const fullDefenceWithStatesPaid = claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
@@ -88,7 +88,7 @@ describe('Claimant response: view defendant response page', () => {
       })
 
       it('should render paid in full with stated amount when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithPaidInFull)
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithStatesPaid)
         draftStoreServiceMock.resolveFind('claimantResponse')
 
         await request(app)

@@ -21,7 +21,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro paidInFullAcceptedClaimantDashboard() %}
+{% macro claimIsSettledClaimantDashboard() %}
   {{ t('This claim is settled.') }}
 {% endmacro %}
 
@@ -43,11 +43,11 @@
   <p>{{ t('The defendant’s County Court Judgment will be marked as paid.') }}</p>
 {% endmacro %}
 
-{% macro paidInFullRejectedClaimantDashboard() %}
+{% macro statesPaidInFullRejectedClaimantDashboard() %}
   {{ t('You’ve rejected the defendant’s admission.') }}
 {% endmacro %}
 
-{% macro paidInFullRejectedClaimantClaimDetails(claim) %}
+{% macro statesPaidInFullRejectedClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
   <p>{{ t('They said they owe {{ amount }}.', { amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
 

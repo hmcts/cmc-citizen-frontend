@@ -17,7 +17,7 @@ import {
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
-  fullDefenceWithPaidInFullGreaterThanClaimAmount,
+  fullDefenceWithStatesPaidGreaterThanClaimAmount,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
@@ -354,9 +354,9 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
 }
 
-export const sampleFullDefenceWithPaidInFullGreaterThanClaimAmount = {
+export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
   respondedAt: '2017-07-25T22:45:51.785',
-  response: fullDefenceWithPaidInFullGreaterThanClaimAmount
+  response: fullDefenceWithStatesPaidGreaterThanClaimAmount
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {

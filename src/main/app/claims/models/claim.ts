@@ -176,8 +176,8 @@ export class Claim {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
-    } else if (this.hasClaimantRejectedPaidInFull()) {
-      return ClaimStatus.CLAIMANT_REJECTED_PAID_IN_FULL
+    } else if (this.hasClaimantRejectedStatesPaid()) {
+      return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
@@ -467,7 +467,7 @@ export class Claim {
         || (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID && this.response.paymentDeclaration !== undefined))
   }
 
-  private hasClaimantRejectedPaidInFull (): boolean {
+  private hasClaimantRejectedStatesPaid (): boolean {
     return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && this.response.responseType === ResponseType.FULL_DEFENCE

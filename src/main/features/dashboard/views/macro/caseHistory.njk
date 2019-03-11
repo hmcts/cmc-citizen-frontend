@@ -67,12 +67,12 @@
 {% from "./claimStatus/paidInFullClaimant.njk" import
   paidInFullClaimantClaimSettledDetails,
   paidInFullClaimantClaimDetails,
-  paidInFullRejectedClaimantClaimDetails,
+  statesPaidInFullRejectedClaimantClaimDetails,
   paidInFullCCJCancelledClaimantClaimDetails,
   paidInFullCCJSatisfiedClaimantClaimDetails %}
 {% from "./claimStatus/paidInFullDefendant.njk" import
   paidInFullDefendantClaimDetails,
-  paidInFullRejectedDefendantClaimDetails,
+  statesPaidRejectedDefendantClaimDetails,
   paidInFullCCJSatisfiedDefendantClaimDetails,
   paidInFullCCJCancelledDefendantClaimDetails %}
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
@@ -176,8 +176,8 @@
       {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
       {{ statesPaidClaimSettledClaimantDetails(claim, csrf) }}
-    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PAID_IN_FULL %}
-      {{ paidInFullRejectedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+      {{ statesPaidInFullRejectedClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -255,8 +255,8 @@
         {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
         {{ statesPaidClaimSettledDefendantsDetails(claim, csrf) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PAID_IN_FULL %}
-        {{ paidInFullRejectedDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+        {{ statesPaidRejectedDefendantClaimDetails(claim) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}

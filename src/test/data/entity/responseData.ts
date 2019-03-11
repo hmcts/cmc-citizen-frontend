@@ -560,7 +560,7 @@ export const partialAdmissionWithPaymentBySetDateDataPaymentDateAfterMonth = {
   amount: 3000
 }
 
-export const fullDefenceWithPaidInFullGreaterThanClaimAmount = {
+export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
   ...defenceWithAmountClaimedAlreadyPaidData,
   paymentDeclaration: {
     paidDate: '2017-12-31',

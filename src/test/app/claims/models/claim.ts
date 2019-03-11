@@ -425,7 +425,7 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID)
     })
 
-    context('should return CLAIMANT_REJECTED_PAID_IN_FULL', () => {
+    context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
       it('when defendant states paid amount equal to claim amount', () => {
         claim.totalAmountTillToday = 100
         claim.response = {
@@ -441,7 +441,7 @@ describe('Claim', () => {
           type: 'REJECTION'
         }
 
-        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PAID_IN_FULL)
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
       })
 
       it('when defendant states paid amount greater than claim amount', () => {
@@ -459,7 +459,7 @@ describe('Claim', () => {
           type: 'REJECTION'
         }
 
-        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PAID_IN_FULL)
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
       })
     })
   })

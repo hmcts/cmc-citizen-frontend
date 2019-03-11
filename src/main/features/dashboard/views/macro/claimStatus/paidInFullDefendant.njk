@@ -44,14 +44,14 @@
       AppPaths.contactUsPage.uri) + '. This costs £15.') | safe }}</p>
 {% endmacro %}
 
-{% macro paidInFullRejectedDefendantDashboard(claim) %}
+{% macro statesPaidRejectedDefendantDashboard(claim) %}
   {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
     claimantName: claim.claimData.claimant.name,
     amount: claim.response.paymentDeclaration.paidAmount | numeral
   }) }}
 {% endmacro %}
 
-{% macro paidInFullRejectedDefendantClaimDetails(claim) %}
+{% macro statesPaidRejectedDefendantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
       claimantName: claim.claimData.claimant.name,
       amount: claim.response.paymentDeclaration.paidAmount | numeral
