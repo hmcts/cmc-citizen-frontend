@@ -18,7 +18,8 @@ interface PageSpecificValues {
     type: string,
     description: string,
     comment: string
-  }
+  },
+  settleClaimEnterDate: string
 }
 
 export class ClaimantResponseTestData {
@@ -47,7 +48,8 @@ export class ClaimantResponseTestData {
       type: 'CONTRACTS_AND_AGREEMENTS',
       description: 'correspondence',
       comment:  'have this evidence'
-    }
+    },
+    settleClaimEnterDate: '2018-01-01'
   }
 
 }
@@ -78,7 +80,8 @@ export class UnreasonableClaimantResponseTestData {
       type: 'CONTRACTS_AND_AGREEMENTS',
       description: 'correspondence',
       comment:  'have this evidence'
-    }
+    },
+    settleClaimEnterDate: undefined
   }
 
 }
