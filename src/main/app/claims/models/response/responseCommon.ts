@@ -17,6 +17,7 @@ export interface ResponseCommon {
   moreTimeNeeded?: YesNoOption
   freeMediation?: YesNoOption
   mediationPhoneNumber?: String
+  mediationContactPerson?: String
   statementOfTruth?: StatementOfTruth
 }
 
@@ -27,6 +28,7 @@ export namespace ResponseCommon {
       defendant: deserializeDefendantDetails(input.defendant),
       freeMediation: input.freeMediation,
       mediationPhoneNumber: input.mediationPhoneNumber,
+      mediationContactPerson: input.mediationContactPerson,
       statementOfTruth: input.statementOfTruth
         ? new StatementOfTruth().deserialize(input.statementOfTruth)
         : undefined
