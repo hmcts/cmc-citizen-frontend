@@ -16,8 +16,8 @@ export interface ResponseCommon {
   defendant: Party
   moreTimeNeeded?: YesNoOption
   freeMediation?: YesNoOption
-  mediationPhoneNumber?: String
-  mediationContactPerson?: String
+  mediationPhoneNumber?: string
+  mediationContactPerson?: string
   statementOfTruth?: StatementOfTruth
 }
 
