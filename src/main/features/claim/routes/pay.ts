@@ -102,14 +102,7 @@ async function successHandler (res, next) {
       features += 'directions_questionnaire'
     }
 
-    // if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
-    //   await claimStoreClient.saveClaim(draft, user, 'admissions')
-    // } else {
-    //   await claimStoreClient.saveClaim(draft, user)
-    // }
-
     await claimStoreClient.saveClaim(draft, user, features)
-
   }
 
   await new DraftService().delete(draft.id, user.bearerToken)

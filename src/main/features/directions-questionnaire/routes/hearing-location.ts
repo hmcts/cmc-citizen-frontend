@@ -11,11 +11,3 @@ export default express.Router()
   .get(Paths.hearingLocationPage.uri, (req: express.Request, res: express.Response) => {
     renderView(res)
   })
-  // .post(
-  //   Paths.hearingLocationPage.uri,
-  //   ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-  //     const claim: Claim = res.locals.claim
-  //
-  //     res.redirect(Paths.howMediationWorksPage.evaluateUri({ externalId: claim.externalId }))
-  //   })
-  // )
