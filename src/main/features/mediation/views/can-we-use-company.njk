@@ -38,8 +38,7 @@
                 <label for="freeMediationOptionNO">{{ t(FreeMediationOption.NO) | capitalize }}</label>
               </div>
               <div class="panel panel-border-narrow js-hidden" id="mediation-contact-name" aria-hidden="false">
-                {{ textInput('Who should the mediation service call?', 'mediationContactPerson', form) }}
-                {{ textInput('Enter this person’s phone number, including extension if required', 'mediationPhoneNumber', form, 'For example, 02012346788 ext. 153') }}
+                {{ canWeUseCompanyInputs(form) }}
               </div>
             </fieldset>
           </div>
@@ -48,8 +47,7 @@
             <input id="freeMediationOptionNO" type="radio" name="option" value="{{ FreeMediationOption.NO }}" checked>
             <label for="freeMediationOptionNO">{{ t(FreeMediationOption.NO) | capitalize }}</label>
           </div>
-          {{ textInput('Who should the mediation service call?', 'mediationContactPerson', form) }}
-          {{ textInput('Enter this person’s phone number, including extension if required', 'mediationPhoneNumber', form, 'For example, 02012346788 ext. 153') }}
+          {{ canWeUseCompanyInputs(form) }}
         {% endif %}
 
         {{ saveAndContinueButton() }}
@@ -57,4 +55,9 @@
     </div>
   </div>
 {% endblock %}
+
+{% macro canWeUseCompanyInputs(form) %}
+  {{ textInput('Who should the mediation service call?', 'mediationContactPerson', form) }}
+  {{ textInput('Enter this person’s phone number, including extension if required', 'mediationPhoneNumber', form, 'For example, 02012346788 ext. 153') }}
+{% endmacro %}
 
