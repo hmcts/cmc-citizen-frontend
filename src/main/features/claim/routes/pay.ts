@@ -95,13 +95,12 @@ async function successHandler (res, next) {
 
     let features: string
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
-      features = 'admissions,'
+      features = 'admissions'
     }
 
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-      features += 'directions_questionnaire'
+      features += features === undefined ? 'directions_questionnaire' : ', directions_questionnaire'
     }
-
     await claimStoreClient.saveClaim(draft, user, features)
   }
 

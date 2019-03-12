@@ -7,8 +7,8 @@ import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJu
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/DirectionsQuestionnaireDraft'
-import { RouterFinder } from 'shared/router/routerFinder'
 import { DirectionsQuestionnaireGuard } from 'directions-questionnaire/guard/directionsQuestionnaireGuard'
+import { RouterFinder } from 'shared/router/routerFinder'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
