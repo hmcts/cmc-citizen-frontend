@@ -44,6 +44,7 @@ export class CanWeUse implements CompletableTask {
   }
 
   isCompleted (): boolean {
-    return !!this.option && !!this.mediationPhoneNumber
+    return (!!this.option && this.option === FreeMediationOption.YES) ||
+      (!!this.option && this.option === FreeMediationOption.NO && !!this.mediationPhoneNumber)
   }
 }
