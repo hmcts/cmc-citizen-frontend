@@ -575,7 +575,6 @@ export const sampleMediationDraftObj = {
 }
 
 export const sampleDirectionsQuestionnaireDraftObj = {
-  externalId: 'cee86e6e-bec1-450b-aca0-62a6a118bb40',
   selfWitness: { selfWitness: false },
   otherWitnesses: { otherWitnesses: false }
 }

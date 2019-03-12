@@ -118,9 +118,9 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save DQ draft', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.rejectSave()
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
           await request(app)
             .post(pagePath)
