@@ -8,7 +8,7 @@ export const individualDetails = {
     line2: 'Street 1',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E1A'
+    postcode: 'E1 8FA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
@@ -16,7 +16,7 @@ export const individualDetails = {
     line2: 'Street 10',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B10A'
+    postcode: 'BT1 5GB'
   },
   dateOfBirth: {
     known: true,
@@ -30,14 +30,14 @@ export const individualDetails = {
 
 export const soleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
-  name: 'Rosa Smith',
-  businessName: 'Example Inc.',
+  name: 'SoleTrader Smith',
+  businessName: 'SoleTrader Ltd.',
   address: {
     line1: 'Flat 2',
     line2: 'Street 2',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E2A'
+    postcode: 'E2 8FA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
@@ -45,20 +45,20 @@ export const soleTraderDetails = {
     line2: 'Street 20',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B20A'
+    postcode: 'BT2 5GB'
   }
 }
 
 export const companyDetails = {
   type: PartyType.COMPANY.value,
-  name: 'Example Inc.',
-  contactPerson: 'John Smith',
+  name: 'Company Ltd.',
+  contactPerson: 'Company Smith',
   address: {
     line1: 'Flat 3',
     line2: 'Street 3',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E3A'
+    postcode: 'E3 8FA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
@@ -66,20 +66,20 @@ export const companyDetails = {
     line2: 'Street 30',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B30A'
+    postcode: 'BT3 5GB'
   }
 }
 
 export const organisationDetails = {
   type: PartyType.ORGANISATION.value,
-  name: 'Example Inc.',
-  contactPerson: 'John Smith',
+  name: 'Organisation.',
+  contactPerson: 'Organisation Smith',
   address: {
     line1: 'Flat 4',
     line2: 'Street 4',
     line3: 'Cool house name',
     city: 'London',
-    postcode: 'E4A'
+    postcode: 'E4 8FA'
   },
   hasCorrespondenceAddress: true,
   correspondenceAddress: {
@@ -87,7 +87,7 @@ export const organisationDetails = {
     line2: 'Street 40',
     line3: 'Cooler house name',
     city: 'Belfast',
-    postcode: 'B40A'
+    postcode: 'BT4 5GB'
   }
 }
 
