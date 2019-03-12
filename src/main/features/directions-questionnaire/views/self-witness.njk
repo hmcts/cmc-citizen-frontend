@@ -1,0 +1,37 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
+{% from "date.njk" import dateInput %}
+
+{% set heading = t('Do you want to give evidence as a witness?') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Self Witness" data-event-label-from="selfWitness" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {% set error = form.errorFor('selfWitness') %}
+        <fieldset id="selfWitness[label]" class="form-group {% if error %} form-group-error {% endif %}">
+          <legend>
+            <span class="visuallyhidden">
+              {{ t('Do you want to give evidence as a witness?') }}
+            </span>
+          </legend>
+
+          <p>{{ t('This could be providing written evidence or going to a hearing at the court.') }}</p>
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+          {{
+          radioOption(form = form, label = 'Yes', name = 'selfWitness', value = 'true', checked = form.valueFor('selfWitness') === true, bold = true)
+          }}
+
+          {{
+          radioOption(form = form, label = 'No', name = 'selfWitness', value = 'false', checked = form.valueFor('selfWitness') === false, bold = true)
+          }}
+
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
