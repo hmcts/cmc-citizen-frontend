@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
-import { sampleClaimObj } from '../../../http-mocks/claim-store'
+import { sampleClaimObj } from 'test/http-mocks/claim-store'
 import { ClaimStatusNode, ClaimStatusFlow } from 'dashboard/helpers/claimStatusFlow'
 
 describe('The dashboard status rule engine', () => {

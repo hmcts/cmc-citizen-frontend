@@ -6,7 +6,7 @@ const logger = Logger.getLogger('ClaimStatusFlow')
 export class ClaimStatusFlow {
 
   static readonly flow: ClaimStatusNode = {
-    description: 'Claim Is Draft',
+    description: 'Claim Exists',
     isValidFor: () => true,
     next: [
       {
@@ -20,9 +20,13 @@ export class ClaimStatusFlow {
   static decide (flow: ClaimStatusNode, claim: Claim): string {
     if (flow.isValidFor(claim)) {
       const nextPossibleConditions = (flow.next || []).filter(state => state.isValidFor(claim))
-      if (nextPossibleConditions.length > 1) throw new Error(`Two possible paths are valid for a claim, check the flow's logic`)
+      if (nextPossibleConditions.length > 1) {
+        throw new Error(`Two possible paths are valid for a claim, check the flow's logic`)
+      }
       if (nextPossibleConditions.length === 0) {
-        if (!flow.dashboard) throw new Error(`Trying to render an intermediate state with no dashboard, check the flow's logic`)
+        if (!flow.dashboard) {
+          throw new Error(`Trying to render an intermediate state with no dashboard, check the flow's logic`)
+        }
         return flow.dashboard
       }
       return this.decide(nextPossibleConditions[0], claim)

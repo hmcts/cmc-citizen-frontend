@@ -13,7 +13,7 @@ import { Paths } from 'dashboard/paths'
 import { Claim } from 'claims/models/claim'
 import { ClaimStatusFlow } from 'dashboard/helpers/claimStatusFlow'
 import { Logger } from '@hmcts/nodejs-logging'
-import { app } from '../../app'
+import { app } from 'main/app'
 
 const logger = Logger.getLogger('DashboardFeature')
 
