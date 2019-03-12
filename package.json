@@ -91,7 +91,7 @@
     "serve-favicon": "^2.5.0",
     "string.prototype.startswith": "^0.2.0",
     "to-boolean": "^1.0.0",
-    "ts-node": "^8.0.2",
+    "ts-node": "^8.0.3",
     "tsconfig-paths": "^3.8.0",
     "typescript": "^3.3.3333",
     "uuid": "^3.3.2"
