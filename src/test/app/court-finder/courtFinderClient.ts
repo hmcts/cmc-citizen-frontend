@@ -1,6 +1,4 @@
-import * as fs from 'fs'
 import * as nock from 'nock'
-import * as path from 'path'
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
 import { CourtFinderClient } from 'court-finder-client/courtFinderClient'
@@ -8,6 +6,40 @@ import { CourtFinderResponse } from 'court-finder-client/courtFinderResponse'
 
 const mockClient = 'http://localhost'
 const courtFinderClient: CourtFinderClient = new CourtFinderClient(mockClient)
+
+const apiData = [
+  {
+    name: 'Birmingham District Probate Registry',
+    lat: 52.4816613587661,
+    lon: -1.89552893773996,
+    number: null,
+    cci_code: null,
+    magistrate_code: null,
+    slug: 'birmingham-district-probate-registry',
+    types: [],
+    address: {
+      address_lines: [
+        'The Priory Courts',
+        '33 Bull Street'
+      ],
+      postcode: 'B4 6DU',
+      town: 'Birmingham',
+      type: 'Visiting'
+    },
+    areas_of_law: [
+      {
+        name: 'Probate',
+        external_link: 'https%3A//www.gov.uk/wills-probate-inheritance',
+        display_url: '<bound method AreaOfLaw.display_url of <AreaOfLaw: Probate>>',
+        external_link_desc: 'Information about wills and probate'
+      }
+    ],
+    displayed: true,
+    hide_aols: false,
+    dx_number: '701990 Birmingham 7',
+    distance: 1
+  }
+]
 
 const expectedResponse = {
   courts: [
@@ -46,7 +78,7 @@ describe('CourtFinderClient', () => {
     it('should return found courts', () => {
       nock(mockClient)
           .get(/\/search\/results.json\?postcode=.+&aol=.+/)
-          .reply(200, fs.readFileSync(path.join(__dirname, 'courtFinderClientAll.json')))
+          .reply(200, apiData)
       return courtFinderClient.findMoneyClaimCourtsByPostcode('A111AA')
           .then((courtResponse: CourtFinderResponse) => {
             chai.expect(courtResponse).eql(expectedResponse)
