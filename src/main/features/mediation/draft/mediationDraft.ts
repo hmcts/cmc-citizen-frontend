@@ -1,9 +1,11 @@
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { FreeMediation } from 'forms/models/freeMediation'
 import { CanWeUse } from 'mediation/form/models/CanWeUse'
+import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 
 export class MediationDraft extends DraftDocument {
   canWeUse: CanWeUse
+  canWeUseCompany: CanWeUseCompany
   willYouTryMediation: FreeMediation
   youCanOnlyUseMediation: FreeMediation
 
@@ -23,6 +25,9 @@ export class MediationDraft extends DraftDocument {
       }
       if (input.canWeUse) {
         this.canWeUse = new CanWeUse().deserialize(input.canWeUse)
+      }
+      if (input.canWeUseCompany) {
+        this.canWeUseCompany = new CanWeUseCompany().deserialize(input.canWeUseCompany)
       }
     }
     return this
