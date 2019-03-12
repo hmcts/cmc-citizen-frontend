@@ -130,9 +130,10 @@
     lodash.mapvalues "^4.6.0"
     request-promise-native "^1.0.5"
 
-"@hmcts/nodejs-healthcheck@^1.4.5":
-  version "1.4.6"
-  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-healthcheck/-/nodejs-healthcheck-1.4.6.tgz#3eb43ca7b1ba1b1306df0821bdb5d8c88257e863"
+"@hmcts/nodejs-healthcheck@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/nodejs-healthcheck/-/nodejs-healthcheck-1.5.1.tgz#4d99f9e3041e11fcfacf0bec82eb8a2463fcea01"
+  integrity sha512-DFaBhc42UU5X8uaaCmlHBk2Mrw12hNVWhWvd3zH3pN6ucCb/IgqxLMBOVXPClDzWwpKMlbKATN3EPz6rru47wg==
   dependencies:
     fs-extra "^4.0.1"
     js-yaml "^3.8.4"

@@ -34,7 +34,7 @@
     "@hmcts/cmc-validators": "^0.2.2",
     "@hmcts/draft-store-client": "^1.1.1",
     "@hmcts/info-provider": "^1.0.0",
-    "@hmcts/nodejs-healthcheck": "^1.4.5",
+    "@hmcts/nodejs-healthcheck": "^1.5.1",
     "@hmcts/nodejs-logging": "^3.0.0",
     "@hmcts/os-names-client": "^1.0.4",
     "@hmcts/os-places-client": "^1.0.4",
