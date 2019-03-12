@@ -68,7 +68,7 @@ describe('Defendant response: task list page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => {
               expect(res).to.be.successful.withText('Respond to a money claim')
-              expect(res.text.match(/INCOMPLETE/g)).length(2)
+              expect(res.text.match(/INCOMPLETE/g)).length(3)
             })
         })
       })
