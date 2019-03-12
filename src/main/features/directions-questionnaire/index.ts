@@ -8,6 +8,7 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/DirectionsQuestionnaireDraft'
 import { RouterFinder } from 'shared/router/routerFinder'
+import { DirectionsQuestionnaireGuard } from 'directions-questionnaire/guard/directionsQuestionnaireGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -25,6 +26,7 @@ export class DirectionsQuestionnaireFeature {
     app.all(allDQs, requestHandler())
     app.all(allDQs, ClaimMiddleware.retrieveByExternalId)
     app.all(allDQs, CountyCourtJudgmentRequestedGuard.requestHandler)
+    app.all(allDQs, DirectionsQuestionnaireGuard.requestHandler)
     app.all(allDQs,
       DraftMiddleware.requestHandler(new DraftService(), 'directionsQuestionnaire', 100, (value: any): DirectionsQuestionnaireDraft => {
         return new DirectionsQuestionnaireDraft().deserialize(value)
