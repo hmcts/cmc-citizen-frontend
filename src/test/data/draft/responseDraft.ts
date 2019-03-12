@@ -27,7 +27,9 @@ const baseResponseDraft = {
   },
   moreTimeNeeded: {
     option: 'no'
-  }
+  },
+  freeMediation: 'yes',
+  mediationPhoneNumber: '07777777777'
 }
 
 const baseDefenceDraft = {
@@ -39,9 +41,8 @@ const baseDefenceDraft = {
   defence: {
     text: 'My defence'
   },
-  freeMediation: {
-    option: 'no'
-  }
+  freeMediation: 'yes',
+  mediationPhoneNumber: '07777777777'
 }
 
 export const partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted = {
