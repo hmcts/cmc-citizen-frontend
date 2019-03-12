@@ -304,7 +304,7 @@ export class TaskListBuilder {
       return new TaskList(
         'Tell us more about the claim', [
           new TaskListItem(
-            'Give us details in case there\'s a hearing',
+            `Give us details in case there's a hearing`,
             path,
             DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
           )
