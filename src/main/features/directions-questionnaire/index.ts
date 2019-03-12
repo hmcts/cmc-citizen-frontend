@@ -7,7 +7,6 @@ import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJu
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/DirectionsQuestionnaireDraft'
-import { ResponseDraft } from 'response/draft/responseDraft'
 import { RouterFinder } from 'shared/router/routerFinder'
 
 function requestHandler (): express.RequestHandler {
@@ -34,15 +33,6 @@ export class DirectionsQuestionnaireFeature {
         res.locals.draft = res.locals.directionsQuestionnaireDraft
         next()
       })
-    app.all(allDQs,
-      DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
-        return new ResponseDraft().deserialize(value)
-      }),
-      (req: express.Request, res: express.Response, next: express.NextFunction) => {
-        res.locals.draft = res.locals.responseDraft
-        next()
-      }
-    )
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
