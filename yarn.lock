@@ -1548,10 +1548,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeceptjs@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.0.6.tgz#64145672ee9700c61b17d0a287f841d17381c71b"
-  integrity sha512-IF0eO/BZv1GSymaUflVYOFDXHTFI41CpQecDPi4tFBQofNWfvi9TLr37bvlJxOeA/4uxsFWlGpTU3LxlC4l6xw==
+codeceptjs@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.0.7.tgz#d97e3e73981482deb5ae21073cc4c46ab98b1c10"
+  integrity sha512-SUKA5KY9tF0Nb+5B0CvURlvPTDki25IaRMC227yRCliAoWQ6LDW0GEcVqVXkllIUw6WiaPiZFV2JPs4Lq5efoQ==
   dependencies:
     allure-js-commons "^1.3.2"
     archiver "^3.0.0"
