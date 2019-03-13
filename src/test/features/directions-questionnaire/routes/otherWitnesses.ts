@@ -14,6 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
+import { YesNoOption } from 'models/yesNoOption'
 
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -83,8 +84,8 @@ describe('Directions Questionnaire - other witnesses page', () => {
   })
 
   describe('on POST', () => {
-    const validFormData = { otherWitnesses: 'false' }
-    const invalidFormData = { otherWitnesses: 'true' }
+    const validFormData = { otherWitnesses: YesNoOption.NO.option }
+    const invalidFormData = { otherWitnesses: YesNoOption.YES.option }
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
