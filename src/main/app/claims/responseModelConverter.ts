@@ -79,7 +79,7 @@ export class ResponseModelConverter {
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
           return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft)
         }
-        return this.convertFullDefence(draft, claim , mediationDraft)
+        return this.convertFullDefence(draft, claim, mediationDraft)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft, claim, mediationDraft)
       case FormResponseType.PART_ADMISSION:
