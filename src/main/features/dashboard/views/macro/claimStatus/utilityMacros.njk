@@ -7,7 +7,7 @@
 {% endmacro %}
 
 {% macro viewAndRespondOffer(claim, text = 'View and respond to the offer') %}
-  <p>{{ internalLink(t('text'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-secondary') }}</p>
+  <p>{{ internalLink(t(text), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-secondary') }}</p>
 {% endmacro %}
 
 {% macro signAgreementLink(claim, text = 'Sign the settlement agreement') %}
