@@ -38,11 +38,10 @@ export default express.Router()
     FormValidator.requestHandler(DateOfBirth, DateOfBirth.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const form: Form<DateOfBirth> = req.body
-
+      const claim: Claim = res.locals.claim
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
-        const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
         switch (draft.document.defendantDetails.partyDetails.type) {
