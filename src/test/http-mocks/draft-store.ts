@@ -593,8 +593,6 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'response:company':
       documentDocument = { ...sampleCompanyResponseDraftObj, ...draftOverride }
-      // tslint:disable-next-line
-      console.log(documentDocument)
       break
     case 'response:full-admission':
       documentDocument = { ...sampleFullAdmissionResponseDraftObj, ...draftOverride }
