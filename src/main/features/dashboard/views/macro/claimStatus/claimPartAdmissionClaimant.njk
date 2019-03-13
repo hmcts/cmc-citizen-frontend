@@ -23,8 +23,7 @@
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
-  {{ t('The defendant believes they owe you {{ amount }}. You can accept or reject that this is the amount owed.',
-    { amount: claim.response.amount | numeral }) }}
+  {{ t('Respond to the defendant.') }}
 {% endmacro %}
 
 
