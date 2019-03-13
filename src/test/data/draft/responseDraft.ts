@@ -27,10 +27,7 @@ const baseResponseDraft = {
   },
   moreTimeNeeded: {
     option: 'no'
-  },
-  freeMediation: 'yes',
-  mediationPhoneNumber: '07777777777',
-  mediationContactPerson: 'Mediation Contact Person'
+  }
 }
 
 const baseDefenceDraft = {
@@ -41,6 +38,9 @@ const baseDefenceDraft = {
   },
   defence: {
     text: 'My defence'
+  },
+  freeMediation: {
+    option: 'no'
   }
 }
 
