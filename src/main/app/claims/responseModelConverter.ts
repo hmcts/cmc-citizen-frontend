@@ -79,7 +79,7 @@ export class ResponseModelConverter {
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
           return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft)
         }
-        return this.convertFullDefence(draft, claim ,mediationDraft)
+        return this.convertFullDefence(draft, claim , mediationDraft)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft, claim, mediationDraft)
       case FormResponseType.PART_ADMISSION:
@@ -204,9 +204,7 @@ export class ResponseModelConverter {
         } else {
           return mediationDraft.canWeUseCompany.mediationPhoneNumber
         }
-      }
-
-      if (mediationDraft.canWeUse) {
+      } else {
         if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
           if (!claim.isResponseSubmitted()) {
             return draft.defendantDetails.mobilePhone.number
