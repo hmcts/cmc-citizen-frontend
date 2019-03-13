@@ -19,7 +19,7 @@ export class CourtFinderClient {
       return Promise.reject('Missing postcode')
     }
 
-    let uri: string = `${this.apiUrl}/search/results.json?postcode=${postcode}&aol=Money claims&spoe=${spoe}`
+    let uri: string = `${this.apiUrl}/search/results.json?postcode=${postcode}&aol=Money claims&spoe=${spoe.name}`
 
     return this.performRequest(uri)
   }
