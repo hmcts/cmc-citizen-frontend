@@ -6,12 +6,13 @@ import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { SelfWitness } from 'directions-questionnaire/forms/models/selfWitness'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('SelfWitness', () => {
   describe('constructor', () => {
     it('should set the primitive fields to undefined', () => {
       const selfWitness: SelfWitness = new SelfWitness()
-      expect(selfWitness.selfWitness).to.be.undefined
+      expect(selfWitness.option).to.be.undefined
     })
   })
 
@@ -33,14 +34,14 @@ describe('SelfWitness', () => {
     })
 
     it('should accept self witness with option present' , () => {
-      const errors = validator.validateSync(new SelfWitness(true))
+      const errors = validator.validateSync(new SelfWitness(YesNoOption.YES))
       expect(errors).to.be.empty
     })
   })
 
   describe('isCompleted', () => {
     it('Should be marked completed when an option is selected', () => {
-      const selfWitness: SelfWitness = new SelfWitness(false)
+      const selfWitness: SelfWitness = new SelfWitness(YesNoOption.YES)
       expect(selfWitness.isCompleted()).to.be.true
     })
 

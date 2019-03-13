@@ -1,32 +1,35 @@
-import { IsDefined } from '@hmcts/class-validator'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
+import { YesNoOption } from 'models/yesNoOption'
+
+import { ValidationErrors } from 'forms/validation/validationErrors'
 import { CompletableTask } from 'models/task'
-import * as toBoolean from 'to-boolean'
 
 export class SelfWitness implements CompletableTask {
-  @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  selfWitness: boolean
+  @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
+  @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
+  option?: YesNoOption
 
-  constructor (selfWitness?: boolean) {
-    this.selfWitness = selfWitness
+  constructor (option?: YesNoOption) {
+    this.option = option
   }
 
-  static fromObject (value?: any): SelfWitness {
-    if (!value) {
-      return value
+  public static fromObject (input?: any): SelfWitness {
+    if (!input) {
+      return input
     }
 
-    return new SelfWitness(value.selfWitness !== undefined ? toBoolean(value.selfWitness) === true : undefined)
+    return new SelfWitness(YesNoOption.fromObject(input.option))
   }
 
   deserialize (input?: any): SelfWitness {
-    if (input) {
-      this.selfWitness = input.selfWitness
+    if (input && input.option) {
+      this.option = YesNoOption.fromObject(input.option)
     }
+
     return this
   }
 
   isCompleted (): boolean {
-    return this.selfWitness !== undefined
+    return this.option !== undefined
   }
 }

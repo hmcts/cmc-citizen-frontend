@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 {% from "date.njk" import dateInput %}
+{% from "form.njk" import yesNoRadio %}
 
 {% set heading = t('Do you want to give evidence as a witness?') %}
 
@@ -20,14 +21,22 @@
 
           <p>{{ t('This could be providing written evidence or going to a hearing at the court.') }}</p>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
-          {{
-          radioOption(form = form, label = 'Yes', name = 'selfWitness', value = 'true', checked = form.valueFor('selfWitness') === true, bold = true)
-          }}
+
+          {% set name = 'option' %}
 
           {{
-          radioOption(form = form, label = 'No', name = 'selfWitness', value = 'false', checked = form.valueFor('selfWitness') === false, bold = true)
+          radioGroup(
+            label = heading,
+            name = name,
+            options = [
+            { label: t('Yes'), value: YesNoOption.YES.option, checked: (form.valueFor('option').option === YesNoOption.YES.option) },
+            { label: t('No'), value: YesNoOption.NO.option, checked: (form.valueFor('option').option === YesNoOption.NO.option) }
+          ],
+            form = form,
+            labelForScreenReadersOnly = true,
+            isInline = false
+          )
           }}
-
         </fieldset>
 
         {{ saveAndContinueButton() }}

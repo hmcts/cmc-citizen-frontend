@@ -1,20 +1,20 @@
 import { IsDefined, IsInt, Min, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { CompletableTask } from 'models/task'
-import * as toBoolean from 'to-boolean'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
+import { YesNoOption } from 'models/yesNoOption'
 
 export class OtherWitnesses implements CompletableTask {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  otherWitnesses?: boolean
+  otherWitnesses?: YesNoOption
 
-  @ValidateIf(o => o.otherWitnesses === true)
+  @ValidateIf(o => o.otherWitnesses && o.otherWitnesses.option === YesNoOption.YES.option)
   @IsDefined()
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
   @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   howMany?: number
 
-  constructor (otherWitnesses?: boolean, howMany?: number) {
+  constructor (otherWitnesses?: YesNoOption, howMany?: number) {
     this.otherWitnesses = otherWitnesses
     this.howMany = howMany
   }
@@ -24,13 +24,14 @@ export class OtherWitnesses implements CompletableTask {
       return value
     }
 
-    return new OtherWitnesses(value.otherWitnesses !== undefined ? toBoolean(value.otherWitnesses) === true : undefined,
+    return new OtherWitnesses(
+      YesNoOption.fromObject(value.otherWitnesses),
       toNumberOrUndefined(value.howMany))
   }
 
   deserialize (input?: any): OtherWitnesses {
     if (input) {
-      this.otherWitnesses = input.otherWitnesses
+      this.otherWitnesses = YesNoOption.fromObject(input.otherWitnesses)
       if (input.otherWitnesses) {
         this.howMany = toNumberOrUndefined(input.howMany)
       }
@@ -41,7 +42,7 @@ export class OtherWitnesses implements CompletableTask {
   isCompleted (): boolean {
     if (this.otherWitnesses === undefined) {
       return false
-    } else if (this.otherWitnesses) {
+    } else if (this.otherWitnesses.option === YesNoOption.YES.option) {
       return this.howMany !== undefined
     } else {
       return true
