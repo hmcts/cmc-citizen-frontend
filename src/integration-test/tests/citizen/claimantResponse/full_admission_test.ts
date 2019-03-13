@@ -167,12 +167,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimantResponseTestData = new UnreasonableClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
     claimantResponseTestData.pageSpecificValues.settleClaimEnterDate = '2019-01-01'
-    // claimantResponseTestData.pageSpecificValues.paymentDatePageEnterDate = '2025-01-01'
-    // claimantResponseTestData.pageSpecificValues.paymentPlanPageEnterRepaymentPlan = {
-    //   equalInstalment: 20.00,
-    //   firstPaymentDate: '2023-01-01',
-    //   frequency: 'everyWeek'
-    // }
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
