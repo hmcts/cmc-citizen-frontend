@@ -95,21 +95,13 @@ async function successHandler (res, next) {
 
     let features: string
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
-      features = 'admissions,'
+      features = 'admissions'
     }
 
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-      features += 'directions_questionnaire'
+      features += features === undefined ? 'directions_questionnaire' : ', directions_questionnaire'
     }
-
-    // if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
-    //   await claimStoreClient.saveClaim(draft, user, 'admissions')
-    // } else {
-    //   await claimStoreClient.saveClaim(draft, user)
-    // }
-
     await claimStoreClient.saveClaim(draft, user, features)
-
   }
 
   await new DraftService().delete(draft.id, user.bearerToken)
