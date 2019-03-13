@@ -27,7 +27,7 @@
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     {{ t('Waiting for the defendant to pay you.') }}
   {% else %}
-  {{ t('Respond to the defendant.') }}
+    {{ t('Respond to the defendant.') }}
   {% endif %}
 
 {% endmacro %}
