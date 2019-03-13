@@ -24,7 +24,7 @@
 
           {% if not fallbackPage %}
             {% if defendantView %}
-              <p>{{ t('The nearest court to {{ postcode }} is {{ courtName }} ', { postcode: postcode, courtName: form.valueFor('courtName')}) }}</p>
+              <p>{{ t('The nearest court to {{ postcode }} is {{ courtName }} ', { postcode: form.valueFor('courtPostcode'), courtName: form.valueFor('courtName')}) }}</p>
             {% else %}
               <p>{{ t('You can choose any location - {{ courtName }} is nearest to the home address you gave us.', { courtName: form.valueFor('courtName')}) }}</p>
             {% endif %}
@@ -51,13 +51,13 @@
 
             <div class="js-hidden" id="courtAccepted-no">
               <h1 class="heading-medium">Choose another court</h1>
-              {{ radioOption(form = form, label = 'Enter court name', name = 'anotherCourt', value = 'true', checked = form.valueFor('otherWitnesses') === true, bold = true) }}
-              <div class="form-group panel panel-border-narrow js-hidden " id="anotherCourt-true" aria-hidden="false">
+              {{ radioOption(form = form, label = 'Enter court name', name = 'alternativeOption', value = 'name', checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
                 {{ textInput(label = t('Court name'), form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-30') }}
               </div>
-              {{ radioOption(form = form, label = 'Search by postcode', name = 'anotherCourt', value = 'false', checked = form.valueFor('anotherCourt') === false, bold = true) }}
-              <div class="form-group panel panel-border-narrow js-hidden " id="anotherCourt-false" aria-hidden="false">
-                {{ textInput(label = t('Postcode'), form = form, name = 'courtPostcode', inputClass = 'form-control-1-10') }}
+              {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
+                {{ textInput(label = t('Postcode'), form = form, name = 'alternativePostcode', inputClass = 'form-control-1-10') }}
               </div>
 
             </div>
@@ -65,6 +65,8 @@
             <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
             {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
           {% endif %}
+          <input type="hidden" name="courtName" value="{{ form.valueFor("courtName") }}">
+          <input type="hidden" name="courtPostcode" value="{{ form.valueFor("courtPostcode") }}">
         </fieldset>
         {{ saveAndContinueButton() }}
       </form>
