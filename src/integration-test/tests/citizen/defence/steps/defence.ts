@@ -274,10 +274,10 @@ export class DefenceSteps {
   }
 
   checkAndSendAndSubmit (defendantType: PartyType): void {
-    if (defendantType === PartyType.INDIVIDUAL) {
-      defendantCheckAndSendPage.checkFactsTrueAndSubmit()
-    } else {
+    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
       defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
+    } else {
+      defendantCheckAndSendPage.checkFactsTrueAndSubmit()
     }
   }
 
