@@ -20,15 +20,15 @@
           <p>{{ t('A witness is someone who can confirm facts about the claim, for example someone who saw work being done.') }}</p>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
           {{
-          radioOption(form = form, label = 'Yes', name = 'otherWitnesses', value = 'true', checked = form.valueFor('otherWitnesses') === true, bold = true)
+          radioOption(form = form, label = 'Yes', name = 'otherWitnesses', value = YesNoOption.YES.option, checked = form.valueFor('otherWitnesses').option === YesNoOption.YES.option)
           }}
 
-          <div class="form-group panel panel-border-narrow js-hidden " id="otherWitnesses-true" aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden " id="otherWitnesses-yes" aria-hidden="false">
             {{ numericInput(label = t('How many?'), form = form, name = 'howMany', inputClass = 'form-control-1-8') }}
           </div>
 
           {{
-          radioOption(form = form, label = 'No', name = 'otherWitnesses', value = 'false', checked = form.valueFor('otherWitnesses') === false, bold = true)
+          radioOption(form = form, label = 'No', name = 'otherWitnesses', value = YesNoOption.NO.option, checked = form.valueFor('otherWitnesses').option === YesNoOption.NO.option)
           }}
 
         </fieldset>

@@ -6,6 +6,7 @@ import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { OtherWitnesses } from 'directions-questionnaire/forms/models/otherWitnesses'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('OtherWitnesses', () => {
   describe('constructor', () => {
@@ -33,13 +34,13 @@ describe('OtherWitnesses', () => {
     })
 
     it('should reject other witnesses with yes option and no how many present', () => {
-      const errors = validator.validateSync(new OtherWitnesses(true))
+      const errors = validator.validateSync(new OtherWitnesses(YesNoOption.YES))
       expect(errors).to.not.be.empty
       expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
     })
 
     it('should accept other witness with option and how many present' , () => {
-      const errors = validator.validateSync(new OtherWitnesses(true, 1))
+      const errors = validator.validateSync(new OtherWitnesses(YesNoOption.YES, 1))
       expect(errors).to.be.empty
     })
   })
@@ -51,17 +52,17 @@ describe('OtherWitnesses', () => {
     })
 
     it('Should be marked complete when the no option is selected', () => {
-      const otherWitnesses: OtherWitnesses = new OtherWitnesses(false)
+      const otherWitnesses: OtherWitnesses = new OtherWitnesses(YesNoOption.NO)
       expect(otherWitnesses.isCompleted()).to.be.true
     })
 
     it('Should be marked not complete when the yes option is selected and no how many present', () => {
-      const otherWitnesses: OtherWitnesses = new OtherWitnesses(true)
+      const otherWitnesses: OtherWitnesses = new OtherWitnesses(YesNoOption.YES)
       expect(otherWitnesses.isCompleted()).to.be.false
     })
 
     it('Should be marked complete when the yes option is selected and how many is present', () => {
-      const otherWitnesses: OtherWitnesses = new OtherWitnesses(true, 1)
+      const otherWitnesses: OtherWitnesses = new OtherWitnesses(YesNoOption.YES, 1)
       expect(otherWitnesses.isCompleted()).to.be.true
     })
   })
