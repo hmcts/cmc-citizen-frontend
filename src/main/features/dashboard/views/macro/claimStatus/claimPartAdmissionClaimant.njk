@@ -25,7 +25,7 @@
 {% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
 
   {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    {{ t('Waiting for the defendant to pay you') }}
+    {{ t('Waiting for the defendant to pay you.') }}
   {% else %}
   {{ t('Respond to the defendant.') }}
   {% endif %}
