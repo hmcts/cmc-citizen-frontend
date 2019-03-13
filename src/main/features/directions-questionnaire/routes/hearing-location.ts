@@ -12,9 +12,10 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'shared/errorHandling'
 import { YesNoOption } from 'models/yesNoOption'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, fallbackPage: boolean) {
-  res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage })
+  res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage, defendantView: isPartyDefendant(res) })
 }
 
 async function getNearestCourt (postcode: string): Promise<Court> {
@@ -28,16 +29,32 @@ async function getNearestCourt (postcode: string): Promise<Court> {
   }
 }
 
+function isPartyDefendant (res: express.Response): boolean {
+  return (!res.locals.claim.response)
+}
+
+function getDefaultPostcode (res: express.Response): string {
+  const claim: Claim = res.locals.claim
+  if (isPartyDefendant(res)) {
+    const responseDraft: Draft<ResponseDraft> = res.locals.responseDraft
+    if (responseDraft.document.defendantDetails.partyDetails) {
+      return responseDraft.document.defendantDetails.partyDetails.address.postcode
+    } else {
+      return claim.claimData.defendant.address.postcode
+    }
+  } else {
+    return claim.claimData.claimant.address.postcode
+  }
+}
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.hearingLocationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
-
       let form: Form<HearingLocation> = new Form<HearingLocation>(new HearingLocation())
-      const claim: Claim = res.locals.claim
+
       if (!draft.document.hearingLocation) {
-        const court: Court = await getNearestCourt(claim.claimData.defendant.address.postcode)
+        const court: Court = await getNearestCourt(getDefaultPostcode(res))
         if (court) {
           form.model.courtName = court.name
         }

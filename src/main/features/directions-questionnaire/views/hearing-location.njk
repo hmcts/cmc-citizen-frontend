@@ -17,48 +17,50 @@
               {{ t('Do you want witnesses to give evidence?') }}
             </span>
           </legend>
-        <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
-        <p>{{ t('We’ll use the location you choose unless the defendant has an exceptional reason to object, for example accessibility needs.') }}</p>
+          {% if not defendantView %}
+            <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
+            <p>{{ t('We’ll use the location you choose unless the defendant has an exceptional reason to object, for example accessibility needs.') }}</p>
+          {% endif %}
 
           {% if not fallbackPage %}
-        <p>{{ t('You can choose any location - {{ courtName }} is nearest to the home address you gave us.', { courtName: form.valueFor('courtName')}) }}</p>
-          <h1 class="heading-medium">{{ t('Do you want to choose {{ courtName }}', { courtName: form.valueFor('courtName') }) }}</h1>
-          {{ radioGroup(
-            form = form,
-            label = heading,
-            labelForScreenReadersOnly = true,
-            name = 'courtAccepted',
-            options = [
-              {
-                label: 'Yes',
-                value: YesNoOption.YES.option,
-                checked: form.valueFor('courtAccepted') === YesNoOption.YES
-              },
-              {
-                label: 'No',
-                value: YesNoOption.NO.option,
-                checked: form.valueFor('courtAccepted') === YesNoOption.NO
-              }
-            ]
-          )
-          }}
+            {% if defendantView %}
+              <p>{{ t('The nearest court to {{ postcode }} is {{ courtName }} ', { postcode: postcode, courtName: form.valueFor('courtName')}) }}</p>
+            {% else %}
+              <p>{{ t('You can choose any location - {{ courtName }} is nearest to the home address you gave us.', { courtName: form.valueFor('courtName')}) }}</p>
+            {% endif %}
+            <h1
+              class="heading-medium">{{ t('Do you want to choose {{ courtName }}', { courtName: form.valueFor('courtName') }) }}</h1>
+            {{ radioGroup(
+              form = form,
+              label = heading,
+              labelForScreenReadersOnly = true,
+              name = 'courtAccepted',
+              options = [
+                {
+                  label: 'Yes',
+                  value: YesNoOption.YES.option,
+                  checked: form.valueFor('courtAccepted') === YesNoOption.YES
+                },
+                {
+                  label: 'No',
+                  value: YesNoOption.NO.option,
+                  checked: form.valueFor('courtAccepted') === YesNoOption.NO
+                }
+              ]
+            ) }}
 
-        <div class="js-hidden" id="courtAccepted-no">
-            <h1 class="heading-medium">Choose another court</h1>
-          {{
-          radioOption(form = form, label = 'Enter court name', name = 'anotherCourt', value = 'true', checked = form.valueFor('otherWitnesses') === true, bold = true)
-          }}
-          <div class="form-group panel panel-border-narrow js-hidden " id="anotherCourt-true" aria-hidden="false">
-            {{ textInput(label = t('Court name'), form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-30') }}
-          </div>
-          {{
-          radioOption(form = form, label = 'Search by postcode', name = 'anotherCourt', value = 'false', checked = form.valueFor('anotherCourt') === false, bold = true)
-          }}
-          <div class="form-group panel panel-border-narrow js-hidden " id="anotherCourt-false" aria-hidden="false">
-            {{ textInput(label = t('Postcode'), form = form, name = 'courtPostcode', inputClass = 'form-control-1-10') }}
-          </div>
+            <div class="js-hidden" id="courtAccepted-no">
+              <h1 class="heading-medium">Choose another court</h1>
+              {{ radioOption(form = form, label = 'Enter court name', name = 'anotherCourt', value = 'true', checked = form.valueFor('otherWitnesses') === true, bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="anotherCourt-true" aria-hidden="false">
+                {{ textInput(label = t('Court name'), form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-30') }}
+              </div>
+              {{ radioOption(form = form, label = 'Search by postcode', name = 'anotherCourt', value = 'false', checked = form.valueFor('anotherCourt') === false, bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="anotherCourt-false" aria-hidden="false">
+                {{ textInput(label = t('Postcode'), form = form, name = 'courtPostcode', inputClass = 'form-control-1-10') }}
+              </div>
 
-        </div>
+            </div>
           {% else %}
             <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
             {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
