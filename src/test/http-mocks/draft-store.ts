@@ -570,7 +570,7 @@ export const sampleMediationDraftObj = {
     option: FreeMediationOption.YES
   },
   youCanOnlyUseMediation: {
-    option: FreeMediationOption.YES
+    option: FreeMediationOption.NO
   }
 }
 
