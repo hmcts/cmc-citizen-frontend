@@ -25,7 +25,6 @@ import { InterestDateType } from 'common/interestDateType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
-import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -262,9 +261,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
-            if (FeatureToggles.isEnabled('mediation')) {
-              draftStoreServiceMock.resolveDelete()
-            }
+            draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .post(pagePath)
