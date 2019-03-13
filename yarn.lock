@@ -1551,10 +1551,10 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeceptjs@^2.0.6:
-  version "2.0.6"
-  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.0.6.tgz#64145672ee9700c61b17d0a287f841d17381c71b"
-  integrity sha512-IF0eO/BZv1GSymaUflVYOFDXHTFI41CpQecDPi4tFBQofNWfvi9TLr37bvlJxOeA/4uxsFWlGpTU3LxlC4l6xw==
+codeceptjs@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.0.7.tgz#d97e3e73981482deb5ae21073cc4c46ab98b1c10"
+  integrity sha512-SUKA5KY9tF0Nb+5B0CvURlvPTDki25IaRMC227yRCliAoWQ6LDW0GEcVqVXkllIUw6WiaPiZFV2JPs4Lq5efoQ==
   dependencies:
     allure-js-commons "^1.3.2"
     archiver "^3.0.0"
@@ -3667,10 +3667,10 @@ helmet-csp@2.7.1:
     dasherize "2.0.0"
     platform "1.3.5"
 
-helmet@^3.15.1:
-  version "3.15.1"
-  resolved "https://registry.yarnpkg.com/helmet/-/helmet-3.15.1.tgz#2c80d1a59138b6f23929605afca4b1c88b3298ec"
-  integrity sha512-hgoNe/sjKlKNvJ3g9Gz149H14BjMMWOCmW/DTXl7IfyKGtIK37GePwZrHNfr4aPXdKVyXcTj26RgRFbPKDy9lw==
+helmet@^3.16.0:
+  version "3.16.0"
+  resolved "https://registry.yarnpkg.com/helmet/-/helmet-3.16.0.tgz#7df41a4bfe4c83d90147c1e30d70893f92a9d97c"
+  integrity sha512-rsTKRogc5OYGlvSHuq5QsmOsOzF6uDoMqpfh+Np8r23+QxDq+SUx90Rf8HyIKQVl7H6NswZEwfcykinbAeZ6UQ==
   dependencies:
     depd "2.0.0"
     dns-prefetch-control "0.1.0"
@@ -3682,8 +3682,8 @@ helmet@^3.15.1:
     helmet-csp "2.7.1"
     hide-powered-by "1.0.0"
     hpkp "2.0.0"
-    hsts "2.1.0"
-    ienoopen "1.0.0"
+    hsts "2.2.0"
+    ienoopen "1.1.0"
     nocache "2.0.0"
     referrer-policy "1.1.0"
     x-xss-protection "1.1.0"
@@ -3726,9 +3726,12 @@ hpkp@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/hpkp/-/hpkp-2.0.0.tgz#10e142264e76215a5d30c44ec43de64dee6d1672"
 
-hsts@2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/hsts/-/hsts-2.1.0.tgz#cbd6c918a2385fee1dd5680bfb2b3a194c0121cc"
+hsts@2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/hsts/-/hsts-2.2.0.tgz#09119d42f7a8587035d027dda4522366fe75d964"
+  integrity sha512-ToaTnQ2TbJkochoVcdXYm4HOCliNozlviNsg+X2XQLQvZNI/kCHR9rZxVYpJB3UPcHz80PgxRyWQ7PdU1r+VBQ==
+  dependencies:
+    depd "2.0.0"
 
 http-cache-semantics@3.8.1:
   version "3.8.1"
@@ -3860,9 +3863,10 @@ ieee754@^1.1.4:
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.12.tgz#50bf24e5b9c8bb98af4964c941cdb0918da7b60b"
   integrity sha512-GguP+DRY+pJ3soyIiGPTvdiVXjZ+DbXOxGpXn3eMvNW4x4irjqXm4wHKscC+TfxSJ0yw/S1F24tqdMNsMZTiLA==
 
-ienoopen@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ienoopen/-/ienoopen-1.0.0.tgz#346a428f474aac8f50cf3784ea2d0f16f62bda6b"
+ienoopen@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ienoopen/-/ienoopen-1.1.0.tgz#411e5d530c982287dbdc3bb31e7a9c9e32630974"
+  integrity sha512-MFs36e/ca6ohEKtinTJ5VvAJ6oDRAYFdYXweUnGY9L9vcoqFOU4n2ZhmJ0C4z/cwGZ3YIQRSB3XZ1+ghZkY5NQ==
 
 ignore-by-default@^1.0.1:
   version "1.0.1"
@@ -7901,10 +7905,10 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@^3.3.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.1.tgz#6de14e1db4b8a006ac535e482c8ba018c55f750b"
-  integrity sha512-cTmIDFW7O0IHbn1DPYjkiebHxwtCMU+eTy30ZtJNBPF9j2O1ITu5XH2YnBeVRKWHqF+3JQwWJv0Q0aUgX8W7IA==
+typescript@^3.3.3333:
+  version "3.3.3333"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.3.3333.tgz#171b2c5af66c59e9431199117a3bcadc66fdcfd6"
+  integrity sha512-JjSKsAfuHBE/fB2oZ8NxtRTk5iGcg6hkYXMnZ3Wc+b2RSqejEqTaem11mHASMnFilHrax3sLK0GDzcJrekZYLw==
 
 ua-parser-js@^0.7.9:
   version "0.7.17"
