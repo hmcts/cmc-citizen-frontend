@@ -9,6 +9,7 @@ import { DraftService } from 'services/draftService'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { DirectionsQuestionnaireGuard } from 'directions-questionnaire/guard/directionsQuestionnaireGuard'
 import { RouterFinder } from 'shared/router/routerFinder'
+import { ResponseDraft } from 'response/draft/responseDraft'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -35,6 +36,9 @@ export class DirectionsQuestionnaireFeature {
         res.locals.draft = res.locals.directionsQuestionnaireDraft
         next()
       })
+    app.all(allDQs, DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
+      return new ResponseDraft().deserialize(value)
+    }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }
