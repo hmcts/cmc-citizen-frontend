@@ -70,8 +70,6 @@ export default express.Router()
           } else {
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
           }
-        } else if (paidEqualToClaimed) {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         } else if (admissionsEnabled) {
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         } else {

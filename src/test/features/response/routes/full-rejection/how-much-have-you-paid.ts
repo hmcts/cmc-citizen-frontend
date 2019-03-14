@@ -134,7 +134,7 @@ describe(`Defendant: reject all - ${header}`, () => {
         testValidPost(0, true,
           Paths.taskListPage.evaluateUri({ externalId: externalId }))
         testValidPost(0, false,
-          Paths.taskListPage.evaluateUri({ externalId: externalId }))
+          Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
         testValidPost(1, true,
           Paths.taskListPage.evaluateUri({ externalId: externalId }))
         testValidPost(1, false,

@@ -2,6 +2,7 @@
 {% set heading = 'Judgment amount' %}
 {% from "form.njk" import submitButton %}
 {% from "interestSnippet.njk" import interestSnippet %}
+{% from "internalLink.njk" import internalLink %}
 
 {% block content %}
 <div class="grid-row">
@@ -75,7 +76,7 @@
     </div>
 
     <div class="form-group">
-      <a class="button" href="{{ nextPageUrl }}">{{ t('Continue') }}</a>
+      {{ internalLink(t('Continue'), nextPageUrl, 'button') }}
     </div>
   </div>
 </div>
