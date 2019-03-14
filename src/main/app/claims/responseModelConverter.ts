@@ -107,7 +107,9 @@ export class ResponseModelConverter {
       mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
       mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
-        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
