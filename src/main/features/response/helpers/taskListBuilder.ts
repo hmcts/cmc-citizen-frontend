@@ -34,6 +34,8 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -276,7 +278,12 @@ export class TaskListBuilder {
     if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
       ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       let path: string
-      path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
+      if (getPreferredParty(claim) === MadeBy.DEFENDANT) {
+        path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
+      } else {
+        path = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId })
+      }
+
       return new TaskList(
       'Tell us more about the claim', [
         new TaskListItem(

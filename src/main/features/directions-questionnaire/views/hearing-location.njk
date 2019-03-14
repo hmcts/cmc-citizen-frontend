@@ -9,24 +9,24 @@
       <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Location"
             data-event-label-from="courtAccepted" novalidate>
         {{ csrfProtection(csrf) }}
-        {% set court = { name: 'Test court name' } %}
-        {% set error = form.errorFor('courtAccepted') %}
-        <fieldset id="otherWitnesses[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset id="otherWitnesses[label]" class="form-group {% if form.hasErrors() %} form-group-error {% endif %}">
           <legend>
             <span class="visuallyhidden">
               {{ t('Do you want witnesses to give evidence?') }}
             </span>
           </legend>
-          {% if not defendantView %}
-            <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
-            <p>{{ t('We’ll use the location you choose unless the defendant has an exceptional reason to object, for example accessibility needs.') }}</p>
-          {% endif %}
 
+          {% set courtName = form.valueFor('courtName') %}
+          {% set courtPostcode = form.valueFor('courtPostcode') %}
           {% if not fallbackPage %}
-            {% if defendantView %}
-              <p>{{ t('The nearest court to {{ postcode }} is {{ courtName }} ', { postcode: form.valueFor('courtPostcode'), courtName: form.valueFor('courtName')}) }}</p>
-            {% else %}
-              <p>{{ t('You can choose any location - {{ courtName }} is nearest to the home address you gave us.', { courtName: form.valueFor('courtName')}) }}</p>
+            {% if courtPostcode %}
+              <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
+            {% elseif party === MadeBy.DEFENDANT %}
+              <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
+              <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
+              <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}</p>
+            {% elseif party === MadeBy.CLAIMANT %}
+              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}
             {% endif %}
             <h1
               class="heading-medium">{{ t('Do you want to choose {{ courtName }}', { courtName: form.valueFor('courtName') }) }}</h1>
@@ -48,7 +48,6 @@
                 }
               ]
             ) }}
-
             <div class="js-hidden" id="courtAccepted-no">
               <h1 class="heading-medium">Choose another court</h1>
               {{ radioOption(form = form, label = 'Enter court name', name = 'alternativeOption', value = 'name', checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
@@ -59,14 +58,17 @@
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
                 {{ textInput(label = t('Postcode'), form = form, name = 'alternativePostcode', inputClass = 'form-control-1-10') }}
               </div>
-
             </div>
           {% else %}
             <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
             {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
           {% endif %}
-          <input type="hidden" name="courtName" value="{{ form.valueFor("courtName") }}">
-          <input type="hidden" name="courtPostcode" value="{{ form.valueFor("courtPostcode") }}">
+          {% if courtName %}
+            <input type="hidden" name="courtName" value="{{ courtName }}">
+          {% endif %}
+          {% if courtPostcode %}
+            <input type="hidden" name="courtPostcode" value="{{ courtPostcode }}">
+          {% endif %}
         </fieldset>
         {{ saveAndContinueButton() }}
       </form>
