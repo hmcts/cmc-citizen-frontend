@@ -20,7 +20,8 @@ let healthCheckConfig = {
   }
 }
 
-export default express.Router().use(healthcheck.addTo(healthCheckRouter, healthCheckConfig))
+export default express.Router().use(healthCheckRouter)
+healthcheck.addTo(healthCheckRouter, healthCheckConfig)
 
 function basicHealthCheck (serviceName) {
   const options = {
