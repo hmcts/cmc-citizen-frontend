@@ -9,7 +9,7 @@
 
 {% macro partAdmittedClaimantAcceptsDefendantDashboard(claim) %}
   {{ t('{{ claimantName }} accepted your admission of {{ amount }}',
-    { amount: claim.response.amount, claimantName: claim.claimData.claimant.name }) }}
+    { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) %}
