@@ -11,16 +11,8 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
-import {
-  rejectRetrieveByClaimantId,
-  resolveRetrieveByClaimantId,
-  resolveRetrieveByClaimantIdToEmptyList,
-  resolveRetrieveByDefendantId,
-  resolveRetrieveByDefendantIdToEmptyList,
-  sampleClaimIssueObj,
-  sampleClaimObj
-} from 'test/http-mocks/claim-store'
 import { MomentFactory } from 'shared/momentFactory'
 import {
   baseFullAdmissionData,
@@ -47,7 +39,7 @@ describe('Dashboard page', () => {
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        rejectRetrieveByClaimantId('HTTP error')
+        claimStoreServiceMock.rejectRetrieveByClaimantId('HTTP error')
 
         await request(app)
           .get(Paths.dashboardPage.uri)
@@ -57,8 +49,8 @@ describe('Dashboard page', () => {
 
       context('when no claims issued', () => {
         beforeEach(() => {
-          resolveRetrieveByClaimantIdToEmptyList()
-          resolveRetrieveByDefendantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
+          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
         })
 
         it('should render page with start claim button when everything is fine', async () => {
@@ -73,8 +65,8 @@ describe('Dashboard page', () => {
 
       context('when at least one claim issued', () => {
         beforeEach(() => {
-          resolveRetrieveByClaimantId()
-          resolveRetrieveByDefendantId('000MC001', '1')
+          claimStoreServiceMock.resolveRetrieveByClaimantId()
+          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1')
         })
 
         it('should render page with continue claim button when everything is fine', async () => {
@@ -103,11 +95,11 @@ describe('Dashboard page', () => {
 
         context('as a claimant', () => {
           beforeEach(() => {
-            resolveRetrieveByDefendantIdToEmptyList()
+            claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           })
 
-          it('should show claim issued statuses when the claim is issued', async () => {
-            resolveRetrieveByClaimantId(sampleClaimIssueObj, {
+          it('should show the correct status when the claim is issued', async () => {
+            claimStoreServiceMock.resolveRetrieveByClaimantId(claimStoreServiceMock.sampleClaimIssueObj, {
               responseDeadline: MomentFactory.currentDate().add(1, 'days')
             })
             await request(app)
@@ -118,15 +110,15 @@ describe('Dashboard page', () => {
 
           context('when the claim is in full admission', () => {
             const fullAdmissionClaim = {
-              ...sampleClaimObj,
+              ...claimStoreServiceMock.sampleClaimObj,
               responseDeadline: MomentFactory.currentDate().add(1, 'days'),
               response: {
                 ...baseResponseData,
                 ...baseFullAdmissionData
               }
             }
-            it('should show pay immediately statuses when the claim is marked as pay immediately', async () => {
-              resolveRetrieveByClaimantId(fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(fullAdmissionClaim, {
                 response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
               })
 
@@ -136,8 +128,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('The defendant admits they owe all the money. They’ve said that they will pay immediately.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay immediately and payment is past the deadline', async () => {
-              resolveRetrieveByClaimantId(fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately and payment is past the deadline', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(fullAdmissionClaim, {
                 responseDeadline: MomentFactory.currentDate().subtract(1, 'days'),
                 response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
               })
@@ -148,8 +140,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('The defendant has not responded to your claim. You can request a County Court Judgment against them.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by set date', async () => {
-              resolveRetrieveByClaimantId(fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by set date', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(fullAdmissionClaim, {
                 response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
               })
 
@@ -159,8 +151,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('The defendant has offered to pay by a set date. You can accept or reject their offer.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by instalments', async () => {
-              resolveRetrieveByClaimantId(fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by instalments', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(fullAdmissionClaim, {
                 response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
               })
 
@@ -172,7 +164,7 @@ describe('Dashboard page', () => {
           })
           context('when the claim is in partial admission', () => {
             const partAdmissionClaim = {
-              ...sampleClaimObj,
+              ...claimStoreServiceMock.sampleClaimObj,
               responseDeadline: MomentFactory.currentDate().add(1, 'days'),
               response: {
                 ...baseResponseData,
@@ -180,8 +172,8 @@ describe('Dashboard page', () => {
                 amount: 30
               }
             }
-            it('should show pay immediately statuses when the claim is marked as pay immediately', async () => {
-              resolveRetrieveByClaimantId(partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayImmediatelyData }
               })
 
@@ -191,8 +183,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay immediately and the offer is accepted', async () => {
-              resolveRetrieveByClaimantId(partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately and the offer is accepted', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
                 claimantResponse: baseAcceptationClaimantResponseData
               })
@@ -203,8 +195,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('You’ve accepted the defendant’s part admission. They said they’d pay immediately.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay immediately and the offer is accepted and response is after the deadline', async () => {
-              resolveRetrieveByClaimantId(partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately and the offer is accepted and response is after the deadline', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
                 claimantResponse: baseAcceptationClaimantResponseData,
                 responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
@@ -216,8 +208,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('The defendant has not responded to your claim. You can request a County Court Judgment against them.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by set date', async () => {
-              resolveRetrieveByClaimantId(partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by set date', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayBySetDateData }
               })
 
@@ -227,8 +219,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by instalments', async () => {
-              resolveRetrieveByClaimantId(partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by instalments', async () => {
+              claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
               })
 
@@ -242,11 +234,11 @@ describe('Dashboard page', () => {
 
         context('as a defendant', () => {
           beforeEach(() => {
-            resolveRetrieveByClaimantIdToEmptyList()
+            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           })
 
-          it('should show claim issued statuses when the claim is issued', async () => {
-            resolveRetrieveByDefendantId('000MC001', '1', sampleClaimIssueObj, {
+          it('should show the correct status when the claim is issued', async () => {
+            claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', claimStoreServiceMock.sampleClaimIssueObj, {
               responseDeadline: MomentFactory.currentDate().add(1, 'days')
             })
 
@@ -258,15 +250,15 @@ describe('Dashboard page', () => {
 
           context('when the claim is in full admission', () => {
             const fullAdmissionClaim = {
-              ...sampleClaimObj,
+              ...claimStoreServiceMock.sampleClaimObj,
               responseDeadline: MomentFactory.currentDate().add(1, 'days'),
               response: {
                 ...baseResponseData,
                 ...baseFullAdmissionData
               }
             }
-            it('should show pay immediately statuses when the claim is marked as pay immediately', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
                 response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
               })
 
@@ -276,8 +268,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('You’ve admitted all of the claim and said you’ll pay the full amount immediately.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay immediately and payment is past the deadline', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately and payment is past the deadline', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
                 response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
                 responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
               })
@@ -288,8 +280,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by set date', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by set date', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
                 response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
               })
 
@@ -299,8 +291,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by instalments', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by instalments', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullAdmissionClaim, {
                 response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
               })
 
@@ -312,7 +304,7 @@ describe('Dashboard page', () => {
           })
           context('when the claim is in partial admission', () => {
             const partAdmissionClaim = {
-              ...sampleClaimObj,
+              ...claimStoreServiceMock.sampleClaimObj,
               responseDeadline: MomentFactory.currentDate().add(1, 'days'),
               response: {
                 ...baseResponseData,
@@ -320,8 +312,8 @@ describe('Dashboard page', () => {
                 amount: 30
               }
             }
-            it('should show pay immediately statuses when the claim is marked as pay immediately', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayImmediatelyData }
               })
 
@@ -331,8 +323,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('You’ve admitted part of the claim.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay immediately and the offer is accepted', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay immediately and the offer is accepted', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
                 claimantResponse: baseAcceptationClaimantResponseData
               })
@@ -343,8 +335,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('John Smith accepted your admission of £30'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay immediately and the offer is accepted and response is after the deadline', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
+            it('should show show the correct status when the claim is marked as pay immediately and the offer is accepted and response is after the deadline', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
                 claimantResponse: baseAcceptationClaimantResponseData,
                 responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
@@ -356,8 +348,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by set date', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by set date', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayBySetDateData }
               })
 
@@ -367,8 +359,8 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText('You’ve admitted part of the claim.'))
             })
 
-            it('should show pay immediately statuses when the claim is marked as pay by instalments', async () => {
-              resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
+            it('should show the correct status when the claim is marked as pay by instalments', async () => {
+              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim, {
                 response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
 
               })
