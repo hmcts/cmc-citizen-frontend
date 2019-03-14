@@ -40,7 +40,7 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
 
-    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)
+    if (!ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)
       && (draft.isResponsePartiallyAdmitted() || draft.isResponseFullyAdmitted())) {
       delete draft.response.type
     }
@@ -87,7 +87,7 @@ export class TaskListBuilder {
         )
       )
 
-      if (ClaimFeatureToggles.areAdmissionsEnabled(claim)
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)
         && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
         && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
         tasks.push(
@@ -110,7 +110,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
+    if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)) {
       if (draft.isResponseFullyAdmitted()) {
         tasks.push(
           new TaskListItem(
@@ -273,7 +273,8 @@ export class TaskListBuilder {
   }
 
   static buildDirectionsQuestionnaireSection (draft: ResponseDraft, claim: Claim, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
-    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directions_questionnaire')) {
       let path: string
       path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
       return new TaskList(
@@ -294,8 +295,8 @@ export class TaskListBuilder {
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidClaimAmount(claim, draft)
-      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidMoreThenClaimAmount(claim, draft))
-      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft))
+      || (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && TaskListBuilder.isRejectedFullyBecausePaidMoreThenClaimAmount(claim, draft))
+      || (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft))
       || draft.isResponseFullyAdmitted()
       || draft.isResponsePartiallyAdmitted()) {
       tasks.push(
