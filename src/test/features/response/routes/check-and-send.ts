@@ -263,10 +263,6 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
 
-            if (FeatureToggles.isEnabled('mediation')) {
-              draftStoreServiceMock.resolveDelete()
-            }
-
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
