@@ -68,7 +68,12 @@
             {{ evidenceFragment(claim.response.evidence) }}
           {% endif %}
         {% else %}
-          {{ t('{{ defendantName }} states they paid you {{ amount }}.', { defendantName: defendantName, amount: claim.totalAmountTillToday | numeral }) }}
+          {{ t('{{ defendantName }} states they paid you {{ amount }}.',
+            {
+              defendantName: defendantName,
+              amount: (claim.response.paymentDeclaration.paidAmount if claim.response.paymentDeclaration.paidAmount else claim.totalAmountTillToday) | numeral
+            }
+          ) }}
 
           {{ paymentInformationFragment(paymentDeclaration = claim.response.paymentDeclaration) }}
 

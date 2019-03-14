@@ -26,6 +26,7 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 
@@ -300,7 +301,8 @@ export class TaskListBuilder {
   static buildDirectionsQuestionnaireSection (draft: DraftClaimantResponse,
                                               claim: Claim,
                                               directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
-    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       let path: string
       if (getPreferredParty(claim) === MadeBy.CLAIMANT) {
         path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })

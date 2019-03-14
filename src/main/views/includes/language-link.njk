@@ -1,9 +1,7 @@
-{% macro link(code, name) %}
-  <a href="?lang={{ code }}">{{ name }}</a>
-{% endmacro %}
+{% from "internalLink.njk" import internalLink %}
 
 {% if language === 'en' %}
-  {{ link('cy', 'Cymraeg') }}
+  {{ internalLink('Cymraeg', '?lang=cy') }}
 {% else %}
-  {{ link('en', 'English') }}
+  {{ internalLink('English', '?lang=en') }}
 {% endif %}
