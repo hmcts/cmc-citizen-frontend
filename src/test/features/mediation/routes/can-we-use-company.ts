@@ -45,7 +45,7 @@ if (FeatureToggles.isEnabled('mediation')) {
         })
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response:full-rejection', {defendantDetails: {partyDetails: {...draftStoreServiceMock.sampleOrganisationDetails}}})
+          draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
           await request(app)
@@ -81,34 +81,34 @@ if (FeatureToggles.isEnabled('mediation')) {
         context('when form is valid', () => {
           it('should redirect to defendant task list when defendant says yes', async () => {
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', {defendantDetails: {partyDetails: {...draftStoreServiceMock.sampleOrganisationDetails}}})
+            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: '07777777777'})
+              .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: '07777777777' })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should show validation error when defendant says yes with no phone number', async () => {
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', {defendantDetails: {partyDetails: {...draftStoreServiceMock.sampleOrganisationDetails}}})
+            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
             claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: undefined})
+              .send({ option: FreeMediationOption.YES, mediationPhoneNumberConfirmation: undefined })
               .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
           })
 
           it('should redirect to response task list when no was chosen and a phone number and a contact is given', async () => {
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', {defendantDetails: {partyDetails: {...draftStoreServiceMock.sampleOrganisationDetails}}})
+            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
@@ -122,24 +122,24 @@ if (FeatureToggles.isEnabled('mediation')) {
               })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should show validation error when defendant says no with no phone number', async () => {
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', {defendantDetails: {partyDetails: {...draftStoreServiceMock.sampleOrganisationDetails}}})
+            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
             claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({option: FreeMediationOption.NO, mediationPhoneNumber: undefined})
+              .send({ option: FreeMediationOption.NO, mediationPhoneNumber: undefined })
               .expect(res => expect(res).to.be.successful.withText('div class="error-summary"'))
           })
 
           it('should show validation error when defendant says no with no contact name', async () => {
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response:full-rejection', {defendantDetails: {partyDetails: {...draftStoreServiceMock.sampleOrganisationDetails}}})
+            draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
             claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
             await request(app)

@@ -95,7 +95,7 @@ if (FeatureToggles.isEnabled('mediation')) {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({option: FreeMediationOption.YES})
+                .send({ option: FreeMediationOption.YES })
                 .expect(res => expect(res).to.be.serverError.withText('Error'))
             })
 
@@ -108,10 +108,10 @@ if (FeatureToggles.isEnabled('mediation')) {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({option: FreeMediationOption.YES})
+                .send({ option: FreeMediationOption.YES })
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(MediationPaths.mediationAgreementPage
-                    .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
             })
 
             it('should redirect to response task list when No was chosen and no response is available', async () => {
@@ -123,10 +123,10 @@ if (FeatureToggles.isEnabled('mediation')) {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({option: FreeMediationOption.NO})
+                .send({ option: FreeMediationOption.NO })
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(ResponsePaths.taskListPage
-                    .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
             })
           })
         })
@@ -148,10 +148,10 @@ if (FeatureToggles.isEnabled('mediation')) {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({option: FreeMediationOption.NO})
+            .send({ option: FreeMediationOption.NO })
             .expect(res => expect(res).to.be.redirect
               .toLocation(ClaimantResponsePaths.taskListPage
-                .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
       })
     })

@@ -56,7 +56,7 @@ if (FeatureToggles.isEnabled('mediation')) {
         })
         it('should render page when everything is fine and defendant phone number is not provided', async () => {
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response', {defendantDetails: {mobilePhone: {number: undefined}}})
+          draftStoreServiceMock.resolveFind('response', { defendantDetails: { mobilePhone: { number: undefined } } })
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
           await request(app)
@@ -99,7 +99,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({option: FreeMediationOption.YES, mediationPhoneNumber: undefined})
+              .send({ option: FreeMediationOption.YES, mediationPhoneNumber: undefined })
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
@@ -112,10 +112,10 @@ if (FeatureToggles.isEnabled('mediation')) {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({option: FreeMediationOption.YES})
+              .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to response task list when No was chosen and a phone number is given', async () => {
@@ -133,7 +133,7 @@ if (FeatureToggles.isEnabled('mediation')) {
               })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.taskListPage
-                  .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
       })

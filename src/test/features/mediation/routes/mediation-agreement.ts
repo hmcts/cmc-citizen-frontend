@@ -127,7 +127,7 @@ if (FeatureToggles.isEnabled('mediation')) {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({reject: 'I don’t agree'})
+                .send({ reject: 'I don’t agree' })
                 .expect(res => expect(res).to.be.serverError.withText('Error'))
             })
 
@@ -142,10 +142,10 @@ if (FeatureToggles.isEnabled('mediation')) {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({accept: 'I agree'})
+                .send({ accept: 'I agree' })
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(MediationPaths.canWeUsePage
-                    .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
             })
 
             it('should redirect to response task list when No was chosen and it is defendant', async () => {
@@ -159,9 +159,9 @@ if (FeatureToggles.isEnabled('mediation')) {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({reject: 'I don’t agree'})
+                .send({ reject: 'I don’t agree' })
                 .expect(res => expect(res).to.be.redirect
-                  .toLocation(ResponsePaths.taskListPage.evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                  .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
             })
 
             it('should redirect to claimant response task list when No was chosen and it is claimant', async () => {
@@ -175,10 +175,10 @@ if (FeatureToggles.isEnabled('mediation')) {
               await request(app)
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .send({reject: 'I don’t agree'})
+                .send({ reject: 'I don’t agree' })
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(ClaimantResponsePaths.taskListPage
-                    .evaluateUri({externalId: claimStoreServiceMock.sampleClaimObj.externalId})))
+                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
             })
           })
         })
