@@ -41,6 +41,7 @@ export const defenceWithAmountClaimedAlreadyPaidData = {
   defenceType: 'ALREADY_PAID',
   paymentDeclaration: {
     paidDate: '2017-12-31',
+    paidAmount: '100',
     explanation: 'I paid in cash'
   }
 }
@@ -557,4 +558,13 @@ export const partialAdmissionWithPaymentBySetDateDataPaymentDateAfterMonth = {
     paymentDate: MomentFactory.currentDate().add(50, 'days')
   },
   amount: 3000
+}
+
+export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '20000',
+    explanation: 'I paid in cash'
+  }
 }
