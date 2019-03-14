@@ -9,19 +9,23 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
 
 function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
-  res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, { form: form, currentParty: getUsersRole(res.locals.claim, res.locals.user) })
+  res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, { form: form, party: getUsersRole(res.locals.claim, res.locals.user) })
 }
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.hearingExceptionalCircumstancesPage.uri,
+    ExceptionalCircumstancesGuard.requestHandler,
     (req: express.Request, res: express.Response) => {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
       renderPage(res, new Form<ExceptionalCircumstances>(draft.document.exceptionalCircumstances))
     })
-  .post(Paths.hearingExceptionalCircumstancesPage.uri, FormValidator.requestHandler(ExceptionalCircumstances, ExceptionalCircumstances.fromObject),
+  .post(Paths.hearingExceptionalCircumstancesPage.uri,
+    ExceptionalCircumstancesGuard.requestHandler,
+    FormValidator.requestHandler(ExceptionalCircumstances, ExceptionalCircumstances.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<ExceptionalCircumstances> = req.body
 
