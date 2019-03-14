@@ -121,7 +121,7 @@ describe('Defendant user details: your date of birth page', () => {
                 known: 'true', date: {
                   year: fifteenYearsAgo.year(),
                   month: fifteenYearsAgo.month(),
-                  day: fifteenYearsAgo.day()
+                  day: fifteenYearsAgo.date()
                 }
               })
               .expect(res => expect(res).to.be.redirect
