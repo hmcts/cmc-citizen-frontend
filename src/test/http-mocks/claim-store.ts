@@ -408,10 +408,10 @@ export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason: string = 
     .reply(HttpStatus.NOT_FOUND, reason)
 }
 
-export function resolveRetrieveByClaimantId (claimOverride?: object) {
+export function resolveRetrieveByClaimantId (claim: object = sampleClaimObj, claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...claimOverride }])
+    .reply(HttpStatus.OK, [{ ...claim, ...claimOverride }])
 }
 
 export function resolveRetrieveByClaimantIdToEmptyList () {
@@ -456,10 +456,10 @@ export function rejectRetrieveByLetterHolderId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string) {
+export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string, claim: object = sampleClaimObj, claimOverride?: any) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
+    .reply(HttpStatus.OK, [{ ...claim, referenceNumber: referenceNumber, defendantId: defendantId, ...claimOverride }])
 }
 
 export function rejectRetrieveByDefendantId (reason: string) {
@@ -638,10 +638,4 @@ export function resolveSavePaidInFull () {
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
-}
-
-export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
-  mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/claimant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleData }])
 }
