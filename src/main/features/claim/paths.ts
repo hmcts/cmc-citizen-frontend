@@ -43,5 +43,5 @@ export class Paths {
 }
 
 export class ErrorPaths {
-  static readonly amountExceededPage = new RoutablePath('/claim/amount-exceeded')
+  static readonly amountExceededPage = new RoutablePath('/eligibility/not-eligible?reason=claim-value-over-10000')
 }
