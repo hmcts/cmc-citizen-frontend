@@ -6,17 +6,21 @@ import * as path from 'path'
 import { FeatureToggles } from 'utils/featureToggles'
 
 /* tslint:disable:no-default-export */
-export default express.Router()
-  .get('/health', healthcheck.configure({
-    checks: {
-      'claimstore': basicHealthCheck('claim-store'),
-      'draft-store': basicHealthCheck('draft-store'),
-      'fees': basicHealthCheck('fees'),
-      'pay': basicHealthCheck('pay'),
-      'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
-      'idam-api': basicHealthCheck('idam.api')
-    }
-  }))
+
+let healthCheckRouter = express.Router()
+
+let healthCheckConfig = {
+  checks: {
+    'claimstore': basicHealthCheck('claim-store'),
+    'draft-store': basicHealthCheck('draft-store'),
+    'fees': basicHealthCheck('fees'),
+    'pay': basicHealthCheck('pay'),
+    'idam-service-2-service-auth': basicHealthCheck('idam.service-2-service-auth'),
+    'idam-api': basicHealthCheck('idam.api')
+  }
+}
+
+export default express.Router().use(healthcheck.addTo(healthCheckRouter, healthCheckConfig))
 
 function basicHealthCheck (serviceName) {
   const options = {
