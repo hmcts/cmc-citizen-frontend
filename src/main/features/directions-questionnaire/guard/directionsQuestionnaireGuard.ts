@@ -9,7 +9,7 @@ const logger = Logger.getLogger('directions-questionnaire/guards/directionsQuest
 export class DirectionsQuestionnaireGuard {
   static requestHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
     const claim: Claim = res.locals.claim
-    if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
+    if (!ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       logger.warn('State guard: direction questionnaire feature not found - redirecting to dashboard')
       res.redirect(DashboardPaths.dashboardPage.uri)
     } else {
