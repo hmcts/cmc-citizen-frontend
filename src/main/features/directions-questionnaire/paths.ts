@@ -7,4 +7,5 @@ export class Paths {
   static readonly selfWitnessPage = new RoutablePath(`${directionsQuestionnairePath}/self-witness`)
   static readonly otherWitnessesPage = new RoutablePath(`${directionsQuestionnairePath}/other-witnesses`)
   static readonly datesPage = new RoutablePath(`${directionsQuestionnairePath}/dates`)
+  static readonly hearingExceptionalCircumstancesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-exceptional-circumstances`)
 }
