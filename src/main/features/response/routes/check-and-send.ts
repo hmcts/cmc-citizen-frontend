@@ -121,9 +121,10 @@ export default express.Router()
             next(new Error('Unknown response type: ' + responseType))
         }
 
+        const draftService = new DraftService()
         if (form.model.type === SignatureType.QUALIFIED) {
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService().save(draft, user.bearerToken)
+          await draftService.save(draft, user.bearerToken)
         }
         await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
         await new DraftService().delete(draft.id, user.bearerToken)
