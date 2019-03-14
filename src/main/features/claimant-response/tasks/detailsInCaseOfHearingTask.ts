@@ -5,6 +5,5 @@ export class DetailsInCaseOfHearingTask {
   static isCompleted (draft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
     return directionsQuestionnaireDraft.otherWitnesses.isCompleted() &&
       directionsQuestionnaireDraft.selfWitness.isCompleted()
-
   }
 }

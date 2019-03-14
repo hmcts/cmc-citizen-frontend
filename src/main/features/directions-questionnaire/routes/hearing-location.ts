@@ -13,9 +13,12 @@ import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'shared/errorHandling'
 import { YesNoOption } from 'models/yesNoOption'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { MadeBy } from 'offer/form/models/madeBy'
+import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { User } from 'idam/user'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, fallbackPage: boolean) {
-  res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage, defendantView: isPartyDefendant(res) })
+  res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage, party: getUsersRole(res.locals.claim, res.locals.user) })
 }
 
 async function getNearestCourt (postcode: string): Promise<Court> {
@@ -29,13 +32,10 @@ async function getNearestCourt (postcode: string): Promise<Court> {
   }
 }
 
-function isPartyDefendant (res: express.Response): boolean {
-  return (!res.locals.claim.response)
-}
-
 function getDefaultPostcode (res: express.Response): string {
   const claim: Claim = res.locals.claim
-  if (isPartyDefendant(res)) {
+  const user: User = res.locals.user
+  if (getUsersRole(claim, user) === MadeBy.DEFENDANT) {
     const responseDraft: Draft<ResponseDraft> = res.locals.responseDraft
     if (responseDraft.document.defendantDetails.partyDetails) {
       return responseDraft.document.defendantDetails.partyDetails.address.postcode
@@ -46,25 +46,28 @@ function getDefaultPostcode (res: express.Response): string {
     return claim.claimData.claimant.address.postcode
   }
 }
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.hearingLocationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      let form: Form<HearingLocation> = new Form<HearingLocation>(new HearingLocation())
 
       if (!draft.document.hearingLocation) {
-        const court: Court = await getNearestCourt(getDefaultPostcode(res))
+        const postcode: string = getDefaultPostcode(res)
+        const court: Court = await getNearestCourt(postcode)
         if (court) {
-          form.model.courtName = court.name
-          form.model.courtPostcode = getDefaultPostcode(res)
+          renderPage(res, new Form<HearingLocation>(new HearingLocation(court.name)), false)
+        } else {
+          renderPage(res, new Form<HearingLocation>(new HearingLocation()), true)
         }
-        renderPage(res, form, court === undefined)
+
       } else {
-        form.model.courtName = draft.document.hearingLocation
-        form.model.courtAccepted = YesNoOption.YES
-        form.model.courtPostcode = draft.document.hearingLocationPostcode
-        renderPage(res, form, false)
+        renderPage(res, new Form<HearingLocation>(
+          new HearingLocation(draft.document.hearingLocation,
+            draft.document.hearingLocationPostcode,
+            YesNoOption.YES)),
+          false)
       }
     } catch (err) {
       next(err)
@@ -84,10 +87,12 @@ export default express.Router()
           if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
             const court: Court = await getNearestCourt(form.model.alternativePostcode)
             if (court !== undefined) {
-              form.model = new HearingLocation(undefined, court.name, form.model.alternativePostcode)
+              form.model = new HearingLocation(court.name, form.model.alternativePostcode)
             }
             renderPage(res, form, court === undefined)
+
           } else {
+
             if (form.model.courtAccepted === YesNoOption.NO) {
               draft.document.hearingLocation = form.model.alternativeCourtName
             } else {
@@ -98,6 +103,7 @@ export default express.Router()
             await new DraftService().save(draft, user.bearerToken)
             res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: res.locals.claim.externalId }))
           }
+
         } catch (err) {
           next(err)
         }

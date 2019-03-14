@@ -13,14 +13,15 @@ export class AlternativeCourtOption {
 }
 
 export class HearingLocation {
-  @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  courtAccepted?: YesNoOption
 
   @IsDefined()
   courtName?: string
 
-  @IsDefined()
+  @IsValidPostcode()
   courtPostcode?: string
+
+  @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
+  courtAccepted?: YesNoOption
 
   @ValidateIf(o => o.courtAccepted.option === YesNoOption.NO.option)
   @IsDefined()
@@ -37,9 +38,9 @@ export class HearingLocation {
   @IsValidPostcode()
   alternativePostcode?: string
 
-  constructor (courtAccepted?: YesNoOption,
-               courtName?: string,
+  constructor (courtName?: string,
                courtPostcode?: string,
+               courtAccepted?: YesNoOption,
                alternativeOption?: string,
                alternativeCourtName?: string,
                alternativePostcode?: string) {
@@ -57,9 +58,9 @@ export class HearingLocation {
     }
 
     return new HearingLocation(
-      YesNoOption.fromObject(value.courtAccepted),
       value.courtName,
       value.courtPostcode,
+      YesNoOption.fromObject(value.courtAccepted),
       value.alternativeOption,
       value.alternativeCourtName,
       value.alternativePostcode)
