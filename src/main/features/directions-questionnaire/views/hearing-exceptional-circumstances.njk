@@ -1,0 +1,44 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, textArea, saveAndContinueButton, errorSummary %}
+
+
+{% if party === MadeBy.CLAIMANT %}
+  {% set courtName = 'Placeholder court name' %}
+  {% set heading = t('The hearing will be held at {{ courtName }}?', { courtName: courtName }) %}
+{% elseif %}
+  {% set heading = t('The hearing will be held at the claimant’s chosen court') %}
+{% endif %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('The defendant chose this location.') }}</p>
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Self Witness" data-event-label-from="selfWitness" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {% set error = form.hasErrors() %}
+        <fieldset id="option[label]" class="form-group {% if error %} form-group-error {% endif %}">
+          <legend>
+            <span class="visuallyhidden">
+              {{ t('Are there exceptional circumstances (like accessibility needs) which mean you want to ask for the hearing to be held at a different location?') }}
+            </span>
+          </legend>
+
+          <p>{{ t('Are there exceptional circumstances (like accessibility needs) which mean you want to ask for the hearing to be held at a different location?') }}</p>
+          {{
+          radioOption(form = form, label = 'Yes', name = 'option', value = YesNoOption.YES.option, checked = form.valueFor('option').option === YesNoOption.YES.option, bold = true)
+          }}
+          <div class="form-group panel panel-border-narrow js-hidden " id="option-yes" aria-hidden="false">
+            {{ textArea(label = t('Briefly explain your reasons'), form = form, name = 'reason', inputClass = 'form-control-3-4') }}
+          </div>
+          {{
+          radioOption(form = form, label = 'No', name = 'option', value = YesNoOption.NO.option, checked = form.valueFor('option').option === YesNoOption.NO.option, bold = true)
+          }}
+
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
