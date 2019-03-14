@@ -261,7 +261,6 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
-            draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .post(pagePath)
