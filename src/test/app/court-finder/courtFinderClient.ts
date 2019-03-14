@@ -75,11 +75,22 @@ describe('CourtFinderClient', () => {
           })
     })
 
+    it('should return valid false for bad request', () => {
+      nock(mockClient)
+        .get(/\/search\/results.json\?postcode=.+&aol=.+/)
+        .reply(400, [])
+
+      return courtFinderClient.findMoneyClaimCourtsByPostcode('B222BB')
+        .then((courtResponse: CourtFinderResponse) => {
+          chai.expect(courtResponse).eql({ courts: [], statusCode: 400, valid: false })
+        })
+    })
+
     it('should return found courts', () => {
       nock(mockClient)
           .get(/\/search\/results.json\?postcode=.+&aol=.+/)
           .reply(200, apiData)
-      return courtFinderClient.findMoneyClaimCourtsByPostcode('A111AA')
+      return courtFinderClient.findMoneyClaimCourtsByPostcode('C333CC')
           .then((courtResponse: CourtFinderResponse) => {
             chai.expect(courtResponse).eql(expectedResponse)
           })
