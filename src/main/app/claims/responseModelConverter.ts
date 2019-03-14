@@ -206,9 +206,7 @@ export class ResponseModelConverter {
         } else {
           return mediationDraft.canWeUseCompany.mediationPhoneNumber
         }
-      }
-
-      if (mediationDraft.canWeUse) {
+      } else if (mediationDraft.canWeUse) {
         if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
           if (!claim.isResponseSubmitted()) {
             return draft.defendantDetails.mobilePhone.number
