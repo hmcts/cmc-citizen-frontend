@@ -164,8 +164,9 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
-    const claimantResponseTestData = new ClaimantResponseTestData()
+    const claimantResponseTestData = new UnreasonableClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeCourtOfferedInstalmentsPage = true
+    claimantResponseTestData.pageSpecificValues.settleClaimEnterDate = '2019-01-01'
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
@@ -176,7 +177,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('County Court Judgment')
-    claimantResponseSteps.settleClaim(testData, claimantResponseTestData, 'Tell us you\'ve been paid')
+    claimantResponseSteps.settleClaim(testData, claimantResponseTestData, 'Tell us you’ve been paid')
     I.see('The claim is now settled')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
