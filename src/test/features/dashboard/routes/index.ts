@@ -340,7 +340,7 @@ describe('Dashboard page', () => {
               await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('John Smith accepted your admission of 30'))
+                .expect(res => expect(res).to.be.successful.withText('John Smith accepted your admission of £30'))
             })
 
             it('should show pay immediately statuses when the claim is marked as pay immediately and the offer is accepted and response is after the deadline', async () => {
