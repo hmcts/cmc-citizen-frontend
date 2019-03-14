@@ -5,6 +5,7 @@
 {% from "form.njk" import csrfProtection %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
 {% from "summaryTable.njk" import timelineSummary, evidenceSummary %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set evidenceRows = claim.claimData.evidence.getPopulatedRowsOnly() if claim.claimData.evidence %}
 
@@ -31,7 +32,8 @@
       {% endif %}
 
       <p><span class="bold-small">{{ t('Download the claim') }}</span></p>
-      <p><a href="{{ pdfUrl.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
+      <p>{{ internalLink(t('Download claim'), pdfUrl.evaluateUri({ externalId: claim.externalId })) }}
+        {{ t('(PDF)') }}</p>
     </div>
   </div>
 {% endblock %}
