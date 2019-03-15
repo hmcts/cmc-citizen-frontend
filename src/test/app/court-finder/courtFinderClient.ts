@@ -66,13 +66,13 @@ describe('CourtFinderClient', () => {
   describe('findMoneyClaimCourtsByPostcode', () => {
     it('should return valid false if no court found', () => {
       nock(mockClient)
-        .get(/\/search\/results.json\?postcode=.+&aol=.+/)
-        .reply(404, [])
+          .get(/\/search\/results.json\?postcode=.+&aol=.+/)
+          .reply(404, [])
 
       return courtFinderClient.findMoneyClaimCourtsByPostcode('A111AA')
-        .then((courtResponse: CourtFinderResponse) => {
-          chai.expect(courtResponse).eql({ courts: [], statusCode: 404, valid: false })
-        })
+          .then((courtResponse: CourtFinderResponse) => {
+            chai.expect(courtResponse).eql({ courts: [], statusCode: 404, valid: false })
+          })
     })
 
     it('should return valid false for bad request', () => {
@@ -88,12 +88,12 @@ describe('CourtFinderClient', () => {
 
     it('should return found courts', () => {
       nock(mockClient)
-        .get(/\/search\/results.json\?postcode=.+&aol=.+/)
-        .reply(200, apiData)
+          .get(/\/search\/results.json\?postcode=.+&aol=.+/)
+          .reply(200, apiData)
       return courtFinderClient.findMoneyClaimCourtsByPostcode('C333CC')
-        .then((courtResponse: CourtFinderResponse) => {
-          chai.expect(courtResponse).eql(expectedResponse)
-        })
+          .then((courtResponse: CourtFinderResponse) => {
+            chai.expect(courtResponse).eql(expectedResponse)
+          })
     })
 
     it('should reject promise if no postcode', () =>
