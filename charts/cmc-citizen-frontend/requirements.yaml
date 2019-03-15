@@ -1,9 +1,14 @@
 dependencies:
   - name: nodejs
-    version: 0.2.1
+    version: ~0.2.1
     repository: '@hmcts'
   - name: rpe-feature-toggle-api
-    version: 0.0.7
+    version: ~0.0.7
     repository: '@hmcts'
     tags:
       - rpe-feature-toggle-api-pod
+  - name: cmc-claim-store
+    version: ~0.0.6
+    repository: '@hmcts'
+    tags:
+      - cmc-claim-store-pod

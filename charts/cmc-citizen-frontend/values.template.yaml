@@ -1,5 +1,6 @@
 tags:
-  - rpe-feature-toggle-api
+  - rpe-feature-toggle-api-pod
+  - cmc-claim-store-pod
 
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
@@ -29,7 +30,10 @@ nodejs:
   cpuRequests: 0.2
   memoryLimits: 512Mi
   cpuLimits: 1
+  readinessDelay: 90 # cmc-claim-store-pod will start much slower
+  livenessDelay: 90  # cmc-claim-store-pod will start much slower
   environment:
+    CLAIM_STORE_URL: http://${SERVICE_NAME}-java # local cmc-claim-store-pod
     IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
     IDAM_URL: https://preprod-idamapi.reform.hmcts.net:3511
     IDAM_AUTHENTICATION_WEB_URL: https://idam.preprod.ccidam.reform.hmcts.net
@@ -38,7 +42,6 @@ nodejs:
     IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
     FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
@@ -69,3 +72,13 @@ nodejs:
       - citizen-draft-store-secondary
       - citizen-cookie-encryption-key
       - staff-email
+
+cmc-claim-store:
+  java:
+    image: hmcts.azurecr.io/hmcts/cmc-claim-store:latest  # master
+    environment:
+      SEND_LETTER_URL: false                              # disable bulk print requests
+      CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-claim-store-postgres
+      CMC_DB_HOST: ${SERVICE_NAME}-claim-store-postgres
+      FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
+      RESPOND_TO_CLAIM_URL: https://www-${SERVICE_FQDN}/first-contact/start
