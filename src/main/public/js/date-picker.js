@@ -52,8 +52,7 @@ var datePickerUtils = {
       content: '<span>' + day + '</span>'
     };
     if (day === '1') {
-      var html = '<span>' + day + '</span><p class="first-of-month">' + month + '</p>';
-      displayMonth.content = html;
+      displayMonth.content = '<span>' + day + '</span><p class="first-of-month">' + month + '</p>';
     }
     return displayMonth;
   }
@@ -90,10 +89,8 @@ var datePicker = {
 
     // Update the date-picker with dates that have already been added.
     var d = datePicker.getData().map(function(date) {
-      console.log(date);
       return date.value
     });
-    console.log(d);
     datePicker.selector().datepicker('setDates', d);
   },
 
@@ -112,14 +109,13 @@ var datePicker = {
       'SUN'
     ];
     var dow = $('.dow');
-    $.each(dow, function(index, day) {
+    $.each(dow, function(index) {
       $(this).text(days[index]);
     });
   },
 
   toggleArrows: function(nextOrPrevArrow) {
-    var assetPath = $('#asset-path').data('path');
-    return '<img src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png">';
+    return '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png">';
   },
 
   changeDateHandler: function(event) {
@@ -193,17 +189,13 @@ var datePicker = {
   },
 
   removeDate: function (dates) {
-    console.log(dates);
     var data = datePicker.getData();
-    console.log(data);
     var oldDates = data.map(function (date) {
       return date.value
     });
     var newDates = dates;
     var dateToRemove = _.differenceWith(oldDates, newDates, _.isEqual).toString();
     var index = datePickerUtils.getIndexFromDate(data, dateToRemove);
-
-    console.log(index);
 
     return datePicker.displayDateList(newDates);
   },
@@ -220,9 +212,9 @@ var datePicker = {
 };
 
 /* global $ */
-// $(document).ready(function () {
-//   if ($('#date-picker').length) {
-//     $('.add-another-add-link').hide();
-//     datePicker.init();
-//   }
-// });
+$(document).ready(function () {
+  if ($('#date-picker').length) {
+    $('.add-another-add-link').hide();
+    datePicker.init();
+  }
+});
