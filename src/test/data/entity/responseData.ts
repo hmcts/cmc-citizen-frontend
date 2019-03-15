@@ -18,14 +18,6 @@ export const baseResponseData = {
   freeMediation: 'no'
 }
 
-export const baseResponseDataMediation = {
-  defendant: individual,
-  moreTimeNeeded: 'no',
-  freeMediation: 'yes',
-  mediationPhoneNumber: '07777777777',
-  mediationContactPerson: 'Mary Richards'
-}
-
 const baseCompanyResponseData = {
   defendant: company,
   moreTimeNeeded: 'no'
@@ -37,23 +29,9 @@ const baseDefenceData = {
   freeMediation: 'no'
 }
 
-const baseDefenceDataMediation = {
-  responseType: 'FULL_DEFENCE',
-  defence: 'My defence',
-  freeMediation: 'yes',
-  mediationPhoneNumber: '07777777777',
-  mediationContactPerson: 'Mary Richards'
-}
-
 export const defenceWithDisputeData = {
   ...baseResponseData,
   ...baseDefenceData,
-  defenceType: 'DISPUTE'
-}
-
-export const defenceWithDisputeDataMediation = {
-  ...baseResponseDataMediation,
-  ...baseDefenceDataMediation,
   defenceType: 'DISPUTE'
 }
 
@@ -101,13 +79,6 @@ export const basePayBySetDateData = {
 export const basePartialAdmissionData = {
   responseType: 'PART_ADMISSION',
   freeMediation: 'no'
-}
-
-export const basePartialAdmissionDataMediation = {
-  responseType: 'PART_ADMISSION',
-  freeMediation: 'yes',
-  mediationPhoneNumber: '07777777777',
-  mediationContactPerson: 'Mary Richards'
 }
 
 const basePartialEvidencesAndTimeLines = {
@@ -432,15 +403,6 @@ export const partialAdmissionWithSoMPaymentBySetDateData = {
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }
-}
-
-export const partialAdmissionWithImmediatePaymentCompanyData = {
-  ...baseCompanyResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  ...basePayImmediatelyData,
-  amount: 3000
 }
 
 export const partialAdmissionWithPaymentBySetDateCompanyData = {

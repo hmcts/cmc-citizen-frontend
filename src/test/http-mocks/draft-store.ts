@@ -566,6 +566,7 @@ export const sampleClaimantResponseDraftObj = {
 }
 
 export const sampleMediationDraftObj = {
+  freeMediation: 'yes',
   willYouTryMediation: {
     option: FreeMediationOption.YES
   },
