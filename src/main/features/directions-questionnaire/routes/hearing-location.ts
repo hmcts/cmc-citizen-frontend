@@ -101,7 +101,7 @@ export default express.Router()
             draft.document.hearingLocationPostcode = form.model.courtPostcode
 
             await new DraftService().save(draft, user.bearerToken)
-            res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
           }
 
         } catch (err) {
