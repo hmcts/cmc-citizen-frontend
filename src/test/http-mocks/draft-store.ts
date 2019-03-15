@@ -570,7 +570,16 @@ export const sampleMediationDraftObj = {
     option: FreeMediationOption.YES
   },
   youCanOnlyUseMediation: {
-    option: FreeMediationOption.NO
+    option: FreeMediationOption.YES
+  },
+  canWeUse: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777'
+  },
+  canWeUseCompany: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777',
+    mediationContactPerson: 'Mary Richards'
   }
 }
 
