@@ -104,8 +104,18 @@ describe('Directions Questionnaire - hearing location', () => {
 
   describe('on POST', () => {
     const validFormDataAccept = { courtAccepted: 'yes', courtName: 'Test court' }
-    const validFormDataAcceptAlternatePostcode = { courtAccepted: 'no', alternativeOption: 'postcode', alternativePostcode: 'a111aa', courtName: 'Test court' }
-    const validFormDataAcceptAlternateName = { courtAccepted: 'no', alternativeOption: 'name', alternativeCourtName: 'Test Court Name', courtName: 'Test court' }
+    const validFormDataAcceptAlternatePostcode = {
+      courtAccepted: 'no',
+      alternativeOption: 'postcode',
+      alternativePostcode: 'a111aa',
+      courtName: 'Test court'
+    }
+    const validFormDataAcceptAlternateName = {
+      courtAccepted: 'no',
+      alternativeOption: 'name',
+      alternativeCourtName: 'Test Court Name',
+      courtName: 'Test court'
+    }
     const invalidFormData = { courtAccepted: 'no' }
 
     const method = 'post'
@@ -210,6 +220,35 @@ describe('Directions Questionnaire - hearing location', () => {
         })
       })
 
+      context('when submit from fallback page', () => {
+        context('when form is valid', () => {
+          it('should redirect to expert page', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ alternativeCourtName: 'Test' })
+              .expect(res => expect(res).to.be.redirect.toLocation(expertPath))
+          })
+        })
+
+        context('when form is invalid', () => {
+          it('should render the page with errors', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            draftStoreServiceMock.resolveFind('response')
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ alternativeCourtName: undefined })
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', 'div class="error-summary"'))
+          })
+        })
+      })
     })
   })
 

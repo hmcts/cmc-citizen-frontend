@@ -64,9 +64,7 @@ export default express.Router()
 
       } else {
         renderPage(res, new Form<HearingLocation>(
-          new HearingLocation(draft.document.hearingLocation,
-            draft.document.hearingLocationPostcode,
-            YesNoOption.YES)),
+          new HearingLocation(draft.document.hearingLocation, undefined, YesNoOption.YES)),
           false)
       }
     } catch (err) {
@@ -93,17 +91,15 @@ export default express.Router()
 
           } else {
 
-            if (form.model.courtAccepted === YesNoOption.NO) {
+            if (form.model.courtAccepted === undefined) {
               draft.document.hearingLocation = form.model.alternativeCourtName
             } else {
               draft.document.hearingLocation = form.model.courtName
             }
-            draft.document.hearingLocationPostcode = form.model.courtPostcode
 
             await new DraftService().save(draft, user.bearerToken)
             res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
           }
-
         } catch (err) {
           next(err)
         }

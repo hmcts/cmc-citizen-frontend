@@ -21,7 +21,7 @@ export function getPartyForType (type: PartyType): any {
   }
 }
 
-export function createClaim (claimant: PartyType, defendant: PartyType, currentParty: MadeBy): any {
+export function createClaim (claimant: PartyType, defendant: PartyType, currentParty: MadeBy = MadeBy.CLAIMANT): any {
   return {
     ...claimStoreServiceMock.sampleClaimIssueCommonObj,
     features: ['directionsQuestionnaire'],
