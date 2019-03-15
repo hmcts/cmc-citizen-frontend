@@ -1,3 +1,5 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% set claimantName = claim.claimData.claimant.name %}
 
 <h2 class="heading-small">{{ t('If you agreed to try mediation') }}</h2>
@@ -10,7 +12,7 @@
 
 {% if claim.response.defenceType !== DefenceType.ALREADY_PAID %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-  <p>{{ t('You can still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to repair goods you sold the claimant or suggest a payment.',
-      { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+  <p>{{ t('You can still {{ settleOutOfCourt }}. For example you could offer to repair goods you sold the claimant or suggest a payment.',
+      { settleOutOfCourt: internalLink(t('settle the claim out of court'), OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId })) }) | safe }}</p>
   <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
 {% endif %}
