@@ -3,7 +3,7 @@ import { Paths } from 'response/paths'
 
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
-import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { DateOfBirth, ValidationErrors } from 'forms/models/dateOfBirth'
 import { PartyType } from 'common/partyType'
 import { ErrorHandling } from 'shared/errorHandling'
 import { IndividualDetails } from 'forms/models/individualDetails'
@@ -12,6 +12,8 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
+
+const dateUnder18Pattern: string = ValidationErrors.DATE_UNDER_18.replace('%s', '.*')
 
 function renderView (form: Form<DateOfBirth>, res: express.Response) {
   res.render(Paths.defendantDateOfBirthPage.associatedView, {
@@ -40,7 +42,11 @@ export default express.Router()
       const form: Form<DateOfBirth> = req.body
       const claim: Claim = res.locals.claim
       if (form.hasErrors()) {
-        renderView(form, res)
+        if (form.errors.some(error => error.message.search(dateUnder18Pattern) >= 0)) {
+          res.redirect(Paths.under18Page.evaluateUri({ externalId: claim.externalId }))
+        } else {
+          renderView(form, res)
+        }
       } else {
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
