@@ -52,7 +52,6 @@ export default express.Router()
         const { externalId } = req.params
 
         const paidLessThanClaimed = form.model.amount < claim.totalAmountTillToday
-        const paidEqualToClaimed = form.model.amount === claim.totalAmountTillToday
         const admissionsEnabled = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)
 
         if (!paidLessThanClaimed) {
