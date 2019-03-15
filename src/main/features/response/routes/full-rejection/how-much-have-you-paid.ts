@@ -52,7 +52,6 @@ export default express.Router()
         const { externalId } = req.params
 
         const paidLessThanClaimed = form.model.amount < claim.totalAmountTillToday
-        const paidEqualToClaimed = form.model.amount === claim.totalAmountTillToday
         const admissionsEnabled = ClaimFeatureToggles.areAdmissionsEnabled(claim)
 
         if (!paidLessThanClaimed) {
@@ -70,8 +69,6 @@ export default express.Router()
           } else {
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
           }
-        } else if (paidEqualToClaimed) {
-          res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         } else if (admissionsEnabled) {
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
         } else {

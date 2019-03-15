@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
 {% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
@@ -18,7 +19,8 @@
           <span class="bold">{{ claim.respondedAt | date }}</span>
         </p>
         <p class="receipt-download-container">
-          <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a> (PDF)
+          {{ internalLink(t('Download your response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+          {{ t('(PDF)') }}
         </p>
       </div>
 
@@ -48,7 +50,7 @@
 
       {% include "includes/service_survey_link.njk" %}
 
-      <p><a class="button" href="{{ DashboardPaths.dashboardPage.uri }}">{{ t('Go to your account') }}</a></p>
+      <p>{{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
 
       {{ supportWidget() }}
     </div>
