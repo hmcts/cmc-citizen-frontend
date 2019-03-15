@@ -127,7 +127,9 @@ export default express.Router()
           await draftService.save(draft, user.bearerToken)
         }
         await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
-        await new DraftService().delete(draft.id, user.bearerToken)
+        await draftService.delete(draft.id, user.bearerToken)
+        await draftService.delete(mediationDraft.id, user.bearerToken)
+
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
