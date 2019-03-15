@@ -94,8 +94,8 @@
     "ts-node": "^8.0.3",
     "tsconfig-paths": "^3.8.0",
     "typescript": "^3.3.3333",
-    "uuid": "^3.3.2",
-    "yarn": "^1.13.0"
+    "tslint-microsoft-contrib": "^6.1.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
@@ -121,7 +121,7 @@
     "gulp-sass": "^4.0.2",
     "husky": "^1.3.1",
     "jsonwebtoken": "^8.5.0",
-    "mocha": "^6.0.2",
+    "mocha": "^5.2.0",
     "mocha-junit-reporter": "^1.18.0",
     "mocha-multi": "^1.0.1",
     "mocha-parallel-tests": "^2.0.5",
