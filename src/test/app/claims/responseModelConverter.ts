@@ -398,7 +398,7 @@ describe('ResponseModelConverter', () => {
       it('should convert already paid partial admission', () => {
         const responseDraft = prepareResponseDraft({
           ...partialAdmissionAlreadyPaidDraft,
-          ...sampleMediationDraftObj,
+          ...sampleMediationDraftObj
         }, individualDetails)
         const responseData = preparePartialResponseData({
           ...partialAdmissionAlreadyPaidData,
