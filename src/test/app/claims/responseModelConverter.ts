@@ -291,6 +291,26 @@ describe('ResponseModelConverter', () => {
         })
       })
 
+      it(`should convert company who says YES to mediation and they confirm number`, () => {
+        const responseDraft = prepareResponseDraft({
+          ...defenceWithAmountClaimedAlreadyPaidDraft,
+          ...sampleMediationDraftObj,
+          ...{ canWeUseCompany: {
+            option: FreeMediationOption.YES,
+            mediationPhoneNumberConfirmation: '07777777777',
+            mediationContactPerson: 'Mary Richards'
+          } }
+        }, companyDetails)
+        const responseData = preparePartialResponseData({
+          ...partialAdmissionFromStatesPaidDefence,
+          ...mediationResponseData
+        }, company)
+        const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+        expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, claim)))
+          .to.deep.equal(Response.deserialize(responseData))
+      })
+
       it('should not convert payment declaration for defence with dispute', () => {
         const responseDraft = prepareResponseDraft({
           ...defenceWithDisputeDraft,
@@ -490,21 +510,19 @@ describe('ResponseModelConverter', () => {
           .to.deep.equal(convertObjectLiteralToJSON(responseData))
       })
 
-      it('should convert partial admission paid by instalments with complete SoM', () => {
+      it('should convert partial admission with Mediation canWeUse FreeMediation to YES', () => {
         const responseDraft = prepareResponseDraft({
           ...partialAdmissionWithPaymentByInstalmentsDraft,
           ...sampleMediationDraftObj,
-          ...{ canWeUseCompany: {
+          ...{ canWeUse: {
             option: FreeMediationOption.YES,
-            mediationPhoneNumberConfirmation: '07777777777',
+            mediationPhoneNumber: '07777777777',
             mediationContactPerson: 'Mary Richards'
-          } },
-          statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
+          } }
         }, individualDetails)
         const responseData = preparePartialResponseData({
           ...partialAdmissionWithPaymentByInstalmentsData,
-          ...mediationResponseData,
-          statementOfMeans: { ...statementOfMeansWithAllFieldsData }
+          ...mediationResponseData
         }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
