@@ -26,6 +26,7 @@ import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { FeatureToggles } from 'utils/featureToggles'
+import * as HttpStatus from 'http-status-codes'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -273,6 +274,18 @@ describe('Defendant response: check and send page', () => {
               .send({ signed: 'true', type: SignatureType.BASIC })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to confirmation page when form is valid with SignatureType as qualified', async () => {
+            draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ signed: 'true', type: SignatureType.QUALIFIED })
+              .expect(HttpStatus.OK)
           })
 
           it('should redirect to counter-claim hand off page when defendant is counter claiming', async () => {
