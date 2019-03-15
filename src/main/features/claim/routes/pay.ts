@@ -99,7 +99,7 @@ async function successHandler (res, next) {
     }
 
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-      features += features === undefined ? 'directions_questionnaire' : ', directions_questionnaire'
+      features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
     }
     await claimStoreClient.saveClaim(draft, user, features)
   }

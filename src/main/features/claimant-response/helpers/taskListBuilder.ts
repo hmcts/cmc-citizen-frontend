@@ -26,6 +26,7 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const validator: Validator = new Validator()
 
@@ -298,7 +299,8 @@ export class TaskListBuilder {
   static buildDirectionsQuestionnaireSection (draft: DraftClaimantResponse,
                                               claim: Claim,
                                               directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
-    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       let path: string
       path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
       return new TaskList(
