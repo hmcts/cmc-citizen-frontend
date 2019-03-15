@@ -19,8 +19,8 @@ rpe-feature-toggle-api:
     releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
     environment:
       FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
-  postgresql:
-    postgresqlDatabase: hmcts
+  tags:
+    postgresql-pod: false # will share cmc-claim-store db
 
 nodejs:
   image: ${IMAGE_NAME}
@@ -82,3 +82,5 @@ cmc-claim-store:
       CMC_DB_HOST: ${SERVICE_NAME}-claim-store-postgres
       FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://www-${SERVICE_FQDN}/first-contact/start
+  tags:
+    cmc-citizen-frontend-pod: false
