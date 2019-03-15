@@ -8,13 +8,11 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   selfWitness?: SelfWitness
   otherWitnesses?: OtherWitnesses
   hearingLocation?: string
-  hearingLocationPostcode?: string
   exceptionalCircumstances?: ExceptionalCircumstances
 
   constructor (selfWitness: SelfWitness = new SelfWitness(),
                otherWitnesses: OtherWitnesses = new OtherWitnesses(),
                hearingLocation: string = '',
-               hearingLocationPostcode: string = '',
                exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances()) {
     super()
   }
@@ -25,7 +23,6 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.selfWitness = input.selfWitness
       this.otherWitnesses = input.otherWitnesses
       this.hearingLocation = input.hearingLocation
-      this.hearingLocationPostcode = input.hearingLocationPostcode
       this.exceptionalCircumstances = input.exceptionalCircumstances
     }
     return this
