@@ -15,8 +15,10 @@ import {
   fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate, fullAdmissionWithSoMPaymentBySetDateInNext2Days,
+  fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
+  fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
@@ -352,6 +354,11 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
 }
 
+export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesPaidGreaterThanClaimAmount
+}
+
 export function mockCalculateInterestRate (expected: number): mock.Scope {
   return mock(serviceBaseURL)
     .get('/interest/calculate')
@@ -401,10 +408,10 @@ export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason: string = 
     .reply(HttpStatus.NOT_FOUND, reason)
 }
 
-export function resolveRetrieveByClaimantId (claimOverride?: object) {
+export function resolveRetrieveByClaimantId (claim: object = sampleClaimObj, claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...claimOverride }])
+    .reply(HttpStatus.OK, [{ ...claim, ...claimOverride }])
 }
 
 export function resolveRetrieveByClaimantIdToEmptyList () {
@@ -449,10 +456,10 @@ export function rejectRetrieveByLetterHolderId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string) {
+export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string, claim: object = sampleClaimObj, claimOverride?: any) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
+    .reply(HttpStatus.OK, [{ ...claim, referenceNumber: referenceNumber, defendantId: defendantId, ...claimOverride }])
 }
 
 export function rejectRetrieveByDefendantId (reason: string) {
@@ -631,10 +638,4 @@ export function resolveSavePaidInFull () {
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
-}
-
-export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
-  mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/claimant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleData }])
 }
