@@ -4,6 +4,8 @@
 {% set heading = 'Are there dates in the next 9 months when you or your witnesses can’t go to a hearing?' %}
 
 {% block additional_scripts %}
+  <script src="{{ asset_paths['js'] }}/moment.js"></script>
+  <script src="{{ asset_paths['js'] }}/lodash.js"></script>
   <script src="{{ asset_paths['js'] }}/bootstrap-datepicker.min.js"></script>
   <script src="{{ asset_paths['js'] }}/date-picker.js"></script>
   <link rel="stylesheet" href="{{ asset_paths['style_vendor'] }}/bootstrap-datepicker.standalone.min.css"
@@ -24,13 +26,12 @@
           form = form,
           labelBold = false
         ) }}
-        <div>
-        {#<div class="panel panel-border-narrow js-hidden" id="hasUnavailableDates-true" aria-hidden="false">#}
+        {#<div>#}
+        <div class="panel panel-border-narrow js-hidden" id="hasUnavailableDates-true" aria-hidden="false">
           <h2 class="heading-medium">{{ t('Select the dates you can’t go to a hearing') }}</h2>
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
-          <div id="date-picker"></div>
-          <input type="hidden" id="selected-dates">
-          <h2 class="heading-medium">{{ t('Dates selected') }}</h2>
+          <div id="date-picker" class="datepicker"></div>
+          <h2 class="heading-medium">Dates selected</h2>
           <dl id="dates-cant-attend-list" class="add-another-list">
           </dl>
         </div>
