@@ -7,19 +7,19 @@ import { Paths } from 'directions-questionnaire/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { app } from 'main/app'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as idamServiceMock from '../../../http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
 
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
-import { PartyType } from '../../../../integration-test/data/party-type'
+import { PartyType } from 'integration-test/data/party-type'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { Interest } from 'claims/models/interest'
-import * as SampleParty from '../../../data/entity/party'
 import { InterestDateType } from 'common/interestDateType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as RouteHelper from './helper/dqRouteHelper'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -28,62 +28,8 @@ const expertPath = Paths.expertPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: externalId })
 const dashboardPath = DashboardPaths.dashboardPage.uri
 
-function getPartyForType (type: PartyType): any {
-  switch (type) {
-    case PartyType.SOLE_TRADER:
-      return SampleParty.soleTrader
-    case PartyType.INDIVIDUAL:
-      return SampleParty.individual
-    case PartyType.ORGANISATION:
-      return SampleParty.organisation
-    case PartyType.COMPANY:
-      return SampleParty.company
-  }
-}
-
-function createClaim (claimant: PartyType, defendant: PartyType, currentParty: MadeBy): any {
-  return {
-    ...claimStoreServiceMock.sampleClaimIssueCommonObj,
-    features: ['directionsQuestionnaire'],
-    response: currentParty === MadeBy.CLAIMANT ? claimStoreServiceMock.sampleDefendantResponseObj.response : undefined,
-    claim: {
-      claimants: [
-        {
-          ...getPartyForType(claimant)
-        }
-      ],
-      defendants: [
-        {
-          ...getPartyForType(defendant)
-        }
-      ],
-      payment: {
-        id: '12',
-        amount: 2500,
-        state: { status: 'failed' }
-      },
-      amount: {
-        type: 'breakdown',
-        rows: [{ reason: 'Reason', amount: 200 }]
-      },
-      interest: {
-        type: ClaimInterestType.STANDARD,
-        rate: 10,
-        reason: 'Special case',
-        interestDate: {
-          type: InterestDateType.SUBMISSION,
-          endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
-        } as InterestDate
-      } as Interest,
-      reason: 'Because I can',
-      feeAmountInPennies: 2500,
-      timeline: { rows: [{ date: 'a', description: 'b' }] }
-    }
-  }
-}
-
 function setupMocks (claimant: PartyType, defendant: PartyType, currentParty: MadeBy) {
-  const claimObject = createClaim(claimant, defendant, currentParty)
+  const claimObject = RouteHelper.createClaim(claimant, defendant, currentParty)
   idamServiceMock.resolveRetrieveUserFor(currentParty === MadeBy.CLAIMANT ? claimObject.submitterId : claimObject.defendantId, 'citizen')
   claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimObject)
   draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -155,12 +101,12 @@ function checkAccessGuards (app: any, method: string) {
             claim: {
               claimants: [
                 {
-                  ...getPartyForType(PartyType.INDIVIDUAL)
+                  ...RouteHelper.getPartyForType(PartyType.INDIVIDUAL)
                 }
               ],
               defendants: [
                 {
-                  ...getPartyForType(PartyType.ORGANISATION)
+                  ...RouteHelper.getPartyForType(PartyType.ORGANISATION)
                 }
               ],
               payment: {
@@ -238,13 +184,13 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
       })
 
       it('should return 500 and render error page when cannot retrieve directions questionnaire draft', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(RouteHelper.createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
         draftStoreServiceMock.rejectFind('Error')
         await shouldBeServerError(method, 'Error')
       })
 
       it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(RouteHelper.createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
         draftStoreServiceMock.resolveFind('response')
         await shouldRenderPageWithText('The defendant chose this location', method)
@@ -271,13 +217,13 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
 
       it('should return 500 when cannot retrieve DQ draft', async () => {
         draftStoreServiceMock.rejectFind('Error')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(RouteHelper.createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
         await shouldBeServerError(method, 'Error', validFormData)
       })
 
       context('when form is valid', async () => {
         beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(RouteHelper.createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
         })
@@ -299,7 +245,7 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
 
       context('when form is invalid', async () => {
         it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(RouteHelper.createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
           await shouldRenderPageWithText('div class="error-summary', method, invalidFormData)
