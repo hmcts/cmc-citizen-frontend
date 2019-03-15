@@ -1,6 +1,6 @@
 tags:
-  - rpe-feature-toggle-api-pod
-  - cmc-claim-store-pod
+  rpe-feature-toggle-api-pod: true
+  cmc-claim-store-pod: true
 
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
