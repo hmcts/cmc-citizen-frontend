@@ -39,6 +39,7 @@ import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { sampleMediationDraftObj } from 'test/http-mocks/draft-store'
 import { FeatureToggles } from 'utils/featureToggles'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
   return new ResponseDraft().deserialize({
@@ -476,6 +477,28 @@ describe('ResponseModelConverter', () => {
         const responseDraft = prepareResponseDraft({
           ...partialAdmissionWithPaymentByInstalmentsDraft,
           ...sampleMediationDraftObj,
+          statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
+        }, individualDetails)
+        const responseData = preparePartialResponseData({
+          ...partialAdmissionWithPaymentByInstalmentsData,
+          ...mediationResponseData,
+          statementOfMeans: { ...statementOfMeansWithAllFieldsData }
+        }, individual)
+        const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+        expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, claim)))
+          .to.deep.equal(convertObjectLiteralToJSON(responseData))
+      })
+
+      it('should convert partial admission paid by instalments with complete SoM', () => {
+        const responseDraft = prepareResponseDraft({
+          ...partialAdmissionWithPaymentByInstalmentsDraft,
+          ...sampleMediationDraftObj,
+          ...{ canWeUseCompany: {
+            option: FreeMediationOption.YES,
+            mediationPhoneNumberConfirmation: '07777777777',
+            mediationContactPerson: 'Mary Richards'
+          } },
           statementOfMeans: { ...statementOfMeansWithAllFieldsDraft }
         }, individualDetails)
         const responseData = preparePartialResponseData({
