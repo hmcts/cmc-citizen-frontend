@@ -4,7 +4,7 @@
 import { expect } from 'chai'
 import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { HearingLocation, ValidationErrors} from 'directions-questionnaire/forms/models/hearingLocation'
+import { HearingLocation, ValidationErrors } from 'directions-questionnaire/forms/models/hearingLocation'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 
@@ -112,7 +112,7 @@ describe('HearingLocation', () => {
             hearingLocation.courtName = 'COURT'
             hearingLocation.courtAccepted = YesNoOption.NO
             hearingLocation.alternativeOption = 'postcode'
-            hearingLocation.alternativePostcode= 'A111AA'
+            hearingLocation.alternativePostcode = 'A111AA'
 
             const errors = validator.validateSync(hearingLocation)
             expect(errors).to.be.empty
@@ -142,7 +142,7 @@ describe('HearingLocation', () => {
 
       it('Should accept when alternative court name is provided', () => {
         let hearingLocation: HearingLocation = new HearingLocation()
-        hearingLocation.alternativeCourtName = "court"
+        hearingLocation.alternativeCourtName = 'court'
         const errors = validator.validateSync(hearingLocation)
 
         expect(errors).to.be.empty

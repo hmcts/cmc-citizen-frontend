@@ -4,7 +4,7 @@
 import { expect } from 'chai'
 import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { ExceptionalCircumstances, ValidationErrors} from 'directions-questionnaire/forms/models/exceptionalCircumstances'
+import { ExceptionalCircumstances, ValidationErrors } from 'directions-questionnaire/forms/models/exceptionalCircumstances'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 

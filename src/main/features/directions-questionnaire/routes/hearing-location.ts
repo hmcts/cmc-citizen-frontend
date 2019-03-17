@@ -16,6 +16,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { User } from 'idam/user'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, fallbackPage: boolean) {
   res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage, party: getUsersRole(res.locals.claim, res.locals.user) })
@@ -37,7 +38,8 @@ function getDefaultPostcode (res: express.Response): string {
   const user: User = res.locals.user
   if (getUsersRole(claim, user) === MadeBy.DEFENDANT) {
     const responseDraft: Draft<ResponseDraft> = res.locals.responseDraft
-    if (responseDraft.document.defendantDetails.partyDetails) {
+    const partyDetails: PartyDetails = responseDraft.document.defendantDetails.partyDetails
+    if (partyDetails && partyDetails.address.postcode) {
       return responseDraft.document.defendantDetails.partyDetails.address.postcode
     } else {
       return claim.claimData.defendant.address.postcode
