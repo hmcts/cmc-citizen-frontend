@@ -78,6 +78,8 @@ nodejs:
 cmc-claim-store:
   java:
     image: hmcts.azurecr.io/hmcts/cmc-claim-store:latest  # master
+    ingressIP: ${INGRESS_IP}
+    consulIP: ${CONSUL_LB_IP}
     readinessDelay: 90 # allowing for a bit of drag...
     livenessDelay: 90  # allowing for a bit of drag...
     registerAdditionalDns:
