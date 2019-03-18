@@ -20,7 +20,7 @@ rpe-feature-toggle-api:
     image: hmcts.azurecr.io/hmcts/rpe-feature-toggle-api:latest
     releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
     environment:
-      FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
+      FEATURES_DB_HOST: ${SERVICE_NAME}-claim-store-postgres
 
 nodejs:
   image: ${IMAGE_NAME}
