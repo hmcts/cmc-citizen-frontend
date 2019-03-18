@@ -14,13 +14,12 @@ import { ViewDefendantResponseTask } from 'claimant-response/tasks/viewDefendant
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { ChooseHowToProceedTask } from 'claimant-response/tasks/chooseHowToProceedTask'
 import { SignSettlementAgreementTask } from 'claimant-response/tasks/signSettlementAgreementTask'
-import { FreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
+import { ClaimantResponseFreeMediationTask } from 'claimant-response/tasks/freeMediationTask'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettledTask'
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/partPaymentReceivedTask'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
-import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 
@@ -84,23 +83,13 @@ export class TaskListBuilder {
     if (claim.response.freeMediation === YesNoOption.YES) {
       if ((draft.accepted && draft.accepted.accepted.option === YesNoOption.NO) ||
         (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.NO)) {
-        if (FeatureToggles.isEnabled('mediation')) {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
-            ))
-        } else {
-          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Consider free mediation',
-              path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
-            ))
-        }
+        const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        tasks.push(
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            ClaimantResponseFreeMediationTask.isCompleted(draft, mediationDraft)
+          ))
       }
     }
 
@@ -162,23 +151,13 @@ export class TaskListBuilder {
       if (claim.response.freeMediation === YesNoOption.YES
         && draft.settleAdmitted
         && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
-        if (FeatureToggles.isEnabled('mediation')) {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
-            ))
-        } else {
-          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-          tasks.push(
-            new TaskListItem(
-              'Consider free mediation',
-              path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
-            ))
-        }
+        const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        tasks.push(
+          new TaskListItem(
+            'Free telephone mediation',
+            path,
+            ClaimantResponseFreeMediationTask.isCompleted(draft, mediationDraft)
+          ))
       }
     }
 

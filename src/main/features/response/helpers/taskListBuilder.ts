@@ -15,7 +15,7 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
-import { FreeMediationTask } from 'response/tasks/freeMediationTask'
+import { ResponseFreeMediationTask } from 'response/tasks/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastDeadline } from 'claims/isPastDeadline'
@@ -29,7 +29,6 @@ import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
 import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
-import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 export class TaskListBuilder {
@@ -239,31 +238,15 @@ export class TaskListBuilder {
     if (draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
-      let path: string
-      if (FeatureToggles.isEnabled('mediation')) {
-        path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-        return new TaskList(
-          'Try to resolve the claim', [
-            new TaskListItem(
-              'Free telephone mediation',
-              path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
-            )
-          ]
-        )
-      } else {
-        path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-        return new TaskList(
-          'Resolving the claim', [
-            new TaskListItem(
-              'Consider free mediation',
-              path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
-            )
-          ]
-        )
-      }
-
+      return new TaskList(
+        'Try to resolve the claim', [
+          new TaskListItem(
+            'Free telephone mediation',
+            MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            ResponseFreeMediationTask.isCompleted(draft, mediationDraft)
+          )
+        ]
+      )
     }
 
     return undefined

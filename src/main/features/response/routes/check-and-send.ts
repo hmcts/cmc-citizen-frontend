@@ -20,7 +20,6 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
@@ -37,7 +36,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim),
-    mediationEnabled: FeatureToggles.isEnabled('mediation'),
     mediationDraft: mediationDraft.document
   })
 }

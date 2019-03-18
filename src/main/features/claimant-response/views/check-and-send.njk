@@ -2,6 +2,7 @@
 
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "components/free-mediation/freeMediationCheckAndSendBlock.njk" import freeMediationBlock %}
 
 {% set heading = 'Check your answers' %}
 
@@ -12,7 +13,6 @@
     {{ tableStart('yourResponse', 'Your response') }}
 
     {% if alreadyPaid %}
-
       {% if draft.partPaymentReceived %}
         {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
           value = draft.partPaymentReceived.received | yesNo,
@@ -34,32 +34,8 @@
           changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
-      {% if draft.freeMediation and mediationEnabled !== true %}
-        {{ row(label = 'Will you try free mediation?', bold = true, value = draft.freeMediation.option | yesNo,
-          changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-      {% endif %}
-
-      {% if mediationEnabled %}
-        {{ tableStart('freeMediation', 'Free telephone mediation') }}
-        {{
-        row(
-          label = 'Will you try free mediation?',
-          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-          bold = true
-        )
-        }}
-        {% if mediationDraft.youCanOnlyUseMediation %}
-          {{
-          row(
-            label = 'Do you agree to the mediation conditions?',
-            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
-            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-          }}
-        {% endif %}
-        {{ tableEnd() }}
+      {% if draft.freeMediation %}
+        {{ freeMediationBlock(mediationDraft) }}
       {% endif %}
     {% else %}
       {% if draft.settleAdmitted %}
@@ -77,8 +53,7 @@
         {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
           changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
         {% if draft.settleAdmitted.admitted.option === 'no' and claim.response.freeMediation === 'yes' %}
-          {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
-            changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
+          {{ freeMediationBlock(mediationDraft) }}
         {% endif %}
       {% endif %}
 

@@ -1,0 +1,68 @@
+{% macro freeMediationBlock(mediaitonDraft) %}
+  {{ tableStart('freeMediation', 'Free telephone mediation') }}
+  {{
+  row(
+    label = 'Will you try free mediation?',
+    value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+    changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+    bold = true
+  )
+  }}
+  {% if mediationDraft.youCanOnlyUseMediation %}
+    {{
+    row(
+      label = 'Agree to mediation conditions',
+      value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+      changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    )
+    }}
+  {% endif %}
+  {% if mediationDraft.canWeUseCompany %}
+    {% if mediationDraft.mediationPhoneNumberConfirmation %}
+      {{
+      row(
+        label = 'Contact number',
+        value = t(draft.canWeUseCompany.mediationPhoneNumberConfirmation) | capitalize,
+        changeLink = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      )
+      }}
+      {{
+      row(
+        label = 'Contact name',
+        value = t(draft.defendantDetails.partyDetails.contactPerson) | capitalize,
+        bold = true
+      )
+      }}
+    {% else %}
+      {{
+      row(
+        label = 'Contact number',
+        value = t(mediationDraft.canWeUseCompany.mediationPhoneNumber) | capitalize,
+        changeLink = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      )
+      }}
+      {{
+      row(
+        label = 'Contact name',
+        value = t(mediationDraft.canWeUseCompany.mediationContactPerson) | capitalize,
+        bold = true
+      )
+      }}
+    {% endif %}
+  {% else %}
+    {{
+    row(
+      label = 'Contact number',
+      value = t(mediationDraft.canWeUse.mediationPhoneNumber),
+      changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    )
+    }}
+  {% endif %}
+  {{ tableEnd() }}
+{% endmacro %}

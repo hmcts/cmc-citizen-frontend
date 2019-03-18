@@ -12,7 +12,6 @@ export class Paths {
   static readonly moreTimeConfirmationPage = new RoutablePath(`${responsePath}/more-time-confirmation`)
   static readonly responseTypePage = new RoutablePath(`${responsePath}/response-type`)
   static readonly defencePage = new RoutablePath(`${responsePath}/your-defence`)
-  static readonly freeMediationPage = new RoutablePath(`${responsePath}/free-mediation`)
   static readonly checkAndSendPage = new RoutablePath(`${responsePath}/check-and-send`)
   static readonly confirmationPage = new RoutablePath(`${responsePath}/confirmation`)
   static readonly counterClaimPage = new RoutablePath(`${responsePath}/counter-claim`)

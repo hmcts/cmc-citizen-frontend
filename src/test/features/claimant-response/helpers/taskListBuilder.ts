@@ -22,7 +22,6 @@ import {
   partialAdmissionWithImmediatePaymentData, defenceWithAmountClaimedAlreadyPaidData
 } from 'test/data/entity/responseData'
 import { NumberFormatter } from 'utils/numberFormatter'
-import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Claimant response task list builder', () => {
   let claim: Claim
@@ -135,11 +134,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
         })
 
         it('Should be available when settle the claim has been rejected', () => {
@@ -159,11 +154,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
         })
 
         it('Should be available when "Have you been paid the full amount" is rejected', () => {
@@ -183,11 +174,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
         })
       })
     })
@@ -347,11 +334,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
         })
 
         it('should be available when payment will be made by instalments, defendant requested free mediation and claimant rejected response', () => {
@@ -374,11 +357,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
         })
 
         it('should be not available when defendant did not request free mediation and claimant rejected response', () => {
@@ -401,11 +380,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).to.be.undefined
         })
 
         it('should be not available when defendant requested free mediation and claimant accepted response', () => {

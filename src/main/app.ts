@@ -74,11 +74,7 @@ new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
-
-if (FeatureToggles.isEnabled('mediation')) {
-  logger.info('FeatureToggles.mediation enabled')
-  new MediationFeature().enableFor(app)
-}
+new MediationFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('paidInFull')) {
   logger.info('FeatureToggles.paidInFull enabled')
