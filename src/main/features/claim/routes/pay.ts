@@ -106,7 +106,9 @@ async function successHandler (req, res, next) {
   const payClient: PayClient = await getPayClient(req)
   const paymentReference = draft.document.claimant.payment.reference
 
-  payClient.update(user, paymentReference, savedClaim.externalId, savedClaim.claimNumber)
+  const savedClaimId = savedClaim.id === undefined ? 'UNKNOWN' : String(savedClaim.id)
+
+  await payClient.update(user, paymentReference, savedClaim.externalId, savedClaimId)
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
