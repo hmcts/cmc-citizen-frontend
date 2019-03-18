@@ -284,7 +284,7 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true', type: SignatureType.QUALIFIED })
+              .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: 'signer', signerRole: 'role' })
               .expect(HttpStatus.OK)
           })
 
