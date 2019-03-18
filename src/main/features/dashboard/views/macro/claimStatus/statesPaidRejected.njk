@@ -1,0 +1,53 @@
+{% from "internalLink.njk" import internalLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink %}
+
+{% macro statesPaidInFullRejectedClaimantDashboard() %}
+  {{ t('You’ve rejected the defendant’s admission.') }}
+{% endmacro %}
+
+{% macro statesPaidInFullRejectedClaimantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
+  <p>{{ t('They said they owe {{ amount }}.', { amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
+
+  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
+  <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {
+      dqDeadline: claim.directionsQuestionnaireDeadline | date
+    }) }}</p>
+
+  <p>{{ _downloadResponseLink(claim, 'Download their response') }} {{ t('(PDF)') }}</p>
+{% endmacro %}
+
+{% macro statesPaidRejectedDefendantDashboard(claim) %}
+  {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+    claimantName: claim.claimData.claimant.name,
+    amount: claim.response.paymentDeclaration.paidAmount | numeral
+  }) }}
+{% endmacro %}
+
+{% macro statesPaidRejectedDefendantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+      claimantName: claim.claimData.claimant.name,
+      amount: claim.response.paymentDeclaration.paidAmount | numeral
+    }) }}</h2>
+  <p>{{ t('They said you didn’t pay them {{ amount }}.', { amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
+  <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
+  <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {
+      dqDeadline: claim.directionsQuestionnaireDeadline | date
+    }) }}</p>
+  <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro _linkToDirectionsQuestionnairePage(externalId) %}
+  <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
+      { completeDQ: internalLink(
+        'complete a directions questionnaire',
+        DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
+      }
+    ) | safe
+    }}</p>
+{% endmacro %}
+
+{% macro _downloadResponseLink(claim, text) %}
+  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+{% endmacro %}
