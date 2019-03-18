@@ -1,6 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
+import { Paths as ResponsePaths } from 'response/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
@@ -8,6 +9,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Availability } from 'directions-questionnaire/forms/models/availability'
+import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
   res.render(Paths.hearingDatesPage.associatedView, { form: form })
@@ -20,7 +23,8 @@ export default express.Router()
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
       renderPage(res, new Form<Availability>(draft.document.availability))
     })
-  .post(Paths.hearingDatesPage.uri, FormValidator.requestHandler(Availability, Availability.fromObject),
+  .post(Paths.hearingDatesPage.uri,
+    FormValidator.requestHandler(Availability, Availability.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
 
@@ -28,12 +32,18 @@ export default express.Router()
         renderPage(res, form)
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-        const user: User = res.locals.user
+        const user = res.locals.user
 
         draft.document.availability = form.model
 
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(DashboardPaths.dashboardPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+        let url
+        if (getUsersRole(res.locals.claim, user) === MadeBy.DEFENDANT) {
+          url = ResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId })
+        } else {
+          url = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId })
+        }
+        res.redirect(url)
       }
     }))

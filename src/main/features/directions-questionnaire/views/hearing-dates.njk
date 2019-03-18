@@ -13,7 +13,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <form novalidate method="post">
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Unavailability Dates" data-event-label-from="availability" novalidate>
         {{ csrfProtection(csrf) }}
         {{ radioGroup(
           name = 'hasUnavailableDates',
@@ -25,13 +25,23 @@
           form = form,
           labelBold = false
         ) }}
-        {#<div>#}
         <div class="panel panel-border-narrow js-hidden" id="hasUnavailableDates-true" aria-hidden="false">
           <h2 class="heading-medium">{{ t('Select the dates you can’t go to a hearing') }}</h2>
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
           <div id="date-picker" class="datepicker"></div>
           <h2 class="heading-medium">Dates selected</h2>
           <dl id="dates-cant-attend-list" class="add-another-list">
+            {% for date in form.model.unavailableDates %}
+              <div id="add-another-list-items-{{ loop.index0 }}">
+                <dd class="add-another-list-item">
+                  <span data-index="items-{{ loop.index0 }}">{{ date }}</span>
+                  <input type="hidden" name="unavailableDates[{{ loop.index0 }}]" value="{{ date }}" />
+                </dd>
+                <dd class="add-another-list-controls">
+                  <a class="add-another-delete-link link" data-index="{{ loop.index0 }}">Remove</a>
+                </dd>
+              </div>
+            {% endfor %}
           </dl>
         </div>
       </form>

@@ -1,7 +1,8 @@
-import { LocalDate } from 'forms/models/localDate'
 import { ArrayNotEmpty, IsDefined, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
+import { LocalDate } from 'forms/models/localDate'
+import * as moment from 'moment'
 
 export class Availability {
 
@@ -25,14 +26,17 @@ export class Availability {
 
     return new Availability(
       YesNoOption.fromObject(value.hasUnavailableDates),
-      value.unavailabledates)
+      value.unavailabledates
+    )
   }
 
   deserialize (input?: any): Availability {
     if (input) {
-      this.hasUnavailableDates = YesNoOption.fromObject(input.hasUnavailableDates)
+      this.hasUnavailableDates = YesNoOption.fromObject(input.hasUnavailableDates.option)
       if (input.unavailableDates) {
-        this.unavailableDates = input.unavailableDates
+        this.unavailableDates = input.unavailableDates.map(
+          dateStr => moment(Number(dateStr))
+        )
       }
     }
     return this

@@ -30,7 +30,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.hearingLocation = input.hearingLocation
       this.hearingLocationPostcode = input.hearingLocationPostcode
       this.exceptionalCircumstances = input.exceptionalCircumstances
-      this.availability = input.availability
+      this.availability = new Availability().deserialize(input.availability)
     }
     return this
   }
