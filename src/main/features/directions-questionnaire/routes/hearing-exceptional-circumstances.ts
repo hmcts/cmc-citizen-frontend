@@ -42,7 +42,7 @@ export default express.Router()
         if (form.model.option.option === YesNoOption.YES.option) {
           res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
       }
     }))

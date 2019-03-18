@@ -16,6 +16,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { User } from 'idam/user'
+import { PartyDetails } from 'forms/models/partyDetails'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, fallbackPage: boolean) {
   res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage, party: getUsersRole(res.locals.claim, res.locals.user) })
@@ -37,7 +38,8 @@ function getDefaultPostcode (res: express.Response): string {
   const user: User = res.locals.user
   if (getUsersRole(claim, user) === MadeBy.DEFENDANT) {
     const responseDraft: Draft<ResponseDraft> = res.locals.responseDraft
-    if (responseDraft.document.defendantDetails.partyDetails) {
+    const partyDetails: PartyDetails = responseDraft.document.defendantDetails.partyDetails
+    if (partyDetails && partyDetails.address.postcode) {
       return responseDraft.document.defendantDetails.partyDetails.address.postcode
     } else {
       return claim.claimData.defendant.address.postcode
@@ -64,9 +66,7 @@ export default express.Router()
 
       } else {
         renderPage(res, new Form<HearingLocation>(
-          new HearingLocation(draft.document.hearingLocation,
-            draft.document.hearingLocationPostcode,
-            YesNoOption.YES)),
+          new HearingLocation(draft.document.hearingLocation, undefined, YesNoOption.YES)),
           false)
       }
     } catch (err) {
@@ -93,17 +93,15 @@ export default express.Router()
 
           } else {
 
-            if (form.model.courtAccepted === YesNoOption.NO) {
+            if (form.model.courtAccepted === undefined) {
               draft.document.hearingLocation = form.model.alternativeCourtName
             } else {
               draft.document.hearingLocation = form.model.courtName
             }
-            draft.document.hearingLocationPostcode = form.model.courtPostcode
 
             await new DraftService().save(draft, user.bearerToken)
-            res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
           }
-
         } catch (err) {
           next(err)
         }

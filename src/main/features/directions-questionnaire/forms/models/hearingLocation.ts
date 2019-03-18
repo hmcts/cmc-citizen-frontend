@@ -12,30 +12,35 @@ export class AlternativeCourtOption {
   }
 }
 
-export class HearingLocation {
+export class ValidationErrors {
+  static readonly NO_ALTERNATIVE_COURT_NAME = 'Provide a court name'
+  static readonly SELECT_ALTERNATIVE_OPTION = 'Select an alternative court option'
+  static readonly NO_ALTERNATIVE_POSTCODE = 'Provide a valid postcode'
+}
 
-  @IsDefined()
+export class HearingLocation {
   courtName?: string
 
   @IsValidPostcode()
   courtPostcode?: string
 
+  @ValidateIf(o => !!o.courtName)
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   courtAccepted?: YesNoOption
 
-  @ValidateIf(o => o.courtAccepted.option === YesNoOption.NO.option)
-  @IsDefined()
-  @IsIn(AlternativeCourtOption.all())
+  @ValidateIf(o => o.courtAccepted && o.courtAccepted.option === YesNoOption.NO.option)
+  @IsDefined({ message: ValidationErrors.SELECT_ALTERNATIVE_OPTION })
+  @IsIn(AlternativeCourtOption.all(), { message: ValidationErrors.SELECT_ALTERNATIVE_OPTION })
   alternativeOption?: string
 
-  @ValidateIf(o => o.alternativeOption === 'name')
-  @IsDefined()
-  @IsNotEmpty()
+  @ValidateIf(o => o.alternativeOption === 'name' || !o.courtName)
+  @IsDefined({ message: ValidationErrors.NO_ALTERNATIVE_COURT_NAME })
+  @IsNotEmpty({ message: ValidationErrors.NO_ALTERNATIVE_COURT_NAME })
   alternativeCourtName?: string
 
   @ValidateIf(o => o.alternativeOption === 'postcode')
-  @IsDefined()
-  @IsValidPostcode()
+  @IsDefined({ message: ValidationErrors.NO_ALTERNATIVE_POSTCODE })
+  @IsValidPostcode({ message: ValidationErrors.NO_ALTERNATIVE_POSTCODE })
   alternativePostcode?: string
 
   constructor (courtName?: string,

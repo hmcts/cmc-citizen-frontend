@@ -41,7 +41,13 @@ export class ExceptionalCircumstances implements CompletableTask {
   }
 
   isCompleted (): boolean {
-    return false
+    if (this.option === undefined) {
+      return false
+    } else if (this.option.option === YesNoOption.YES.option) {
+      return this.reason !== undefined
+    } else {
+      return true
+    }
   }
 
 }
