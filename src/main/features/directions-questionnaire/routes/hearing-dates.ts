@@ -20,7 +20,12 @@ export default express.Router()
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
       renderPage(res, new Form<Availability>(draft.document.availability))
     })
-  .post(Paths.hearingDatesPage.uri, FormValidator.requestHandler(Availability, Availability.fromObject),
+  .post(Paths.hearingDatesPage.uri,
+    (req: express.Request, res: express.Response, next) => {
+      console.log('req:', req)
+      next()
+    },
+    FormValidator.requestHandler(Availability, Availability.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
 
@@ -34,6 +39,6 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(DashboardPaths.dashboardPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+        res.redirect(DashboardPaths.dashboardPage.uri)
       }
     }))

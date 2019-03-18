@@ -8,6 +8,9 @@
   <script src="{{ asset_paths['js'] }}/lodash.js"></script>
   <script src="{{ asset_paths['js'] }}/bootstrap-datepicker.min.js"></script>
   <script src="{{ asset_paths['js'] }}/date-picker.js"></script>
+  <script language="JavaScript">
+
+  </script>
 {% endblock %}
 
 {% block content %}
@@ -18,15 +21,15 @@
         {{ radioGroup(
           name = 'hasUnavailableDates',
           options = [
-            { label: 'Yes', value: true },
-            { label: 'No', value: false }
+            { label: 'Yes', value: YesNoOption.YES.option },
+            { label: 'No', value: YesNoOption.NO.option }
           ],
           isInline = false,
           form = form,
           labelBold = false
         ) }}
         {#<div>#}
-        <div class="panel panel-border-narrow js-hidden" id="hasUnavailableDates-true" aria-hidden="false">
+        <div class="panel panel-border-narrow js-hidden" id="hasUnavailableDates-yes" aria-hidden="false">
           <h2 class="heading-medium">{{ t('Select the dates you can’t go to a hearing') }}</h2>
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
           <div id="date-picker" class="datepicker"></div>
@@ -34,6 +37,7 @@
           <dl id="dates-cant-attend-list" class="add-another-list">
           </dl>
         </div>
+        {{ submitButton() }}
       </form>
     </div>
   </div>

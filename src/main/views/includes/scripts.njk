@@ -13,7 +13,8 @@
 {% if development %}
   <script src="https://localhost:35729/livereload.js"></script>
 
-  <script src="{{ asset_paths['js'] }}/lib/htmlcs/HTMLCS.js"></script>
+  {# TODO: the following script interferes with the datepicker - need to find a solution to have them play nicely with each other #}
+  {#<script src="{{ asset_paths['js'] }}/lib/htmlcs/HTMLCS.js"></script>#}
   <script src="{{ asset_paths['js'] }}/lib/htmlcs/Auditor/HTMLCSAuditor.js"></script>
   <script src="{{ asset_paths['js'] }}/a11y.js"></script>
 {% endif %}
