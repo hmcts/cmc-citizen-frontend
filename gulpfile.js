@@ -35,6 +35,7 @@ gulp.task('copy-files', (done) => {
   copyClientPolyfills()
   copyA11ySniffer()
   copyClientModules()
+  copyDatePickerDependencies()
   done()
 })
 
@@ -109,6 +110,25 @@ function copyClientModules () {
     './node_modules/numeral/min/locales.min.js'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/numeral`))
+}
+
+function copyDatePickerDependencies () {
+  gulp.src([
+    './node_modules/lodash/lodash.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib`))
+  gulp.src([
+    './node_modules/moment/min/moment.min.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib`))
+  gulp.src([
+    './node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib`))
+  gulp.src([
+    './node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib`))
 }
 
 gulp.task('watch', (done) => {

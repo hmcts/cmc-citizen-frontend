@@ -29,8 +29,6 @@ import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCas
 import { MadeBy } from 'offer/form/models/madeBy'
 import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { MadeBy } from 'offer/form/models/madeBy'
-import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 
 const validator: Validator = new Validator()
 
