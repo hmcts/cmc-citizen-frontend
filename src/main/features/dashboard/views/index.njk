@@ -6,6 +6,16 @@
 
 {% set heading = 'Your money claims account' %}
 
+{% macro backwardCompatibleDashboardFor(claim, newStatus, type) %}
+  {% if newStatus %}
+    {{ newStatus }}
+  {% elif type === 'claimant' %}
+    {{ caseStatusForClaimant(claim.status, claim) }}
+  {% else %}
+    {{ caseStatusForDefendant(claim.status, claim) }}
+  {% endif %}
+{% endmacro %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-full">
@@ -44,18 +54,19 @@
           </tr>
         {% endif %}
         {% for claim in claimsAsClaimant %}
+          {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
           <tr class="claims default mobile-table">
             <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant') }}</td>
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForClaimant(claim.status, claim) }}
+              {{ backwardCompatibleDashboardFor(claim, claimantDashboardStatus, 'claimant') }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
-              {{ t('Status: ') }}
-              {{ caseStatusForClaimant(claim.status, claim) }}
+              {{ t('Status:') }}
+              {{ backwardCompatibleDashboardFor(claim, claimantDashboardStatus, 'claimant') }}
             </td>
           </tr>
         {% endfor %}
@@ -89,17 +100,19 @@
           </tr>
         {% endif %}
         {% for claim in claimsAsDefendant %}
+          {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
           <tr class="mobile-table">
             <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })) }}</td>
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForDefendant(claim.status, claim) }}
+              {{ backwardCompatibleDashboardFor(claim, defendantDashboardStatus, 'defendant') }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
-              {{ t('Status:') }} {{ caseStatusForDefendant(claim.status, claim) }}
+              {{ t('Status:') }}
+              {{ backwardCompatibleDashboardFor(claim, defendantDashboardStatus, 'defendant') }}
             </td>
           </tr>
         {% endfor %}
