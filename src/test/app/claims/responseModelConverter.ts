@@ -291,19 +291,27 @@ describe('ResponseModelConverter', () => {
         })
       })
 
-      it(`should convert company who says YES to mediation and they confirm number`, () => {
-        const responseDraft = prepareResponseDraft({
-          ...defenceWithAmountClaimedAlreadyPaidDraft,
-          ...sampleMediationDraftObj,
-          ...{ canWeUseCompany: {
+      it(`should convert company who says YES to mediation and confirm number`, () => {
+
+        const mediationDraft = new MediationDraft().deserialize({
+          youCanOnlyUseMediation: {
+            option: FreeMediationOption.YES
+          },
+          canWeUseCompany: {
             option: FreeMediationOption.YES,
-            mediationPhoneNumberConfirmation: '07777777777',
+            mediationPhoneNumberConfirmation: '07777777788',
             mediationContactPerson: 'Mary Richards'
-          } }
+          }})
+        const responseDraft = prepareResponseDraft({
+          ...defenceWithAmountClaimedAlreadyPaidDraft
         }, companyDetails)
         const responseData = preparePartialResponseData({
           ...partialAdmissionFromStatesPaidDefence,
-          ...mediationResponseData
+          ...{
+            freeMediation: 'yes',
+            mediationPhoneNumber: '07777777788',
+            mediationContactPerson: 'Company Smith'
+          }
         }, company)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
