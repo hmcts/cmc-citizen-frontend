@@ -61,7 +61,7 @@ withPipeline("nodejs", product, component) {
   }
 
   after('akschartsinstall') {
-    def aksServiceUrl = ${TEST_URL}
+    def aksServiceUrl = env.TEST_URL
     env.CLAIM_STORE_URL = aksServiceUrl.replaceAll('\\.service', '-java.service')
   }
 
