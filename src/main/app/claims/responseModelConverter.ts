@@ -218,7 +218,6 @@ export class ResponseModelConverter {
         }
       }
     }
-    return undefined
   }
 
   private static convertMediationContactPerson (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
@@ -235,7 +234,6 @@ export class ResponseModelConverter {
         }
       }
     }
-    return undefined
   }
 
   private static convertStatementOfMeans (draft: ResponseDraft): StatementOfMeans {

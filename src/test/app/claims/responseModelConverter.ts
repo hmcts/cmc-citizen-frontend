@@ -540,6 +540,28 @@ describe('ResponseModelConverter', () => {
         expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, claim)))
           .to.deep.equal(convertObjectLiteralToJSON(responseData))
       })
+
+      it('should convert partial admission with Mediation canWeUse FreeMediation to YES and response not submitted', () => {
+        const responseDraft = prepareResponseDraft({
+          ...partialAdmissionWithPaymentByInstalmentsDraft
+        }, individualDetails)
+        const responseData = preparePartialResponseData({
+          ...partialAdmissionWithPaymentByInstalmentsData,
+          ...{
+            freeMediation: 'no',
+            mediationPhoneNumber: '0700000000'
+          }
+        }, individual)
+        const mediationDraft = new MediationDraft().deserialize({
+          canWeUse: {
+            option: FreeMediationOption.YES
+          }})
+
+        const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+        expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, claim)))
+          .to.deep.equal(convertObjectLiteralToJSON(responseData))
+      })
     })
   }
 })
