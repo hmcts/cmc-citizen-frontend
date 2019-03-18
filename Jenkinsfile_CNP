@@ -34,7 +34,6 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
-env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
@@ -59,6 +58,11 @@ withPipeline("nodejs", product, component) {
 
   after('build') {
     sh 'yarn setup'
+  }
+
+  after('akschartsinstall') {
+    def aksServiceUrl = ${TEST_URL}
+    env.CLAIM_STORE_URL = aksServiceUrl.replaceAll('\\.service', '-java.service')
   }
 
   loadVaultSecrets(secrets)
