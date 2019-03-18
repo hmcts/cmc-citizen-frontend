@@ -63,7 +63,7 @@ withPipeline("nodejs", product, component) {
   before('smoketest:aks') {
     // required because we use a local AKS instance of claim-store for limiting bulk print requests
     def aksServiceUrl = env.TEST_URL
-    env.CLAIM_STORE_URL = aksServiceUrl.replaceAll('\\.service', '-java.service')
+    env.CLAIM_STORE_URL = aksServiceUrl.replaceAll('http://', 'http://claim-store-')
     println "Using CLAIM_STORE_URL: " + env.CLAIM_STORE_URL
   }
 

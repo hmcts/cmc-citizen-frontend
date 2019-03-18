@@ -80,6 +80,10 @@ cmc-claim-store:
     image: hmcts.azurecr.io/hmcts/cmc-claim-store:latest  # master
     readinessDelay: 90 # allowing for a bit of drag...
     livenessDelay: 90  # allowing for a bit of drag...
+    registerAdditionalDns:
+      enabled: true
+      primaryIngressHost: ${SERVICE_FQDN}
+      prefix: claim-store
     environment:
       SEND_LETTER_URL: false                              # disable bulk print requests
       CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-claim-store-postgres
