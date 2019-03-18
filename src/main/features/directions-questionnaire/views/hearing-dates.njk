@@ -1,12 +1,12 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, submitButton, radioGroup %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, radioGroup %}
 
 {% set heading = 'Are there dates in the next 9 months when you or your witnesses can’t go to a hearing?' %}
 
 {% block additional_scripts %}
-  <script src="{{ asset_paths['js'] }}/moment.js"></script>
-  <script src="{{ asset_paths['js'] }}/lodash.js"></script>
-  <script src="{{ asset_paths['js'] }}/bootstrap-datepicker.min.js"></script>
+  <script src="{{ asset_paths['js_vendor'] }}/moment.min.js"></script>
+  <script src="{{ asset_paths['js_vendor'] }}/lodash.js"></script>
+  <script src="{{ asset_paths['js_vendor'] }}/bootstrap-datepicker.js"></script>
   <script src="{{ asset_paths['js'] }}/date-picker.js"></script>
 {% endblock %}
 
@@ -44,6 +44,7 @@
             {% endfor %}
           </dl>
         </div>
+        {{ saveAndContinueButton() }}
       </form>
     </div>
   </div>
