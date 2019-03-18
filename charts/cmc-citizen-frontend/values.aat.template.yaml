@@ -1,4 +1,5 @@
 cmc-claim-store:
   java:
-    CLAIM_STORE_DB_PASSWORD: claimstore
-    CMC_DB_PASSWORD: cmc
+    environment:
+      CLAIM_STORE_DB_PASSWORD: claimstore
+      CMC_DB_PASSWORD: cmc
