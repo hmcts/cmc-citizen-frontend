@@ -60,7 +60,7 @@ withPipeline("nodejs", product, component) {
     sh 'yarn setup'
   }
 
-  after('akschartsinstall') {
+  after('smoketest:aks') {
     def aksServiceUrl = env.TEST_URL
     env.CLAIM_STORE_URL = aksServiceUrl.replaceAll('\\.service', '-java.service')
   }
