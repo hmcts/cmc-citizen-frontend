@@ -90,7 +90,7 @@ const datePicker = {
       elements += '<div id="add-another-list-items-' + date.index + '">' +
         '<dd class="add-another-list-item">' +
         '<span data-index="items-' + date.index + '">' + datePickerUtils.formatDateForDisplay(date.value) + '</span>' +
-        '<input type="hidden" name="unavailableDates[' + index + ']" value="' + date.value + '" />' +
+        '<input type="hidden" name="unavailableDates[' + index + ']" value="' + new Date(date.value).getTime() + '" />' +
         '</dd>' +
         '<dd class="add-another-list-controls">' +
         '<a class="add-another-delete-link link" data-index="' + date.index + '">Remove</a>' +
