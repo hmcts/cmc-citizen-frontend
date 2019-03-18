@@ -7,6 +7,8 @@ tags:
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
   registerDns: false
+  readinessDelay: 90 # allowing for a bit of drag...
+  livenessDelay: 90  # allowing for a bit of drag...
   importer:
     cron:
       enabled: false
@@ -76,6 +78,8 @@ nodejs:
 cmc-claim-store:
   java:
     image: hmcts.azurecr.io/hmcts/cmc-claim-store:latest  # master
+    readinessDelay: 90 # allowing for a bit of drag...
+    livenessDelay: 90  # allowing for a bit of drag...
     environment:
       SEND_LETTER_URL: false                              # disable bulk print requests
       CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-claim-store-postgres
