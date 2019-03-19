@@ -115,7 +115,7 @@ var datePicker = {
   },
 
   toggleArrows: function(nextOrPrevArrow) {
-    return '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png">';
+    return '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png" />';
   },
 
   changeDateHandler: function(event) {

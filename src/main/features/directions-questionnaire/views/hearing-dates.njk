@@ -8,6 +8,7 @@
   <script src="{{ asset_paths['js_vendor'] }}/lodash.js"></script>
   <script src="{{ asset_paths['js_vendor'] }}/bootstrap-datepicker.js"></script>
   <script src="{{ asset_paths['js'] }}/date-picker.js"></script>
+  <link rel="stylesheet" href="{{ asset_paths['style_vendor'] }}/bootstrap-datepicker3.standalone.css" />
 {% endblock %}
 
 {% block content %}
@@ -29,20 +30,8 @@
           <h2 class="heading-medium">{{ t('Select the dates you can’t go to a hearing') }}</h2>
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
           <div id="date-picker" class="datepicker"></div>
-          <h2 class="heading-medium">Dates selected</h2>
-          <dl id="dates-cant-attend-list" class="add-another-list">
-            {% for date in form.model.unavailableDates %}
-              <div id="add-another-list-items-{{ loop.index0 }}">
-                <dd class="add-another-list-item">
-                  <span data-index="items-{{ loop.index0 }}">{{ date }}</span>
-                  <input type="hidden" name="unavailableDates[{{ loop.index0 }}]" value="{{ date }}" />
-                </dd>
-                <dd class="add-another-list-controls">
-                  <a class="add-another-delete-link link" data-index="{{ loop.index0 }}">Remove</a>
-                </dd>
-              </div>
-            {% endfor %}
-          </dl>
+          {% include '../ajax/date-list.njk' %}
+          <pre>{{ dates if dates else 'undefined' }}</pre>
         </div>
         {{ saveAndContinueButton() }}
       </form>
