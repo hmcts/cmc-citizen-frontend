@@ -135,8 +135,7 @@ describe('Claim issue: check and send page', () => {
           it(`Should validate that a claim made by company against ${partyDetails.type}`, async () => {
             draftStoreServiceMock.resolveFind('claim',
               {
-                claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails },
-                defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails }
+                claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }
               })
             feesServiceMock.resolveCalculateIssueFee()
 
@@ -156,8 +155,7 @@ describe('Claim issue: check and send page', () => {
           it(`Should validate that a claim made by organisation against ${partyDetails.type}`, async () => {
             draftStoreServiceMock.resolveFind('claim',
               {
-                claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails },
-                defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: organisationDetails }
+                claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }
               })
             feesServiceMock.resolveCalculateIssueFee()
 
