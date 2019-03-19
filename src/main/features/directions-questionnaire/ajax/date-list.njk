@@ -1,0 +1,32 @@
+{% from 'internalLink.njk' import internalLink %}
+
+<h2 class="heading-medium">{{ t('Dates selected') }}</h2>
+<dl id="dates-cant-attend-list" class="add-another-list">
+  {% if dates and dates.length > 0 %}
+    {% for date in dates %}
+      <div id="add-another-list-items-{{ loop.index0 }}">
+        <dd class="add-another-list-item">
+          <span data-index="items-{{ loop.index0 }}">{{ date }}</span>
+          <input type="hidden" name="unavailableDates[{{ loop.index0 }}]" value="{{ date }}"/>
+        </dd>
+        <dd class="add-another-list-controls">
+          <form method="post" action="{{ DirectionsQuestionnairePaths.ajaxDatePickerReceiver.evaluateUri({
+            externalId: externalId,
+            method: 'delete'
+          }) }}">
+            <input type="hidden" name="year" value="{{ date.getYear() }}" />
+            <input type="hidden" name="month" value="{{ date.getMonth() }}" />
+            <input type="hidden" name="date" value="{{ date.getDate() }}" />
+            <button type="submit" class="add-another-delete-link link">{{ t('Remove') }}</button>
+          </form>
+        </dd>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div>
+      <dd class="add-another-list-item">
+        <div id="items" class="noItems">{{ t('No dates added yet') }}</div>
+      </dd>
+    </div>
+  {% endif %}
+</dl>

@@ -77,7 +77,7 @@ const datePicker = {
     $.each(dow, index => $(this).text(days[index]))
   },
 
-  toggleArrows: nextOrPrevArrow => '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png">',
+  toggleArrows: nextOrPrevArrow => '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png" />',
 
   changeDateHandler: event => datePicker.displayDateList(event.dates),
 
