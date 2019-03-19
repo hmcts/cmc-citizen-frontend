@@ -1,0 +1,39 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary, option, checkboxOption, textArea %}
+{% from "date.njk" import dateInput %}
+{% from "form.njk" import yesNoRadio %}
+
+{% set heading = t('Select any support you’d require for a court hearing (optional)?') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Support Required" novalidate>
+        {{ csrfProtection(csrf) }}
+        {% set error = form.hasErrors() %}
+        <fieldset id="" class="form-group {% if error %} form-group-error {% endif %}">
+          {% call expandableCheckboxOption(form = form, name = 'languageSelected', value = 'true', label = "Language Interpreter", checked = form.valueFor('languageSelected')) %}
+            {{ textInput(label = t('What language needs to be interpreted?'), hint = t('You’ll have to arrange and pay for interpreters except for Welsh.'), form = form, name = 'languageInterpreted', inputClass = '') }}
+          {% endcall %}
+          {% call expandableCheckboxOption(form = form, name = 'signLanguageSelected', value = 'true', label = t('Sign Language Interpreter'), checked = form.valueFor('signLanguageSelected')) %}
+            {{ textInput(label = t('Enter the sign language you need'), form = form, name = 'signLanguageInterpreted', inputClass = '') }}
+          {% endcall %}
+          {{ option(form = form, name = 'hearingLoopSelected', value = 'true', type = 'checkbox', checked = form.valueFor('hearingLoopSelected'), label = t('Hearing Loop')) }}
+          {{ option(form = form, name = 'disabledAccessSelected', value = 'true', type = 'checkbox', checked = form.valueFor('disabledAccessSelected'), label = t('Disabled Access')) }}
+          {% call expandableCheckboxOption(form = form, name = 'otherSupportSelected', value = 'true', label = 'Other support', checked = form.valueFor('otherSupportSelected')) %}
+            {{ textArea(label = t('Explain the other support you need at your hearing'), form = form, name = 'otherSupport') }}
+          {% endcall %}
+        </fieldset>
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
+  {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
+    {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable', dataTarget = expandablePanelId) }}
+    <div class="form-group panel panel-border-narrow js-hidden {{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
+      {{ caller() }}
+    </div>
+{% endmacro %}

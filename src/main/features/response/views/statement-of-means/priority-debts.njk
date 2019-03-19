@@ -46,10 +46,10 @@
 {% macro priorityDebt(form, name, label) %}
   {% set checkboxName = name + 'Declared' %}
 
-  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
-    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of income', amountLabel = 'Repayment amount', amountHint = 'Only include the amount you’re paying to clear previously missed regular payments', scheduleLabel = 'Repaid every') }}
-    {{ linkButton(name = 'action[resetDebt][' + name + ']', label = 'Reset this debt', class = 'link-button js-hidden') }}
-  {% endcall %}
+    {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
+      {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of income', amountLabel = 'Repayment amount', amountHint = 'Only include the amount you’re paying to clear previously missed regular payments', scheduleLabel = 'Repaid every') }}
+      {{ linkButton(name = 'action[resetDebt][' + name + ']', label = 'Reset this debt', class = 'link-button js-hidden') }}
+    {% endcall %}
 {% endmacro %}
 
 
