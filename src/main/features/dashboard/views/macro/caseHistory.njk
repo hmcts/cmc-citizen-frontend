@@ -1,14 +1,21 @@
-{% from "./caseStatus.njk" import caseStatusForClaimant, caseStatusForDefendant %}
+{% from "internalLink.njk" import internalLink %}
+{% from "./caseStatus.njk" import
+  caseStatusForClaimant,
+  caseStatusForDefendant %}
 
-{% from "./claimStatus/noReponse.njk" import noResponseForClaimantClaimDetails, noResponseForDefendantClaimDetails %}
-{% from "./claimStatus/moreTimeRequested.njk" import moreTimeRequestedForClaimantClaimDetails, moreTimeRequestedForDefendantClaimDetails %}
+{% from "./claimStatus/noReponse.njk" import
+  noResponseForClaimantClaimDetails,
+  noResponseForDefendantClaimDetails %}
+{% from "./claimStatus/moreTimeRequested.njk" import
+  moreTimeRequestedForClaimantClaimDetails,
+  moreTimeRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/ccjEligible.njk" import
   ccjEligibleForClaimantClaimDetails,
   ccjEligibleForDefendantClaimDetails %}
 {% from "./claimStatus/ccjRequested.njk" import
-ccjRequestedForClaimantClaimDetails,
-ccjRequestedForDefendantClaimDetails %}
+  ccjRequestedForClaimantClaimDetails,
+  ccjRequestedForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimRejected.njk" import
   claimRejectedAlreadyPaidForClaimantClaimDetails,
@@ -39,7 +46,7 @@ ccjRequestedForDefendantClaimDetails %}
   claimFullAdmissionForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimFullAdmissionForClaimant.njk" import
-claimFullAdmissionForClaimantClaimDetails,
+  claimFullAdmissionForClaimantClaimDetails,
   claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails %}
 
 {% from "./claimStatus/offerSubmitted.njk" import
@@ -58,8 +65,19 @@ claimFullAdmissionForClaimantClaimDetails,
 {% from "./claimStatus/claimantResponse.njk" import
   claimantWithDefendantAsBusinessResponseDetailedStatus %}
 
-{% from "./claimStatus/paidInFullClaimant.njk" import paidInFullClaimantClaimSettledDetails, paidInFullClaimantClaimDetails, paidInFullCCJCancelledClaimantClaimDetails, paidInFullCCJSatisfiedClaimantClaimDetails %}
-{% from "./claimStatus/paidInFullDefendant.njk" import paidInFullDefendantClaimDetails, paidInFullCCJSatisfiedDefendantClaimDetails, paidInFullCCJCancelledDefendantClaimDetails %}
+{% from "./claimStatus/paidInFullClaimant.njk" import
+  paidInFullClaimantClaimSettledDetails,
+  paidInFullClaimantClaimDetails,
+  paidInFullCCJCancelledClaimantClaimDetails,
+  paidInFullCCJSatisfiedClaimantClaimDetails %}
+{% from "./claimStatus/paidInFullDefendant.njk" import
+  paidInFullDefendantClaimDetails,
+  paidInFullCCJSatisfiedDefendantClaimDetails,
+  paidInFullCCJCancelledDefendantClaimDetails %}
+{% from "./claimStatus/statesPaidRejected.njk" import
+  statesPaidRejectedDefendantClaimDetails,
+  statesPaidInFullRejectedClaimantClaimDetails %}
+
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import
   admissionByCCJDefendantClaimDetails,
@@ -80,8 +98,9 @@ claimFullAdmissionForClaimantClaimDetails,
   CCJAfterBreakingSettlementAgreementClaimDetails,
   pastPaymentDeadlineDefendantClaimDetails %}
 
-{% from "./claimStatus/partAdmissionStatesPaidAccepted.njk" import partAdmissionStatesPaidClaimSettledClaimantDetails,
-partAdmissionStatesPaidClaimSettledDefendantsDetails %}
+{% from "./claimStatus/statesPaidAccepted.njk" import
+  statesPaidClaimSettledClaimantDetails,
+  statesPaidClaimSettledDefendantsDetails %}
 
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
   {% for state in claim.stateHistory %}
@@ -154,12 +173,14 @@ partAdmissionStatesPaidClaimSettledDefendantsDetails %}
       {{ claimantWithDefendantAsBusinessResponseDetailedStatus(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
       {{ requestCCJ(claim) }}
-    {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
       {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
       {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
-    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID %}
-      {{ partAdmissionStatesPaidClaimSettledClaimantDetails(claim, csrf) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+      {{ statesPaidClaimSettledClaimantDetails(claim, csrf) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+      {{ statesPaidInFullRejectedClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -223,7 +244,7 @@ partAdmissionStatesPaidClaimSettledDefendantsDetails %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReachedForDefendant(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
         {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
         {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
@@ -235,8 +256,10 @@ partAdmissionStatesPaidClaimSettledDefendantsDetails %}
         {{ settlementAgreementRejectedDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
         {{ partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) }}
-      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID %}
-        {{ partAdmissionStatesPaidClaimSettledDefendantsDetails(claim, csrf) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+        {{ statesPaidClaimSettledDefendantsDetails(claim, csrf) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+        {{ statesPaidRejectedDefendantClaimDetails(claim) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -244,8 +267,8 @@ partAdmissionStatesPaidClaimSettledDefendantsDetails %}
 {% macro _settleOutOfCourtOption (claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-    <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
-        { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
+    <p>{{ t('You may still {{ settleOutOfCourt }}. For example you could offer to fix goods you sold the claimant or suggest a payment.',
+        { settleOutOfCourt: internalLink(t('settle the claim out of court'), OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId })) }) | safe }}</p>
     <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
   </div>
 {% endmacro %}
