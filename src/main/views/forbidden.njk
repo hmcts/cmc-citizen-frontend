@@ -1,11 +1,14 @@
 {% extends "layout.njk" %}
 
+{% from "internalLink.njk" import internalLink %}
+
 {% set heading = 'Forbidden' %}
 
 {% block content %}
   <p>
-    {{ t('You can return to <a href="/">Civil Money Claims</a> and start your claim or defence again.') | safe }}
+    {{ t('You can return to {{ homepage }} and start your claim or defence again.',
+      { homepage: internalLink(t('Civil Money Claims'), AppPaths.homePage.uri) }) | safe }}
   </p>
 
-  <a class="button" href="/">{{ t('Start again') }}</a>
+  {{ internalLink(t('Start again'), AppPaths.homePage.uri, 'button') }}
 {% endblock %}
