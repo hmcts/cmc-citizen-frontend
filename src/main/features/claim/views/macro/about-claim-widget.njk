@@ -25,12 +25,12 @@
     </li>
     <li>
       <strong class="bold">{{ t('Claim details:') }}</strong>
-      <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
+      {{ internalLink(t('View claim'), ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }), 'block') }}
     </li>
     {% if showResponse and claim.response %}
       <li>
         <strong class="bold">{{ t(responseLabel) }}</strong>
-        <a class="block" href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
+        {{ internalLink(t('Download response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
       </li>
     {% endif %}
   </ul>
