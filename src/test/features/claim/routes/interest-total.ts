@@ -55,6 +55,30 @@ describe('Claim issue: interest total page', () => {
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
+      it('should render page when no reason is sent', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            amount: 1000
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
+      it('should render page when no amount is sent', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            reason: 'Some reason'
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.rejectSave()

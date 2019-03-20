@@ -75,7 +75,8 @@
     "paidInFull": "FEATURE_PAID_IN_FULL",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY",
-    "mediation": "FEATURE_MEDIATION"
+    "mediation": "FEATURE_MEDIATION",
+    "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE"
   },
 
   "oauth": {

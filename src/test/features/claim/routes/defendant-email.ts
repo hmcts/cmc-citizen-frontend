@@ -74,6 +74,17 @@ describe('Claim issue: defendant email page', () => {
           .send({ address: 'defendant@example.com' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
+
+      it('should redirect to task list when no email address is given', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveSave()
+
+        await request(app)
+          .post(ClaimPaths.defendantEmailPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ address: '' })
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
+      })
     })
   })
 })

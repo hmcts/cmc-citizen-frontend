@@ -1,3 +1,6 @@
+tags:
+  - rpe-feature-toggle-api-pod
+
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
   registerDns: false
@@ -5,19 +8,16 @@ rpe-feature-toggle-api:
     cron:
       enabled: false
     oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0'
-        admin@example.com Password12 && /scripts/add-toggle.sh cmc_defence_reminders
-        'CMC defence reminders' false admin@example.com Password12
+      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST} &&
+        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST} && 
+        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST}
       enabled: true
       permissions: cmc-new-features-consent-given
   java:
+    image: hmcts.azurecr.io/hmcts/rpe-feature-toggle-api:latest
     releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
     environment:
       FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
-      ADMIN_USERNAME_TEST: admin@example.com
-      ADMIN_PASSWORD_TEST: Password12
-      EDITOR_USERNAME_TEST: editor@example.com
-      EDITOR_PASSWORD_TEST: Password12
   postgresql:
     postgresqlDatabase: hmcts
 
@@ -29,7 +29,17 @@ nodejs:
   cpuRequests: 0.2
   memoryLimits: 512Mi
   cpuLimits: 1
-  environment:    
+  environment:
+    IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
+    IDAM_URL: https://preprod-idamapi.reform.hmcts.net:3511
+    IDAM_AUTHENTICATION_WEB_URL: https://idam.preprod.ccidam.reform.hmcts.net
+    IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
+    FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
+    CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
+    DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
     REFORM_TEAM: cmc
     REFORM_SERVICE_NAME: citizen-frontend
     REFORM_ENVIRONMENT: preview
@@ -47,6 +57,7 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     FEATURE_MOCK_PAY: false
     FEATURE_MEDIATION: false
+    FEATURE_DIRECTIONS_QUESTIONNAIRE: false
   keyVaults:
     cmc:
       resourceGroup: cmc

@@ -15,16 +15,72 @@ import {
   fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate, fullAdmissionWithSoMPaymentBySetDateInNext2Days,
+  fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
+  fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { organisation } from 'test/data/entity/party'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
+
+export const sampleClaimIssueCommonObj = {
+  id: 1,
+  submitterId: '1',
+  submitterEmail: 'claimant@example.com',
+  externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
+  defendantId: '123',
+  referenceNumber: '000MC050',
+  createdAt: '2017-07-25T22:45:51.785',
+  issuedOn: '2017-07-25',
+  totalAmountTillToday: 200,
+  totalAmountTillDateOfIssue: 200,
+  moreTimeRequested: false,
+  responseDeadline: '2017-08-08',
+  features: ['admissions']
+}
+
+export const sampleClaimIssueOrgVOrgObj = {
+  ...sampleClaimIssueCommonObj,
+  claim: {
+    claimants: [
+      {
+        ...organisation
+      }
+    ],
+    defendants: [
+      {
+        ...organisation
+      }
+    ],
+    payment: {
+      id: '12',
+      amount: 2500,
+      state: { status: 'failed' }
+    },
+    amount: {
+      type: 'breakdown',
+      rows: [{ reason: 'Reason', amount: 200 }]
+    },
+    interest: {
+      type: ClaimInterestType.STANDARD,
+      rate: 10,
+      reason: 'Special case',
+      interestDate: {
+        type: InterestDateType.SUBMISSION,
+        endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+      } as InterestDate
+    } as Interest,
+    reason: 'Because I can',
+    feeAmountInPennies: 2500,
+    timeline: { rows: [{ date: 'a', description: 'b' }] }
+  }
+}
 
 export const sampleClaimIssueObj = {
   id: 1,
@@ -298,6 +354,11 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
 }
 
+export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesPaidGreaterThanClaimAmount
+}
+
 export function mockCalculateInterestRate (expected: number): mock.Scope {
   return mock(serviceBaseURL)
     .get('/interest/calculate')
@@ -315,6 +376,12 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
+}
+
+export function resolveRetrieveClaimBySampleExternalId (sampleData?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...sampleData })
 }
 
 export function resolveRetrieveClaimByExternalIdWithResponse (override?: object): mock.Scope {
@@ -341,10 +408,10 @@ export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason: string = 
     .reply(HttpStatus.NOT_FOUND, reason)
 }
 
-export function resolveRetrieveByClaimantId (claimOverride?: object) {
+export function resolveRetrieveByClaimantId (claim: object = sampleClaimObj, claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...claimOverride }])
+    .reply(HttpStatus.OK, [{ ...claim, ...claimOverride }])
 }
 
 export function resolveRetrieveByClaimantIdToEmptyList () {
@@ -389,10 +456,10 @@ export function rejectRetrieveByLetterHolderId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string) {
+export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string, claim: object = sampleClaimObj, claimOverride?: any) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
+    .reply(HttpStatus.OK, [{ ...claim, referenceNumber: referenceNumber, defendantId: defendantId, ...claimOverride }])
 }
 
 export function rejectRetrieveByDefendantId (reason: string) {

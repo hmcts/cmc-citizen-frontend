@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "task-list.njk" import task, taskListHeading, disabledTask %}
 {% from "timeRemaining.njk" import timeRemaining %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set heading = 'Respond to a money claim' %}
 
@@ -34,6 +35,18 @@
         </div>
       {% endif %}
 
+
+      {% if directionsQuestionnaireSection %}
+        <div class="task-group">
+          {{ taskListHeading(directionsQuestionnaireSection.name) }}
+
+          {% for item in directionsQuestionnaireSection.tasks %}
+            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+
       {% if submitSection %}
         <div class="task-group">
           {{ taskListHeading(submitSection.name) }}
@@ -65,9 +78,7 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>
-            <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">
-              {{ t('View claim') }}
-            </a>
+            {{ internalLink(t('View claim'), ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId })) }}
           </li>
         </ul>
       </div>

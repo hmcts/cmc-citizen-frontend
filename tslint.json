@@ -1,5 +1,6 @@
 {
   "extends": "tslint-config-standard",
+  "rulesDirectory": ["node_modules/tslint-microsoft-contrib"],
   "rules": {
     "member-ordering": [
       true,
@@ -21,6 +22,7 @@
     ],
     "no-default-export": true,
     "no-floating-promises": false,
-    "no-console": true
+    "no-console": true,
+    "mocha-avoid-only": true
   }
 }

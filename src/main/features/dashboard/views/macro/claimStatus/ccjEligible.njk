@@ -1,4 +1,5 @@
 {% from "form.njk" import csrfProtection, submitButton %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro ccjEligibleForClaimantDashboard() %}
   {{ t('The defendant has not responded to your claim. You can request a County Court Judgment against them.') }}
@@ -40,5 +41,5 @@
 {% endmacro %}
 
 {% macro _respondToClaimLink(claim) %}
-  <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
+  {{ internalLink(t('Respond to claim'), ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}

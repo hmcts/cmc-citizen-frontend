@@ -44,26 +44,19 @@ export default express.Router()
     Paths.canWeUsePage.uri,
     FormValidator.requestHandler(CanWeUse, CanWeUse.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
-      const claim: Claim = res.locals.claim
       const form: Form<CanWeUse> = req.body
 
       if (form.hasErrors()) {
         renderView(form, res)
       } else {
+        const claim: Claim = res.locals.claim
         const draft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
+
         draft.document.canWeUse = form.model
 
         if (form.model.option === FreeMediationOption.YES) {
-          let phoneNumber: string
-          if (!claim.isResponseSubmitted()) {
-            const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
-            phoneNumber = draftResponse.document.defendantDetails.mobilePhone ? draftResponse.document.defendantDetails.mobilePhone.number : undefined
-          } else {
-            phoneNumber = claim.claimData.claimant.mobilePhone
-          }
-          draft.document.canWeUse.mediationPhoneNumber = phoneNumber
-
+          draft.document.canWeUse.mediationPhoneNumber = undefined
         }
         await new DraftService().save(draft, user.bearerToken)
 

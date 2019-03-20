@@ -36,7 +36,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
-    admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim),
+    admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     mediationDraft: mediationDraft.document
   })
@@ -53,7 +53,7 @@ function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
 
 function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
   if (isStatementOfTruthRequired(draft)) {
-    if (claim.claimData.defendant.isBusinessOrSoleTrader()) {
+    if (claim.claimData.defendant.isBusiness()) {
       return SignatureType.QUALIFIED
     } else {
       return SignatureType.BASIC
