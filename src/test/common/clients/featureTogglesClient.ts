@@ -17,14 +17,14 @@ describe('featureToggleClient', () => {
     it('should return admission is off when feature toggle for admission is disabled', async () => {
 
       featureToggleApiMock.resolveIsAdmissionsAllowed(false)
-      const result = await featureTogglesClient.isAdmissionsAllowed(user, roles)
+      const result = await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')
       expect(result).to.be.false
     })
 
     it('should return admission is on when feature toggle for admission is enabled', async () => {
 
       featureToggleApiMock.resolveIsAdmissionsAllowed()
-      const result = await featureTogglesClient.isAdmissionsAllowed(user, roles)
+      const result = await featureTogglesClient.isFeatureToggleEnabled(user, roles,'cmc_admissions')
       expect(result).to.be.true
     })
   })
@@ -32,7 +32,7 @@ describe('featureToggleClient', () => {
     it('should throw error', async () => {
 
       featureToggleApiMock.rejectIsAdmissionsAllowed()
-      expect(await featureTogglesClient.isAdmissionsAllowed(user, roles)
+      expect(await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')
         .catch(err => expect(err).to.be.serverError.withText('Error')))
     })
   })
