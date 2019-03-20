@@ -1,5 +1,5 @@
 import * as RouteHelper from 'test/features/directions-questionnaire/routes/helper/dqRouteHelper'
-import { PartyType } from '../../../../integration-test/data/party-type'
+import { PartyType } from 'integration-test/data/party-type'
 import { expect } from 'chai'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
