@@ -23,7 +23,7 @@ const baseCompanyResponseData = {
   moreTimeNeeded: 'no'
 }
 
-const baseDefenceData = {
+export const baseDefenceData = {
   responseType: 'FULL_DEFENCE',
   defence: 'My defence',
   freeMediation: 'no'
