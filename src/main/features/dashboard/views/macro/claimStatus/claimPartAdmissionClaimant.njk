@@ -23,10 +23,8 @@
 
 {% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
 
-  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY
-     or claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE
-     or claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    {{ t("Respond to the defendant's offer.") }}
+  {% if claim.response.paymentIntention.paymentOption %}
+    {{ t('Respond to the defendant’s offer.') }}
   {% else %}
     {{ t('Respond to the defendant.') }}
   {% endif %}
