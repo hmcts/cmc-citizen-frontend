@@ -3,21 +3,11 @@ import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 
 export function getPreferredParty (claim: Claim): MadeBy {
-  const isClaimantBusiness: boolean = claim.claimData.claimant.isBusiness()
   const isDefendantBusiness: boolean = claim.claimData.defendant.isBusiness()
-
-  if (isClaimantBusiness) {
-    if (isDefendantBusiness) {
-      return MadeBy.CLAIMANT
-    } else {
-      return MadeBy.DEFENDANT
-    }
+  if (isDefendantBusiness) {
+    return MadeBy.CLAIMANT
   } else {
-    if (isDefendantBusiness) {
-      return MadeBy.CLAIMANT
-    } else {
-      return MadeBy.DEFENDANT
-    }
+    return MadeBy.DEFENDANT
   }
 }
 

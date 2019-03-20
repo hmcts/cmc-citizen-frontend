@@ -12,7 +12,7 @@ describe('ExceptionalCircumstances', () => {
   describe('constructor', () => {
     it('should set the primitive fields to undefined', () => {
       const exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances()
-      expect(exceptionalCircumstances.option).to.be.undefined
+      expect(exceptionalCircumstances.exceptionalCircumstances).to.be.undefined
       expect(exceptionalCircumstances.reason).to.be.undefined
     })
   })

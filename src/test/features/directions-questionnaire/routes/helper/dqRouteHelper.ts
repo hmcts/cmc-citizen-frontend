@@ -1,10 +1,10 @@
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { MadeBy } from 'offer/form/models/madeBy'
-import { PartyType } from '../../../../../integration-test/data/party-type'
+import { PartyType } from 'integration-test/data/party-type'
 import { Interest } from 'claims/models/interest'
 import { InterestDateType } from 'common/interestDateType'
-import * as SampleParty from '../../../../data/entity/party'
-import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
+import * as SampleParty from 'test/data/entity/party'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 
