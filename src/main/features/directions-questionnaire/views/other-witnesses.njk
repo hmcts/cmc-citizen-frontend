@@ -10,7 +10,7 @@
         {{ csrfProtection(csrf) }}
 
         {% set error = form.errorFor('otherWitnesses') %}
-        <fieldset id="" class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset class="form-group {% if error %} form-group-error {% endif %}">
           <legend>
             <span class="visuallyhidden">
               {{ t('Do you want witnesses to give evidence?') }}
