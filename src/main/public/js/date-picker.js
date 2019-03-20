@@ -2,8 +2,10 @@ const datePickerUtils = {
 
   getIndexOfDate: element => $(element).data('index'),
 
-  getValueOfDate: element => new Date($(element).text()),
+  // TODO: returns the date as displayed - decide whether or not to keep that
+  getDisplayValueOfDate: element => new Date($(element).text()),
 
+  // simply puts the two parameters into a structure
   buildDatesArray: (index, value) => {
     return {
       index: index,
@@ -13,18 +15,23 @@ const datePickerUtils = {
 
   formatDateForDisplay: d => moment(new Date(d)).format('dddd D MMMM YYYY'),
 
-  formatDateForData: d => moment(new Date(d)).format('YYYY-MM-D'),
-
-  sortDates: dates => dates.sort((date1, date2) => date1.value - date2.value),
+  // d should be a Date object
+  // returns a basic LocalDate structure
+  formatDateForData: d => {
+    let mDate = moment(d)
+    return {
+      year: mDate.year(),
+      month: mDate.month() + 1,
+      day: mDate.date()
+    }
+  },
 
   displayFirstOfMonth: date => {
     const mDate = moment(date)
     const day = mDate.format('D')
-    const month = mDate.format('MMM')
-    let displayMonth = {
-      content: '<span>' + day + '</span>'
-    }
+    let displayMonth = { content: '<span>' + day + '</span>' }
     if (day === '1') {
+      const month = mDate.format('MMM')
       displayMonth.content = '<span>' + day + '</span><p class="first-of-month">' + month + '</p>'
     }
     return displayMonth
@@ -53,7 +60,6 @@ const datePicker = {
       daysOfWeekDisabled: '06',
       defaultViewDate: moment().add(1, 'days').format('MM-D-YYYY'),
       startDate: '+1d',
-      endDate: '+10m',
       weekStart: 1,
       maxViewMode: 0,
       datesDisabled: datesDisabled,
@@ -61,6 +67,7 @@ const datePicker = {
         leftArrow: datePicker.toggleArrows('prev'),
         rightArrow: datePicker.toggleArrows('next')
       },
+      // date = "2019-04-06T23:00:00.000Z"
       beforeShowDay: date => datePickerUtils.displayFirstOfMonth(date)
     }).on('changeDate', event => datePicker.changeDateHandler(event))
 
@@ -81,10 +88,12 @@ const datePicker = {
 
   toggleArrows: nextOrPrevArrow => '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png" />',
 
+  // event.dates are Date objects
   changeDateHandler: event => {
     let uuid = /\/case\/([^/]+)\//.exec(window.location.pathname)[1]
     const csrf = $("input[name='_csrf']").val()
     let dates = event.dates.map(eventDate => datePickerUtils.formatDateForData(eventDate))
+    // dates : LocalDate[]
     $.post('/case/' + uuid + '/directions-questionnaire/hearing-dates/date-picker/replace', {
       _csrf: csrf,
       hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === 'yes',
@@ -94,7 +103,12 @@ const datePicker = {
       $('#date-selection-wrapper .add-another-delete-link').click(function (e) {
         e.preventDefault()
         let dateIndex = /\d+$/.exec(e.currentTarget.id)[0]
-        const d = dates.filter((date, index) => index !== Number(dateIndex)).map(dateStr => new Date(dateStr))
+        const d = dates
+        // moment months are 0-indexed
+          .map(localDate => moment({ ...localDate, month: localDate.month - 1 }))
+          .map(mDate => mDate.toDate())
+          .sort((date1, date2) => date1.getTime() - date2.getTime())
+          .filter((localDate, index) => index !== Number(dateIndex))
         datePicker.selector().datepicker('setDates', d)
       })
     })
@@ -104,7 +118,7 @@ const datePicker = {
     const list = $('.add-another-list .add-another-list-item > span').toArray()
     return list.map(item => datePickerUtils.buildDatesArray(
       datePickerUtils.getIndexOfDate(item),
-      datePickerUtils.getValueOfDate(item)
+      datePickerUtils.getDisplayValueOfDate(item)
     ))
   }
 }
