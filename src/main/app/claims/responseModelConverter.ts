@@ -101,7 +101,9 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
-        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
       statementOfTruth: this.convertStatementOfTruth(draft)
     }

@@ -23,6 +23,7 @@ import {
 } from 'test/data/entity/responseData'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { FeatureToggles } from 'utils/featureToggles'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 describe('Claimant response task list builder', () => {
   let claim: Claim
@@ -683,6 +684,33 @@ describe('Claimant response task list builder', () => {
         const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
         expect(taskList.tasks.find(task => task.name === taskName)).to.be.undefined
       })
+    })
+  })
+
+  describe('"Tell us more about the claim"', () => {
+    it('response is partial admission', () => {
+
+      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
+      draft = new DraftClaimantResponse().deserialize({
+        ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          acceptPaymentMethod: {
+            accept: {
+              option: 'no'
+            }
+          }
+        }
+      })
+      claim.features = ['admissions', 'directionsQuestionnaire']
+
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        draft, claim, new DirectionsQuestionnaireDraft()
+      )
+
+      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+        expect(taskList.name).to.contains('Tell us more about the claim')
+      } else {
+        expect(taskList).to.be.eq(undefined)
+      }
     })
   })
 
