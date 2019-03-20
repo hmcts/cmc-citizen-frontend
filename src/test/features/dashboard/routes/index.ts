@@ -180,7 +180,7 @@ describe('Dashboard page', () => {
               await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'))
+                .expect(res => expect(res).to.be.successful.withText('Respond to the defendant.'))
             })
 
             it('should show the correct status when the claim is marked as pay immediately and the offer is accepted', async () => {
@@ -216,7 +216,7 @@ describe('Dashboard page', () => {
               await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'))
+                .expect(res => expect(res).to.be.successful.withText('Respond to the defendant.'))
             })
 
             it('should show the correct status when the claim is marked as pay by instalments', async () => {
@@ -227,7 +227,7 @@ describe('Dashboard page', () => {
               await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'))
+                .expect(res => expect(res).to.be.successful.withText('Respond to the defendant.'))
             })
           })
         })
