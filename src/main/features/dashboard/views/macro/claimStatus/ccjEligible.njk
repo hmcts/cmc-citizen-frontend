@@ -11,12 +11,12 @@
     <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. '
         + 'You can request a County Court Judgment (CCJ) against them.',
         { defendantName : defendantName }) }}</p>
-    <p>{{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}</p>
+    <p>{{ t("The court will order them to pay the money. It doesn't guarantee that they'll pay it.") }}</p>
     <p>{{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.',
         { defendantName : defendantName }) }}</p>
     <form novalidate method="post">
       {{ csrfProtection(csrf) }}
-      {{ submitButton('Request a County Court Judgment') }}
+      {{ submitButton('Request a CCJ') }}
     </form>
   </div>
 {% endmacro %}
