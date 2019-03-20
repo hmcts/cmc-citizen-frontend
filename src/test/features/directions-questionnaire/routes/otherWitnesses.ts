@@ -18,7 +18,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
-  ...{ features: ['directions_questionnaire'] }
+  ...{ features: ['directionsQuestionnaire'] }
 }
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
