@@ -39,10 +39,44 @@ describe('OtherWitnesses', () => {
       expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
     })
 
-    it('should accept other witness with option and how many present' , () => {
+    it('should accept other witness with option and how many present', () => {
       const errors = validator.validateSync(new OtherWitnesses(YesNoOption.YES, 1))
       expect(errors).to.be.empty
     })
+  })
+
+  describe('fromObject should return', () => {
+
+    it('undefined when undefined provided', () => {
+      const model = OtherWitnesses.fromObject(undefined)
+
+      expect(model).to.be.eq(undefined)
+    })
+
+    it('empty object when unknown value provided', () => {
+      const model = OtherWitnesses.fromObject({ otherWitnesses: 'I do not know this value!' })
+
+      expect(model.otherWitnesses).to.be.eq(undefined)
+    })
+
+    it(`valid object when values provided`, () => {
+      const model = OtherWitnesses.fromObject({ otherWitnesses: 'yes' })
+      expect(model.otherWitnesses).to.be.eq(YesNoOption.YES)
+    })
+  })
+
+  describe('deserialize', () => {
+
+    it('should return an instance initialised with defaults for undefined', () => {
+      expect(new OtherWitnesses().deserialize(undefined)).to.be.eql(new OtherWitnesses())
+    })
+
+    it('should return an instance from given object', () => {
+      const actual: OtherWitnesses = new OtherWitnesses().deserialize({ otherWitnesses: 'yes', howMany: 1 })
+
+      expect(actual).to.be.eql(new OtherWitnesses(YesNoOption.YES, 1))
+    })
+
   })
 
   describe('isCompleted', () => {
