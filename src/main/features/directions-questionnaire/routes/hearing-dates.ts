@@ -12,20 +12,23 @@ import { Availability } from 'directions-questionnaire/forms/models/availability
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { LocalDate } from 'forms/models/localDate'
-import { YesNoOption } from 'models/yesNoOption'
 import * as Moment from 'moment'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
   res.render(Paths.hearingDatesPage.associatedView, {
     externalId: res.locals.claim.claimData.externalId,
     form: form,
-    dates: form.model ? form.model.unavailableDates : []
+    dates: (form.model ? form.model.unavailableDates : [])
+      .map(rawDate => LocalDate.fromObject(rawDate))
+      .map(localDate => localDate.toMoment())
   })
 }
 
 function renderFragment (res: express.Response, draft: Draft<DirectionsQuestionnaireDraft>) {
   res.render('directions-questionnaire/views/components/date-list', {
-    dates: draft.document.availability.unavailableDates,
+    dates: draft.document.availability.unavailableDates
+      .map(rawDate => LocalDate.fromObject(rawDate))
+      .map(localDate => localDate.toMoment()),
     externalId: res.locals.claim.externalId
   })
 }
@@ -73,7 +76,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
       const unavailableDates = req.body.unavailableDates
-      draft.document.availability = draft.document.availability || new Availability(YesNoOption.NO, [])
+      draft.document.availability = draft.document.availability || new Availability(undefined, [])
 
       const availability = draft.document.availability
       if (req.params.method === 'replace') {

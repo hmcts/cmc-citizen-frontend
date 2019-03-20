@@ -4,15 +4,9 @@ var datePickerUtils = {
     return _.find(dateList, { value: new Date(date) }).index;
   },
 
-  getIndexOfDate: function(element) {
-    return $(element).data('index');
-  },
+  getValueOfDate: element => new Date($(element).text()),
 
-  getValueOfDate: function(element) {
-    return new Date($(element).text());
-  },
-
-  buildDatesArray: function(index, value) {
+  buildDatesArray: (index, value) => {
     return {
       index: index,
       value: value
@@ -24,35 +18,24 @@ var datePickerUtils = {
     return date.format('dddd D MMMM YYYY');
   },
 
-  formatDateForData: d => moment(new Date(d)).format('YYYY-MM-D'),
-
-  sortDates: dates => dates.sort((date1, date2) => date1.value - date2.value),
-
-  isDateRemoved: function(currentDateList, newDateList) {
-    return currentDateList.length > newDateList.length
+  // d should be a Date object
+  // returns a basic LocalDate structure
+  formatDateForData: d => {
+    let mDate = moment(d)
+    return {
+      year: mDate.year(),
+      month: mDate.month() + 1,
+      day: mDate.date()
+    }
   },
 
-  sortDates: function(dates) {
-    return dates.sort(function(date1, date2) {
-      if (date1.value > date2.value) {
-        return 1;
-      }
-      if (date1.value < date2.value) {
-        return -1;
-      }
-      return 0;
-    });
-  },
-
-  displayFirstOfMonth: function(date) {
-    var mDate = moment(date);
-    var day = mDate.format('D');
-    var month = mDate.format('MMM');
-    var displayMonth = {
-      content: '<span>' + day + '</span>'
-    };
+  displayFirstOfMonth: date => {
+    const mDate = moment(date)
+    const day = mDate.format('D')
+    let displayMonth = { content: '<span>' + day + '</span>' }
     if (day === '1') {
-      displayMonth.content = '<span>' + day + '</span><p class="first-of-month">' + month + '</p>';
+      const month = mDate.format('MMM')
+      displayMonth.content = '<span>' + day + '</span><p class="first-of-month">' + month + '</p>'
     }
     return displayMonth;
   }
@@ -78,6 +61,7 @@ var datePicker = {
         leftArrow: datePicker.toggleArrows('prev'),
         rightArrow: datePicker.toggleArrows('next')
       },
+      // date = "2019-04-06T23:00:00.000Z"
       beforeShowDay: function(date) {
         return datePickerUtils.displayFirstOfMonth(date);
       }
@@ -118,10 +102,12 @@ var datePicker = {
     return '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png" />';
   },
 
+  // event.dates are Date objects
   changeDateHandler: event => {
     let uuid = /\/case\/([^/]+)\//.exec(window.location.pathname)[1]
     const csrf = $("input[name='_csrf']").val()
     let dates = event.dates.map(eventDate => datePickerUtils.formatDateForData(eventDate))
+    // dates : LocalDate[]
     $.post('/case/' + uuid + '/directions-questionnaire/hearing-dates/date-picker/replace', {
       _csrf: csrf,
       hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === 'yes',
@@ -131,7 +117,12 @@ var datePicker = {
       $('#date-selection-wrapper .add-another-delete-link').click(function (e) {
         e.preventDefault()
         let dateIndex = /\d+$/.exec(e.currentTarget.id)[0]
-        const d = dates.filter((date, index) => index !== Number(dateIndex)).map(dateStr => new Date(dateStr))
+        const d = dates
+        // moment months are 0-indexed
+          .map(localDate => moment({ ...localDate, month: localDate.month - 1 }))
+          .map(mDate => mDate.toDate())
+          .sort((date1, date2) => date1.getTime() - date2.getTime())
+          .filter((localDate, index) => index !== Number(dateIndex))
         datePicker.selector().datepicker('setDates', d)
       })
     })
@@ -168,7 +159,7 @@ var datePicker = {
     return list.map(function(item) {
       return datePickerUtils.buildDatesArray(
       datePickerUtils.getIndexOfDate(item),
-      datePickerUtils.getValueOfDate(item)
+      datePickerUtils.getDisplayValueOfDate(item)
     );
     });
   }
