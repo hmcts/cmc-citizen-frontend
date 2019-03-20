@@ -13,6 +13,8 @@ const datePickerUtils = {
 
   formatDateForDisplay: d => moment(new Date(d)).format('dddd D MMMM YYYY'),
 
+  formatDateForData: d => moment(new Date(d)).format('YYYY-MM-D'),
+
   sortDates: dates => dates.sort((date1, date2) => date1.value - date2.value),
 
   displayFirstOfMonth: date => {
@@ -79,48 +81,31 @@ const datePicker = {
 
   toggleArrows: nextOrPrevArrow => '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png" />',
 
-  changeDateHandler: event => datePicker.displayDateList(event.dates),
-
-  displayDateList: dates => {
-    const datesIndex = dates.map((date, index) => datePickerUtils.buildDatesArray(index, date))
-    const orderDates = datePickerUtils.sortDates(datesIndex)
-    let elements = ''
-
-    $.each(orderDates, (index, date) => {
-      elements += '<div id="add-another-list-items-' + date.index + '">' +
-        '<dd class="add-another-list-item">' +
-        '<span data-index="items-' + date.index + '">' + datePickerUtils.formatDateForDisplay(date.value) + '</span>' +
-        '<input type="hidden" name="unavailableDates[' + index + ']" value="' + new Date(date.value).getTime() + '" />' +
-        '</dd>' +
-        '<dd class="add-another-list-controls">' +
-        '<a class="add-another-delete-link link" data-index="' + date.index + '">Remove</a>' +
-        '</dd>' +
-        '</div>'
-    })
-    if (elements === '') {
-      const noItems = '<div>' +
-        '<dd class="add-another-list-item">' +
-        '<div id="items" class="noItems">No dates added yet</div>' +
-        '</dd>' +
-        '</div>'
-      $('.add-another-list').empty().append(noItems)
-    } else {
-      $('.add-another-list').empty().append(elements)
-      $('.add-another-delete-link').click(function () {
-        const index = $(this).data('index')
-        $('#add-another-list-items-' + index).remove()
-        let d = datePicker.getData().map(date => date.value)
+  changeDateHandler: event => {
+    let uuid = /\/case\/([^/]+)\//.exec(window.location.pathname)[1]
+    const csrf = $("input[name='_csrf']").val()
+    let dates = event.dates.map(eventDate => datePickerUtils.formatDateForData(eventDate))
+    $.post('/case/' + uuid + '/directions-questionnaire/hearing-dates/date-picker/replace', {
+      _csrf: csrf,
+      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === 'yes',
+      unavailableDates: dates,
+    }, (result) => {
+      $('#date-selection-wrapper').empty().append(result)
+      $('#date-selection-wrapper .add-another-delete-link').click(function (e) {
+        e.preventDefault()
+        let dateIndex = /\d+$/.exec(e.currentTarget.id)[0]
+        const d = dates.filter((date, index) => index !== Number(dateIndex)).map(dateStr => new Date(dateStr))
         datePicker.selector().datepicker('setDates', d)
       })
-    }
+    })
   },
 
   getData: () => {
     const list = $('.add-another-list .add-another-list-item > span').toArray()
     return list.map(item => datePickerUtils.buildDatesArray(
-        datePickerUtils.getIndexOfDate(item),
-        datePickerUtils.getValueOfDate(item)
-      ))
+      datePickerUtils.getIndexOfDate(item),
+      datePickerUtils.getValueOfDate(item)
+    ))
   }
 }
 

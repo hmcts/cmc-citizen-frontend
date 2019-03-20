@@ -10,5 +10,5 @@ export class Paths {
   static readonly expertPage = new RoutablePath(`${directionsQuestionnairePath}/expert`)
   static readonly hearingDatesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-dates`)
 
-  static readonly ajaxDatePickerReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/:method`)
+  static readonly hearingDatesUpdateReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/:method`)
 }

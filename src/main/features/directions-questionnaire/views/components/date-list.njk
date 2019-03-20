@@ -6,19 +6,17 @@
     {% for date in dates %}
       <div id="add-another-list-items-{{ loop.index0 }}">
         <dd class="add-another-list-item">
-          <span data-index="items-{{ loop.index0 }}">{{ date }}</span>
+          <span data-index="items-{{ loop.index0 }}">{{ date | date }}</span>
           <input type="hidden" name="unavailableDates[{{ loop.index0 }}]" value="{{ date }}"/>
         </dd>
         <dd class="add-another-list-controls">
-          <form method="post" action="{{ DirectionsQuestionnairePaths.ajaxDatePickerReceiver.evaluateUri({
-            externalId: externalId,
-            method: 'delete'
-          }) }}">
-            <input type="hidden" name="year" value="{{ date.getYear() }}" />
-            <input type="hidden" name="month" value="{{ date.getMonth() }}" />
-            <input type="hidden" name="date" value="{{ date.getDate() }}" />
-            <button type="submit" class="add-another-delete-link link">{{ t('Remove') }}</button>
-          </form>
+          {{ internalLink(t('Remove'),
+            DirectionsQuestionnairePaths.hearingDatesUpdateReceiver.evaluateUri({
+              externalId: externalId,
+              method: 'remove'
+            }),
+            'add-another-delete-link link',
+            id = 'add-another-delete-link-' + loop.index0) }}
         </dd>
       </div>
     {% endfor %}
