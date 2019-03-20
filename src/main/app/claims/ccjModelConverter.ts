@@ -42,20 +42,23 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
 }
 
 export function retrievePaymentOptionsFromClaim (claim: Claim): CCJPaymentOption {
-  if (claim.response && claim.isAdmissionsResponse() &&
-    ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime())) {
+  if (!claim.response || !claim.isAdmissionsResponse()) {
+    return undefined
+  } else if (((claim.settlement && (claim.settlementReachedAt || claim.settlement.isOfferRejectedByDefendant()))
+    || claim.hasDefendantNotSignedSettlementAgreementInTime())) {
     const lastOffer: Offer = claim.settlement.getLastOffer()
     if (lastOffer && lastOffer.paymentIntention) {
       const paymentOptionFromOffer: PaymentOption = lastOffer.paymentIntention.paymentOption
       return new CCJPaymentOption(PaymentType.valueOf(paymentOptionFromOffer))
     }
+  } else {
+    return undefined
   }
-  return undefined
 }
 
 export function getRepaymentPlanForm (claim: Claim, draft: DraftWrapper<DraftCCJ>): RepaymentPlanForm {
   if (draft.document.paymentOption.option === PaymentType.INSTALMENTS) {
-    if ((claim.settlement && claim.settlementReachedAt) || claim.hasDefendantNotSignedSettlementAgreementInTime()) {
+    if ((claim.settlement && (claim.settlementReachedAt || claim.settlement.isOfferRejectedByDefendant())) || claim.hasDefendantNotSignedSettlementAgreementInTime()) {
       const coreRepaymentPlan: CoreRepaymentPlan = claim.settlement.getLastOffer().paymentIntention.repaymentPlan
       const firstPaymentDate: Moment = calculateMonthIncrement(MomentFactory.currentDate(), 1)
       const paymentSchedule: PaymentSchedule = PaymentSchedule.of(coreRepaymentPlan.paymentSchedule)
