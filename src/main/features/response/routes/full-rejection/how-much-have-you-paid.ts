@@ -52,7 +52,7 @@ export default express.Router()
         const { externalId } = req.params
 
         const paidLessThanClaimed = form.model.amount < claim.totalAmountTillToday
-        const admissionsEnabled = ClaimFeatureToggles.areAdmissionsEnabled(claim)
+        const admissionsEnabled = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)
 
         if (!paidLessThanClaimed) {
           delete draft.document.rejectAllOfClaim.whyDoYouDisagree

@@ -53,6 +53,10 @@ variable "feature_mediation" {
   default = "false"
 }
 
+variable "feature_directions_questionnaire" {
+  default = "false"
+}
+
 variable "feature_new_features_consent" {
   default = "false"
 }
