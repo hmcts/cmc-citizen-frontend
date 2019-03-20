@@ -24,9 +24,9 @@ var datePickerUtils = {
     return date.format('dddd D MMMM YYYY');
   },
 
-  isDateAdded: function(currentDateList, newDateList) {
-    return newDateList.length > currentDateList.length
-  },
+  formatDateForData: d => moment(new Date(d)).format('YYYY-MM-D'),
+
+  sortDates: dates => dates.sort((date1, date2) => date1.value - date2.value),
 
   isDateRemoved: function(currentDateList, newDateList) {
     return currentDateList.length > newDateList.length
@@ -118,60 +118,23 @@ var datePicker = {
     return '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png" />';
   },
 
-  changeDateHandler: function(event) {
-    var dates = event.dates;
-    var currentDates = datePicker.getData();
-    var added = datePickerUtils.isDateAdded(currentDates, dates);
-    var removed = datePickerUtils.isDateRemoved(currentDates, dates);
-    if (added) {
-      return datePicker.postDate(dates);
-    } else if (removed) {
-      return datePicker.removeDate(dates);
-    }
-    return datePicker.displayDateList(dates);
-  },
-
-  displayDateList: function(dates) {
-    var datesIndex = dates.map(function(date, index) {
-      return datePickerUtils.buildDatesArray(index, date);
-    });
-    var orderDates = datePickerUtils.sortDates(datesIndex);
-    var elements = '';
-
-    $.each(orderDates, function(index, date) {
-      elements += '<div id="add-another-list-items-' + date.index + '">' +
-        '<dd class="add-another-list-item">' +
-        '<span data-index="items-' + date.index + '">' + datePickerUtils.formatDateForDisplay(date.value) + '</span>' +
-        '</dd>' +
-        '<dd class="add-another-list-controls">' +
-        '<a class="add-another-delete-link link" data-index="' + date.index + '">Remove</a>' +
-        '</dd>' +
-        '</div>';
-    });
-    if (elements === '') {
-      var noItems = '<div>' +
-        '<dd class="add-another-list-item">' +
-        '<div id="items" class="noItems">No dates added yet</div>' +
-        '</dd>' +
-        '</div>';
-      $('.add-another-list').empty().append(noItems);
-    } else {
-      $('.add-another-list').empty().append(elements);
-      $('.add-another-delete-link').click(function () {
-        const index = $(this).data('index');
-        return $.ajax({
-          type: 'GET',
-          url: '/prototype-180522/016-hearing-dates/' + index + '/delete',
-          success: function () {
-            $('#add-another-list-items-' + index).remove();
-            var d = datePicker.getData().map(function (date) {
-              return date.value
-            });
-            datePicker.selector().datepicker('setDates', d);
-          }
-        });
-      });
-    }
+  changeDateHandler: event => {
+    let uuid = /\/case\/([^/]+)\//.exec(window.location.pathname)[1]
+    const csrf = $("input[name='_csrf']").val()
+    let dates = event.dates.map(eventDate => datePickerUtils.formatDateForData(eventDate))
+    $.post('/case/' + uuid + '/directions-questionnaire/hearing-dates/date-picker/replace', {
+      _csrf: csrf,
+      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === 'yes',
+      unavailableDates: dates,
+    }, (result) => {
+      $('#date-selection-wrapper').empty().append(result)
+      $('#date-selection-wrapper .add-another-delete-link').click(function (e) {
+        e.preventDefault()
+        let dateIndex = /\d+$/.exec(e.currentTarget.id)[0]
+        const d = dates.filter((date, index) => index !== Number(dateIndex)).map(dateStr => new Date(dateStr))
+        datePicker.selector().datepicker('setDates', d)
+      })
+    })
   },
 
   postDate: function (dates) {
@@ -204,9 +167,9 @@ var datePicker = {
     var list = $('.add-another-list .add-another-list-item > span').toArray();
     return list.map(function(item) {
       return datePickerUtils.buildDatesArray(
-        datePickerUtils.getIndexOfDate(item),
-        datePickerUtils.getValueOfDate(item)
-      );
+      datePickerUtils.getIndexOfDate(item),
+      datePickerUtils.getValueOfDate(item)
+    );
     });
   }
 };

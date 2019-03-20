@@ -11,9 +11,30 @@ import { DraftService } from 'services/draftService'
 import { Availability } from 'directions-questionnaire/forms/models/availability'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { MadeBy } from 'offer/form/models/madeBy'
+import { LocalDate } from 'forms/models/localDate'
+import { YesNoOption } from 'models/yesNoOption'
+import * as Moment from 'moment'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
-  res.render(Paths.hearingDatesPage.associatedView, { form: form })
+  res.render(Paths.hearingDatesPage.associatedView, {
+    externalId: res.locals.claim.claimData.externalId,
+    form: form,
+    dates: form.model ? form.model.unavailableDates : []
+  })
+}
+
+function renderFragment (res: express.Response, draft: Draft<DirectionsQuestionnaireDraft>) {
+  res.render('directions-questionnaire/views/components/date-list', {
+    dates: draft.document.availability.unavailableDates,
+    externalId: res.locals.claim.externalId
+  })
+}
+
+function sortDates (dates: LocalDate[]): LocalDate[] {
+  if (!dates) {
+    return []
+  }
+  return dates.sort((date1, date2) => Moment(date1).valueOf() - Moment(date2).valueOf())
 }
 
 /* tslint:disable:no-default-export */
@@ -47,3 +68,21 @@ export default express.Router()
         res.redirect(url)
       }
     }))
+
+  .post(Paths.hearingDatesUpdateReceiver.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+      const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
+      const unavailableDates = req.body.unavailableDates
+      draft.document.availability = draft.document.availability || new Availability(YesNoOption.NO, [])
+
+      const availability = draft.document.availability
+      if (req.params.method === 'replace') {
+        availability.unavailableDates = sortDates(unavailableDates)
+      } else if (req.params.method === 'remove') {
+
+      }
+      const user = res.locals.user
+      await new DraftService().save(draft, user.bearerToken)
+      renderFragment(res, draft)
+    })
+  )

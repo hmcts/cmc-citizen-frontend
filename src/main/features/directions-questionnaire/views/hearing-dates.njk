@@ -30,8 +30,9 @@
           <h2 class="heading-medium">{{ t('Select the dates you can’t go to a hearing') }}</h2>
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
           <div id="date-picker" class="datepicker"></div>
-          {% include '../ajax/date-list.njk' %}
-          <pre>{{ dates if dates else 'undefined' }}</pre>
+          <div id="date-selection-wrapper">
+            {% include '../views/components/date-list.njk' %}
+          </div>
         </div>
         {{ saveAndContinueButton() }}
       </form>
