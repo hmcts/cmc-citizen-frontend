@@ -12,7 +12,7 @@
       {% if not claimDraftSaved %}
         {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
       {% endif %}
-      
+
       {% if claimsAsClaimant | length or claimDraftSaved %}
 
       <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>
@@ -44,19 +44,27 @@
           </tr>
         {% endif %}
         {% for claim in claimsAsClaimant %}
-          {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
           <tr class="claims default mobile-table">
             <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant') }}</td>
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForClaimant(claim.status, claim) }}
+              {% if claim.isFullAdmission %}
+                {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
+                {{ claimantDashboardStatus }}
+              {% else %}
+                {{ caseStatusForClaimant(claim.status, claim) }}
+              {% endif %}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {{ caseStatusForClaimant(claim.status, claim) }}
+              {% if claim.isFullAdmission %}
+                {{ claimantDashboardStatus }}
+              {% else %}
+                {{ caseStatusForClaimant(claim.status, claim) }}
+              {% endif %}
             </td>
           </tr>
         {% endfor %}
@@ -90,19 +98,27 @@
           </tr>
         {% endif %}
         {% for claim in claimsAsDefendant %}
-          {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
           <tr class="mobile-table">
             <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })) }}</td>
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ caseStatusForDefendant(claim.status, claim) }}
+              {% if claim.isFullAdmission %}
+                {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
+                {{ defendantDashboardStatus }}
+              {% else %}
+                {{ caseStatusForDefendant(claim.status, claim) }}
+              {% endif %}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {{ caseStatusForDefendant(claim.status, claim) }}
+              {% if claim.isFullAdmission %}
+                {{ defendantDashboardStatus }}
+              {% else %}
+                {{ caseStatusForDefendant(claim.status, claim) }}
+              {% endif %}
             </td>
           </tr>
         {% endfor %}

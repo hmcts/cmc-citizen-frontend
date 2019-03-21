@@ -25,7 +25,10 @@ import {
   defenceWithAmountClaimedAlreadyPaidData,
   partialAdmissionAlreadyPaidData
 } from 'test/data/entity/responseData'
-import { baseAcceptationClaimantResponseData } from 'test/data/entity/claimantResponseData'
+import {
+  baseAcceptationClaimantResponseData,
+  baseRejectionClaimantResponseData
+} from 'test/data/entity/claimantResponseData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -107,6 +110,16 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.']
   },
   {
+    status: 'full admission, pay by set date, rejected by claimant',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: baseRejectionClaimantResponseData
+    },
+    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission. They said they owe £30'],
+    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £30']
+  },
+  {
     status: 'full admission, pay by repayment plan',
     claim: fullAdmissionClaim,
     claimOverride: {
@@ -115,6 +128,16 @@ const testData = [
     },
     claimantAssertions: ['000MC000', 'The defendant has offered to pay in instalments. You can accept or reject their offer.'],
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
+  },
+  {
+    status: 'full admission, pay by repayment plan, rejected by claimant',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: baseRejectionClaimantResponseData
+    },
+    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission. They said they owe £30'],
+    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £30']
   },
   {
     status: 'partial admission, pay immediately',
@@ -206,7 +229,7 @@ const testData = [
   }
 ]
 
-describe('Dashboard page', () => {
+describe.only('Dashboard page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

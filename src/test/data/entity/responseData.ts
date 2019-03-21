@@ -50,7 +50,6 @@ export const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
   freeMediation: 'no'
 }
-
 export const basePayImmediatelyData = {
   paymentIntention: {
     paymentOption: PaymentOption.IMMEDIATELY,

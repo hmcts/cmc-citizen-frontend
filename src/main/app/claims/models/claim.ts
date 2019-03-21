@@ -23,6 +23,7 @@ import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
+import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 
 interface State {
   status: ClaimStatus
@@ -83,8 +84,65 @@ export class Claim {
     return this.respondedAt.clone().add('5', 'days')
   }
 
+  // used in a nunjucks template
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
+  }
+
+  get isFullAdmission (): boolean {
+    return this.response && this.response.responseType === ResponseType.FULL_ADMISSION
+  }
+
+  get isPayImmediately (): boolean {
+    const response = (this.response as FullAdmissionResponse | PartialAdmissionResponse)
+    return response && response.paymentIntention && response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
+  }
+
+  get isPayBySetDate (): boolean {
+    const response = (this.response as FullAdmissionResponse | PartialAdmissionResponse)
+    return response && response.paymentIntention && response.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE
+  }
+
+  get isPayByInstalments (): boolean {
+    const response = (this.response as FullAdmissionResponse | PartialAdmissionResponse)
+    return response && response.paymentIntention && response.paymentIntention.paymentOption === PaymentOption.INSTALMENTS
+  }
+
+  get isPaymentPastDeadline (): boolean {
+    const response = (this.response as FullAdmissionResponse | PartialAdmissionResponse)
+    return response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+  }
+
+  get hasCCJBeenRequested (): boolean {
+    return !!this.countyCourtJudgmentRequestedAt
+  }
+
+  get hasClaimantAccepted (): boolean {
+    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+  }
+
+  get isCCJ (): boolean {
+    return (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.CCJ
+  }
+
+  get isReferToJudge (): boolean {
+    return (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+  }
+
+  get isSettlement (): boolean {
+    return (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.SETTLEMENT
+  }
+
+  get hasAlternativePaymentIntention (): boolean {
+    return !!(this.claimantResponse as AcceptationClaimantResponse).claimantPaymentIntention
+  }
+
+  private isDefendantBusiness (): boolean {
+    return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
+  }
+
+  get isResponsePastDeadline (): boolean {
+    return !this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
   }
 
   get eligibleForCCJ (): boolean {
@@ -92,25 +150,23 @@ export class Claim {
       && (this.admissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
-        || this.isSettlementAgreementRejected()
+          || this.isSettlementAgreementRejected()
         )
       )
   }
 
-  get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
+  get hasBreachedSettlementTerms (): boolean {
     if (this.response && this.settlement && this.settlement.isThroughAdmissionsAndSettled()) {
       const lastOffer: Offer = this.settlement.getLastOffer()
       if (lastOffer && lastOffer.paymentIntention) {
         const paymentOption = lastOffer.paymentIntention.paymentOption
         switch (paymentOption) {
           case PaymentOption.BY_SPECIFIED_DATE:
-            return !this.countyCourtJudgmentRequestedAt
-              && isPastDeadline(MomentFactory.currentDateTime(),
+            return isPastDeadline(MomentFactory.currentDateTime(),
                 (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
 
           case PaymentOption.INSTALMENTS:
-            return !this.countyCourtJudgmentRequestedAt
-              && isPastDeadline(MomentFactory.currentDateTime(),
+            return isPastDeadline(MomentFactory.currentDateTime(),
                 (this.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.paymentIntention.repaymentPlan.firstPaymentDate))
 
           default:
@@ -119,6 +175,10 @@ export class Claim {
       }
     }
     return false
+  }
+
+  get eligibleForCCJAfterBreachedSettlementTerms (): boolean {
+    return !this.countyCourtJudgmentRequestedAt && this.hasBreachedSettlementTerms
   }
 
   get status (): ClaimStatus {
@@ -362,10 +422,6 @@ export class Claim {
       && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
   }
 
-  private isDefendantBusiness (): boolean {
-    return this.claimData && this.claimData.defendant && this.claimData.defendant.isBusiness()
-  }
-
   private isOfferSubmitted (): boolean {
     return this.settlement && this.response && this.response.responseType === ResponseType.FULL_DEFENCE
   }
@@ -378,6 +434,10 @@ export class Claim {
     return this.settlement && this.settlement.isOfferRejected()
   }
 
+  get isSettled (): boolean {
+    return this.settlement && this.settlement.isSettled()
+  }
+
   private isSettlementReached (): boolean {
     return this.settlement && !!this.settlementReachedAt
   }
@@ -386,11 +446,11 @@ export class Claim {
     return this.moneyReceivedOn.isSameOrBefore(calculateMonthIncrement(this.countyCourtJudgmentRequestedAt))
   }
 
-  private isSettlementReachedThroughAdmission (): boolean {
+  isSettlementReachedThroughAdmission (): boolean {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
 
-  private isSettlementAgreementRejected (): boolean {
+  isSettlementAgreementRejected (): boolean {
     if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
       return false
     }
@@ -475,7 +535,7 @@ export class Claim {
       && this.response.paymentDeclaration !== undefined
   }
 
-  private isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {
+  isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {
     return this.response
       && (this.response.responseType === ResponseType.FULL_ADMISSION
         || this.response.responseType === ResponseType.PART_ADMISSION)

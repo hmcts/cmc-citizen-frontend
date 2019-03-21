@@ -1,7 +1,7 @@
 import * as express from 'express'
 import * as path from 'path'
-import * as nunjucks from 'nunjucks'
 
+import { dashboardFilterForClaimant, dashboardFilterForDefendant } from 'dashboard/filters/claimStatusFilter'
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
 import { RouterFinder } from 'shared/router/routerFinder'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
@@ -10,9 +10,6 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { Paths } from 'dashboard/paths'
-import { Claim } from 'claims/models/claim'
-import { ClaimStatusFlow } from 'dashboard/helpers/claimStatusFlow'
-import { app } from 'main/app'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -22,16 +19,6 @@ function requestHandler (): express.RequestHandler {
   const requiredRoles = ['citizen']
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
-}
-
-function render (claim: Claim, type: string): string {
-  const dashboardName = ClaimStatusFlow.dashboardFor(claim)
-  try {
-    const template = nunjucks.render(path.join(__dirname, './views', 'status', type, dashboardName + '.njk').toString(), { claim: claim })
-    return app.settings.nunjucksEnv.filters['safe'](template)
-  } catch (err) {
-    return ''
-  }
 }
 
 export class DashboardFeature {
@@ -48,8 +35,8 @@ export class DashboardFeature {
               return adverbial ? 'Monthly' : 'Every month'
           }
         }
-        app.settings.nunjucksEnv.filters.dashboardStatusForClaimant = (claim: Claim) => render(claim, 'claimant')
-        app.settings.nunjucksEnv.filters.dashboardStatusForDefendant = (claim: Claim) => render(claim, 'defendant')
+        app.settings.nunjucksEnv.filters.dashboardStatusForClaimant = dashboardFilterForClaimant
+        app.settings.nunjucksEnv.filters.dashboardStatusForDefendant = dashboardFilterForDefendant
       }
 
       if (app.settings.nunjucksEnv.globals) {

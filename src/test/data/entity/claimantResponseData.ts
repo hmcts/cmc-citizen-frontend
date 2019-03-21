@@ -17,7 +17,7 @@ export const baseAcceptationClaimantResponseData = {
   amountPaid: 100
 }
 
-const baseRejectionClaimantResponseData = {
+export const baseRejectionClaimantResponseData = {
   type: ClaimantResponseType.REJECTION,
   amountPaid: 100
 }
