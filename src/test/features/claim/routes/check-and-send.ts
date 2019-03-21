@@ -130,6 +130,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
 
       it('Should validate that a claim made by individual against organisation and their details', async () => {
@@ -148,6 +149,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
 
       it('Should validate that a claim made by soleTrader against soleTrader and their details', async () => {
@@ -243,6 +245,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Types of senior position'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
 
       it('Should validate that a claim made by company against individual and their details', async () => {
@@ -263,6 +266,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
           .expect(res => expect(res).to.be.successful.withText('Rose Smith'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
 
       it('Should validate that a claim made by company against soleTrader and their details', async () => {
@@ -302,6 +306,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
 
       it('Should validate that a claim made by organisation against organisation and their details', async () => {
@@ -321,6 +326,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-organisation-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Organisation.'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
 
       it('Should validate that a claim made by organisation against individual and their details', async () => {
@@ -341,6 +347,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-individual-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Full name'))
           .expect(res => expect(res).to.be.successful.withText('Rose Smith'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
 
       it('Should validate that a claim made by organisation against soleTrader and their details', async () => {
@@ -381,6 +388,7 @@ describe('Claim issue: check and send page', () => {
           .expect(res => expect(res).to.be.successful.withText('<a href="/claim/defendant-company-details" class="bold">Change <span class="visuallyhidden">full name</span></a>'))
           .expect(res => expect(res).to.be.successful.withText('Company Ltd.'))
           .expect(res => expect(res).to.be.successful.withText('Types of senior position'))
+          .expect(res => expect(res).to.be.successful.withoutText('Business name'))
       })
     })
   })
