@@ -29,4 +29,10 @@ export class MediationSteps {
     mediationAgreementPage.chooseAgree()
     canWeUseCompanyPage.chooseYes()
   }
+
+  rejectMediation (): void {
+    freeMediationPage.clickHowFreeMediationWorks()
+    howMediationWorksPage.chooseContinue()
+    willYouTryMediationPage.chooseNo()
+  }
 }

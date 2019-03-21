@@ -34,7 +34,7 @@ import { TaskListItem } from 'drafts/tasks/taskListItem'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
-const featureToggleMediationTaskLabel = 'Free telephone mediation'
+const mediationTaskLabel = 'Free telephone mediation'
 describe('Defendant response task list builder', () => {
   let claim: Claim
 
@@ -415,7 +415,7 @@ describe('Defendant response task list builder', () => {
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new MediationDraft()
           )
 
-          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('response is partial admission and why do you disagree is completed', () => {
@@ -426,7 +426,7 @@ describe('Defendant response task list builder', () => {
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
 
-          expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
       })
 
@@ -529,14 +529,14 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
       const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
-      expect(tasks.map(task => task.name)).to.contain(featureToggleMediationTaskLabel)
+      expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
     })
 
     it('Should not return "Free telephone mediation" when not fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
       const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
-      expect(tasks.map(task => task.name)).to.not.contain(featureToggleMediationTaskLabel)
+      expect(tasks.map(task => task.name)).to.not.contain(mediationTaskLabel)
     })
   })
 
