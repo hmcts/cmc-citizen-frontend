@@ -49,6 +49,48 @@ export const soleTraderDetails = {
   }
 }
 
+export const claimantSoleTraderDetails = {
+  type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
+  name: 'Claimant SoleTrader',
+  businessName: 'Claimant SoleTrader Ltd.',
+  address: {
+    line1: 'Flat 2',
+    line2: 'Street 2',
+    line3: 'Cool house name',
+    city: 'London',
+    postcode: 'E2 8FA'
+  },
+  hasCorrespondenceAddress: true,
+  correspondenceAddress: {
+    line1: 'Flat 20',
+    line2: 'Street 20',
+    line3: 'Cooler house name',
+    city: 'Belfast',
+    postcode: 'BT2 5GB'
+  }
+}
+
+export const defendantSoleTraderDetails = {
+  type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
+  name: 'Defendant SoleTrader',
+  businessName: 'Defendant SoleTrader Ltd.',
+  address: {
+    line1: 'Flat 2',
+    line2: 'Street 2',
+    line3: 'Cool house name',
+    city: 'London',
+    postcode: 'E2 8FA'
+  },
+  hasCorrespondenceAddress: true,
+  correspondenceAddress: {
+    line1: 'Flat 20',
+    line2: 'Street 20',
+    line3: 'Cooler house name',
+    city: 'Belfast',
+    postcode: 'BT2 5GB'
+  }
+}
+
 export const companyDetails = {
   type: PartyType.COMPANY.value,
   name: 'Company Ltd.',
