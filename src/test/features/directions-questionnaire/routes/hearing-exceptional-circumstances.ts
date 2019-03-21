@@ -207,8 +207,8 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
-      const validFormData = { option: 'yes', reason: 'reason' }
-      const invalidFormData = { option: 'yes' }
+      const validFormData = { exceptionalCircumstances: 'yes', reason: 'reason' }
+      const invalidFormData = { exceptionalCircumstances: 'yes' }
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -239,7 +239,7 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
 
         it('should redirect to expert page when no is selected', async () => {
           draftStoreServiceMock.resolveSave()
-          await shouldRedirect(method, expertPath, { option: 'no' })
+          await shouldRedirect(method, expertPath, { exceptionalCircumstances: 'no' })
         })
       })
 
