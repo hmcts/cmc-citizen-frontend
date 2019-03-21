@@ -13,9 +13,11 @@
         </dd>
         <dd class="add-another-list-controls">
           {{ internalLink(t('Remove'),
-            DirectionsQuestionnairePaths.hearingDatesUpdateReceiver.evaluateUri({
+            DirectionsQuestionnairePaths.hearingDatesDeleteReceiver.evaluateUri({
               externalId: externalId,
-              method: 'remove'
+              year: date.year(),
+              month: date.month() + 1,
+              day: date.date()
             }),
             'add-another-delete-link link',
             id = 'add-another-delete-link-' + loop.index0) }}

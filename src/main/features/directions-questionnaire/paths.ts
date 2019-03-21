@@ -11,5 +11,6 @@ export class Paths {
   static readonly expertPage = new RoutablePath(`${directionsQuestionnairePath}/expert`)
   static readonly hearingDatesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-dates`)
 
-  static readonly hearingDatesUpdateReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/:method`)
+  static readonly hearingDatesReplaceReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/replace`)
+  static readonly hearingDatesDeleteReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/delete/:year/:month/:day`)
 }
