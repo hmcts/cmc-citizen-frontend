@@ -36,7 +36,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
-    admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim),
+    admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     mediationDraft: mediationDraft.document
   })
