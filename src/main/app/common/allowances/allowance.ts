@@ -1,4 +1,6 @@
 import { AllowanceItem } from 'common/allowances/allowanceItem'
+import { MomentFactory } from 'shared/momentFactory'
+import * as moment from 'moment'
 
 export enum DependantAllowanceType {
   PER_DEPENDANT = 'EACH'
@@ -24,22 +26,49 @@ export enum LivingAllowanceType {
   DEFENDANT_OVER_25_PARTNER_UNDER_18 = 'DEFENDANT_OVER_25_PARTNER_UNDER_18'
 }
 
-export class Allowance {
-
-  constructor (public personal?: AllowanceItem[],
-               public dependant?: AllowanceItem[],
-               public pensioner?: AllowanceItem[],
-               public disability?: AllowanceItem[]) {
+export class Allowances {
+  constructor (public allowance?: Allowance[]) {
   }
 
   deserialize (input?: any): Allowance {
     if (!input) {
       return input
     }
+    this.allowance = this.deserializeRows(input.allowances)
+    return this.allowance
+      .sort((a, b) => {
+        return a.startDate.diff(b.startDate, 'days')
+      })
+      .filter(date => date.startDate.isSameOrBefore(moment()))
+      .pop()
+  }
+
+  private deserializeRows (rows: any): Allowance[] {
+    let allowanceRows: Allowance[] = rows.map(row => new Allowance().deserialize(row))
+    return allowanceRows
+  }
+
+}
+
+export class Allowance {
+
+  constructor (public personal?: AllowanceItem[],
+               public dependant?: AllowanceItem[],
+               public pensioner?: AllowanceItem[],
+               public disability?: AllowanceItem[],
+               public startDate?: moment.Moment) {
+  }
+
+  deserialize (input?: any): Allowance {
+    if (!input) {
+      return input
+    }
+
     this.personal = input.personal && this.deserializeAllowanceItem(input.personal)
     this.dependant = input.dependant && this.deserializeAllowanceItem(input.dependant)
     this.pensioner = input.pensioner && this.deserializeAllowanceItem(input.pensioner)
     this.disability = input.disability && this.deserializeAllowanceItem(input.disability)
+    this.startDate = MomentFactory.parse(input.startDate)
 
     return this
   }
