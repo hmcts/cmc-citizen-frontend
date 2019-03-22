@@ -124,6 +124,9 @@
       ],
       "mediation/*": [
         "main/features/mediation/*"
+      ],
+      "directions-questionnaire/*": [
+        "main/features/directions-questionnaire/*"
       ]
     },
     "typeRoots": [

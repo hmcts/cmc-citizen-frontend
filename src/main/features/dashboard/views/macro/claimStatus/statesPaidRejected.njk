@@ -7,7 +7,12 @@
 
 {% macro statesPaidInFullRejectedClaimantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
-  <p>{{ t('They said they owe {{ amount }}.', { amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
+  {% if claim.response.responseType === 'PART_ADMISSION' %}
+    {% set amount = claim.response.amount %}
+  {% else %}
+    {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+  {% endif %}
+  <p>{{ t('They said they owe {{ amount }}.', { amount: amount | numeral }) }}</p>
 
   {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
   <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {
@@ -18,18 +23,28 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
+  {% if claim.response.responseType === 'PART_ADMISSION' %}
+    {% set amount = claim.response.amount %}
+  {% else %}
+    {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+  {% endif %}
   {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
     claimantName: claim.claimData.claimant.name,
-    amount: claim.response.paymentDeclaration.paidAmount | numeral
+    amount: amount | numeral
   }) }}
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantClaimDetails(claim) %}
+  {% if claim.response.responseType === 'PART_ADMISSION' %}
+    {% set amount = claim.response.amount %}
+  {% else %}
+    {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+  {% endif %}
   <h2 class="heading-small">{{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
       claimantName: claim.claimData.claimant.name,
-      amount: claim.response.paymentDeclaration.paidAmount | numeral
+      amount: amount | numeral
     }) }}</h2>
-  <p>{{ t('They said you didn’t pay them {{ amount }}.', { amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
+  <p>{{ t('They said you didn’t pay them {{ amount }}.', { amount: amount | numeral }) }}</p>
   <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
   {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
   <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {

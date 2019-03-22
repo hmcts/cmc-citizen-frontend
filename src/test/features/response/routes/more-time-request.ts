@@ -8,7 +8,6 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
-
 import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'

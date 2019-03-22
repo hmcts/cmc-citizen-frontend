@@ -8,6 +8,7 @@ import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { MomentFactory } from 'shared/momentFactory'
 
 import {
   fullAdmissionWithSoMPaymentByInstalmentsData,
@@ -142,7 +143,7 @@ export const sampleClaimIssueObj = {
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
-  responseDeadline: '2017-08-08',
+  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   features: ['admissions']
 }
 
@@ -308,7 +309,7 @@ export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
-export const samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData = {
+export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithPaymentBySetDateCompanyData
@@ -638,4 +639,16 @@ export function resolveSavePaidInFull () {
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
+}
+
+export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
 }
