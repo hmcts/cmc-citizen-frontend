@@ -73,6 +73,7 @@ $black: #000;
 
             &.active {
               background-color: $day-cell-active-colour;
+              color: $black;
             }
 
             &.day {
