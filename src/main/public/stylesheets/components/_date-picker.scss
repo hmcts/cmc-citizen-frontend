@@ -85,6 +85,7 @@ $black: #000;
               &.focused {
                 &:not(.disabled) {
                   background-color: $day-cell-hover-colour;
+                  color: $black;
                 }
               }
             }
