@@ -12,5 +12,7 @@ export class Paths {
   static readonly hearingDatesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-dates`)
 
   static readonly hearingDatesReplaceReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/replace`)
-  static readonly hearingDatesDeleteReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/delete/:year/:month/:day`)
+  // :index should actually be of the form 'date-N' where N is the numeric index,
+  // because RoutablePath will not accept purely numeric values for parameters
+  static readonly hearingDatesDeleteReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/delete/:index`)
 }
