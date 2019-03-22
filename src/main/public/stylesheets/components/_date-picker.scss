@@ -2,8 +2,11 @@
 
 $day-cell-hover-colour: #bbd9e9;
 $day-cell-active-colour: #76b2d2;
+$selected-dates-separator-colour: #bfc1c3;
+$black: #000;
 
 .datepicker {
+  margin-bottom: 20px;
 
   .datepicker-inline {
     width: 70%;
@@ -14,6 +17,7 @@ $day-cell-active-colour: #76b2d2;
       thead {
         tr {
           th {
+            padding: 10px 0;
             text-align: center;
 
             &.dow {
@@ -128,6 +132,39 @@ $day-cell-active-colour: #76b2d2;
   datepicker {
     table {
       width: 120%;
+    }
+  }
+}
+
+.add-another-list {
+  &.dates-cant-attend-list {
+    padding-bottom: 20px;
+  }
+
+  div {
+    &:not(.noItems) {
+      border-bottom: 1px solid $selected-dates-separator-colour;
+      padding: 15px 0;
+      width: 100%;
+
+      &:first-child {
+        border-top: 1px solid $selected-dates-separator-colour;
+      }
+    }
+
+    .add-another-list-item {
+      display: inline-block;
+      width: 65%;
+    }
+
+    .add-another-list-controls {
+      display: inline-block;
+      float: right;
+      width: 30%;
+
+      .add-another-edit-link {
+        padding-right: 40%;
+      }
     }
   }
 }
