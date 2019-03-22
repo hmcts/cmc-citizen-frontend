@@ -7,17 +7,15 @@
       <div id="add-another-list-items-{{ loop.index0 }}">
         <dd class="add-another-list-item">
           <span data-index="items-{{ loop.index0 }}">{{ date | date }}</span>
-          <input type="hidden" name="unavailableDates[{{ loop.index0 }}][year]" value="{{ date.year() }}"/>
-          <input type="hidden" name="unavailableDates[{{ loop.index0 }}][month]" value="{{ date.month() + 1 }}"/>
           <input type="hidden" name="unavailableDates[{{ loop.index0 }}][day]" value="{{ date.date() }}"/>
+          <input type="hidden" name="unavailableDates[{{ loop.index0 }}][month]" value="{{ date.month() + 1 }}"/>
+          <input type="hidden" name="unavailableDates[{{ loop.index0 }}][year]" value="{{ date.year() }}"/>
         </dd>
         <dd class="add-another-list-controls">
           {{ internalLink(t('Remove'),
             DirectionsQuestionnairePaths.hearingDatesDeleteReceiver.evaluateUri({
               externalId: externalId,
-              year: date.year(),
-              month: date.month() + 1,
-              day: date.date()
+              index: 'date-' + loop.index0
             }),
             'add-another-delete-link link',
             id = 'add-another-delete-link-' + loop.index0) }}

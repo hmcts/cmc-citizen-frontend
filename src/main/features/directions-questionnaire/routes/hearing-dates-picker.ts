@@ -28,6 +28,22 @@ function sortDates (dates: LocalDate[]): LocalDate[] {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
+  .get(Paths.hearingDatesDeleteReceiver.uri,
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
+      const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
+      draft.document.availability = draft.document.availability || new Availability(undefined, [])
+
+      const availability = draft.document.availability
+
+      const dateIndex = Number(/date-([\d+])/.exec(req.params.index)[1])
+      availability.unavailableDates = availability.unavailableDates.filter((date, index) => index !== dateIndex)
+
+      const user = res.locals.user
+      await new DraftService().save(draft, user.bearerToken)
+
+      res.redirect(Paths.hearingDatesPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+    }))
+
   .post(Paths.hearingDatesReplaceReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
@@ -40,23 +56,4 @@ export default express.Router()
       const user = res.locals.user
       await new DraftService().save(draft, user.bearerToken)
       renderFragment(res, draft)
-    }))
-  .get(Paths.hearingDatesDeleteReceiver.uri,
-    (req, res, next) => {
-      console.log('processing...')
-      next()
-    },
-    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      draft.document.availability = draft.document.availability || new Availability(undefined, [])
-
-      const dateToDelete: LocalDate = LocalDate.fromObject(req.params)
-      const availability = draft.document.availability
-
-      availability.unavailableDates = availability.unavailableDates.filter(date => date !== dateToDelete)
-
-      const user = res.locals.user
-      await new DraftService().save(draft, user.bearerToken)
-
-      res.redirect(Paths.hearingDatesPage.evaluateUri({ externalId: res.locals.claim.externalId }))
     }))

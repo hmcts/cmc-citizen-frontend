@@ -1,0 +1,13 @@
+.datepicker {
+  padding-bottom: 15px;
+
+  noscript {
+    div {
+      .form-group,
+      input.link-button {
+        display: inline-grid;
+        vertical-align: middle;
+      }
+    }
+  }
+}
