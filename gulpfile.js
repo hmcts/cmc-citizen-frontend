@@ -126,8 +126,7 @@ function copyDatePickerDependencies () {
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib`))
   gulp.src([
-    // TODO pick one
-    './node_modules/bootstrap-datepicker/dist/css/*'
+    './node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.css'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib`))
 }

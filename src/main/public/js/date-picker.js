@@ -2,10 +2,8 @@ const datePickerUtils = {
 
   getIndexOfDate: element => $(element).data('index'),
 
-  // TODO: returns the date as displayed - decide whether or not to keep that
   getDisplayValueOfDate: element => new Date($(element).text()),
 
-  // simply puts the two parameters into a structure
   buildDatesArray: (index, value) => {
     return {
       index: index,
@@ -15,8 +13,6 @@ const datePickerUtils = {
 
   formatDateForDisplay: d => moment(new Date(d)).format('dddd D MMMM YYYY'),
 
-  // d should be a Date object
-  // returns a basic LocalDate structure
   formatDateForData: d => {
     let mDate = moment(d)
     return {
@@ -67,7 +63,6 @@ const datePicker = {
         leftArrow: datePicker.toggleArrows('prev'),
         rightArrow: datePicker.toggleArrows('next')
       },
-      // date = "2019-04-06T23:00:00.000Z"
       beforeShowDay: date => datePickerUtils.displayFirstOfMonth(date)
     }).on('changeDate', event => datePicker.changeDateHandler(event))
 
