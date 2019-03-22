@@ -237,7 +237,7 @@ describe('Dashboard page', () => {
             })
 
             it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim,
                 {
                   response: { ...partialAdmissionAlreadyPaidData },
@@ -252,7 +252,7 @@ describe('Dashboard page', () => {
             })
 
             it('should show the correct status when the claim is marked as states paid accepted', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim,
                 {
                   response: { ...partialAdmissionAlreadyPaidData },
@@ -277,7 +277,7 @@ describe('Dashboard page', () => {
               }
             }
             it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(fullDefenceClaim,
                 {
                   response: { ...defenceWithAmountClaimedAlreadyPaidData },
@@ -292,7 +292,7 @@ describe('Dashboard page', () => {
             })
 
             it('should show the correct status when the claim is marked as states paid accepted', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByClaimantId(fullDefenceClaim,
                 {
                   response: { ...defenceWithAmountClaimedAlreadyPaidData },
@@ -341,7 +341,7 @@ describe('Dashboard page', () => {
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
             it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim,
                 {
                   response: { ...partialAdmissionAlreadyPaidData },
@@ -356,7 +356,7 @@ describe('Dashboard page', () => {
 
             })
             it('should show the correct status when the claim is marked as states paid accepted', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim,
                 {
                   response: { ...partialAdmissionAlreadyPaidData },
@@ -381,7 +381,7 @@ describe('Dashboard page', () => {
               }
             }
             it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullDefenceClaim,
                 {
                   response: { ...defenceWithAmountClaimedAlreadyPaidData },
@@ -397,7 +397,7 @@ describe('Dashboard page', () => {
             })
 
             it('should show the correct status when the claim is marked as states paid accepted', async () => {
-              // draftStoreServiceMock.resolveFindNoDraftFound()
+              draftStoreServiceMock.resolveFindNoDraftFound()
               claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullDefenceClaim,
                 {
                   response: { ...defenceWithAmountClaimedAlreadyPaidData },
