@@ -18,8 +18,6 @@ var datePickerUtils = {
     return date.format('dddd D MMMM YYYY');
   },
 
-  // d should be a Date object
-  // returns a basic LocalDate structure
   formatDateForData: d => {
     let mDate = moment(d)
     return {
@@ -61,7 +59,6 @@ var datePicker = {
         leftArrow: datePicker.toggleArrows('prev'),
         rightArrow: datePicker.toggleArrows('next')
       },
-      // date = "2019-04-06T23:00:00.000Z"
       beforeShowDay: function(date) {
         return datePickerUtils.displayFirstOfMonth(date);
       }

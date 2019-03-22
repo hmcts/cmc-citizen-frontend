@@ -33,10 +33,8 @@
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
           <div id="date-picker" class="datepicker">
             <noscript>
-              <div>
-                {{ dateInput('newDate', form, hint = '') }}
-                {{ linkButton('Add', 'addDate', 'link-button') }}
-              </div>
+              {{ dateInput('newDate', form, hint = '') }}
+              {{ linkButton('Add', 'addDate', 'button button-secondary') }}
             </noscript>
           </div>
           <div id="date-selection-wrapper">
