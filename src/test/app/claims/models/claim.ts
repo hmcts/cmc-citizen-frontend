@@ -461,6 +461,24 @@ describe('Claim', () => {
 
         expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
       })
+
+      it('when defendant states paid amount less than claim amount', () => {
+        claim.totalAmountTillToday = 100
+        claim.response = {
+          amount: 90,
+          responseType: 'PART_ADMISSION',
+          defenceType: 'ALREADY_PAID',
+          paymentDeclaration: {
+            paidDate: '2010-12-31',
+            explanation: 'Paid by cash'
+          }
+        }
+        claim.claimantResponse = {
+          type: 'REJECTION'
+        }
+
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
+      })
     })
   })
 
