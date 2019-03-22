@@ -205,7 +205,7 @@ describe('Claimant response: payment date', () => {
           })
 
           it('should redirect to task list page when Defendant is business', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
             draftStoreServiceMock.resolveSave()
             draftStoreServiceMock.resolveFind('claimantResponse', claimantResponseDraftOverrideWithNoDisposableIncome)
 
