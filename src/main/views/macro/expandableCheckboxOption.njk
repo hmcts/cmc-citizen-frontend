@@ -1,0 +1,9 @@
+{% from "form.njk" import option %}
+
+{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
+  {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
+  {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable', dataTarget = expandablePanelId) }}
+  <div class="form-group panel panel-border-wide js-hidden {{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
+    {{ caller() }}
+  </div>
+{% endmacro %}

@@ -1,8 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInput, saveAndContinueButton, errorSummary, option, checkboxOption, textArea %}
-{% from "date.njk" import dateInput %}
-{% from "form.njk" import yesNoRadio %}
-
+{% from "expandableCheckboxOption.njk" import expandableCheckboxOption %}
 {% set heading = 'Select any support you’d require for a court hearing (optional)' %}
 
 {% block content %}
@@ -18,7 +16,7 @@
             </span>
           </legend>
           {% call expandableCheckboxOption(form = form, name = 'languageSelected', value = 'true', label = "Language Interpreter", checked = form.valueFor('languageSelected')) %}
-            {{ textInput(label = 'What language needs to be interpreted?', hint = t('You’ll have to arrange and pay for interpreters except for Welsh.'), form = form, name = 'languageInterpreted', inputClass = '') }}
+            {{ textInput(label = 'What language needs to be interpreted?', hint = 'You’ll have to arrange and pay for interpreters except for Welsh.', form = form, name = 'languageInterpreted', inputClass = '') }}
           {% endcall %}
           {% call expandableCheckboxOption(form = form, name = 'signLanguageSelected', value = 'true', label = t('Sign Language Interpreter'), checked = form.valueFor('signLanguageSelected')) %}
             {{ textInput(label = 'Enter the sign language you need', form = form, name = 'signLanguageInterpreted', inputClass = '') }}
@@ -35,10 +33,4 @@
   </div>
 {% endblock %}
 
-{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
-  {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
-    {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable', dataTarget = expandablePanelId) }}
-    <div class="form-group panel panel-border-wide js-hidden {{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
-      {{ caller() }}
-    </div>
-{% endmacro %}
+
