@@ -15,17 +15,17 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import { MomentFactory } from 'shared/momentFactory'
 import {
+  baseDefenceData,
   baseFullAdmissionData,
   basePartialAdmissionData,
   basePayByInstalmentsData,
   basePayBySetDateData,
   basePayImmediatelyData,
   baseResponseData,
-  baseDefenceData,
-  defenceWithAmountClaimedAlreadyPaidData, partialAdmissionAlreadyPaidData
+  defenceWithAmountClaimedAlreadyPaidData,
+  partialAdmissionAlreadyPaidData
 } from 'test/data/entity/responseData'
 import { baseAcceptationClaimantResponseData } from 'test/data/entity/claimantResponseData'
-import * as numeralFilter from 'nunjucks-numeral-filter'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -44,6 +44,16 @@ const partAdmissionClaim = {
   response: {
     ...baseResponseData,
     ...basePartialAdmissionData,
+    amount: 30
+  }
+}
+
+const fullDefenceClaim = {
+  ...claimStoreServiceMock.sampleClaimObj,
+  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+  response: {
+    ...baseResponseData,
+    ...baseDefenceData,
     amount: 30
   }
 }
@@ -153,6 +163,46 @@ const testData = [
     },
     claimantAssertions: ['000MC000', 'The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'],
     defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
+  },
+  {
+    status: 'partial admission, states paid accepted',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partialAdmissionAlreadyPaidData },
+      claimantResponse: { type: 'ACCEPTATION' }
+    },
+    claimantAssertions: ['000MC000', 'This claim is settled.'],
+    defendantAssertions: ['000MC000', 'This claim is settled.']
+  },
+  {
+    status: 'partial admission, states paid rejected',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partialAdmissionAlreadyPaidData },
+      claimantResponse: { type: 'REJECTION' }
+    },
+    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
+    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £3,000']
+  },
+  {
+    status: 'full defence, states paid accepted',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: { ...defenceWithAmountClaimedAlreadyPaidData },
+      claimantResponse: { type: 'ACCEPTATION' }
+    },
+    claimantAssertions: ['000MC000', 'This claim is settled.'],
+    defendantAssertions: ['000MC000', 'This claim is settled.']
+  },
+  {
+    status: 'full defence, states paid rejected',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: { ...defenceWithAmountClaimedAlreadyPaidData },
+      claimantResponse: { type: 'REJECTION' }
+    },
+    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
+    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £100']
   }
 ]
 
@@ -346,72 +396,6 @@ describe('Dashboard page', () => {
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
-            })
-            it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim,
-                {
-                  response: { ...partialAdmissionAlreadyPaidData },
-                  claimantResponse: { type: 'REJECTION' }
-                })
-
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful
-                  .withText(`${partAdmissionClaim.claim.claimants[0].name} rejected your admission of ${numeralFilter(partialAdmissionAlreadyPaidData.amount)}`))
-
-            })
-            it('should show the correct status when the claim is marked as states paid accepted', async () => {
-              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', partAdmissionClaim,
-                {
-                  response: { ...partialAdmissionAlreadyPaidData },
-                  claimantResponse: { type: 'ACCEPTATION' }
-                })
-
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('This claim is settled.'))
-
-            })
-          })
-          context('when the claim is in full defence', () => {
-            const fullDefenceClaim = {
-              ...claimStoreServiceMock.sampleClaimObj,
-              responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-              response: {
-                ...baseResponseData,
-                ...baseDefenceData,
-                amount: 30
-              }
-            }
-            it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullDefenceClaim,
-                {
-                  response: { ...defenceWithAmountClaimedAlreadyPaidData },
-                  claimantResponse: { type: 'REJECTION' }
-                })
-
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful
-                  .withText(`${fullDefenceClaim.claim.claimants[0].name} rejected your admission of ${numeralFilter(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`))
-
-            })
-
-            it('should show the correct status when the claim is marked as states paid accepted', async () => {
-              claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001', '1', fullDefenceClaim,
-                {
-                  response: { ...defenceWithAmountClaimedAlreadyPaidData },
-                  claimantResponse: { type: 'ACCEPTATION' }
-                })
-
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('This claim is settled.'))
-
             })
           })
         })
