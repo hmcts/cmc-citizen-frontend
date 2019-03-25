@@ -2,8 +2,8 @@ import { IsArray, IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-val
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { LocalDate } from 'forms/models/localDate'
-import { AreValidLocalDates, IsValidLocalDate } from '@hmcts/cmc-validators'
-import { AreFutureDates, IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
+import { IsValidLocalDate } from '@hmcts/cmc-validators'
+import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 
 export class ValidationErrors {
   static readonly AT_LEAST_ONE_DATE: string = 'Select at least one date or choose No'
@@ -16,9 +16,11 @@ export class Availability {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   hasUnavailableDates?: YesNoOption
 
-  @ValidateIf(o => o.hasUnavailableDates && o.hasUnavailableDates.option === YesNoOption.YES.option)
-  @IsDefined()
-  @ArrayNotEmpty()
+  @ValidateNested()
+  @IsArray()
+  @ValidateIf(o => o.hasUnavailableDates === YesNoOption.YES)
+  @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID, each: true })
+  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE, each: true })
   unavailableDates?: LocalDate[]
 
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
@@ -41,17 +43,5 @@ export class Availability {
       value.unavailableDates ? value.unavailableDates.map(date => LocalDate.fromObject(date)) : [],
       LocalDate.fromObject(value.newDate)
     )
-  }
-
-  deserialize (input?: any): Availability {
-    if (input) {
-      this.hasUnavailableDates = YesNoOption.fromObject(input.hasUnavailableDates.option)
-      if (input.unavailableDates) {
-        this.unavailableDates = input.unavailableDates.map(
-          dateStr => moment(Number(dateStr))
-        )
-      }
-    }
-    return this
   }
 }
