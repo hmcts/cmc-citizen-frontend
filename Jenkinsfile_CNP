@@ -67,9 +67,9 @@ withPipeline("nodejs", product, component) {
       def encodedServiceName = 'Money%20Claims%20-%20Citizen'
       def aksUrlToWhitelist = env.TEST_URL + '/receiver'
       sh('curl -X PATCH https://idam-api.aat.platform.hmcts.net/testing-support/services/' + encodedServiceName +
-        '-H \'Content-Type: application/json\' ' +
-        '-H \'cache-control: no-cache\' ' +
-        '-d \'[{' +
+        ' -H \'Content-Type: application/json\'' +
+        ' -H \'cache-control: no-cache\'' +
+        ' -d \'[{' +
           '"operation":"add",' +
           '"field":"redirect_uri",' +
           '"value":"' + aksUrlToWhitelist + '"' +
