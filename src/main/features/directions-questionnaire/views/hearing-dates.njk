@@ -17,7 +17,6 @@
     <div class="column-two-thirds">
       <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Unavailability Dates"
             data-event-label-from="availability" novalidate>
-        <pre>{{ form.valueFor('hasUnavailableDates') | default('missing') }}</pre>
         {{ csrfProtection(csrf) }}
         {{ radioGroup(
           name = 'hasUnavailableDates',

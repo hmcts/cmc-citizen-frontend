@@ -46,7 +46,6 @@ export default express.Router()
       const form: Form<Availability> = req.body
 
       if (form.hasErrors()) {
-        console.log(form.errors)
         renderPage(res, form)
       } else {
 
@@ -59,6 +58,9 @@ export default express.Router()
           .sort((date1, date2) => date1.toMoment().diff(date2.toMoment()))
           .map(date => LocalDate.fromObject(date))
         delete draft.document.availability.newDate
+        if (!req.body.rawData.addDate && !form.model.hasUnavailableDates) {
+          delete draft.document.availability.unavailableDates
+        }
 
         await new DraftService().save(draft, user.bearerToken)
 

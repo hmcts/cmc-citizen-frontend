@@ -14,20 +14,19 @@ export class ValidationErrors {
 export class Availability {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  hasUnavailableDates?: YesNoOption
+  hasUnavailableDates?: boolean
 
   @ValidateNested()
   @IsArray()
   @ValidateIf(o => o.hasUnavailableDates === YesNoOption.YES)
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID, each: true })
-  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE, each: true })
   unavailableDates?: LocalDate[]
 
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   @IsFutureDate({ message: ValidationErrors.FUTURE_DATE })
   newDate?: LocalDate
 
-  constructor (hasUnavailableDates?: YesNoOption, unavailableDates?: LocalDate[], newDate?: LocalDate) {
+  constructor (hasUnavailableDates?: boolean, unavailableDates?: LocalDate[], newDate?: LocalDate) {
     this.hasUnavailableDates = hasUnavailableDates
     this.unavailableDates = unavailableDates
     this.newDate = newDate
@@ -38,10 +37,11 @@ export class Availability {
       return value
     }
 
-    return new Availability(
-      value.hasUnavailableDates ? YesNoOption.fromObject(value.hasUnavailableDates.option) : undefined,
+    const availability = new Availability(
+      value.hasUnavailableDates !== undefined ? value.hasUnavailableDates.toString() === 'true' : undefined,
       value.unavailableDates ? value.unavailableDates.map(date => LocalDate.fromObject(date)) : [],
       LocalDate.fromObject(value.newDate)
     )
+    return availability
   }
 }
