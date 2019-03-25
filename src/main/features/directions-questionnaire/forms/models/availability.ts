@@ -1,10 +1,9 @@
-import { IsDefined } from '@hmcts/class-validator'
+import { IsArray, IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { LocalDate } from 'forms/models/localDate'
-import * as moment from 'moment'
-import { IsValidLocalDate } from '@hmcts/cmc-validators'
-import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
+import { AreValidLocalDates, IsValidLocalDate } from '@hmcts/cmc-validators'
+import { AreFutureDates, IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 
 export class ValidationErrors {
   static readonly AT_LEAST_ONE_DATE: string = 'Select at least one date or choose No'
@@ -38,7 +37,7 @@ export class Availability {
     }
 
     return new Availability(
-      YesNoOption.fromObject(value.hasUnavailableDates),
+      value.hasUnavailableDates ? YesNoOption.fromObject(value.hasUnavailableDates.option) : undefined,
       value.unavailableDates ? value.unavailableDates.map(date => LocalDate.fromObject(date)) : [],
       LocalDate.fromObject(value.newDate)
     )

@@ -24,6 +24,14 @@ function renderPage (res: express.Response, form: Form<Availability>) {
   })
 }
 
+const ignoreNewDateIfNotAdding = (req: express.Request, res: express.Response, next) => {
+  if (!req.body.rawData.addDate) {
+    req.body.errors = req.body.errors.filter(error => error.fieldName !== 'newDate')
+    delete req.body.model.newDate
+  }
+  next()
+}
+
 export default express.Router()
   .get(Paths.hearingDatesPage.uri,
     (req: express.Request, res: express.Response) => {
@@ -33,13 +41,7 @@ export default express.Router()
 
   .post(Paths.hearingDatesPage.uri,
     FormValidator.requestHandler(Availability, Availability.fromObject),
-    (req: express.Request, res: express.Response, next) => {
-      if (!req.body.rawData.addDate) {
-        req.body.errors = req.body.errors.filter(error => error.fieldName !== 'newDate')
-        delete req.body.model.newDate
-      }
-      next()
-    },
+    ignoreNewDateIfNotAdding,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
 
@@ -55,18 +57,17 @@ export default express.Router()
         draft.document.availability.unavailableDates = [...form.model.unavailableDates, form.model.newDate]
           .filter(date => !!date)
           .sort((date1, date2) => date1.toMoment().diff(date2.toMoment()))
+          .map(date => LocalDate.fromObject(date))
         delete draft.document.availability.newDate
 
         await new DraftService().save(draft, user.bearerToken)
 
-        let url
         if (req.body.rawData.addDate) {
-          url = Paths.hearingDatesPage.evaluateUri({ externalId: res.locals.claim.externalId })
+          res.redirect(Paths.hearingDatesPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else if (getUsersRole(res.locals.claim, user) === MadeBy.DEFENDANT) {
-          url = ResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId })
+          res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          url = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId })
+          res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
-        res.redirect(url)
       }
     }))
