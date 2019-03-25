@@ -17,12 +17,13 @@
     <div class="column-two-thirds">
       <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Unavailability Dates"
             data-event-label-from="availability" novalidate>
+        <pre>{{ form.valueFor('hasUnavailableDates') | default('missing') }}</pre>
         {{ csrfProtection(csrf) }}
         {{ radioGroup(
           name = 'hasUnavailableDates',
           options = [
-            { label: 'Yes', value: YesNoOption.YES.option, checked: form.valueFor('hasUnavailableDates').option === YesNoOption.YES.option },
-            { label: 'No', value: YesNoOption.NO.option, checked: form.valueFor('hasUnavailableDates').option === YesNoOption.NO.option }
+            { label: 'Yes', value: YesNoOption.YES.option, checked: form.valueFor('hasUnavailableDates') === YesNoOption.YES },
+            { label: 'No', value: YesNoOption.NO.option, checked: form.valueFor('hasUnavailableDates') === YesNoOption.NO }
           ],
           isInline = false,
           form = form,
@@ -31,7 +32,7 @@
         <div class="panel panel-border-narrow js-hidden" id="hasUnavailableDates-yes" aria-hidden="false">
           <h2 class="heading-medium">{{ t('Select the dates you can’t go to a hearing') }}</h2>
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
-          <div id="date-picker" class="datepicker">
+          <div id="date-picker" class="datepicker datepicker-wrapper">
             <noscript>
               {{ dateInput('newDate', form, hint = '') }}
               {{ linkButton('Add', 'addDate', 'button button-secondary') }}

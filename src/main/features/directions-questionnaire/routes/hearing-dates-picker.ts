@@ -28,6 +28,10 @@ function sortDates (dates: LocalDate[]): LocalDate[] {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
+/*
+   * The delete date functionality comes from a simple hyperlink, hence get.
+   * To 'post' would need nested forms for the non-JS page.
+   */
   .get(Paths.hearingDatesDeleteReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
@@ -35,8 +39,10 @@ export default express.Router()
 
       const availability = draft.document.availability
 
+      // The 'date-' prefix is needed because our RoutablePath class rejects :segments with only numbers
       const dateIndex = Number(/date-([\d+])/.exec(req.params.index)[1])
       availability.unavailableDates = availability.unavailableDates.filter((date, index) => index !== dateIndex)
+        .map(date => LocalDate.fromObject(date))
 
       const user = res.locals.user
       await new DraftService().save(draft, user.bearerToken)
@@ -51,7 +57,7 @@ export default express.Router()
       draft.document.availability = draft.document.availability || new Availability(undefined, [])
 
       const availability = draft.document.availability
-      availability.unavailableDates = sortDates(unavailableDates)
+      availability.unavailableDates = sortDates(unavailableDates).map(date => LocalDate.fromObject(date))
 
       const user = res.locals.user
       await new DraftService().save(draft, user.bearerToken)
