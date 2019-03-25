@@ -3,7 +3,6 @@
 
 
 {% if party === MadeBy.CLAIMANT %}
-  {% set courtName = 'Placeholder court name' %}
   {% set heading = t('The hearing will be held at {{ courtName }}', { courtName: courtName }) %}
 {% else %}
   {% set heading = t('The hearing will be held at the claimant’s chosen court') %}
