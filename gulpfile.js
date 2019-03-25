@@ -81,22 +81,12 @@ function copyClientPolyfills () {
 
 function copyA11ySniffer () {
   gulp.src([
-    './node_modules/HTML_CodeSniffer/HTMLCS.js'
+    './node_modules/html_codesniffer/build/HTMLCS.js'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/htmlcs`))
 
   gulp.src([
-    './node_modules/HTML_CodeSniffer/Standards/**'
-  ])
-    .pipe(gulp.dest(`${assetsDirectory}/js/lib/htmlcs/Standards`))
-
-  gulp.src([
-    './node_modules/HTML_CodeSniffer/Auditor/HTMLCSAuditor.js'
-  ])
-    .pipe(gulp.dest(`${assetsDirectory}/js/lib/htmlcs/Auditor`))
-
-  gulp.src([
-    './node_modules/HTML_CodeSniffer/Auditor/**/*.{css,gif,png}'
+    './node_modules/html_codesniffer/build/**/*.{css,gif,png}'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
 }
