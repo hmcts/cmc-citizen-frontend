@@ -160,12 +160,12 @@ export class Claim {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isResponseSubmitted()) {
       return ClaimStatus.RESPONSE_SUBMITTED
-    } else if (this.moreTimeRequested) {
-      return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (this.hasClaimantAcceptedStatesPaid()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
+    } else if (this.hasClaimantRejectedStatesPaid()) {
+      return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
-    } else if (!this.response) {
-      return ClaimStatus.NO_RESPONSE
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
@@ -174,14 +174,14 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
-    } else if (this.hasClaimantAcceptedStatesPaid()) {
-      return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
-    } else if (this.hasClaimantRejectedStatesPaid()) {
-      return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
       return ClaimStatus.CLAIMANT_RESPONSE_SUBMITTED
+    } else if (this.moreTimeRequested) {
+      return ClaimStatus.MORE_TIME_REQUESTED
+    } else if (!this.response) {
+      return ClaimStatus.NO_RESPONSE
     } else {
       throw new Error('Unknown Status')
     }
@@ -470,8 +470,8 @@ export class Claim {
   private hasClaimantRejectedStatesPaid (): boolean {
     return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
-      && this.response.responseType === ResponseType.FULL_DEFENCE
-      && this.response.defenceType === DefenceType.ALREADY_PAID
+      && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
+         || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.response.paymentDeclaration !== undefined
   }
 

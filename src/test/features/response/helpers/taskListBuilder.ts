@@ -31,10 +31,13 @@ import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/r
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
 const mediationTaskLabel = 'Free telephone mediation'
+const directionsQuestionnaireTaskLabel = 'Tell us more about the claim'
+
 describe('Defendant response task list builder', () => {
   let claim: Claim
 
@@ -446,6 +449,25 @@ describe('Defendant response task list builder', () => {
     })
   })
 
+  describe('"Tell us more about the claim"', () => {
+    beforeEach(() => {
+      claim.features = ['admissions', 'directionsQuestionnaire']
+    })
+
+    it('response is partial admission', () => {
+
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new DirectionsQuestionnaireDraft()
+      )
+
+      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+        expect(taskList.name).to.contains(directionsQuestionnaireTaskLabel)
+      } else {
+        expect(taskList).to.be.eq(undefined)
+      }
+    })
+  })
+
   describe('"Check and submit your response" task', () => {
     let isResponsePopulatedStub: sinon.SinonStub
     let isResponseRejectedFullyWithDisputePaidStub: sinon.SinonStub
@@ -539,5 +561,4 @@ describe('Defendant response task list builder', () => {
       expect(tasks.map(task => task.name)).to.not.contain(mediationTaskLabel)
     })
   })
-
 })
