@@ -80,9 +80,18 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@hmcts/class-validator@0.9.1-b":
+"@hmcts/class-validator@^0.9.1-b":
   version "0.9.1-b"
   resolved "https://registry.yarnpkg.com/@hmcts/class-validator/-/class-validator-0.9.1-b.tgz#656006d3569b68743344bd3e407f67d916cc2af3"
+  dependencies:
+    "@typed/is-promise" "^1.0.0"
+    "@types/validator" "9.4.2"
+    google-libphonenumber "^3.1.6"
+    validator "10.4.0"
+
+"@hmcts/class-validator@^0.9.1-c":
+  version "0.9.1-c"
+  resolved "https://registry.yarnpkg.com/@hmcts/class-validator/-/class-validator-0.9.1-c.tgz#ea8b72b69c3cef217b8f9f772725270302707b13"
   dependencies:
     "@typed/is-promise" "^1.0.0"
     "@types/validator" "9.4.2"
@@ -104,8 +113,11 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
 
-"@hmcts/cmc-validators@../cmc-validators/dist":
-  version "0.0.0"
+"@hmcts/cmc-validators@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.2.tgz#c99b88776f68d95cc14ab6bce562da7f123bb518"
+  dependencies:
+    "@hmcts/class-validator" "^0.9.1-b"
 
 "@hmcts/draft-store-client@^1.1.1", "@hmcts/draft-store-client@^1.2.1":
   version "1.2.1"
