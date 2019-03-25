@@ -107,7 +107,7 @@ var datePicker = {
     // dates : LocalDate[]
     $.post('/case/' + uuid + '/directions-questionnaire/hearing-dates/date-picker/replace', {
       _csrf: csrf,
-      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === 'yes',
+      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === 'true',
       unavailableDates: dates,
     }, (result) => {
       $('#date-selection-wrapper').empty().append(result)

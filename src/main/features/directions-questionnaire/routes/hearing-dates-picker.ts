@@ -7,6 +7,8 @@ import { Availability } from 'directions-questionnaire/forms/models/availability
 import { DraftService } from 'services/draftService'
 import { LocalDate } from 'forms/models/localDate'
 import * as Moment from 'moment'
+import { FormValidator } from 'forms/validation/formValidator'
+import { Form } from 'forms/form'
 
 function renderFragment (res: express.Response, draft: Draft<DirectionsQuestionnaireDraft>) {
   res.render('directions-questionnaire/views/components/date-list', {
@@ -51,15 +53,22 @@ export default express.Router()
     }))
 
   .post(Paths.hearingDatesReplaceReceiver.uri,
+    FormValidator.requestHandler(Availability, Availability.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      const unavailableDates = req.body.unavailableDates
-      draft.document.availability = draft.document.availability || new Availability(undefined, [])
+      const form: Form<Availability> = req.body
 
-      const availability = draft.document.availability
-      availability.unavailableDates = sortDates(unavailableDates).map(date => LocalDate.fromObject(date))
+      if (form.hasErrors()) {
+        res.sendStatus(400)
+      } else {
+        const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
+        const unavailableDates = form.model.unavailableDates
+        draft.document.availability = draft.document.availability || new Availability(true, [])
 
-      const user = res.locals.user
-      await new DraftService().save(draft, user.bearerToken)
-      renderFragment(res, draft)
+        const availability = draft.document.availability
+        availability.unavailableDates = sortDates(unavailableDates).map(date => LocalDate.fromObject(date))
+
+        const user = res.locals.user
+        await new DraftService().save(draft, user.bearerToken)
+        renderFragment(res, draft)
+      }
     }))
