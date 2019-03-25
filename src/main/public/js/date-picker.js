@@ -85,7 +85,7 @@ const datePicker = {
 
   // event.dates are Date objects
   changeDateHandler: event => {
-    let uuid = /\/case\/([^/]+)\//.exec(window.location.pathname)[1]
+    const uuid = $('#externalId')[0].innerText
     const csrf = $("input[name='_csrf']").val()
     let dates = event.dates.map(eventDate => datePickerUtils.formatDateForData(eventDate))
     // dates : LocalDate[]
