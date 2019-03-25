@@ -10,9 +10,15 @@ import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
-  res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, { form: form, party: getUsersRole(res.locals.claim, res.locals.user) })
+  const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
+  const defendantCourt = 'Defendant’s Court Name'
+  res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, {
+    form: form,
+    party: party,
+    courtName: defendantCourt })
 }
 
 /* tslint:disable:no-default-export */
