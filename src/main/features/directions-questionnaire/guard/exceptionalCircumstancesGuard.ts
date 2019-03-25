@@ -12,7 +12,7 @@ export class ExceptionalCircumstancesGuard {
     const claim: Claim = res.locals.claim
     const user: User = res.locals.user
     if (DirectionsQuestionnaireHelper.getUsersRole(claim, user) === DirectionsQuestionnaireHelper.getPreferredParty(claim)) {
-      logger.warn('State guard: user is preferred party in court hearing location - redirecting to dashboard')
+      logger.info('State guard: user is preferred party in court hearing location - redirecting to dashboard')
       res.redirect(DashboardPaths.dashboardPage.uri)
     } else {
       next()

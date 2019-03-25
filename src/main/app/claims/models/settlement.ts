@@ -79,6 +79,14 @@ export class Settlement {
     return this.partyStatements && this.partyStatements.some(statement => statement.type === 'COUNTERSIGNATURE')
   }
 
+  isOfferRejectedByDefendant (): boolean {
+    const statement: PartyStatement = this.partyStatements
+      .filter(o => o.type === StatementType.REJECTION.value && o.madeBy === MadeBy.DEFENDANT.value)
+      .pop()
+
+    return !!statement
+  }
+
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {
     return partyStatement.type === StatementType.OFFER.value && partyStatement.madeBy === MadeBy.DEFENDANT.value
   }

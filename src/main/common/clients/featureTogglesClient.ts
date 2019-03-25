@@ -16,27 +16,6 @@ export class FeatureTogglesClient {
     }
   }
 
-  async isAdmissionsAllowed (user: User, roles: string[]): Promise<boolean> {
-    if (!user) {
-      return Promise.reject(new Error('user must be set'))
-    }
-
-    return this.request
-      .get(`${this.featureTogglesApiUrl}/cmc_admissions`, {
-        headers: {
-          'X-USER-ID': `${user.email}`,
-          'X-USER-PERMISSIONS': roles.join(',')
-        }
-      })
-      .then((value: any) => {
-        return Promise.resolve(!!value)
-      })
-      .catch((error: any) => {
-        trackCustomEvent('ff4J cmc_admissions failure', { errorValue: error })
-        return Promise.resolve(false)
-      })
-  }
-
   async isFeatureToggleEnabled (user: User, roles: string[], feature: string) {
     if (!user) {
       return Promise.reject(new Error('user must be set'))
