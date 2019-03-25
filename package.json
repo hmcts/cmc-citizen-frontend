@@ -107,7 +107,7 @@
     "@types/mocha": "*",
     "@types/sinon-chai": "^3.2.1",
     "@types/supertest": "*",
-    "HTML_CodeSniffer": "https://github.com/squizlabs/HTML_CodeSniffer/archive/2.0.7.tar.gz",
+    "html_codesniffer": "2.3.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.2.0",
