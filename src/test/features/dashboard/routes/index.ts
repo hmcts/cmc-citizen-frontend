@@ -73,10 +73,10 @@ const testData = [
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
       moreTimeRequested: true,
-      responseDeadline: MomentFactory.currentDate().add(10, 'days')
+      responseDeadline: '2099-08-08'
     },
-    claimantAssertions: ['000MC050', 'Your claim has been sent.'],
-    defendantAssertions: ['000MC050', 'Respond to claim.', '(10 days remaining)']
+    claimantAssertions: ['000MC050', 'John Doe has requested more time to respond.'],
+    defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
   },
   {
     status: 'full admission, pay immediately',
