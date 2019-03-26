@@ -30,9 +30,9 @@ nodejs:
   memoryLimits: 512Mi
   cpuLimits: 1
   environment:
-    IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
-    IDAM_URL: https://preprod-idamapi.reform.hmcts.net:3511
-    IDAM_AUTHENTICATION_WEB_URL: https://idam.preprod.ccidam.reform.hmcts.net
+    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
+    IDAM_URL: https://idam-api.aat.platform.hmcts.net
+    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
