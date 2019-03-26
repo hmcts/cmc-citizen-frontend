@@ -295,7 +295,7 @@ export class DefenceSteps {
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     this.confirmYourDetails(defendantParty)
-    I.see('COMPLETED')
+    I.see('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {
       this.requestMoreTimeToRespond()
