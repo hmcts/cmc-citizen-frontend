@@ -1,4 +1,4 @@
-import { IsArray, IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
+import { ArrayNotEmpty, IsArray, IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { LocalDate } from 'forms/models/localDate'
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
@@ -14,9 +14,10 @@ export class Availability {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   hasUnavailableDates?: boolean
 
+  @ValidateIf(o => o.hasUnavailableDates)
   @ValidateNested()
   @IsArray({ message: ValidationErrors.AT_LEAST_ONE_DATE })
-  @ValidateIf(o => o.hasUnavailableDates)
+  @ArrayNotEmpty({ message: ValidationErrors.AT_LEAST_ONE_DATE })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID, each: true })
   unavailableDates?: LocalDate[]
 

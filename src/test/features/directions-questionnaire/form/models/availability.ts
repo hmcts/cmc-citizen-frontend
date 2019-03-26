@@ -4,8 +4,7 @@ import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { Availability, ValidationErrors } from 'directions-questionnaire/forms/models/availability'
-import { LocalDate } from 'forms/models/localDate'
-import * as moment from 'moment'
+import { daysFromNow } from 'test/localDateUtils'
 
 describe('Availability', () => {
   describe('constructor', () => {
@@ -74,9 +73,3 @@ describe('Availability', () => {
     })
   })
 })
-
-function daysFromNow (adjustment: number): LocalDate {
-  let mDate: moment.Moment = moment()
-  mDate.add(adjustment, 'days')
-  return LocalDate.fromMoment(mDate)
-}

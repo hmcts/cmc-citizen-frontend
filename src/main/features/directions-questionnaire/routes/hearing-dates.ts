@@ -15,19 +15,30 @@ import { MadeBy } from 'offer/form/models/madeBy'
 import { LocalDate } from 'forms/models/localDate'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
+  const dates = (form.model && form.model.unavailableDates ? form.model.unavailableDates : [])
+    .map(rawDate => LocalDate.fromObject(rawDate))
+    .map(localDate => localDate.toMoment())
+
   res.render(Paths.hearingDatesPage.associatedView, {
-    externalId: res.locals.claim.claimData.externalId,
+    externalId: res.locals.claim.externalId,
     form: form,
-    dates: (form.model && form.model.unavailableDates ? form.model.unavailableDates : [])
-      .map(rawDate => LocalDate.fromObject(rawDate))
-      .map(localDate => localDate.toMoment())
+    dates: dates
   })
 }
 
 const ignoreNewDateIfNotAdding = (req: express.Request, res: express.Response, next) => {
-  if (!req.body.rawData.addDate) {
-    req.body.errors = req.body.errors.filter(error => error.fieldName !== 'newDate')
-    delete req.body.model.newDate
+  const form: Form<Availability> = req.body
+  if (!form.rawData['addDate']) {
+    form.errors = form.errors.filter(error => error.fieldName !== 'newDate')
+    delete form.model.newDate
+  }
+  next()
+}
+
+const ignoreEmptyArrayIfAdding = (req: express.Request, res: express.Response, next) => {
+  const form: Form<Availability> = req.body
+  if (form.rawData['addDate']) {
+    form.errors = form.errors.filter(error => error.fieldName !== 'unavailableDates')
   }
   next()
 }
@@ -42,9 +53,9 @@ export default express.Router()
   .post(Paths.hearingDatesPage.uri,
     FormValidator.requestHandler(Availability, Availability.fromObject),
     ignoreNewDateIfNotAdding,
+    ignoreEmptyArrayIfAdding,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
-
       if (form.hasErrors()) {
         renderPage(res, form)
       } else {
@@ -65,7 +76,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (req.body.rawData.addDate) {
-          res.redirect(Paths.hearingDatesPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          renderPage(res, form)
         } else if (getUsersRole(res.locals.claim, user) === MadeBy.DEFENDANT) {
           res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
