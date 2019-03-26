@@ -39,6 +39,40 @@ describe('SelfWitness', () => {
     })
   })
 
+  describe('fromObject should return', () => {
+
+    it('undefined when undefined provided', () => {
+      const model = SelfWitness.fromObject(undefined)
+
+      expect(model).to.be.eq(undefined)
+    })
+
+    it('empty object when unknown value provided', () => {
+      const model = SelfWitness.fromObject({ option: 'I do not know this value!' })
+
+      expect(model.option).to.be.eq(undefined)
+    })
+
+    it(`valid object when values provided`, () => {
+      const model = SelfWitness.fromObject({ option: 'yes' })
+      expect(model.option).to.be.eq(YesNoOption.YES)
+    })
+  })
+
+  describe('deserialize', () => {
+
+    it('should return an instance initialised with defaults for undefined', () => {
+      expect(new SelfWitness().deserialize(undefined)).to.be.eql(new SelfWitness())
+    })
+
+    it('should return an instance from given object', () => {
+      const actual: SelfWitness = new SelfWitness().deserialize({ option: 'yes' })
+
+      expect(actual).to.be.eql(new SelfWitness(YesNoOption.YES))
+    })
+
+  })
+
   describe('isCompleted', () => {
     it('Should be marked completed when an option is selected', () => {
       const selfWitness: SelfWitness = new SelfWitness(YesNoOption.YES)

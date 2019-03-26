@@ -6,7 +6,7 @@ import { ResidenceType } from 'claims/models/response/statement-of-means/residen
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 
 import { MomentFactory } from 'shared/momentFactory'
-import { individual, company } from 'test/data/entity/party'
+import { company, individual } from 'test/data/entity/party'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
@@ -23,7 +23,7 @@ const baseCompanyResponseData = {
   moreTimeNeeded: 'no'
 }
 
-const baseDefenceData = {
+export const baseDefenceData = {
   responseType: 'FULL_DEFENCE',
   defence: 'My defence',
   freeMediation: 'no'
@@ -403,15 +403,6 @@ export const partialAdmissionWithSoMPaymentBySetDateData = {
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }
-}
-
-export const partialAdmissionWithImmediatePaymentCompanyData = {
-  ...baseCompanyResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  ...basePayImmediatelyData,
-  amount: 3000
 }
 
 export const partialAdmissionWithPaymentBySetDateCompanyData = {

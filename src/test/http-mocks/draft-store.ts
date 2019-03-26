@@ -522,11 +522,7 @@ export const sampleClaimantResponseDraftObj = {
     paymentPlan: {
       totalAmount: 3326.59,
       instalmentAmount: 10,
-      firstPaymentDate: {
-        year: 2019,
-        month: 1,
-        day: 1
-      },
+      firstPaymentDate: LocalDate.fromMoment(MomentFactory.currentDate().add(50, 'days')),
       paymentSchedule: {
         value: 'EACH_WEEK',
         displayValue: 'Each week'
@@ -571,6 +567,15 @@ export const sampleMediationDraftObj = {
   },
   youCanOnlyUseMediation: {
     option: FreeMediationOption.YES
+  },
+  canWeUse: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777'
+  },
+  canWeUseCompany: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777',
+    mediationContactPerson: 'Mary Richards'
   }
 }
 
@@ -594,8 +599,6 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'response:company':
       documentDocument = { ...sampleCompanyResponseDraftObj, ...draftOverride }
-      // tslint:disable-next-line
-      console.log(documentDocument)
       break
     case 'response:full-admission':
       documentDocument = { ...sampleFullAdmissionResponseDraftObj, ...draftOverride }
