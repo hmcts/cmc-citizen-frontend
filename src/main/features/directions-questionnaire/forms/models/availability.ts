@@ -1,4 +1,4 @@
-import { ArrayNotEmpty, IsArray, IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
+import { ArrayNotEmpty, IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { LocalDate } from 'forms/models/localDate'
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
@@ -16,7 +16,6 @@ export class Availability {
 
   @ValidateIf(o => o.hasUnavailableDates)
   @ValidateNested()
-  @IsArray({ message: ValidationErrors.AT_LEAST_ONE_DATE })
   @ArrayNotEmpty({ message: ValidationErrors.AT_LEAST_ONE_DATE })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID, each: true })
   unavailableDates?: LocalDate[]
@@ -38,7 +37,8 @@ export class Availability {
 
     const availability = new Availability(
       value.hasUnavailableDates !== undefined ? value.hasUnavailableDates.toString() === 'true' : undefined,
-      value.unavailableDates ? value.unavailableDates.map(date => LocalDate.fromObject(date)) : [],
+      value.unavailableDates && (value.unavailableDates.constructor === Array)
+        ? value.unavailableDates.map(date => LocalDate.fromObject(date)) : [],
       LocalDate.fromObject(value.newDate)
     )
     return availability
