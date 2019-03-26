@@ -579,6 +579,11 @@ export const sampleMediationDraftObj = {
   }
 }
 
+export const sampleDirectionsQuestionnaireDraftObj = {
+  selfWitness: { selfWitness: false },
+  otherWitnesses: { otherWitnesses: false }
+}
+
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
@@ -612,6 +617,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'mediation':
       documentDocument = { ...sampleMediationDraftObj, ...draftOverride }
+      break
+    case 'directionsQuestionnaire':
+      documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
