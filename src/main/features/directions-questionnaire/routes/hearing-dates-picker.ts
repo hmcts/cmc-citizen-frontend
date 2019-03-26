@@ -28,6 +28,13 @@ function sortDates (dates: LocalDate[]): LocalDate[] {
   return dates.sort((date1, date2) => Moment(date1).valueOf() - Moment(date2).valueOf())
 }
 
+const ignoreEmptyArrayError = (req: express.Request, res: express.Response, next) => {
+  const form: Form<Availability> = req.body
+  console.log(form)
+  form.errors = form.errors.filter(error => error.message !== 'Select at least one date or choose No')
+  next()
+}
+
 /* tslint:disable:no-default-export */
 export default express.Router()
   /*
@@ -43,7 +50,8 @@ export default express.Router()
 
       // The 'date-' prefix is needed because our RoutablePath class rejects :segments with only numbers
       const dateIndex = Number(/date-([\d+])/.exec(req.params.index)[1])
-      availability.unavailableDates = availability.unavailableDates.filter((date, index) => index !== dateIndex)
+      availability.unavailableDates = availability.unavailableDates
+        .filter((date, index) => index !== dateIndex)
         .map(date => LocalDate.fromObject(date))
 
       const user = res.locals.user
@@ -54,6 +62,7 @@ export default express.Router()
 
   .post(Paths.hearingDatesReplaceReceiver.uri,
     FormValidator.requestHandler(Availability, Availability.fromObject),
+    ignoreEmptyArrayError,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
 
