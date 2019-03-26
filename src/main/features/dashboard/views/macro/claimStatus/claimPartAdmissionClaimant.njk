@@ -24,8 +24,6 @@
 {% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
 
   {% if claim.response.paymentIntention.paymentOption %}
-    {{ t('Respond to the defendant’s offer.') }}
-  {% else %}
     {{ t('Respond to the defendant.') }}
   {% endif %}
 
