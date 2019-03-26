@@ -405,15 +405,6 @@ export const partialAdmissionWithSoMPaymentBySetDateData = {
   }
 }
 
-export const partialAdmissionWithImmediatePaymentCompanyData = {
-  ...baseCompanyResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  ...basePayImmediatelyData,
-  amount: 3000
-}
-
 export const partialAdmissionWithPaymentBySetDateCompanyData = {
   ...baseCompanyResponseData,
   ...basePartialAdmissionData,
