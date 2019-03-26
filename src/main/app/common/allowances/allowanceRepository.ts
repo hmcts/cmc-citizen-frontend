@@ -1,9 +1,11 @@
 import { AllowanceItem } from 'common/allowances/allowanceItem'
-import { Allowance,
+import {
+  Allowance, Allowances,
   DependantAllowanceType,
   DisabilityAllowanceType,
   LivingAllowanceType,
-  PensionAllowanceType } from 'common/allowances/allowance'
+  PensionAllowanceType
+} from 'common/allowances/allowance'
 import { join } from 'path'
 
 export interface AllowanceRepository {
@@ -21,7 +23,7 @@ export class ResourceAllowanceRepository implements AllowanceRepository {
 
   constructor (public path?: string) {
     const resourcePath = path || join(__dirname, '..', '..', '..','resources','meansAllowance.json')
-    this.allowances = new Allowance().deserialize(require(resourcePath))
+    this.allowances = new Allowances().deserialize(require(resourcePath))
   }
 
   getDependantAllowance (dependantAllowanceType: DependantAllowanceType): AllowanceItem {
