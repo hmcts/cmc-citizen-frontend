@@ -30,7 +30,7 @@ function sortDates (dates: LocalDate[]): LocalDate[] {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-/*
+  /*
    * The delete date functionality comes from a simple hyperlink, hence get.
    * To 'post' would need nested forms for the non-JS page.
    */

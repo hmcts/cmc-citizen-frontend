@@ -52,7 +52,7 @@
 
         td {
           border-radius: 0;
-          color: $black;
+          color: $govuk-text-colour;
           display: table-cell;
           font-weight: 600;
           height: 57px;
@@ -68,7 +68,7 @@
 
           &.active {
             background-color: $day-cell-active-colour;
-            color: $black;
+            color: $govuk-text-colour;
           }
 
           &.day {
@@ -85,7 +85,7 @@
             &.focused {
               &:not(.disabled) {
                 background-color: $day-cell-hover-colour;
-                color: $black;
+                color: $govuk-text-colour;
               }
             }
           }
