@@ -49,14 +49,14 @@
               ]
             ) }}
             <div class="js-hidden" id="courtAccepted-no">
-              <h1 class="heading-medium">Choose another court</h1>
+              <h1 class="heading-medium">{{ t('Choose another court') }}</h1>
               {{ radioOption(form = form, label = 'Enter court name', name = 'alternativeOption', value = 'name', checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
-                {{ textInput(label = t('Court name'), form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-30') }}
+                {{ textInput(label = 'Court name', form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-30') }}
               </div>
               {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
-                {{ textInput(label = t('Postcode'), form = form, name = 'alternativePostcode', inputClass = 'form-control-1-10') }}
+                {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-10') }}
               </div>
             </div>
           {% else %}
