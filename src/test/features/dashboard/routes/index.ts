@@ -122,7 +122,7 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData }
     },
-    claimantAssertions: ['000MC000', 'The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'],
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
     defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
@@ -152,7 +152,7 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC000', 'The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'],
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
     defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
@@ -161,7 +161,7 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC000', 'The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'],
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
     defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
@@ -285,117 +285,41 @@ describe('Dashboard page', () => {
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
+          })
+        })
 
-            it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim,
-                {
-                  response: { ...partialAdmissionAlreadyPaidData },
-                  claimantResponse: { type: 'REJECTION' }
-                })
-
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('You’ve rejected the defendant’s admission.'))
-
-            })
-
-            it('should show the correct status when the claim is marked as states paid accepted', async () => {
-              claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim,
-                {
-                  response: { ...partialAdmissionAlreadyPaidData },
-                  claimantResponse: { type: 'ACCEPTATION' }
-                })
-
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('This claim is settled.'))
-            })
+        context('as a defendant', () => {
+          beforeEach(() => {
+            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           })
 
-          context('when the claim is in full defence', () => {
-            const fullDefenceClaim = {
-              ...claimStoreServiceMock.sampleClaimObj,
-              responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-              response: {
-                ...baseResponseData,
-                ...baseDefenceData,
-                amount: 30
-              }
-            }
-            it('should show the correct status when the claim is marked as states paid rejected', async () => {
-              claimStoreServiceMock.resolveRetrieveByClaimantId(fullDefenceClaim,
-                {
-                  response: { ...defenceWithAmountClaimedAlreadyPaidData },
-                  claimantResponse: { type: 'REJECTION' }
-                })
-
-              await request(app)
-                .get(Paths.dashboardPage.uri)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('Respond to the defendant’s offer.'))
-            })
-
-          })
-
-          it('should show the correct status when the claim is marked as states paid accepted', async () => {
-            claimStoreServiceMock.resolveRetrieveByClaimantId(fullDefenceClaim,
-              {
-                response: { ...defenceWithAmountClaimedAlreadyPaidData },
-                claimantResponse: { type: 'ACCEPTATION' }
-              })
-
+          it('should render page with start claim button when everything is fine', async () => {
+            draftStoreServiceMock.resolveFindNoDraftFound()
+            claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
             await request(app)
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Respond to the defendant’s offer.'))
+              .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
           })
 
-          it('should show the correct status when the claim is marked as pay by instalments', async () => {
-            claimStoreServiceMock.resolveRetrieveByClaimantId(partAdmissionClaim, {
-              response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
-            })
-
+          it('should render page with claim number and status', async () => {
+            draftStoreServiceMock.resolveFindNoDraftFound()
+            claimStoreServiceMock.resolveRetrieveByDefendantId(claimStoreServiceMock.sampleClaimIssueObj.referenceNumber, '1', claimStoreServiceMock.sampleClaimIssueObj)
             await request(app)
-              .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Respond to the defendant’s offer.'))
-          })
-        })
-      })
-
-      context('as a defendant', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-        })
-
-        it('should render page with start claim button when everything is fine', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
-          await request(app)
-            .get(Paths.dashboardPage.uri)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
-        })
-
-        it('should render page with claim number and status', async () => {
-          draftStoreServiceMock.resolveFindNoDraftFound()
-          claimStoreServiceMock.resolveRetrieveByDefendantId(claimStoreServiceMock.sampleClaimIssueObj.referenceNumber, '1', claimStoreServiceMock.sampleClaimIssueObj)
-          await request(app)
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim'))
-        })
+          })
 
-        testData.forEach(data => {
-          it(`should render dashboard: ${data.status}`, async () => {
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
-            await request(app)
+          testData.forEach(data => {
+            it(`should render dashboard: ${data.status}`, async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+              await request(app)
                 .get(Paths.dashboardPage.uri)
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+            })
           })
         })
       })
