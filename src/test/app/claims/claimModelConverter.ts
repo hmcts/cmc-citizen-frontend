@@ -9,12 +9,19 @@ import {
   companyDetails,
   individualDetails,
   organisationDetails,
-  soleTraderDetails
+  soleTraderDetails, defendantIndividualDetails, theirSoleTraderDetails
 } from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
 import { claimData as entityTemplate } from 'test/data/entity/claimData'
-import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
+import {
+  company,
+  individual,
+  individualDefendant,
+  organisation,
+  soleTrader,
+  soleTraderDefendant
+} from 'test/data/entity/party'
 import { YesNoOption } from 'models/yesNoOption'
 import { Interest } from 'claim/form/models/interest'
 
@@ -43,10 +50,10 @@ function convertObjectLiteralToJSON (value: object): object {
 
 describe('ClaimModelConverter', () => {
   [
-    [[individualDetails, individual], [soleTraderDetails, soleTrader]],
+    [[individualDetails, individual], [theirSoleTraderDetails, soleTraderDefendant]],
     [[soleTraderDetails, soleTrader], [companyDetails, company]],
     [[companyDetails, company], [organisationDetails, organisation]],
-    [[organisationDetails, organisation], [individualDetails, individual]]
+    [[organisationDetails, organisation], [defendantIndividualDetails, individualDefendant]]
   ].forEach(entry => {
     const [[claimantPartyDetails, claimantParty], [defendantPartyDetails, defendantParty]] = entry
 
@@ -64,5 +71,14 @@ describe('ClaimModelConverter', () => {
     claimDraft.interest = new Interest(YesNoOption.NO)
     const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
     expect(converted.interest.interestDate).to.be.undefined
+  })
+
+  it('should not contain title if blank', () => {
+    const claimDraft = prepareClaimDraft(defendantIndividualDetails, individualDefendant)
+    // @ts-ignore
+    claimDraft.defendant.partyDetails.title = ' '
+    const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
+    // @ts-ignore
+    expect(converted.defendant.title).to.be.undefined
   })
 })

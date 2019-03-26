@@ -12,6 +12,7 @@ export class TheirDetailsMapper {
     return {
       type: this.partyTypeAsString(party),
       fullName: party.name,
+      ...this.splitNames(party),
       contactPerson: this.contactPerson(party),
       businessName: this.businessName(party),
       address: {
@@ -41,6 +42,28 @@ export class TheirDetailsMapper {
           return undefined
       }
     }
+  }
+
+  private static splitNames (partyDetails: TheirDetails): object {
+    if (partyDetails && partyDetails.type) {
+      switch (partyDetails.type) {
+        case PartyType.INDIVIDUAL.value:
+          const individual = partyDetails as Individual
+          return {
+            title: individual.title,
+            firstName: individual.firstName,
+            lastName: individual.lastName
+          }
+        case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+          const soleTrader = partyDetails as SoleTrader
+          return {
+            title: soleTrader.title,
+            firstName: soleTrader.firstName,
+            lastName: soleTrader.lastName
+          }
+      }
+    }
+    return undefined
   }
 
   private static businessName (partyDetails: TheirDetails): any {
