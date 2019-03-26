@@ -15,7 +15,7 @@ import { MadeBy } from 'offer/form/models/madeBy'
 import { StatementType } from 'offer/form/models/statementType'
 import { PaymentOption } from 'claims/models/paymentOption'
 
-function createSettlement (defendantAction, date?, type?) {
+export function createSettlement (defendantAction, date?, type?) {
   return {
     partyStatements: [
       {
@@ -47,7 +47,7 @@ function createSettlement (defendantAction, date?, type?) {
 
 describe('The dashboard status rule engine', () => {
 
-  describe.only('given the claim flow', () => {
+  describe('given the claim flow', () => {
 
     // this will be removed once more flows are added to the "new" dashboard
     it('should extract an empty dashboard if a claim is not in full admission', () => {
@@ -245,7 +245,7 @@ describe('The dashboard status rule engine', () => {
           response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
           countyCourtJudgment: null,
           settlement: settlement,
-          settlementReachedAt: '2020-10-10',
+          settlementReachedAt: MomentFactory.currentDate(),
           claimantResponse: claimantResponse
         })
         expect(ClaimStatusFlow.dashboardFor(defendantRejectedAgreement)).to.eql('defendant_counter_signs_settlement_agreement')

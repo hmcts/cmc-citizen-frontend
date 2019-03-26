@@ -1,20 +1,17 @@
 import { Claim } from 'claims/models/claim'
-import { Logger } from '@hmcts/nodejs-logging'
-
-const logger = Logger.getLogger('ClaimStatusFlow')
 
 const payBySetDate = {
-  description: 'Claim is Pay By Set Date',
+  description: 'Response is Pay By Set Date',
   isValidFor: (claim) => claim.isPayBySetDate
 }
 
 const payImmediately = {
-  description: 'Claim is Pay Immediately',
+  description: 'Response is Pay Immediately',
   isValidFor: (claim) => claim.isPayImmediately
 }
 
 const payByInstalments = {
-  description: 'Claim is Pay By Instalments',
+  description: 'Response is Pay By Instalments',
   isValidFor: (claim) => claim.isPayByInstalments
 }
 
@@ -78,49 +75,51 @@ function signSettlementAgreementFlow (type: string): ClaimStatusNode[] {
   ]
 }
 
-const paymentPlanFlow: ClaimStatusNode[] = [{
-  description: 'Claimant accepts repayment plan',
-  dashboard: `claimant_accepted_repayment_plan`,
-  isValidFor: (claim) => claim.hasClaimantAccepted && !claim.hasAlternativePaymentIntention,
-  next: [
-    {
-      description: 'Claimant wants to sign settlement agreement by admission',
-      dashboard: 'claimants_wants_to_sign_settlement_agreement',
-      isValidFor: (claim) => claim.hasClaimantAcceptedDefendantResponseWithSettlement(),
-      next: signSettlementAgreementFlow('admission')
-    },
-    {
-      description: 'Claimant wants CCJ by admission when accepting payment plan',
-      dashboard: 'ccj_admission_accept_payment_plan',
-      isValidFor: (claim) => claim.isCCJ && !claim.settlement,
-      next: []
-    }
-  ]
-}, {
-  description: 'Claimant suggests counter repayment plan',
-  dashboard: 'suggest_counter_repayment_plan',
-  isValidFor: (claim) => claim.hasClaimantAccepted && claim.hasAlternativePaymentIntention,
-  next: [
-    {
-      description: 'Sign settlement agreement by determination',
-      dashboard: 'claimant_signed_agreement',
-      isValidFor: (claim) => claim.isSettlement && !claim.isReferToJudge && !claim.isCCJ,
-      next: signSettlementAgreementFlow('determination')
-    },
-    {
-      description: 'Refer to Judge',
-      dashboard: 'refer_to_judge',
-      isValidFor: (claim) => !claim.isSettlementReachedThroughAdmission() && claim.isReferToJudge && !claim.hasCCJBeenRequested,
-      next: []
-    },
-    {
-      description: 'Claimants requests CCJ by determination',
-      dashboard: 'ccj_by_determination',
-      isValidFor: (claim) => !claim.isSettlementReachedThroughAdmission() && claim.isCCJ && claim.hasCCJBeenRequested,
-      next: []
-    }
-  ]
-}]
+const paymentPlanFlow: ClaimStatusNode[] = [
+  {
+    description: 'Claimant accepts repayment plan',
+    dashboard: `claimant_accepted_repayment_plan`,
+    isValidFor: (claim) => claim.hasClaimantAccepted && !claim.hasAlternativePaymentIntention,
+    next: [
+      {
+        description: 'Claimant wants to sign settlement agreement by admission',
+        dashboard: 'claimants_wants_to_sign_settlement_agreement',
+        isValidFor: (claim) => claim.hasClaimantAcceptedDefendantResponseWithSettlement(),
+        next: signSettlementAgreementFlow('admission')
+      },
+      {
+        description: 'Claimant wants CCJ by admission when accepting payment plan',
+        dashboard: 'ccj_admission_accept_payment_plan',
+        isValidFor: (claim) => claim.isCCJ && !claim.settlement,
+        next: []
+      }
+    ]
+  },
+  {
+    description: 'Claimant suggests counter repayment plan',
+    dashboard: 'suggest_counter_repayment_plan',
+    isValidFor: (claim) => claim.hasClaimantAccepted && claim.hasAlternativePaymentIntention,
+    next: [
+      {
+        description: 'Sign settlement agreement by determination',
+        dashboard: 'claimant_signed_agreement',
+        isValidFor: (claim) => claim.isSettlement && !claim.isReferToJudge && !claim.isCCJ,
+        next: signSettlementAgreementFlow('determination')
+      },
+      {
+        description: 'Refer to Judge',
+        dashboard: 'refer_to_judge',
+        isValidFor: (claim) => !claim.isSettlementReachedThroughAdmission() && claim.isReferToJudge && !claim.hasCCJBeenRequested,
+        next: []
+      },
+      {
+        description: 'Claimants requests CCJ by determination',
+        dashboard: 'ccj_by_determination',
+        isValidFor: (claim) => !claim.isSettlementReachedThroughAdmission() && claim.isCCJ && claim.hasCCJBeenRequested,
+        next: []
+      }
+    ]
+  }]
 export class ClaimStatusFlow {
 
   static readonly flow: ClaimStatusNode = {
@@ -165,14 +164,14 @@ export class ClaimStatusFlow {
         next: []
       },
       {
-        description: 'Claim is Full Admission',
+        description: 'Response is Full Admission',
         isValidFor: (claim) => claim.isFullAdmission && !claim.moneyReceivedOn,
         next: [
           {
             ...payImmediately,
             dashboard: 'pay_immediately',
             next: [{
-              description: 'Claim is Past the Payment deadline',
+              description: 'Response is Past the Payment deadline',
               isValidFor: (claim) => claim.isPaymentPastDeadline,
               dashboard: 'pay_immediately',
               next: [
@@ -227,7 +226,6 @@ export class ClaimStatusFlow {
     try {
       return this.decide(ClaimStatusFlow.flow, claim)
     } catch (err) {
-      logger.error(err)
       return ''
     }
   }

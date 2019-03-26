@@ -27,8 +27,10 @@ import {
 } from 'test/data/entity/responseData'
 import {
   baseAcceptationClaimantResponseData,
-  baseRejectionClaimantResponseData
+  referToJudgeAcceptationClaimantResponseData,
+  settlementAcceptationClaimantResponseData
 } from 'test/data/entity/claimantResponseData'
+import { createSettlement } from 'test/features/dashboard/helpers/claimStatusFlow'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -110,14 +112,52 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.']
   },
   {
-    status: 'full admission, pay by set date, rejected by claimant',
+    status: 'full admission, pay by set date, accepted by claimant, settlement agreement',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
-      claimantResponse: baseRejectionClaimantResponseData
+      countyCourtJudgment: null,
+      claimantResponse: settlementAcceptationClaimantResponseData,
+      settlement: createSettlement('any action')
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission. They said they owe £30'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £30']
+    claimantAssertions: ['000MC000', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not.'],
+    defendantAssertions: ['000MC000', 'John Smith asked you to sign a settlement agreement.']
+  },
+  {
+    status: 'full admission, pay by set date, accepted by claimant, settlement agreement, defendant does sign',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      countyCourtJudgment: null,
+      claimantResponse: settlementAcceptationClaimantResponseData,
+      settlement: createSettlement('COUNTERSIGNATURE'),
+      settlementReachedAt: MomentFactory.currentDate()
+    },
+    claimantAssertions: ['000MC000', 'You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['000MC000', 'You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'full admission, pay by set date, accepted by claimant, settlement agreement, defendant does not sign in time',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      countyCourtJudgment: null,
+      claimantResponse: settlementAcceptationClaimantResponseData,
+      settlement: createSettlement('any action'),
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days')
+    },
+    claimantAssertions: ['000MC000', 'The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.'],
+    defendantAssertions: ['000MC000', 'John Smith asked you to sign a settlement agreement.']
+  },
+  {
+    status: 'full admission, pay by set date, accepted by claimant, refer to judge',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: referToJudgeAcceptationClaimantResponseData
+    },
+    claimantAssertions: ['000MC000', 'Awaiting judge’s review.'],
+    defendantAssertions: ['000MC000', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'full admission, pay by repayment plan',
@@ -130,14 +170,52 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
   },
   {
-    status: 'full admission, pay by repayment plan, rejected by claimant',
+    status: 'full admission, pay by repayment plan, accepted by claimant, settlement agreement',
     claim: fullAdmissionClaim,
     claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
-      claimantResponse: baseRejectionClaimantResponseData
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      countyCourtJudgment: null,
+      claimantResponse: settlementAcceptationClaimantResponseData,
+      settlement: createSettlement('any action')
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission. They said they owe £30'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £30']
+    claimantAssertions: ['000MC000', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not.'],
+    defendantAssertions: ['000MC000', 'John Smith asked you to sign a settlement agreement.']
+  },
+  {
+    status: 'full admission, pay by repayment plan, accepted by claimant, settlement agreement, defendant does sign',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      countyCourtJudgment: null,
+      claimantResponse: settlementAcceptationClaimantResponseData,
+      settlement: createSettlement('COUNTERSIGNATURE'),
+      settlementReachedAt: MomentFactory.currentDate()
+    },
+    claimantAssertions: ['000MC000', 'You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['000MC000', 'You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'full admission, pay by repayment plan, accepted by claimant, settlement agreement, defendant does not sign in time',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      countyCourtJudgment: null,
+      claimantResponse: settlementAcceptationClaimantResponseData,
+      settlement: createSettlement('any action'),
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days')
+    },
+    claimantAssertions: ['000MC000', 'The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.'],
+    defendantAssertions: ['000MC000', 'John Smith asked you to sign a settlement agreement.']
+  },
+  {
+    status: 'full admission, pay by repayment plan, accepted by claimant, refer to judge',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: referToJudgeAcceptationClaimantResponseData
+    },
+    claimantAssertions: ['000MC000', 'Awaiting judge’s review.'],
+    defendantAssertions: ['000MC000', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'partial admission, pay immediately',
@@ -229,7 +307,7 @@ const testData = [
   }
 ]
 
-describe.only('Dashboard page', () => {
+describe('Dashboard page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

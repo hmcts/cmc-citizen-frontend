@@ -640,15 +640,3 @@ export function resolveSavePaidInFull () {
     .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
 }
-
-export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
-  mock(`${serviceBaseURL}/claims`)
-    .get(new RegExp('/claimant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleData }])
-}
-
-export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
-  mock(`${serviceBaseURL}/defendant`)
-    .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleData }])
-}

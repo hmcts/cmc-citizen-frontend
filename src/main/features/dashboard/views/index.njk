@@ -49,22 +49,22 @@
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {% if claim.isFullAdmission %}
-                {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
-                {{ claimantDashboardStatus }}
-              {% else %}
+              {#{% if claim.isFullAdmission %}#}
+                {#{% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}#}
+                {#{{ claimantDashboardStatus }}#}
+              {#{% else %}#}
                 {{ caseStatusForClaimant(claim.status, claim) }}
-              {% endif %}
+              {#{% endif %}#}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {% if claim.isFullAdmission %}
-                {{ claimantDashboardStatus }}
-              {% else %}
+              {#{% if claim.isFullAdmission %}#}
+                {#{{ claimantDashboardStatus }}#}
+              {#{% else %}#}
                 {{ caseStatusForClaimant(claim.status, claim) }}
-              {% endif %}
+              {#{% endif %}#}
             </td>
           </tr>
         {% endfor %}
@@ -103,22 +103,22 @@
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {% if claim.isFullAdmission %}
-                {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
-                {{ defendantDashboardStatus }}
-              {% else %}
+              {#{% if claim.isFullAdmission %}#}
+                {#{% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}#}
+                {#{{ defendantDashboardStatus }}#}
+              {#{% else %}#}
                 {{ caseStatusForDefendant(claim.status, claim) }}
-              {% endif %}
+              {#{% endif %}#}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {% if claim.isFullAdmission %}
-                {{ defendantDashboardStatus }}
-              {% else %}
+              {#{% if claim.isFullAdmission %}#}
+                {#{{ defendantDashboardStatus }}#}
+              {#{% else %}#}
                 {{ caseStatusForDefendant(claim.status, claim) }}
-              {% endif %}
+              {#{% endif %}#}
             </td>
           </tr>
         {% endfor %}
