@@ -30,7 +30,6 @@ function sortDates (dates: LocalDate[]): LocalDate[] {
 
 const ignoreEmptyArrayError = (req: express.Request, res: express.Response, next) => {
   const form: Form<Availability> = req.body
-  console.log(form)
   form.errors = form.errors.filter(error => error.message !== 'Select at least one date or choose No')
   next()
 }

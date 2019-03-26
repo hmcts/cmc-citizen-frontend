@@ -35,7 +35,7 @@ describe('Availability', () => {
 
     it('should reject availability with affirmation of unavailable dates but no dates given', () => {
       const errors = validator.validateSync(new Availability(true))
-      console.log(errors)
+
       expect(errors).to.not.be.empty
       expectValidationError(errors, ValidationErrors.AT_LEAST_ONE_DATE)
     })
