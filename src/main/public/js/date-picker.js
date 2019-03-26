@@ -99,12 +99,11 @@ var datePicker = {
     return '<img alt="' + nextOrPrevArrow + '" src="/img/date-picker/' + nextOrPrevArrow + '_arrow.png" />';
   },
 
-  // event.dates are Date objects
   changeDateHandler: event => {
     const uuid = $('#externalId')[0].innerText
     const csrf = $("input[name='_csrf']").val()
+
     let dates = event.dates.map(eventDate => datePickerUtils.formatDateForData(eventDate))
-    // dates : LocalDate[]
     $.post('/case/' + uuid + '/directions-questionnaire/hearing-dates/date-picker/replace', {
       _csrf: csrf,
       hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === 'true',
@@ -115,7 +114,6 @@ var datePicker = {
         e.preventDefault()
         let dateIndex = /\d+$/.exec(e.currentTarget.id)[0]
         const d = dates
-        // moment months are 0-indexed
           .map(localDate => moment({ ...localDate, month: localDate.month - 1 }))
           .map(mDate => mDate.toDate())
           .sort((date1, date2) => date1.getTime() - date2.getTime())
