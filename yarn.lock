@@ -80,9 +80,10 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@hmcts/class-validator@0.9.1-b", "@hmcts/class-validator@^0.9.1-b":
-  version "0.9.1-b"
-  resolved "https://registry.yarnpkg.com/@hmcts/class-validator/-/class-validator-0.9.1-b.tgz#656006d3569b68743344bd3e407f67d916cc2af3"
+"@hmcts/class-validator@0.9.1-d", "@hmcts/class-validator@^0.9.1-b":
+  version "0.9.1-d"
+  resolved "https://registry.yarnpkg.com/@hmcts/class-validator/-/class-validator-0.9.1-d.tgz#d2dbbc53c5483121f746de1b57a740906acafd78"
+  integrity sha512-6FYwbt5OvkpP5JOu8cj1uyG3anSn/8nz1xReOcAB3i0kPYl3Ia+IkmcL0pyv0cNh/MOwJxlcKJGOt4fWcpbk0Q==
   dependencies:
     "@typed/is-promise" "^1.0.0"
     "@types/validator" "9.4.2"
