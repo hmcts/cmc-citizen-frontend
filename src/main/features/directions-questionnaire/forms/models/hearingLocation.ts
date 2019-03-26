@@ -33,12 +33,12 @@ export class HearingLocation {
   @IsIn(AlternativeCourtOption.all(), { message: ValidationErrors.SELECT_ALTERNATIVE_OPTION })
   alternativeOption?: string
 
-  @ValidateIf(o => o.alternativeOption === 'name' || !o.courtName)
+  @ValidateIf(o => o.courtAccepted && o.courtAccepted.option === YesNoOption.NO.option && o.alternativeOption === 'name' || !o.courtName)
   @IsDefined({ message: ValidationErrors.NO_ALTERNATIVE_COURT_NAME })
   @IsNotEmpty({ message: ValidationErrors.NO_ALTERNATIVE_COURT_NAME })
   alternativeCourtName?: string
 
-  @ValidateIf(o => o.alternativeOption === 'postcode')
+  @ValidateIf(o => o.courtAccepted && o.courtAccepted.option === YesNoOption.NO.option || o.alternativeOption === 'postcode')
   @IsDefined({ message: ValidationErrors.NO_ALTERNATIVE_POSTCODE })
   @IsValidPostcode({ message: ValidationErrors.NO_ALTERNATIVE_POSTCODE })
   alternativePostcode?: string
