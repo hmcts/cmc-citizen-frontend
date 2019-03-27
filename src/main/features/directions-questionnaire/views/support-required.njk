@@ -3,13 +3,17 @@
 {% from "expandableCheckboxOption.njk" import expandableCheckboxOption %}
 {% set heading = 'Select any support you’d require for a court hearing (optional)' %}
 
+{% block additional_scripts %}
+  {% include "expandable-checkbox-option-scripts.njk" %}
+{% endblock %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Support Required" novalidate>
         {{ csrfProtection(csrf) }}
         {% set error = form.hasErrors() %}
-        <fieldset id="supportRequired" class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset id="supportRequired" class="{% if error %} form-group-error {% endif %}">
           <legend>
             <span class="visuallyhidden">
               {{ t('Select any support you’d require for a court hearing (optional)') }}

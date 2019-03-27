@@ -2,8 +2,12 @@
 
 {% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
   {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
-  {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable', dataTarget = expandablePanelId) }}
-  <div class="form-group panel panel-border-wide js-hidden {{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
-    {{ caller() }}
+  <div class="expandable-checkbox-option">
+    <h3 class="heading-medium expandable">{{ t(label) }}</h3>
+    {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable visually-hidden', dataTarget = expandablePanelId) }}
+    <div class="panel panel-border-narrow expandable {{ ' ' + additionalClasses if additionalClasses }}"
+         id="{{ expandablePanelId }}">
+      {{ caller() }}
+    </div>
   </div>
 {% endmacro %}
