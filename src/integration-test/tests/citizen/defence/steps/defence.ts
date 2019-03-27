@@ -506,6 +506,8 @@ export class DefenceSteps {
     I.see('Post your response')
     I.see(claimRef)
     I.see(claimant.name)
-    I.see(defendant.name)
+    I.see(defendant.title)
+    I.see(defendant.firstName)
+    I.see(defendant.lastName)
   }
 }

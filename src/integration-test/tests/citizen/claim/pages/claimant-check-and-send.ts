@@ -75,10 +75,12 @@ export class ClaimantCheckAndSendPage {
     switch (defendantType) {
 
       case PartyType.INDIVIDUAL:
-        I.see(defendant.name)
+        I.see(defendant.firstName)
+        I.see(defendant.lastName)
         break
       case PartyType.SOLE_TRADER:
-        I.see(defendant.name)
+        I.see(defendant.firstName)
+        I.see(defendant.lastName)
         break
       case PartyType.COMPANY:
         I.see(defendant.name)

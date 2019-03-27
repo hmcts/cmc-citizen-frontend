@@ -111,7 +111,8 @@ export class ClaimSteps {
     switch (defendantType) {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
-        individualDetailsPage.enterName(defendant.name)
+        individualDetailsPage.enterFirstName(defendant.firstName)
+        individualDetailsPage.enterLastName(defendant.lastName)
         if (byLookup) {
           individualDetailsPage.lookupAddress(postcodeLookupQuery)
           manualEntryLink = false
@@ -121,7 +122,8 @@ export class ClaimSteps {
         break
       case PartyType.SOLE_TRADER:
         partyTypePage.selectSoleTrader()
-        individualDetailsPage.enterName(defendant.name)
+        individualDetailsPage.enterFirstName(defendant.firstName)
+        individualDetailsPage.enterLastName(defendant.lastName)
         if (byLookup) {
           individualDetailsPage.lookupAddress(postcodeLookupQuery)
           manualEntryLink = false
