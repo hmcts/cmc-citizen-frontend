@@ -1,10 +1,9 @@
-import { ResponseDraft } from 'response/draft/responseDraft'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediationTask } from 'shared/components/free-mediation/freeMediationTask'
 
 export class ResponseFreeMediationTask extends FreeMediationTask {
-  static isCompleted (responseDraft: ResponseDraft, mediationDraft: MediationDraft): boolean {
-    return (this.isWillYouTryMediationCompleted(mediationDraft)) ||
+  static isCompleted (mediationDraft: MediationDraft): boolean {
+    return (this.isWillYouTryMediationCompleted(mediationDraft)) &&
       this.isYouCanOnlyUseMediationCompleted(mediationDraft) &&
       this.isCanWeUseCompleted(mediationDraft)
   }

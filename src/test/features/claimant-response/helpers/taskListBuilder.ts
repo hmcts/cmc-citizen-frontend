@@ -11,6 +11,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { Claim } from 'claims/models/claim'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
+import { FeatureToggles } from 'utils/featureToggles'
 
 import {
   fullAdmissionWithPaymentBySetDateData,
@@ -43,7 +44,7 @@ describe('Claimant response task list builder', () => {
     })
   })
 
-  describe('"How do you want to respond?" section', () => {
+  describe('"Choose what to do next" section', () => {
 
     describe('States paid task', () => {
       describe('"Accept or reject their response" task', () => {

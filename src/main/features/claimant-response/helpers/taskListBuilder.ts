@@ -26,6 +26,8 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { FeatureToggles } from 'utils/featureToggles'
+import { IntentionToProceedTask } from 'claimant-response/tasks/intentionToProceedTask'
 
 const validator: Validator = new Validator()
 
@@ -92,7 +94,7 @@ export class TaskListBuilder {
           new TaskListItem(
             'Free telephone mediation',
             path,
-            ClaimantResponseFreeMediationTask.isCompleted(draft, mediationDraft)
+            ClaimantResponseFreeMediationTask.isCompleted(mediationDraft)
           ))
       }
     }
@@ -111,12 +113,12 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
 
     if (claim.response.responseType === ResponseType.FULL_DEFENCE
-      && claim.response.freeMediation === YesNoOption.NO) {
+      && claim.response.freeMediation === YesNoOption.YES) {
       tasks.push(
         new TaskListItem(
-          'Accept or reject their response',
-          Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-          false
+          'Decide whether to proceed',
+          Paths.intentionToProceedPage.evaluateUri({ externalId: externalId }),
+          IntentionToProceedTask.isCompleted(draft.intentionToProceed)
         )
       )
     }
@@ -153,14 +155,13 @@ export class TaskListBuilder {
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
 
       if (claim.response.freeMediation === YesNoOption.YES
-        && draft.settleAdmitted
-        && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
-        const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        && (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO)
+          || draft.intentionToProceed.proceed.option === YesNoOption.YES) {
         tasks.push(
           new TaskListItem(
             'Free telephone mediation',
-            path,
-            ClaimantResponseFreeMediationTask.isCompleted(draft, mediationDraft)
+            MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+            ClaimantResponseFreeMediationTask.isCompleted(mediationDraft)
           ))
       }
     }
@@ -185,7 +186,16 @@ export class TaskListBuilder {
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
 
-    return new TaskList('How do you want to respond?', tasks)
+    if (claim.response.responseType === ResponseType.FULL_DEFENCE && draft.intentionToProceed.proceed.option === YesNoOption.YES) {
+      tasks.push(
+        new TaskListItem(
+          'Free telephone mediation',
+          MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
+          ClaimantResponseFreeMediationTask.isCompleted(mediationDraft)
+        ))
+    }
+
+    return new TaskList('Choose what to do next', tasks)
   }
 
   private static buildProposeAlternateRepaymentPlanTask (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {

@@ -1,4 +1,6 @@
-{% macro freeMediationBlock(mediaitonDraft) %}
+{% from "table.njk" import tableStart, tableEnd, row %}
+
+{% macro freeMediationBlock(claim, mediationDraft, contactPerson) %}
   {{ tableStart('freeMediation', 'Free telephone mediation') }}
   {{
   row(
@@ -23,7 +25,7 @@
       {{
       row(
         label = 'Contact number',
-        value = t(draft.canWeUseCompany.mediationPhoneNumberConfirmation) | capitalize,
+        value = t(mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation) | capitalize,
         changeLink = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }),
         bottomBorder = false,
         bold = true
@@ -32,7 +34,7 @@
       {{
       row(
         label = 'Contact name',
-        value = t(draft.defendantDetails.partyDetails.contactPerson) | capitalize,
+        value = contactPerson | capitalize,
         bold = true
       )
       }}
@@ -55,14 +57,25 @@
       }}
     {% endif %}
   {% else %}
-    {{
-    row(
-      label = 'Contact number',
-      value = t(mediationDraft.canWeUse.mediationPhoneNumber),
-      changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
-      bold = true
-    )
-    }}
+    {% if mediationDraft.canWeUse.mediationPhoneNumber %}
+      {{
+      row(
+        label = 'Contact number',
+        value = mediationDraft.canWeUse.mediationPhoneNumber,
+        changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      )
+      }}
+    {% else %}
+      {{
+      row(
+        label = 'Contact number',
+        value = claim.claimData.claimant.mobilePhone,
+        changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      )
+      }}
+    {% endif %}
   {% endif %}
   {{ tableEnd() }}
 {% endmacro %}

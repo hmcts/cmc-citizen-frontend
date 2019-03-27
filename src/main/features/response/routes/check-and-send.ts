@@ -28,6 +28,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+  // const contactPerson: string =
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -36,7 +37,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
-    mediationDraft: mediationDraft.document
+    mediationDraft: mediationDraft.document,
+    contactPerson: 'blah'
   })
 }
 
@@ -127,7 +129,6 @@ export default express.Router()
         await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
         await draftService.delete(draft.id, user.bearerToken)
         await draftService.delete(mediationDraft.id, user.bearerToken)
-
 
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }

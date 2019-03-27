@@ -11,6 +11,7 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { ResponseType } from 'claims/models/response/responseType'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
@@ -18,6 +19,7 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
   return claim.response.responseType === ResponseType.FULL_ADMISSION
     || (claim.response.responseType === ResponseType.PART_ADMISSION)
     || (claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.paymentDeclaration !== undefined)
+    || (claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.freeMediation === FreeMediationOption.YES)
 }, (req: express.Request): void => {
   throw new NotFoundError(req.path)
 })

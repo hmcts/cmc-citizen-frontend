@@ -33,6 +33,7 @@ import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendComp
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -246,7 +247,7 @@ export class TaskListBuilder {
           new TaskListItem(
             'Free telephone mediation',
             MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
-            ResponseFreeMediationTask.isCompleted(draft, mediationDraft)
+            ResponseFreeMediationTask.isCompleted(mediationDraft)
           )
         ]
       )

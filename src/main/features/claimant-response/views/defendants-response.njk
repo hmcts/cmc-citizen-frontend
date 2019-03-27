@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 
-{% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page === 1 %}
+{% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page === 1 %}
   {% set heading = 'How they want to pay' %}
 {% else %}
   {% set heading = 'The defendant’s response' %}
@@ -50,6 +50,25 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+        <p>{{ t('{{ defendantName }} has rejected the claim.', { defendantName: defendantName }) }}</p>
+
+        <h2 class="heading-medium">{{ t('Their defence') }}</h2>
+
+        <h3 class="heading-small form-group-related">{{ t('Why they disagree with the claim') }}</h3>
+        <p>{{ claim.response.defence }}</p>
+
+        {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
+          <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+          <div class="form-group">
+            {{ timelineFragment(claim.response.timeline) }}
+          </div>
+        {% endif %}
+
+        {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
+          {{ evidenceFragment(claim.response.evidence) }}
+        {% endif %}
+      {% endif %}
       {% if alreadyPaid %}
         {% if partiallyPaid %}
           <p>{{ t('{{ defendantName }} said they paid you {{ amount }}. They said this is all they owe, not the amount you claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
@@ -80,7 +99,7 @@
         {% endif %}
 
       {% else %}
-        {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
+        {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
           <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}</p>
           <p>
             {{ paymentIntentionFragment(
@@ -104,7 +123,7 @@
 
       {% endif %}
 
-      {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
+      {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if page === 0 %}
           <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
           <p>
@@ -153,7 +172,7 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
+        {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
           <input type="hidden" name="action[showPage]" value="{{ page + 1 }}">
         {% endif %}
 
