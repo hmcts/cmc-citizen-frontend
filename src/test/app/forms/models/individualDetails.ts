@@ -1,9 +1,6 @@
 import { expect } from 'chai'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
-import {
-  IndividualDetails,
-  ValidationErrors as IndividualDetailsValidationErrors
-} from 'forms/models/individualDetails'
+import { IndividualDetails } from 'forms/models/individualDetails'
 import { ValidationErrors as PartyDetailsValidationErrors } from 'forms/models/partyDetails'
 import { PartyType } from 'common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
@@ -11,12 +8,13 @@ import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms
 import { ValidationError, Validator } from '@hmcts/class-validator'
 import { expectValidationError, expectValidationErrorNotPresent } from 'test/app/forms/models/validationUtils'
 import { LocalDate } from 'forms/models/localDate'
+import { ValidationErrors as SplitNamedPartyDetailsValidationErrors } from 'forms/models/splitNamedPartyDetails'
 
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'bb127nq')
 
 const aVeryLongString = (): string => {
   return 'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongString' +
-         'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringa'
+    'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringa'
 }
 describe('IndividualDetails', () => {
   let input
@@ -101,12 +99,12 @@ describe('IndividualDetails', () => {
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
-    it('should return error when name got more than 255 character if firstName and lastName are undefined', () => {
+    it('should return error when name has more than 255 character if firstName and lastName are undefined', () => {
       individualDetails.name = aVeryLongString()
       individualDetails.firstName = undefined
       individualDetails.lastName = undefined
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, IndividualDetailsValidationErrors.errorTooLong('Name').replace('$constraint1','255'))
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Name').replace('$constraint1','255'))
     })
 
     it('should return error when firstName is undefined if name is undefined', () => {
@@ -115,8 +113,8 @@ describe('IndividualDetails', () => {
       individualDetails.lastName = 'some name'
       let errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
     it('should return error when firstName is blank if name is undefined', () => {
@@ -125,16 +123,16 @@ describe('IndividualDetails', () => {
       individualDetails.lastName = 'some name'
       let errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
-    it('should return error when firstName got more than 255 character name is undefined', () => {
+    it('should return error when firstName has more than 255 characters if name is undefined', () => {
       individualDetails.name = undefined
       individualDetails.firstName = aVeryLongString()
       individualDetails.lastName = 'some name'
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, IndividualDetailsValidationErrors.errorTooLong('First name').replace('$constraint1','255'))
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('First name').replace('$constraint1','255'))
     })
 
     it('should return error when lastName is undefined if name is undefined', () => {
@@ -143,8 +141,8 @@ describe('IndividualDetails', () => {
       individualDetails.lastName = undefined
       let errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
     it('should return error when lastName is blank if name is undefined', () => {
@@ -153,16 +151,24 @@ describe('IndividualDetails', () => {
       individualDetails.lastName = '  '
       let errors: ValidationError[] = validator.validateSync(individualDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
-    it('should return error when lastName got more than 255 character if name is undefined', () => {
+    it('should return error when lastName has more than 255 character if name is undefined', () => {
       individualDetails.name = undefined
       individualDetails.firstName = 'some name'
       individualDetails.lastName = aVeryLongString()
       let errors: ValidationError[] = validator.validateSync(individualDetails)
-      expectValidationError(errors, IndividualDetailsValidationErrors.errorTooLong('Last name').replace('$constraint1','255'))
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Last name').replace('$constraint1','255'))
+    })
+
+    it('should return error when title has more than 35 characters', () => {
+      individualDetails.title = aVeryLongString()
+      individualDetails.firstName = 'some name'
+      individualDetails.lastName = 'some name'
+      let errors: ValidationError[] = validator.validateSync(individualDetails)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Title').replace('$constraint1','35'))
     })
 
     it('should return error when dataOfBirth is undefined', () => {

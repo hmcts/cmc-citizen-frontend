@@ -1,13 +1,10 @@
 import { expect } from 'chai'
 import {
   SoleTraderDetails,
-  ValidationErrors as SoleTraderDetailsValidationErrors,
-  ValidationErrors as IndividualDetailsValidationErrors
+  ValidationErrors as SoleTraderDetailsValidationErrors
 } from 'forms/models/soleTraderDetails'
-import {
-  ValidationErrors as PartyDetailsValidationErrors,
-  ValidationErrors as PartydDetailsValidationErrors
-} from 'forms/models/partyDetails'
+import { ValidationErrors as PartyDetailsValidationErrors } from 'forms/models/partyDetails'
+import { ValidationErrors as SplitNamedPartyDetailsValidationErrors } from 'forms/models/splitNamedPartyDetails'
 import { PartyType } from 'common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
@@ -68,7 +65,7 @@ describe('SoleTraderDetails', () => {
     it('should return error when address is undefined', () => {
       soleTraderDetails.address = undefined
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-      expectValidationError(errors, PartydDetailsValidationErrors.ADDRESS_REQUIRED)
+      expectValidationError(errors, PartyDetailsValidationErrors.ADDRESS_REQUIRED)
     })
 
     it('should return errors when required address fields are missing', () => {
@@ -93,12 +90,12 @@ describe('SoleTraderDetails', () => {
       expectValidationError(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
     })
 
-    it('should return error when name got more than 255 character if firstName and lastName are undefined', () => {
+    it('should return error when name has more than 255 character if firstName and lastName are undefined', () => {
       soleTraderDetails.name = aVeryLongString()
       soleTraderDetails.firstName = undefined
       soleTraderDetails.lastName = undefined
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-      expectValidationError(errors, IndividualDetailsValidationErrors.errorTooLong('Name').replace('$constraint1','255'))
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Name').replace('$constraint1','255'))
     })
 
     it('should return error when firstName is undefined if name is undefined', () => {
@@ -107,8 +104,8 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.lastName = 'some name'
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
     it('should return error when firstName is blank if name is undefined', () => {
@@ -117,16 +114,16 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.lastName = 'some name'
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
-    it('should return error when firstName got more than 255 character name is undefined', () => {
+    it('should return error when firstName has more than 255 character if name is undefined', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = aVeryLongString()
       soleTraderDetails.lastName = 'some name'
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-      expectValidationError(errors, IndividualDetailsValidationErrors.errorTooLong('First name').replace('$constraint1','255'))
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('First name').replace('$constraint1','255'))
     })
 
     it('should return error when lastName is undefined if name is undefined', () => {
@@ -135,8 +132,8 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.lastName = undefined
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
     it('should return error when lastName is blank if name is undefined', () => {
@@ -145,16 +142,24 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.lastName = '  '
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
-      expectValidationErrorNotPresent(errors, IndividualDetailsValidationErrors.FIRSTNAME_REQUIRED)
-      expectValidationError(errors, IndividualDetailsValidationErrors.LASTNAME_REQUIRED)
+      expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
     })
 
-    it('should return error when lastName got more than 255 character if name is undefined', () => {
+    it('should return error when lastName has more than 255 character if name is undefined', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = 'some name'
       soleTraderDetails.lastName = aVeryLongString()
       let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-      expectValidationError(errors, IndividualDetailsValidationErrors.errorTooLong('Last name').replace('$constraint1','255'))
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Last name').replace('$constraint1','255'))
+    })
+
+    it('should return error when title has more than 35 characters', () => {
+      soleTraderDetails.title = aVeryLongString()
+      soleTraderDetails.firstName = 'some name'
+      soleTraderDetails.lastName = 'some name'
+      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.errorTooLong('Title').replace('$constraint1','35'))
     })
 
     it('should return no error when business name is blank', () => {
@@ -166,7 +171,7 @@ describe('SoleTraderDetails', () => {
       expect(errors.length).to.equal(0)
     })
 
-    it('should return error when business name got more than 255 character', () => {
+    it('should return error when business name has more than 255 character', () => {
       soleTraderDetails.businessName = aVeryLongString()
       soleTraderDetails.firstName = 'claimantName'
       soleTraderDetails.lastName = 'claimantName'
@@ -187,7 +192,7 @@ describe('SoleTraderDetails', () => {
       it('should return error when correspondence address is undefined', () => {
         soleTraderDetails.correspondenceAddress = undefined
         let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
-        expectValidationError(errors, PartydDetailsValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
+        expectValidationError(errors, PartyDetailsValidationErrors.CORRESPONDENCE_ADDRESS_REQUIRED)
       })
 
       it('should return errors when correspondence address required fields are missing', () => {
