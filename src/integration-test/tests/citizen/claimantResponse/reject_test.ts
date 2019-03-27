@@ -83,7 +83,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
-      I.see('The defendant’s response')
+      I.see('Respond to the defendant')
       I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
       // TODO: accept or reject the response - implemented yet?
       I.click('Sign out')
