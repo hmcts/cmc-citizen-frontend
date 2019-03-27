@@ -78,7 +78,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)
-      I.see(`The defendant believes they owe you £50. You can accept or reject that this is the amount owed.`) // TODO IS THIS WRONG? should be defendants name
+      I.see(`Respond to the defendant.`) // TODO IS THIS WRONG? should be defendants name
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
