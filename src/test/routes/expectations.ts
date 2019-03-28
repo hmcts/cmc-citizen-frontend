@@ -52,6 +52,13 @@ Assertion.addProperty('redirect', statusCodeInRangeAssertion([
 ]))
 
 /**
+ * Checks whether response status code is bad request
+ */
+Assertion.addProperty('badRequest', statusCodeInRangeAssertion([
+  HttpStatus.BAD_REQUEST
+]))
+
+/**
  * Checks whether response status code is forbidden
  */
 Assertion.addProperty('forbidden', statusCodeInRangeAssertion([
