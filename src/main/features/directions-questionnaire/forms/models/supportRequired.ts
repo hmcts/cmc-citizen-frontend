@@ -1,4 +1,5 @@
 import { IsDefined, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
+import { IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly NO_LANGUAGE_ENTERED = 'Enter the language that needs to be interpreted'
@@ -11,12 +12,14 @@ export class SupportRequired {
   @ValidateIf(o => o.languageSelected)
   @IsDefined({ message: ValidationErrors.NO_LANGUAGE_ENTERED })
   @IsNotEmpty({ message: ValidationErrors.NO_LANGUAGE_ENTERED })
+  @IsNotBlank({ message: ValidationErrors.NO_LANGUAGE_ENTERED })
   languageInterpreted?: string
 
   signLanguageSelected?: boolean
   @ValidateIf(o => o.signLanguageSelected)
   @IsDefined({ message: ValidationErrors.NO_SIGN_LANGUAGE_ENTERED })
   @IsNotEmpty({ message: ValidationErrors.NO_SIGN_LANGUAGE_ENTERED })
+  @IsNotBlank({ message: ValidationErrors.NO_SIGN_LANGUAGE_ENTERED })
   signLanguageInterpreted?: string
 
   hearingLoopSelected?: boolean
@@ -27,6 +30,7 @@ export class SupportRequired {
   @ValidateIf(o => o.otherSupportSelected)
   @IsDefined({ message: ValidationErrors.NO_OTHER_SUPPORT })
   @IsNotEmpty({ message: ValidationErrors.NO_OTHER_SUPPORT })
+  @IsNotBlank({ message: ValidationErrors.NO_OTHER_SUPPORT})
   otherSupport?: string
 
   constructor (
