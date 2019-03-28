@@ -103,7 +103,7 @@ describe('Login receiver', async () => {
         it('should redirect to task list', async () => {
           claimStoreServiceMock.resolveLinkDefendant()
 
-          const encryptedEligibilityCookie = cookieEncrypter.encryptCookie('j:' + JSON.stringify(eligibleCookie), { key: config.get('session.encryptionKey') })
+          const encryptedEligibilityCookie = cookieEncrypter.encryptCookie('j:' + JSON.stringify(eligibleCookie), { key: config.get('secrets.cmc.encryptionKey') })
 
           await request(app)
             .get(AppPaths.receiver.uri)

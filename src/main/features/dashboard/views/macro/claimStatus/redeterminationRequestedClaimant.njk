@@ -5,7 +5,7 @@
 {% macro redeterminationClaimantClaimDetails(claim) %}
   <div class="status-block">
     {% if claim.reDetermination.partyType === MadeBy.CLAIMANT
-    or claim.isInterlocutoryJudgmentRequestedOnFullAdmission() %}
+    or claim.isInterlocutoryJudgmentRequestedOnAdmissions() %}
       <h2 class="heading-small">{{ t('Awaiting judge’s review') }}</h2>
       <p>{{ t('You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.') }}</p>
       <p>{{ t('A County Court Judgment has been issued against the defendant.') }}</p>

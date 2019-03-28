@@ -13,13 +13,13 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.governmentDepartmentPage.uri
-const pageRedirect: string = Paths.claimIsForTenancyDepositPage.uri
+const pageRedirect: string = Paths.defendantAgePage.uri
 const expectedTextOnPage: string = 'Are you claiming against a government department?'
 
 describe('Claim eligibility: government department page', () => {
   attachDefaultHooks(app)
 
-  describe('on GET', () => {
+  context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
@@ -30,7 +30,7 @@ describe('Claim eligibility: government department page', () => {
     })
   })
 
-  describe('on POST', () => {
+  context('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
     it('should render page when form is invalid and everything is fine', async () => {

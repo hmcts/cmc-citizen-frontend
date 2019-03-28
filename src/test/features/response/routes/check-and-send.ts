@@ -20,6 +20,11 @@ import { ResponseType } from 'response/form/models/responseType'
 import { SignatureType } from 'common/signatureType'
 import { RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { InterestDateType } from 'common/interestDateType'
+import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { InterestDate } from 'claims/models/interestDate'
+import { Interest } from 'claims/models/interest'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -73,6 +78,89 @@ describe('Defendant response: check and send page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+        })
+
+        context('for individual and sole traders', () => {
+          it('should return statement of truth with a tick box', async () => {
+            draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+          })
+        })
+        context('for company and organisation', () => {
+          it('should return statement of truth with a tick box', async () => {
+
+            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('mediation')
+            const claimStoreOverride = {
+              claim: {
+                claimants: [
+                  {
+                    type: 'company',
+                    name: 'John Smith Ltd',
+                    contactPerson: 'John Smith',
+                    address: {
+                      line1: 'line1',
+                      line2: 'line2',
+                      city: 'city',
+                      postcode: 'bb127nq'
+                    }
+                  }
+                ],
+                defendants: [
+                  {
+                    type: 'company',
+                    name: 'John Doe Ltd',
+                    contactPerson: 'John Doe',
+                    address: {
+                      line1: 'line1',
+                      line2: 'line2',
+                      city: 'city',
+                      postcode: 'bb127nq'
+                    }
+                  }
+                ],
+                payment: {
+                  id: '12',
+                  amount: 2500,
+                  state: { status: 'failed' }
+                },
+                amount: {
+                  type: 'breakdown',
+                  rows: [{ reason: 'Reason', amount: 200 }]
+                },
+                interest: {
+                  type: ClaimInterestType.STANDARD,
+                  rate: 10,
+                  reason: 'Special case',
+                  interestDate: {
+                    type: InterestDateType.SUBMISSION,
+                    endDateType: InterestEndDateOption.SETTLED_OR_JUDGMENT
+                  } as InterestDate
+                } as Interest,
+                reason: 'Because I can',
+                feeAmountInPennies: 2500,
+                timeline: { rows: [{ date: 'a', description: 'b' }] }
+              }
+            }
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
+              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+          })
         })
       })
     })

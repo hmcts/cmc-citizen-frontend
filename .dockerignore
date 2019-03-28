@@ -17,3 +17,5 @@
 !default.conf.js
 !saucelabs.conf.js
 !server.js
+!acb.yaml
+!Dockerfile
