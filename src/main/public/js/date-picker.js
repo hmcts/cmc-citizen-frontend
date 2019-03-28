@@ -78,16 +78,16 @@ const datePicker = {
   setUpDOWHeading: () => {
     const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
     const dow = $(".dow");
-    $.each(dow, index => $(this).text(days[index]));
+    $.each(dow, (index) => $(this).text(days[index]));
   },
 
-  toggleArrows: nextOrPrevArrow => "<img alt=\"" + nextOrPrevArrow + "\" src=\"/img/date-picker/" + nextOrPrevArrow + "_arrow.png\" />",
+  toggleArrows: (nextOrPrevArrow) => "<img alt=\"" + nextOrPrevArrow + "\" src=\"/img/date-picker/" + nextOrPrevArrow + "_arrow.png\" />",
 
-  changeDateHandler: event => {
+  changeDateHandler: (event) => {
     const uuid = $("#externalId")[0].innerText;
     const csrf = $("input[name=\"_csrf\"]").val();
 
-    let dates = event.dates.map(eventDate => datePickerUtils.formatDateForData(eventDate));
+    let dates = event.dates.map((eventDate) => datePickerUtils.formatDateForData(eventDate));
     $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
       _csrf: csrf,
       hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === "true",
@@ -98,8 +98,8 @@ const datePicker = {
         e.preventDefault();
         let dateIndex = /\d+$/.exec(e.currentTarget.id)[0];
         const d = dates
-          .map(localDate => moment({ ...localDate, month: localDate.month - 1 }))
-          .map(mDate => mDate.toDate())
+          .map((localDate) => moment({ ...localDate, month: localDate.month - 1 }))
+          .map((mDate) => mDate.toDate())
           .sort((date1, date2) => date1.getTime() - date2.getTime())
           .filter((localDate, index) => index !== Number(dateIndex));
         datePicker.selector().datepicker("setDates", d);
@@ -109,12 +109,12 @@ const datePicker = {
 
   getData: () => {
     const list = $(".add-another-list .add-another-list-item > span").toArray();
-    return list.map(item => datePickerUtils.buildDatesArray(
+    return list.map((item) => datePickerUtils.buildDatesArray(
       datePickerUtils.getIndexOfDate(item),
       datePickerUtils.getDisplayValueOfDate(item)
     ));
   }
-}
+};
 
 /* global $ */
 $(document).ready(function () {
@@ -122,4 +122,4 @@ $(document).ready(function () {
     $(".add-another-add-link").hide();
     datePicker.init();
   }
-})
+});
