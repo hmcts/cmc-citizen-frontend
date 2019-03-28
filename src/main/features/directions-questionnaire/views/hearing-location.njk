@@ -1,0 +1,77 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup %}
+
+{% set heading = t('Choose a hearing location') %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Location"
+            data-event-label-from="courtAccepted" novalidate>
+        {{ csrfProtection(csrf) }}
+        <fieldset id="otherWitnesses[label]" class="form-group {% if form.hasErrors() %} form-group-error {% endif %}">
+          <legend>
+            <span class="visuallyhidden">
+              {{ t('Choose a hearing location') }}
+            </span>
+          </legend>
+
+          {% set courtName = form.valueFor('courtName') %}
+          {% set courtPostcode = form.valueFor('courtPostcode') %}
+          {% if not fallbackPage %}
+            {% if courtPostcode %}
+              <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
+            {% elseif party === MadeBy.DEFENDANT %}
+              <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
+              <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
+              <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}</p>
+            {% elseif party === MadeBy.CLAIMANT %}
+              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}
+            {% endif %}
+            <h1
+              class="heading-medium">{{ t('Do you want to choose {{ courtName }}', { courtName: form.valueFor('courtName') }) }}</h1>
+            {{ radioGroup(
+              form = form,
+              label = heading,
+              labelForScreenReadersOnly = true,
+              name = 'courtAccepted',
+              options = [
+                {
+                  label: 'Yes',
+                  value: YesNoOption.YES.option,
+                  checked: form.valueFor('courtAccepted') === YesNoOption.YES
+                },
+                {
+                  label: 'No',
+                  value: YesNoOption.NO.option,
+                  checked: form.valueFor('courtAccepted') === YesNoOption.NO
+                }
+              ]
+            ) }}
+            <div class="js-hidden" id="courtAccepted-no">
+              <h1 class="heading-medium">{{ t('Choose another court') }}</h1>
+              {{ radioOption(form = form, label = 'Enter court name', name = 'alternativeOption', value = 'name', checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
+                {{ textInput(label = 'Court name', form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-30') }}
+              </div>
+              {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
+              <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
+                {{ textInput(label = 'Postcode', form = form, name = 'alternativePostcode', inputClass = 'form-control-1-10') }}
+              </div>
+            </div>
+          {% else %}
+            <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
+            {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
+          {% endif %}
+          {% if courtName %}
+            <input type="hidden" name="courtName" value="{{ courtName }}">
+          {% endif %}
+          {% if courtPostcode %}
+            <input type="hidden" name="courtPostcode" value="{{ courtPostcode }}">
+          {% endif %}
+        </fieldset>
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
