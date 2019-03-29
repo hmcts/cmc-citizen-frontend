@@ -7,6 +7,7 @@ import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 export class ValidationErrors {
   static readonly AT_LEAST_ONE_DATE: string = 'Select at least one date or choose No'
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
+  static readonly FUTURE_DATE_REQUIRED: string = 'Select a date after today'
 }
 
 export class Availability {
@@ -20,7 +21,7 @@ export class Availability {
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID, each: true })
   unavailableDates?: LocalDate[]
 
-  @IsFutureDate({ message: ValidationErrors.DATE_NOT_VALID })
+  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   newDate?: LocalDate
 
