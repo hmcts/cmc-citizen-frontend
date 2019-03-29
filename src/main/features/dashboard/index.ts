@@ -12,10 +12,7 @@ import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { Paths } from 'dashboard/paths'
 import { Claim } from 'claims/models/claim'
 import { ClaimStatusFlow } from 'dashboard/helpers/claimStatusFlow'
-import { Logger } from '@hmcts/nodejs-logging'
 import { app } from 'main/app'
-
-const logger = Logger.getLogger('DashboardFeature')
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -33,7 +30,6 @@ function render (claim: Claim, type: string): string {
     const template = nunjucks.render(path.join(__dirname, './views', 'status', type, dashboardName + '.njk').toString(), { claim: claim })
     return app.settings.nunjucksEnv.filters['safe'](template)
   } catch (err) {
-    logger.error(`view not found for status: ${dashboardName}`)
     return ''
   }
 }

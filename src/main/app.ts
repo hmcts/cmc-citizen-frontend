@@ -29,6 +29,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 import { PaidInFullFeature } from 'paid-in-full/index'
 import { MediationFeature } from 'mediation/index'
+import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
 
 export const app: express.Express = express()
 
@@ -93,6 +94,11 @@ if (FeatureToggles.isEnabled('testingSupport')) {
 if (FeatureToggles.isEnabled('admissions')) {
   logger.info('FeatureToggles.admissions enabled')
   new ClaimantResponseFeature().enableFor(app)
+}
+
+if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+  logger.info('FeatureToggles.directionsQuestionnaire enabled')
+  new DirectionsQuestionnaireFeature().enableFor(app)
 }
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
 // to convert moment object to String
