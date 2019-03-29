@@ -76,13 +76,13 @@
             padding-left: 5px;
             padding-top: 3px;
           }
+        }
 
-          &:hover,
-          &.focused {
-            &:not(.disabled) {
-              background-color: $day-cell-hover-colour;
-              color: $govuk-text-colour;
-            }
+        &:hover,
+        &.focused {
+          &:not(.disabled) {
+            background-color: $day-cell-hover-colour;
+            color: $govuk-text-colour;
           }
         }
 
