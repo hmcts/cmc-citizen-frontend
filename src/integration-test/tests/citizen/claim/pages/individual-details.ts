@@ -4,6 +4,7 @@ const I: I = actor()
 
 const fields = {
   name: 'input[id=name]',
+  title: 'input[id=title]',
   firstName: 'input[id=firstName]',
   lastName: 'input[id=lastName]',
   address: {
@@ -38,6 +39,10 @@ export class IndividualDetailsPage {
 
   enterName (name: string): void {
     I.fillField(fields.name, name)
+  }
+
+  enterTitle (title: string): void {
+    I.fillField(fields.title, title)
   }
 
   enterFirstName (firstName: string): void {

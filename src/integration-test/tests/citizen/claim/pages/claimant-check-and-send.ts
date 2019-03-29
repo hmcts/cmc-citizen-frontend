@@ -75,6 +75,7 @@ export class ClaimantCheckAndSendPage {
     switch (defendantType) {
 
       case PartyType.INDIVIDUAL:
+        I.see(defendant.title)
         I.see(defendant.firstName)
         I.see(defendant.lastName)
         break

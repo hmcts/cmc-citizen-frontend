@@ -111,6 +111,7 @@ export class ClaimSteps {
     switch (defendantType) {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
+        individualDetailsPage.enterTitle(defendant.title)
         individualDetailsPage.enterFirstName(defendant.firstName)
         individualDetailsPage.enterLastName(defendant.lastName)
         if (byLookup) {
