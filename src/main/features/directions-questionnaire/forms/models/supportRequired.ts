@@ -30,7 +30,7 @@ export class SupportRequired {
   @ValidateIf(o => o.otherSupportSelected)
   @IsDefined({ message: ValidationErrors.NO_OTHER_SUPPORT })
   @IsNotEmpty({ message: ValidationErrors.NO_OTHER_SUPPORT })
-  @IsNotBlank({ message: ValidationErrors.NO_OTHER_SUPPORT})
+  @IsNotBlank({ message: ValidationErrors.NO_OTHER_SUPPORT })
   otherSupport?: string
 
   constructor (
