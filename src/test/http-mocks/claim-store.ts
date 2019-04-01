@@ -8,6 +8,7 @@ import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { MomentFactory } from 'shared/momentFactory'
 
 import {
   fullAdmissionWithSoMPaymentByInstalmentsData,
@@ -15,8 +16,10 @@ import {
   fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
-  fullAdmissionWithSoMPaymentBySetDate, fullAdmissionWithSoMPaymentBySetDateInNext2Days,
+  fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
+  fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData
 } from 'test/data/entity/responseData'
@@ -140,7 +143,7 @@ export const sampleClaimIssueObj = {
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
-  responseDeadline: '2017-08-08',
+  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   features: ['admissions']
 }
 
@@ -306,7 +309,7 @@ export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
-export const samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData = {
+export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithPaymentBySetDateCompanyData
@@ -350,6 +353,11 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonabl
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
+}
+
+export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesPaidGreaterThanClaimAmount
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
@@ -401,10 +409,10 @@ export function resolveRetrieveClaimByExternalIdTo404HttpCode (reason: string = 
     .reply(HttpStatus.NOT_FOUND, reason)
 }
 
-export function resolveRetrieveByClaimantId (claimOverride?: object) {
+export function resolveRetrieveByClaimantId (claim: object = sampleClaimObj, claimOverride?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, ...claimOverride }])
+    .reply(HttpStatus.OK, [{ ...claim, ...claimOverride }])
 }
 
 export function resolveRetrieveByClaimantIdToEmptyList () {
@@ -449,10 +457,10 @@ export function rejectRetrieveByLetterHolderId (reason: string) {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string) {
+export function resolveRetrieveByDefendantId (referenceNumber: string, defendantId?: string, claim: object = sampleClaimObj, claimOverride?: any) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/defendant/[0-9]+'))
-    .reply(HttpStatus.OK, [{ ...sampleClaimObj, referenceNumber: referenceNumber, defendantId: defendantId }])
+    .reply(HttpStatus.OK, [{ ...claim, referenceNumber: referenceNumber, defendantId: defendantId, ...claimOverride }])
 }
 
 export function rejectRetrieveByDefendantId (reason: string) {
@@ -636,5 +644,11 @@ export function resolveSavePaidInFull () {
 export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
   mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
     .reply(HttpStatus.OK, [{ ...sampleData }])
 }

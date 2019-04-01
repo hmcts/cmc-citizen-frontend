@@ -121,7 +121,7 @@ export class ClaimantResponseSteps {
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
       defendantsResponsePage.submitHowTheyWantToPay()
     }
-    I.see('COMPLETED')
+    I.see('COMPLETE')
     if (!testData.defendantClaimsToHavePaidInFull) {
       taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
       settleAdmittedPage.selectAdmittedNo()
@@ -146,7 +146,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     defendantsResponsePage.submitHowTheyWantToPay() // bug
-    I.see('COMPLETED')
+    I.see('COMPLETE')
     taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
     settleAdmittedPage.selectAdmittedYes()
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
@@ -162,7 +162,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     defendantsResponsePage.submitHowTheyWantToPay() // bug
-    I.see('COMPLETED')
+    I.see('COMPLETE')
     taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
     settleAdmittedPage.selectAdmittedYes()
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
@@ -183,7 +183,7 @@ export class ClaimantResponseSteps {
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
       defendantsResponsePage.submitHowTheyWantToPay()
     }
-    I.see('COMPLETED')
+    I.see('COMPLETE')
     if (!testData.defendantClaimsToHavePaidInFull) {
       taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
       settleAdmittedPage.selectAdmittedYes()
@@ -210,7 +210,7 @@ export class ClaimantResponseSteps {
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
       defendantsResponsePage.submitHowTheyWantToPay()
     }
-    I.see('COMPLETED')
+    I.see('COMPLETE')
     if (!testData.defendantClaimsToHavePaidInFull) {
       taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
       settleAdmittedPage.selectAdmittedYes()
@@ -274,7 +274,7 @@ export class ClaimantResponseSteps {
   acceptCCJ (shouldPaySome: boolean): void {
     taskListPage.selectTaskViewDefendantResponse()
     I.click('Continue')
-    I.see('COMPLETED')
+    I.see('COMPLETE')
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseYes()  // no is covered in settlement journey
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
@@ -330,6 +330,7 @@ export class ClaimantResponseSteps {
     }
     taskListPage.selectTaskChooseHowToFormaliseRepayment()
     chooseHowToProceedPage.chooseRequestCcj()
+    taskListPage.selectTaskRequestCountyCourtJudgment()
     if (shouldPaySome) {
       ccjPaidAnyMoneyPage.paidSome(10)
     } else {

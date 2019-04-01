@@ -100,23 +100,15 @@ export class GovPayClient implements PayClient {
     checkNotEmpty(paymentReference, 'Payment reference is required')
     checkNotEmpty(caseReference, 'Case Reference is required')
     checkNotEmpty(caseNumber, 'Case Number is required')
-    try {
-      await request.patch({
-        uri: `${paymentURL}/${paymentReference}`,
-        body: this.preparePaymentUpdateRequest(caseReference, caseNumber),
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`,
-          ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
-        }
-      })
-      return
-    } catch (err) {
-      if (err.statusCode === HttpStatus.NOT_FOUND) {
-        return undefined
+    return request.patch({
+      uri: `${paymentURL}/${paymentReference}`,
+      body: this.preparePaymentUpdateRequest(caseReference, caseNumber),
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
       }
-      throw err
-    }
-    return Promise.resolve()
+    }).then(() => Promise.resolve())
+      .catch(() => Promise.reject())
   }
 
   private preparePaymentUpdateRequest (caseReference: string, caseNumber: string): object {

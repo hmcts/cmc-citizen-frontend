@@ -97,11 +97,15 @@ async function successHandler (req, res, next) {
       logger.error(`missing consent not given role for user, User Id : ${user.id}`)
     }
 
-    if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
-      savedClaim = await claimStoreClient.saveClaim(draft, user, 'admissions')
-    } else {
-      savedClaim = await claimStoreClient.saveClaim(draft, user)
+    let features: string
+    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
+      features = 'admissions'
     }
+
+    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
+      features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
+    }
+    savedClaim = await claimStoreClient.saveClaim(draft, user, features)
   }
   const payClient: PayClient = await getPayClient(req)
   const paymentReference = draft.document.claimant.payment.reference

@@ -65,27 +65,31 @@ import { CohabitingOption } from 'response/form/models/statement-of-means/cohabi
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { FeatureToggles } from 'utils/featureToggles'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 export class ResponseModelConverter {
 
-  static convert (draft: ResponseDraft, claim: Claim): Response {
+  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, claim: Claim): Response {
     switch (draft.response.type) {
       case FormResponseType.DEFENCE:
         if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
-          return this.convertFullDefenceAsPartialAdmission(draft)
+          return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft)
         }
-        return this.convertFullDefence(draft)
+        return this.convertFullDefence(draft, claim, mediationDraft)
       case FormResponseType.FULL_ADMISSION:
-        return this.convertFullAdmission(draft)
+        return this.convertFullAdmission(draft, claim, mediationDraft)
       case FormResponseType.PART_ADMISSION:
-        return this.convertPartAdmission(draft)
+        return this.convertPartAdmission(draft, claim, mediationDraft)
       default:
         throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
+  private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -99,15 +103,19 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: this.convertFreeMediation(mediationDraft, draft),
+      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
-        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
   }
 
-  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -124,16 +132,20 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: this.convertFreeMediation(mediationDraft, draft),
+      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
   }
 
-  private static convertFullAdmission (draft: ResponseDraft): FullAdmissionResponse {
+  private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: this.convertFreeMediation(mediationDraft, draft),
+      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -141,7 +153,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertPartAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+  private static convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): PartialAdmissionResponse {
     let amount
     if (draft.partialAdmission.alreadyPaid.option === DraftYesNoOption.YES) {
       amount = draft.partialAdmission.howMuchHaveYouPaid.amount
@@ -169,9 +181,58 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: this.convertFreeMediation(mediationDraft, draft),
+      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
+      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
+    }
+  }
+
+  private static convertFreeMediation (mediationDraft: MediationDraft, draft: ResponseDraft): YesNoOption {
+    if (FeatureToggles.isEnabled('mediation')) {
+      return FreeMediationUtil.convertFreeMediation(mediationDraft.youCanOnlyUseMediation)
+    } else {
+      return FreeMediationUtil.convertFreeMediation(draft.freeMediation)
+    }
+  }
+
+  private static convertMediationPhoneNumber (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
+    if (FeatureToggles.isEnabled('mediation')) {
+
+      if (mediationDraft.canWeUseCompany) {
+        if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
+          return mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation
+        } else {
+          return mediationDraft.canWeUseCompany.mediationPhoneNumber
+        }
+      } else if (mediationDraft.canWeUse) {
+        if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
+          if (!claim.isResponseSubmitted()) {
+            return draft.defendantDetails.mobilePhone.number
+          } else {
+            return claim.claimData.claimant.mobilePhone ? claim.claimData.claimant.mobilePhone : mediationDraft.canWeUse.mediationPhoneNumber
+          }
+        } else {
+          return mediationDraft.canWeUse.mediationPhoneNumber
+        }
+      }
+    }
+  }
+
+  private static convertMediationContactPerson (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
+    if (FeatureToggles.isEnabled('mediation')) {
+      if (mediationDraft.canWeUseCompany) {
+        if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
+          if (!claim.isResponseSubmitted()) {
+            return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson
+          } else {
+            return (claim.claimData.claimant as CompanyDetails).contactPerson
+          }
+        } else {
+          return mediationDraft.canWeUseCompany.mediationContactPerson
+        }
+      }
     }
   }
 

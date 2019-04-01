@@ -24,6 +24,8 @@ export default express.Router()
         .buildRespondToClaimSection(draft.document, claim)
       const resolvingClaimSection = TaskListBuilder
         .buildResolvingClaimSection(draft.document, claim, draftMediation.document)
+      const directionsQuestionnaireSection = TaskListBuilder
+        .buildDirectionsQuestionnaireSection(draft.document, claim)
 
       const submitSection = TaskListBuilder.buildSubmitSection(claim, draft.document, claim.externalId, claim.features)
 
@@ -33,6 +35,7 @@ export default express.Router()
           submitSection: submitSection,
           respondToClaimSection: respondToClaimSection,
           resolvingClaimSection: resolvingClaimSection,
+          directionsQuestionnaireSection: directionsQuestionnaireSection,
           claim: claim
         })
     } catch (err) {

@@ -85,7 +85,8 @@
     "paidInFull": false,
     "returnErrorToUser": false,
     "mockPay": false,
-    "mediation": true
+    "mediation": true,
+    "directionsQuestionnaire": false
   },
   "oauth": {
     "clientId": "cmc_citizen"
