@@ -40,6 +40,13 @@ describe('Availability', () => {
       expectValidationError(errors, ValidationErrors.AT_LEAST_ONE_DATE)
     })
 
+    it('should reject availability with a past date', () => {
+      const errors = validator.validateSync(new Availability(true, [daysFromNow(1)], daysFromNow(-1)))
+
+      expect(errors).to.not.be.empty
+      expectValidationError(errors, ValidationErrors.FUTURE_DATE_REQUIRED)
+    })
+
     it('should accept availability with affirmation of unavailable dates and dates given', () => {
       const errors = validator.validateSync(new Availability(true, [daysFromNow(1)]))
       expect(errors).to.be.empty

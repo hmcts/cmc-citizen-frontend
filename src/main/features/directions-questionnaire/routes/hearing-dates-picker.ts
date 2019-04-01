@@ -3,7 +3,7 @@ import { Paths } from 'directions-questionnaire/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Draft } from '@hmcts/draft-store-client'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { Availability } from 'directions-questionnaire/forms/models/availability'
+import { Availability, ValidationErrors } from 'directions-questionnaire/forms/models/availability'
 import { DraftService } from 'services/draftService'
 import { LocalDate } from 'forms/models/localDate'
 import * as Moment from 'moment'
@@ -30,7 +30,7 @@ function sortDates (dates: LocalDate[]): LocalDate[] {
 
 const ignoreEmptyArrayError = (req: express.Request, res: express.Response, next) => {
   const form: Form<Availability> = req.body
-  form.errors = form.errors.filter(error => error.message !== 'Select at least one date or choose No')
+  form.errors = form.errors.filter(error => error.message !== ValidationErrors.AT_LEAST_ONE_DATE)
   next()
 }
 

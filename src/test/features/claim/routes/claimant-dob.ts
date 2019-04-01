@@ -57,7 +57,6 @@ describe('Claim issue: claimant date of birth page', () => {
       it('should render page with error when DOB is less than 18', async () => {
         draftStoreServiceMock.resolveFind('claim')
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
-
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

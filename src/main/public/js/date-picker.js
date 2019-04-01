@@ -32,7 +32,7 @@ const datePickerUtils = {
     }
     return displayMonth;
   }
-}
+};
 
 const datePicker = {
 
@@ -104,7 +104,7 @@ const datePicker = {
           .filter((localDate, index) => index !== Number(dateIndex));
         datePicker.selector().datepicker("setDates", d);
       });
-    })
+    });
   },
 
   getData: () => {

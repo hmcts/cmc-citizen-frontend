@@ -1,6 +1,6 @@
 {% from 'internalLink.njk' import internalLink %}
 
-<h2 class="heading-medium">{{ t('Dates selected') }}</h2>
+<h2 class="heading-medium" id="unavailableDates[label]">{{ t('Dates selected') }}</h2>
 <dl class="dates-cant-attend-list add-another-list">
   {% if dates and dates.length > 0 %}
     {% for date in dates %}

@@ -1,12 +1,15 @@
-import { ArrayNotEmpty, IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
+import { IsDefined } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { LocalDate } from 'forms/models/localDate'
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
+import { IsValidAvailabilityDates } from 'directions-questionnaire/forms/validators/availabilityDatesValidator'
 
 export class ValidationErrors {
   static readonly AT_LEAST_ONE_DATE: string = 'Select at least one date or choose No'
+  static readonly CLEAR_ALL_DATES: string = 'Remove all dates or choose Yes'
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
+  static readonly FUTURE_DATE_REQUIRED: string = 'Select a date after today'
 }
 
 export class Availability {
@@ -14,13 +17,10 @@ export class Availability {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   hasUnavailableDates?: boolean
 
-  @ValidateIf(o => o.hasUnavailableDates)
-  @ValidateNested()
-  @ArrayNotEmpty({ message: ValidationErrors.AT_LEAST_ONE_DATE })
-  @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID, each: true })
+  @IsValidAvailabilityDates()
   unavailableDates?: LocalDate[]
 
-  @IsFutureDate({ message: ValidationErrors.DATE_NOT_VALID })
+  @IsFutureDate({ message: ValidationErrors.FUTURE_DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
   newDate?: LocalDate
 
