@@ -77,10 +77,8 @@ export default express.Router()
 
         if (req.body.rawData.addDate) {
           renderPage(res, form)
-        } else if (getUsersRole(res.locals.claim, user) === MadeBy.DEFENDANT) {
-          res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          res.redirect(Paths..evaluateUri({ externalId: res.locals.claim.externalId }))
         }
       }
     }))

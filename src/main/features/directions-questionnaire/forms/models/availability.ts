@@ -35,13 +35,12 @@ export class Availability {
       return value
     }
 
-    const availability = new Availability(
+    return new Availability(
       value.hasUnavailableDates !== undefined ? value.hasUnavailableDates.toString() === 'true' : undefined,
       value.unavailableDates && (value.unavailableDates.constructor === Array)
         ? value.unavailableDates.map(date => LocalDate.fromObject(date)) : [],
       LocalDate.fromObject(value.newDate)
     )
-    return availability
   }
 
   isCompleted (): boolean {

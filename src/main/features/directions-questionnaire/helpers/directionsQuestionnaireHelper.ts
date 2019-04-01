@@ -1,6 +1,6 @@
 import { MadeBy } from 'offer/form/models/madeBy'
-import { Claim } from 'claims/models/claim'
-import { User } from 'idam/user'
+import { Claim } from 'main/app/claims/models/claim'
+import { User } from 'main/app/idam/user'
 
 export function getPreferredParty (claim: Claim): MadeBy {
   const isDefendantBusiness: boolean = claim.claimData.defendant.isBusiness()
