@@ -20,12 +20,13 @@ import {
   companyDetails,
   defendantIndividualDetails,
   defendantSoleTraderDetails,
+  individualDetails,
   organisationDetails
 } from 'test/data/draft/partyDetails'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-describe.only('Claim issue: check and send page', () => {
+describe('Claim issue: check and send page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -67,7 +68,7 @@ describe.only('Claim issue: check and send page', () => {
       })
 
       it('Should validate check-and-send Page hyperlink with correct location and span', async () => {
-        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: defendantIndividualDetails })
+        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantIndividualDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)

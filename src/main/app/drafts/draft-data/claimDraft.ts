@@ -37,7 +37,7 @@ export function prepareClaimDraft (userEmailAddress: string) {
         type: PartyType.INDIVIDUAL.value,
         title: 'Mrs.',
         firstName: 'Mary',
-        lastName: 'Richard',
+        lastName: 'Richards',
         address: {
           line1: 'Flat 3A',
           line2: 'Street 1',

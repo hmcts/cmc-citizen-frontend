@@ -7,9 +7,11 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { claimDraft as draftTemplate } from 'test/data/draft/claimDraft'
 import {
   companyDetails,
+  defendantIndividualDetails,
+  defendantSoleTraderDetails,
   individualDetails,
   organisationDetails,
-  soleTraderDetails, defendantIndividualDetails, theirSoleTraderDetails
+  soleTraderDetails
 } from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
@@ -24,6 +26,7 @@ import {
 } from 'test/data/entity/party'
 import { YesNoOption } from 'models/yesNoOption'
 import { Interest } from 'claim/form/models/interest'
+import { Individual } from 'claims/models/details/theirs/individual'
 
 function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object): DraftClaim {
   return new DraftClaim().deserialize({
@@ -50,7 +53,7 @@ function convertObjectLiteralToJSON (value: object): object {
 
 describe('ClaimModelConverter', () => {
   [
-    [[individualDetails, individual], [theirSoleTraderDetails, soleTraderDefendant]],
+    [[individualDetails, individual], [defendantSoleTraderDetails, soleTraderDefendant]],
     [[soleTraderDetails, soleTrader], [companyDetails, company]],
     [[companyDetails, company], [organisationDetails, organisation]],
     [[organisationDetails, organisation], [defendantIndividualDetails, individualDefendant]]
@@ -74,11 +77,9 @@ describe('ClaimModelConverter', () => {
   })
 
   it('should not contain title if blank', () => {
-    const claimDraft = prepareClaimDraft(defendantIndividualDetails, individualDefendant)
-    // @ts-ignore
-    claimDraft.defendant.partyDetails.title = ' '
+    const defendantWithoutTitle = { ...individualDefendant, title: ' ' }
+    const claimDraft = prepareClaimDraft(defendantIndividualDetails, defendantWithoutTitle)
     const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
-    // @ts-ignore
-    expect(converted.defendant.title).to.be.undefined
+    expect((converted.defendant as Individual).title).to.be.undefined
   })
 })
