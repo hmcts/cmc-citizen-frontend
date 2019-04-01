@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@hmcts/class-validator": "0.9.1-b",
-    "@hmcts/cmc-common-frontend": "^1.55.0",
+    "@hmcts/cmc-common-frontend": "^1.56.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/cmc-validators": "^0.2.2",
     "@hmcts/draft-store-client": "^1.1.1",
@@ -93,7 +93,7 @@
     "to-boolean": "^1.0.0",
     "ts-node": "^8.0.3",
     "tsconfig-paths": "^3.8.0",
-    "typescript": "^3.3.4000",
+    "typescript": "^3.4.1",
     "tslint-microsoft-contrib": "^6.1.0",
     "uuid": "^3.3.2"
   },
@@ -133,7 +133,7 @@
     "pa11y": "^5.1.0",
     "randomstring": "^1.1.5",
     "sass-lint": "^1.10.2",
-    "sinon": "^7.3.0",
+    "sinon": "^7.3.1",
     "sinon-chai": "^3.3.0",
     "sinon-express-mock": "^2.1.0",
     "sonarqube-scanner": "^2.4.0",
