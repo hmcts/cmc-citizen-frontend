@@ -87,7 +87,7 @@ describe('Directions Questionnaire - hearing dates picker widget', () => {
 
     context('when user authorised', () => {
       const validData = { hasUnavailableDates: true, unavailableDates: unavailableDates }
-      const invalidData = { hasUnavailableDates: true, unavailableDates: [{ year: 2000, month: 2, day: 0 }] }
+      const invalidData = { hasUnavailableDates: true, unavailableDates: [{ year: 2000, month: 0, day: 2 }] }
 
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
