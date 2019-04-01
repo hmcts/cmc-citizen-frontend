@@ -10,7 +10,6 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { createClaim } from './helper/dqRouteHelper'
 import { Paths } from 'directions-questionnaire/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 import { PartyType } from 'integration-test/data/party-type'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { daysFromNow } from 'test/localDateUtils'
@@ -22,7 +21,7 @@ const claimWithDQ = {
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.CLAIMANT)
-const taskListPath = ResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
+const supportPagePath = Paths.supportPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -156,7 +155,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to task list page', async () => {
+          it('should redirect to support page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
@@ -166,7 +165,7 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
-              .expect(res => expect(res).to.be.redirect.toLocation(taskListPath))
+              .expect(res => expect(res).to.be.redirect.toLocation(supportPagePath))
           })
         })
 
