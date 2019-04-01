@@ -64,13 +64,12 @@ export default express.Router()
     ignoreEmptyArrayError,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
-
       if (form.hasErrors()) {
         res.sendStatus(400)
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const unavailableDates = form.model.unavailableDates
-        draft.document.availability = draft.document.availability || new Availability(true, [])
+        draft.document.availability = form.model
 
         const availability = draft.document.availability
         availability.unavailableDates = sortDates(unavailableDates).map(date => LocalDate.fromObject(date))
