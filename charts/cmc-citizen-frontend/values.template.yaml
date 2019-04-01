@@ -8,9 +8,9 @@ rpe-feature-toggle-api:
     cron:
       enabled: false
     oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST} &&
-        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST} && 
-        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST}
+      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
+        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
       enabled: true
       permissions: cmc-new-features-consent-given
   java:
