@@ -78,7 +78,7 @@ const datePicker = {
   setUpDOWHeading: () => {
     const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
     const dow = $(".dow");
-    $.each(dow, (index) => $(this).text(days[index]));
+    $.each(dow, (index, node) => node.textContent = days[index]);
   },
 
   toggleArrows: (nextOrPrevArrow) => "<img alt=\"" + nextOrPrevArrow + "\" src=\"/img/date-picker/" + nextOrPrevArrow + "_arrow.png\" />",
@@ -90,7 +90,7 @@ const datePicker = {
     let dates = event.dates.map((eventDate) => datePickerUtils.formatDateForData(eventDate));
     $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
       _csrf: csrf,
-      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val() === "true",
+      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val(),
       unavailableDates: dates,
     }, (result) => {
       $("#date-selection-wrapper").empty().append(result);
