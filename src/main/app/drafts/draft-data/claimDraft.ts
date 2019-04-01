@@ -17,7 +17,7 @@ export function prepareClaimDraft (userEmailAddress: string) {
           line2: 'Street 2',
           line3: 'Street 3',
           city: 'London',
-          postcode: 'SW1A 9AA'
+          postcode: 'SW1H 9AJ'
         },
         dateOfBirth: {
           known: true,
@@ -41,7 +41,7 @@ export function prepareClaimDraft (userEmailAddress: string) {
           line2: 'Street 1',
           line3: 'Middle Road',
           city: 'London',
-          postcode: 'SW1A 9AA'
+          postcode: 'SW1H 9AJ'
         }
       },
       email: {

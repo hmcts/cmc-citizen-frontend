@@ -74,6 +74,7 @@ describe('Directions Questionnaire - self witness page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+        draftStoreServiceMock.resolveFind('response')
 
         await request(app)
           .get(pagePath)
@@ -120,6 +121,7 @@ describe('Directions Questionnaire - self witness page', () => {
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save DQ draft', async () => {
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.rejectSave()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
@@ -133,6 +135,7 @@ describe('Directions Questionnaire - self witness page', () => {
         it('should redirect to other witnesses page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -147,6 +150,7 @@ describe('Directions Questionnaire - self witness page', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .post(pagePath)
