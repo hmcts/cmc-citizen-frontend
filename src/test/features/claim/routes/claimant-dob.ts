@@ -57,11 +57,10 @@ describe('Claim issue: claimant date of birth page', () => {
       it('should render page with error when DOB is less than 18', async () => {
         draftStoreServiceMock.resolveFind('claim')
         const date: Moment = MomentFactory.currentDate().subtract(1, 'year')
-
         await request(app)
           .post(ClaimPaths.claimantDateOfBirthPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
-          .send({ known: 'true', date: { day: date.date(), month: date.month(), year: date.year() } })
+          .send({ known: 'true', date: { day: date.date(), month: date.month() + 1, year: date.year() } })
           .expect(res => expect(res).to.be.successful.withText('Please enter a date of birth before', 'div class="error-summary"'))
       })
 
