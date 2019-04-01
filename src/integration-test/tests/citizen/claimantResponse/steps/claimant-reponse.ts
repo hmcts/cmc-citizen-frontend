@@ -296,7 +296,7 @@ export class ClaimantResponseSteps {
     testData: EndToEndTestData,
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
-    I.dontSee('COMPLETE')
+    I.dontSeeElement({ css: 'div.task-finished:not(.unfinished)>strong' })
     taskListPage.selectTaskViewDefendantResponse()
     defendantsResponsePage.submit()
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
