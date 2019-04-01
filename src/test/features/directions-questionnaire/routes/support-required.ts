@@ -40,7 +40,7 @@ function checkAccessGuard (app: any, method: string) {
   })
 }
 
-describe('Directions Questionnaire - self witness page', () => {
+describe('Directions Questionnaire - support required page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -76,6 +76,7 @@ describe('Directions Questionnaire - self witness page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+        draftStoreServiceMock.resolveFind('response')
 
         await request(app)
           .get(pagePath)
@@ -122,6 +123,7 @@ describe('Directions Questionnaire - self witness page', () => {
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save DQ draft', async () => {
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.rejectSave()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
@@ -137,6 +139,7 @@ describe('Directions Questionnaire - self witness page', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
 
           await request(app)
             .post(pagePath)
@@ -155,6 +158,7 @@ describe('Directions Questionnaire - self witness page', () => {
         }
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+        draftStoreServiceMock.resolveFind('response')
         draftStoreServiceMock.resolveSave()
         idamServiceMock.resolveRetrieveUserFor(claim.submitterId, 'citizen')
 
@@ -168,10 +172,11 @@ describe('Directions Questionnaire - self witness page', () => {
 
     context('when user is authorised defendant and form is valid', () => {
       it('should redirect to response task list page', async () => {
+        idamServiceMock.resolveRetrieveUserFor(claimWithDQ.defendantId, 'citizen')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+        draftStoreServiceMock.resolveFind('response')
         draftStoreServiceMock.resolveSave()
-        idamServiceMock.resolveRetrieveUserFor(claimWithDQ.defendantId, 'citizen')
 
         await request(app)
           .post(pagePath)
