@@ -19,25 +19,37 @@ describe('Frequency view filter', () => {
 
   context('render payment frequency', () => {
 
-    for (let paymentFrequency in PaymentFrequency) {
-      Frequency.all()
-        .forEach(frequency => {
-          if (Frequency.of(paymentFrequency).inWeeks === frequency.inWeeks) {
-            it(`should render payment frequency ${paymentFrequency} as ${frequency.displayValue}`, () => {
-              expect(FrequencyViewFilter.renderPaymentFrequency(
-                Frequency.toPaymentFrequency(Frequency.of(paymentFrequency)))).to.equal(frequency.displayValue)
-            })
-          } else {
-            it(`should not render payment frequency ${paymentFrequency} as ${frequency.displayValue}`, () => {
-              expect(FrequencyViewFilter.renderPaymentFrequency(
-                Frequency.toPaymentFrequency(Frequency.of(paymentFrequency)))).to.not.equal(frequency.displayValue)
-            })
-          }
-        })
+    it(`should render payment frequency ${PaymentFrequency.WEEK} as ${Frequency.WEEKLY.displayValue}`, () => {
+      expect(FrequencyViewFilter.renderPaymentFrequency(
+        Frequency.toPaymentFrequency(Frequency.of(PaymentFrequency.WEEK)))).to.equal(Frequency.WEEKLY.displayValue)
+    })
 
-      it('should throw an error for null', () => {
-        expect(() => FrequencyViewFilter.renderPaymentFrequency(null)).to.throw(TypeError)
-      })
-    }
+    it(`should render payment frequency ${PaymentFrequency.TWO_WEEKS} as ${Frequency.TWO_WEEKLY.displayValue}`,
+      () => {
+        expect(FrequencyViewFilter.renderPaymentFrequency(
+          Frequency.toPaymentFrequency(Frequency.of(PaymentFrequency.TWO_WEEKS)
+          ))).to.equal(Frequency.TWO_WEEKLY.displayValue)
+      }
+    )
+
+    it(`should render payment frequency ${PaymentFrequency.FOUR_WEEKS} as ${Frequency.FOUR_WEEKLY.displayValue}`,
+      () => {
+        expect(FrequencyViewFilter.renderPaymentFrequency(
+          Frequency.toPaymentFrequency(Frequency.of(PaymentFrequency.FOUR_WEEKS)
+          ))).to.equal(Frequency.FOUR_WEEKLY.displayValue)
+      }
+    )
+
+    it(`should render payment frequency ${PaymentFrequency.MONTH} as ${Frequency.MONTHLY.displayValue}`,
+      () => {
+        expect(FrequencyViewFilter.renderPaymentFrequency(
+          Frequency.toPaymentFrequency(Frequency.of(PaymentFrequency.MONTH)
+          ))).to.equal(Frequency.MONTHLY.displayValue)
+      }
+    )
+
+    it('should throw an error for null', () => {
+      expect(() => FrequencyViewFilter.renderPaymentFrequency(null)).to.throw(TypeError)
+    })
   })
 })
