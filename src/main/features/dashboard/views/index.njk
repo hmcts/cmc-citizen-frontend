@@ -6,23 +6,13 @@
 
 {% set heading = 'Your money claims account' %}
 
-{% macro backwardCompatibleDashboardFor(claim, newStatus, type) %}
-  {% if newStatus %}
-    {{ newStatus }}
-  {% elif type === 'claimant' %}
-    {{ caseStatusForClaimant(claim.status, claim) }}
-  {% else %}
-    {{ caseStatusForDefendant(claim.status, claim) }}
-  {% endif %}
-{% endmacro %}
-
 {% block content %}
   <div class="grid-row">
     <div class="column-full">
       {% if not claimDraftSaved %}
         {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
       {% endif %}
-
+      
       {% if claimsAsClaimant | length or claimDraftSaved %}
 
       <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>
@@ -60,13 +50,13 @@
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ backwardCompatibleDashboardFor(claim, claimantDashboardStatus, 'claimant') }}
+              {{ caseStatusForClaimant(claim.status, claim) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {{ backwardCompatibleDashboardFor(claim, claimantDashboardStatus, 'claimant') }}
+              {{ caseStatusForClaimant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}
@@ -106,13 +96,13 @@
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {{ backwardCompatibleDashboardFor(claim, defendantDashboardStatus, 'defendant') }}
+              {{ caseStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {{ backwardCompatibleDashboardFor(claim, defendantDashboardStatus, 'defendant') }}
+              {{ caseStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}

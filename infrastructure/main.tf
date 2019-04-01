@@ -145,6 +145,7 @@ module "citizen-frontend" {
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
     FEATURE_MEDIATION = "${var.feature_mediation}"
+    FEATURE_DIRECTIONS_QUESTIONNAIRE = "${var.feature_directions_questionnaire}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 

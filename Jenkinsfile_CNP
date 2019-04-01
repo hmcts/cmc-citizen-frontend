@@ -11,13 +11,6 @@ def secrets = [
       secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
       secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
       secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
-    ],
-  'rpe-ft-api-${env}' :
-    [
-      secret('admin-username-test', 'ADMIN_USERNAME_TEST'),
-      secret('admin-password-test', 'ADMIN_PASSWORD_TEST'),
-      secret('editor-username-test', 'EDITOR_USERNAME_TEST'),
-      secret('editor-password-test', 'EDITOR_PASSWORD_TEST')
     ]
 ]
 
@@ -33,7 +26,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
-env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
+env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
@@ -59,6 +52,24 @@ withPipeline("nodejs", product, component) {
 
   after('build') {
     sh 'yarn setup'
+  }
+
+  before('smoketest:aks') {
+    // workaround to fix SIDAM whitelisting for PR AKS URLs
+    try {
+      def encodedServiceName = 'Money%20Claims%20-%20Citizen'
+      def aksUrlToWhitelist = env.TEST_URL + '/receiver'
+      sh('curl -X PATCH https://idam-api.aat.platform.hmcts.net/testing-support/services/' + encodedServiceName +
+        ' -H \'Content-Type: application/json\'' +
+        ' -H \'cache-control: no-cache\'' +
+        ' -d \'[{' +
+          '"operation":"add",' +
+          '"field":"redirect_uri",' +
+          '"value":"' + aksUrlToWhitelist + '"' +
+        '}]\'')
+    } catch (err) {
+      notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update SIDAM PR whitelisting'
+    }
   }
 
   loadVaultSecrets(secrets)

@@ -36,7 +36,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
-env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
+env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
@@ -46,7 +46,6 @@ withNightlyPipeline("nodejs", product, component) {
   env.TEST_URL = params.URL_TO_TEST
 
   loadVaultSecrets(secrets)
-  setVaultName('cmc')
   enableCrossBrowserTest()
   enableSecurityScan()
   enableFullFunctionalTest(180)

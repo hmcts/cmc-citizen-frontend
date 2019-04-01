@@ -8,6 +8,7 @@ import {
   StatementOfMeansPaths
 } from 'response/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
+import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
@@ -31,13 +32,17 @@ import { ValidationUtils } from 'shared/ValidationUtils'
 import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
 
-    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)
+    if (!ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)
       && (draft.isResponsePartiallyAdmitted() || draft.isResponseFullyAdmitted())) {
       delete draft.response.type
     }
@@ -84,7 +89,7 @@ export class TaskListBuilder {
         )
       )
 
-      if (ClaimFeatureToggles.areAdmissionsEnabled(claim)
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)
         && draft.rejectAllOfClaim.howMuchHaveYouPaid !== undefined
         && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
         tasks.push(
@@ -107,7 +112,7 @@ export class TaskListBuilder {
       )
     }
 
-    if (ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
+    if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)) {
       if (draft.isResponseFullyAdmitted()) {
         tasks.push(
           new TaskListItem(
@@ -269,13 +274,36 @@ export class TaskListBuilder {
     return undefined
   }
 
+  static buildDirectionsQuestionnaireSection (draft: ResponseDraft, claim: Claim, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
+    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
+      let path: string
+      if (getPreferredParty(claim) === MadeBy.DEFENDANT) {
+        path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
+      } else {
+        path = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId })
+      }
+
+      return new TaskList(
+      'Tell us more about the claim', [
+        new TaskListItem(
+          `Give us details in case there’s a hearing`,
+          path,
+          DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+        )
+      ]
+    )
+    }
+    return undefined
+  }
+
   static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string, features: string[]): TaskList {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidClaimAmount(claim, draft)
-      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidMoreThenClaimAmount(claim, draft))
-      || (ClaimFeatureToggles.areAdmissionsEnabled(claim) && TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft))
+      || (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && TaskListBuilder.isRejectedFullyBecausePaidMoreThenClaimAmount(claim, draft))
+      || (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft))
       || draft.isResponseFullyAdmitted()
       || draft.isResponsePartiallyAdmitted()) {
       tasks.push(
