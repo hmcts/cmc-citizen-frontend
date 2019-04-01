@@ -40,7 +40,8 @@ export default express.Router()
         const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
 
-        if (draft.document.defendantDetails.mobilePhone.number !== form.model.number && mediationDraft) {
+        if (form.model.number
+          && draft.document.defendantDetails.mobilePhone.number !== form.model.number && mediationDraft) {
           mediationDraft.document.canWeUseCompany = undefined
           mediationDraft.document.canWeUse = undefined
           await new DraftService().save(mediationDraft, user.bearerToken)
