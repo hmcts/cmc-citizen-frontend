@@ -1,8 +1,6 @@
 /* tslint:disable:no-default-export */
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
-import { Paths as ResponsePaths } from 'response/paths'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Form } from 'forms/form'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
@@ -10,8 +8,6 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Availability } from 'directions-questionnaire/forms/models/availability'
-import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
-import { MadeBy } from 'offer/form/models/madeBy'
 import { LocalDate } from 'forms/models/localDate'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
@@ -78,7 +74,7 @@ export default express.Router()
         if (req.body.rawData.addDate) {
           renderPage(res, form)
         } else {
-          res.redirect(Paths..evaluateUri({ externalId: res.locals.claim.externalId }))
+          res.redirect(Paths.supportPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
       }
     }))
