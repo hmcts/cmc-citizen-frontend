@@ -186,7 +186,7 @@ describe('Claimant response task list builder', () => {
 
         claim.response.freeMediation = YesNoOption.NO
         const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-        expect(taskList.tasks.find(task => task.name === 'Accept or reject their response')).not.to.be.undefined
+        expect(taskList.tasks.find(task => task.name === 'Accept or reject their response')).to.be.undefined
       })
     })
 

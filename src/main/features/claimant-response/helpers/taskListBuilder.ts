@@ -158,7 +158,7 @@ export class TaskListBuilder {
 
       if (claim.response.freeMediation === YesNoOption.YES
         && (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO)
-          || draft.intentionToProceed.proceed.option === YesNoOption.YES) {
+          || (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES)) {
         tasks.push(
           new TaskListItem(
             'Free telephone mediation',
@@ -188,7 +188,8 @@ export class TaskListBuilder {
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
 
-    if (claim.response.responseType === ResponseType.FULL_DEFENCE && draft.intentionToProceed.proceed.option === YesNoOption.YES) {
+    if (claim.response.responseType === ResponseType.FULL_DEFENCE
+      && (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES)) {
       tasks.push(
         new TaskListItem(
           'Free telephone mediation',
