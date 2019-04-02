@@ -107,6 +107,26 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.']
   },
   {
+    status: 'full admission,  pay by set date , claimant accept the repayment plan, defendant past deadline, Request CCJ',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+    },
+    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
+    defendantAssertions: ['000MC000', 'John Smith can now ask for a County Court Judgment (CCJ) against you']
+  },
+  {
+    status: 'full admission,  pay by instalments , claimant accept the repayment plan, defendant miss the past deadline, Request CCJ',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+    },
+    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
+    defendantAssertions: ['000MC000', 'John Smith can now ask for a County Court Judgment (CCJ) against you']
+  },
+  {
     status: 'full admission, pay by repayment plan',
     claim: fullAdmissionClaim,
     claimOverride: {
@@ -265,6 +285,7 @@ describe('Dashboard page', () => {
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+              .expect(res => expect(res).to.be.successful.withText('<a href="/eligibility" class="newclaim" id="start-now" >Make a new money claim</a>'))
           })
 
           it('should render page with claim number and status', async () => {
@@ -300,6 +321,7 @@ describe('Dashboard page', () => {
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
+              .expect(res => expect(res).to.be.successful.withText('<a href="/eligibility" class="newclaim" id="start-now" >Make a new money claim</a>'))
           })
 
           it('should render page with claim number and status', async () => {
