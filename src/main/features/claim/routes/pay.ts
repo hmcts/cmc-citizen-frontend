@@ -58,35 +58,7 @@ async function successHandler (res, next) {
   const user: User = res.locals.user
   const externalId: string = draft.document.externalId
 
-  let claimIsAlreadyFullyPersisted: boolean
-
   try {
-    claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user)
-      .then(() => true)
-  } catch (err) {
-    /**
-     * NOT_FOUND -> claim was not submitted yet -> migrate draft
-     */
-    if (err.statusCode === HttpStatus.NOT_FOUND) {
-      claimIsAlreadyFullyPersisted = false
-    } else {
-      logError(
-        user.id,
-        draft.document.claimant.payment,
-        `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${externalId}.`
-      )
-      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
-        {
-          externalId: externalId,
-          payment: draft.document.claimant.payment,
-          error: err
-        })
-      next(err)
-      return
-    }
-  }
-
-  if (!claimIsAlreadyFullyPersisted) {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
     if (!roles.length) {
@@ -102,8 +74,30 @@ async function successHandler (res, next) {
       features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
     }
     await claimStoreClient.saveClaim(draft, user, features)
-  }
 
+  } catch (err) {
+    if (err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
+      logError(
+        user.id,
+        draft.document.claimant.payment,
+        `Payment processed successfully but there is problem saving claim from claim store externalId: ${externalId}.`
+      )
+      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
+        {
+          externalId: externalId,
+          payment: draft.document.claimant.payment,
+          error: err
+        })
+      next(err)
+      return
+    } else if (err.statusCode === HttpStatus.CONFLICT) {
+      logError(
+        user.id,
+        draft.document.claimant.payment,
+        `Payment processed successfully claim already exist with same externalId: ${externalId}.`
+      )
+    }
+  }
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
@@ -138,7 +132,7 @@ export default express.Router()
         }
       }
 
-      const caseReference: string = await claimStoreClient.savePrePayment(externalId, user)
+      const caseReference: string = externalId
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(
