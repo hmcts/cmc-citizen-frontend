@@ -13,7 +13,7 @@ export class IntentionToProceed {
   }
 
   static fromObject (input?: any): IntentionToProceed {
-    if (input == null) {
+    if (!input) {
       return input
     }
     return new IntentionToProceed(YesNoOption.fromObject(input.proceed))
