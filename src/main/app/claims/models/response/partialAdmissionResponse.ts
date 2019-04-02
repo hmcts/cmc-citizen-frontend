@@ -7,6 +7,7 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
+import { DefenceType } from 'claims/models/response/defenceType'
 
 export interface PartialAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
@@ -18,6 +19,7 @@ export interface PartialAdmissionResponse extends ResponseCommon {
   freeMediation?: YesNoOption,
   paymentIntention?: PaymentIntention
   statementOfMeans?: StatementOfMeans
+  defenceType?: DefenceType
 }
 
 export namespace PartialAdmissionResponse {
