@@ -13,7 +13,11 @@ describe('IntentionToProceedTask', () => {
     expect(IntentionToProceedTask.isCompleted(new IntentionToProceed(undefined))).to.be.false
   })
 
-  it('should be completed when option is selected', () => {
+  it('should be completed when option is Yes', () => {
     expect(IntentionToProceedTask.isCompleted(new IntentionToProceed(YesNoOption.YES))).to.be.true
+  })
+
+  it('should be completed when option is No', () => {
+    expect(IntentionToProceedTask.isCompleted(new IntentionToProceed(YesNoOption.NO))).to.be.true
   })
 })
