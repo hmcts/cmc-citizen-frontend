@@ -11,6 +11,7 @@ import { ClaimSettled } from 'claimant-response/form/models/states-paid/claimSet
 import { AcceptCourtOffer } from 'claimant-response/form/models/acceptCourtOffer'
 import { CourtDetermination } from 'claimant-response/draft/courtDetermination'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import { IntentionToProceed } from 'claimant-response/form/models/intentionToProceed'
 
 export class DraftClaimantResponse extends DraftDocument {
   defendantResponseViewed: boolean
@@ -28,6 +29,7 @@ export class DraftClaimantResponse extends DraftDocument {
   acceptCourtOffer?: AcceptCourtOffer
   courtDetermination?: CourtDetermination
   rejectionReason?: RejectionReason
+  intentionToProceed?: IntentionToProceed
 
   constructor () {
     super()
@@ -77,6 +79,9 @@ export class DraftClaimantResponse extends DraftDocument {
       }
       if (input.rejectionReason) {
         this.rejectionReason = new RejectionReason().deserialize(input.rejectionReason)
+      }
+      if (input.intentionToProceed) {
+        this.intentionToProceed = new IntentionToProceed().deserialize(input.intentionToProceed)
       }
     }
     return this
