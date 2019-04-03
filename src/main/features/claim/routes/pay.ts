@@ -76,7 +76,7 @@ async function successHandler (res, next) {
     await claimStoreClient.saveClaim(draft, user, features)
 
   } catch (err) {
-    if (err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
+    if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
       logError(
         user.id,
         draft.document.claimant.payment,
@@ -94,7 +94,7 @@ async function successHandler (res, next) {
       logError(
         user.id,
         draft.document.claimant.payment,
-        `Payment processed successfully claim already exist with same externalId: ${externalId}.`
+        `Payment processed successfully and claim already exist with same externalId: ${externalId}.`
       )
     }
   }
