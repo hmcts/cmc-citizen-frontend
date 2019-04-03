@@ -61,6 +61,7 @@ describe('Defendant response: priority-debt', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('response:full-admission')
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -88,6 +89,7 @@ describe('Defendant response: priority-debt', () => {
         beforeEach(() => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
         })
 
         it('should trigger validation when negative amount is present', async () => {
@@ -145,6 +147,7 @@ describe('Defendant response: priority-debt', () => {
         it('should save to the draft store', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -172,6 +175,7 @@ describe('Defendant response: priority-debt', () => {
         it('should reset the debt', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
