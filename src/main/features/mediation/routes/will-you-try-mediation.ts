@@ -14,8 +14,13 @@ import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMe
 import { Claim } from 'claims/models/claim'
 
 function renderView (form: Form<FreeMediation>, res: express.Response) {
+  const user: User = res.locals.user
+  const claim: Claim = res.locals.claim
+
+  const hint = user.id === claim.defendantId ? 'We’ll ask the claimant if they’ll try free mediation. If they say no, the claim will go to a hearing.' : ''
   res.render(Paths.willYouTryMediation.associatedView, {
-    form: form
+    form: form,
+    hint: hint
   })
 }
 
