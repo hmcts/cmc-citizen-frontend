@@ -1,9 +1,10 @@
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
+import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
 
 export class Frequency {
   static readonly WEEKLY = new Frequency(['WEEK', 'EACH_WEEK'], 52 / 12, 1, 'Each week')
-  static readonly TWO_WEEKLY = new Frequency(['TWO_WEEK', 'EVERY_TWO_WEEKS'], 52 / 12 / 2, 2, 'Every 2 weeks')
-  static readonly FOUR_WEEKLY = new Frequency(['FOUR_WEEK', 'EVERY_FOUR_WEEKS'], 52 / 12 / 4, 4, 'Every 4 weeks')
+  static readonly TWO_WEEKLY = new Frequency(['TWO_WEEKS', 'EVERY_TWO_WEEKS'], 52 / 12 / 2, 2, 'Every 2 weeks')
+  static readonly FOUR_WEEKLY = new Frequency(['FOUR_WEEKS', 'EVERY_FOUR_WEEKS'], 52 / 12 / 4, 4, 'Every 4 weeks')
   static readonly MONTHLY = new Frequency(['MONTH', 'EVERY_MONTH'], 1, 52 / 12, 'Every month')
 
   constructor (
@@ -58,6 +59,25 @@ export class Frequency {
         }
         case PaymentSchedule.EVERY_MONTH: {
           return PaymentSchedule.EVERY_MONTH
+        }
+      }
+    }
+  }
+
+  static toPaymentFrequency (frequency: Frequency): PaymentFrequency {
+    for (const value of frequency.values) {
+      switch (value) {
+        case PaymentFrequency.WEEK: {
+          return PaymentFrequency.WEEK
+        }
+        case PaymentFrequency.TWO_WEEKS: {
+          return PaymentFrequency.TWO_WEEKS
+        }
+        case PaymentFrequency.FOUR_WEEKS: {
+          return PaymentFrequency.FOUR_WEEKS
+        }
+        case PaymentFrequency.MONTH: {
+          return PaymentFrequency.MONTH
         }
       }
     }
