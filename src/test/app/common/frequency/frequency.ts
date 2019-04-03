@@ -7,9 +7,9 @@ describe('Frequency', () => {
     [
       { frequencyValue: 'WEEK', expectedFrequency: Frequency.WEEKLY },
       { frequencyValue: 'EACH_WEEK', expectedFrequency: Frequency.WEEKLY },
-      { frequencyValue: 'TWO_WEEK', expectedFrequency: Frequency.TWO_WEEKLY },
+      { frequencyValue: 'TWO_WEEKS', expectedFrequency: Frequency.TWO_WEEKLY },
       { frequencyValue: 'EVERY_TWO_WEEKS', expectedFrequency: Frequency.TWO_WEEKLY },
-      { frequencyValue: 'FOUR_WEEK', expectedFrequency: Frequency.FOUR_WEEKLY },
+      { frequencyValue: 'FOUR_WEEKS', expectedFrequency: Frequency.FOUR_WEEKLY },
       { frequencyValue: 'EVERY_FOUR_WEEKS', expectedFrequency: Frequency.FOUR_WEEKLY },
       { frequencyValue: 'MONTH', expectedFrequency: Frequency.MONTHLY },
       { frequencyValue: 'EVERY_MONTH', expectedFrequency: Frequency.MONTHLY }
