@@ -53,6 +53,7 @@ describe('Statement of means', () => {
         it('should return successful response when claim is retrieved', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(partnerAgePage)
@@ -96,6 +97,7 @@ describe('Statement of means', () => {
         it('should return error page when unable to save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.rejectSave()
 
           await request(app)
@@ -108,6 +110,7 @@ describe('Statement of means', () => {
         it('should redirect to partner pension page when all is fine and form is valid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -122,6 +125,7 @@ describe('Statement of means', () => {
         it('should trigger validation when all is fine and form is invalid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(partnerAgePage)
