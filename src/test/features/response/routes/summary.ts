@@ -14,6 +14,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -52,6 +53,7 @@ describe('Defendant response: summary page', () => {
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(ResponsePaths.summaryPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
