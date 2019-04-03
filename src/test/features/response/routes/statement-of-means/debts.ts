@@ -1,4 +1,4 @@
-import { expect } from 'chai'
+ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 import 'test/routes/expectations'
@@ -60,6 +60,7 @@ describe('Defendant response: Statement of means: debts', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -114,6 +115,7 @@ describe('Defendant response: Statement of means: debts', () => {
           it('when valid debt provided', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
@@ -130,6 +132,7 @@ describe('Defendant response: Statement of means: debts', () => {
           it('when no selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
@@ -150,6 +153,7 @@ describe('Defendant response: Statement of means: debts', () => {
         it('should add one more row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
