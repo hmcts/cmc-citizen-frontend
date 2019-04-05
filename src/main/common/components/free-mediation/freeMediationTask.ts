@@ -12,7 +12,7 @@ export class FreeMediationTask {
   }
 
   static isCanWeUseCompleted (mediationDraft: MediationDraft): boolean {
-    return ((!mediationDraft.canWeUse && !mediationDraft.canWeUseCompany) ||
+    return ((!!mediationDraft.canWeUse && !!mediationDraft.canWeUseCompany) ||
       (!!mediationDraft.canWeUse && mediationDraft.canWeUse.isCompleted()) ||
       (!!mediationDraft.canWeUseCompany && mediationDraft.canWeUseCompany.isCompleted()))
   }
