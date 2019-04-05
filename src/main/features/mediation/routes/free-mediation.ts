@@ -10,7 +10,8 @@ function renderView (res: express.Response): void {
   const claim: Claim = res.locals.claim
 
   res.render(Paths.freeMediationPage.associatedView, {
-    otherParty: claim.otherPartyName(user)
+    otherParty: claim.otherPartyName(user),
+    defendant: user.id === claim.defendantId
   })
 }
 
