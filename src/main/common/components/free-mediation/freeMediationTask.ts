@@ -3,7 +3,7 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 
 export class FreeMediationTask {
   static isWillYouTryMediationCompleted (mediationDraft: MediationDraft): boolean {
-    return !!mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.NO
+    return !!mediationDraft.willYouTryMediation
   }
 
   static isYouCanOnlyUseMediationCompleted (mediationDraft: MediationDraft): boolean {
