@@ -18,6 +18,7 @@ function renderView (form: Form<FreeMediation>, res: express.Response) {
   const claim: Claim = res.locals.claim
 
   const hint = user.id === claim.defendantId ? 'We’ll ask the claimant if they’ll try free mediation. If they say no, the claim will go to a hearing.' : ''
+
   res.render(Paths.willYouTryMediation.associatedView, {
     form: form,
     hint: hint
