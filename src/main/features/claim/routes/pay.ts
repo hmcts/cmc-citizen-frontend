@@ -80,9 +80,9 @@ async function successHandler (res, next) {
       logError(
         user.id,
         draft.document.claimant.payment,
-        `Payment processed successfully but there is problem saving claim from claim store externalId: ${externalId}.`
+        `Payment processed successfully but there was a problem saving claim '${externalId}' to the claim store: ${externalId}.`
       )
-      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
+      trackCustomEvent(`Post payment successful but unable to store claim in claim-store with externalId: ${externalId}`,
         {
           externalId: externalId,
           payment: draft.document.claimant.payment,
@@ -94,7 +94,7 @@ async function successHandler (res, next) {
       logError(
         user.id,
         draft.document.claimant.payment,
-        `Payment processed successfully and claim already exist with same externalId: ${externalId}.`
+        `Payment processed successfully and claim ${externalId} already exists .`
       )
     }
   }
