@@ -1,0 +1,29 @@
+tags:
+  - rpe-feature-toggle-api-pod
+
+rpe-feature-toggle-api:
+  releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
+  registerDns: false
+  importer:
+    cron:
+      enabled: false
+    oneoff:
+      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
+        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
+      enabled: true
+      permissions: cmc-new-features-consent-given
+  java:
+    image: hmcts.azurecr.io/hmcts/rpe-feature-toggle-api:latest
+    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
+    environment:
+      FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
+  postgresql:
+    postgresqlDatabase: hmcts
+
+nodejs:
+  image: ${IMAGE_NAME}
+  ingressHost: ${SERVICE_FQDN}
+  environment:
+    LOG_LEVEL: DEBUG
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl-api
