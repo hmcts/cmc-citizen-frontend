@@ -80,7 +80,7 @@ async function successHandler (res, next) {
       logError(
         user.id,
         draft.document.claimant.payment,
-        `Payment processed successfully but there was a problem saving claim '${externalId}' to the claim store: ${externalId}.`
+        `Payment processed successfully but there was a problem saving claim '${externalId}' to the claim store.`
       )
       trackCustomEvent(`Post payment successful but unable to store claim in claim-store with externalId: ${externalId}`,
         {
