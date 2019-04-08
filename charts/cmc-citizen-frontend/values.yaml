@@ -11,6 +11,10 @@ nodejs:
     REFORM_SERVICE_NAME: citizen-frontend
     REFORM_ENVIRONMENT: preview
     UV_THREADPOOL_SIZE: 64
+    GA_TRACKING_ID: UA-00000000-0
+    SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
     FEATURE_TESTING_SUPPORT: true
     FEATURE_NEW_FEATURES_CONSENT: true
     FEATURE_ADMISSIONS: true
