@@ -10,12 +10,16 @@ import { PaymentIntention as DomainPaymentIntention } from 'claims/models/respon
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
-import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { Claim } from 'claims/models/claim'
+import { FreeMediationConverter } from 'claims/freeMediationConverter'
 
 export class ClaimantResponseConverter {
 
   public static convertToClaimantResponse (
+    claim: Claim,
     draftClaimantResponse: DraftClaimantResponse,
+    mediationDraft: MediationDraft,
     isDefendantBusiness: boolean
   ): ClaimantResponse {
     if (!this.isResponseAcceptance(draftClaimantResponse)) {
@@ -25,7 +29,9 @@ export class ClaimantResponseConverter {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
       }
 
-      reject.freeMediation = FreeMediationUtil.convertFreeMediation(draftClaimantResponse.freeMediation)
+      reject.freeMediation = FreeMediationConverter.convertFreeMediation(mediationDraft)
+      reject.mediationPhoneNumber = FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft)
+      reject.mediationContactPerson = FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft)
 
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text

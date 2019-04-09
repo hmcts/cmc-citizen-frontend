@@ -70,8 +70,9 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
+      const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const user: User = res.locals.user
-      await new ClaimStoreClient().saveClaimantResponse(claim, draft, user)
+      await new ClaimStoreClient().saveClaimantResponse(claim, draft, mediationDraft, user)
       await new DraftService().delete(draft.id, user.bearerToken)
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
     }))

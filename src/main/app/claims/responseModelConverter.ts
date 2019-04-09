@@ -64,10 +64,8 @@ import { CarerOption } from 'response/form/models/statement-of-means/carer'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
-import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
-import { FreeMediationOption } from 'forms/models/freeMediation'
+import { FreeMediationConverter } from 'claims/freeMediationConverter'
 
 export class ResponseModelConverter {
 
@@ -102,9 +100,9 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: this.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
-      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
+      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
         draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
         draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -131,9 +129,9 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: this.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
-      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
+      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -142,9 +140,9 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
-      freeMediation: this.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
-      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
+      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -180,49 +178,11 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
-      freeMediation: this.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
-      mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
+      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
-    }
-  }
-
-  private static convertFreeMediation (mediationDraft: MediationDraft): YesNoOption {
-    return FreeMediationUtil.convertFreeMediation(mediationDraft.youCanOnlyUseMediation)
-  }
-
-  private static convertMediationPhoneNumber (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
-    if (mediationDraft.canWeUseCompany) {
-      if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
-        return mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation
-      } else {
-        return mediationDraft.canWeUseCompany.mediationPhoneNumber
-      }
-    } else if (mediationDraft.canWeUse) {
-      if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
-        if (!claim.isResponseSubmitted()) {
-          return draft.defendantDetails.mobilePhone.number
-        } else {
-          return claim.claimData.claimant.mobilePhone ? claim.claimData.claimant.mobilePhone : mediationDraft.canWeUse.mediationPhoneNumber
-        }
-      } else {
-        return mediationDraft.canWeUse.mediationPhoneNumber
-      }
-    }
-  }
-
-  private static convertMediationContactPerson (mediationDraft: MediationDraft, draft: ResponseDraft, claim: Claim): string {
-    if (mediationDraft.canWeUseCompany) {
-      if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
-        if (!claim.isResponseSubmitted()) {
-          return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson
-        } else {
-          return (claim.claimData.claimant as CompanyDetails).contactPerson
-        }
-      } else {
-        return mediationDraft.canWeUseCompany.mediationContactPerson
-      }
     }
   }
 
