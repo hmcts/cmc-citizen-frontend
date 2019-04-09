@@ -39,11 +39,13 @@
       {% endif %}
 
     {% elseif draft.intentionToProceed %}
-      {{ row(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
-        changeLink = ClaimantResponsePaths.intentionToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-      {% if claim.response.freeMediation === 'yes' %}
-        {{ freeMediationBlock(claim, mediationDraft, contactPerson) }}
-      {% endif %}
+      <div class="form-group">
+        {{ row(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
+          changeLink = ClaimantResponsePaths.intentionToProceedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        {% if draft.intentionToProceed.proceed.option === 'yes' and claim.response.freeMediation === 'yes' %}
+          {{ freeMediationBlock(claim, mediationDraft, contactPerson) }}
+        {% endif %}
+      </div>
     {% else %}
       {% if draft.settleAdmitted %}
         {% if draft.settleAdmitted.admitted.option === 'yes' %}

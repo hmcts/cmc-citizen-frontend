@@ -16,7 +16,6 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { FeatureToggles } from 'utils/featureToggles'
 import { ResponseType } from 'claims/models/response/responseType'
 import { Organisation } from 'claims/models/details/yours/organisation'
 
@@ -58,7 +57,6 @@ export default express.Router()
         paymentIntention: paymentIntention,
         alreadyPaid: alreadyPaid,
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
-        mediationEnabled: FeatureToggles.isEnabled('mediation'),
         mediationDraft: mediationDraft.document,
         contactPerson: contactPerson
       })
