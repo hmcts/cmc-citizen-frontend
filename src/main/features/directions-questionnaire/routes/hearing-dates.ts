@@ -39,7 +39,7 @@ const ignoreEmptyArrayIfAdding = (req: express.Request, res: express.Response, n
   next()
 }
 
-const ignorePopulatedArrayIfNoJS = (req: express.Request, res: express.Response, next) => {
+const ignorePopulatedArrayIfJSEnabled = (req: express.Request, res: express.Response, next) => {
   const form: Form<Availability> = req.body
   if (!form.rawData['noJS']) {
     form.errors = form.errors.filter(error => error.message !== ValidationErrors.CLEAR_ALL_DATES)
@@ -58,7 +58,7 @@ export default express.Router()
     FormValidator.requestHandler(Availability, Availability.fromObject),
     ignoreNewDateIfNotAdding,
     ignoreEmptyArrayIfAdding,
-    ignorePopulatedArrayIfNoJS,
+    ignorePopulatedArrayIfJSEnabled,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
       if (form.hasErrors()) {
