@@ -107,7 +107,7 @@ describe('claimant response converter', () => {
     it('rejection with mediation', () => {
       const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
       draftClaimantResponse.freeMediation = new FreeMediation('yes')
-      expect(converter.convertToClaimantResponse(claim, createDraftClaimantResponseForFullRejection(), mediationDraft,false)).to.deep.eq({
+      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
         'type': 'REJECTION',
         'amountPaid': 10,
         'freeMediation': 'yes',
