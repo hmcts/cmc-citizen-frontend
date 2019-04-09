@@ -40,7 +40,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You’ve rejected their response')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
-    I.see('You’ve rejected the defendant’s admission. They said they owe £50')
+    I.see('You’ve rejected the defendant’s admission.')
   })
 
   Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @citizen @admissions', async (I: I) => {

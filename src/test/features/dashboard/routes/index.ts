@@ -142,7 +142,7 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData }
     },
-    claimantAssertions: ['000MC000', 'The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'],
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
     defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
@@ -172,7 +172,7 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC000', 'The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'],
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
     defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
@@ -181,7 +181,7 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC000', 'The defendant believes they owe you £30. You can accept or reject that this is the amount owed.'],
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
     defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
