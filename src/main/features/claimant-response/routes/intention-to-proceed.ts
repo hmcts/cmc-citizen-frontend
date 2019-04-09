@@ -5,7 +5,6 @@ import { Form } from 'main/app/forms/form'
 import { FormValidator } from 'main/app/forms/validation/formValidator'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
-import { YesNoOption } from 'main/app/models/yesNoOption'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { IntentionToProceed } from 'claimant-response/form/models/intentionToProceed'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
@@ -34,8 +33,7 @@ export default express.Router()
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
-        if (form.model.proceed === YesNoOption.NO.option && mediationDraft) {
-
+        if (form.model.proceed && mediationDraft.id) {
           await new DraftService().delete(mediationDraft.id, user.bearerToken)
         }
 

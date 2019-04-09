@@ -55,6 +55,7 @@ describe('Claimant response: intention to proceed page', () => {
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
         await request(app)
@@ -100,6 +101,7 @@ describe('Claimant response: intention to proceed page', () => {
 
       it('should render page when form is invalid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
         await request(app)
@@ -110,7 +112,9 @@ describe('Claimant response: intention to proceed page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
+        draftStoreServiceMock.resolveDelete()
         draftStoreServiceMock.rejectSave()
 
         await request(app)
@@ -122,8 +126,10 @@ describe('Claimant response: intention to proceed page', () => {
 
       it('should redirect to task list page when Yes is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveDelete()
 
         await request(app)
           .post(pagePath)
@@ -134,8 +140,10 @@ describe('Claimant response: intention to proceed page', () => {
 
       it('should redirect to task list page when No is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveDelete()
 
         await request(app)
           .post(pagePath)
