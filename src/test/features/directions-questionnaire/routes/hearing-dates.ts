@@ -186,10 +186,16 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
 
       context('with the JavaScript-disabled API', () => {
         const validFormData = { addDate: 'Add', hasUnavailableDates: true, newDate: daysFromNow(1) }
-        const invalidFormData = {
+        const invalidFormDataWithYes = {
+          noJS: true,
           addDate: 'Add',
           hasUnavailableDates: true,
           newDate: { year: 2000, month: 2, day: 30 }
+        }
+        const invalidFormDataWithNo = {
+          noJS: true,
+          hasUnavailableDates: false,
+          unavailableDates: [daysFromNow(1)]
         }
 
         context('when form is valid', () => {
@@ -221,16 +227,18 @@ describe('Directions Questionnaire - hearing unavailable dates', () => {
         })
 
         context('when form is invalid', () => {
-          it('should render page when everything is fine', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            draftStoreServiceMock.resolveFind('response')
+          [invalidFormDataWithNo, invalidFormDataWithYes].forEach(invalidFormData => {
+            it(`should render page when everything is fine and has dates ${invalidFormData.hasUnavailableDates ? '' : 'not '}selected`, async () => {
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('response')
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(invalidFormData)
-              .expect(res => expect(res).to.be.successful.withText('Select the dates you can’t go to a hearing', 'div class="error-summary"'))
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(invalidFormData)
+                .expect(res => expect(res).to.be.successful.withText('Select the dates you can’t go to a hearing', 'div class="error-summary"'))
+            })
           })
         })
       })

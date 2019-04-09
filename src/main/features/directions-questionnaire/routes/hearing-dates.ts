@@ -7,7 +7,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { Draft } from '@hmcts/draft-store-client'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
-import { Availability } from 'directions-questionnaire/forms/models/availability'
+import { Availability, ValidationErrors } from 'directions-questionnaire/forms/models/availability'
 import { LocalDate } from 'forms/models/localDate'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
@@ -42,7 +42,7 @@ const ignoreEmptyArrayIfAdding = (req: express.Request, res: express.Response, n
 const ignorePopulatedArrayIfNoJS = (req: express.Request, res: express.Response, next) => {
   const form: Form<Availability> = req.body
   if (!form.rawData['noJS']) {
-    form.errors = form.errors.filter(error => error.fieldName !== 'unavailableDates')
+    form.errors = form.errors.filter(error => error.message !== ValidationErrors.CLEAR_ALL_DATES)
   }
   next()
 }
