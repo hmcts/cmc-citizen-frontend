@@ -39,6 +39,14 @@ const ignoreEmptyArrayIfAdding = (req: express.Request, res: express.Response, n
   next()
 }
 
+const ignorePopulatedArrayIfNoJS = (req: express.Request, res: express.Response, next) => {
+  const form: Form<Availability> = req.body
+  if (!form.rawData['noJS']) {
+    form.errors = form.errors.filter(error => error.fieldName !== 'unavailableDates')
+  }
+  next()
+}
+
 export default express.Router()
   .get(Paths.hearingDatesPage.uri,
     (req: express.Request, res: express.Response) => {
@@ -50,6 +58,7 @@ export default express.Router()
     FormValidator.requestHandler(Availability, Availability.fromObject),
     ignoreNewDateIfNotAdding,
     ignoreEmptyArrayIfAdding,
+    ignorePopulatedArrayIfNoJS,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<Availability> = req.body
       if (form.hasErrors()) {

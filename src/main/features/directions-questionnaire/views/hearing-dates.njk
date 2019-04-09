@@ -33,6 +33,7 @@
           <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays.') }}</p>
           <div id="date-picker" class="datepicker datepicker-wrapper">
             <noscript>
+              <input type="hidden" name="noJS" value="true" />
               {{ dateInput('newDate', form, hint = '') }}
               {{ linkButton('Add', 'addDate', 'button button-secondary') }}
             </noscript>
