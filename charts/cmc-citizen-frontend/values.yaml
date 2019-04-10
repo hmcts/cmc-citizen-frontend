@@ -1,5 +1,5 @@
 nodejs:
-  image: hmcts.azurecr.io/hmcts/cmc-claim-store:latest
+  image: hmcts.azurecr.io/hmcts/cmc-citizen-frontend:latest
   applicationPort: 3000
   memoryRequests: 256Mi
   cpuRequests: 0.2
