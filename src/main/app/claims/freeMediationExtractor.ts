@@ -6,13 +6,13 @@ import { Claim } from 'claims/models/claim'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { CompanyDetails } from 'forms/models/companyDetails'
 
-export class FreeMediationConverter {
+export class FreeMediationExtractor {
 
-  static convertFreeMediation (mediationDraft: MediationDraft): YesNoOption {
+  static getFreeMediation (mediationDraft: MediationDraft): YesNoOption {
     return FreeMediationUtil.convertFreeMediation(mediationDraft.youCanOnlyUseMediation)
   }
 
-  static convertMediationPhoneNumber (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
+  static getMediationPhoneNumber (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
     if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         return mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation
@@ -33,7 +33,7 @@ export class FreeMediationConverter {
     }
   }
 
-  static convertMediationContactPerson (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
+  static getMediationContactPerson (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
     if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {

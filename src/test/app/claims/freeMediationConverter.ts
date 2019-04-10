@@ -1,11 +1,11 @@
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediationOption } from 'forms/models/freeMediation'
-import { FreeMediationConverter } from 'claims/freeMediationConverter'
+import { FreeMediationExtractor } from 'claims/freeMediationExtractor'
 import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 
-context('FreeMediationConverter', () => {
+context('FreeMediationExtractor', () => {
 
   const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
@@ -16,7 +16,7 @@ context('FreeMediationConverter', () => {
           option: FreeMediationOption.YES
         }})
 
-      expect(FreeMediationConverter.convertFreeMediation(mediationDraft)).to.be.eq(FreeMediationOption.YES)
+      expect(FreeMediationExtractor.getFreeMediation(mediationDraft)).to.be.eq(FreeMediationOption.YES)
     })
   })
 
@@ -32,7 +32,7 @@ context('FreeMediationConverter', () => {
           mediationPhoneNumberConfirmation: '07777777788'
         }})
 
-      expect(FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft)).to.be.eq('07777777788')
+      expect(FreeMediationExtractor.getMediationPhoneNumber(claim, mediationDraft)).to.be.eq('07777777788')
     })
   })
 
@@ -48,7 +48,7 @@ context('FreeMediationConverter', () => {
           mediationContactPerson: 'Mary Richards'
         }})
 
-      expect(FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, undefined))
+      expect(FreeMediationExtractor.getMediationContactPerson(claim, mediationDraft, undefined))
         .to.be.eq('Mary Richards')
     })
   })

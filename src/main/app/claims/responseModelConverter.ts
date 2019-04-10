@@ -65,7 +65,7 @@ import { CohabitingOption } from 'response/form/models/statement-of-means/cohabi
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { FreeMediationConverter } from 'claims/freeMediationConverter'
+import { FreeMediationExtractor } from 'claims/freeMediationExtractor'
 
 export class ResponseModelConverter {
 
@@ -100,9 +100,9 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
-      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
+      freeMediation: FreeMediationExtractor.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationExtractor.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationExtractor.getMediationContactPerson(claim, mediationDraft, draft),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
         draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
         draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -129,9 +129,9 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
-      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
+      freeMediation: FreeMediationExtractor.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationExtractor.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationExtractor.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }
@@ -140,9 +140,9 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
-      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
-      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
+      freeMediation: FreeMediationExtractor.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationExtractor.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationExtractor.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -178,9 +178,9 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
-      freeMediation: FreeMediationConverter.convertFreeMediation(mediationDraft),
-      mediationPhoneNumber: FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft, draft),
-      mediationContactPerson: FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft, draft),
+      freeMediation: FreeMediationExtractor.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationExtractor.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationExtractor.getMediationContactPerson(claim, mediationDraft, draft),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft)
     }

@@ -12,7 +12,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
-import { FreeMediationConverter } from 'claims/freeMediationConverter'
+import { FreeMediationExtractor } from 'claims/freeMediationExtractor'
 
 export class ClaimantResponseConverter {
 
@@ -29,9 +29,9 @@ export class ClaimantResponseConverter {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
       }
 
-      reject.freeMediation = FreeMediationConverter.convertFreeMediation(mediationDraft)
-      reject.mediationPhoneNumber = FreeMediationConverter.convertMediationPhoneNumber(claim, mediationDraft)
-      reject.mediationContactPerson = FreeMediationConverter.convertMediationContactPerson(claim, mediationDraft)
+      reject.freeMediation = FreeMediationExtractor.getFreeMediation(mediationDraft)
+      reject.mediationPhoneNumber = FreeMediationExtractor.getMediationPhoneNumber(claim, mediationDraft)
+      reject.mediationContactPerson = FreeMediationExtractor.getMediationContactPerson(claim, mediationDraft)
 
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
