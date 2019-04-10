@@ -21,7 +21,7 @@ import { Claim } from 'claims/models/claim'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { FreeMediationExtractor } from 'claims/freeMediationExtractor'
+import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -38,7 +38,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationDraft: mediationDraft.document,
-    contactPerson: FreeMediationExtractor.getMediationContactPerson(claim, mediationDraft.document, draft.document)
+    contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document)
   })
 }
 
