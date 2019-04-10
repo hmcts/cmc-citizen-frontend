@@ -1,29 +1,51 @@
-
 import * as StateMachine from '@taoqf/javascript-state-machine'
 import { Claim } from 'claims/models/claim'
 
 import { ResponseType } from 'claims/models/response/responseType'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { MomentFactory } from 'shared/momentFactory'
+
 import * as _ from 'lodash'
 import * as path from 'path'
+import { InitialStates } from 'claims/models/claim-states/initial-states'
+import { FullDefenceStates } from 'claims/models/claim-states/full-defence-states'
 
-export function InitialTransitions (claim: Claim) {
+export function initialTransitions (claim: Claim): StateMachine {
   return new StateMachine({
     init : 'init',
     transitions : [
 
-      { name : 'checkNoResponse', from: 'init', to: 'no-response' },
-      { name : 'checkMoreTimeRequested', from: ['init', 'no-response'], to: 'more-time-requested' },
-      { name : 'checkCCJEnabled', from: ['init', 'no-response','more-time-requested'], to: 'no-response-past-deadline' },
+      {
+        name : 'checkNoResponse',
+        from: InitialStates.INIT,
+        to: InitialStates.NO_RESPONSE
+      },
+      {
+        name : 'checkMoreTimeRequested',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
+        to: InitialStates.MORE_TIME_REQUESTED
+      },
+      {
+        name : 'checkCCJEnabled',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE,InitialStates.MORE_TIME_REQUESTED],
+        to: InitialStates.NO_RESPONSE_PAST_DEADLINE
+      },
 
-      { name : 'checkIsFullDefence',from: ['init'], to: 'full-defence' }
-
+      {
+        name : 'checkIsFullDefence',
+        from: [InitialStates.INIT],
+        to: FullDefenceStates.FULL_DEFENCE
+      }
     ],
+    data : {
+      log : {
+        invalidTransitions : []
+      }
+    },
     methods: {
 
       onInvalidTransition (transition: string, from: string, to: string) {
-        // When the transaction is not allowed then state is going to remain same
+        this.log.invalidTransitions.push({ transition : transition,from: from,to: to })
       },
 
       onBeforeCheckNoResponse () {
@@ -48,7 +70,7 @@ export function InitialTransitions (claim: Claim) {
         })
       },
 
-      getTemplate (type: string) {
+      getTemplate (type: string): object {
         return {
           dashboard: path.join(__dirname, '../views', 'status', type, this.state + '.njk'),
           state: this.state

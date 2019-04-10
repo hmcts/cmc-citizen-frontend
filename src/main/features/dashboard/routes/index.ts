@@ -8,8 +8,8 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { InitialTransitions } from 'dashboard/claims-state-machine/initial-transitions'
-import { FullDefenceTransitions } from 'dashboard/claims-state-machine/full-defence-transitions'
+import { claimState } from 'dashboard/claims-state-machine/claim-state'
+import { ActorType } from 'claims/models/claim-states/actor-type'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -24,29 +24,8 @@ export default express.Router()
     const responseDraftSaved = responseDraft && responseDraft.document && responseDraft.id !== 0
     const claimsAsDefendant: Claim[] = await claimStoreClient.retrieveByDefendantId(user)
 
-    claimsAsClaimant.forEach(function (eachClaim) {
-      let claimantState = InitialTransitions(eachClaim)
-      claimantState.findState(claimantState)
-
-      if (claimantState.is('full-defence')) {
-        claimantState = FullDefenceTransitions(eachClaim)
-        claimantState.findState(claimantState)
-      }
-
-      eachClaim.template = claimantState.getTemplate('claimant')
-    })
-
-    claimsAsDefendant.forEach(function (eachClaim) {
-      let claimantState = InitialTransitions(eachClaim)
-      claimantState.findState(claimantState)
-
-      if (claimantState.is('full-defence')) {
-        claimantState = FullDefenceTransitions(eachClaim)
-        claimantState.findState(claimantState)
-      }
-
-      eachClaim.template = claimantState.getTemplate('defendant')
-    })
+    claimState(claimsAsClaimant,ActorType.CLAIMANT)
+    claimState(claimsAsDefendant,ActorType.DEFENDANT)
 
     res.render(Paths.dashboardPage.associatedView, {
       claimsAsClaimant: claimsAsClaimant,

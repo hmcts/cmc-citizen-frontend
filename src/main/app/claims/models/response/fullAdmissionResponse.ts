@@ -3,15 +3,11 @@ import { ResponseType } from 'claims/models/response/responseType'
 
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { StatementOfMeans } from 'claims/models/response/statement-of-means/statementOfMeans'
-import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
-import { DefenceType } from 'claims/models/response/defenceType'
 
 export interface FullAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.FULL_ADMISSION
-  paymentDeclaration?: PaymentDeclaration
   paymentIntention?: PaymentIntention
   statementOfMeans?: StatementOfMeans
-  defenceType?: DefenceType
 }
 
 export namespace FullAdmissionResponse {
