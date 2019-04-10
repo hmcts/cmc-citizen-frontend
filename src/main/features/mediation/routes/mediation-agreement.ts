@@ -9,6 +9,8 @@ import { Draft } from '@hmcts/draft-store-client'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMediation'
 import { DraftService } from 'services/draftService'
+import { User } from 'idam/user'
+
 
 function renderView (res: express.Response): void {
   const user: User = res.locals.user
