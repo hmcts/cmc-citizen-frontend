@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, submitButton %}
+{% from "form.njk" import csrfProtection, submitButton, linkButton %}
 
 {% set heading = 'How free mediation works' %}
 
@@ -27,7 +27,8 @@
         {{ csrfProtection(csrf) }}
 
         <div class="form-group">
-          {{ submitButton() }}
+          {{ submitButton('Continue with free mediation', 'mediationYes') }}
+          {{ linkButton('I don’t want to try free mediation', 'mediationNo', 'link-button') }}
         </div>
       </form>
     </div>
