@@ -4,7 +4,6 @@ const I: I = actor()
 
 const buttons = {
   submit: 'input[type=submit]'
-
 }
 
 export class WillYouTryMediationPage {
