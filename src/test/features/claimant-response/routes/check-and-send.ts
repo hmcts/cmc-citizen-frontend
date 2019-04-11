@@ -321,6 +321,7 @@ describe('Claimant response: check and send page', () => {
         draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
         draftStoreServiceMock.resolveDelete()
+        draftStoreServiceMock.resolveDelete()
         claimStoreServiceMock.resolveClaimantResponse()
 
         await request(app)

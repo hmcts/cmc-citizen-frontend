@@ -70,7 +70,12 @@ export default express.Router()
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const user: User = res.locals.user
+      const draftService = new DraftService()
+
       await new ClaimStoreClient().saveClaimantResponse(claim, draft, mediationDraft, user)
-      await new DraftService().delete(draft.id, user.bearerToken)
+      await draftService.delete(draft.id, user.bearerToken)
+      if (mediationDraft.id) {
+        await draftService.delete(mediationDraft.id, user.bearerToken)
+      }
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
     }))
