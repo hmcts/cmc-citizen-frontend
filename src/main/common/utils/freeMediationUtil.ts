@@ -27,10 +27,9 @@ export class FreeMediationUtil {
     } else if (mediationDraft.canWeUse) {
       if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {
-          return draft.defendantDetails.mobilePhone.number ? draft.defendantDetails.mobilePhone.number : undefined
+          return draft.defendantDetails.mobilePhone.number || undefined
         } else {
-          return claim.claimData.claimant.mobilePhone ?
-            claim.claimData.claimant.mobilePhone : mediationDraft.canWeUse.mediationPhoneNumber
+          return claim.claimData.claimant.mobilePhone || mediationDraft.canWeUse.mediationPhoneNumber
         }
       } else {
         return mediationDraft.canWeUse.mediationPhoneNumber
@@ -43,8 +42,7 @@ export class FreeMediationUtil {
     if (mediationDraft.canWeUseCompany) {
       if (mediationDraft.canWeUseCompany.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {
-          return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson ?
-            (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson : undefined
+          return (draft.defendantDetails.partyDetails as CompanyDetails).contactPerson || undefined
         } else {
           return (claim.claimData.claimant as CompanyDetails).contactPerson
         }
