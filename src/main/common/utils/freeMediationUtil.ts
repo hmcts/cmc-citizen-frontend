@@ -36,6 +36,7 @@ export class FreeMediationUtil {
         return mediationDraft.canWeUse.mediationPhoneNumber
       }
     }
+    return undefined
   }
 
   static getMediationContactPerson (claim: Claim, mediationDraft: MediationDraft, draft?: ResponseDraft): string {
@@ -51,5 +52,6 @@ export class FreeMediationUtil {
         return mediationDraft.canWeUseCompany.mediationContactPerson
       }
     }
+    return undefined
   }
 }
