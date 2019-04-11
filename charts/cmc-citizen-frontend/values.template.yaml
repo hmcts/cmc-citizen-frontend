@@ -1,5 +1,6 @@
 tags:
   - rpe-feature-toggle-api-pod
+  - idam-pr
 
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
@@ -73,3 +74,8 @@ nodejs:
       - citizen-draft-store-secondary
       - citizen-cookie-encryption-key
       - staff-email
+
+idam-pr:
+  service:
+    name: Money Claims - Citizen
+    redirect_uri: https://${SERVICE_FQDN}/receiver
