@@ -13,8 +13,7 @@ function renderView (res: express.Response): void {
   res.render(Paths.freeMediationPage.associatedView, {
     otherParty: claim.otherPartyName(user),
     defendant: user.id === claim.defendantId,
-    autoRegister: FeatureToggles.isEnabled('mediation')
-      && claim.totalAmountTillDateOfIssue < 300
+    mediationPilot: FeatureToggles.isEnabled('mediationPilot')
   })
 }
 

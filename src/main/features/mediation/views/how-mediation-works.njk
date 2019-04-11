@@ -27,8 +27,12 @@
         {{ csrfProtection(csrf) }}
 
         <div class="form-group">
-          {{ submitButton('Continue with free mediation', 'mediationYes') }}
-          {{ linkButton('I don’t want to try free mediation', 'mediationNo', 'link-button') }}
+          {% if mediationPilot %}
+            {{ submitButton('Continue with free mediation', 'mediationYes') }}
+            {{ linkButton('I don’t want to try free mediation', 'mediationNo', 'link-button') }}
+          {% else %}
+            {{ submitButton() }}
+          {% endif %}
         </div>
       </form>
     </div>

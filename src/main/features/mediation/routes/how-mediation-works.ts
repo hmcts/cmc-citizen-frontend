@@ -7,9 +7,12 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
+import { FeatureToggles } from 'utils/featureToggles'
 
 function renderView (res: express.Response): void {
-  res.render(Paths.howMediationWorksPage.associatedView)
+  res.render(Paths.howMediationWorksPage.associatedView, {
+    mediationPilot: FeatureToggles.isEnabled('mediationPilot')
+  })
 }
 
 /* tslint:disable:no-default-export */
