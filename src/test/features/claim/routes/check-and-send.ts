@@ -16,11 +16,12 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as feesServiceMock from 'test/http-mocks/fees'
 import { SignatureType } from 'common/signatureType'
 import {
-  companyDetails,
-  individualDetails,
-  organisationDetails,
   claimantSoleTraderDetails,
-  defendantSoleTraderDetails
+  companyDetails,
+  defendantIndividualDetails,
+  defendantSoleTraderDetails,
+  individualDetails,
+  organisationDetails
 } from 'test/data/draft/partyDetails'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -67,7 +68,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate check-and-send Page hyperlink with correct location and span', async () => {
-        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: individualDetails } })
+        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantIndividualDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)

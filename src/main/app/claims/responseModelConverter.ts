@@ -325,7 +325,9 @@ export class ResponseModelConverter {
     if (defendant.partyDetails.hasCorrespondenceAddress) {
       party.correspondenceAddress = new Address().deserialize(defendant.partyDetails.correspondenceAddress)
     }
-    party.name = defendant.partyDetails.name
+    if (defendant.partyDetails.name) {
+      party.name = defendant.partyDetails.name
+    }
     if (defendant.email) {
       party.email = defendant.email.address
     }
