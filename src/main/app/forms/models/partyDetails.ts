@@ -14,6 +14,7 @@ export class ValidationErrors {
 export class PartyDetails {
   type?: string
 
+  @ValidateIf(o => (o.lastName === undefined && o.firstName === undefined), { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })
   @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })
   @MaxLength(255, { message: ValidationErrors.NAME_TOO_LONG, groups: ['claimant', 'defendant'] })

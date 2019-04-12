@@ -7,6 +7,7 @@ import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no'
   static readonly NUMBER_REQUIRED: string = 'Please enter a phone number'
+  static readonly NAME_REQUIRED: string = 'Please enter a name'
 }
 
 export class CanWeUseCompany implements CompletableTask {
@@ -28,8 +29,8 @@ export class CanWeUseCompany implements CompletableTask {
   mediationPhoneNumber?: string
 
   @ValidateIf(o => o.option === FreeMediationOption.NO)
-  @IsDefined({ message: ValidationErrors.NUMBER_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.NUMBER_REQUIRED })
+  @IsDefined({ message: ValidationErrors.NAME_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED })
   @MaxLength(30, { message: CommonValidationErrors.TEXT_TOO_LONG })
   mediationContactPerson?: string
 

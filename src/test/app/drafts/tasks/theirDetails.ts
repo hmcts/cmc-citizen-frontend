@@ -11,7 +11,8 @@ describe('Their details', () => {
           email: { address: 'example@example.com' },
           partyDetails: {
             type : 'individual',
-            name: 'Janice Henrieta Clark',
+            firstName: 'Janice Henrieta',
+            lastName: 'Clark',
             address: {
               line1: 'Another lane',
               line2: '',
