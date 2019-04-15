@@ -16,13 +16,13 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
   const claimantType: PartyType = PartyType.INDIVIDUAL
   const defendantType: PartyType = PartyType.INDIVIDUAL
   const hasDefendantEmail = false
-
-  const claimRef: string = await I.createClaim(createClaimData(claimantType, defendantType, hasDefendantEmail, InterestType.NO_INTEREST), email)
+  const claimData = createClaimData(claimantType, defendantType, hasDefendantEmail, InterestType.NO_INTEREST)
+  const claimRef: string = await I.createClaim(claimData, email)
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
   ccjSteps.ccjDefendantToPayByInstalments()
-  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, defendantType)
+  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
 
@@ -31,12 +31,13 @@ Scenario('Request judgment as a Company, pay by set date @citizen', async (I: I)
   const claimantType: PartyType = PartyType.COMPANY
   const defendantType: PartyType = PartyType.COMPANY
 
-  const claimRef: string = await I.createClaim(createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST), email)
+  const claimData = createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST)
+  const claimRef: string = await I.createClaim(claimData, email)
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
   ccjSteps.ccjDefendantToPayBySetDate()
-  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, defendantType)
+  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
 
@@ -45,11 +46,12 @@ Scenario('Request judgment as a sole trader, pay immediately @citizen', async (I
   const claimantType: PartyType = PartyType.SOLE_TRADER
   const defendantType: PartyType = PartyType.ORGANISATION
 
-  const claimRef: string = await I.createClaim(createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST), email)
+  const claimData = createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST)
+  const claimRef: string = await I.createClaim(claimData, email)
 
   userSteps.login(email)
   ccjSteps.requestCCJ(claimRef, defendantType)
   ccjSteps.ccjDefendantToPayImmediately()
-  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, defendantType)
+  ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
 })

@@ -27,6 +27,14 @@ export const individual = {
   email: 'individual@example.com'
 }
 
+export const individualDefendant = {
+  ...individual,
+  name: 'Mr. John Smith',
+  title: 'Mr.',
+  firstName: 'John',
+  lastName: 'Smith'
+}
+
 export const soleTrader = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
   name: 'SoleTrader Smith',
@@ -34,6 +42,15 @@ export const soleTrader = {
   ...addressCorrespondenceAddress,
   mobilePhone: '0700000002',
   email: 'sole-trader@example.com'
+}
+
+export const soleTraderDefendant = {
+  ...soleTrader,
+  businessName: 'Defendant SoleTrader Ltd.',
+  name: 'Defendant SoleTrader',
+  title: undefined,
+  firstName: 'Defendant',
+  lastName: 'SoleTrader'
 }
 
 export const company = {
