@@ -102,9 +102,12 @@ async function successHandler (res, next) {
       features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
     }
 
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
-      features += features === undefined ? 'mediationPilot' : ', mediationPilot'
+    if (draft.document.amount.totalAmount() < 300) {
+      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
+        features += features === undefined ? 'mediationPilot' : ', mediationPilot'
+      }
     }
+
     await claimStoreClient.saveClaim(draft, user, features)
   }
 
