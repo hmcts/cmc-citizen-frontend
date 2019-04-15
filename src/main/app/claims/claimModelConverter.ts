@@ -122,7 +122,9 @@ export class ClaimModelConverter {
         const individualDetails = defendantDetails as IndividualDetails
 
         return new DefendantAsIndividual(
-          individualDetails.name,
+          StringUtils.trimToUndefined(individualDetails.title),
+          individualDetails.firstName,
+          individualDetails.lastName,
           this.convertAddress(individualDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address)
         )
@@ -131,7 +133,9 @@ export class ClaimModelConverter {
         const soleTraderDetails: SoleTraderDetails = defendantDetails as SoleTraderDetails
 
         return new DefendantAsSoleTrader(
-          soleTraderDetails.name,
+          StringUtils.trimToUndefined(soleTraderDetails.title),
+          soleTraderDetails.firstName,
+          soleTraderDetails.lastName,
           this.convertAddress(soleTraderDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
           soleTraderDetails.businessName

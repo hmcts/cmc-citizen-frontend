@@ -57,7 +57,9 @@ export class EndToEndTestData {
 
     const testData = new EndToEndTestData()
     testData.defendantClaimsToHavePaidInFull = true
-    testData.defendantName = claimData.defendants[0].name
+    testData.defendantName = (defendantPartyType === PartyType.INDIVIDUAL || PartyType.SOLE_TRADER) ?
+      `${claimData.defendants[0].title} ${claimData.defendants[0].firstName} ${claimData.defendants[0].lastName}` :
+      claimData.defendants[0].name
     testData.defendant = claimData.defendants[0]
     testData.claimantName = claimData.claimants[0].name
     testData.claimant = claimData.claimants[0]

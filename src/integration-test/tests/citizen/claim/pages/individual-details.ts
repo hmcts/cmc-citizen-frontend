@@ -4,6 +4,9 @@ const I: I = actor()
 
 const fields = {
   name: 'input[id=name]',
+  title: 'input[id=title]',
+  firstName: 'input[id=firstName]',
+  lastName: 'input[id=lastName]',
   address: {
     postcodeLookUp: 'input[id="address[postcodeLookup]"]',
     selectAddressList: 'select[id="address[addressList]"]',
@@ -36,6 +39,18 @@ export class IndividualDetailsPage {
 
   enterName (name: string): void {
     I.fillField(fields.name, name)
+  }
+
+  enterTitle (title: string): void {
+    I.fillField(fields.title, title)
+  }
+
+  enterFirstName (firstName: string): void {
+    I.fillField(fields.firstName, firstName)
+  }
+
+  enterLastName (lastName: string): void {
+    I.fillField(fields.lastName, lastName)
   }
 
   lookupAddress (postcodeLookupQuery: PostcodeLookupQuery): void {

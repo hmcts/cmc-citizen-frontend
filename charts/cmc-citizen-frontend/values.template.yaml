@@ -1,5 +1,6 @@
 tags:
   - rpe-feature-toggle-api-pod
+  - idam-pr
 
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
@@ -21,6 +22,9 @@ rpe-feature-toggle-api:
       FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
   postgresql:
     postgresqlDatabase: hmcts
+
+postgresql:
+  enabled: true
 
 nodejs:
   image: ${IMAGE_NAME}
@@ -71,3 +75,8 @@ nodejs:
       - citizen-draft-store-secondary
       - citizen-cookie-encryption-key
       - staff-email
+
+idam-pr:
+  service:
+    name: Money Claims - Citizen
+    redirect_uri: https://${SERVICE_FQDN}/receiver
