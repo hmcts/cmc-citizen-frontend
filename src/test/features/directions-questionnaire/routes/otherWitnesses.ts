@@ -24,7 +24,7 @@ const claimWithDQ = {
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const datesPage = Paths.datesPage.evaluateUri({ externalId: externalId })
+const datesPage = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.otherWitnessesPage.evaluateUri({ externalId: externalId })
 
 function checkAccessGuard (app: any, method: string) {

@@ -3,6 +3,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 
 export class DetailsInCaseOfHearingTask {
   static isCompleted (draft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
-    return false
+    return directionsQuestionnaireDraft && directionsQuestionnaireDraft.otherWitnesses && directionsQuestionnaireDraft.otherWitnesses.isCompleted() &&
+       directionsQuestionnaireDraft.selfWitness && directionsQuestionnaireDraft.selfWitness.isCompleted()
   }
 }
