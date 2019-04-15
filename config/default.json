@@ -86,7 +86,8 @@
     "returnErrorToUser": false,
     "mockPay": false,
     "mediation": true,
-    "directionsQuestionnaire": false
+    "directionsQuestionnaire": false,
+    "newDashboardStatus" : false
   },
   "oauth": {
     "clientId": "cmc_citizen"

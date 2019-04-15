@@ -32,7 +32,8 @@
     "paidInFull": true,
     "returnErrorToUser": true,
     "mediation": true,
-    "directionsQuestionnaire": true
+    "directionsQuestionnaire": true,
+    "newDashboardStatus" : true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
