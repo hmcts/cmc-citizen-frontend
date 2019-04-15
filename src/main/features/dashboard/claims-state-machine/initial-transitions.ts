@@ -17,7 +17,8 @@ export function InitialTransitions (claim: Claim) {
       { name : 'checkMoreTimeRequested', from: ['init', 'no-response'], to: 'more-time-requested' },
       { name : 'checkCCJEnabled', from: ['init', 'no-response','more-time-requested'], to: 'no-response-past-deadline' },
 
-      { name : 'checkIsFullAdmission',from: ['init'], to: 'full-admission' }
+      { name : 'checkIsFullAdmission',from: ['init'], to: 'full-admission' },
+      { name : 'checkIsPartAdmission',from: ['init'], to: 'part-admission' }
 
     ],
     methods: {
@@ -36,6 +37,10 @@ export function InitialTransitions (claim: Claim) {
 
       onBeforeCheckIsFullAdmission () {
         return (claim.response.responseType && claim.response.responseType === ResponseType.FULL_ADMISSION)
+      },
+
+      onBeforeCheckIsPartAdmission (): boolean {
+        return (claim.response.responseType && claim.response.responseType === ResponseType.PART_ADMISSION)
       },
 
       onBeforeCheckCCJEnabled () {

@@ -1,0 +1,2 @@
+{{ t('{{ claimantName }} accepted your admission of {{ amount }}',
+  { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}

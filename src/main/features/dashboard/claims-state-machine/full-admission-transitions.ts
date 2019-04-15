@@ -164,7 +164,7 @@ export function FullAdmissionTransitions (claim: Claim) {
       },
 
       onBeforeCheckIsPayImmediatelyPastDeadLine (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_BY_IMMEDIATELY) && (claim.response as FullAdmissionResponse).paymentIntention && !claim.claimantResponse &&
+        return this.is(FullAdmissionStates.FA_PAY_BY_IMMEDIATELY) && !claim.claimantResponse &&
           (claim.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
       },
 
