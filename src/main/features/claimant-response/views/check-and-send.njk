@@ -93,11 +93,11 @@
           changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
         {% if draft.acceptPaymentMethod.accept.option === 'no' %}
-          {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+          {% if draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.IMMEDIATELY.value %}
             {% set alternatePaymentMethodResponse = t('Immediately') %}
-          {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+          {% elseif draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.BY_SPECIFIED_DATE.value %}
             {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: paymentIntention.paymentDate | date }) %}
-          {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+          {% elseif draft.alternatePaymentMethod.paymentOption.option.value === PaymentType.INSTALMENTS.value %}
             {% set alternatePaymentMethodResponse = t('By instalments') %}
           {% endif %}
 
