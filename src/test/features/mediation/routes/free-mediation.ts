@@ -62,7 +62,10 @@ if (FeatureToggles.isEnabled('mediation')) {
           })
 
           it('should render page with automatic registration details when everything is fine and auto-registered', async () => {
-            const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj })
+            const claim: Claim = new Claim().deserialize({
+              ...claimStoreServiceMock.sampleClaimIssueObj,
+              features: ['admissions', 'mediationPilot']
+            })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -114,7 +117,10 @@ if (FeatureToggles.isEnabled('mediation')) {
           })
 
           it('should render page with automatic registration details when everything is fine and auto-registered', async () => {
-            const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj })
+            const claim: Claim = new Claim().deserialize({
+              ...claimStoreServiceMock.sampleClaimIssueObj,
+              features: ['admissions', 'mediationPilot']
+            })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
