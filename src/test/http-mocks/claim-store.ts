@@ -280,8 +280,8 @@ export const partySettlementWithInstalmentsAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: '2023-01-01',
-      paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: { 'paymentDate': MomentFactory.currentDate().year(2), 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
   }, {
@@ -293,9 +293,9 @@ export const partySettlementWithInstalmentsAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: '2022-01-01',
+      completionDate: MomentFactory.currentDate().year(2),
       paymentIntention: {
-        paymentDate: '2022-01-01',
+        paymentDate: MomentFactory.currentDate().year(2),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
@@ -310,7 +310,7 @@ export const partySettlementWithSetDateAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: '2023-01-01',
+      completionDate: MomentFactory.currentDate().year(2),
       paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
@@ -323,9 +323,9 @@ export const partySettlementWithSetDateAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: '2022-01-01',
+      completionDate: MomentFactory.currentDate().year(2),
       paymentIntention: {
-        paymentDate: '2022-01-01',
+        paymentDate: MomentFactory.currentDate().year(2),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
