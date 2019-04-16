@@ -7,10 +7,11 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 function renderView (res: express.Response): void {
   res.render(Paths.howMediationWorksPage.associatedView, {
-    mediationPilot: res.locals.claim.features.some(feature => feature === 'mediationPilot')
+    mediationPilot: ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')
   })
 }
 
