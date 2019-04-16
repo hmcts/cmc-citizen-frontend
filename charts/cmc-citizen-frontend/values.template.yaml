@@ -62,6 +62,7 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     FEATURE_MOCK_PAY: false
     FEATURE_MEDIATION: false
+    FEATURE_MEDIATION_PILOT: false
     FEATURE_DIRECTIONS_QUESTIONNAIRE: false
   keyVaults:
     cmc:

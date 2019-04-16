@@ -24,7 +24,6 @@
             <li>{{ t('avoid a County Court Judgment') }}</li>
             </li>
           </ul>
-          <p>{{ t('You’ll only speak to a mediator about the claim, not to {{ otherParty }}.', { otherParty: otherParty }) }}</p>
         {% else %}
           <p>{{ t('Continuing the claim doesn’t guarantee you get paid - it can mean:') }}</p>
           <ul class="list list-bullet">
@@ -32,8 +31,9 @@
             <li>{{ t('you have to go to a court hearing and pay a fee') }}</li>
             </li>
           </ul>
-          <p>{{ t('You’ll only speak to a mediator about the claim, not to {{ otherParty }}.', { otherParty: otherParty }) }}</p>
         {% endif %}
+
+        <p>{{ t('You’ll only speak to a mediator about the claim, not to {{ otherParty }}.', { otherParty: otherParty }) }}</p>
 
       {% endif %}
 
@@ -51,5 +51,3 @@
     </div>
   </div>
 {% endblock %}
-
-
