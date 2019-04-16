@@ -106,6 +106,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
@@ -120,6 +121,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
