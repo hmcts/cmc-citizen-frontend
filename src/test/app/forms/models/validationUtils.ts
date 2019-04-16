@@ -18,6 +18,11 @@ export function expectValidationError (errors: ValidationError[], message: strin
   expect(violations.map(violation => violation.message)).to.include(message, `Error '${message}' has not been found. ${stringifyViolations(violations)}`)
 }
 
+export function expectValidationErrorNotPresent (errors: ValidationError[], message: string) {
+  const violations: Violation[] = extractViolationsFrom(errors)
+  expect(violations.map(violation => violation.message)).to.not.include(message, `Error '${message}' has been found. ${stringifyViolations(violations)}`)
+}
+
 export function expectPropertyValidationError (errors: ValidationError[], property: string, message: string) {
   const violations: Violation[] = extractViolationsFrom(errors)
   expect(violations).to.deep.include(new Violation(property, message), `Error '${message}' on property '${property}' has not been found. ${stringifyViolations(violations)}`)
