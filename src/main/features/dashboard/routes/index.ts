@@ -11,6 +11,8 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { InitialTransitions } from 'dashboard/claims-state-machine/initial-transitions'
 import { FullAdmissionTransitions } from 'dashboard/claims-state-machine/full-admission-transitions'
 import { FullAdmissionStates } from 'claims/models/claim-states/full-admission-states'
+import { PartAdmissionStates } from 'claims/models/claim-states/part-admission-states'
+import { PartAdmissionTransitions } from 'dashboard/claims-state-machine/part-admission-transitions'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -34,6 +36,9 @@ export default express.Router()
       if (claimantState.is(FullAdmissionStates.FULL_ADMISSION)) {
         claimantState = FullAdmissionTransitions(eachClaim)
         claimantState.findState(claimantState)
+      } else if (claimantState.is(PartAdmissionStates.PART_ADMISSION)) {
+        claimantState = PartAdmissionTransitions(eachClaim)
+        claimantState.findState(claimantState)
       }
       eachClaim.template = claimantState.getTemplate('claimant')
     })
@@ -45,6 +50,9 @@ export default express.Router()
 
       if (claimantState.is(FullAdmissionStates.FULL_ADMISSION)) {
         claimantState = FullAdmissionTransitions(eachClaim)
+        claimantState.findState(claimantState)
+      } else if (claimantState.is(PartAdmissionStates.PART_ADMISSION)) {
+        claimantState = PartAdmissionTransitions(eachClaim)
         claimantState.findState(claimantState)
       }
       eachClaim.template = claimantState.getTemplate('defendant')

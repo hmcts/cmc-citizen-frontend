@@ -13,6 +13,8 @@ import { StatesPaidStates } from 'claims/models/claim-states/states-paid-states'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { RejectionClaimantResponse } from 'claims/models/claimant-response/rejectionClaimantResponse'
+import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
+import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 
 export function PartAdmissionTransitions (claim: Claim) {
   return new StateMachine({
@@ -149,6 +151,12 @@ export function PartAdmissionTransitions (claim: Claim) {
         name : 'checkIsPayByInstallmentsRejectedWithoutMediation',
         from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_REJECTED_WITHOUT_MEDIATION
+      },
+
+      {
+        name : 'checkReferredToJudge',
+        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITH_MEDIATION,PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITHOUT_MEDIATION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITH_MEDIATION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITHOUT_MEDIATION],
+        to: PartAdmissionStates.PA_REFERRED_TO_JUDGE
       }
 
       // {
@@ -389,6 +397,10 @@ export function PartAdmissionTransitions (claim: Claim) {
 
       onBeforeCheckIsPayByInstallmentsRejectedWithoutMediation (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITHOUT_MEDIATION) && !!claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.REJECTION
+      },
+
+      onBeforeCheckReferredToJudge (): boolean {
+        return !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
       },
 
       //
