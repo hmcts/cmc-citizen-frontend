@@ -6,5 +6,13 @@ export class Paths {
   static readonly hearingLocationPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-location`)
   static readonly selfWitnessPage = new RoutablePath(`${directionsQuestionnairePath}/self-witness`)
   static readonly otherWitnessesPage = new RoutablePath(`${directionsQuestionnairePath}/other-witnesses`)
-  static readonly datesPage = new RoutablePath(`${directionsQuestionnairePath}/dates`)
+  static readonly supportPage = new RoutablePath(`${directionsQuestionnairePath}/support-required`)
+  static readonly hearingExceptionalCircumstancesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-exceptional-circumstances`)
+  static readonly expertPage = new RoutablePath(`${directionsQuestionnairePath}/expert`)
+  static readonly hearingDatesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-dates`)
+
+  static readonly hearingDatesReplaceReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/replace`)
+  // :index should actually be of the form 'date-N' where N is the numeric index,
+  // because RoutablePath will not accept purely numeric values for parameters
+  static readonly hearingDatesDeleteReceiver = new RoutablePath(`${Paths.hearingDatesPage.uri}/date-picker/delete/:index`)
 }

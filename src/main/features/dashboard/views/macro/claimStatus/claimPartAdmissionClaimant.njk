@@ -22,7 +22,6 @@
 {% endmacro %}
 
 {% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
-
   {% if claim.response.paymentIntention.paymentOption %}
     {{ t('Respond to the defendant.') }}
   {% endif %}
