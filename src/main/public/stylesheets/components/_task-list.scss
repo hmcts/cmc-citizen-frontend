@@ -65,6 +65,8 @@ div {
   &.task-finished {
     background-color: $link-colour;
     float: right;
+    width: 120px;
+    text-align: center;
 
     strong {
       @include media (mobile) {
