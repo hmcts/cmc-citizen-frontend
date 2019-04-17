@@ -206,7 +206,7 @@ const testData = [
   }
 ]
 
-describe.only('Dashboard page', () => {
+describe('Dashboard page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
