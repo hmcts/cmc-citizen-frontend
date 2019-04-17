@@ -183,7 +183,7 @@ const testData = [
     claimOverride: {
       settlement: claimStoreServiceMock.partySettlementWithSetDateAndRejection,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
-      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
     claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
     defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
@@ -429,7 +429,6 @@ describe('Dashboard page', () => {
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
-              .expect(res => expect(res).to.be.successful.withText('<a href="/eligibility" class="newclaim" id="start-now" >Make a new money claim</a>'))
           })
 
           it('should render page with claim number and status', async () => {
@@ -465,7 +464,6 @@ describe('Dashboard page', () => {
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
-              .expect(res => expect(res).to.be.successful.withText('<a href="/eligibility" class="newclaim" id="start-now" >Make a new money claim</a>'))
           })
 
           it('should render page with claim number and status', async () => {
