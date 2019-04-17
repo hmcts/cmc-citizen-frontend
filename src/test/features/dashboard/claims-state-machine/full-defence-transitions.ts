@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
 import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 
-import { FullDefenceTransitions } from 'dashboard/claims-state-machine/full-defence-transitions'
+import { fullDefenceTransitions } from 'dashboard/claims-state-machine/full-defence-transitions'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
@@ -20,7 +20,7 @@ describe('State Machine for the dashboard status before response', () => {
           defenceType: DefenceType.ALREADY_PAID
         }
       })
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-already-paid')
     })
@@ -44,7 +44,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-already-paid-reject')
     })
@@ -60,7 +60,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-reject-with-mediation')
     })
@@ -76,7 +76,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-reject-without-mediation')
     })
@@ -104,7 +104,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-settlement-offer-with-mediation')
     })
@@ -132,7 +132,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-settlement-offer-without-mediation')
     })
@@ -164,7 +164,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-settlement-offer-reject-without-mediation')
     })
@@ -196,7 +196,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-settlement-offer-reject-with-mediation')
     })
@@ -228,7 +228,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-made-agreement-with-mediation')
     })
@@ -260,7 +260,7 @@ describe('State Machine for the dashboard status before response', () => {
         }
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-made-agreement-without-mediation')
     })
@@ -297,7 +297,7 @@ describe('State Machine for the dashboard status before response', () => {
         settlementReachedAt : MomentFactory.parse('2019-03-01')
       })
 
-      let claimState = FullDefenceTransitions(claim)
+      let claimState = fullDefenceTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fd-settled-with-agreement')
     })

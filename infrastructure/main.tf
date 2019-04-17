@@ -146,6 +146,7 @@ module "citizen-frontend" {
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
     FEATURE_MEDIATION = "${var.feature_mediation}"
     FEATURE_DIRECTIONS_QUESTIONNAIRE = "${var.feature_directions_questionnaire}"
+    FEATURE_NEW_DASHBOARD_STATUS = "${var.feature_new_dashboard_status}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 
