@@ -41,7 +41,7 @@
                 </div>
               </div>
               <div class="panel panel-border-narrow js-hidden" id="mediation-phone-number" aria-hidden="false">
-                {{ textInput('Enter a direct phone number the mediation service can use. We won’t give the number to anyone else.', 'mediationPhoneNumber', form) }}
+                {{ canWeUseInputs(form) }}
               </div>
 
             </fieldset>
@@ -51,7 +51,7 @@
             <input id="freeMediationOptionNO" type="radio" name="option" value="{{ FreeMediationOption.NO }}" checked>
             <label for="freeMediationOptionNO">{{ t(FreeMediationOption.NO) | capitalize }}</label>
           </div>
-          {{ textInput('Enter a direct phone number the mediation service can use. We won’t give the number to anyone else.', 'mediationPhoneNumber', form) }}
+          {{ canWeUseInputs(form) }}
         {% endif %}
 
         {{ saveAndContinueButton() }}
@@ -60,3 +60,6 @@
   </div>
 {% endblock %}
 
+{% macro canWeUseInputs(form) %}
+  {{ textInput('Enter a direct phone number the mediation service can use. We won’t give the number to anyone else.', 'mediationPhoneNumber', form) }}
+{% endmacro %}

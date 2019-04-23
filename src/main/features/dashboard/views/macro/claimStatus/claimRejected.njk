@@ -101,12 +101,12 @@
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim, text) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
+  {{ internalLink(t(text), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}
 
 {% macro _linkToDirectionsQuestionnairePage(externalId) %}
-<p>{{ t('You need to {{ url }} form to tell us more about the claim.',
-        { url: internalLink(
+  <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
+        { completeDQ: internalLink(
           'complete a directions questionnaire',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
         }
@@ -115,5 +115,5 @@
 {% endmacro %}
 
 {% macro _respond(claim, text) %}
-  <p><a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t(text) }}</a></p>
+  <p>{{ internalLink(t(text), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-secondary') }}</p>
 {% endmacro %}

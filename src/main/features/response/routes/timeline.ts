@@ -45,7 +45,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       let timeline
 
-      if (ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()) {
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && draft.document.isResponsePartiallyAdmitted()) {
         timeline = draft.document.partialAdmission.timeline
       } else {
         timeline = draft.document.timeline

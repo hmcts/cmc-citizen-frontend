@@ -13,6 +13,7 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -83,8 +84,8 @@ export class ClaimStoreClient {
       })
   }
 
-  saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, user: User): Promise<void> {
-    const response = ResponseModelConverter.convert(draft.document, claim)
+  saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, mediationDraft: Draft<MediationDraft>, user: User): Promise<void> {
+    const response = ResponseModelConverter.convert(draft.document, mediationDraft.document, claim)
     const externalId: string = claim.externalId
 
     const options = {

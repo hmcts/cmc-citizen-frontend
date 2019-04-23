@@ -10,9 +10,7 @@ import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { FreeMediationOption } from 'forms/models/freeMediation'
-import {
-  defenceWithDisputeData
-} from 'test/data/entity/responseData'
+import { defenceWithDisputeData } from 'test/data/entity/responseData'
 import { offer, offerRejection } from 'test/data/entity/offer'
 import { individual, organisation } from 'test/data/entity/party'
 import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
@@ -25,10 +23,10 @@ import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { Organisation } from 'claims/models/details/theirs/organisation'
 import {
-  baseDeterminationAcceptationClaimantResponseData,
-  rejectionClaimantResponseData,
   baseAcceptationClaimantResponseData,
-  partAdmissionStatesPaidClaimantResponseData
+  baseDeterminationAcceptationClaimantResponseData,
+  partAdmissionStatesPaidClaimantResponseData,
+  rejectionClaimantResponseData
 } from 'test/data/entity/claimantResponseData'
 import { Company } from 'claims/models/details/theirs/company'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
@@ -101,13 +99,13 @@ describe('Claim', () => {
 
     it('should return the claimant name when the defendant user is given', () => {
       const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
-      const user: User = new User('1','','John','Doe', [],'','')
+      const user: User = new User('1', '', 'John', 'Doe', [], '', '')
       expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.defendant.name)
     })
 
     it('should return the defendant name when the claimant user is given', () => {
       const claimWithResponse = new Claim().deserialize({ ...claimStoreMock.sampleClaimIssueObj, ...claimStoreMock.sampleFullAdmissionWithPaymentBySetDateResponseObj })
-      const user: User = new User('123','','John','Smith', [],'','')
+      const user: User = new User('123', '', 'John', 'Smith', [], '', '')
       expect(claimWithResponse.otherPartyName(user)).to.be.eq(claimWithResponse.claimData.claimant.name)
     })
 
@@ -346,7 +344,7 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.REDETERMINATION_BY_JUDGE)
     })
 
-    it('should return CLAIMANT_REJECTS_PART_ADMISSION when the claimant rejects the part admission', () => {
+    it('should return CLAIMANT_REJECTED_PART_ADMISSION when the claimant rejects the part admission', () => {
       claim.claimantResponse = rejectionClaimantResponseData
       claim.claimantRespondedAt = MomentFactory.currentDate()
       claim.claimData = {
@@ -355,7 +353,7 @@ describe('Claim', () => {
       claim.response = {
         responseType: ResponseType.PART_ADMISSION
       }
-      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION)
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION)
     })
 
     it('should return CCJ_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
@@ -410,7 +408,7 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY)
     })
 
-    it('should contain the claim status CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID only when part admission states paid is accepted', () => {
+    it('should contain the claim status CLAIMANT_ACCEPTED_STATES_PAID only when part admission states paid is accepted', () => {
       claim.respondedAt = moment()
       claim.response = {
         paymentIntention: null,
@@ -424,7 +422,63 @@ describe('Claim', () => {
       claim.claimantResponse = partAdmissionStatesPaidClaimantResponseData
 
       expect(claim.stateHistory).to.have.lengthOf(1)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_PART_ADMISSION_STATES_PAID)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID)
+    })
+
+    context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
+      it('when defendant states paid amount equal to claim amount', () => {
+        claim.totalAmountTillToday = 100
+        claim.response = {
+          responseType: 'FULL_DEFENCE',
+          defenceType: 'ALREADY_PAID',
+          paymentDeclaration: {
+            paidDate: '2010-12-31',
+            explanation: 'Paid by cash',
+            paidAmount: 100
+          }
+        }
+        claim.claimantResponse = {
+          type: 'REJECTION'
+        }
+
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
+      })
+
+      it('when defendant states paid amount greater than claim amount', () => {
+        claim.totalAmountTillToday = 100
+        claim.response = {
+          responseType: 'FULL_DEFENCE',
+          defenceType: 'ALREADY_PAID',
+          paymentDeclaration: {
+            paidDate: '2010-12-31',
+            explanation: 'Paid by cash',
+            paidAmount: 200
+          }
+        }
+        claim.claimantResponse = {
+          type: 'REJECTION'
+        }
+
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
+      })
+
+      it('when defendant states paid amount less than claim amount', () => {
+        claim.totalAmountTillToday = 100
+        claim.response = {
+          amount: 90,
+          responseType: 'PART_ADMISSION',
+          defenceType: 'ALREADY_PAID',
+          paymentDeclaration: {
+            paidDate: '2010-12-31',
+            explanation: 'Paid by cash'
+          }
+        }
+        claim.claimantResponse = {
+          type: 'REJECTION'
+        }
+
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
+      })
     })
   })
 

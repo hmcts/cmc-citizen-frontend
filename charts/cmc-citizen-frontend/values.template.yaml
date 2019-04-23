@@ -1,5 +1,6 @@
 tags:
-  - rpe-feature-toggle-api
+  - rpe-feature-toggle-api-pod
+  - idam-pr
 
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
@@ -8,9 +9,10 @@ rpe-feature-toggle-api:
     cron:
       enabled: false
     oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0'
-        ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST} && /scripts/add-toggle.sh cmc_defence_reminders
-        'CMC defence reminders' false ${ADMIN_USERNAME_TEST} ${ADMIN_PASSWORD_TEST}
+      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '0.1' &&
+        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
       enabled: true
       permissions: cmc-new-features-consent-given
   java:
@@ -21,6 +23,9 @@ rpe-feature-toggle-api:
   postgresql:
     postgresqlDatabase: hmcts
 
+postgresql:
+  enabled: true
+
 nodejs:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
@@ -30,9 +35,9 @@ nodejs:
   memoryLimits: 512Mi
   cpuLimits: 1
   environment:
-    IDAM_API_URL: https://preprod-idamapi.reform.hmcts.net:3511
-    IDAM_URL: https://preprod-idamapi.reform.hmcts.net:3511
-    IDAM_AUTHENTICATION_WEB_URL: https://idam.preprod.ccidam.reform.hmcts.net
+    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
+    IDAM_URL: https://idam-api.aat.platform.hmcts.net
+    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     S2S_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
@@ -57,6 +62,7 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     FEATURE_MOCK_PAY: false
     FEATURE_MEDIATION: false
+    FEATURE_DIRECTIONS_QUESTIONNAIRE: false
   keyVaults:
     cmc:
       resourceGroup: cmc
@@ -69,3 +75,8 @@ nodejs:
       - citizen-draft-store-secondary
       - citizen-cookie-encryption-key
       - staff-email
+
+idam-pr:
+  service:
+    name: Money Claims - Citizen
+    redirect_uri: https://${SERVICE_FQDN}/receiver

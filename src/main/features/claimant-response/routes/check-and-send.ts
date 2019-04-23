@@ -15,7 +15,6 @@ import { FullAdmissionResponse } from 'claims/models/response/fullAdmissionRespo
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
-import { PartyType } from 'common/partyType'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'
 
@@ -23,18 +22,26 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
   if (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
+    // claimant rejected a part admit, so no payment plan has been agreed at all
     return undefined
   }
 
-  if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept &&
-    draft.acceptPaymentMethod.accept.option === YesNoOption.YES ||
-    (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.YES)) {
-    return response.paymentIntention
-  } else if (claim.response.defendant.type === PartyType.INDIVIDUAL.value) {
+  // both parties agree the amount
+  if (draft.acceptPaymentMethod) {
+    if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+      return response.paymentIntention
+    }
+
+    if (!draft.courtDetermination) {
+      // the court calculator was not invoked, so the alternate plan must have been more lenient than the defendant's
+      return draft.alternatePaymentMethod.toDomainInstance()
+    }
+
     return draft.courtDetermination.courtDecision
-  } else {
-    return draft.alternatePaymentMethod.toDomainInstance()
   }
+
+  // claimant was not asked to accept the payment method, so it must have been IMMEDIATELY
+  return response.paymentIntention
 }
 
 /* tslint:disable:no-default-export */
@@ -42,17 +49,17 @@ export default express.Router()
   .get(
     Paths.checkAndSendPage.uri,
     AllClaimantResponseTasksCompletedGuard.requestHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
-
+      const paymentIntention: PaymentIntention = alreadyPaid ? undefined : getPaymentIntention(draft.document, claim)
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
         totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
-        paymentIntention: alreadyPaid ? undefined : getPaymentIntention(draft.document, claim),
+        paymentIntention: paymentIntention,
         alreadyPaid: alreadyPaid,
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
         mediationEnabled: FeatureToggles.isEnabled('mediation'),

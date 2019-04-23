@@ -1,3 +1,5 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% macro offerSubmittedForClaimantDashboard(claim) %}
   <p>
     {{ t('The defendant has made an offer to settle out of court.') }}
@@ -31,5 +33,5 @@
 {% endmacro %}
 
 {% macro _viewAndRespondToOfferLink(claim) %}
-  <a href="{{ OfferPaths.responsePage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View and respond to the offer') }}</a>
+  {{ internalLink(t('View and respond to the offer'), OfferPaths.responsePage.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}

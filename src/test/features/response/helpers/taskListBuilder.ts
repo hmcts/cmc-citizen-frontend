@@ -13,7 +13,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
 import {
   defenceWithDisputeDraft,
-  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted
+  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted,
+  fullAdmissionWithImmediatePaymentDraft
 } from 'test/data/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
@@ -32,11 +33,13 @@ import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
 import { FeatureToggles } from 'utils/featureToggles'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
 const mediationTaskLabel = 'Consider free mediation'
 const featureToggleMediationTaskLabel = 'Free telephone mediation'
+const directionsQuestionnaireTaskLabel = 'Tell us more about the claim'
 describe('Defendant response task list builder', () => {
   let claim: Claim
 
@@ -431,7 +434,6 @@ describe('Defendant response task list builder', () => {
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
-
           if (FeatureToggles.isEnabled('mediation')) {
             expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
           } else {
@@ -453,6 +455,45 @@ describe('Defendant response task list builder', () => {
           expect(taskList).to.be.eq(undefined)
         })
       })
+    })
+  })
+
+  describe('"Tell us more about the claim"', () => {
+    beforeEach(() => {
+      claim.features = ['admissions', 'directionsQuestionnaire']
+    })
+
+    it('response is partial admission', () => {
+
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new DirectionsQuestionnaireDraft()
+      )
+
+      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+        expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
+      } else {
+        expect(taskList).to.be.undefined
+      }
+    })
+
+    it('response is full defence', () => {
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+      )
+
+      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+        expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
+      } else {
+        expect(taskList).to.be.undefined
+      }
+    })
+
+    it('response is full admit', () => {
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        new ResponseDraft().deserialize(fullAdmissionWithImmediatePaymentDraft), claim, new DirectionsQuestionnaireDraft()
+      )
+
+      expect(taskList).to.be.undefined
     })
   })
 
@@ -557,5 +598,4 @@ describe('Defendant response task list builder', () => {
       }
     })
   })
-
 })
