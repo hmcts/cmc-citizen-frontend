@@ -262,6 +262,31 @@ describe('Claimant response: check and send page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
+
+        it(`should render page successfully when Defendant's part admit pay immediately response is accepted`, async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData)
+          draftStoreServiceMock.resolveFind(draftType,
+            {
+              settleAdmitted: {
+                admitted: {
+                  option: 'yes'
+                }
+              },
+              acceptPaymentMethod: undefined,
+              formaliseRepaymentPlan: undefined,
+              settlementAgreement: undefined,
+              freeMediation: undefined,
+              rejectionReason: undefined,
+              alternatePaymentMethod: undefined,
+              courtOfferedPaymentIntention: undefined
+            })
+          draftStoreServiceMock.resolveFind('mediation')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+        })
       })
     })
   })
