@@ -276,6 +276,65 @@ export const settlementWithSetDateAndAcceptation = {
     ]
   }
 }
+export const partySettlementWithInstalmentsAndRejection = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: { 'paymentDate': MomentFactory.currentDate().year(2), 'paymentOption': 'BY_SPECIFIED_DATE' }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+}
+export const partySettlementWithInstalmentsAndAcceptation = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: {
+        paymentDate: MomentFactory.currentDate().year(2),
+        paymentOption: 'BY_SPECIFIED_DATE'
+      }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }]
+}
+
+export const partySettlementWithSetDateAndRejection = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+}
+export const partySettlementWithSetDateAndAcceptation = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: {
+        paymentDate: MomentFactory.currentDate().year(2),
+        paymentOption: 'BY_SPECIFIED_DATE'
+      }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }]
+}
 
 export const settlementAndSettlementReachedAt: object = {
   settlementReachedAt: '2017-07-25T22:45:51.785',
