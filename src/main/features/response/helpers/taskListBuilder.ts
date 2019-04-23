@@ -284,15 +284,17 @@ export class TaskListBuilder {
         path = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId })
       }
 
-      return new TaskList(
-      'Tell us more about the claim', [
-        new TaskListItem(
-          `Give us details in case there’s a hearing`,
-          path,
-          DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+      if (draft.isResponsePartiallyAdmitted() || draft.isResponseRejected()) {
+        return new TaskList(
+          'Tell us more about the claim', [
+            new TaskListItem(
+              `Give us details in case there’s a hearing`,
+              path,
+              DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+            )
+          ]
         )
-      ]
-    )
+      }
     }
     return undefined
   }
