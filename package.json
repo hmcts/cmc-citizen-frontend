@@ -77,6 +77,7 @@
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "3.3.1",
     "js-base64": "^2.5.1",
+    "ldclient-node": "^5.7.4",
     "lodash": "^4.17.11",
     "mime": "^2.4.2",
     "moment": "^2.24.0",
@@ -94,8 +95,8 @@
     "to-boolean": "^1.0.0",
     "ts-node": "^8.0.3",
     "tsconfig-paths": "^3.8.0",
-    "typescript": "^3.4.3",
     "tslint-microsoft-contrib": "^6.1.1",
+    "typescript": "^3.4.3",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
