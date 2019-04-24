@@ -110,7 +110,7 @@
     }
   },
   "launchDarkly": {
-    "featureFlag-keys": {
+    "keys": {
       "admissions": "cmc_admissions"
     },
     "sdk-keys": {
