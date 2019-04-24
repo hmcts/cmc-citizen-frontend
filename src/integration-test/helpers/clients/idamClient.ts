@@ -67,7 +67,7 @@ export class IdamClient {
       }
     }
     return request(options).then(function (response) {
-      return response['code']
+      return response.code
     }).then(function (response) {
       return IdamClient.exchangeCode(response).then(function (response) {
         return response
@@ -163,6 +163,7 @@ export class IdamClient {
       })
 
       code = url.parse(res.headers.location, true).query.code
+      return IdamClient.exchangeCode(code)
     } else {
       const base64EncodedCredentials = IdamClient.toBase64(pin)
 
@@ -174,12 +175,14 @@ export class IdamClient {
         }
       }
 
-      code = request(options).then(function (response) {
+      return request(options).then(function (response) {
         return response.code
+      }).then(function (response) {
+        return IdamClient.exchangeCode(response).then(function (response) {
+          return response
+        })
       })
     }
-
-    return IdamClient.exchangeCode(code)
   }
 
   static exchangeCode (code: string): Promise<string> {
