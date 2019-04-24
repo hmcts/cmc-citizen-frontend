@@ -12,40 +12,40 @@ import { FullDefenceStates } from 'claims/models/claim-states/full-defence-state
 
 export function initialTransitions (claim: Claim): StateMachine {
   return new StateMachine({
-    init : 'init',
-    transitions : [
+    init: 'init',
+    transitions: [
 
       {
-        name : 'checkNoResponse',
+        name: 'checkNoResponse',
         from: InitialStates.INIT,
         to: InitialStates.NO_RESPONSE
       },
       {
-        name : 'checkMoreTimeRequested',
+        name: 'checkMoreTimeRequested',
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
         to: InitialStates.MORE_TIME_REQUESTED
       },
       {
-        name : 'checkCCJEnabled',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE,InitialStates.MORE_TIME_REQUESTED],
+        name: 'checkCCJEnabled',
+        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
         to: InitialStates.NO_RESPONSE_PAST_DEADLINE
       },
 
       {
-        name : 'checkIsFullDefence',
+        name: 'checkIsFullDefence',
         from: [InitialStates.INIT],
         to: FullDefenceStates.FULL_DEFENCE
       }
     ],
-    data : {
-      log : {
-        invalidTransitions : []
+    data: {
+      log: {
+        invalidTransitions: []
       }
     },
     methods: {
 
       onInvalidTransition (transition: string, from: string, to: string) {
-        this.log.invalidTransitions.push({ transition : transition,from: from,to: to })
+        this.log.invalidTransitions.push({ transition: transition, from: from, to: to })
       },
 
       onBeforeCheckNoResponse () {

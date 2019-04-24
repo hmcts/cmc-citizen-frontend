@@ -1,4 +1,3 @@
-
 import * as StateMachine from '@taoqf/javascript-state-machine'
 import { Claim } from 'claims/models/claim'
 
@@ -12,91 +11,92 @@ import { FullDefenceResponse } from 'claims/models/response/fullDefenceResponse'
 
 export function fullDefenceTransitions (claim: Claim): StateMachine {
   return new StateMachine({
-    init : FullDefenceStates.FULL_DEFENCE,
-    transitions : [
+    init: FullDefenceStates.FULL_DEFENCE,
+    transitions: [
       {
-        name : 'checkAlreadyPaid',
+        name: 'checkAlreadyPaid',
         from: FullDefenceStates.FULL_DEFENCE,
         to: FullDefenceStates.FD_ALREADY_PAID
       },
       {
-        name : 'checkAlreadyPaidResponse',
-        from: [FullDefenceStates.FULL_DEFENCE,FullDefenceStates.FD_ALREADY_PAID],
+        name: 'checkAlreadyPaidResponse',
+        from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_ALREADY_PAID],
         to: FullDefenceStates.FD_ALREADY_PAID_RESPONSE
       },
       {
-        name : 'checkAlreadyPaidAccept',
-        from: [FullDefenceStates.FULL_DEFENCE,FullDefenceStates.FD_ALREADY_PAID_RESPONSE],
-        to: FullDefenceStates.FD_ALREADY_PAID_ACCEPT },
+        name: 'checkAlreadyPaidAccept',
+        from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_ALREADY_PAID_RESPONSE],
+        to: FullDefenceStates.FD_ALREADY_PAID_ACCEPT
+      },
       {
-        name : 'checkAlreadyPaidReject',
-        from: [FullDefenceStates.FULL_DEFENCE,FullDefenceStates.FD_ALREADY_PAID_RESPONSE],
+        name: 'checkAlreadyPaidReject',
+        from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_ALREADY_PAID_RESPONSE],
         to: FullDefenceStates.FD_ALREADY_PAID_REJECT
       },
 
       {
-        name : 'checkRejectWithMediation',
+        name: 'checkRejectWithMediation',
         from: FullDefenceStates.FULL_DEFENCE,
         to: FullDefenceStates.FD_REJECT_WITH_MEDIATION
       },
       {
-        name : 'checkRejectWithoutMediation',
+        name: 'checkRejectWithoutMediation',
         from: FullDefenceStates.FULL_DEFENCE,
         to: FullDefenceStates.FD_REJECT_WITHOUT_MEDIATION
       },
 
       {
-        name : 'checkSettlementOfferWithMediation',
+        name: 'checkSettlementOfferWithMediation',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_REJECT_WITH_MEDIATION],
         to: FullDefenceStates.FD_SETTLEMENT_OFFER_WITH_MEDIATION
       },
       {
-        name : 'checkSettlementOfferWithoutMediation',
+        name: 'checkSettlementOfferWithoutMediation',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_REJECT_WITHOUT_MEDIATION],
         to: FullDefenceStates.FD_SETTLEMENT_OFFER_WITHOUT_MEDIATION
       },
 
       {
-        name : 'checkSettlementOfferRejectWithMediation',
+        name: 'checkSettlementOfferRejectWithMediation',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_SETTLEMENT_OFFER_WITH_MEDIATION],
         to: FullDefenceStates.FD_SETTLEMENT_OFFER_REJECT_WITH_MEDIATION
       },
       {
-        name : 'checkSettlementOfferRejectWithoutMediation',
+        name: 'checkSettlementOfferRejectWithoutMediation',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_SETTLEMENT_OFFER_WITHOUT_MEDIATION],
         to: FullDefenceStates.FD_SETTLEMENT_OFFER_REJECT_WITHOUT_MEDIATION
       },
 
       {
-        name : 'checkSettlementOfferAcceptWithMediation',
+        name: 'checkSettlementOfferAcceptWithMediation',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_SETTLEMENT_OFFER_WITH_MEDIATION],
         to: FullDefenceStates.FD_MADE_AGREEMENT_WITH_MEDIATION
       },
       {
-        name : 'checkSettlementOfferAcceptWithoutMediation',
+        name: 'checkSettlementOfferAcceptWithoutMediation',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_SETTLEMENT_OFFER_WITHOUT_MEDIATION],
         to: FullDefenceStates.FD_MADE_AGREEMENT_WITHOUT_MEDIATION
       },
 
       {
-        name : 'checkSettledByAgreement',
-        from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_SETTLEMENT_OFFER_WITH_MEDIATION,FullDefenceStates.FD_SETTLEMENT_OFFER_WITHOUT_MEDIATION, FullDefenceStates.FD_MADE_AGREEMENT_WITH_MEDIATION,FullDefenceStates.FD_MADE_AGREEMENT_WITHOUT_MEDIATION],
+        name: 'checkSettledByAgreement',
+        from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_SETTLEMENT_OFFER_WITH_MEDIATION, FullDefenceStates.FD_SETTLEMENT_OFFER_WITHOUT_MEDIATION, FullDefenceStates.FD_MADE_AGREEMENT_WITH_MEDIATION, FullDefenceStates.FD_MADE_AGREEMENT_WITHOUT_MEDIATION],
         to: FullDefenceStates.FD_SETTLED_WITH_AGREEMENT
       },
       {
-        name : 'checkSettledByAgreement',
+        name: 'checkSettledByAgreement',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_SETTLEMENT_OFFER_REJECT_WITHOUT_MEDIATION],
         to: FullDefenceStates.FD_SETTLED
       }
     ],
-    data : {
-      log : {
-        invalidTransitions : []
+    data: {
+      log: {
+        invalidTransitions: []
       }
     },
     methods: {
       onInvalidTransition (transition: string, from: string, to: string): void {
-        this.log.invalidTransitions.push({ transition : transition,from: from,to: to })
+        this.log.invalidTransitions.push({ transition: transition, from: from, to: to })
       },
 
       onBeforeCheckAlreadyPaid (): boolean {
