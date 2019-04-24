@@ -56,7 +56,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
   },
   {
-    status: 'Full defence - defendant paid what he believe - claimant rejected to defendant response',
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
     claim: fullDefenceClaim,
     claimOverride: {
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
@@ -68,7 +68,7 @@ const testData = [
     defendantAssertions: ['000MC000', fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £100']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and accept mediation',
+    status: 'Full defence - defendant dispute all of the claim and accepts mediation',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -82,7 +82,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and reject mediation',
+    status: 'Full defence - defendant dispute all of the claim and reject mediation',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -96,7 +96,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and accept mediation - defendant offers settlement to settle out of court',
+    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -112,7 +112,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and reject mediation - defendant offers settlement to settle out of court',
+    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -127,7 +127,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and accept mediation - defendant offers settlement to settle out of court - claimant accepted offer',
+    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -143,7 +143,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
+    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -158,7 +158,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and accept mediation - defendant offers settlement to settle out of court - claimant rejected offer',
+    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -174,7 +174,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
+    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
@@ -189,7 +189,7 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
-    status: 'Full defence - defendant dispute all the of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
+    status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
     claim: fullDefenceClaim,
     claimOverride: {
       ...respondedAt,
