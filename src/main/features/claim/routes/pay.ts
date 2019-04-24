@@ -24,9 +24,11 @@ import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
+const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -93,10 +95,10 @@ async function successHandler (res, next) {
       logger.error(`missing consent not given role for user, User Id : ${user.id}`)
     }
 
-    let features: string
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
+    let features: string = ''
+    launchDarklyClient.callFeatureFlag(user, config.get<string>('launchDarkly.featureFlag-keys.admissions'), function () {
       features = 'admissions'
-    }
+    })
 
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
       features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
