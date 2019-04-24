@@ -11,7 +11,7 @@ export class LaunchDarklyClient {
   }
 
   callFeatureFlag (user: User, featureKey: string, f?: () => void) {
-    let ldUser: ld.LDUser = {
+    const ldUser: ld.LDUser = {
       key: user.id
     }
     LaunchDarklyClient.client.on('ready', function () {
