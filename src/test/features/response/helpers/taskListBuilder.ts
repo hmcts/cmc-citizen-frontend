@@ -13,7 +13,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Claim } from 'claims/models/claim'
 import {
   defenceWithDisputeDraft,
-  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted
+  partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted,
+  fullAdmissionWithImmediatePaymentDraft
 } from 'test/data/draft/responseDraft'
 import { MomentFactory } from 'shared/momentFactory'
 import { PartyType } from 'common/partyType'
@@ -462,10 +463,30 @@ describe('Defendant response task list builder', () => {
       )
 
       if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-        expect(taskList.name).to.contains(directionsQuestionnaireTaskLabel)
+        expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
       } else {
-        expect(taskList).to.be.eq(undefined)
+        expect(taskList).to.be.undefined
       }
+    })
+
+    it('response is full defence', () => {
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+      )
+
+      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+        expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
+      } else {
+        expect(taskList).to.be.undefined
+      }
+    })
+
+    it('response is full admit', () => {
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        new ResponseDraft().deserialize(fullAdmissionWithImmediatePaymentDraft), claim, new DirectionsQuestionnaireDraft()
+      )
+
+      expect(taskList).to.be.undefined
     })
   })
 

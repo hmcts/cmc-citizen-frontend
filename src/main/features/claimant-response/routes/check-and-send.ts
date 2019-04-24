@@ -22,20 +22,27 @@ import { Organisation } from 'claims/models/details/yours/organisation'
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
 
-  let result: PaymentIntention
   if (draft.settleAdmitted && draft.settleAdmitted.admitted.option === YesNoOption.NO) {
-    result = undefined
-
-  } else if (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
-    result = response.paymentIntention
-
-  } else if (!draft.courtDetermination) {
-    result = draft.alternatePaymentMethod.toDomainInstance()
-
-  } else {
-    result = draft.courtDetermination.courtDecision
+    // claimant rejected a part admit, so no payment plan has been agreed at all
+    return undefined
   }
-  return result
+
+  // both parties agree the amount
+  if (draft.acceptPaymentMethod) {
+    if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+      return response.paymentIntention
+    }
+
+    if (!draft.courtDetermination) {
+      // the court calculator was not invoked, so the alternate plan must have been more lenient than the defendant's
+      return draft.alternatePaymentMethod.toDomainInstance()
+    }
+
+    return draft.courtDetermination.courtDecision
+  }
+
+  // claimant was not asked to accept the payment method, so it must have been IMMEDIATELY
+  return response.paymentIntention
 }
 
 /* tslint:disable:no-default-export */
