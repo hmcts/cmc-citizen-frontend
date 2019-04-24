@@ -12,7 +12,7 @@ export class LaunchDarklyClient {
 
   callFeatureFlag (user: User, featureKey: string, f?: () => void) {
     let ldUser: ld.LDUser = {
-      key: user.bearerToken
+      key: user.id
     }
     LaunchDarklyClient.client.on('ready', function () {
       LaunchDarklyClient.client.variation(featureKey, ldUser, false, (value: ld.LDFlagValue) => {
