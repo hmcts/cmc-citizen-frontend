@@ -109,8 +109,8 @@
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
     }
   },
-  "launchDarkly": {
-    "featureFlag-keys": {
+  "featureFlags": {
+    "keys": {
       "admissions": "cmc_admissions"
     },
     "sdk-keys": {
