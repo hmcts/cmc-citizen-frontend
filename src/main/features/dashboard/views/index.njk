@@ -103,11 +103,13 @@
             <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })) }}</td>
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
-            {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-              {% include claim.template.dashboard ignore missing %}
-            {% else %}
-              {{ caseStatusForClaimant(claim.status, claim) }}
-            {% endif %}
+            <td class="mobile-hide">
+              {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
+                {% include claim.template.dashboard ignore missing %}
+              {% else %}
+                {{ caseStatusForClaimant(claim.status, claim) }}
+              {% endif %}
+            </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">

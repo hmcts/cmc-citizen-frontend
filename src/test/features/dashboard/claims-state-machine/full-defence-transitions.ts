@@ -294,7 +294,7 @@ describe('State Machine for the dashboard status before response', () => {
             }
           ]
         },
-        settlementReachedAt : MomentFactory.parse('2019-03-01')
+        settlementReachedAt: MomentFactory.parse('2019-03-01')
       })
 
       let claimState = fullDefenceTransitions(claim)
