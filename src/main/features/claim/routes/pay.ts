@@ -96,7 +96,7 @@ async function successHandler (res, next) {
     }
 
     let features: string = ''
-    launchDarklyClient.callFeatureFlag(user, 'cmc_admissions' , () => {
+    await launchDarklyClient.callFeatureFlag(user, 'cmc_admissions' , () => {
       features = 'admissions'
     })
 
