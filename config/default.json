@@ -108,5 +108,12 @@
       "encryptionKey": "not-a-real-32-bit-encryption-key",
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
     }
+  },
+
+  "launchDarkly": {
+    "sdk": "",
+    "featureFlags": {
+      "admissions": ""
+    }
   }
 }
