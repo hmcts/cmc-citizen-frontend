@@ -71,8 +71,8 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "ld_sdk_key" {
-  name = "ld-sdk-key"
+data "azurerm_key_vault_secret" "launch_darkly_sdk_key" {
+  name = "launchDarkly-sdk-key"
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
@@ -155,7 +155,7 @@ module "citizen-frontend" {
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 
     //LaunchDarkly
-    LD_SDK_KEYS = "${data.azurerm_key_vault_secret.ld_sdk_key.value}"
+    LD_SDK_KEY = "${data.azurerm_key_vault_secret.launch_darkly_sdk_key.value}"
   }
 }
 

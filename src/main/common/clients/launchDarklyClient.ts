@@ -2,7 +2,7 @@ import * as config from 'config'
 import { User } from 'idam/user'
 import * as ld from 'ldclient-node'
 
-const sdkKeys: string = config.get<string>('launchDarkly.sdk')
+const sdkKeys: string = config.get<string>('secrets.cmc.launchDarkly-sdk-key')
 
 export class LaunchDarklyClient {
   private static client: ld.LDClient
