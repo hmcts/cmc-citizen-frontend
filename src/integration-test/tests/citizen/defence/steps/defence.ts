@@ -295,7 +295,7 @@ export class DefenceSteps {
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     this.confirmYourDetails(defendantParty)
-    I.see('COMPLETED')
+    I.see('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {
       this.requestMoreTimeToRespond()
@@ -506,6 +506,8 @@ export class DefenceSteps {
     I.see('Post your response')
     I.see(claimRef)
     I.see(claimant.name)
-    I.see(defendant.name)
+    I.see(defendant.title)
+    I.see(defendant.firstName)
+    I.see(defendant.lastName)
   }
 }

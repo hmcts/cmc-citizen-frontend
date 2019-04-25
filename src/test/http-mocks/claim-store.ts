@@ -8,6 +8,7 @@ import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
 import { InterestDate } from 'claims/models/interestDate'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
+import { MomentFactory } from 'shared/momentFactory'
 
 import {
   fullAdmissionWithSoMPaymentByInstalmentsData,
@@ -20,7 +21,7 @@ import {
   fullDefenceWithStatesPaidGreaterThanClaimAmount,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
-  partialAdmissionWithSoMPaymentBySetDateData
+  partialAdmissionWithSoMPaymentBySetDateData, partialAdmissionWithImmediatePaymentData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -142,7 +143,7 @@ export const sampleClaimIssueObj = {
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
-  responseDeadline: '2017-08-08',
+  responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   features: ['admissions']
 }
 
@@ -275,6 +276,65 @@ export const settlementWithSetDateAndAcceptation = {
     ]
   }
 }
+export const partySettlementWithInstalmentsAndRejection = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: { 'paymentDate': MomentFactory.currentDate().year(2), 'paymentOption': 'BY_SPECIFIED_DATE' }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+}
+export const partySettlementWithInstalmentsAndAcceptation = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: {
+        paymentDate: MomentFactory.currentDate().year(2),
+        paymentOption: 'BY_SPECIFIED_DATE'
+      }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }]
+}
+
+export const partySettlementWithSetDateAndRejection = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+}
+export const partySettlementWithSetDateAndAcceptation = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: {
+        paymentDate: MomentFactory.currentDate().year(2),
+        paymentOption: 'BY_SPECIFIED_DATE'
+      }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }]
+}
 
 export const settlementAndSettlementReachedAt: object = {
   settlementReachedAt: '2017-07-25T22:45:51.785',
@@ -308,10 +368,16 @@ export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   response: partialAdmissionWithSoMPaymentBySetDateData
 }
 
-export const samplePartialAdmissionWithPaymentBySetDateCompanyDataCompanyData = {
+export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithPaymentBySetDateCompanyData
+}
+
+export const samplePartialAdmissionWithPayImmediatelyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithImmediatePaymentData
 }
 
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
@@ -638,4 +704,16 @@ export function resolveSavePaidInFull () {
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/' + externalIdPattern + '/paid-in-full'))
     .reply(HttpStatus.OK)
+}
+
+export function resolveRetrieveBySampleDataClaimant (sampleData?: object) {
+  mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/claimant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
+  mock(`${serviceBaseURL}/defendant`)
+    .get(new RegExp('/defendant/[0-9]+'))
+    .reply(HttpStatus.OK, [{ ...sampleData }])
 }
