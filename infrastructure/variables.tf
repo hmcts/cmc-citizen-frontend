@@ -126,7 +126,3 @@ variable "node_debug" {
   default = ""
 }
 
-// LaunchDarkly feature toggles
-variable "ld_feature_admissions" {
-  default = ""
-}

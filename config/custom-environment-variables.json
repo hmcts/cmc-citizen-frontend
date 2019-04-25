@@ -101,9 +101,6 @@
   },
 
   "launchDarkly": {
-    "sdk": "LD_SDK_KEYS",
-    "featureFlags": {
-       "admissions": "LD_FEATURE_ADMISSIONS"
-    }
+    "sdk": "LD_SDK_KEYS"
   }
 }

@@ -111,9 +111,6 @@
   },
 
   "launchDarkly": {
-    "sdk": "sdk-AAAAA",
-    "featureFlags": {
-      "admissions": ""
-    }
+    "sdk": "sdk-AAAAA"
   }
 }

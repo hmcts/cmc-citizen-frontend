@@ -33,7 +33,3 @@ output "feature_mock_pay" {
 output "feature_testing_support" {
   value = "${var.feature_testing_support}"
 }
-
-output "ld_feature_admissions" {
-  value = "${var.ld_feature_admissions}"
-}
