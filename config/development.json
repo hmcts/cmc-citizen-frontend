@@ -7,7 +7,7 @@
     "returnErrorToUser": true,
     "mediation": true,
     "directionsQuestionnaire": true,
-    "newDashboardStatus" : true
+    "newDashboardStatus": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
