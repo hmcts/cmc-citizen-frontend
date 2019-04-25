@@ -96,7 +96,8 @@ async function successHandler (res, next) {
     }
 
     let features: string = ''
-    launchDarklyClient.callFeatureFlag(user, config.get<string>('launchDarkly.featureFlag-keys.admissions'), () => {
+    const featureKeys: string = config.get<string>('featureFlags.keys.admissions')
+    launchDarklyClient.callFeatureFlag(user, featureKeys , () => {
       features = 'admissions'
     })
 

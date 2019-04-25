@@ -98,5 +98,12 @@
       "encryptionKey": "COOKIE_ENCRYPTION_KEY",
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
     }
+  },
+
+  "featureFlags": {
+    "keys": {
+      "admissions": "CMC_ADMISSIONS",
+      "sdk": "SDK_KEYS"
+    }
   }
 }

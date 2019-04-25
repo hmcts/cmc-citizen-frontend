@@ -6,9 +6,6 @@ import { AppInsights } from 'modules/app-insights'
 // App Insights needs to be enabled as early as possible as it monitors other libraries as well
 AppInsights.enable()
 
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
-LaunchDarklyClient.initClient()
-
 import * as config from 'config'
 import * as toBoolean from 'to-boolean'
 
