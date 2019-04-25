@@ -100,10 +100,10 @@
     }
   },
 
-  "featureFlags": {
-    "keys": {
-      "admissions": "CMC_ADMISSIONS",
-      "sdk": "SDK_KEYS"
+  "launchDarkly": {
+    "sdk": "LD_SDK_KEYS",
+    "featureFlags": {
+       "admissions": "LD_FEATURE_ADMISSIONS"
     }
   }
 }

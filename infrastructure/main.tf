@@ -71,6 +71,11 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "ld_sdk_key" {
+  name = "ld-sdk-key"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
 module "citizen-frontend" {
   source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
   product = "${var.product}-${var.microservice}"
@@ -149,6 +154,9 @@ module "citizen-frontend" {
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 
+    //LaunchDarkly
+    LD_FEATURE_ADMISSIONS = "${var.ld_feature_admissions}"
+    LD_SDK_KEYS = "${data.azurerm_key_vault_secret.ld_sdk_key.value}"
   }
 }
 
