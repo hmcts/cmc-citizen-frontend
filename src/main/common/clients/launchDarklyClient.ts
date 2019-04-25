@@ -17,7 +17,7 @@ export class LaunchDarklyClient {
     }
   }
 
-  callFeatureFlag (user: User, featureKey: string, f?: () => void): void {
+  async callFeatureFlag (user: User, featureKey: string, f?: () => void) {
     const ldUser: ld.LDUser = {
       key: user.id
     }

@@ -125,4 +125,3 @@ variable "log_level" {
 variable "node_debug" {
   default = ""
 }
-
