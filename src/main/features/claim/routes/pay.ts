@@ -101,7 +101,7 @@ async function successHandler (res, next) {
       logError(
         user.id,
         draft.document.claimant.payment,
-        `Payment processed successfully and claim ${externalId} already exists .`
+        `Payment processed successfully and claim ${externalId} already exists.`
       )
     }
   }
