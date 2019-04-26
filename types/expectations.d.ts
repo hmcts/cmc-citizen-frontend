@@ -5,6 +5,7 @@ declare namespace Chai {
     redirect: RedirectAssertion
     forbidden: RenderAssertion
     notFound: RenderAssertion
+    badRequest: RenderAssertion
     cookie (cookieName: string, cookieValue: string): Assertion
   }
   interface RenderAssertion {
