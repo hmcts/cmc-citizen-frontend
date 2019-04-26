@@ -91,9 +91,7 @@ export class Claim {
     return !this.countyCourtJudgmentRequestedAt
       && (this.admissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
-        || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline)
-        || this.isSettlementAgreementRejected()
-        )
+        || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
       )
   }
 
