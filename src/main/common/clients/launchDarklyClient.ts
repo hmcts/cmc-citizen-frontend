@@ -17,9 +17,12 @@ export class LaunchDarklyClient {
     }
   }
 
-  async callFeatureFlag (user: User, featureKey: string, f?: () => void) {
+  async callFeatureFlag (user: User, roles: string[], featureKey: string, f?: () => void) {
     const ldUser: ld.LDUser = {
-      key: user.id
+      key: user.id,
+      custom: {
+        'roles': roles
+      }
     }
     LaunchDarklyClient.client.on('ready', function () {
       LaunchDarklyClient.client.variation(featureKey, ldUser, false, (value: ld.LDFlagValue) => {
