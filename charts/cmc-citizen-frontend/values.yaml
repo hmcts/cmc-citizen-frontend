@@ -35,3 +35,4 @@ nodejs:
       - citizen-draft-store-secondary
       - citizen-cookie-encryption-key
       - staff-email
+      - launchDarkly-sdk-key
