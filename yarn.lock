@@ -3339,9 +3339,10 @@ govuk_frontend_toolkit@^7.1.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/govuk_frontend_toolkit/-/govuk_frontend_toolkit-7.2.0.tgz#5c006d83c3de33c7da49f720cadae83f58783158"
 
-govuk_template_jinja@0.24.1:
-  version "0.24.1"
-  resolved "https://registry.yarnpkg.com/govuk_template_jinja/-/govuk_template_jinja-0.24.1.tgz#6f624d2a820679debbb61d2e01f2ceca669ec69f"
+govuk_template_jinja@0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/govuk_template_jinja/-/govuk_template_jinja-0.25.0.tgz#3b86b3a22ec1e7d7a7420fd80ea248e8e24e10d1"
+  integrity sha512-zPGO2/Up5dCxKYOsBRe34gOSABoFoOKloY9sNkxKLRkebINhfMZObLfs7eNKzIc6+EQ3YPIYrUonnQjAUsFG5A==
 
 graceful-fs@^4.0.0, graceful-fs@^4.1.10, graceful-fs@^4.1.11:
   version "4.1.11"
