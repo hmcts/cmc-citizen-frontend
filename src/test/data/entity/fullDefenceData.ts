@@ -1,7 +1,7 @@
 import { MomentFactory } from 'shared/momentFactory'
 
 export const respondedAt = {
-  respondedAt : MomentFactory.currentDate()
+  respondedAt: MomentFactory.currentDate()
 }
 
 export const claimantRejectAlreadyPaid = {
@@ -14,7 +14,7 @@ export const claimantRejectAlreadyPaid = {
 }
 
 export const directionsQuestionnaireDeadline = {
-  directionsQuestionnaireDeadline : MomentFactory.currentDate()
+  directionsQuestionnaireDeadline: MomentFactory.currentDate()
 }
 
 export const defendantOffersSettlement = [{
@@ -36,42 +36,42 @@ export const claimantRejectOffer = [{
   type: 'REJECTION'
 }]
 
-export const defendantCouterSign = [{
+export const defendantCounterSign = [{
   madeBy: 'DEFENDANT',
   type: 'COUNTERSIGNATURE'
 }]
 
 export const settledWithAgreement = {
-  settlement : {
-    partyStatements : [
-      ...defendantCouterSign,
+  settlement: {
+    partyStatements: [
+      ...defendantOffersSettlement,
       ...claimantAcceptOffer,
-      ...defendantOffersSettlement
+      ...defendantCounterSign
     ]
   },
-  settlementReachedAt : MomentFactory.currentDate()
+  settlementReachedAt: MomentFactory.currentDate()
 }
 export const settlementOfferAccept = {
-  settlement : {
-    partyStatements : [
-      ...claimantAcceptOffer,
-      ...defendantOffersSettlement
+  settlement: {
+    partyStatements: [
+      ...defendantOffersSettlement,
+      ...claimantAcceptOffer
     ]
   }
 }
 
 export const settlementOfferReject = {
-  settlement : {
-    partyStatements : [
-      ...claimantRejectOffer,
-      ...defendantOffersSettlement
+  settlement: {
+    partyStatements: [
+      ...defendantOffersSettlement,
+      ...claimantRejectOffer
     ]
   }
 }
 
 export const settlementOffer = {
-  settlement : {
-    partyStatements : [
+  settlement: {
+    partyStatements: [
       ...defendantOffersSettlement
     ]
   }

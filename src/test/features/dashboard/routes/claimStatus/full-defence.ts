@@ -40,7 +40,8 @@ const fullDefenceClaim = {
     ...baseResponseData,
     ...baseDefenceData,
     amount: 30
-  }
+  },
+  ...respondedAt
 }
 
 const testData = [
@@ -48,57 +49,99 @@ const testData = [
     status: 'Full defence - defendant paid what he believe',
     claim: fullDefenceClaim,
     claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      ...respondedAt
+      response: { ...defenceWithAmountClaimedAlreadyPaidData }
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.'],
-    defendantAssertions: ['000MC000', 'We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
+    claimantAssertions: [
+      'The defendant’s response',
+      fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.',
+      'Respond'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.',
+      'Download your response'
+    ]
   },
   {
+
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
     claim: fullDefenceClaim,
     claimOverride: {
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      ...respondedAt,
       ...claimantRejectAlreadyPaid,
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £100']
+    claimantAssertions: [
+      'You’ve rejected the defendant’s admission',
+      'They said they owe £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      'complete a directions questionnaire',
+      'Download their response'
+    ],
+    defendantAssertions: [
+      fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      'complete a directions questionnaire',
+      'Download your response'
+    ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
         freeMediation: FreeMediationOption.YES
       }
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.'],
-    defendantAssertions: ['000MC000', 'You have rejected the claim. You’ve suggested mediation.']
+    claimantAssertions: [
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+      'Find out how mediation works',
+      'If you don’t send an email before the deadline, the claim will proceed without mediation',
+      'Download their response',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You have rejected the claim. You’ve suggested mediation.',
+      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
+      'Download your response',
+      'Settle out of court',
+      'settle the claim out of court'
+    ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
       },
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['000MC000', 'The defendant has rejected your claim'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.']
+    claimantAssertions: [
+      'The defendant has rejected your claim',
+      'They said they dispute your claim.',
+      'complete a directions questionnaire',
+      'Download their response',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
+      'complete a directions questionnaire',
+      'Download your response',
+      'Settle out of court',
+      'settle the claim out of court'
+    ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
@@ -107,14 +150,31 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOffer
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.'],
-    defendantAssertions: ['000MC000', 'You have rejected the claim. You’ve suggested mediation.','ou made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.']
+    claimantAssertions: [
+      'The defendant’s response',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+      'Find out how mediation works',
+      'If you don’t send an email before the deadline, the claim will proceed without mediation',
+      'Download their response',
+      'Settle out of court',
+      fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
+      'View and respond to the offer',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You have rejected the claim. You’ve suggested mediation.',
+      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
+      'Download your response',
+      'Settle out of court',
+      'You made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.'
+    ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -122,14 +182,29 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOffer
     },
-    claimantAssertions: ['000MC000', 'The defendant has rejected your claim', fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and said you don’t want to use mediation to solve it.','You made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.']
+    claimantAssertions: [
+      'The defendant has rejected your claim',
+      'They said they dispute your claim.',
+      'complete a directions questionnaire',
+      'Download their response',
+      'Settle out of court',
+      fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You’ve rejected the claim and said you don’t want to use mediation to solve it.',
+      'complete a directions questionnaire',
+      'Download your response',
+      'Settle out of court',
+      'You made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.'
+    ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
@@ -139,22 +214,31 @@ const testData = [
       ...settlementOfferAccept
     },
     claimantAssertions: [
-      '000MC000',
+      'The defendant’s response',
       fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+      'Find out how mediation works',
+      'If you don’t send an email before the deadline, the claim will proceed without mediation',
+      'Download their response',
+      'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
+      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
+      'Request County Court Judgment',
+      'request a County Court Judgment'
     ],
     defendantAssertions: [
-      '000MC000',
+      'Your response to the claim',
       'You have rejected the claim. You’ve suggested mediation.',
-      'The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.'
+      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
+      'Download your response',
+      'Settle out of court',
+      'The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.',
+      'Sign the settlement agreement'
     ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -163,22 +247,30 @@ const testData = [
       ...settlementOfferAccept
     },
     claimantAssertions: [
-      '000MC000',
       'The defendant has rejected your claim',
+      'They said they dispute your claim.',
+      'complete a directions questionnaire',
+      'Download their response',
+      'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
+      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
+      'Request County Court Judgment',
+      'request a County Court Judgment'
     ],
     defendantAssertions: [
-      '000MC000',
+      'Your response to the claim',
       'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
-      'The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.'
+      'complete a directions questionnaire',
+      'Download your response',
+      'Settle out of court',
+      'The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.',
+      'Sign the settlement agreement'
     ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
@@ -187,14 +279,30 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOfferReject
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.','You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.'],
-    defendantAssertions: ['000MC000', 'You have rejected the claim. You’ve suggested mediation.','The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.']
+    claimantAssertions: [
+      'The defendant’s response',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
+      'Find out how mediation works',
+      'If you don’t send an email before the deadline, the claim will proceed without mediation',
+      'Download their response',
+      'Settle out of court',
+      'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You have rejected the claim. You’ve suggested mediation.',
+      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
+      'Download your response',
+      'Settle out of court',
+      'The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.'
+    ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -202,14 +310,29 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOfferReject
     },
-    claimantAssertions: ['000MC000', 'The defendant has rejected your claim','You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.','The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.']
+    claimantAssertions: [
+      'The defendant has rejected your claim',
+      'They said they dispute your claim.',
+      'complete a directions questionnaire',
+      'Download their response',
+      'Settle out of court',
+      'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
+      'complete a directions questionnaire',
+      'Download your response',
+      'Settle out of court',
+      'The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.'
+    ]
   },
   {
     status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -217,8 +340,24 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settledWithAgreement
     },
-    claimantAssertions: ['000MC000', 'You’ve both signed a legal agreement. The claim is now settled.'],
-    defendantAssertions: ['000MC000', 'You’ve both signed a legal agreement. The claim is now settled.']
+    claimantAssertions: [
+      'Agreement signed',
+      'You’ve both signed a legal agreement. The claim is now settled.',
+      'Download the settlement agreement',
+      'Settle out of court',
+      fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
+      'View and respond to the offer',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Agreement signed',
+      'You’ve both signed a legal agreement. The claim is now settled.',
+      'Download the settlement agreement',
+      'Settle out of court',
+      'You made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.'
+
+    ]
   }
 ]
 

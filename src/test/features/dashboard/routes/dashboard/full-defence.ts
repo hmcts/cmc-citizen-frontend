@@ -41,7 +41,8 @@ const fullDefenceClaim = {
     ...baseResponseData,
     ...baseDefenceData,
     amount: 30
-  }
+  },
+  ...respondedAt
 }
 
 const testData = [
@@ -49,57 +50,52 @@ const testData = [
     status: 'Full defence - defendant paid what he believe',
     claim: fullDefenceClaim,
     claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      ...respondedAt
+      response: { ...defenceWithAmountClaimedAlreadyPaidData }
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.'],
-    defendantAssertions: ['000MC000', 'We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.'],
+    defendantAssertions: ['We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
   },
   {
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
     claim: fullDefenceClaim,
     claimOverride: {
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      ...respondedAt,
       ...claimantRejectAlreadyPaid,
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission.'],
-    defendantAssertions: ['000MC000', fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £100']
+    claimantAssertions: ['You’ve rejected the defendant’s admission.'],
+    defendantAssertions: [fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £100']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
         freeMediation: FreeMediationOption.YES
       }
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
       },
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
+    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
@@ -108,14 +104,13 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOffer
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -123,14 +118,13 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOffer
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
+    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
@@ -139,14 +133,13 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOfferAccept
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -154,14 +147,13 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOfferAccept
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
+    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData,
@@ -170,14 +162,13 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOfferReject
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
+    defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -185,14 +176,13 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settlementOfferReject
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim. You need to tell us more about the claim.']
+    claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
+    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
     claim: fullDefenceClaim,
     claimOverride: {
-      ...respondedAt,
       response: {
         ...baseResponseData,
         ...baseDefenceData
@@ -200,8 +190,8 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       ...settledWithAgreement
     },
-    claimantAssertions: ['000MC000', 'You’ve both signed a legal agreement. The claim is now settled.'],
-    defendantAssertions: ['000MC000', 'You’ve both signed a legal agreement. The claim is now settled.']
+    claimantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.'],
+    defendantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.']
   }
 ]
 
