@@ -1,30 +1,30 @@
 import * as express from 'express'
 import * as config from 'config'
 
-import { Paths } from 'claim/paths'
+import {Paths} from 'claim/paths'
 
-import { GovPayClient, MockPayClient, PayClient } from 'payment-hub-client/payClient'
-import { Payment } from 'payment-hub-client/payment'
+import {GovPayClient, MockPayClient, PayClient} from 'payment-hub-client/payClient'
+import {Payment} from 'payment-hub-client/payment'
 
-import { FeesClient } from 'fees/feesClient'
+import {FeesClient} from 'fees/feesClient'
 
-import { ClaimStoreClient } from 'claims/claimStoreClient'
-import { buildURL } from 'utils/callbackBuilder'
-import { draftClaimAmountWithInterest } from 'shared/interestUtils'
-import { User } from 'idam/user'
-import { DraftService } from 'services/draftService'
-import { ServiceAuthTokenFactoryImpl } from 'shared/security/serviceTokenFactoryImpl'
-import { Draft } from '@hmcts/draft-store-client'
-import { DraftClaim } from 'drafts/models/draftClaim'
-import { Logger } from '@hmcts/nodejs-logging'
-import { FeeOutcome } from 'fees/models/feeOutcome'
-import { Fee } from 'payment-hub-client/fee'
-import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
+import {ClaimStoreClient} from 'claims/claimStoreClient'
+import {buildURL} from 'utils/callbackBuilder'
+import {draftClaimAmountWithInterest} from 'shared/interestUtils'
+import {User} from 'idam/user'
+import {DraftService} from 'services/draftService'
+import {ServiceAuthTokenFactoryImpl} from 'shared/security/serviceTokenFactoryImpl'
+import {Draft} from '@hmcts/draft-store-client'
+import {DraftClaim} from 'drafts/models/draftClaim'
+import {Logger} from '@hmcts/nodejs-logging'
+import {FeeOutcome} from 'fees/models/feeOutcome'
+import {Fee} from 'payment-hub-client/fee'
+import {PaymentRetrieveResponse} from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
-import { FeatureToggles } from 'utils/featureToggles'
-import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
-import { trackCustomEvent } from 'logging/customEventTracker'
-import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import {FeatureToggles} from 'utils/featureToggles'
+import {FeatureTogglesClient} from 'shared/clients/featureTogglesClient'
+import {trackCustomEvent} from 'logging/customEventTracker'
+import {LaunchDarklyClient} from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
@@ -95,10 +95,10 @@ async function successHandler (res, next) {
       logger.error(`missing consent not given role for user, User Id : ${user.id}`)
     }
 
-    let features: string = ''
-    await launchDarklyClient.callFeatureFlag(user, roles,'admissions' , () => {
+    let features: string
+    if (await launchDarklyClient.variation(user, roles, 'admissions')) {
       features = 'admissions'
-    })
+    }
 
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
       features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
