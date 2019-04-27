@@ -16,6 +16,7 @@ import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/
 
 import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -59,6 +60,22 @@ describe('Dashboard - claimant page', () => {
             .get(claimPagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Claim number', claimStoreServiceMock.sampleClaimObj.referenceNumber))
+        })
+
+        context('when defendant has not responded', () => {
+          it('should render page with you can request a CCJ message', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+              responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+            })
+
+            await request(app)
+              .get(claimPagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('You can request a County Court Judgment',
+                'John Doe has not responded to your claim by the deadline. You can request a County Court Judgment (CCJ) against them.',
+                'John Doe can still respond to the claim until you request a CCJ.'))
+
+          })
         })
 
         context('when accessor is not the claimant', () => {

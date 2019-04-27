@@ -79,6 +79,16 @@ const testData = [
     defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
   },
   {
+    status: 'claim issued, past deadline',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      moreTimeRequested: false,
+      responseDeadline: MomentFactory.currentDate().subtract(-1, 'days')
+    },
+    claimantAssertions: ['000MC050', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
+    defendantAssertions: ['000MC050', 'You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.']
+  },
+  {
     status: 'full admission, pay immediately',
     claim: fullAdmissionClaim,
     claimOverride: {

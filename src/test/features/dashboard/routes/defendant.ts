@@ -12,6 +12,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -55,6 +56,24 @@ describe('Dashboard - defendant page', () => {
             .get(defendantPage)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.forbidden)
+        })
+
+        context('when defendant has not responded', () => {
+          it('should render page with you can request a CCJ message', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+              responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+            })
+
+            await request(app)
+              .get(defendantPage)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('You haven’t responded to this claim',
+                'You haven’t responded to the claim. John Smith can now ask for a County Court Judgment against you.',
+                'A County Court Judgment can mean you find it difficult to get credit, like a mortgage or mobile ' +
+                'phone contract. Bailiffs could also be sent to your home.',
+                'You can still respond to the claim before they ask for a judgment.'))
+
+          })
         })
       })
     })
