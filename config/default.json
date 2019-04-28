@@ -109,5 +109,8 @@
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
       "launchDarkly-sdk-key": "sdk-AAAAA"
     }
+  },
+  "launchDarkly": {
+    "offline": true
   }
 }

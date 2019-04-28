@@ -99,5 +99,8 @@
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
       "launchDarkly-sdk-key": "LD_SDK_KEY"
     }
+  },
+  "launchDarkly": {
+    "offline": "LD_OFFLINE_FLAG"
   }
 }
