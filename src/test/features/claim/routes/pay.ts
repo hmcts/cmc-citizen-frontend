@@ -38,7 +38,11 @@ import { InterestEndDate, InterestEndDateOption } from 'claim/form/models/intere
 import { InterestDateType } from 'common/interestDateType'
 import { InterestStartDate } from 'claim/form/models/interestStartDate'
 import { YesNoOption } from 'models/yesNoOption'
+import { mock, when } from 'ts-mockito'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
+import { User } from 'idam/user'
 
+const mockedLaunchDarklyClient: LaunchDarklyClient = mock(LaunchDarklyClient)
 const draftType = 'claim'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -438,12 +442,15 @@ describe('Claim issue: post payment callback receiver', () => {
         describe('when claim does not exist', () => {
 
           it('should return 500 and render error page when cannot save claim', async () => {
+            const roles: string[] = ['test']
+            const user: User = new User('testId','','','', roles, '','')
+            when(mockedLaunchDarklyClient.variation(user,roles,'admissions')).thenResolve(Promise.resolve(true))
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
+            /*featureToggleApiMock.resolveIsAdmissionsAllowed()*/
             claimStoreServiceMock.rejectSaveClaimForUser()
 
             await request(app)
