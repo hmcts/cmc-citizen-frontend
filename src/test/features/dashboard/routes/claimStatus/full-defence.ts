@@ -14,6 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import { MomentFactory } from 'shared/momentFactory'
 import { FreeMediationOption } from 'forms/models/freeMediation'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 import {
   baseDefenceData,
@@ -73,12 +74,12 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve rejected the defendant’s admission',
-      'They said they owe £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
       'complete a directions questionnaire',
       'Download their response'
     ],
     defendantAssertions: [
-      fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      `${fullDefenceClaim.claim.claimants[0].name} rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
       'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
       'complete a directions questionnaire',
       'Download your response'
