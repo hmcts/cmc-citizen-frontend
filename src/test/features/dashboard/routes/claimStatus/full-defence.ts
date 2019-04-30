@@ -365,10 +365,6 @@ const testData = [
 const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: fullDefenceClaim.externalId })
 const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: fullDefenceClaim.externalId })
 
-afterEach(function (done) {
-  app.listen(done).close(done)
-})
-
 describe('Dashboard page', () => {
   attachDefaultHooks(app)
 
