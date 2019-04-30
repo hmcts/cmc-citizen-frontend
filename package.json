@@ -41,7 +41,7 @@
     "@hmcts/properties-volume": "0.0.9",
     "@hmcts/requestretry": "^1.1.2",
     "@types/config": "^0.0.34",
-    "@types/cookies": "^0.7.1",
+    "@types/cookies": "^0.7.2",
     "@types/csurf": "^1.9.33",
     "@types/express": "^4.16.0",
     "@types/http-status-codes": "^1.0.29",
