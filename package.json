@@ -95,8 +95,8 @@
     "to-boolean": "^1.0.0",
     "ts-node": "^8.1.0",
     "tsconfig-paths": "^3.8.0",
-    "tslint-microsoft-contrib": "^6.1.1",
     "typescript": "^3.4.5",
+    "tslint-microsoft-contrib": "^6.1.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
