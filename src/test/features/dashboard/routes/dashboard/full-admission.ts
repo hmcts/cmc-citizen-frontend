@@ -12,7 +12,6 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 
@@ -24,6 +23,26 @@ import {
   baseResponseData
 } from 'test/data/entity/responseData'
 
+import {
+  claimantResponseAt,
+  claimantReferredToJudgeResponse,
+  claimantReferredToJudgeResponseForInstalments,
+  claimantAcceptRepaymentPlan,
+  settlementOfferBySetDate,
+  settlementOfferByInstallments,
+  settlementOfferAcceptBySetDate,
+  settlementOfferAcceptInInstalment,
+  settledWithAgreementBySetDate,
+  settledWithAgreementInInstalments,
+  settledWithAgreementBySetDatePastPaymentDeadline,
+  settledWithAgreementInInstalmentsPastPaymentDeadline,
+  defendantRejectedSettlementOfferAcceptBySetDate,
+  defendantRejectedSettlementOfferAcceptInInstalments,
+  claimantAcceptRepaymentPlanByDetermination,
+  claimantAcceptRepaymentPlanInInstalmentsByDetermination
+
+} from 'test/data/entity/fullAdmission'
+
 const cookieName: string = config.get<string>('session.cookieName')
 
 const fullAdmissionClaim = {
@@ -32,7 +51,8 @@ const fullAdmissionClaim = {
   response: {
     ...baseResponseData,
     ...baseFullAdmissionData
-  }
+  },
+  claimantResponseAt: { ...claimantResponseAt }
 }
 
 const testData = [
@@ -64,305 +84,289 @@ const testData = [
     status: 'Full admission - defendant responded to pay by set date',
     claim: fullAdmissionClaim,
     claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      ...settlementOfferBySetDate
     },
     claimantAssertions: ['The defendant has offered to pay by a set date. You can accept or reject their offer.'],
-    defendantAssertions: ['You’ve admitted all of the claim and offered to pay the full amount by ' + moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')]
+    defendantAssertions: [`You’ve admitted all of the claim and offered to pay the full amount by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}`]
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan and referred to judge',
+    status: 'Full admission - defendant responded to pay by set date - claimant rejects repayment plan and referred to judge',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
-      claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'REFER_TO_JUDGE' }
+      claimantResponse: { ...claimantReferredToJudgeResponse }
     },
     claimantAssertions: ['Awaiting judge’s review.'],
     defendantAssertions: [fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment against you']
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement. The defendant can choose to sign it or not.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementBySetDate
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementBySetDatePastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...defendantRejectedSettlementOfferAcceptBySetDate
+    },
+    claimantAssertions: [`${fullAdmissionClaim.claim.defendants[0].name} has rejected your settlement agreement. You can request a County Court Judgment against them.`],
+    defendantAssertions: ['You rejected the settlement agreement.']
+  },
+
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement. The defendant can choose to sign it or not.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settledWithAgreementBySetDate
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settledWithAgreementBySetDatePastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...defendantRejectedSettlementOfferAcceptBySetDate
+    },
+    claimantAssertions: [`${fullAdmissionClaim.claim.defendants[0].name} has rejected your settlement agreement. You can request a County Court Judgment against them.`],
+    defendantAssertions: ['You rejected the settlement agreement.']
+  },
+
+  {
+    status: 'Full admission - defendant responded to pay in instalments',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      ...settlementOfferByInstallments
+    },
+    claimantAssertions: ['The defendant has offered to pay in instalments. You can accept or reject their offer.'],
+    defendantAssertions: ['You’ve admitted all of the claim and offered to pay the full amount in instalments.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant rejects repayment plan and referred to judge',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantReferredToJudgeResponseForInstalments }
+    },
+    claimantAssertions: ['Awaiting judge’s review.'],
+    defendantAssertions: [fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment against you']
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement. The defendant can choose to sign it or not.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementInInstalments
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementInInstalmentsPastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...defendantRejectedSettlementOfferAcceptInInstalments
+    },
+    claimantAssertions: [`${fullAdmissionClaim.claim.defendants[0].name} has rejected your settlement agreement. You can request a County Court Judgment against them.`],
+    defendantAssertions: ['You rejected the settlement agreement.']
+  },
+
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement. The defendant can choose to sign it or not.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['The defendant has not responded to your settlement agreement. You can request a County Court Judgment against them.'],
+    defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
+
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settledWithAgreementInInstalments
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settledWithAgreementInInstalmentsPastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement.'],
+    defendantAssertions: ['You’ve both signed a settlement agreement.']
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...defendantRejectedSettlementOfferAcceptInInstalments
+    },
+    claimantAssertions: [`${fullAdmissionClaim.claim.defendants[0].name} has rejected your settlement agreement. You can request a County Court Judgment against them.`],
+    defendantAssertions: ['You rejected the settlement agreement.']
   }
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts the repayment plan by admission - defendant past counter signature deadline'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts the repayment plan by determination - defendant past counter signature deadline'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant rejected'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant rejected'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline'
-  // },
-  //
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments',
-  //   claim: fullAdmissionClaim,
-  //   claimOverride: {
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
-  //     amount: 30
-  //   },
-  //   claimantAssertions: ['000MC000', 'The defendant has offered to pay in instalments. You can accept or reject their offer.'],
-  //   defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan and referred to judge'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by admission'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by determination'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts the repayment plan by admission - defendant past counter signature deadline'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts the repayment plan by determination - defendant past counter signature deadline'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by admission - defendant rejected'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by determination - defendant rejected'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by admission - defendant signed contract'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by determination - defendant signed contract'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline'
-  // },
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline'
-  // },
-  //
-  //
-  // {
-  //   status: 'Full admission - defendant responded to pay by set date - claimant accept the repayment plan by admission - defendant past counter signature deadline',
-  //   claim: fullAdmissionClaim,
-  //   claimOverride: {
-  //     response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
-  //     responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
-  //   },
-  //   claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-  //   defendantAssertions: ['000MC000', 'John Smith can now ask for a County Court Judgment (CCJ) against you']
-  // },
-  //
-  // {
-  //   status: 'Full admission - defendant responded to pay by installments - claimant accept the repayment plan - defendant past counter signature deadline',
-  //   claim: fullAdmissionClaim,
-  //   claimOverride: {
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
-  //     responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
-  //   },
-  //   claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-  //   defendantAssertions: ['000MC000', 'John Smith can now ask for a County Court Judgment (CCJ) against you']
-  // },
-  //
-  // {
-  //   status: 'full admission, pay by set date , claimant and defendant both accept the repayment plan and sign',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
-  //     settlementReachedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'You’ve both signed a legal agreement'],
-  //   defendantAssertions: ['000MC050', 'You’ve both signed a legal agreement']
-  // },
-  // {
-  //   status: 'full admission, pay by set date , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.partySettlementWithSetDateAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
-  //     response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not'],
-  //   defendantAssertions: ['000MC050', 'John Smith asked you to sign a settlement agreement']
-  // },
-  // {
-  //   status: 'full admission, pay by set date, claimant accept the repayment plan and request a CCJ',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
-  //     countyCourtJudgment: {
-  //       'ccjType': 'DETERMINATION',
-  //       'paidAmount': 10,
-  //       'payBySetDate': '2022-01-01',
-  //       'paymentOption': 'BY_SPECIFIED_DATE',
-  //       'defendantDateOfBirth': '2000-01-01'
-  //     },
-  //     countyCourtJudgmentRequestedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-  //   defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
-  // },
-  // {
-  //   status: 'full admission, pay by set date, claimant accept the repayment plan and request a CCJ, claim settled by claimant',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
-  //     countyCourtJudgment: {
-  //       'ccjType': 'DETERMINATION',
-  //       'paidAmount': 10,
-  //       'payBySetDate': '2022-01-01',
-  //       'paymentOption': 'BY_SPECIFIED_DATE',
-  //       'defendantDateOfBirth': '2000-01-01'
-  //     },
-  //     countyCourtJudgmentRequestedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     moneyReceivedOn: MomentFactory.currentDate(),
-  //     response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'This claim is settled.'],
-  //   defendantAssertions: ['000MC050', 'John Smith confirmed you’ve paid']
-  // },
-  // {
-  //   status: 'full admission, pay by set date,  rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'REFER_TO_JUDGE' },
-  //     settlementReachedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'Awaiting judge’s review'],
-  //   defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
-  // },
-  // {
-  //   status: 'full admission, pay by set date , claimant accept the repayment plan, defendant reject the settlement',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.partySettlementWithSetDateAndRejection,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
-  //     response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
-  //   defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
-  // },
-  // {
-  //   status: 'full admission, pay by instalments , claimant accept the repayment plan, defendant miss the past deadline, Request CCJ',
-  //   claim: fullAdmissionClaim,
-  //   claimOverride: {
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
-  //     responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
-  //   },
-  //   claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-  //   defendantAssertions: ['000MC000', 'John Smith can now ask for a County Court Judgment (CCJ) against you']
-  // },
-  //
-  // {
-  //   status: 'full admission, pay by repayment plan, claimant and defendant both accept the repayment plan and sign',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
-  //     settlementReachedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'You’ve both signed a legal agreement'],
-  //   defendantAssertions: ['000MC050', 'You’ve both signed a legal agreement']
-  // },
-  // {
-  //   status: 'full admission, pay by repayment plan , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.partySettlementWithInstalmentsAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not'],
-  //   defendantAssertions: ['000MC050', 'John Smith asked you to sign a settlement agreement']
-  // },
-  // {
-  //   status: 'full admission, pay by repayment plan, claimant accept the repayment plan and request a CCJ',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
-  //     countyCourtJudgment: {
-  //       'ccjType': 'DETERMINATION',
-  //       'paidAmount': 10,
-  //       'payBySetDate': '2022-01-01',
-  //       'paymentOption': 'BY_SPECIFIED_DATE',
-  //       'defendantDateOfBirth': '2000-01-01'
-  //     },
-  //     countyCourtJudgmentRequestedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-  //   defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
-  // },
-  // {
-  //   status: 'full admission, pay by repayment plan, claimant accept the repayment plan and request a CCJ, claim settled by claimant',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
-  //     countyCourtJudgment: {
-  //       'ccjType': 'DETERMINATION',
-  //       'paidAmount': 10,
-  //       'payBySetDate': '2022-01-01',
-  //       'paymentOption': 'BY_SPECIFIED_DATE',
-  //       'defendantDateOfBirth': '2000-01-01'
-  //     },
-  //     countyCourtJudgmentRequestedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     moneyReceivedOn: MomentFactory.currentDate(),
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'This claim is settled.'],
-  //   defendantAssertions: ['000MC050', 'John Smith confirmed you’ve paid']
-  // },
-  // {
-  //   status: 'full admission, pay by repayment plan,  rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'REFER_TO_JUDGE' },
-  //     settlementReachedAt: MomentFactory.currentDate().subtract(1, 'days'),
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'Awaiting judge’s review'],
-  //   defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
-  // },
-  // {
-  //   status: 'full admission, pay by instalments , claimant accept the repayment plan, defendant reject the settlement',
-  //   claim: claimStoreServiceMock.sampleClaimIssueObj,
-  //   claimOverride: {
-  //     settlement: claimStoreServiceMock.partySettlementWithInstalmentsAndRejection,
-  //     claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
-  //     response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
-  //   },
-  //   claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
-  //   defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
-  // }
 ]
 
 describe('Dashboard page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', Paths.dashboardPage.uri)
 
     context('when user authorised', () => {
       beforeEach(() => {
