@@ -154,7 +154,7 @@ module "citizen-frontend" {
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 
-    //LaunchDarkly
+    // LaunchDarkly
     LD_SDK_KEY = "${data.azurerm_key_vault_secret.launch_darkly_sdk_key.value}"
   }
 }
