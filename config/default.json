@@ -111,6 +111,6 @@
     }
   },
   "launchDarkly": {
-    "offline": true
+    "offline": false
   }
 }
