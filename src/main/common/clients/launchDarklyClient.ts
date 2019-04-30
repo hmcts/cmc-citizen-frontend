@@ -24,7 +24,7 @@ export class LaunchDarklyClient {
     const ldUser: ld.LDUser = {
       key: user.id,
       custom: {
-        'roles': roles
+        roles
       }
     }
     return LaunchDarklyClient.client.variation(featureKey, ldUser, false)
