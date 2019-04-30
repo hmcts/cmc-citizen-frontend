@@ -125,7 +125,3 @@ variable "log_level" {
 variable "node_debug" {
   default = ""
 }
-
-variable "ld_offline_flag" {
-  default = "false"
-}

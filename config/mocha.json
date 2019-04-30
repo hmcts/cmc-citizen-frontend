@@ -39,5 +39,8 @@
   },
   "requestRetry": {
     "maxAttempts": 1
+  },
+  "launchDarkly": {
+    "offline": true
   }
 }
