@@ -39,7 +39,7 @@ let statementOfMeansCalculations: StatementOfMeansCalculations
 let repository: AllowanceRepository
 let allowanceCalculations: AllowanceCalculations
 
-const sampleAllowanceDataLocation = join(__dirname,'..', '..', '..', 'data', 'entity','sampleAllowanceData.json')
+const sampleAllowanceDataLocation = join(__dirname,'..', '..', '..', 'settlement.ts', 'entity','sampleAllowanceData.json')
 const partyType: string = PartyType.INDIVIDUAL.value
 const dateOfBirthOver18: moment.Moment = moment().subtract(24, 'year')
 

@@ -12,7 +12,7 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreMock from 'test/http-mocks/draft-store'
-import * as data from 'test/features/dashboard/routes/settlement/data'
+import * as data from 'test/data/entity/settlement'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
