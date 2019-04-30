@@ -27,6 +27,10 @@ const cookieName: string = config.get<string>('session.cookieName')
 const otherWitnessesPage = Paths.otherWitnessesPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
 
+afterEach(function (done) {
+  app.listen(done).close(done)
+})
+
 function checkAccessGuard (app: any, method: string) {
 
   it(`should redirect to dashboard page when DQ is not enabled for claim`, async () => {
