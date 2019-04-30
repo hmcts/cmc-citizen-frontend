@@ -41,7 +41,7 @@ export const defenceWithAmountClaimedAlreadyPaidData = {
   defenceType: 'ALREADY_PAID',
   paymentDeclaration: {
     paidDate: '2017-12-31',
-    paidAmount: '100',
+    paidAmount: 100,
     explanation: 'I paid in cash'
   }
 }
