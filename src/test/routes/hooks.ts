@@ -8,4 +8,8 @@ export function attachDefaultHooks (app: express.Express) {
   before(() => {
     app.locals.csrf = 'dummy-token'
   })
+
+  afterEach(function (done) {
+    app.listen(done).close(done)
+  })
 }

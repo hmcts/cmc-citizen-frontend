@@ -96,7 +96,11 @@
       "citizen-oauth-client-secret": "OAUTH_CLIENT_SECRET",
       "os-postcode-lookup-api-key": "POSTCODE_LOOKUP_API_KEY",
       "encryptionKey": "COOKIE_ENCRYPTION_KEY",
-      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
+      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
+      "launchDarkly-sdk-key": "LD_SDK_KEY"
     }
+  },
+  "launchDarkly": {
+    "offline": "LD_OFFLINE_FLAG"
   }
 }

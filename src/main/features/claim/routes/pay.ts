@@ -24,9 +24,11 @@ import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { LaunchDarklyClient } from 'shared/clients/launchDarklyClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
+const launchDarklyClient: LaunchDarklyClient = new LaunchDarklyClient()
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -66,7 +68,7 @@ async function successHandler (res, next) {
     }
 
     let features: string
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
+    if (await launchDarklyClient.variation(user, roles, 'admissions')) {
       features = 'admissions'
     }
 

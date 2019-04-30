@@ -25,18 +25,21 @@ describe('ErrorHandling', () => {
 
   it('should invoke given request handler', async () => {
     const handled = ErrorHandling.apply(resolvingRequestHandler)
+    // @ts-ignore
     await handled(mockReq, mockRes, nextFunction)
     expect(resolvingRequestHandler).to.have.been.calledWith(mockReq, mockRes, nextFunction)
   })
 
   it('should not invoke next function when the request handler is successful', async () => {
     const handled = ErrorHandling.apply(resolvingRequestHandler)
+    // @ts-ignore
     await handled(mockReq, mockRes, nextFunction)
     expect(nextFunction).to.have.not.been.called
   })
 
   it('should invoke next function when the request handler has failed', async () => {
     const handled = ErrorHandling.apply(rejectingRequestHandler)
+    // @ts-ignore
     await handled(mockReq, mockRes, nextFunction)
     expect(nextFunction).to.have.been.called
   })

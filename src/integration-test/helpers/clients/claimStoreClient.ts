@@ -23,7 +23,7 @@ export class ClaimStoreClient {
       headers: {
         Authorization: `Bearer ${owner.bearerToken}`
       }
-    })
+    }).promise()
   }
 
   /**
@@ -69,7 +69,7 @@ export class ClaimStoreClient {
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
-    })
+    }).promise()
   }
 
   /**
@@ -96,7 +96,7 @@ export class ClaimStoreClient {
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
-    })
+    }).promise()
   }
 
   static addRoleToUser (bearerToken: string, role: string): Promise<void> {
@@ -110,6 +110,6 @@ export class ClaimStoreClient {
         headers: {
           Authorization: `Bearer ${bearerToken}`
         }
-      })
+      }).promise()
   }
 }

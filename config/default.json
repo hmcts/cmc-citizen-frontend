@@ -106,7 +106,11 @@
       "citizen-oauth-client-secret": "123456",
       "os-postcode-lookup-api-key": "AAAAAAA",
       "encryptionKey": "not-a-real-32-bit-encryption-key",
-      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
+      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
+      "launchDarkly-sdk-key": "sdk-AAAAA"
     }
+  },
+  "launchDarkly": {
+    "offline": false
   }
 }
