@@ -32,5 +32,10 @@ export default express.Router()
       await new DraftService().save(draft, user.bearerToken)
 
       const { externalId } = req.params
-      res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
+
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
+        res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
+      } else {
+        res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId }))
+      }
     }))
