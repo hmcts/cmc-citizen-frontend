@@ -41,10 +41,11 @@ exports.config = {
         pageLoad: 60000,
         'page load': 60000
       },
-      host: 'ondemand.saucelabs.com',
+      host: 'ondemand.eu-central-1.saucelabs.com',
       port: 80,
-      user: saucelabsUsername,
-      key: saucelabsAccessKey,
+      region: 'eu',
+      user: process.env.SAUCE_USERNAME,
+      key: process.env.SAUCE_ACCESS_KEY,
       desiredCapabilities: setupDesiredCapabilitiesFor(browser, saucelabsTunnelIdentifier)
     },
     IdamHelper: {
