@@ -7,6 +7,11 @@ export const partialAdmission = {
   respondedAt: MomentFactory.currentDateTime().subtract(10, 'days')
 }
 
+export const fullAdmission = {
+  response: claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj.response,
+  respondedAt: MomentFactory.currentDateTime().subtract(10, 'days')
+}
+
 export const dateIn3Months = MomentFactory.currentDate().add(3, 'months')
 export const dateIn6Months = MomentFactory.currentDate().add(6, 'months')
 
@@ -74,7 +79,7 @@ export const claimantResponses = {
 
 export const partyStatement = {
   byDefendant: {
-    offeringToPayBySetDate: {
+    offeringPaymentBySetDate: {
       type: 'OFFER',
       offer: {
         completionDate: dateIn3Months.toISOString(),
@@ -85,7 +90,7 @@ export const partyStatement = {
       },
       madeBy: 'DEFENDANT'
     },
-    offerNonMonetaryCompletion: {
+    offeringNonMonetarySettlement: {
       type: 'OFFER',
       offer: {
         content: 'I will send pigeons',
@@ -93,11 +98,11 @@ export const partyStatement = {
       },
       madeBy: 'DEFENDANT'
     },
-    counterSignature: {
+    countersigning: {
       type: 'COUNTERSIGNATURE',
       madeBy: 'DEFENDANT'
     },
-    rejection: {
+    rejecting: {
       type: 'REJECTION',
       madeBy: 'DEFENDANT'
     }
@@ -107,7 +112,7 @@ export const partyStatement = {
       type: 'ACCEPTATION',
       madeBy: 'CLAIMANT'
     },
-    offeringToPayBySetDate: {
+    offeringPaymentBySetDate: {
       type: 'OFFER',
       offer: {
         completionDate: dateIn3Months.toISOString(),
@@ -120,7 +125,7 @@ export const partyStatement = {
     }
   },
   byCourt: {
-    offerPayInInstalments: {
+    offeringPaymentByInstalments: {
       type: 'OFFER',
       offer: {
         completionDate: dateIn6Months.toISOString(),
@@ -143,9 +148,9 @@ export const partyStatement = {
 export const payBySetDateSettlementReachedPartyStatements = {
   settlement: {
     partyStatements: [
-      partyStatement.byDefendant.offeringToPayBySetDate,
+      partyStatement.byDefendant.offeringPaymentBySetDate,
       partyStatement.byClaimant.accepting,
-      partyStatement.byDefendant.counterSignature
+      partyStatement.byDefendant.countersigning
     ]
   },
   settlementReachedAt: MomentFactory.currentDateTime(),
@@ -155,9 +160,9 @@ export const payBySetDateSettlementReachedPartyStatements = {
 export const nonMonetaryOfferSettlementReachedPartyStatements = {
   settlement: {
     partyStatements: [
-      partyStatement.byDefendant.offerNonMonetaryCompletion,
+      partyStatement.byDefendant.offeringNonMonetarySettlement,
       partyStatement.byClaimant.accepting,
-      partyStatement.byDefendant.counterSignature
+      partyStatement.byDefendant.countersigning
     ]
   },
   settlementReachedAt: MomentFactory.currentDateTime(),
@@ -167,9 +172,9 @@ export const nonMonetaryOfferSettlementReachedPartyStatements = {
 export const defendantRejectsSettlementPartyStatements = {
   settlement: {
     partyStatements: [
-      partyStatement.byClaimant.offeringToPayBySetDate,
+      partyStatement.byClaimant.offeringPaymentBySetDate,
       partyStatement.byClaimant.accepting,
-      partyStatement.byDefendant.rejection
+      partyStatement.byDefendant.rejecting
     ]
   },
   settlementReachedAt: MomentFactory.currentDateTime(),
@@ -179,7 +184,7 @@ export const defendantRejectsSettlementPartyStatements = {
 export const claimantAcceptsCourtOfferPartyStatements = {
   settlement: {
     partyStatements: [
-      partyStatement.byCourt.offerPayInInstalments,
+      partyStatement.byCourt.offeringPaymentByInstalments,
       partyStatement.byClaimant.accepting
     ]
   },

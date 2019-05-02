@@ -31,12 +31,31 @@ const defendantContext = {
   url: defendantPagePath
 }
 
+const claimantName = claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name
+const defendantName = claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name
+
 const testData = [
   {
-    status: 'Should show case settled when settlement reached',
+    status: 'Should show case settled when part-admit pay-by-set-date settlement reached',
     claim: {
       ...data.claim,
       ...data.partialAdmission,
+      ...data.payBySetDateSettlementReachedPartyStatements
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement'
+    ]
+  },
+  {
+    status: 'Should show case settled when full-admit pay-by-set-date settlement reached',
+    claim: {
+      ...data.claim,
+      ...data.fullAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
     claimantAssertions: [
@@ -68,7 +87,7 @@ const testData = [
     ]
   },
   {
-    status: 'Should show settlement rejected',
+    status: 'Should show part-admit settlement rejected',
     claim: {
       ...data.claim,
       ...data.partialAdmission,
@@ -82,12 +101,31 @@ const testData = [
     ],
     defendantAssertions: [
       'You rejected the settlement agreement',
-      `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can request a County Court Judgment (CCJ) against you`,
+      `${claimantName} can request a County Court Judgment (CCJ) against you`,
       'Download your response'
     ]
   },
   {
-    status: 'Should show claimant accepted court plan settlement',
+    status: 'Should show full-admit settlement rejected',
+    claim: {
+      ...data.claim,
+      ...data.fullAdmission,
+      ...data.claimantResponses.acceptWithNewPlan,
+      ...data.defendantRejectsSettlementPartyStatements
+    },
+    claimantAssertions: [
+      'The defendant has rejected your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them',
+      'Request a County Court Judgment (CCJ)'
+    ],
+    defendantAssertions: [
+      'You rejected the settlement agreement',
+      `${claimantName} can request a County Court Judgment (CCJ) against you`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Should show claimant accepted court plan part-admit settlement',
     claim: {
       ...data.claim,
       ...data.partialAdmission,
@@ -96,7 +134,26 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve signed a settlement agreement',
-      `We’ve emailed ${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
+      `We’ve emailed ${defendantName} the repayment plan and the settlement agreement for them to sign.`,
+      'If they do not respond you can request a County Court Judgment.'
+    ],
+    defendantAssertions: [
+      'They asked you to sign a settlement agreement to formalise the plan.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'View the repayment plan'
+    ]
+  },
+  {
+    status: 'Should show claimant accepted court plan full-admit settlement',
+    claim: {
+      ...data.claim,
+      ...data.fullAdmission,
+      ...data.claimantResponses.acceptsWithCourtPlan,
+      ...data.claimantAcceptsCourtOfferPartyStatements
+    },
+    claimantAssertions: [
+      'You’ve signed a settlement agreement',
+      `We’ve emailed ${defendantName} the repayment plan and the settlement agreement for them to sign.`,
       'If they do not respond you can request a County Court Judgment.'
     ],
     defendantAssertions: [

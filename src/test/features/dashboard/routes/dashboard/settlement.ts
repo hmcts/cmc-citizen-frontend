@@ -37,10 +37,24 @@ const defendantContext = {
 
 const testData = [
   {
-    status: 'Should show case settled when settlement reached',
+    status: 'Should show case settled when part-admit pay-by-set-date settlement reached',
     claim: {
       ...data.claim,
       ...data.partialAdmission,
+      ...data.payBySetDateSettlementReachedPartyStatements
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement.'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement'
+    ]
+  },
+  {
+    status: 'Should show case settled when full-admit pay-by-set-date settlement reached',
+    claim: {
+      ...data.claim,
+      ...data.fullAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
     claimantAssertions: [
@@ -68,7 +82,7 @@ const testData = [
     ]
   },
   {
-    status: 'Should show settlement rejected',
+    status: 'Should show part-admit settlement rejected',
     claim: {
       ...data.claim,
       ...data.partialAdmission,
@@ -84,7 +98,23 @@ const testData = [
     ]
   },
   {
-    status: 'Should show claimant accepted court plan settlement',
+    status: 'Should show full-admit settlement rejected',
+    claim: {
+      ...data.claim,
+      ...data.fullAdmission,
+      ...data.claimantResponses.acceptWithNewPlan,
+      ...data.defendantRejectsSettlementPartyStatements
+    },
+    claimantAssertions: [
+      `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has rejected your settlement agreement`,
+      'You can request a County Court Judgment against them'
+    ],
+    defendantAssertions: [
+      'You rejected the settlement agreement'
+    ]
+  },
+  {
+    status: 'Should show claimant accepted court plan part-admit settlement',
     claim: {
       ...data.claim,
       ...data.partialAdmission,
@@ -98,10 +128,26 @@ const testData = [
     defendantAssertions: [
       `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} asked you to sign a settlement agreement`
     ]
+  },
+  {
+    status: 'Should show claimant accepted court plan full-admit settlement',
+    claim: {
+      ...data.claim,
+      ...data.fullAdmission,
+      ...data.claimantResponses.acceptsWithCourtPlan,
+      ...data.claimantAcceptsCourtOfferPartyStatements
+    },
+    claimantAssertions: [
+      'You’ve signed a settlement agreement.',
+      'The defendant can choose to sign it or not.'
+    ],
+    defendantAssertions: [
+      `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} asked you to sign a settlement agreement`
+    ]
   }
 ]
 
-describe('Settlement claim statuses', () => {
+describe('Settlement dashboard statuses', () => {
   attachDefaultHooks(app)
 
   testData.forEach(data => {
