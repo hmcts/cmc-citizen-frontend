@@ -11,227 +11,670 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
+import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { FreeMediationOption } from 'forms/models/freeMediation'
+import { NumberFormatter } from 'utils/numberFormatter'
 
 import {
-  baseDefenceData,
-  baseResponseData,
-  defenceWithAmountClaimedAlreadyPaidData
+  baseFullAdmissionData,
+  basePayByInstalmentsData,
+  basePayBySetDateData,
+  basePayImmediatelyData,
+  baseResponseData
 } from 'test/data/entity/responseData'
 
 import {
-  respondedAt,
-  claimantRejectAlreadyPaid,
-  directionsQuestionnaireDeadline,
-  settlementOffer,
-  settlementOfferAccept,
-  settlementOfferReject,
-  settledWithAgreement
-} from 'test/data/entity/fullDefenceData'
+  claimantResponseAt,
+  claimantReferredToJudgeResponse,
+  claimantReferredToJudgeResponseForInstalments,
+  claimantAcceptRepaymentPlan,
+  settlementOfferBySetDate,
+  settlementOfferByInstalments,
+  settlementOfferAcceptBySetDate,
+  settlementOfferAcceptInInstalment,
+  settledWithAgreementBySetDate,
+  settledWithAgreementInInstalments,
+  settledWithAgreementBySetDatePastPaymentDeadline,
+  settledWithAgreementInInstalmentsPastPaymentDeadline,
+  defendantRejectedSettlementOfferAcceptBySetDate,
+  defendantRejectedSettlementOfferAcceptInInstalments,
+  claimantAcceptRepaymentPlanByDetermination,
+  claimantAcceptRepaymentPlanInInstalmentsByDetermination,
+  setByDatePaymentIntentionPastDeadline,
+  defendantOffersSettlementByInstalments
+
+} from 'test/data/entity/fullAdmission'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const fullDefenceClaim = {
+const fullAdmissionClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
-  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+  responseDeadline: MomentFactory.currentDate().add(5, 'days'),
   response: {
     ...baseResponseData,
-    ...baseDefenceData,
-    amount: 30
-  }
+    ...baseFullAdmissionData
+  },
+  ...claimantResponseAt
 }
 
 const testData = [
   {
-    status: 'Full defence - defendant paid what he believe',
-    claim: fullDefenceClaim,
+    status: 'Full admission - defendant responded to pay immediately',
+    claim: fullAdmissionClaim,
     claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      ...respondedAt
-    },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.'],
-    defendantAssertions: ['000MC000', 'We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
-  },
-  {
-    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: { ...defenceWithAmountClaimedAlreadyPaidData },
-      ...respondedAt,
-      ...claimantRejectAlreadyPaid,
-      ...directionsQuestionnaireDeadline
-    },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', fullDefenceClaim.claim.claimants[0].name + ' rejected your admission of £100']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
-      }
-    },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.'],
-    defendantAssertions: ['000MC000', 'You have rejected the claim. You’ve suggested mediation.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
-      },
-      ...directionsQuestionnaireDeadline
-    },
-    claimantAssertions: ['000MC000', 'The defendant has rejected your claim'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
-      },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOffer
-    },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.'],
-    defendantAssertions: ['000MC000', 'You have rejected the claim. You’ve suggested mediation.','ou made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
-      },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOffer
-    },
-    claimantAssertions: ['000MC000', 'The defendant has rejected your claim', fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and said you don’t want to use mediation to solve it.','You made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.']
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
-      },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferAccept
+      response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
     },
     claimantAssertions: [
-      '000MC000',
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-      'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
+      'The defendant said they’ll pay you immediately',
+      'Tell us you’ve settled',
+      'If you haven’t been paid',
+      `If the defendant has not paid you by ${moment(fullAdmissionClaim.responseDeadline).format('LL')}, you can request a County Court Judgment.`
     ],
     defendantAssertions: [
-      '000MC000',
-      'You have rejected the claim. You’ve suggested mediation.',
-      'The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.'
+      'Your response to the claim',
+      `You said you’ll pay ${fullAdmissionClaim.claim.claimants[0].name} ${NumberFormatter.formatMoney(fullAdmissionClaim.claim.amount.rows[0].amount)} before 4pm on ${moment(fullAdmissionClaim.responseDeadline).format('LL')}.`,
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
     ]
   },
   {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
-    claim: fullDefenceClaim,
+    status: 'Full admission - defendant responded to pay immediately - past payment deadline',
+    claim: fullAdmissionClaim,
     claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
-      },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferAccept
+      response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
+      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
     claimantAssertions: [
-      '000MC000',
-      'The defendant has rejected your claim',
-      'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
+      'You can request a County Court Judgment',
+      `${fullAdmissionClaim.claim.defendants[0].name} has not responded to your claim by the deadline. You can request a County Court Judgment (CCJ) against them.`,
+      `${fullAdmissionClaim.claim.defendants[0].name} can still respond to the claim until you request a CCJ.`,
+      'Request a CCJ'
     ],
     defendantAssertions: [
-      '000MC000',
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
-      'The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.'
+      'You haven’t responded to the claim.',
+      `You haven’t responded to the claim. ${fullAdmissionClaim.claim.claimants[0].name} can now ask for a County Court Judgment against you.`,
+      'You can still respond to the claim before they ask for a judgment.',
+      'Respond to claim'
+
+    ]
+  },
+
+  {
+    status: 'Full admission - defendant responded to pay by set date',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      ...settlementOfferBySetDate
+    },
+    claimantAssertions: [
+      `The defendant has offered to pay by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}.`,
+      'View and respond to the offer',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      `You’ve offered to pay ${fullAdmissionClaim.claim.claimants[0].name} by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}.`,
+      'Download your response'
     ]
   },
   {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
-    claim: fullDefenceClaim,
+    status: 'Full admission - defendant responded to pay by set date - claimant rejects repayment plan and referred to judge',
+    claim: fullAdmissionClaim,
     claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
-      },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferReject
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: { ...claimantReferredToJudgeResponse }
     },
-    claimantAssertions: ['000MC000', fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.','You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.'],
-    defendantAssertions: ['000MC000', 'You have rejected the claim. You’ve suggested mediation.','The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.']
+    claimantAssertions: [
+      'Awaiting judge’s review',
+      `You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.`,
+      'A County Court Judgment has been issued against the defendant.',
+      `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`,
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
+      'They rejected your repayment plan.',
+      'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
+      `When we’ve processed the request we’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
+      'Download your response'
+    ]
   },
   {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
-    claim: fullDefenceClaim,
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission',
+    claim: fullAdmissionClaim,
     claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
-      },
-      ...directionsQuestionnaireDeadline,
-      ...settlementOfferReject
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptBySetDate
     },
-    claimantAssertions: ['000MC000', 'The defendant has rejected your claim','You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.'],
-    defendantAssertions: ['000MC000', 'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.','The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.']
+    claimantAssertions: [
+      'You’ve signed a settlement agreement',
+      `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
+      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'View the repayment plan',
+      'Download your response'
+    ]
   },
   {
-    status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
-    claim: fullDefenceClaim,
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
     claimOverride: {
-      ...respondedAt,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData
-      },
-      ...directionsQuestionnaireDeadline,
-      ...settledWithAgreement
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptBySetDate
     },
-    claimantAssertions: ['000MC000', 'You’ve both signed a legal agreement. The claim is now settled.'],
-    defendantAssertions: ['000MC000', 'You’ve both signed a legal agreement. The claim is now settled.']
+    claimantAssertions: [
+      'The defendant has not signed your settlement agreement',
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementBySetDate
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in full by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementBySetDatePastPaymentDeadline
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntentionPastDeadline.paymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'Request County Court Judgment',
+      'request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...defendantRejectedSettlementOfferAcceptBySetDate
+    },
+    claimantAssertions: [
+      `The defendant has rejected your settlement agreement`,
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment (CCJ)',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You rejected the settlement agreement',
+      `${fullAdmissionClaim.claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
+      `If ${fullAdmissionClaim.claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+      'Download your response'
+    ]
+  },
+
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: [
+      'You’ve signed a settlement agreement',
+      `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
+      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan.`,
+      'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: [
+      'The defendant has not signed your settlement agreement',
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settledWithAgreementBySetDate
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in full by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settledWithAgreementBySetDatePastPaymentDeadline
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntentionPastDeadline.paymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'Request County Court Judgment',
+      'request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...defendantRejectedSettlementOfferAcceptBySetDate
+    },
+    claimantAssertions: [
+      `The defendant has rejected your settlement agreement`,
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment (CCJ)',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You rejected the settlement agreement',
+      `${fullAdmissionClaim.claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
+      `If ${fullAdmissionClaim.claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+      'Download your response'
+    ]
+  },
+
+  {
+    status: 'Full admission - defendant responded to pay in instalments',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      ...settlementOfferByInstalments
+    },
+    claimantAssertions: [
+      'The defendant has offered to pay in instalments',
+      'View and respond to the offer',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      `You’ve offered to pay ${fullAdmissionClaim.claim.claimants[0].name} ${NumberFormatter.formatMoney(basePayByInstalmentsData.paymentIntention.repaymentPlan.instalmentAmount)}`,
+      `starting ${moment(basePayByInstalmentsData.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant rejects repayment plan and referred to judge',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantReferredToJudgeResponseForInstalments }
+    },
+    claimantAssertions: [
+      'Awaiting judge’s review',
+      `You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.`,
+      'A County Court Judgment has been issued against the defendant.',
+      `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`,
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
+      'They rejected your repayment plan.',
+      'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
+      `When we’ve processed the request we’ll post a copy of the judgment to you and to ${fullAdmissionClaim.claim.claimants[0].name}.`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: [
+      'You’ve signed a settlement agreement',
+      `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
+      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: [
+      'The defendant has not signed your settlement agreement',
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementInInstalments
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
+      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says you’ll repay ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
+      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementInInstalmentsPastPaymentDeadline
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'Request County Court Judgment',
+      'request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...defendantRejectedSettlementOfferAcceptInInstalments
+    },
+    claimantAssertions: [
+      `The defendant has rejected your settlement agreement`,
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment (CCJ)',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You rejected the settlement agreement',
+      `${fullAdmissionClaim.claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
+      `If ${fullAdmissionClaim.claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+      'Download your response'
+    ]
+  },
+
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: [
+      'You’ve signed a settlement agreement',
+      `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
+      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan.`,
+      'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant past counter signature deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: [
+      'The defendant has not signed your settlement agreement',
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant signed contract',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settledWithAgreementInInstalments
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
+      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says you’ll repay ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
+      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settledWithAgreementInInstalmentsPastPaymentDeadline
+    },
+    claimantAssertions: [
+      'You’ve both signed a settlement agreement',
+      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
+      'Download the settlement agreement',
+      'Tell us you’ve settled',
+      'Request County Court Judgment',
+      'request a County Court Judgment',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You’ve both signed a settlement agreement',
+      'Download the settlement agreement',
+      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant rejected',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...defendantRejectedSettlementOfferAcceptInInstalments
+    },
+    claimantAssertions: [
+      `The defendant has rejected your settlement agreement`,
+      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
+      'Request a County Court Judgment (CCJ)',
+      'If you’ve been paid',
+      'Tell us if you want to end the claim'
+    ],
+    defendantAssertions: [
+      'You rejected the settlement agreement',
+      `${fullAdmissionClaim.claim.claimants[0].name} can request a County Court Judgment (CCJ) against you.`,
+      `If ${fullAdmissionClaim.claim.claimants[0].name} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.`,
+      'Download your response'
+    ]
   }
 ]
 
-const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: fullDefenceClaim.externalId })
-const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: fullDefenceClaim.externalId })
+const claimPagePath = Paths.claimantPage.evaluateUri({ externalId: fullAdmissionClaim.externalId })
+const defendantPagePath = Paths.defendantPage.evaluateUri({ externalId: fullAdmissionClaim.externalId })
 
 describe('Dashboard page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', claimPagePath)
-    checkAuthorizationGuards(app, 'get', defendantPagePath)
-
     context('when user authorised', () => {
       context('Claim Status', () => {
         context('as a claimant', () => {
@@ -244,7 +687,7 @@ describe('Dashboard page', () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
               await request(app)
                 .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', `${cookieName} = ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
           })
@@ -260,7 +703,7 @@ describe('Dashboard page', () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
               await request(app)
                 .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
+                .set('Cookie', `${cookieName} = ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })

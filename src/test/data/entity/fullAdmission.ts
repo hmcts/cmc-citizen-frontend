@@ -24,7 +24,7 @@ export const installmentsPaymentIntentionPastDeadline = {
   repaymentPlan: {
     completionDate: MomentFactory.currentDate().subtract(12, 'months'),
     firstPaymentDate: MomentFactory.currentDate().subtract(1, 'days'),
-    installmentAmount: 10,
+    instalmentAmount: 10,
     paymentLength: '10 months',
     paymentSchedule: PaymentSchedule.EVERY_MONTH
   }
@@ -35,7 +35,7 @@ export const installmentsPaymentIntention = {
   repaymentPlan: {
     completionDate: MomentFactory.currentDate().add(12, 'months'),
     firstPaymentDate: MomentFactory.currentDate().add(15, 'days'),
-    installmentAmount: 10,
+    instalmentAmount: 10,
     paymentLength: '10 months',
     paymentSchedule: PaymentSchedule.EVERY_MONTH
   }
@@ -111,7 +111,7 @@ export const defendantOffersSettlementBySetDate = [{
   }
 }]
 
-export const defendantOffersSettlementByInstallments = [{
+export const defendantOffersSettlementByInstalments = [{
   type: 'OFFER',
   madeBy: 'DEFENDANT',
   offer: {
@@ -170,7 +170,7 @@ export const settledWithAgreementBySetDate = {
 export const settledWithAgreementInInstalments = {
   settlement: {
     partyStatements: [
-      ...defendantOffersSettlementByInstallments,
+      ...defendantOffersSettlementByInstalments,
       ...claimantAcceptOffer,
       ...defendantCounterSign
     ]
@@ -192,7 +192,7 @@ export const defendantRejectedSettlementOfferAcceptBySetDate = {
 export const defendantRejectedSettlementOfferAcceptInInstalments = {
   settlement: {
     partyStatements: [
-      ...defendantOffersSettlementByInstallments,
+      ...defendantOffersSettlementByInstalments,
       ...claimantAcceptOffer,
       ...defendantRejected
     ]
@@ -234,7 +234,7 @@ export const settlementOfferAcceptBySetDate = {
 export const settlementOfferAcceptInInstalment = {
   settlement: {
     partyStatements: [
-      ...defendantOffersSettlementByInstallments,
+      ...defendantOffersSettlementByInstalments,
       ...claimantAcceptOffer
     ]
   }
@@ -248,10 +248,10 @@ export const settlementOfferBySetDate = {
   }
 }
 
-export const settlementOfferByInstallments = {
+export const settlementOfferByInstalments = {
   settlement: {
     partyStatements: [
-      ...defendantOffersSettlementByInstallments
+      ...defendantOffersSettlementByInstalments
     ]
   }
 }

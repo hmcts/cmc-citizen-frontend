@@ -29,7 +29,7 @@ import {
   claimantReferredToJudgeResponseForInstalments,
   claimantAcceptRepaymentPlan,
   settlementOfferBySetDate,
-  settlementOfferByInstallments,
+  settlementOfferByInstalments,
   settlementOfferAcceptBySetDate,
   settlementOfferAcceptInInstalment,
   settledWithAgreementBySetDate,
@@ -226,7 +226,7 @@ const testData = [
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
-      ...settlementOfferByInstallments
+      ...settlementOfferByInstalments
     },
     claimantAssertions: ['The defendant has offered to pay in instalments. You can accept or reject their offer.'],
     defendantAssertions: ['You’ve admitted all of the claim and offered to pay the full amount in instalments.']
