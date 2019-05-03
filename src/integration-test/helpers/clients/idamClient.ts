@@ -92,6 +92,7 @@ export class IdamClient {
    * @returns {Promise<string>}
    */
   static async upliftUser (email: string, upliftToken: string): Promise<void> {
+    let code
     const upliftParams = IdamClient.toUrlParams({
       userName: email,
       password: defaultPassword,
@@ -99,8 +100,7 @@ export class IdamClient {
       clientId: oauth2.client_id,
       redirectUri: oauth2.redirect_uri
     })
-
-    const res = await require('request-promise-native').post({
+    const options = {
       uri: `${baseURL}/login/uplift?${upliftParams}`,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
@@ -109,10 +109,15 @@ export class IdamClient {
       followRedirect: false,
       json: false,
       resolveWithFullResponse: true
+    }
+    return require('request-promise-native').post(options).then(function (response) {
+      return response
+    }).then(function (response) {
+      code = url.parse(response.headers.location, true).query.code
+      return IdamClient.exchangeCode(code).then(function (response) {
+        return response
+      })
     })
-
-    const code: string = url.parse(res.headers.location, true).query.code.toString()
-    await IdamClient.exchangeCode(code)
   }
 
   /**
@@ -122,9 +127,9 @@ export class IdamClient {
    * @returns {Promise<string>} bearer token
    */
   static async authenticatePinUser (pin: string): Promise<string> {
-    const oauth2Params: string = IdamClient.toUrlParams(oauth2)
     let code
-    const res = request.get({
+    const oauth2Params: string = IdamClient.toUrlParams(oauth2)
+    const options = {
       uri: `${baseURL}/pin?${oauth2Params}`,
       headers: {
         pin,
@@ -134,10 +139,15 @@ export class IdamClient {
       followRedirect: false,
       json: false,
       resolveWithFullResponse: true
+    }
+    return request(options).then(function (response) {
+      return response
+    }).then(function (response) {
+      code = url.parse(response.headers.location, true).query.code
+      return IdamClient.exchangeCode(code).then(function (response) {
+        return response
+      })
     })
-
-    code = url.parse(res.headers.location, true).query.code
-    return IdamClient.exchangeCode(code)
   }
 
   static exchangeCode (code: string): Promise<string> {
