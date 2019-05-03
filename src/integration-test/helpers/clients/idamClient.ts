@@ -12,9 +12,6 @@ const oauth2 = {
   client_secret: process.env.OAUTH_CLIENT_SECRET
 }
 
-const strategicIdam: boolean = baseURL.includes('core-compute') ||
-  baseURL.includes('platform.hmcts.net')
-
 export class IdamClient {
 
   /**
@@ -95,49 +92,27 @@ export class IdamClient {
    * @returns {Promise<string>}
    */
   static async upliftUser (email: string, upliftToken: string): Promise<void> {
-    if (strategicIdam) {
-      const upliftParams = IdamClient.toUrlParams({
-        userName: email,
-        password: defaultPassword,
-        jwt: upliftToken,
-        clientId: oauth2.client_id,
-        redirectUri: oauth2.redirect_uri
-      })
+    const upliftParams = IdamClient.toUrlParams({
+      userName: email,
+      password: defaultPassword,
+      jwt: upliftToken,
+      clientId: oauth2.client_id,
+      redirectUri: oauth2.redirect_uri
+    })
 
-      const res = await require('request-promise-native').post({
-        uri: `${baseURL}/login/uplift?${upliftParams}`,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        simple: false,
-        followRedirect: false,
-        json: false,
-        resolveWithFullResponse: true
-      })
+    const res = await require('request-promise-native').post({
+      uri: `${baseURL}/login/uplift?${upliftParams}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      simple: false,
+      followRedirect: false,
+      json: false,
+      resolveWithFullResponse: true
+    })
 
-      const code: string = url.parse(res.headers.location, true).query.code.toString()
-      await IdamClient.exchangeCode(code)
-    } else {
-      const base64EncodedCredentials = IdamClient.toBase64(`${email}:${defaultPassword}`)
-      const upliftParams = IdamClient.toUrlParams({
-        response_type: 'code',
-        client_id: oauth2.client_id,
-        redirect_uri: oauth2.redirect_uri,
-        upliftToken: upliftToken
-      })
-
-      const options = {
-        method: 'POST',
-        uri: `${baseURL}/oauth2/authorize?${upliftParams}`,
-        headers: {
-          Authorization: `Basic ${base64EncodedCredentials}`
-        }
-      }
-      return request(options).then(function (response) {
-        return Promise.resolve()
-      })
-    }
-
+    const code: string = url.parse(res.headers.location, true).query.code.toString()
+    await IdamClient.exchangeCode(code)
   }
 
   /**
@@ -149,40 +124,20 @@ export class IdamClient {
   static async authenticatePinUser (pin: string): Promise<string> {
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
     let code
-    if (strategicIdam) {
-      const res = request.get({
-        uri: `${baseURL}/pin?${oauth2Params}`,
-        headers: {
-          pin,
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        simple: false,
-        followRedirect: false,
-        json: false,
-        resolveWithFullResponse: true
-      })
+    const res = request.get({
+      uri: `${baseURL}/pin?${oauth2Params}`,
+      headers: {
+        pin,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      simple: false,
+      followRedirect: false,
+      json: false,
+      resolveWithFullResponse: true
+    })
 
-      code = url.parse(res.headers.location, true).query.code
-      return IdamClient.exchangeCode(code)
-    } else {
-      const base64EncodedCredentials = IdamClient.toBase64(pin)
-
-      const options = {
-        method: 'POST',
-        uri: `${baseURL}/oauth2/authorize?${oauth2Params}&response_type=code`,
-        headers: {
-          Authorization: `Pin ${base64EncodedCredentials}`
-        }
-      }
-
-      return request(options).then(function (response) {
-        return response.code
-      }).then(function (response) {
-        return IdamClient.exchangeCode(response).then(function (response) {
-          return response
-        })
-      })
-    }
+    code = url.parse(res.headers.location, true).query.code
+    return IdamClient.exchangeCode(code)
   }
 
   static exchangeCode (code: string): Promise<string> {
