@@ -11,7 +11,7 @@ function reportBuildResultToSaucelabs (result) {
   const sessionId = container.helpers('WebDriverIO').browser.requestHandler.sessionID
 
   request.put({
-    uri: `https://saucelabs.com/rest/v1/${process.env.SAUCELABS_USERNAME}/jobs/${sessionId}`,
+    uri: `https://eu-central-1.saucelabs.com/rest/v1/${sauceUsername}/jobs/${sessionId}`,
     auth: {
       username: process.env.SAUCELABS_USERNAME,
       password: process.env.SAUCELABS_ACCESS_KEY
