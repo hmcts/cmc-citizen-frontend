@@ -92,7 +92,6 @@ export class IdamClient {
    * @returns {Promise<string>}
    */
   static async upliftUser (email: string, upliftToken: string): Promise<void> {
-    let code
     const upliftParams = IdamClient.toUrlParams({
       userName: email,
       password: defaultPassword,
@@ -113,7 +112,7 @@ export class IdamClient {
     return require('request-promise-native').post(options).then(function (response) {
       return response
     }).then(function (response) {
-      code = url.parse(response.headers.location, true).query.code
+      const code: any = url.parse(response.headers.location, true).query.code
       return IdamClient.exchangeCode(code).then(function (response) {
         return response
       })
@@ -127,7 +126,6 @@ export class IdamClient {
    * @returns {Promise<string>} bearer token
    */
   static async authenticatePinUser (pin: string): Promise<string> {
-    let code
     const oauth2Params: string = IdamClient.toUrlParams(oauth2)
     const options = {
       uri: `${baseURL}/pin?${oauth2Params}`,
@@ -143,7 +141,7 @@ export class IdamClient {
     return request(options).then(function (response) {
       return response
     }).then(function (response) {
-      code = url.parse(response.headers.location, true).query.code
+      const code: any = url.parse(response.headers.location, true).query.code
       return IdamClient.exchangeCode(code).then(function (response) {
         return response
       })
