@@ -416,26 +416,19 @@
   resolved "https://registry.yarnpkg.com/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/nunjucks@^3.1.0":
+"@types/nunjucks@^3.0.0":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@types/nunjucks/-/nunjucks-3.1.1.tgz#1f910f43c1aa41d99328cf28b6f1b82630ec6763"
   integrity sha512-8Isd49iSR8TfqrfmcaimQZG9/uwqkZw7uJGSn4Do3JD6QMlNwzDUtXoW1bM9INUaR7Eld2LYcJrKVECF7YOd1w==
 
-<<<<<<< HEAD
-"@types/request-promise-native@^1.0.15":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@types/request-promise-native/-/request-promise-native-1.0.15.tgz#5b3369fc6aaf9e7fef7b6b688aef4c5759623e16"
-=======
 "@types/range-parser@*":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
-"@types/request-promise-native@^1.0.2":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/@types/request-promise-native/-/request-promise-native-1.0.16.tgz#a326a6fb541da63c6c713293c1935e54b7d84d3b"
-  integrity sha512-gbLf6cg1XGBU8BObOgs5VkCQo5JFz2GstgZjyE4FRbig/jiCEdiynu2fCzJlw3qYPuoj59spKnvuRLN4PsMvhA==
->>>>>>> master
+"@types/request-promise-native@^1.0.15":
+  version "1.0.15"
+  resolved "https://registry.yarnpkg.com/@types/request-promise-native/-/request-promise-native-1.0.15.tgz#5b3369fc6aaf9e7fef7b6b688aef4c5759623e16"
   dependencies:
     "@types/request" "*"
 
