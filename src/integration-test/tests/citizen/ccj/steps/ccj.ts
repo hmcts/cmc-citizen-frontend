@@ -63,7 +63,7 @@ export class CountyCourtJudgementSteps {
     ccjPaymentOptionsPage.chooseImmediately()
   }
 
-  checkCCJFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType): void {
+  checkCCJFactsAreTrueAndSubmit (claimantType: PartyType, defendant: Party, defendantType: PartyType): void {
     ccjCheckAndSendPage.verifyCheckAndSendAnswers(defendant, defendantType, defendantPaidAmount, defendant.address)
 
     if (claimantType === PartyType.COMPANY || claimantType === PartyType.ORGANISATION) {

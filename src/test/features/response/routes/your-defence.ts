@@ -4,8 +4,8 @@ import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -15,8 +15,8 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const expectedText: string = 'Why do you disagree with the claim'

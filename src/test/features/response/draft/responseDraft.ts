@@ -8,7 +8,7 @@ import { PaymentOption, PaymentType } from 'shared/components/payment-intention/
 
 import { Response } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/rejectAllOfClaim'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'

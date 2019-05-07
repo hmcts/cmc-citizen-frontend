@@ -1,6 +1,6 @@
 import { IsEmail } from '@hmcts/cmc-validators'
 import { CompletableTask } from 'models/task'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 export class ValidationErrors {
   static readonly ADDRESS_NOT_VALID: string = 'Enter valid email address'

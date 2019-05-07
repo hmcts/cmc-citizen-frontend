@@ -1,4 +1,4 @@
-import { IsDefined, IsPositive } from 'class-validator'
+import { IsDefined, IsPositive } from '@hmcts/class-validator'
 import { Fractions, IsLessThan } from '@hmcts/cmc-validators'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'

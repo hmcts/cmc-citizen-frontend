@@ -28,6 +28,7 @@
 {% from "./claimStatus/claimPartAdmissionClaimant.njk" import
   claimPartAdmittedAlreadyPaidForClaimantDashboard,
   claimPartAdmittedToOweForClaimantDashboard,
+  partAdmittedPayImmediatelyClaimantClaimDetails,
   partAdmittedClaimantAcceptsClaimantDashboard %}
 
 {% from "./claimStatus/claimFullAdmissionForDefendant.njk" import
@@ -52,8 +53,13 @@
   settlementAgreementSignedByBothClaimantDashboard,
   settlementAgreementRejectedForClaimantDashboard %}
 
-{% from "./claimStatus/paidInFullClaimant.njk" import paidInFullClaimantDashboard %}
-{% from "./claimStatus/paidInFullDefendant.njk" import paidInFullDefendantDashboard %}
+{% from "./claimStatus/paidInFullClaimant.njk" import claimIsSettledClaimantDashboard %}
+{% from "./claimStatus/paidInFullDefendant.njk" import
+  claimSettledDashboard,
+  paidInFullCancelledOrSatisfiedDefendantDashboard %}
+{% from "./claimStatus/statesPaidRejected.njk" import
+  statesPaidInFullRejectedClaimantDashboard,
+  statesPaidRejectedDefendantDashboard %}
 
 {% from "./claimStatus/offerSettlement.njk" import offerSettlementReachedDashboard %}
 
@@ -71,9 +77,13 @@
 {% from "./claimStatus/partAdmitRejectionClaimant.njk" import partAdmitRejectedByClaimantDashboard %}
 {% from "./claimStatus/partAdmitRejectionDefendant.njk" import partAdmitRejectedByClaimantDefendantDashboard %}
 
+{% from "./claimStatus/breachOfPaymentDefendant.njk" import CCJAfterBreakingSettlementAgreementClaimDetails %}
+
+
 {% macro caseStatusForClaimant(status, claim) %}
-  {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
-    {{ paidInFullClaimantDashboard() }}
+  {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+    {{ claimSettledDashboard() }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -84,7 +94,8 @@
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
     {{ redeterminationClaimantDashboard() }}
-  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ %}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
+    status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or status === ClaimStatus.CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED %}
     {{ admissionByCCJClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
     {{ claimFullAdmissionForClaimantDashboard(claim) }}
@@ -121,13 +132,15 @@
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}
-  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_COMPANY_OR_ORGANISATION_RESPONSE %}
-    {{ claimantRejectedDefendantAsCompanyOrOrganisationResponse() }}
-  {% elif status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
     {{ partAdmitRejectedByClaimantDashboard(claim) }}
-    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
+    {{ partAdmitRejectedByClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+    {{ statesPaidInFullRejectedClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
     {{ claimantWithDefendantAsBusinessResponse() }}
-    {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
     {{ claimantWithDefendantAsBusinessResponse() }}
   {% elif status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
     {{ settlementAgreementRejectedForClaimantDashboard(claim) }}
@@ -137,8 +150,10 @@
 {% endmacro %}
 
 {% macro caseStatusForDefendant(status, claim) %}
-  {% if status === ClaimStatus.PAID_IN_FULL %}
-    {{ paidInFullDefendantDashboard() }}
+  {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
+    {{ claimSettledDashboard() }}
+  {% elif status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED %}
+    {{ paidInFullCancelledOrSatisfiedDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.NO_RESPONSE %}
     {{ noResponseForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.MORE_TIME_REQUESTED %}
@@ -149,7 +164,8 @@
     {{ redeterminationDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
-  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ %}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ
+    or status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or status === ClaimStatus.CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED %}
     {{ admissionByCCJDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION or status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     or status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED %}
@@ -182,18 +198,20 @@
     {{ offerRejectedForDefendantDashboard() }}
   {% elif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ offerAcceptedForDefendantDashboard() }}
-  {% elif status === ClaimStatus.CLAIMANT_REJECTS_PART_ADMISSION %}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
     {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
+    {{ statesPaidRejectedDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
     {{ partAdmittedClaimantAcceptsDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
-  {{ offerSettlementReachedDashboard() }}
-  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
-  {{  claimFullAdmissionForDefendantDashboard(claim) }}
-  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
-  {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
     {{ offerSettlementReachedDashboard() }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
+    {{  claimFullAdmissionForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
+    {{ claimPartAdmittedToOweForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
     {{ settlementAgreementRejectedForDefendantDashboard() }}
   {% endif %}

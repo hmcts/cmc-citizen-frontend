@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { PaymentPlan, ValidationErrors } from 'shared/components/payment-intention/model/paymentPlan'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'

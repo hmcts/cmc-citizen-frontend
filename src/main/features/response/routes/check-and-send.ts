@@ -20,12 +20,15 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { FeatureToggles } from 'utils/featureToggles'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
+  const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -33,7 +36,9 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
-    admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim)
+    admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
+    mediationEnabled: FeatureToggles.isEnabled('mediation'),
+    mediationDraft: mediationDraft.document
   })
 }
 
@@ -95,6 +100,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
@@ -115,12 +121,18 @@ export default express.Router()
             next(new Error('Unknown response type: ' + responseType))
         }
 
+        const draftService = new DraftService()
         if (form.model.type === SignatureType.QUALIFIED) {
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService().save(draft, user.bearerToken)
+          await draftService.save(draft, user.bearerToken)
         }
-        await claimStoreClient.saveResponseForUser(claim, draft, user)
-        await new DraftService().delete(draft.id, user.bearerToken)
+        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
+        await draftService.delete(draft.id, user.bearerToken)
+
+        if (FeatureToggles.isEnabled('mediation')) {
+          await draftService.delete(mediationDraft.id, user.bearerToken)
+        }
+
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

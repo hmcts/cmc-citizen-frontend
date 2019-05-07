@@ -4,6 +4,9 @@ const I: I = actor()
 
 const fields = {
   name: 'input[id=name]',
+  title: 'input[id=title]',
+  firstName: 'input[id=firstName]',
+  lastName: 'input[id=lastName]',
   address: {
     postcodeLookUp: 'input[id="address[postcodeLookup]"]',
     selectAddressList: 'select[id="address[addressList]"]',
@@ -38,12 +41,16 @@ export class IndividualDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  enterAddress (address: Address): void {
-    I.click(fields.address.enterManually)
-    I.fillField(fields.address.line1, address.line1)
-    I.fillField(fields.address.line2, address.line2)
-    I.fillField(fields.address.postcode, address.postcode)
-    I.fillField(fields.address.city, address.city)
+  enterTitle (title: string): void {
+    I.fillField(fields.title, title)
+  }
+
+  enterFirstName (firstName: string): void {
+    I.fillField(fields.firstName, firstName)
+  }
+
+  enterLastName (lastName: string): void {
+    I.fillField(fields.lastName, lastName)
   }
 
   lookupAddress (postcodeLookupQuery: PostcodeLookupQuery): void {
@@ -52,6 +59,16 @@ export class IndividualDetailsPage {
     I.waitForVisible(fields.address.selectAddressList)
     I.click(fields.address.selectAddressList)
     I.selectOption(fields.address.selectAddressList, postcodeLookupQuery.address)
+  }
+
+  enterAddress (address: Address, clickManualLink: boolean = true): void {
+    if (clickManualLink) {
+      I.click(fields.address.enterManually)
+    }
+    I.fillField(fields.address.line1, address.line1)
+    I.fillField(fields.address.line2, address.line2)
+    I.fillField(fields.address.postcode, address.postcode)
+    I.fillField(fields.address.city, address.city)
   }
 
   enterAddresses (address: Address, correspondenceAddress: Address): void {
@@ -73,5 +90,4 @@ export class IndividualDetailsPage {
   submit (): void {
     I.click(buttons.submit)
   }
-
 }

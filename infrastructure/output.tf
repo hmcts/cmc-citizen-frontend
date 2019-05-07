@@ -1,11 +1,3 @@
-output "vaultUri" {
-  value = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
-}
-
-output "vaultName" {
-  value = "${local.vaultName}"
-}
-
 output "idam_url" {
   value = "${var.idam_api_url}"
 }
@@ -36,4 +28,8 @@ output "feature_return_error_to_user" {
 
 output "feature_mock_pay" {
   value = "${var.feature_mock_pay}"
+}
+
+output "feature_testing_support" {
+  value = "${var.feature_testing_support}"
 }

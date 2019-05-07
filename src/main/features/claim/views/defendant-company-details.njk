@@ -14,12 +14,14 @@
     <div class="column-two-thirds">
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
+        <p>{{ t('You’ll have to pay an extra fee if you later want to change the name of anyone involved with the claim.') }}</p>
 
         {{
           partyDetailsFragment(
             form,
             fields = [
-              { label: 'Company name', name: 'name' }
+              { label: 'Company name', name: 'name' },
+              { label: 'Contact person (optional)', name: 'contactPerson', hint: 'This might be a person you’ve discussed the claim with.' }
             ],
             addressSection = {
               heading: 'Company address',

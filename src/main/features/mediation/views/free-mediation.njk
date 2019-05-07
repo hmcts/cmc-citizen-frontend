@@ -1,0 +1,53 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton %}
+
+{% set heading = 'Free telephone mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {% if mediationPilot %}
+
+        <p>{{ t('We’re automatically registering some claims worth £300 or less for free telephone mediation. Your claim has been selected for this.') }}</p>
+        <p>{{ t('We’ll tell you how mediation works - you can decide to take part or not.') }}</p>
+
+      {% else %}
+
+        <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>
+        {% set footnote = true %}
+
+        {% if defendant %}
+          <p>{{ t('The free service can help you:') }}</p>
+          <ul class="list list-bullet">
+            <li>{{ t('avoid a long wait for the claim to be resolved') }}</li>
+            <li>{{ t('avoid a court hearing, which can last a whole day') }}</li>
+            <li>{{ t('avoid a County Court Judgment') }}</li>
+            </li>
+          </ul>
+        {% else %}
+          <p>{{ t('Continuing the claim doesn’t guarantee you get paid - it can mean:') }}</p>
+          <ul class="list list-bullet">
+            <li>{{ t('it takes longer to resolve your claim') }}</li>
+            <li>{{ t('you have to go to a court hearing and pay a fee') }}</li>
+            </li>
+          </ul>
+        {% endif %}
+
+        <p>{{ t('You’ll only speak to a mediator about the claim, not to {{ otherParty }}.', { otherParty: otherParty }) }}</p>
+
+      {% endif %}
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{ submitButton('How free mediation works') }}
+        </div>
+      </form>
+
+      {% if footnote %}
+        <p class="font-xsmall">{{ t('*Source: Small Claims Mediation Service statistics, November 2017 to October 2018.') }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
