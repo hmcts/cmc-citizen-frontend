@@ -96,10 +96,8 @@ const testData = [
       }
     },
     claimantAssertions: [
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-      'Find out how mediation works',
-      'If you don’t send an email before the deadline, the claim will proceed without mediation',
-      'Download their response',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
+      'You need to decide whether to proceed with the claim',
       'If you’ve been paid',
       'Tell us if you want to end the claim'
     ],
@@ -152,11 +150,7 @@ const testData = [
       ...settlementOffer
     },
     claimantAssertions: [
-      'The defendant’s response',
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-      'Find out how mediation works',
-      'If you don’t send an email before the deadline, the claim will proceed without mediation',
-      'Download their response',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim',
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'View and respond to the offer',
@@ -215,11 +209,7 @@ const testData = [
       ...settlementOfferAccept
     },
     claimantAssertions: [
-      'The defendant’s response',
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-      'Find out how mediation works',
-      'If you don’t send an email before the deadline, the claim will proceed without mediation',
-      'Download their response',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
       'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
       'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
@@ -281,11 +271,7 @@ const testData = [
       ...settlementOfferReject
     },
     claimantAssertions: [
-      'The defendant’s response',
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-      'Find out how mediation works',
-      'If you don’t send an email before the deadline, the claim will proceed without mediation',
-      'Download their response',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'If you’ve been paid',
