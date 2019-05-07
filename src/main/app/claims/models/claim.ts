@@ -191,7 +191,7 @@ export class Claim {
       statuses.push({ status: ClaimStatus.OFFER_REJECTED })
     } else if (this.isOfferAccepted() && !this.isSettlementReached() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
       statuses.push({ status: ClaimStatus.OFFER_ACCEPTED })
-    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn) {
+    } else if (this.isOfferSubmitted() && !this.settlement.isThroughAdmissions() && !this.moneyReceivedOn && !this.isSettlementReached()) {
       statuses.push({ status: ClaimStatus.OFFER_SUBMITTED })
     }
 
@@ -338,6 +338,10 @@ export class Claim {
       return false
     }
 
+    if (this.isSettlementReached()) {
+      return false
+    }
+
     if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
       return true
     }
@@ -471,7 +475,7 @@ export class Claim {
     return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
-         || this.response.responseType === ResponseType.PART_ADMISSION)
+        || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.response.paymentDeclaration !== undefined
   }
 
