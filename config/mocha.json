@@ -32,6 +32,7 @@
     "paidInFull": true,
     "returnErrorToUser": true,
     "mediation": true,
+    "mediationPilot": true,
     "directionsQuestionnaire": true
   },
   "appInsights": {
