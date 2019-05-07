@@ -97,73 +97,73 @@ describe('Mediation: how mediation works page', () => {
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
 
-      context('when user authorised', () => {
-        context('when form is valid', () => {
-          context('when mediation pilot is not enabled', () => {
-            it('should redirect to the free mediation page when everything is fine for the defendant', async () => {
-              idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-              checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
+    context('when user authorised', () => {
+      context('when form is valid', () => {
+        context('when mediation pilot is not enabled', () => {
+          it('should redirect to the free mediation page when everything is fine for the defendant', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId })))
-            })
-
-            it('should redirect to the free mediation page when everything is fine for the claimant', async () => {
-              idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
-              checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId })))
-            })
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId })))
           })
 
-          context('when mediation pilot is enabled', () => {
-            const mediationPilotOverride = {
-              totalAmountTillToday: 200,
-              features: [...claimStoreServiceMock.sampleClaimObj.features, 'mediationPilot']
-            }
+          it('should redirect to the free mediation page when everything is fine for the claimant', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
 
-            it('should redirect to the mediation agreement page when everything is fine for the defendant', async () => {
-              idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-              checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId })))
+          })
+        })
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
-            })
+        context('when mediation pilot is enabled', () => {
+          const mediationPilotOverride = {
+            totalAmountTillToday: 200,
+            features: [...claimStoreServiceMock.sampleClaimObj.features, 'mediationPilot']
+          }
 
-            it('should redirect to the mediation agreement page when everything is fine for the claimant', async () => {
-              idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
-              checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
+          it('should redirect to the mediation agreement page when everything is fine for the defendant', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
-            })
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
+          })
+
+          it('should redirect to the mediation agreement page when everything is fine for the claimant', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
           })
         })
       })
+    })
   })
 })
