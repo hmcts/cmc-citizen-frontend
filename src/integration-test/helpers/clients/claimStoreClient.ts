@@ -19,11 +19,15 @@ export class ClaimStoreClient {
       return Promise.reject('Claim owner is required')
     }
 
-    return request.get(`${baseURL}/claims/${referenceNumber}`, {
+    const options = {
+      uri: `${baseURL}/claims/${referenceNumber}`,
       headers: {
         Authorization: `Bearer ${owner.bearerToken}`
       }
-    }).promise()
+    }
+    return request(options).then(function (response) {
+      return response
+    })
   }
 
   /**
@@ -65,11 +69,17 @@ export class ClaimStoreClient {
       return Promise.reject('Defendant is required')
     }
 
-    return request.put(`${baseURL}/claims/defendant/link`, {
+    const options = {
+      method: 'PUT',
+      uri: `${baseURL}/claims/defendant/link`,
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
-    }).promise()
+    }
+
+    return request(options).then(function (response) {
+      return response
+    })
   }
 
   /**
@@ -91,12 +101,18 @@ export class ClaimStoreClient {
       return Promise.reject('Defendant is required')
     }
 
-    return request.post(`${baseURL}/responses/claim/${externalId}/defendant/${defendant.id}`, {
+    const options = {
+      method: 'POST',
+      uri: `${baseURL}/responses/claim/${externalId}/defendant/${defendant.id}`,
       body: responseData,
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
-    }).promise()
+    }
+
+    return request(options).then(function (response) {
+      return response
+    })
   }
 
   static addRoleToUser (bearerToken: string, role: string): Promise<void> {
@@ -104,12 +120,14 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('bearerToken is required'))
     }
 
-    return request
-      .post(`${baseURL}/user/roles`, {
-        body: { role: role },
-        headers: {
-          Authorization: `Bearer ${bearerToken}`
-        }
-      }).promise()
+    const options = {
+      method: 'POST',
+      uri: `${baseURL}/user/roles`,
+      body: { role: role },
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    }
+    return request(options).then()
   }
 }
