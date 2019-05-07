@@ -76,6 +76,7 @@
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY",
     "mediation": "FEATURE_MEDIATION",
+    "mediationPilot": "FEATURE_MEDIATION_PILOT",
     "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE"
   },
 
