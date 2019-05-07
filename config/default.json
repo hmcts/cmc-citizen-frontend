@@ -86,6 +86,7 @@
     "returnErrorToUser": false,
     "mockPay": false,
     "mediation": true,
+    "mediationPilot": false,
     "directionsQuestionnaire": false
   },
   "oauth": {
