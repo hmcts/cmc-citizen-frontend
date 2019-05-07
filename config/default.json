@@ -4,10 +4,10 @@
   },
   "idam": {
     "authentication-web": {
-      "url": "https://localhost:8000"
+      "url": "http://localhost:9002"
     },
     "api": {
-      "url": "http://localhost:8080"
+      "url": "http://localhost:5000"
     },
     "service-2-service-auth": {
       "url": "http://localhost:4552",
@@ -103,7 +103,7 @@
       "citizen-draft-store-primary": "not-a-real-primary-secret",
       "citizen-draft-store-secondary": "not-a-real-secondary-secret",
       "staff-email": "CONTACT_EMAIL",
-      "citizen-oauth-client-secret": "123456",
+      "citizen-oauth-client-secret": "12345678",
       "os-postcode-lookup-api-key": "AAAAAAA",
       "encryptionKey": "not-a-real-32-bit-encryption-key",
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
