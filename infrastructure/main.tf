@@ -1,7 +1,3 @@
-provider "azurerm" {
-  version = "1.19.0"
-}
-
 provider "vault" {
   //  # It is strongly recommended to configure this provider through the
   //  # environment variables described above, so that each user can have
@@ -13,7 +9,7 @@ provider "vault" {
 }
 
 locals {
-  aseName = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  aseName = "core-compute-${var.env}"
 
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
   local_ase = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.aseName}"
@@ -145,6 +141,7 @@ module "citizen-frontend" {
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
     FEATURE_MEDIATION = "${var.feature_mediation}"
+    FEATURE_DIRECTIONS_QUESTIONNAIRE = "${var.feature_directions_questionnaire}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
 

@@ -18,7 +18,7 @@ class FreeMediationPage extends AbstractFreeMediationPage {
 const populateAmountRequestHandler = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const claim: Claim = res.locals.claim
   const draft: ResponseDraft = res.locals.responseDraft.document
-  res.locals.amount = ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.isResponsePartiallyAdmitted() ? draft.partialAdmission.howMuchDoYouOwe.amount : 0
+  res.locals.amount = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && draft.isResponsePartiallyAdmitted() ? draft.partialAdmission.howMuchDoYouOwe.amount : 0
   next()
 }
 

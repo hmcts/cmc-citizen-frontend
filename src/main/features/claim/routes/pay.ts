@@ -58,24 +58,38 @@ async function successHandler (res, next) {
   const user: User = res.locals.user
   const externalId: string = draft.document.externalId
 
-  let claimIsAlreadyFullyPersisted: boolean
-
   try {
-    claimIsAlreadyFullyPersisted = await claimStoreClient.retrieveByExternalId(externalId, user)
-      .then(() => true)
+    const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
+
+    if (!roles.length) {
+      logger.error(`missing consent not given role for user, User Id : ${user.id}`)
+    }
+
+    let features: string
+    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
+      features = 'admissions'
+    }
+
+    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
+      features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
+    }
+
+    if (draft.document.amount.totalAmount() <= 300) {
+      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
+        features += features === undefined ? 'mediationPilot' : ', mediationPilot'
+      }
+    }
+
+    await claimStoreClient.saveClaim(draft, user, features)
+
   } catch (err) {
-    /**
-     * NOT_FOUND -> claim was not submitted yet -> migrate draft
-     */
-    if (err.statusCode === HttpStatus.NOT_FOUND) {
-      claimIsAlreadyFullyPersisted = false
-    } else {
+    if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
       logError(
         user.id,
         draft.document.claimant.payment,
-        `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${externalId}.`
+        `Payment processed successfully but there was a problem saving claim '${externalId}' to the claim store.`
       )
-      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
+      trackCustomEvent(`Post payment successful but unable to store claim in claim-store with externalId: ${externalId}`,
         {
           externalId: externalId,
           payment: draft.document.claimant.payment,
@@ -83,23 +97,14 @@ async function successHandler (res, next) {
         })
       next(err)
       return
+    } else if (err.statusCode === HttpStatus.CONFLICT) {
+      logError(
+        user.id,
+        draft.document.claimant.payment,
+        `Payment processed successfully and claim ${externalId} already exists.`
+      )
     }
   }
-
-  if (!claimIsAlreadyFullyPersisted) {
-    const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
-
-    if (!roles.length) {
-      logger.error(`missing consent not given role for user, User Id : ${user.id}`)
-    }
-
-    if (await featureTogglesClient.isAdmissionsAllowed(user, roles)) {
-      await claimStoreClient.saveClaim(draft, user, 'admissions')
-    } else {
-      await claimStoreClient.saveClaim(draft, user)
-    }
-  }
-
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
@@ -134,7 +139,7 @@ export default express.Router()
         }
       }
 
-      const caseReference: string = await claimStoreClient.savePrePayment(externalId, user)
+      const caseReference: string = externalId
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(

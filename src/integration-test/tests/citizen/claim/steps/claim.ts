@@ -111,7 +111,9 @@ export class ClaimSteps {
     switch (defendantType) {
       case PartyType.INDIVIDUAL:
         partyTypePage.selectIndividual()
-        individualDetailsPage.enterName(defendant.name)
+        individualDetailsPage.enterTitle(defendant.title)
+        individualDetailsPage.enterFirstName(defendant.firstName)
+        individualDetailsPage.enterLastName(defendant.lastName)
         if (byLookup) {
           individualDetailsPage.lookupAddress(postcodeLookupQuery)
           manualEntryLink = false
@@ -121,7 +123,8 @@ export class ClaimSteps {
         break
       case PartyType.SOLE_TRADER:
         partyTypePage.selectSoleTrader()
-        individualDetailsPage.enterName(defendant.name)
+        individualDetailsPage.enterFirstName(defendant.firstName)
+        individualDetailsPage.enterLastName(defendant.lastName)
         if (byLookup) {
           individualDetailsPage.lookupAddress(postcodeLookupQuery)
           manualEntryLink = false
@@ -183,10 +186,10 @@ export class ClaimSteps {
   checkClaimFactsAreTrueAndSubmit (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): void {
     claimantCheckAndSendPage.verifyCheckAndSendAnswers(claimantType, defendantType, enterDefendantEmail)
 
-    if (claimantType === PartyType.INDIVIDUAL) {
-      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
-    } else {
+    if (claimantType === PartyType.COMPANY || claimantType === PartyType.ORGANISATION) {
       claimantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
+    } else {
+      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
     }
   }
 

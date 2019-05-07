@@ -36,7 +36,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     draft: draft.document,
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
-    admissionsApplicable: ClaimFeatureToggles.areAdmissionsEnabled(claim),
+    admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     mediationDraft: mediationDraft.document
   })
@@ -53,7 +53,7 @@ function isStatementOfTruthRequired (draft: Draft<ResponseDraft>): boolean {
 
 function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
   if (isStatementOfTruthRequired(draft)) {
-    if (claim.claimData.defendant.isBusinessOrSoleTrader()) {
+    if (claim.claimData.defendant.isBusiness()) {
       return SignatureType.QUALIFIED
     } else {
       return SignatureType.BASIC
@@ -100,6 +100,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
@@ -120,12 +121,18 @@ export default express.Router()
             next(new Error('Unknown response type: ' + responseType))
         }
 
+        const draftService = new DraftService()
         if (form.model.type === SignatureType.QUALIFIED) {
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
-          await new DraftService().save(draft, user.bearerToken)
+          await draftService.save(draft, user.bearerToken)
         }
-        await claimStoreClient.saveResponseForUser(claim, draft, user)
-        await new DraftService().delete(draft.id, user.bearerToken)
+        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
+        await draftService.delete(draft.id, user.bearerToken)
+
+        if (FeatureToggles.isEnabled('mediation')) {
+          await draftService.delete(mediationDraft.id, user.bearerToken)
+        }
+
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
