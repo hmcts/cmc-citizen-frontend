@@ -12,7 +12,7 @@ function reportBuildResultToSaucelabs (result) {
   const sauceUsername = process.env.SAUCELABS_USERNAME
 
   request.put({
-    uri: `https://eu-central-1.saucelabs.com/rest/v1/'+${sauceUsername}+'/jobs/'+${sessionId}`,
+    uri: `https://eu-central-1.saucelabs.com/rest/v1/'+$sauceUsername+'/jobs/'+$sessionId,
     auth: {
       username: process.env.SAUCELABS_USERNAME,
       password: process.env.SAUCELABS_ACCESS_KEY
