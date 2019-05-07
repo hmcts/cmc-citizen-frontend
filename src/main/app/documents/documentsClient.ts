@@ -39,15 +39,18 @@ export class DocumentsClient {
     if (StringUtils.isBlank(bearerToken)) {
       throw new Error('User authorisation cannot be blank')
     }
-    return request.get(
-      `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-          Accept: 'application/pdf'
-        },
-        encoding: null
-      }
-    )
+
+    const options = {
+      uri: `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+        Accept: 'application/pdf'
+      },
+      encoding: null
+    }
+
+    return request(options).then(function (response) {
+      return response
+    })
   }
 }
