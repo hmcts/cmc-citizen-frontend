@@ -1,3 +1,3 @@
 export enum StatesPaidStates {
- STATES_PAID = 'states-paid'
+  STATES_PAID = 'states-paid'
 }

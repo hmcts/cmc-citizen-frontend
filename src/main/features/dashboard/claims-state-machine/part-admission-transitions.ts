@@ -18,144 +18,144 @@ import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption
 
 export function PartAdmissionTransitions (claim: Claim) {
   return new StateMachine({
-    init : PartAdmissionStates.PART_ADMISSION,
-    transitions : [
+    init: PartAdmissionStates.PART_ADMISSION,
+    transitions: [
       {
-        name : 'checkIsStatesPaid',
+        name: 'checkIsStatesPaid',
         from: PartAdmissionStates.PART_ADMISSION,
         to: StatesPaidStates.STATES_PAID
       },
       {
-        name : 'checkIsPayImmediatelyWithMediation',
+        name: 'checkIsPayImmediatelyWithMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayImmediatelyWithoutMediation',
+        name: 'checkIsPayImmediatelyWithoutMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayImmediatelyAcceptedWithMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION],
+        name: 'checkIsPayImmediatelyAcceptedWithMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_ACCEPTED_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayImmediatelyAcceptedWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION],
+        name: 'checkIsPayImmediatelyAcceptedWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_ACCEPTED_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayImmediatelyWithMediationPastDeadLine',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_ACCEPTED_WITH_MEDIATION],
+        name: 'checkIsPayImmediatelyWithMediationPastDeadLine',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_ACCEPTED_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION_PAST_DEADLINE
       },
       {
-        name : 'checkIsPayImmediatelyWithoutMediationPastDeadLine',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_ACCEPTED_WITHOUT_MEDIATION],
+        name: 'checkIsPayImmediatelyWithoutMediationPastDeadLine',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_ACCEPTED_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION_PAST_DEADLINE
       },
       {
-        name : 'checkCCJRequestedPayImmediatelyWithMediationPastDeadLine',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION_PAST_DEADLINE],
+        name: 'checkCCJRequestedPayImmediatelyWithMediationPastDeadLine',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION_PAST_DEADLINE],
         to: PartAdmissionStates.PA_CCJ_PAST_PAYMENT_DEADLINE_WITH_MEDIATION_BY_ADMISSION
       },
       {
-        name : 'checkCCJRequestedPayImmediatelyWithoutMediationPastDeadLine',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION_PAST_DEADLINE],
+        name: 'checkCCJRequestedPayImmediatelyWithoutMediationPastDeadLine',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION_PAST_DEADLINE],
         to: PartAdmissionStates.PA_CCJ_PAST_PAYMENT_DEADLINE_WITHOUT_MEDIATION_BY_ADMISSION
       },
       {
-        name : 'checkIsPayImmediatelyRejectedWithMediationClaimantWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION],
+        name: 'checkIsPayImmediatelyRejectedWithMediationClaimantWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_REJECTED_WITH_MEDIATION_CLAIMANT_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayImmediatelyRejectedWithMediationClaimantWithMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION],
+        name: 'checkIsPayImmediatelyRejectedWithMediationClaimantWithMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_REJECTED_WITH_MEDIATION_CLAIMANT_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayImmediatelyRejectedWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION],
+        name: 'checkIsPayImmediatelyRejectedWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IMMEDIATELY_REJECTED_WITHOUT_MEDIATION
       },
 
       {
-        name : 'checkIsPayBySetDateWithMediation',
+        name: 'checkIsPayBySetDateWithMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayBySetDateWithoutMediation',
+        name: 'checkIsPayBySetDateWithoutMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayBySetDateAcceptedWithMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
+        name: 'checkIsPayBySetDateAcceptedWithMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayBySetDateAcceptedWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION],
+        name: 'checkIsPayBySetDateAcceptedWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayBySetDateRejectedWithMediationClaimantWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
+        name: 'checkIsPayBySetDateRejectedWithMediationClaimantWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_REJECTED_WITH_MEDIATION_CLAIMANT_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayBySetDateRejectedWithMediationClaimantWithMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
+        name: 'checkIsPayBySetDateRejectedWithMediationClaimantWithMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_REJECTED_WITH_MEDIATION_CLAIMANT_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayBySetDateRejectedWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION],
+        name: 'checkIsPayBySetDateRejectedWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_REJECTED_WITHOUT_MEDIATION
       },
 
       {
-        name : 'checkIsPayByInstallmentsWithMediation',
+        name: 'checkIsPayByInstallmentsWithMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayByInstallmentsWithoutMediation',
+        name: 'checkIsPayByInstallmentsWithoutMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayByInstallmentsAcceptedWithMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITH_MEDIATION],
+        name: 'checkIsPayByInstallmentsAcceptedWithMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayByInstallmentsAcceptedWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITHOUT_MEDIATION],
+        name: 'checkIsPayByInstallmentsAcceptedWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayByInstallmentsRejectedWithMediationClaimantWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITH_MEDIATION],
+        name: 'checkIsPayByInstallmentsRejectedWithMediationClaimantWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_REJECTED_WITH_MEDIATION_CLAIMANT_WITHOUT_MEDIATION
       },
       {
-        name : 'checkIsPayByInstallmentsRejectedWithMediationClaimantWithMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITH_MEDIATION],
+        name: 'checkIsPayByInstallmentsRejectedWithMediationClaimantWithMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_REJECTED_WITH_MEDIATION_CLAIMANT_WITH_MEDIATION
       },
       {
-        name : 'checkIsPayByInstallmentsRejectedWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITHOUT_MEDIATION],
+        name: 'checkIsPayByInstallmentsRejectedWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_INSTALMENTS_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_INSTALMENTS_REJECTED_WITHOUT_MEDIATION
       },
 
       {
-        name : 'checkReferredToJudge',
-        from: [PartAdmissionStates.PART_ADMISSION,PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITH_MEDIATION,PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITHOUT_MEDIATION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITH_MEDIATION,PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITHOUT_MEDIATION],
+        name: 'checkReferredToJudge',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITH_MEDIATION, PartAdmissionStates.PA_PAY_BY_SET_DATE_ACCEPTED_WITHOUT_MEDIATION, PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITH_MEDIATION, PartAdmissionStates.PA_PAY_BY_INSTALMENTS_ACCEPTED_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_REFERRED_TO_JUDGE
       }
 
@@ -275,20 +275,16 @@ export function PartAdmissionTransitions (claim: Claim) {
       // }
 
     ],
-    data : {
-      paymentOption : null,// (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption,
-      log : {
-        invalidTransitions : []
+    data: {
+      paymentOption: null,// (claim.response as PartialAdmissionResponse).paymentIntention.paymentOption,
+      log: {
+        invalidTransitions: []
       }
     },
     methods: {
 
-      onEnterState (): void {
-        console.log(claim.claimNumber + '==>' + this.state)
-      },
-
       onInvalidTransition (transition: string, from: string, to: string): void {
-        this.log.invalidTransitions.push({ transition : transition,from: from,to: to })
+        this.log.invalidTransitions.push({ transition: transition, from: from, to: to })
       },
 
       onBeforeCheckIsStatesPaid (): boolean {
@@ -516,10 +512,10 @@ export function PartAdmissionTransitions (claim: Claim) {
       checkPaymentDeadline (): boolean {
         if (this.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
           return isPastDeadline(MomentFactory.currentDateTime(),
-              (claim.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
+            (claim.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.completionDate))
         } else if (this.paymentOption === PaymentOption.INSTALMENTS) {
           return isPastDeadline(MomentFactory.currentDateTime(),
-              (claim.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.paymentIntention.repaymentPlan.firstPaymentDate))
+            (claim.settlement.partyStatements.filter(o => o.type === StatementType.OFFER.value).pop().offer.paymentIntention.repaymentPlan.firstPaymentDate))
         }
 
         return false

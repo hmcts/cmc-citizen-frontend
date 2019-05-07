@@ -1,4 +1,3 @@
-
 import * as StateMachine from '@taoqf/javascript-state-machine'
 import { Claim } from 'claims/models/claim'
 
@@ -10,15 +9,19 @@ import * as path from 'path'
 
 export function InitialTransitions (claim: Claim) {
   return new StateMachine({
-    init : 'init',
-    transitions : [
+    init: 'init',
+    transitions: [
 
-      { name : 'checkNoResponse', from: 'init', to: 'no-response' },
-      { name : 'checkMoreTimeRequested', from: ['init', 'no-response'], to: 'more-time-requested' },
-      { name : 'checkCCJEnabled', from: ['init', 'no-response','more-time-requested'], to: 'no-response-past-deadline' },
+      { name: 'checkNoResponse', from: 'init', to: 'no-response' },
+      { name: 'checkMoreTimeRequested', from: ['init', 'no-response'], to: 'more-time-requested' },
+      {
+        name: 'checkCCJEnabled',
+        from: ['init', 'no-response', 'more-time-requested'],
+        to: 'no-response-past-deadline'
+      },
 
-      { name : 'checkIsFullAdmission',from: ['init'], to: 'full-admission' },
-      { name : 'checkIsPartAdmission',from: ['init'], to: 'part-admission' }
+      { name: 'checkIsFullAdmission', from: ['init'], to: 'full-admission' },
+      { name: 'checkIsPartAdmission', from: ['init'], to: 'part-admission' }
 
     ],
     methods: {
