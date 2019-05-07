@@ -5,9 +5,11 @@ export enum FullAdmissionStates {
   FA_CCJ_PAST_PAYMENT_DEADLINE_BY_ADMISSION = 'fa-ccj-past-payment-deadline-by-admission',
   FA_SETTLED_PAID_IN_FULL = 'fa-settled-paid-in-full',
   FA_PAY_BY_SPECIFIED_DATE = 'fa-pay-by-specified-date',
-  FA_PAY_BY_INSTALMENTS = 'fa-pay-by-instalments',
-  FA_REFERRED_TO_JUDGE = 'fa-referred-to-judge',
+  FA_PAY_IN_INSTALMENTS = 'fa-pay-in-instalments',
+  FA_PAY_BY_SPECIFIED_DATE_REFERRED_TO_JUDGE = 'fa-pay-by-specified-date-referred-to-judge',
+  FA_PAY_IN_INSTALMENTS_REFERRED_TO_JUDGE = 'fa-pay-in-instalments-referred-to-judge',
   FA_CCJ_BY_ADMISSION = 'fa-ccj-by-admission',
+
   FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION = 'fa-claimant-offer-accepted-by-admission',
   FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION = 'fa-past-counter-signature-deadline-by-admission',
   FA_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION = 'fa-defendant-rejected-claimant-offer-by-admission',
@@ -16,6 +18,7 @@ export enum FullAdmissionStates {
   FA_SETTLED_THROUGH_ADMISSION = 'fa-settled-through-admission',
   FA_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION = 'fa-past-payment-deadline-settled-through-admission',
   FA_CCJ_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION = 'fa-ccj-past-payment-deadline-settled-through-admission',
+
   FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION = 'fa-claimant-offer-accepted-by-determination',
   FA_CCJ_BY_DETERMINATION = 'fa-ccj-by-determination',
   FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION = 'fa-past-counter-signature-deadline-by-determination',

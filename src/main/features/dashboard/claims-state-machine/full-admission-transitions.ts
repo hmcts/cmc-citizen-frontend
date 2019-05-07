@@ -45,23 +45,29 @@ export function FullAdmissionTransitions (claim: Claim) {
       {
         name: 'checkIsInstalments',
         from: FullAdmissionStates.FULL_ADMISSION,
-        to: FullAdmissionStates.FA_PAY_BY_INSTALMENTS
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS
       },
 
       {
-        name: 'checkReferredToJudge',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_BY_INSTALMENTS],
-        to: FullAdmissionStates.FA_REFERRED_TO_JUDGE
+        name: 'checkIsPayBySpecifiedDateReferredToJudge',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE],
+        to: FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE_REFERRED_TO_JUDGE
+      },
+
+      {
+        name: 'checkIsPayInInstalmentsReferredToJudge',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_REFERRED_TO_JUDGE
       },
 
       {
         name: 'checkCCJRequestedWhenAcceptRepaymentPlanByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_BY_INSTALMENTS],
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
         to: FullAdmissionStates.FA_CCJ_BY_ADMISSION
       },
       {
         name: 'checkClaimantOfferAcceptedByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_BY_INSTALMENTS],
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
         to: FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION
       },
       {
@@ -102,12 +108,12 @@ export function FullAdmissionTransitions (claim: Claim) {
 
       {
         name: 'checkClaimantOfferAcceptedByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_BY_INSTALMENTS],
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
         to: FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION
       },
       {
         name: 'checkCCJRequestedWhenAcceptRepaymentPlanByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_BY_INSTALMENTS],
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
         to: FullAdmissionStates.FA_CCJ_BY_DETERMINATION
       },
       {
@@ -222,8 +228,12 @@ export function FullAdmissionTransitions (claim: Claim) {
         return this.paymentOption === PaymentOption.INSTALMENTS
       },
 
-      onBeforeCheckReferredToJudge (): boolean {
-        return !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+      onBeforeCheckIsPayBySpecifiedDateReferredToJudge (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE) && !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+      },
+
+      onBeforeCheckIsPayInInstalmentsReferredToJudge (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS) && !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
       },
 
       onBeforeCheckClaimantOfferAcceptedByAdmission (): boolean {
