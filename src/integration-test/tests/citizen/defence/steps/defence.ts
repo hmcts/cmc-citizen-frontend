@@ -1,9 +1,5 @@
 import { PaymentOption } from 'integration-test/data/payment-option'
-import {
-  claimAmount,
-  DEFAULT_PASSWORD,
-  defence
-} from 'integration-test/data/test-data'
+import { claimAmount, DEFAULT_PASSWORD, defence } from 'integration-test/data/test-data'
 import { DefendantCheckAndSendPage } from 'integration-test/tests/citizen/defence/pages/defendant-check-and-send'
 import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence/pages/defendant-defence-type'
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
@@ -85,9 +81,7 @@ export class DefenceSteps {
   async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
     const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: authorisation })
 
-    const pinResponse = await IdamClient.getPin(claim.letterHolderId)
-
-    return pinResponse.body
+    return IdamClient.getPin(claim.letterHolderId)
   }
 
   enterClaimReference (claimRef: string): void {
@@ -298,10 +292,8 @@ export class DefenceSteps {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
-    I.see('COMPLETED')
+    I.see('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {
       this.requestMoreTimeToRespond()
@@ -362,10 +354,9 @@ export class DefenceSteps {
     defendantParty: Party,
     defendantType: PartyType,
     paymentOption: PaymentOption,
-    claimantName: string
+    claimantName: string,
+    statementOfMeansFullDataSet: boolean = true
   ): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -391,7 +382,8 @@ export class DefenceSteps {
         defendantPaymentPlanPage.enterRepaymentPlan(defendantRepaymentPlan)
         defendantPaymentPlanPage.saveAndContinue()
         defendantTaskListPage.selectShareYourFinancialDetailsTask()
-        statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+        statementOfMeansFullDataSet ? statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
+          : statementOfMeansSteps.fillStatementOfMeansWithMinimalDataSet('50')
         break
       default:
         throw new Error(`Unknown payment option: ${paymentOption}`)
@@ -418,8 +410,6 @@ export class DefenceSteps {
   }
 
   makePartialAdmission (defendantParty: Party): void {
-    I.dontSee('COMPLETE')
-
     this.confirmYourDetails(defendantParty)
 
     this.requestMoreTimeToRespond()
@@ -492,7 +482,6 @@ export class DefenceSteps {
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
     I.dontSee('Your defence')
-    I.dontSee('COMPLETE')
 
     this.confirmYourDetails(defendant)
     I.see('COMPLETE')
@@ -515,6 +504,8 @@ export class DefenceSteps {
     I.see('Post your response')
     I.see(claimRef)
     I.see(claimant.name)
-    I.see(defendant.name)
+    I.see(defendant.title)
+    I.see(defendant.firstName)
+    I.see(defendant.lastName)
   }
 }

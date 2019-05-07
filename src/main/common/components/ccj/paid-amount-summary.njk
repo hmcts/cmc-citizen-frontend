@@ -2,6 +2,7 @@
 {% set heading = 'Judgment amount' %}
 {% from "form.njk" import submitButton %}
 {% from "interestSnippet.njk" import interestSnippet %}
+{% from "internalLink.njk" import internalLink %}
 
 {% block content %}
 <div class="grid-row">
@@ -10,7 +11,7 @@
     <div class="form-group">
       {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
 
-      <p>{{ t('Judgement will be entered against the defendant for this amount.') }}</p>
+      <p>{{ t('Judgment will be entered against the defendant for this amount.') }}</p>
 
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
@@ -75,11 +76,8 @@
     </div>
 
     <div class="form-group">
-      <a class="button" href="{{ nextPageUrl }}">{{ t('Continue') }}</a>
+      {{ internalLink(t('Continue'), nextPageUrl, 'button') }}
     </div>
   </div>
 </div>
 {% endblock %}
-
-
-

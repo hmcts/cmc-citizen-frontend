@@ -1,4 +1,5 @@
 {% from "timeRemaining.njk" import timeRemaining %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro moreTimeRequestedForClaimantDashboard(claim) %}
   {{ t('{{ defendantName }} has requested more time to respond.',
@@ -29,5 +30,5 @@
 {% endmacro %}
 
 {% macro _respondToClaimLink(claim) %}
-  <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
+  {{ internalLink(t('Respond to claim'), ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}

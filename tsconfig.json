@@ -17,6 +17,9 @@
       "payment-hub-client/*": [
         "main/app/pay/*"
       ],
+      "court-finder-client/*": [
+        "main/app/court-finder/*"
+      ],
       "client/*": [
         "main/app/client/*"
       ],
@@ -118,6 +121,12 @@
       ],
       "services/*": [
         "main/services/*"
+      ],
+      "mediation/*": [
+        "main/features/mediation/*"
+      ],
+      "directions-questionnaire/*": [
+        "main/features/directions-questionnaire/*"
       ]
     },
     "typeRoots": [

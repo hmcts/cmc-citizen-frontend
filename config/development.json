@@ -4,7 +4,10 @@
     "newFeaturesConsent": true,
     "admissions": true,
     "paidInFull": true,
-    "returnErrorToUser": true
+    "returnErrorToUser": true,
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

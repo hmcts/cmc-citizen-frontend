@@ -49,6 +49,14 @@ variable "feature_paid_in_full" {
   default = "false"
 }
 
+variable "feature_mediation" {
+  default = "false"
+}
+
+variable "feature_directions_questionnaire" {
+  default = "false"
+}
+
 variable "feature_new_features_consent" {
   default = "false"
 }
@@ -62,6 +70,10 @@ variable "feature_return_error_to_user" {
 }
 
 variable "feature_mock_pay" {
+  default = "false"
+}
+
+variable "feature_testing_support" {
   default = "false"
 }
 

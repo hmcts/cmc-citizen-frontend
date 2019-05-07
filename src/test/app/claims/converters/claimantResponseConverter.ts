@@ -5,7 +5,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import { SettleAdmitted } from 'claimant-response/form/models/settleAdmitted'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
-import { FreeMediation } from 'response/form/models/freeMediation'
+import { FreeMediation } from 'forms/models/freeMediation'
 import { FormaliseRepaymentPlan } from 'claimant-response/form/models/formaliseRepaymentPlan'
 import { FormaliseRepaymentPlanOption } from 'claimant-response/form/models/formaliseRepaymentPlanOption'
 import { CourtDecision } from 'common/court-calculations/courtDecision'
@@ -129,10 +129,13 @@ describe('claimant response converter', () => {
     it('rejection from non acceptance of states paid', () => {
       const draftClaimantResponse = new DraftClaimantResponse()
       draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
+      draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
 
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
         'type': 'REJECTION',
-        'freeMediation': 'no'
+        'freeMediation': 'no',
+        'paymentReceived': 'yes',
+        'settleForAmount': 'no'
       })
     })
 
@@ -142,7 +145,8 @@ describe('claimant response converter', () => {
 
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq({
         'type': 'REJECTION',
-        'freeMediation': 'no'
+        'freeMediation': 'no',
+        'paymentReceived': 'no'
       })
     })
 
@@ -373,7 +377,7 @@ describe('claimant response converter', () => {
         FormaliseRepaymentPlanOption.REFER_TO_JUDGE,
         intentionOfPaymentInFullBySetDate,
         intentionOfPaymentByInstalments)
-      draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected reason')
+      draftClaimantResponse.rejectionReason = new RejectionReason('rejected reason')
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
@@ -400,7 +404,7 @@ describe('claimant response converter', () => {
         FormaliseRepaymentPlanOption.REFER_TO_JUDGE,
         intentionOfPaymentByInstalments,
         intentionOfPaymentInFullBySetDate)
-      draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected reason')
+      draftClaimantResponse.rejectionReason = new RejectionReason('rejected reason')
       expect(converter.convertToClaimantResponse(draftClaimantResponse, false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
