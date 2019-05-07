@@ -131,7 +131,7 @@ if (FeatureToggles.isEnabled('mediation')) {
                 .expect(res => expect(res).to.be.serverError.withText('Error'))
             })
 
-            it('should redirect to itself page when everything is fine', async () => {
+            it('should redirect to phone number page when everything is fine', async () => {
               idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
               checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
