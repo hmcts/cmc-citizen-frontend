@@ -1511,16 +1511,16 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codeceptjs@~2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.1.1.tgz#cac492015e1e139b8804108013d37bc9ff144688"
-  integrity sha512-O8HtIUUx/K/ZtATfyfiJveupmPN1GwoDZM7qf5Bzh53itw/FNWEMKA9r1CrhQEx64OfbhOiMZR/Gi4HR3dJ05A==
+codeceptjs@2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/codeceptjs/-/codeceptjs-2.0.8.tgz#43b560addc4e41daf480ce6e237c80d149a0a20d"
+  integrity sha512-CAL04I7+S6oJcRPUEbi+boCQ+A/zVX3n6bxR0OFfUWv+Q+lmNawk5T7u0dhrYG0o/h6QmXpD0BFwtzESFRohaA==
   dependencies:
     allure-js-commons "^1.3.2"
     archiver "^3.0.0"
     axios "^0.18.0"
     chalk "^1.1.3"
-    commander "^2.20.0"
+    commander "^2.18.0"
     css-to-xpath "^0.1.0"
     cucumber-expressions "^6.0.1"
     escape-string-regexp "^1.0.3"
@@ -1529,7 +1529,7 @@ codeceptjs@~2.1.1:
     gherkin "^5.1.0"
     glob "^6.0.1"
     inquirer "^6.2.2"
-    js-beautify "^1.9.1"
+    js-beautify "^1.8.9"
     lodash.merge "^4.6.1"
     mkdirp "^0.5.1"
     mocha "^4.1.0"
@@ -1609,7 +1609,7 @@ commander@2.15.1:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
 
-commander@^2.12.1, commander@^2.19.0, commander@^2.20.0, commander@^2.8.1, commander@^2.9.0, commander@^2.x:
+commander@^2.12.1, commander@^2.18.0, commander@^2.19.0, commander@^2.8.1, commander@^2.9.0, commander@^2.x:
   version "2.20.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
@@ -4365,7 +4365,7 @@ js-base64@^2.1.8, js-base64@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.5.1.tgz#1efa39ef2c5f7980bb1784ade4a8af2de3291121"
 
-js-beautify@^1.9.1:
+js-beautify@^1.8.9:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/js-beautify/-/js-beautify-1.10.0.tgz#9753a13c858d96828658cd18ae3ca0e5783ea672"
   integrity sha512-OMwf/tPDpE/BLlYKqZOhqWsd3/z2N3KOlyn1wsCRGFwViE8LOQTcDtathQvHvZc+q+zWmcNAbwKSC+iJoMaH2Q==
