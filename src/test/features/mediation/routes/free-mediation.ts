@@ -44,11 +44,11 @@ describe('Mediation: Free mediation page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should render page with the claimants name when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        it('should render page with the claimants name when everything is fine and not auto-registered', async () => {
+          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj, totalAmountTillDateOfIssue: 400 })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
-          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj })
 
           await request(app)
             .get(pagePath)
@@ -57,6 +57,27 @@ describe('Mediation: Free mediation page', () => {
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Free telephone mediation', claim.claimData.claimant.name))
+        })
+
+        it('should render page with automatic registration details when everything is fine and auto-registered', async () => {
+          const claim: Claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimIssueObj,
+            features: ['admissions', 'mediationPilot']
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+            .get(pagePath)
+            .send({
+              otherPartyName: claim.claimData.claimant.name
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => {
+              expect(res).to.be.successful.withText('Free telephone mediation', 'automatically registering')
+              expect(res).to.be.successful.withoutText(claim.claimData.claimant.name)
+            })
         })
       })
     })
@@ -78,11 +99,11 @@ describe('Mediation: Free mediation page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should render page with the defendants name when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+        it('should render page with the defendants name when everything is fine and not auto-registered', async () => {
+          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj, totalAmountTillDateOfIssue: 400 })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
-          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj })
 
           await request(app)
             .get(pagePath)
@@ -91,6 +112,27 @@ describe('Mediation: Free mediation page', () => {
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Free telephone mediation', claim.claimData.defendant.name))
+        })
+
+        it('should render page with automatic registration details when everything is fine and auto-registered', async () => {
+          const claim: Claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimIssueObj,
+            features: ['admissions', 'mediationPilot']
+          })
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+            .get(pagePath)
+            .send({
+              otherPartyName: claim.claimData.defendant.name
+            })
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => {
+              expect(res).to.be.successful.withText('Free telephone mediation', 'automatically registering')
+              expect(res).to.be.successful.withoutText(claim.claimData.defendant.name)
+            })
         })
       })
     })
