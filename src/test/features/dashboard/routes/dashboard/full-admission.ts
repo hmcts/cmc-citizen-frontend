@@ -57,7 +57,7 @@ const fullAdmissionClaim = {
 
 const testData = [
   {
-    status: 'Full admission - defendant responded to pay immediately',
+    status: 'Full admission - defendant responded pay immediately',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
@@ -66,7 +66,7 @@ const testData = [
     defendantAssertions: ['You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
   {
-    status: 'Full admission - defendant responded to pay immediately - past payment deadline',
+    status: 'Full admission - defendant responded pay immediately - past payment deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
@@ -81,7 +81,7 @@ const testData = [
   },
 
   {
-    status: 'Full admission - defendant responded to pay by set date',
+    status: 'Full admission - defendant responded pay by set date',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -91,7 +91,7 @@ const testData = [
     defendantAssertions: [`You’ve admitted all of the claim and offered to pay the full amount by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}`]
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant rejects repayment plan and referred to judge',
+    status: 'Full admission - defendant responded pay by set date - claimant rejects repayment plan and referred to judge',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -101,7 +101,7 @@ const testData = [
     defendantAssertions: [fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment against you']
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by admission',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -112,7 +112,7 @@ const testData = [
     defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant past counter signature deadline',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by admission - defendant past counter signature deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -124,7 +124,7 @@ const testData = [
     defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by admission - defendant signed contract',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -136,7 +136,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -148,7 +148,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by admission - defendant rejected',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by admission - defendant rejected',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -161,7 +161,7 @@ const testData = [
   },
 
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by determination',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -172,7 +172,7 @@ const testData = [
     defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant past counter signature deadline',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by determination - defendant past counter signature deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -185,7 +185,7 @@ const testData = [
 
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by determination - defendant signed contract',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -197,7 +197,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -209,7 +209,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay by set date - claimant accepts repayment plan by determination - defendant rejected',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by determination - defendant rejected',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -222,7 +222,7 @@ const testData = [
   },
 
   {
-    status: 'Full admission - defendant responded to pay in instalments',
+    status: 'Full admission - defendant responded pay in instalments',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -232,7 +232,7 @@ const testData = [
     defendantAssertions: ['You’ve admitted all of the claim and offered to pay the full amount in instalments.']
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant rejects repayment plan and referred to judge',
+    status: 'Full admission - defendant responded pay in instalments - claimant rejects repayment plan and referred to judge',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -242,7 +242,7 @@ const testData = [
     defendantAssertions: [fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment against you']
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by admission',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -253,7 +253,7 @@ const testData = [
     defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant past counter signature deadline',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by admission - defendant past counter signature deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -265,7 +265,7 @@ const testData = [
     defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant signed contract',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by admission - defendant signed contract',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -277,7 +277,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by admission - defendant signed contract - past payment deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -289,7 +289,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by admission - defendant rejected',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by admission - defendant rejected',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -302,7 +302,7 @@ const testData = [
   },
 
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by determination',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -313,7 +313,7 @@ const testData = [
     defendantAssertions: [`${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement.`]
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant past counter signature deadline',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by determination - defendant past counter signature deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -326,7 +326,7 @@ const testData = [
 
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant signed contract',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by determination - defendant signed contract',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -338,7 +338,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by determination - defendant signed contract - past payment deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
@@ -350,7 +350,7 @@ const testData = [
     defendantAssertions: ['You’ve both signed a settlement agreement.']
   },
   {
-    status: 'Full admission - defendant responded to pay in instalments - claimant accepts repayment plan by determination - defendant rejected',
+    status: 'Full admission - defendant responded pay in instalments - claimant accepts repayment plan by determination - defendant rejected',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
