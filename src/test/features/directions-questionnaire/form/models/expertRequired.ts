@@ -60,13 +60,13 @@ describe('ExpertRequired', () => {
   context('deserialize', () => {
 
     it('should return an instance initialised with defaults for undefined', () => {
-      expect(new ExpertRequired().deserialize(undefined)).to.equal(new ExpertRequired())
+      expect(new ExpertRequired().deserialize(undefined)).to.deep.equal(new ExpertRequired())
     })
 
     it('should return an instance from given object', () => {
       const actual: ExpertRequired = new ExpertRequired().deserialize({ option: 'yes' })
 
-      expect(actual).to.equal(new ExpertRequired(YesNoOption.YES))
+      expect(actual).to.deep.equal(new ExpertRequired(YesNoOption.YES))
     })
 
   })
