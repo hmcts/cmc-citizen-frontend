@@ -61,95 +61,185 @@ export function FullAdmissionTransitions (claim: Claim) {
       },
 
       {
-        name: 'checkCCJRequestedWhenAcceptRepaymentPlanByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
-        to: FullAdmissionStates.FA_CCJ_BY_ADMISSION
+        name: 'checkCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_BY_ADMISSION
       },
       {
-        name: 'checkClaimantOfferAcceptedByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
-        to: FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION
+        name: 'checkCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_BY_ADMISSION
       },
       {
-        name: 'checkPastCounterSignatureDeadlineByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
-        to: FullAdmissionStates.FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION
+        name: 'checkPayBySetDateClaimantOfferAcceptedByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION
       },
       {
-        name: 'checkDefendantOfferRejectedByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
-        to: FullAdmissionStates.FA_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION
+        name: 'checkPayInInstalmentsClaimantOfferAcceptedByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION
       },
       {
-        name: 'checkCCJRequestedDefendantOfferRejectedByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION],
-        to: FullAdmissionStates.FA_CCJ_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION
+        name: 'checkPayBySetDatePastCounterSignatureDeadlineByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION
       },
       {
-        name: 'checkCCJRequestedPastCounterSignatureDeadlineByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION],
-        to: FullAdmissionStates.FA_CCJ_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION
+        name: 'checkPayInInstalmentsPastCounterSignatureDeadlineByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION
       },
       {
-        name: 'checkIsSettledThroughAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
-        to: FullAdmissionStates.FA_SETTLED_THROUGH_ADMISSION
+        name: 'checkPayBySetDateDefendantOfferRejectedByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION
       },
       {
-        name: 'checkPastPaymentDeadLineDuringSettlementByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_SETTLED_THROUGH_ADMISSION],
-        to: FullAdmissionStates.FA_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION
+        name: 'checkPayInInstalmentsDefendantOfferRejectedByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION
       },
       {
-        name: 'checkCCJRequestedPastPaymentDeadLineDuringSettlementByAdmission',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION],
-        to: FullAdmissionStates.FA_CCJ_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION
+        name: 'checkCCJPayBySetDateRequestedDefendantOfferRejectedByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION
+      },
+      {
+        name: 'checkCCJPayInInstalmentsRequestedDefendantOfferRejectedByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION
+      },
+      {
+        name: 'checkCCJPayBySetDateRequestedPastCounterSignatureDeadlineByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION
+      },
+      {
+        name: 'checkCCJPayInInstalmentsRequestedPastCounterSignatureDeadlineByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION
+      },
+      {
+        name: 'checkIsPayBySetDateSettledThroughAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_SETTLED_THROUGH_ADMISSION
+      },
+      {
+        name: 'checkIsPayInInstalmentsSettledThroughAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_ADMISSION
+      },
+      {
+        name: 'checkPayBySetDatePastPaymentDeadLineDuringSettlementByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_SETTLED_THROUGH_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION
+      },
+      {
+        name: 'checkPayInInstalmentsPastPaymentDeadLineDuringSettlementByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_ADMISSION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION
+      },
+      {
+        name: 'checkCCJPayBySetDateRequestedPastPaymentDeadLineDuringSettlementByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION
+      },
+      {
+        name: 'checkCCJPayInInstalmentsRequestedPastPaymentDeadLineDuringSettlementByAdmission',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION
       },
 
       {
-        name: 'checkClaimantOfferAcceptedByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
-        to: FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION
+        name: 'checkPayBySetDateClaimantOfferAcceptedByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION
       },
       {
-        name: 'checkCCJRequestedWhenAcceptRepaymentPlanByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
-        to: FullAdmissionStates.FA_CCJ_BY_DETERMINATION
+        name: 'checkPayInInstalmentsClaimantOfferAcceptedByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION
       },
       {
-        name: 'checkPastCounterSignatureDeadlineByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
-        to: FullAdmissionStates.FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION
+        name: 'checkCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_BY_DETERMINATION
       },
       {
-        name: 'checkDefendantOfferRejectedByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
-        to: FullAdmissionStates.FA_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION
+        name: 'checkCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_BY_DETERMINATION
       },
       {
-        name: 'checkCCJRequestedDefendantOfferRejectedByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION],
-        to: FullAdmissionStates.FA_CCJ_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION
+        name: 'checkPayBySetDatePastCounterSignatureDeadlineByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION
       },
       {
-        name: 'checkCCJRequestedPastCounterSignatureDeadlineByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION],
-        to: FullAdmissionStates.FA_CCJ_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION
+        name: 'checkPayInInstalmentsPastCounterSignatureDeadlineByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION
       },
       {
-        name: 'checkIsSettledThroughDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
-        to: FullAdmissionStates.FA_SETTLED_THROUGH_DETERMINATION
+        name: 'checkPayBySetDateDefendantOfferRejectedByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION
       },
       {
-        name: 'checkPastPaymentDeadLineDuringSettlementByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_SETTLED_THROUGH_DETERMINATION],
-        to: FullAdmissionStates.FA_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION
+        name: 'checkPayInInstalmentsDefendantOfferRejectedByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION
       },
       {
-        name: 'checkCCJRequestedPastPaymentDeadLineDuringSettlementByDetermination',
-        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION],
-        to: FullAdmissionStates.FA_CCJ_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION
+        name: 'checkCCJPayBySetDateRequestedDefendantOfferRejectedByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION
+      },
+      {
+        name: 'checkCCJPayInInstalmentsRequestedDefendantOfferRejectedByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION
+      },
+      {
+        name: 'checkCCJPayBySetDateRequestedPastCounterSignatureDeadlineByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION
+      },
+      {
+        name: 'checkCCJPayInInstalmentsRequestedPastCounterSignatureDeadlineByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION
+      },
+      {
+        name: 'checkIsPayBySetDateSettledThroughDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_SETTLED_THROUGH_DETERMINATION
+      },
+      {
+        name: 'checkIsPayInInstalmentsSettledThroughDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_DETERMINATION
+      },
+      {
+        name: 'checkPayBySetDatePastPaymentDeadLineDuringSettlementByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_SETTLED_THROUGH_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION
+      },
+      {
+        name: 'checkPayInInstalmentsPastPaymentDeadLineDuringSettlementByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_DETERMINATION],
+        to: FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION
+      },
+      {
+        name: 'checkCCJPayBySetDateRequestedPastPaymentDeadLineDuringSettlementByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION],
+        to: FullAdmissionStates.FA_CCJ_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION
+      },
+      {
+        name: 'checkCCJPayInInstalmentsRequestedPastPaymentDeadLineDuringSettlementByDetermination',
+        from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION],
+        to: FullAdmissionStates.FA_CCJ_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION
       }
 
     ],
@@ -160,6 +250,9 @@ export function FullAdmissionTransitions (claim: Claim) {
       }
     },
     methods: {
+      checkCCJRequested (): boolean {
+        return !!claim.countyCourtJudgmentRequestedAt
+      },
 
       onInvalidTransition (transition: string, from: string, to: string): void {
         this.log.invalidTransitions.push({ transition: transition, from: from, to: to })
@@ -174,50 +267,104 @@ export function FullAdmissionTransitions (claim: Claim) {
           (claim.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
       },
 
-      onBeforeCheckPastCounterSignatureDeadlineByAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !claim.settlement.isSettled() && !!claim.claimantRespondedAt && claim.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
+      checkPastCounterSignatureDeadline (): boolean {
+        return !claim.settlement.isSettled() && !!claim.claimantRespondedAt && claim.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
       },
 
-      onBeforeCheckPastCounterSignatureDeadlineByDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && !claim.settlement.isSettled() && !!claim.claimantRespondedAt && claim.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
+      onBeforeCheckPayBySetDatePastCounterSignatureDeadlineByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkPastCounterSignatureDeadline()
+      },
+
+      onBeforeCheckPayInInstalmentsPastCounterSignatureDeadlineByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkPastCounterSignatureDeadline()
+      },
+
+      onBeforeCheckPayBySetDatePastCounterSignatureDeadlineByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkPastCounterSignatureDeadline()
+      },
+
+      onBeforeCheckPayInInstalmentsPastCounterSignatureDeadlineByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkPastCounterSignatureDeadline()
       },
 
       onBeforeCheckCCJRequestedPayImmediatelyPastDeadLine (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_IMMEDIATELY_PAST_DEADLINE) && !!claim.countyCourtJudgmentRequestedAt
+        return this.is(FullAdmissionStates.FA_PAY_IMMEDIATELY_PAST_DEADLINE) && this.checkCCJRequested()
       },
 
-      onBeforeCheckCCJRequestedPastCounterSignatureDeadlineByAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION) && !!claim.countyCourtJudgmentRequestedAt
+      onBeforeCheckCCJPayBySetDateRequestedPastCounterSignatureDeadlineByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION) && this.checkCCJRequested()
       },
 
-      onBeforeCheckCCJRequestedPastCounterSignatureDeadlineByDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION) && !!claim.countyCourtJudgmentRequestedAt
+      onBeforeCheckCCJPayInInstalmentsRequestedPastCounterSignatureDeadlineByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION) && this.checkCCJRequested()
       },
 
-      onBeforeCheckCCJRequestedDefendantOfferRejectedByAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION) && !!claim.countyCourtJudgmentRequestedAt
+      onBeforeCheckCCJPayBySetDateRequestedPastCounterSignatureDeadlineByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION) && this.checkCCJRequested()
       },
 
-      onBeforeCheckCCJRequestedDefendantOfferRejectedByDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION) && !!claim.countyCourtJudgmentRequestedAt
+      onBeforeCheckCCJPayInInstalmentsRequestedPastCounterSignatureDeadlineByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION) && this.checkCCJRequested()
       },
 
-      onBeforeCheckCCJRequestedPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION) && !!claim.countyCourtJudgmentRequestedAt
+      onBeforeCheckCCJPayBySetDateRequestedDefendantOfferRejectedByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION) && this.checkCCJRequested()
       },
 
-      onBeforeCheckCCJRequestedPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION) && !!claim.countyCourtJudgmentRequestedAt
+      onBeforeCheckCCJPayInInstalmentsRequestedDefendantOfferRejectedByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_ADMISSION) && this.checkCCJRequested()
       },
 
-      onBeforeCheckCCJRequestedWhenAcceptRepaymentPlanByAdmission (): boolean {
+      onBeforeCheckCCJPayBySetDateRequestedDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayBySetDateRequestedPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayBySetDateRequestedPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      checkCCJRequestedWhenAcceptRepaymentPlanByAdmission (): boolean {
         return !!claim.countyCourtJudgmentRequestedAt && !(claim.claimantResponse as AcceptationClaimantResponse).courtDetermination &&
           (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.CCJ
       },
 
-      onBeforeCheckCCJRequestedWhenAcceptRepaymentPlanByDetermination (): boolean {
+      onBeforeCheckCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE) && this.checkCCJRequestedWhenAcceptRepaymentPlanByAdmission()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS) && this.checkCCJRequestedWhenAcceptRepaymentPlanByAdmission()
+
+      },
+
+      checkCCJRequestedWhenAcceptRepaymentPlanByDetermination (): boolean {
         return !!claim.countyCourtJudgmentRequestedAt && !!(claim.claimantResponse as AcceptationClaimantResponse).courtDetermination &&
           (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.CCJ
+      },
+
+      onBeforeCheckCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE) && this.checkCCJRequestedWhenAcceptRepaymentPlanByDetermination()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS) && this.checkCCJRequestedWhenAcceptRepaymentPlanByDetermination()
+
       },
 
       onBeforeCheckIsBySpecifiedDate (): boolean {
@@ -228,52 +375,103 @@ export function FullAdmissionTransitions (claim: Claim) {
         return this.paymentOption === PaymentOption.INSTALMENTS
       },
 
+      checkIsReferredToJudge (): boolean {
+        return !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+      },
+
       onBeforeCheckIsPayBySpecifiedDateReferredToJudge (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE) && !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+        return this.is(FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE) && this.checkIsReferredToJudge()
       },
 
       onBeforeCheckIsPayInInstalmentsReferredToJudge (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS) && !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS) && this.checkIsReferredToJudge()
       },
 
-      onBeforeCheckClaimantOfferAcceptedByAdmission (): boolean {
+      checkClaimantOfferAcceptedByAdmission (): boolean {
         return !!claim.settlement && claim.settlement.isOfferAccepted() && claim.settlement.isThroughAdmissions() &&
           !!claim.claimantResponse && !(claim.claimantResponse as AcceptationClaimantResponse).courtDetermination
       },
 
-      onBeforeCheckClaimantOfferAcceptedByDetermination (): boolean {
+      onBeforeCheckPayBySetDateClaimantOfferAcceptedByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE) && this.checkClaimantOfferAcceptedByAdmission()
+      },
+
+      onBeforeCheckPayInInstalmentsClaimantOfferAcceptedByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS) && this.checkClaimantOfferAcceptedByAdmission()
+      },
+
+      checkClaimantOfferAcceptedByDetermination (): boolean {
         return !!claim.settlement && claim.settlement.isOfferAccepted() && claim.settlement.isThroughAdmissions() &&
           !!claim.claimantResponse && !!(claim.claimantResponse as AcceptationClaimantResponse).courtDetermination
       },
 
-      onBeforeCheckIsSettledThroughAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !!claim.settlement && claim.settlement.isThroughAdmissionsAndSettled()
+      onBeforeCheckPayBySetDateClaimantOfferAcceptedByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE) && this.checkClaimantOfferAcceptedByDetermination()
       },
 
-      onBeforeCheckIsSettledThroughDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && !!claim.settlement && claim.settlement.isThroughAdmissionsAndSettled()
+      onBeforeCheckPayInInstalmentsClaimantOfferAcceptedByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS) && this.checkClaimantOfferAcceptedByDetermination()
       },
 
-      onBeforeCheckDefendantOfferRejectedByAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.SETTLEMENT
+      checkIsSettled (): boolean {
+        return !!claim.settlement && claim.settlement.isThroughAdmissionsAndSettled()
+      },
+
+      onBeforeCheckIsPayBySetDateSettledThroughAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkIsSettled()
+      },
+
+      onBeforeCheckIsPayInInstalmentsSettledThroughAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkIsSettled()
+      },
+
+      onBeforeCheckIsPayBySetDateSettledThroughDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkIsSettled()
+      },
+
+      onBeforeCheckIsPayInInstalmentsSettledThroughDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkIsSettled()
+      },
+
+      checkDefendantOfferRejected (): boolean {
+        return (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.SETTLEMENT
           && claim.settlement && claim.settlement.isOfferRejected()
       },
 
-      onBeforeCheckDefendantOfferRejectedByDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.SETTLEMENT
-          && claim.settlement && claim.settlement.isOfferRejected()
+      onBeforeCheckPayBySetDateDefendantOfferRejectedByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkDefendantOfferRejected()
+      },
+
+      onBeforeCheckPayInInstalmentsDefendantOfferRejectedByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkDefendantOfferRejected()
+      },
+
+      onBeforeCheckPayBySetDateDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkDefendantOfferRejected()
+      },
+
+      onBeforeCheckPayInInstalmentsDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkDefendantOfferRejected()
       },
 
       onBeforeCheckIsClaimSettled (): boolean {
         return !!claim.moneyReceivedOn
       },
 
-      onBeforeCheckPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
-        return this.checkPaymentDeadline()
+      onBeforeCheckPayBySetDatePastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_SETTLED_THROUGH_ADMISSION) && this.checkPaymentDeadline()
       },
 
-      onBeforeCheckPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
-        return this.checkPaymentDeadline()
+      onBeforeCheckPayInInstalmentsPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_ADMISSION) && this.checkPaymentDeadline()
+      },
+
+      onBeforeCheckPayBySetDatePastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_SETTLED_THROUGH_DETERMINATION) && this.checkPaymentDeadline()
+      },
+
+      onBeforeCheckPayInInstalmentsPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_DETERMINATION) && this.checkPaymentDeadline()
       },
 
       findState (currentSate: StateMachine) {
