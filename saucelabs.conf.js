@@ -7,6 +7,8 @@ const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER'
 const saucelabsTunnelIdentifier = requiredValue(process.env.SAUCELABS_TUNNEL_IDENTIFIER, 'SAUCELABS_TUNNEL_IDENTIFIER')
 const saucelabsUsername = requiredValue(process.env.SAUCELABS_USERNAME, 'SAUCELABS_USERNAME')
 const saucelabsAccessKey = requiredValue(process.env.SAUCELABS_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
+console.log('-----------------Browser: - 'browser,'-----------------saucelabsTunnelIdentifier: - 'saucelabsTunnelIdentifier)
+console.log('-----------------saucelabsUsername: - 'saucelabsUsername,'-----------------saucelabsAccessKey: - 'saucelabsAccessKey)
 
 function requiredValue (envVariableValue, variableName) {
 //   if (envVariableValue && envVariableValue.trim().length > 0) {
