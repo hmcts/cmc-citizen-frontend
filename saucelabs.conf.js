@@ -16,12 +16,12 @@ function requiredValue (envVariableValue, variableName) {
   }
 }
 
-function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
-  let desiredCapability = supportedBrowsers[browser]
-  desiredCapability.tunnelIdentifier = saucelabsTunnelName
-  desiredCapability.tags = ['cmc']
-  return desiredCapability
-}
+// function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
+//   let desiredCapability = supportedBrowsers[browser]
+//   desiredCapability.tunnelIdentifier = saucelabsTunnelName
+//   desiredCapability.tags = ['cmc']
+//   return desiredCapability
+// }
 
 exports.config = {
   name: 'integration-tests',
