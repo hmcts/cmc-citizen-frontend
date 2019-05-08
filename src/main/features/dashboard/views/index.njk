@@ -107,7 +107,7 @@
               {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
                 {% include claim.template.dashboard ignore missing %}
               {% else %}
-                {{ caseStatusForClaimant(claim.status, claim) }}
+                {{ caseStatusForDefendant(claim.status, claim) }}
               {% endif %}
             </td>
           </tr>
@@ -117,7 +117,7 @@
               {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
                 {% include claim.template.dashboard ignore missing %}
               {% else %}
-                {{ caseStatusForClaimant(claim.status, claim) }}
+                {{ caseStatusForDefendant(claim.status, claim) }}
               {% endif %}
             </td>
           </tr>
