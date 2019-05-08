@@ -272,19 +272,19 @@ export function FullAdmissionTransitions (claim: Claim) {
       },
 
       onBeforeCheckPayBySetDatePastCounterSignatureDeadlineByAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkPastCounterSignatureDeadline()
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByAdmission() && this.checkPastCounterSignatureDeadline()
       },
 
       onBeforeCheckPayInInstalmentsPastCounterSignatureDeadlineByAdmission (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkPastCounterSignatureDeadline()
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByAdmission() && this.checkPastCounterSignatureDeadline()
       },
 
       onBeforeCheckPayBySetDatePastCounterSignatureDeadlineByDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkPastCounterSignatureDeadline()
+        return this.is(FullAdmissionStates.FA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByDetermination() && this.checkPastCounterSignatureDeadline()
       },
 
       onBeforeCheckPayInInstalmentsPastCounterSignatureDeadlineByDetermination (): boolean {
-        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkPastCounterSignatureDeadline()
+        return this.is(FullAdmissionStates.FA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByDetermination() && this.checkPastCounterSignatureDeadline()
       },
 
       onBeforeCheckCCJRequestedPayImmediatelyPastDeadLine (): boolean {
