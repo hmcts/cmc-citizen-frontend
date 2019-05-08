@@ -9,19 +9,19 @@ const saucelabsUsername = requiredValue(process.env.SAUCELABS_USERNAME, 'SAUCELA
 const saucelabsAccessKey = requiredValue(process.env.SAUCELABS_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
 
 function requiredValue (envVariableValue, variableName) {
-  if (envVariableValue && envVariableValue.trim().length > 0) {
-    return envVariableValue.trim()
-  } else {
-    throw new Error(`${variableName} is a required environment variable, but wasn't set`)
-  }
+//   if (envVariableValue && envVariableValue.trim().length > 0) {
+//     return envVariableValue.trim()
+//   } else {
+//     throw new Error(`${variableName} is a required environment variable, but wasn't set`)
+//   }
 }
 
-// function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
-//   let desiredCapability = supportedBrowsers[browser]
-//   desiredCapability.tunnelIdentifier = saucelabsTunnelName
-//   desiredCapability.tags = ['cmc']
-//   return desiredCapability
-// }
+function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
+  let desiredCapability = supportedBrowsers[browser]
+  desiredCapability.tunnelIdentifier = saucelabsTunnelName
+  desiredCapability.tags = ['cmc']
+  return desiredCapability
+}
 
 exports.config = {
   name: 'integration-tests',
