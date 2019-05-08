@@ -1,7 +1,3 @@
-provider "azurerm" {
-  version = "1.19.0"
-}
-
 provider "vault" {
   //  # It is strongly recommended to configure this provider through the
   //  # environment variables described above, so that each user can have

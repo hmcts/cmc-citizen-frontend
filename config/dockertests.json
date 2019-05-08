@@ -6,6 +6,7 @@
     "paidInFull": true,
     "returnErrorToUser": true,
     "mediation": false,
+    "mediationPilot": false,
     "directionsQuestionnaire": false,
     "newDashboardStatus": false
   },
