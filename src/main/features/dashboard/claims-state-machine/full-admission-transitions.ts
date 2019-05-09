@@ -53,7 +53,6 @@ export function FullAdmissionTransitions (claim: Claim) {
         from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE],
         to: FullAdmissionStates.FA_PAY_BY_SPECIFIED_DATE_REFERRED_TO_JUDGE
       },
-
       {
         name: 'checkIsPayInInstalmentsReferredToJudge',
         from: [FullAdmissionStates.FULL_ADMISSION, FullAdmissionStates.FA_PAY_IN_INSTALMENTS],
