@@ -2,6 +2,7 @@ feature_mock_pay = "true"
 feature_fine_print = "true"
 feature_new_features_consent = "true"
 feature_return_error_to_user = "true"
+feature_admissions = "true"
 external_host_name = "moneyclaims.sprod.platform.hmcts.net"
 
 idam_api_url = "http://idam-api-idam-sprod.service.core-compute-idam-sprod.internal"
