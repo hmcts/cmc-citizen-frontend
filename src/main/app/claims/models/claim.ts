@@ -366,7 +366,7 @@ export class Claim {
       return true
     }
 
-    return ((((this.response as FullAdmissionResponse).paymentIntention
+    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
           && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
           PaymentOption.IMMEDIATELY
           && !this.isSettlementReachedThroughAdmission() && this.isResponseSubmitted())
