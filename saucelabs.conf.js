@@ -9,8 +9,8 @@ const saucelabsUsername = requiredValue(process.env.SAUCE_USERNAME, 'SAUCELABS_U
 const saucelabsAccessKey = requiredValue(process.env.SAUCE_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
 console.log('-----------------Browser: - '+browser+'-----------------process.env.SAUCELABS_BROWSER: - '+process.env.SAUCELABS_BROWSER)
 console.log('-----------------saucelabsTunnelIdentifier: - '+saucelabsTunnelIdentifier+'-----------------process.env.SAUCELABS_TUNNEL_IDENTIFIER: - '+process.env.SAUCELABS_TUNNEL_IDENTIFIER)
-console.log('-----------------saucelabsUsername: - '+saucelabsUsername+'-----------------process.env.SAUCELABS_USERNAME: - '+process.env.SAUCELABS_USERNAME)
-console.log('-----------------saucelabsAccessKey: - '+saucelabsAccessKey+'-----------------process.env.SAUCELABS_ACCESS_KEY: - '+process.env.SAUCELABS_ACCESS_KEY)
+console.log('-----------------saucelabsUsername: - '+saucelabsUsername+'-----------------process.env.SAUCELABS_USERNAME: - '+process.env.SAUCE_USERNAME)
+console.log('-----------------saucelabsAccessKey: - '+saucelabsAccessKey+'-----------------process.env.SAUCELABS_ACCESS_KEY: - '+process.env.SAUCE_ACCESS_KEY)
 
 function requiredValue (envVariableValue, variableName) {
   if (envVariableValue && envVariableValue.trim().length > 0) {
