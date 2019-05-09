@@ -37,13 +37,13 @@ exports.config = {
     WebDriverIO: {
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       browser: supportedBrowsers[browser].browserName,
-      waitForTimeout: 6000,
+      waitForTimeout: 30000,
       windowSize: '1600x900',
       uniqueScreenshotNames: true,
       timeouts: {
-        script: 6000,
-        pageLoad: 6000,
-        'page load': 6000
+        script: 30000,
+        pageLoad: 30000,
+        'page load': 30000
       },
       host: 'ondemand.eu-central-1.saucelabs.com',
       port: 80,
