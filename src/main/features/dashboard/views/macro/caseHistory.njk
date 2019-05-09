@@ -25,7 +25,7 @@
   claimRejectedFreeMediationYESForClaimantClaimDetails,
   claimRejectedFreeMediationYESForDefendantClaimDetails,
   claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails,
-  claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails  %}
+  claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
@@ -157,7 +157,7 @@
       {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
         {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
       {% endif %}
-    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_REJECTION %}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
