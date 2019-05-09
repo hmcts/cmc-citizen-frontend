@@ -24,8 +24,8 @@
   claimRejectedFreeMediationNOForDefendantClaimDetails,
   claimRejectedFreeMediationYESForClaimantClaimDetails,
   claimRejectedFreeMediationYESForDefendantClaimDetails,
-  claimRejectedDefendantsRejectionFreeMediationNOForClaimantDetails,
-  claimRejectedDefendantsRejectionFreeMediationYESForClaimantDetails  %}
+  claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails,
+  claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails  %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
@@ -160,9 +160,9 @@
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_REJECTION %}
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% if claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedDefendantsRejectionFreeMediationNOForClaimantDetails(claim) }}
+          {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
         {% else %}
-          {{ claimRejectedDefendantsRejectionFreeMediationYESForClaimantDetails(claim) }}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
         {% endif %}
         {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if claim.response.paymentDeclaration and claim.totalAmountTillToday < claim.response.amount %}

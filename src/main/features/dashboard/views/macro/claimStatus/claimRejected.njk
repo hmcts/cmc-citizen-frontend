@@ -39,11 +39,11 @@
     { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
-{% macro claimRejectedDefendantsRejectionFreeMediationNOForClaimantDashboard(claim) %}
+{% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) %}
   {{ t('You’ve reject the defendant’s response.') }}
 {% endmacro %}
 
-{% macro claimRejectedDefendantsRejectionFreeMediationNOForClaimantDetails(claim) %}
+{% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) %}
   {{ t('You’ve reject the defendant’s response.') }}
 {% endmacro %}
 
@@ -78,7 +78,7 @@
     { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
-{% macro claimRejectedDefendantsRejectionFreeMediationYESForClaimantDashboard(claim) %}
+{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
     {{ t('You’ve rejected the defendant’s response.') }}
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
@@ -86,7 +86,7 @@
     {% endif %}
 {% endmacro %}
 
-{% macro claimRejectedDefendantsRejectionFreeMediationYESForClaimantDetails(claim) %}
+{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s response.') }}</h2>
 
