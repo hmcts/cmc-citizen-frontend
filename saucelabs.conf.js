@@ -5,8 +5,8 @@ const supportedBrowsers = require('@hmcts/cmc-supported-browsers').supportedBrow
 
 const browser = requiredValue(process.env.SAUCELABS_BROWSER, 'SAUCELABS_BROWSER')
 const saucelabsTunnelIdentifier = requiredValue(process.env.SAUCELABS_TUNNEL_IDENTIFIER, 'SAUCELABS_TUNNEL_IDENTIFIER')
-// const saucelabsUsername = requiredValue(process.env.SAUCELABS_USERNAME, 'SAUCELABS_USERNAME')
-const saucelabsAccessKey = requiredValue(process.env.SAUCELABS_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
+const saucelabsUsername = requiredValue(process.env.SAUCE_USERNAME, 'SAUCELABS_USERNAME')
+const saucelabsAccessKey = requiredValue(process.env.SAUCE_ACCESS_KEY, 'SAUCELABS_ACCESS_KEY')
 console.log('-----------------Browser: - '+browser+'-----------------process.env.SAUCELABS_BROWSER: - '+process.env.SAUCELABS_BROWSER)
 console.log('-----------------saucelabsTunnelIdentifier: - '+saucelabsTunnelIdentifier+'-----------------process.env.SAUCELABS_TUNNEL_IDENTIFIER: - '+process.env.SAUCELABS_TUNNEL_IDENTIFIER)
 console.log('-----------------saucelabsUsername: - '+saucelabsUsername+'-----------------process.env.SAUCELABS_USERNAME: - '+process.env.SAUCELABS_USERNAME)
