@@ -44,7 +44,11 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) %}
-  {{ t('You’ve reject the defendant’s response.') }}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
+    <p>{{ t('You’ve rejected defendant’s response and said you want to take the case to court.') }}</p>
+    <p>{{ t('The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.') }}</p>
+  </div>
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForClaimantClaimDetails(claim) %}

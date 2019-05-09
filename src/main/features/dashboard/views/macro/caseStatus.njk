@@ -127,7 +127,7 @@
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
     {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
-      {% if claim.response.freeMediation === FreeMediationOption.NO %}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
