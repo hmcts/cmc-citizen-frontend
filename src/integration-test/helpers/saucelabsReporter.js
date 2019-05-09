@@ -9,7 +9,7 @@ const FAILURE = false
 
 function reportBuildResultToSaucelabs (result) {
   const sessionId = container.helpers('WebDriverIO').browser.requestHandler.sessionID
-  const sauceUsername = process.env.SAUCELABS_USERNAME
+  const sauceUsername = process.env.SAUCE_USERNAME
 
   request.put({
     uri: `https://eu-central-1.saucelabs.com/rest/v1/${sauceUsername}/jobs/${sessionId}`,
