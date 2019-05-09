@@ -31,10 +31,7 @@ function logStartupProblem (response) {
 }
 
 function handleError (error) {
-  const errorBody = () => {
-    return error && error.response ? error.response.body : error
-  }
-  console.log('Error during bootstrap, exiting', errorBody())
+  console.log('Error during bootstrap, exiting', error)
   process.exit(1)
 }
 
