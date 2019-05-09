@@ -13,11 +13,11 @@ console.log('-----------------saucelabsUsername: - '+saucelabsUsername+'--------
 console.log('-----------------saucelabsAccessKey: - '+saucelabsAccessKey+'-----------------process.env.SAUCELABS_ACCESS_KEY: - '+process.env.SAUCELABS_ACCESS_KEY)
 
 function requiredValue (envVariableValue, variableName) {
-//   if (envVariableValue && envVariableValue.trim().length > 0) {
-//     return envVariableValue.trim()
-//   } else {
-//     throw new Error(`${variableName} is a required environment variable, but wasn't set`)
-//   }
+  if (envVariableValue && envVariableValue.trim().length > 0) {
+    return envVariableValue.trim()
+  } else {
+    throw new Error(`${variableName} is a required environment variable, but wasn't set`)
+  }
 }
 
 function setupDesiredCapabilitiesFor (browser, saucelabsTunnelName) {
