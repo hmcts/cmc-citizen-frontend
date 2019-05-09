@@ -98,7 +98,6 @@ const testData = [
       'Respond to claim'
     ]
   },
-
   {
     status: 'Full admission - defendant responded pay by set date',
     claim: fullAdmissionClaim,
