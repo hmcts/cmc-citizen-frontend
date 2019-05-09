@@ -73,7 +73,7 @@ export const basePayByInstalmentsData = {
 export const basePayBySetDateData = {
   paymentIntention: {
     paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: MomentFactory.currentDate().add(30, 'days')
+    paymentDate: '2050-12-31'
   }
 }
 export const basePartialAdmissionData = {

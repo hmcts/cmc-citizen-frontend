@@ -19,7 +19,7 @@ export const setByDatePaymentIntentionPastDeadline = {
   paymentOption: PaymentOption.BY_SPECIFIED_DATE
 }
 
-export const installmentsPaymentIntentionPastDeadline = {
+export const instalmentsPaymentIntentionPastDeadline = {
   paymentOption: PaymentOption.INSTALMENTS,
   repaymentPlan: {
     completionDate: MomentFactory.currentDate().subtract(12, 'months'),
@@ -30,7 +30,7 @@ export const installmentsPaymentIntentionPastDeadline = {
   }
 }
 
-export const installmentsPaymentIntention = {
+export const instalmentsPaymentIntention = {
   paymentOption: PaymentOption.INSTALMENTS,
   repaymentPlan: {
     completionDate: MomentFactory.currentDate().add(12, 'months'),
@@ -56,7 +56,7 @@ export const courtDeterminationBySpecifiedDate = {
 
 export const courtDeterminationInInstalments = {
   courtDecision: {
-    ...installmentsPaymentIntention
+    ...instalmentsPaymentIntention
   },
   courtPaymentIntention: {
     paymentDate: MomentFactory.maxDate(),
@@ -116,8 +116,8 @@ export const defendantOffersSettlementByInstalments = [{
   madeBy: 'DEFENDANT',
   offer: {
     content: 'test',
-    completionDate: MomentFactory.currentDate().add(1, 'day'),
-    paymentIntention: { ...installmentsPaymentIntention }
+    completionDate: MomentFactory.currentDate().add(12, 'months'),
+    paymentIntention: { ...instalmentsPaymentIntention }
   }
 }]
 
@@ -137,7 +137,7 @@ export const defendantOffersSettlementInInstalmentsPastPaymentDeadline = [{
   offer: {
     content: 'test',
     completionDate: MomentFactory.currentDate().add(12, 'months'),
-    paymentIntention: { ...installmentsPaymentIntentionPastDeadline }
+    paymentIntention: { ...instalmentsPaymentIntentionPastDeadline }
   }
 }]
 
