@@ -14,8 +14,8 @@ function reportBuildResultToSaucelabs (result) {
   request.put({
     uri: `https://eu-central-1.saucelabs.com/rest/v1/${sauceUsername}/jobs/${sessionId}`,
     auth: {
-      username: process.env.SAUCELABS_USERNAME,
-      password: process.env.SAUCELABS_ACCESS_KEY
+      username: process.env.SAUCE_USERNAME,
+      password: process.env.SAUCE_ACCESS_KEY
     },
     body: {
       passed: result
@@ -26,6 +26,7 @@ function reportBuildResultToSaucelabs (result) {
   ).catch(
     err => console.log(err)
   )
+  console.log('SauceOnDemandSessionID=' + sessionId )
 }
 
 module.exports = function () {
