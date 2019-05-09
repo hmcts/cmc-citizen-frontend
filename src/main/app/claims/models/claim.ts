@@ -168,6 +168,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
+    } else if (this.hasClaimantRejectedDefendantRejection()) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_REJECTION
     } else if (this.hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedDefendantFullAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
@@ -360,8 +362,16 @@ export class Claim {
       return false
     }
 
-    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY && !this.isSettlementReachedThroughAdmission()
-      && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
+    if (this.hasClaimantRejectedDefendantRejection()) {
+      return true
+    }
+
+    return ((((this.response as FullAdmissionResponse).paymentIntention
+          && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
+          PaymentOption.IMMEDIATELY
+          && !this.isSettlementReachedThroughAdmission() && this.isResponseSubmitted())
+        && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ()))
+      || !this.response)
   }
 
   private isDefendantBusiness (): boolean {
@@ -475,6 +485,12 @@ export class Claim {
       && ((this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.ALREADY_PAID)
          || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.response.paymentDeclaration !== undefined
+  }
+
+  private hasClaimantRejectedDefendantRejection (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
   }
 
   private isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {
