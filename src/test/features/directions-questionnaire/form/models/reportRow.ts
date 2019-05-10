@@ -1,10 +1,11 @@
 /* tslint:disable:no-unused-expression */
 import { ReportRow, ValidationErrors } from 'directions-questionnaire/forms/models/reportRow'
+import { ValidationErrors as DateValidationErrors } from 'main/app/forms/models/localDate'
 import { expect } from 'chai'
 import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 import { Validator } from '@hmcts/class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 describe('Report Rows', () => {
   context('constructor', () => {
@@ -122,7 +123,7 @@ describe('Report Rows', () => {
       ))
 
       expect(errors).to.not.be.empty
-      expectValidationError(errors, ValidationErrors.VALID_DATE_REQUIRED)
+      expectValidationError(errors, DateValidationErrors.MONTH_NOT_VALID)
     })
   })
 })
