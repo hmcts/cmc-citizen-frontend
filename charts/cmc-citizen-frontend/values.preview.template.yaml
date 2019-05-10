@@ -6,7 +6,7 @@ postgresql:
   enabled: true # for rpe-feature-toggle-api
 
 rpe-feature-toggle-api:
-  releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
+  releaseNameOverride: ${SERVICE_NAME}-java
   importer:
     cron:
       enabled: false
