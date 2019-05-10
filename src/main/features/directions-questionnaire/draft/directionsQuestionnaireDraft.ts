@@ -5,38 +5,30 @@ import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/
 import { Availability } from 'directions-questionnaire/forms/models/availability'
 import { SupportRequired } from 'directions-questionnaire/forms/models/supportRequired'
 import { ExpertRequired } from 'directions-questionnaire/forms/models/expertRequired'
+import { ExpertReports } from 'directions-questionnaire/forms/models/expertReports'
 
 export class DirectionsQuestionnaireDraft extends DraftDocument {
 
-  selfWitness?: SelfWitness
-  otherWitnesses?: OtherWitnesses
-  hearingLocation?: string
-  exceptionalCircumstances?: ExceptionalCircumstances
-  availability?: Availability
-  supportRequired?: SupportRequired
-  expertRequired?: ExpertRequired
-
-  constructor (selfWitness: SelfWitness = new SelfWitness(),
-               otherWitnesses: OtherWitnesses = new OtherWitnesses(),
-               hearingLocation: string = '',
-               exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances(),
-               availability: Availability = new Availability(),
-               supportRequired: SupportRequired = new SupportRequired(),
-               expertRequired: ExpertRequired = new ExpertRequired()
-  ) {
-    super()
-  }
+  selfWitness: SelfWitness = new SelfWitness()
+  otherWitnesses: OtherWitnesses = new OtherWitnesses()
+  hearingLocation: string = ''
+  exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances()
+  availability: Availability = new Availability()
+  supportRequired: SupportRequired = new SupportRequired()
+  expertRequired: ExpertRequired = new ExpertRequired()
+  expertReports: ExpertReports = new ExpertReports()
 
   deserialize (input: any): DirectionsQuestionnaireDraft {
     if (input) {
       this.externalId = input.externalId
-      this.selfWitness = input.selfWitness
-      this.otherWitnesses = input.otherWitnesses
-      this.supportRequired = input.supportRequired
+      this.selfWitness = new SelfWitness().deserialize(input.selfWitness)
+      this.otherWitnesses = new OtherWitnesses().deserialize(input.otherWitnesses)
+      this.supportRequired = new SupportRequired().deserialize(input.supportRequired)
       this.hearingLocation = input.hearingLocation
-      this.exceptionalCircumstances = input.exceptionalCircumstances
-      this.availability = Availability.fromObject(input.availability)
-      this.expertRequired = input.expertRequired
+      this.exceptionalCircumstances = new ExceptionalCircumstances().deserialize(input.exceptionalCircumstances)
+      this.availability = new Availability().deserialize(input.availability)
+      this.expertRequired = new ExpertRequired().deserialize(input.expertRequired)
+      this.expertReports = new ExpertReports().deserialize(input.expertReports)
     }
     return this
   }
