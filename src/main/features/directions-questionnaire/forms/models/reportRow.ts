@@ -21,8 +21,8 @@ export class ReportRow extends MultiRowFormItem {
 
   @ValidateIf(o => !!o.expertName)
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
-  @IsPastDate({ message: ValidationErrors.PAST_DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.VALID_DATE_REQUIRED })
+  @IsPastDate({ message: ValidationErrors.PAST_DATE_REQUIRED })
   @ValidateNested()
   reportDate?: LocalDate
 

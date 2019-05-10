@@ -13,7 +13,7 @@
   <div class="form-group {% if form.errorFor(nameKey) or form.errorFor(dateKey) %} form-group-error {% endif %}">
 
     {{ textInput('Expert’s name', name = nameKey, form = form) }}
-    {{ dateInput(dateKey, form, 'For example, ' + ('now' | addDays(-30) | date), 'When is the report dated?') }}
+    {{ dateInput(dateKey, form, 'When is the report dated?', 'For example, ' + ('now' | addDays(-30) | date)) }}
 
   </div>
 
