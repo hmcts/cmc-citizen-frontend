@@ -48,7 +48,7 @@ env.SAUCELABS_BROWSER = 'chrome_win_latest'
 env.SAUCELABS_TUNNEL_IDENTIFIER = 'reformtunnel'
 env.TEST_URL = params.URL_TO_TEST
 env.CITIZEN_APP_URL = params.URL_TO_TEST
-env.CHUNKS = 8
+env.CHUNKS = 6
 
 withNightlyPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
