@@ -8,7 +8,8 @@ dependencies:
     tags:
       - idam-pr
   - name: rpe-feature-toggle-api
-    version: ~1.0.0
-    repository: '@hmcts'
+    version: ~2.0.0
+#    repository: '@hmcts'
+    repository: file:///Users/markry/workspace/hmcts/feature-toggle-api/charts/rpe-feature-toggle-api
     tags:
       - rpe-feature-toggle-api-pod

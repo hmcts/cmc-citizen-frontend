@@ -2,9 +2,11 @@ tags:
   - rpe-feature-toggle-api-pod
   - idam-pr
 
+postgresql:
+  enabled: true # for rpe-feature-toggle-api
+
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
-  registerDns: false
   importer:
     cron:
       enabled: false
@@ -15,16 +17,6 @@ rpe-feature-toggle-api:
         /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
       enabled: true
       permissions: cmc-new-features-consent-given
-  java:
-    image: hmcts.azurecr.io/hmcts/rpe-feature-toggle-api:latest
-    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
-    environment:
-      FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
-  postgresql:
-    postgresqlDatabase: hmcts
-
-postgresql:
-  enabled: true
 
 nodejs:
   image: ${IMAGE_NAME}
