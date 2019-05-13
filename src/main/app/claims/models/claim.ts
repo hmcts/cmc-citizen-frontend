@@ -156,8 +156,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (this.eligibleForCCJ) {
-      return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isResponseSubmitted()) {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -174,6 +172,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedPartAdmitPayImmediately()) {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
+    } else if (this.eligibleForCCJ) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
@@ -207,7 +207,8 @@ export class Claim {
   }
 
   get admissionPayImmediatelyPastPaymentDate (): boolean {
-    return this.response && this.response.responseType === ResponseType.FULL_ADMISSION
+    return this.response
+      && (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.response.paymentIntention
       && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
       && this.response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
