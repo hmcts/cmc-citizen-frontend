@@ -4,6 +4,7 @@ import { OtherWitnesses } from 'directions-questionnaire/forms/models/otherWitne
 import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/exceptionalCircumstances'
 import { Availability } from 'directions-questionnaire/forms/models/availability'
 import { SupportRequired } from 'directions-questionnaire/forms/models/supportRequired'
+import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvidence'
 
 export class DirectionsQuestionnaireDraft extends DraftDocument {
 
@@ -13,13 +14,16 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   exceptionalCircumstances?: ExceptionalCircumstances
   availability?: Availability
   supportRequired?: SupportRequired
+  expertEvidence?: ExpertEvidence
 
   constructor (selfWitness: SelfWitness = new SelfWitness(),
                otherWitnesses: OtherWitnesses = new OtherWitnesses(),
                hearingLocation: string = '',
                exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances(),
                availability: Availability = new Availability(),
-               supportRequired: SupportRequired = new SupportRequired()) {
+               supportRequired: SupportRequired = new SupportRequired(),
+               expertEvidence: ExpertEvidence = new ExpertEvidence()
+  ) {
     super()
   }
 
@@ -32,6 +36,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.hearingLocation = input.hearingLocation
       this.exceptionalCircumstances = input.exceptionalCircumstances
       this.availability = Availability.fromObject(input.availability)
+      this.expertEvidence = input.expertEvidence
     }
     return this
   }
