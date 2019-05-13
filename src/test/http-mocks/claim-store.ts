@@ -21,7 +21,7 @@ import {
   fullDefenceWithStatesPaidGreaterThanClaimAmount,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
-  partialAdmissionWithSoMPaymentBySetDateData, partialAdmissionWithImmediatePaymentData
+  partialAdmissionWithSoMPaymentBySetDateData, partialAdmissionWithImmediatePaymentData, defenceWithDisputeData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -418,6 +418,11 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithReasonabl
 export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
+}
+
+export const sampleFullDefenceRejectEntirely = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: defenceWithDisputeData
 }
 
 export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {

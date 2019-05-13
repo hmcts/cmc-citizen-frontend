@@ -36,10 +36,31 @@ const defendantName = claimStoreServiceMock.sampleClaimObj.claim.defendants[0].n
 
 const testData = [
   {
+    status: 'Should show offer to settle made',
+    claim: {
+      ...data.claim,
+      ...data.responses.fullRejection,
+      ...data.nonMonetaryOfferAwaitingClaimantResponsePartyStatements
+    },
+    claimantAssertions: [
+      'They said they dispute your claim.',
+      'complete a directions questionnaire',
+      `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has made an offer to settle out of court.`,
+      'View and respond to the offer'
+    ],
+    defendantAssertions: [
+      'You’ve rejected the claim and said you don’t want to use mediation to solve it.',
+      'You’ll have to go to a hearing.',
+      'complete a directions questionnaire',
+      'You made an offer to settle the claim out of court.',
+      `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can accept or reject your offer.`
+    ]
+  },
+  {
     status: 'Should show case settled when part-admit pay-by-set-date settlement reached',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
     claimantAssertions: [
@@ -55,7 +76,7 @@ const testData = [
     status: 'Should show case settled when full-admit pay-by-set-date settlement reached',
     claim: {
       ...data.claim,
-      ...data.fullAdmission,
+      ...data.responses.fullAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
     claimantAssertions: [
@@ -71,7 +92,7 @@ const testData = [
     status: 'Should show offer settlement reached',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.claimantResponses.acceptBySettlement,
       ...data.nonMonetaryOfferSettlementReachedPartyStatements
     },
@@ -90,7 +111,7 @@ const testData = [
     status: 'Should show part-admit settlement rejected',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.claimantResponses.acceptWithNewPlan,
       ...data.defendantRejectsSettlementPartyStatements
     },
@@ -109,7 +130,7 @@ const testData = [
     status: 'Should show full-admit settlement rejected',
     claim: {
       ...data.claim,
-      ...data.fullAdmission,
+      ...data.responses.fullAdmission,
       ...data.claimantResponses.acceptWithNewPlan,
       ...data.defendantRejectsSettlementPartyStatements
     },
@@ -128,7 +149,7 @@ const testData = [
     status: 'Should show claimant accepted court plan part-admit settlement',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.claimantResponses.acceptsWithCourtPlan,
       ...data.claimantAcceptsCourtOfferPartyStatements
     },
@@ -147,7 +168,7 @@ const testData = [
     status: 'Should show claimant accepted court plan full-admit settlement',
     claim: {
       ...data.claim,
-      ...data.fullAdmission,
+      ...data.responses.fullAdmission,
       ...data.claimantResponses.acceptsWithCourtPlan,
       ...data.claimantAcceptsCourtOfferPartyStatements
     },

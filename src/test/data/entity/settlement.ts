@@ -2,14 +2,21 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { MomentFactory } from 'shared/momentFactory'
 
 export const claim = claimStoreServiceMock.sampleClaimIssueObj
-export const partialAdmission = {
-  response: claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj.response,
-  respondedAt: MomentFactory.currentDateTime().subtract(10, 'days')
-}
 
-export const fullAdmission = {
-  response: claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj.response,
-  respondedAt: MomentFactory.currentDateTime().subtract(10, 'days')
+export const responses = {
+  fullRejection: {
+    response: claimStoreServiceMock.sampleFullDefenceRejectEntirely.response,
+    respondedAt: MomentFactory.currentDateTime().subtract(10, 'days'),
+    directionsQuestionnaireDeadline: MomentFactory.currentDate().add(10, 'days')
+  },
+  partialAdmission: {
+    response: claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj.response,
+    respondedAt: MomentFactory.currentDateTime().subtract(10, 'days')
+  },
+  fullAdmission: {
+    response: claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj.response,
+    respondedAt: MomentFactory.currentDateTime().subtract(10, 'days')
+  }
 }
 
 export const dateIn3Months = MomentFactory.currentDate().add(3, 'months')
@@ -154,6 +161,15 @@ export const payBySetDateSettlementReachedPartyStatements = {
     ]
   },
   settlementReachedAt: MomentFactory.currentDateTime(),
+  countyCourtJudgment: undefined
+}
+
+export const nonMonetaryOfferAwaitingClaimantResponsePartyStatements = {
+  settlement: {
+    partyStatements: [
+      partyStatement.byDefendant.offeringNonMonetarySettlement
+    ]
+  },
   countyCourtJudgment: undefined
 }
 

@@ -40,7 +40,7 @@ const testData = [
     status: 'Should show case settled when part-admit pay-by-set-date settlement reached',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
     claimantAssertions: [
@@ -54,7 +54,7 @@ const testData = [
     status: 'Should show case settled when full-admit pay-by-set-date settlement reached',
     claim: {
       ...data.claim,
-      ...data.fullAdmission,
+      ...data.responses.fullAdmission,
       ...data.payBySetDateSettlementReachedPartyStatements
     },
     claimantAssertions: [
@@ -68,7 +68,7 @@ const testData = [
     status: 'Should show offer settlement reached',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.claimantResponses.acceptBySettlement,
       ...data.nonMonetaryOfferSettlementReachedPartyStatements
     },
@@ -85,7 +85,7 @@ const testData = [
     status: 'Should show part-admit settlement rejected',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.claimantResponses.acceptWithNewPlan,
       ...data.defendantRejectsSettlementPartyStatements
     },
@@ -101,7 +101,7 @@ const testData = [
     status: 'Should show full-admit settlement rejected',
     claim: {
       ...data.claim,
-      ...data.fullAdmission,
+      ...data.responses.fullAdmission,
       ...data.claimantResponses.acceptWithNewPlan,
       ...data.defendantRejectsSettlementPartyStatements
     },
@@ -117,7 +117,7 @@ const testData = [
     status: 'Should show claimant accepted court plan part-admit settlement',
     claim: {
       ...data.claim,
-      ...data.partialAdmission,
+      ...data.responses.partialAdmission,
       ...data.claimantResponses.acceptsWithCourtPlan,
       ...data.claimantAcceptsCourtOfferPartyStatements
     },
@@ -133,7 +133,7 @@ const testData = [
     status: 'Should show claimant accepted court plan full-admit settlement',
     claim: {
       ...data.claim,
-      ...data.fullAdmission,
+      ...data.responses.fullAdmission,
       ...data.claimantResponses.acceptsWithCourtPlan,
       ...data.claimantAcceptsCourtOfferPartyStatements
     },
