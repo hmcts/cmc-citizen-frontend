@@ -24,6 +24,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
+const expertGuidance = Paths.expertGuidancePage.evaluateUri({ externalId })
 const pagePath = Paths.expertReportsPage.evaluateUri({ externalId })
 
 function checkAccessGuard (app: any, method: string) {
@@ -154,8 +155,8 @@ describe('Directions Questionnaire - expert reports page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validDeclaredFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
+            .send(validDeclinedFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(expertGuidance))
         })
       })
 
