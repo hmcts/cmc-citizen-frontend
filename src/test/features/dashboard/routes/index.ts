@@ -92,11 +92,10 @@ const testData = [
     claim: partAdmissionClaim,
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
-      claimantResponse: baseAcceptationClaimantResponseData,
-      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+      claimantResponse: baseAcceptationClaimantResponseData
     },
-    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC000', 'You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.']
+    claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
+    defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
   },
   {
     status: 'partial admission, pay by set date',
