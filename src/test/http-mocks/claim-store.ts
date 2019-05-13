@@ -21,7 +21,9 @@ import {
   fullDefenceWithStatesPaidGreaterThanClaimAmount,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
-  partialAdmissionWithSoMPaymentBySetDateData, partialAdmissionWithImmediatePaymentData, defenceWithDisputeData
+  partialAdmissionWithSoMPaymentBySetDateData,
+  partialAdmissionWithImmediatePaymentData,
+  defenceWithDisputeData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
