@@ -51,7 +51,7 @@
             <input id="freeMediationOptionNO" type="radio" name="option" value="{{ FreeMediationOption.NO }}" checked>
             <label for="freeMediationOptionNO">{{ t(FreeMediationOption.NO) | capitalize }}</label>
           </div>
-          canWeUseInputs(form)
+          {{ canWeUseInputs(form) }}
         {% endif %}
 
         {{ saveAndContinueButton() }}

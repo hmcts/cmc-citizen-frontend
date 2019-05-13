@@ -4,13 +4,16 @@ import { Paths } from 'mediation/paths'
 import { ErrorHandling } from 'main/common/errorHandling'
 import { User } from 'idam/user'
 import { Claim } from 'claims/models/claim'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 function renderView (res: express.Response): void {
   const user: User = res.locals.user
   const claim: Claim = res.locals.claim
 
   res.render(Paths.freeMediationPage.associatedView, {
-    otherParty: claim.otherPartyName(user)
+    otherParty: claim.otherPartyName(user),
+    defendant: user.id === claim.defendantId,
+    mediationPilot: ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')
   })
 }
 

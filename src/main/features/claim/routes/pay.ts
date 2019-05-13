@@ -25,7 +25,6 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { Claim } from 'claims/models/claim'
-import { isNull } from 'util'
 import { MockPayClient } from 'mock-clients/mockPayClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
@@ -62,35 +61,7 @@ async function successHandler (req, res, next) {
   const externalId: string = draft.document.externalId
   let savedClaim: Claim
 
-  let claimIsAlreadyFullyPersisted: boolean
-
   try {
-    savedClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
-    claimIsAlreadyFullyPersisted = !isNull(savedClaim)
-  } catch (err) {
-    /**
-     * NOT_FOUND -> claim was not submitted yet -> migrate draft
-     */
-    if (err.statusCode === HttpStatus.NOT_FOUND) {
-      claimIsAlreadyFullyPersisted = false
-    } else {
-      logError(
-        user.id,
-        draft.document.claimant.payment,
-        `Payment processed successfully but there is problem retrieving claim from claim store externalId: ${externalId}.`
-      )
-      trackCustomEvent(`Post payment successful but no claim in claim-store for externalId: ${externalId}`,
-        {
-          externalId: externalId,
-          payment: draft.document.claimant.payment,
-          error: err
-        })
-      next(err)
-      return
-    }
-  }
-
-  if (!claimIsAlreadyFullyPersisted) {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
     if (!roles.length) {
@@ -105,14 +76,44 @@ async function successHandler (req, res, next) {
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
       features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
     }
+
+    if (draft.document.amount.totalAmount() <= 300) {
+      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
+        features += features === undefined ? 'mediationPilot' : ', mediationPilot'
+      }
+    }
+
     savedClaim = await claimStoreClient.saveClaim(draft, user, features)
+
+  } catch (err) {
+    if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
+      logError(
+        user.id,
+        draft.document.claimant.payment,
+        `Payment processed successfully but there was a problem saving claim '${externalId}' to the claim store.`
+      )
+      trackCustomEvent(`Post payment successful but unable to store claim in claim-store with externalId: ${externalId}`,
+        {
+          externalId: externalId,
+          payment: draft.document.claimant.payment,
+          error: err
+        })
+      next(err)
+      return
+    } else if (err.statusCode === HttpStatus.CONFLICT) {
+      logError(
+        user.id,
+        draft.document.claimant.payment,
+        `Payment processed successfully and claim ${externalId} already exists.`
+      )
+    }
   }
   const payClient: PayClient = await getPayClient(req)
   const paymentReference = draft.document.claimant.payment.reference
 
-  const savedClaimId = savedClaim.id === undefined ? 'UNKNOWN' : String(savedClaim.id)
+  const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
 
-  await payClient.update(user, paymentReference, savedClaim.externalId, savedClaimId)
+  await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }

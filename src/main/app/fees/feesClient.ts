@@ -56,8 +56,12 @@ export class FeesClient {
     }
     ClaimValidator.claimAmount(amount)
     const feeUri: string = `${feesUrl}/fees-register/fees/lookup?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&amount_or_volume=${amount}`
-    const fee: object = await request.get(feeUri)
-    return plainToClass(FeeOutcome, fee)
+    const options = {
+      uri: feeUri
+    }
+    return request(options).then(function (response) {
+      return plainToClass(FeeOutcome, response as object)
+    })
   }
 
   /**
@@ -84,7 +88,12 @@ export class FeesClient {
       throw new Error('Fee channel is required')
     }
     const uri: string = `${feesUrl}/fees-register/fees?service=${service}&jurisdiction1=${jurisdiction1}&jurisdiction2=${jurisdiction2}&channel=${channel}&event=${eventType}&feeVersionStatus=approved`
-    const range: object[] = await request.get(uri)
-    return plainToClass(FeeRange, range)
+    const options = {
+      uri: uri
+    }
+    return request(options).then(function (response) {
+      return plainToClass(FeeRange, response as object[])
+    })
+
   }
 }

@@ -62,7 +62,8 @@ export class GovPayClient implements PayClient {
     checkNotEmpty(fees, 'Fees array is required')
     checkNotEmpty(returnURL, 'Post payment redirect URL is required')
 
-    const payment: object = await request.post({
+    const options = {
+      method: 'POST',
       uri: baseURL,
       body: this.preparePaymentRequest(externalId, fees),
       headers: {
@@ -70,29 +71,33 @@ export class GovPayClient implements PayClient {
         ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`,
         'return-url': `${returnURL}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return Payment.deserialize(response)
     })
-    return Payment.deserialize(payment)
   }
 
   async retrieve (user: User, paymentReference: string): Promise<PaymentRetrieveResponse | undefined> {
     checkDefined(user, 'User is required')
     checkNotEmpty(paymentReference, 'Payment reference is required')
 
-    try {
-      const paymentResponse: object = await request.get({
-        uri: `${baseURL}/${paymentReference}`,
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`,
-          ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
-        }
-      })
-      return plainToClass(PaymentRetrieveResponse, paymentResponse)
-    } catch (err) {
+    const options = {
+      uri: `${baseURL}/${paymentReference}`,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`,
+        ServiceAuthorization: `Bearer ${this.serviceAuthToken.bearerToken}`
+      }
+    }
+
+    return request(options).then(function (response) {
+      return plainToClass(PaymentRetrieveResponse, response)
+    }).catch(function (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         return undefined
       }
       throw err
-    }
+    })
   }
 
   async update (user: User, paymentReference: string, caseReference: string, caseNumber: string): Promise<void> {

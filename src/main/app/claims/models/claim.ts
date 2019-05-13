@@ -58,6 +58,7 @@ export class Claim {
   moneyReceivedOn: Moment
   reDetermination: ReDetermination
   reDeterminationRequestedAt: Moment
+  ccdCaseId: number
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -207,8 +208,10 @@ export class Claim {
   }
 
   get admissionPayImmediatelyPastPaymentDate (): boolean {
-    return this.response && (this.response as FullAdmissionResponse).paymentIntention && (this.response as FullAdmissionResponse).paymentIntention.paymentOption === PaymentOption.IMMEDIATELY &&
-      (this.response as FullAdmissionResponse).paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+    return this.response && this.response.responseType === ResponseType.FULL_ADMISSION
+      && this.response.paymentIntention
+      && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
+      && this.response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
   }
 
   get retrieveDateOfBirthOfDefendant (): DateOfBirth {

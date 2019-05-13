@@ -397,19 +397,6 @@ describe('Claim issue: post payment callback receiver', () => {
 
       describe('succeeded', () => {
 
-        it('should return 500 and render error page when cannot retrieve claim', async () => {
-          draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
-          idamServiceMock.resolveRetrieveServiceToken()
-          payServiceMock.resolveRetrieve('Success')
-          draftStoreServiceMock.resolveSave()
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('Server is down')
-
-          await request(app)
-            .get(Paths.finishPaymentReceiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
-
         describe('when claim already exists', () => {
 
           it('should return 500 and render error page when cannot delete draft', async () => {
@@ -417,7 +404,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.rejectDelete()
 
             await request(app)
@@ -431,7 +417,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
@@ -457,7 +442,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.rejectSaveClaimForUser()
@@ -473,7 +457,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.resolveSaveClaimForUser()
@@ -490,7 +473,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.rejectIsAdmissionsAllowed()
 
@@ -505,7 +487,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.rejectRetrieveUserRoles()
 
             await request(app)
@@ -519,7 +500,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveSaveClaimForUser()
@@ -536,7 +516,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode('Claim not found by external id')
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-not-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed(false)
             claimStoreServiceMock.resolveSaveClaimForUser()
