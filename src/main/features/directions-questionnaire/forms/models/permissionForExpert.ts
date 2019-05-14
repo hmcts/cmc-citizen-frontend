@@ -9,8 +9,8 @@ export class PermissionForExpert implements CompletableTask {
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
   requestPermissionForExpert?: YesNoOption
 
-  constructor (option?: YesNoOption) {
-    this.requestPermissionForExpert = option
+  constructor (requestPermissionForExpert?: YesNoOption) {
+    this.requestPermissionForExpert = requestPermissionForExpert
   }
 
   public static fromObject (input?: any): PermissionForExpert {
@@ -18,7 +18,7 @@ export class PermissionForExpert implements CompletableTask {
       return input
     }
 
-    return new PermissionForExpert(YesNoOption.fromObject(input.option))
+    return new PermissionForExpert(YesNoOption.fromObject(input.requestPermissionForExpert))
   }
 
   deserialize (input?: any): PermissionForExpert {
