@@ -54,8 +54,9 @@ const testData = [
     },
     claimantAssertions: [
       'The defendant’s response',
-      fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.',
-      'Respond'
+      fullDefenceClaim.claim.defendants[0].name + ' says they paid you £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount + ' on ',
+      'You can accept or reject this response.',
+      'View and respond'
     ],
     defendantAssertions: [
       'Your response to the claim',
