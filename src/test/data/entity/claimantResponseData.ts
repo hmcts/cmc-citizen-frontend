@@ -12,9 +12,7 @@ export const baseDeterminationAcceptationClaimantResponseData = {
 }
 
 export const baseAcceptationClaimantResponseData = {
-  type: ClaimantResponseType.ACCEPTATION,
-  claimantPaymentIntention: monthlyInstalmentPaymentIntentionData,
-  amountPaid: 100
+  type: ClaimantResponseType.ACCEPTATION
 }
 
 const baseRejectionClaimantResponseData = {
