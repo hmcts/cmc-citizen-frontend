@@ -23,6 +23,8 @@ import { Individual } from 'claims/models/details/yours/individual'
 import { LocalDate } from 'forms/models/localDate'
 import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
+import { User } from 'idam/user'
+import { ClaimTemplate } from 'claims/models/claimTemplate'
 
 interface State {
   status: ClaimStatus
@@ -58,6 +60,7 @@ export class Claim {
   moneyReceivedOn: Moment
   reDetermination: ReDetermination
   reDeterminationRequestedAt: Moment
+  template: ClaimTemplate
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
