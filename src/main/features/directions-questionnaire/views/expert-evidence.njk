@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioOption, radioOptionWithHiddenControl, textArea, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, radioOption, textArea, saveAndContinueButton %}
 
-{% set heading = t('Does the claim involve something an expert can still examine?') %}
+{% set heading = 'Does the claim involve something an expert can still examine?' %}
 
 {% block content %}
 
