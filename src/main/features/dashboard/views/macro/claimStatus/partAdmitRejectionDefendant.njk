@@ -10,7 +10,7 @@
   <div class="status-block">
     <h2 class="heading-small">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
         { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
-    <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.claimData.amount.totalAmount() | numeral }) }}</p>
+    <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       <p>{{ t('They have agreed to try mediation. We’ll contact you with details of your appointment.') }}</p>
