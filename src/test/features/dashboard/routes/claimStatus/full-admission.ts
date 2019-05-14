@@ -236,7 +236,7 @@ const testData = [
     ]
   },
   {
-    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by admission and offered a settlement agreement - defendant rejected',
+    status: 'Full admission - defendant responded pay by set date - claimant accepts repayment plan by admission and offered a settlement agreement - defendant rejects settlement agreement',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
@@ -246,7 +246,6 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
       'Request a County Court Judgment (CCJ)',
       'If you’ve been paid',
       'Tell us if you want to end the claim'
@@ -364,7 +363,6 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
       'Request a County Court Judgment (CCJ)',
       'If you’ve been paid',
       'Tell us if you want to end the claim'
@@ -528,7 +526,6 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
       'Request a County Court Judgment (CCJ)',
       'If you’ve been paid',
       'Tell us if you want to end the claim'
@@ -649,7 +646,6 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
       'Request a County Court Judgment (CCJ)',
       'If you’ve been paid',
       'Tell us if you want to end the claim'
