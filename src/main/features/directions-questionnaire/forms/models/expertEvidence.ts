@@ -4,7 +4,7 @@ import { IsDefined, IsIn, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
 import { YesNoOption } from 'models/yesNoOption'
 
 export class ValidationErrors {
-  static readonly REASON_REQUIRED: string = 'Explain what is there to examine'
+  static readonly REASON_REQUIRED: string = 'Explain what there is to examine'
 }
 
 export class ExpertEvidence implements CompletableTask {
