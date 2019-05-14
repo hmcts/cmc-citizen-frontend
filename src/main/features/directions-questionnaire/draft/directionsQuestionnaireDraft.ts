@@ -6,6 +6,7 @@ import { Availability } from 'directions-questionnaire/forms/models/availability
 import { SupportRequired } from 'directions-questionnaire/forms/models/supportRequired'
 import { ExpertRequired } from 'directions-questionnaire/forms/models/expertRequired'
 import { ExpertReports } from 'directions-questionnaire/forms/models/expertReports'
+import { PermissionForExpert } from 'directions-questionnaire/forms/models/permissionForExpert'
 
 export class DirectionsQuestionnaireDraft extends DraftDocument {
 
@@ -17,6 +18,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   supportRequired: SupportRequired = new SupportRequired()
   expertRequired: ExpertRequired = new ExpertRequired()
   expertReports: ExpertReports = new ExpertReports()
+  permissionForExpert: PermissionForExpert = new PermissionForExpert()
 
   deserialize (input: any): DirectionsQuestionnaireDraft {
     if (input) {
@@ -29,6 +31,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.availability = new Availability().deserialize(input.availability)
       this.expertRequired = new ExpertRequired().deserialize(input.expertRequired)
       this.expertReports = new ExpertReports().deserialize(input.expertReports)
+      this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert)
     }
     return this
   }
