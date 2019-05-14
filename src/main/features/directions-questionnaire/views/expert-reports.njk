@@ -31,34 +31,33 @@
         {{ csrfProtection(csrf) }}
 
         {% set errorHasAnyExpertReports = form.errorFor('declared') %}
-        <div class="statement-of-means-container">
-          <fieldset id="declared[label]"
-                    class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
-            <legend class="visually-hidden">{{ t('Have you already got a report written by an expert?') }}</legend>
-            {% if errorHasAnyExpertReports %}<span class="error-message">{{ t(errorHasAnyExpertReports) }}</span>{% endif %}
+        <fieldset id="declared[label]"
+                  class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Have you already got a report written by an expert?') }}</legend>
+          {% if errorHasAnyExpertReports %}<span
+            class="error-message">{{ t(errorHasAnyExpertReports) }}</span>{% endif %}
 
-            {{ radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true) }}
+          {{ radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true) }}
 
-            {% set noRowsError = form.errorFor('rows') %}
-            <div
-              class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
-              id="declared-true" aria-hidden="false">
+          {% set noRowsError = form.errorFor('rows') %}
+          <div
+            class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
+            id="declared-true" aria-hidden="false">
 
-              {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
+            {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
 
-              {% for row in form.model.rows %}
-                {{ expertReportsRow(loop.index0, form) }}
-              {% endfor %}
+            {% for row in form.model.rows %}
+              {{ expertReportsRow(loop.index0, form) }}
+            {% endfor %}
 
-              <div id="add-event-container" class="form-group">
-                {{ linkButton('Add another report', 'action[addRow]', 'button button-secondary') }}
-              </div>
-
+            <div id="add-event-container" class="form-group">
+              {{ linkButton('Add another report', 'action[addRow]', 'button button-secondary') }}
             </div>
 
-            {{ radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false) }}
-          </fieldset>
-        </div>
+          </div>
+
+          {{ radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false) }}
+        </fieldset>
 
         {{ saveAndContinueButton() }}
 
