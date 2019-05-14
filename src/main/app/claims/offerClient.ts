@@ -12,38 +12,63 @@ export class OfferClient {
 
   static makeOffer (externalId: string, user: User, offerForm: OfferForm): Promise<Claim> {
     const offer: Offer = OfferModelConverter.convert(offerForm)
-    return request.post(`${claimStoreApiUrl}/${externalId}/offers/defendant`, {
+
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreApiUrl}/${externalId}/offers/defendant`,
       body: offer,
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 
   static acceptOffer (externalId: string, user: User): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${externalId}/offers/claimant/accept`, {
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreApiUrl}/${externalId}/offers/claimant/accept`,
       body: '',
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 
   static rejectOffer (externalId: string, user: User): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${externalId}/offers/claimant/reject`, {
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreApiUrl}/${externalId}/offers/claimant/reject`,
       body: '',
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 
   static countersignOffer (externalId: string, user: User): Promise<Claim> {
-    return request.post(`${claimStoreApiUrl}/${externalId}/offers/defendant/countersign`, {
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreApiUrl}/${externalId}/offers/defendant/countersign`,
       body: '',
       headers: {
         Authorization: `Bearer ${user.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 }

@@ -81,9 +81,7 @@ export class DefenceSteps {
   async getClaimPin (claimRef: string, authorisation: string): Promise<string> {
     const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(claimRef, { bearerToken: authorisation })
 
-    const pinResponse = await IdamClient.getPin(claim.letterHolderId)
-
-    return pinResponse.body
+    return IdamClient.getPin(claim.letterHolderId)
   }
 
   enterClaimReference (claimRef: string): void {
