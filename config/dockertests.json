@@ -6,7 +6,9 @@
     "paidInFull": true,
     "returnErrorToUser": true,
     "mediation": false,
-    "directionsQuestionnaire": false
+    "mediationPilot": false,
+    "directionsQuestionnaire": false,
+    "newDashboardStatus": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
