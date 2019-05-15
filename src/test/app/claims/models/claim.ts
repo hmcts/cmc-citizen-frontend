@@ -674,16 +674,14 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE)
     })
 
-    it('should contain multiple statuses when response submitted and offers exchanged', () => {
+    it('should contain settlement reached status only when response submitted and offers exchanged', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
       claim.settlement = new Settlement()
       claim.settlementReachedAt = moment()
 
-      expect(claim.stateHistory).to.have.lengthOf(3)
+      expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_SUBMITTED)
-      expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
   })
 

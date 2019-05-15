@@ -22,14 +22,6 @@
   <p>{{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
       + internalLink('request a County Court Judgment. ', CCJPaths.paidAmountPage.evaluateUri({
         externalId:claim.externalId }) )) | safe }}</p>
-  <div class="status-block">
-    {% set defendantName = claim.claimData.defendant.name %}
-    <h2 class="heading-small">{{ t('Settle out of court') }}</h2>
-    <p>{{ t('You’ve agreed to the offer made by {{ defendantName }} and signed an agreement to settle your claim. ',
-        { defendantName: defendantName }) }}</p>
-    <p>{{ t('We’ve asked {{ defendantName}} to sign the agreement.',
-        { defendantName: defendantName }) }}</p>
-  </div>
 {% endmacro %}
 
 {% macro offerAcceptedForDefendantDashboard() %}
