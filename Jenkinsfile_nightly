@@ -44,7 +44,7 @@ env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
 // SAUCELABS config - configured on Jenkins (also IDAM_URL above used)
-env.SAUCELABS_BROWSER = 'chrome_win_latest','firefox_win_latest'
+env.SAUCELABS_BROWSER = 'chrome_win_latest'
 env.SAUCELABS_TUNNEL_IDENTIFIER = 'reformtunnel'
 env.TEST_URL = params.URL_TO_TEST
 env.CITIZEN_APP_URL = params.URL_TO_TEST
