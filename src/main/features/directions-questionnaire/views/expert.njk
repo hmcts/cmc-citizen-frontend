@@ -1,0 +1,22 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, linkButton %}
+
+{% set heading = 'Using an expert' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <p>{{ t('It’s rare for a judge to allow you to use an expert in a small claim. Most small claims don’t need an expert.') }}</p>
+
+    <p>{{ t('An expert is not a legal representative.') }}</p>
+
+    <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Expert required" data-event-label-from="expertRequired" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {{ submitButton('Continue without an expert', 'expertNo') }}
+      {{ linkButton('I believe the case needs an expert', 'expertYes', 'link-button') }}
+    </form>
+  </div>
+</div>
+{% endblock %}
