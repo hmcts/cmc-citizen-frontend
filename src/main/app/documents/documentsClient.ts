@@ -1,6 +1,6 @@
 import * as config from 'config'
-import {request} from 'client/request'
-import {StringUtils} from 'utils/stringUtils'
+import { request } from 'client/request'
+import { StringUtils } from 'utils/stringUtils'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
 

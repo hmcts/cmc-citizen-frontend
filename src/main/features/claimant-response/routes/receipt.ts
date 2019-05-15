@@ -1,7 +1,6 @@
 import * as express from 'express'
-import {Paths} from 'claimant-response/paths'
-import {ErrorHandling} from 'shared/errorHandling'
-
+import { Paths } from 'claimant-response/paths'
+import { ErrorHandling } from 'shared/errorHandling'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
