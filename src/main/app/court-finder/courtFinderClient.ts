@@ -3,23 +3,23 @@ import * as requestPromise from 'request-promise-native'
 import { Address } from './address'
 import { Court } from './court'
 import { CourtFinderResponse } from './courtFinderResponse'
-import { Spoe } from './spoe'
+import * as config from 'config'
 
 export class CourtFinderClient {
   constructor (
-    private readonly apiUrl: string = 'https://courttribunalfinder.service.gov.uk',
+    private readonly apiUrl: string = `${config.get<string>('claim-store.url')}`,
     private readonly request: requestDefault.RequestAPI<requestPromise.RequestPromise,
       requestPromise.RequestPromiseOptions,
       requestDefault.RequiredUriUrl> = requestPromise
   ) {
   }
 
-  public findMoneyClaimCourtsByPostcode (postcode: string, spoe: Spoe = Spoe.NEAREST): Promise<CourtFinderResponse> {
+  public findMoneyClaimCourtsByPostcode (postcode: string): Promise<CourtFinderResponse> {
     if (!postcode) {
       return Promise.reject('Missing postcode')
     }
 
-    let uri: string = `${this.apiUrl}/search/results.json?postcode=${postcode}&aol=Money claims&spoe=${spoe.name}`
+    let uri: string = `${this.apiUrl}/search/results.json?postcode=${postcode}&aol=Money claims`
 
     return this.performRequest(uri)
   }
@@ -42,7 +42,7 @@ export class CourtFinderClient {
         responseBody.map((court: any) => {
           return new Court(
             court.name,
-            court.distance,
+            court.slug,
             new Address(
               court.address.address_lines,
               court.address.postcode,

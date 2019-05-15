@@ -53,8 +53,8 @@ const expectedResponse = {
         town: 'Birmingham',
         type: 'Visiting'
       },
-      distance: 1,
-      name: 'Birmingham District Probate Registry'
+      name: 'Birmingham District Probate Registry',
+      slug: 'birmingham-district-probate-registry'
     }
   ], statusCode: 200, valid: true
 }
