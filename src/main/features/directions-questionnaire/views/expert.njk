@@ -9,6 +9,8 @@
 
     <p>{{ t('It’s rare for a judge to allow you to use an expert in a small claim. Most small claims don’t need an expert.') }}</p>
 
+    <p>{{ t('An expert is not a legal representative.') }}</p>
+
     <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Expert required" data-event-label-from="expertRequired" novalidate>
       {{ csrfProtection(csrf) }}
 
