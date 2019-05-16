@@ -23,6 +23,7 @@ nodejs:
     FEATURE_MOCK_PAY: false
     FEATURE_MEDIATION: false
     FEATURE_DIRECTIONS_QUESTIONNAIRE: false
+    FEATURE_NEW_DASHBOARD_STATUS: false
   keyVaults:
     cmc:
       resourceGroup: cmc
