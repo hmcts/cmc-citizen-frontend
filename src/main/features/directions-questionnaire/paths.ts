@@ -9,7 +9,7 @@ export class Paths {
   static readonly supportPage = new RoutablePath(`${directionsQuestionnairePath}/support-required`)
   static readonly hearingExceptionalCircumstancesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-exceptional-circumstances`)
   static readonly expertPage = new RoutablePath(`${directionsQuestionnairePath}/expert-evidence`)
-  static readonly expertYesPage = new RoutablePath(`${directionsQuestionnairePath}/why-expert-is-needed`)
+  static readonly whyExpertIsNeededPage = new RoutablePath(`${directionsQuestionnairePath}/why-expert-is-needed`)
   static readonly expertNoPage = new RoutablePath(`${directionsQuestionnairePath}/expert-no`)
   static readonly hearingDatesPage = new RoutablePath(`${directionsQuestionnairePath}/hearing-dates`)
 

@@ -7,16 +7,16 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Expert Evidence" data-event-label-from="expertEvidence" novalidate>
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Why expert is needed" data-event-label-from="whyExpertIsNeeded" novalidate>
         {{ csrfProtection(csrf) }}
 
-        {% set error = form.errorFor('expertEvidence') %}
-        <fieldset id="expertEvidence[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        {% set error = form.errorFor('whyExpertIsNeeded') %}
+        <fieldset id="whyExpertIsNeeded" class="form-group {% if error %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t(heading) }}</legend>
+          <p>{{ t('Include specific details about the case which you think a judge couldn’t resolve without the expert’s knowledge.') }}</p>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
-
-          <p>{{ t('Include specific details about the case which you think a judge couldn’t resolve without the expert’s knowledge.') }}</p>
-          {{ textArea(name = 'whatToExamine', form = form) }}
+          {{ textArea(name = 'explanation', form = form) }}
           {{ saveAndContinueButton() }}
 
         </fieldset>
