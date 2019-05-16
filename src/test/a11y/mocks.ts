@@ -109,6 +109,10 @@ mock('offer/guards/offerGuard', {
   OfferGuard: justForwardRequestHandler
 })
 
+mock('directions-questionnaire/guard/directionsQuestionnaireGuard', {
+  DirectionsQuestionnaireGuard: justForwardRequestHandler
+})
+
 mock('response/guards/guardFactory', {
   GuardFactory: {
     create: () => {

@@ -4,6 +4,7 @@ import { OtherWitnesses } from 'directions-questionnaire/forms/models/otherWitne
 import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/exceptionalCircumstances'
 import { Availability } from 'directions-questionnaire/forms/models/availability'
 import { SupportRequired } from 'directions-questionnaire/forms/models/supportRequired'
+import { ExpertRequired } from 'directions-questionnaire/forms/models/expertRequired'
 import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvidence'
 import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 
@@ -16,6 +17,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   availability?: Availability
   supportRequired?: SupportRequired
   expertEvidence?: ExpertEvidence
+  expertRequired?: ExpertRequired
   whyExpertIsNeeded?: WhyExpertIsNeeded
 
   constructor (selfWitness: SelfWitness = new SelfWitness(),
@@ -24,7 +26,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
                exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances(),
                availability: Availability = new Availability(),
                supportRequired: SupportRequired = new SupportRequired(),
-               expertEvidence: ExpertEvidence = new ExpertEvidence(),
+               expertRequired: ExpertRequired = new ExpertRequired(),
                whyExpertIsNeeded: WhyExpertIsNeeded = new WhyExpertIsNeeded()
   ) {
     super()
@@ -39,7 +41,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.hearingLocation = input.hearingLocation
       this.exceptionalCircumstances = input.exceptionalCircumstances
       this.availability = Availability.fromObject(input.availability)
-      this.expertEvidence = input.expertEvidence
+      this.expertRequired = input.expertRequired
       this.whyExpertIsNeeded = input.whyExpertIsNeeded
     }
     return this
