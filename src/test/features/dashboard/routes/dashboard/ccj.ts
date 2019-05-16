@@ -63,6 +63,22 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
   {
+    status: 'CCJ - full admission, pay immediately, past deadline - claimant requests CCJ',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: { ...fullAdmissionClaim.response, paymentIntention: {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        paymentDate: MomentFactory.currentDate().subtract(5, 'days')
+      }
+      },
+      countyCourtJudgment: { 'ccjType': 'DEFAULT', 'paidAmount': 10, 'payBySetDate': '2022-01-01', 'paymentOption': 'BY_SPECIFIED_DATE', 'defendantDateOfBirth': '2000-01-01' },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
+    },
+    claimantAssertions: ['000MC000', 'You requested a County Court Judgment on '],
+    defendantAssertions: ['000MC000', 'The claimant has requested a County Court Judgment (CCJ) against you on']
+  },
+  {
     status: 'CCJ - full admission, pay by set date, claimant accepts the repayment plan and request a CCJ',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {

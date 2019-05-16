@@ -18,6 +18,7 @@ import {
   basePayImmediatelyDatePastData,
   baseResponseData
 } from '../../../../data/entity/responseData'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -71,6 +72,38 @@ const testData = [
       'If you pay by cheque or transfer the money must be clear in their account.',
       'If they don’t receive the money by then, they can request a County Court Judgment against you.',
       ' if you need their payment details. Make sure you get receipts for any payments.']
+  },
+  {
+    status: 'CCJ - full admission, pay immediately, past deadline - claimant requests CCJ',
+    claim: fullAdmissionClaim,
+    claimOverride: {
+      response: {
+        ...fullAdmissionClaim.response, paymentIntention: {
+          paymentOption: PaymentOption.IMMEDIATELY,
+          paymentDate: MomentFactory.currentDate().subtract(5, 'days')
+        }
+      },
+      countyCourtJudgment: {
+        'ccjType': 'DEFAULT',
+        'paidAmount': 10,
+        'payBySetDate': '2022-01-01',
+        'paymentOption': 'BY_SPECIFIED_DATE',
+        'defendantDateOfBirth': '2000-01-01'
+      },
+      countyCourtJudgmentRequestedAt: MomentFactory.currentDate().subtract(1, 'days'),
+      responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
+    },
+    claimantAssertions: ['000MC000',
+      'You’ve requested a County Court Judgment (CCJ)',
+      'We’ll contact you within 14 days to tell you whether the judgment has been entered.',
+      'John Doe can no longer respond to your claim using this service - they may have responded by post.'
+    ],
+    defendantAssertions: ['000MC000',
+      'We’ll contact you',
+      'John Smith has requested a County Court Judgment (CCJ) against you because the deadline for your response has passed.',
+      'If you’ve responded by post before the deadline, we may still be processing your response. If we receive your postal response, we’ll reject the request for a CCJ.',
+      'Otherwise we’ll post a copy of the CCJ to you and to John Smith and explain what to do next.'
+    ]
   },
   {
     status: 'CCJ - full admission, pay by set date, claimant accepts the repayment plan and request a CCJ',
