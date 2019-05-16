@@ -1,6 +1,5 @@
 import * as express from 'express'
 import { Paths } from 'features/directions-questionnaire/paths'
-
 import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { RoutablePath } from 'shared/router/routablePath'
 import { ErrorHandling } from 'shared/errorHandling'
