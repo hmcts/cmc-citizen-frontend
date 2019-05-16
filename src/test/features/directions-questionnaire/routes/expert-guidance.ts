@@ -13,13 +13,12 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
-import { RoutablePath } from 'shared/router/routablePath'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = Paths.expertGuidancePage.evaluateUri({ externalId })
-const dashboardPage: RoutablePath = DashboardPaths.dashboardPage
+
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
@@ -83,7 +82,8 @@ describe('Directions Questionnaire - expert guidance page', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send()
-            .expect(res => expect(res).to.be.redirect.toLocation(dashboardPage.uri))
+            .expect(res => expect(res).to.be.redirect.toLocation(Paths.permissionForExpertPage.evaluateUri(
+                { externalId: externalId })))
         })
       })
     })

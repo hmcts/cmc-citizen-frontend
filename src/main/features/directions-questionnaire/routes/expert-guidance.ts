@@ -1,10 +1,7 @@
 import * as express from 'express'
 import { Paths } from 'features/directions-questionnaire/paths'
-import { Paths as DashboardPaths } from 'features/dashboard/paths'
-import { RoutablePath } from 'shared/router/routablePath'
 import { ErrorHandling } from 'shared/errorHandling'
-
-const page: RoutablePath = DashboardPaths.dashboardPage
+import { Claim } from 'claims/models/claim'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -13,6 +10,8 @@ export default express.Router()
   .post(
     Paths.expertGuidancePage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      res.redirect(page.uri)
+
+      const claim: Claim = res.locals.claim
+      res.redirect(Paths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }))
     })
   )
