@@ -13,12 +13,13 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import { RoutablePath } from 'shared/router/routablePath'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = Paths.expertGuidancePage.evaluateUri({ externalId })
+const dashboardPage: RoutablePath = DashboardPaths.dashboardPage
 
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,

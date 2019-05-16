@@ -23,7 +23,7 @@ export class SelfWitness implements CompletableTask {
 
   deserialize (input?: any): SelfWitness {
     if (input && input.option) {
-      this.option = YesNoOption.fromObject(input.option) || YesNoOption.fromObject(input.option.option)
+      this.option = YesNoOption.fromObject(input.option)
     }
 
     return this

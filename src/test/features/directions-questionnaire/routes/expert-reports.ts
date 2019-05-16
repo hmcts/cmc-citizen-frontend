@@ -146,7 +146,7 @@ describe('Directions Questionnaire - expert reports page', () => {
             .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
 
-        it('should redirect to self witness page when reports declined', async () => {
+        it('should redirect to expert guidance page when reports declined', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
