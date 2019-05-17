@@ -42,6 +42,10 @@ describe('ExpertEvidence', () => {
   })
 
   describe('deserialize', () => {
+    it('should return an instance initialised with defaults for undefined', () => {
+      expect(new ExpertEvidence().deserialize(undefined)).to.deep.equal(new ExpertEvidence())
+    })
+
     it('should deserialize expert evidence to return instance of expert evidence', () => {
       const expertEvidence: ExpertEvidence = new ExpertEvidence(YesNoOption.YES, 'bank statements')
 
