@@ -1,0 +1,49 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import radioGroup, saveAndContinueButton, csrfProtection %}
+
+{% set heading = 'You chose not to try free mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('The claim will continue and you might have to go to a hearing.') }}</p>
+
+      <h2 class="heading-medium">{{ t('Advantages of free mediation') }}</h2>
+      <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>
+
+      <p>{{ t('Opting out can mean:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('a long wait for the claim to be resolved') }}</li>
+        <li>{{ t('a court hearing, which can last a whole day') }}</li>
+        <li>{{ t('a County Court Judgment against you') }}</li>
+      </ul>
+      <h2 class="heading-medium">{{ t('Will you change your decision and try free mediation?') }}</h2>
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {% set name = 'option' %}
+
+        {{
+        radioGroup(
+          label = '',
+          name = name,
+          options = [
+          { label: t('Yes'), value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES) },
+          { label: t('No'), value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO) }
+        ],
+          form = form,
+          labelForScreenReadersOnly = false,
+          isInline = false
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+      {% if footnote %}
+        <p class="font-xsmall">{{ t('*Source: Small Claims Mediation Service statistics, November 2017 to October 2018.') }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -34,7 +34,11 @@ export default express.Router()
       const { externalId } = req.params
 
       if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
-        res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
+        if (req.body.mediationYes) {
+          res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
+        } else {
+          res.redirect(Paths.noMediationPage.evaluateUri({ externalId }))
+        }
       } else {
         res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId }))
       }
