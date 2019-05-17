@@ -5,9 +5,10 @@ import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/
 import { Availability } from 'directions-questionnaire/forms/models/availability'
 import { SupportRequired } from 'directions-questionnaire/forms/models/supportRequired'
 import { ExpertRequired } from 'directions-questionnaire/forms/models/expertRequired'
+import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvidence'
+import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 import { ExpertReports } from 'directions-questionnaire/forms/models/expertReports'
 import { PermissionForExpert } from 'directions-questionnaire/forms/models/permissionForExpert'
-import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvidence'
 
 export class DirectionsQuestionnaireDraft extends DraftDocument {
 
@@ -21,6 +22,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   expertReports: ExpertReports = new ExpertReports()
   permissionForExpert: PermissionForExpert = new PermissionForExpert()
   expertEvidence: ExpertEvidence = new ExpertEvidence()
+  whyExpertIsNeeded: WhyExpertIsNeeded
 
   deserialize (input: any): DirectionsQuestionnaireDraft {
     if (input) {
@@ -35,6 +37,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.expertReports = new ExpertReports().deserialize(input.expertReports)
       this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert)
       this.expertEvidence = new ExpertEvidence().deserialize(input.expertEvidence)
+      this.whyExpertIsNeeded = new WhyExpertIsNeeded().deserialize(input.whyExpertIsNeeded)
     }
     return this
   }
