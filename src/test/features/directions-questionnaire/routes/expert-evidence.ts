@@ -15,6 +15,7 @@ import { YesNoOption } from 'models/yesNoOption'
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
 const whyExpertIsNeededPage = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
+const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
 const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -125,7 +126,7 @@ describe('Directions questionnaire - expert evidence', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to other witnesses page', async () => {
+        it('should redirect to whyExpertIsNeededPage', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -136,6 +137,19 @@ describe('Directions questionnaire - expert evidence', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(whyExpertIsNeededPage))
+        })
+
+        it('should redirect to self witnesses page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ expertEvidence: YesNoOption.NO.option })
+            .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
       })
 

@@ -4,7 +4,7 @@
 import { expect } from 'chai'
 import { Validator } from '@hmcts/class-validator'
 import { ExpertEvidence, ValidationErrors } from 'directions-questionnaire/forms/models/expertEvidence'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/exceptionalCircumstances'
@@ -50,11 +50,17 @@ describe('ExpertEvidence', () => {
   })
 
   describe('from object', () => {
-    it('should return instance of expert evidence when passed ExpertEvidence object', () => {
+    it('should return instance of expert evidence when passed ExpertEvidence object - Yes', () => {
       const yes: YesNoOption = YesNoOption.YES
       const whatToExamine: string = 'bank statements'
 
       expect(ExpertEvidence.fromObject({ yes, whatToExamine })).to.be.instanceOf(ExpertEvidence)
+    })
+
+    it('should return instance of expert evidence when passed ExpertEvidence object - No', () => {
+      const no: YesNoOption = YesNoOption.NO
+
+      expect(ExpertEvidence.fromObject({ no })).to.be.instanceOf(ExpertEvidence)
     })
   })
 
