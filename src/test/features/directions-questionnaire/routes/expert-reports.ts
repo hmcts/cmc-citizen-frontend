@@ -24,8 +24,8 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
-const expertReportsPage = Paths.expertReportsPage.evaluateUri({ externalId })
-const pagePath = Paths.expertPage.evaluateUri({ externalId })
+const expertGuidance = Paths.expertGuidancePage.evaluateUri({ externalId })
+const pagePath = Paths.expertReportsPage.evaluateUri({ externalId })
 
 function checkAccessGuard (app: any, method: string) {
 
@@ -38,7 +38,7 @@ function checkAccessGuard (app: any, method: string) {
   })
 }
 
-describe('Directions Questionnaire - expert required page', () => {
+describe('Directions Questionnaire - expert reports page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -79,16 +79,15 @@ describe('Directions Questionnaire - expert required page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(
-            'Using an expert',
-            'It’s rare for a judge to allow you to use an expert in a small claim. Most small claims don’t need an expert.'
-          ))
+          .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
       })
     })
   })
 
   describe('on POST', () => {
-    const expertRequiredFormData = { expertYes: true }
+    const validDeclaredFormData = { declared: 'yes', rows: [ { expertName: 'Kevin Bacon', reportDate: { year: 2019, month: 1, day: 1 } } ] }
+    const validDeclinedFormData = { declared: 'no', rows: [] }
+    const invalidFormData = { declared: 'yes', rows: [] }
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
@@ -105,7 +104,7 @@ describe('Directions Questionnaire - expert required page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(expertRequiredFormData)
+          .send(validDeclinedFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -116,7 +115,7 @@ describe('Directions Questionnaire - expert required page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(expertRequiredFormData)
+          .send(validDeclinedFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -130,11 +129,11 @@ describe('Directions Questionnaire - expert required page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(expertRequiredFormData)
+            .send(validDeclinedFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to self witness page when expert not needed', async () => {
+        it('should redirect to self witness page when reports declared', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -143,11 +142,11 @@ describe('Directions Questionnaire - expert required page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ expertNo: true })
+            .send(validDeclaredFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
 
-        it('should redirect to expert reports page when expert is needed', async () => {
+        it('should redirect to expert guidance page when reports declined', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -156,8 +155,25 @@ describe('Directions Questionnaire - expert required page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(expertRequiredFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(expertReportsPage))
+            .send(validDeclinedFormData)
+            .expect(res => expect(res).to.be.redirect.toLocation(expertGuidance))
+        })
+      })
+
+      context('when form is invalid', () => {
+        it('should return to the same page with an error message', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send(invalidFormData)
+            .expect(res => expect(res).to.be.successful.withText(
+              'Have you already got a report written by an expert?',
+              'div class="error-summary"'
+            ))
         })
       })
     })

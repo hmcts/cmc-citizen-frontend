@@ -24,8 +24,8 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
-const expertReportsPage = Paths.expertReportsPage.evaluateUri({ externalId })
-const pagePath = Paths.expertPage.evaluateUri({ externalId })
+const pagePath = Paths.permissionForExpertPage.evaluateUri({ externalId })
+const dashboardPage = DashboardPaths.dashboardPage.uri
 
 function checkAccessGuard (app: any, method: string) {
 
@@ -38,7 +38,7 @@ function checkAccessGuard (app: any, method: string) {
   })
 }
 
-describe('Directions Questionnaire - expert required page', () => {
+describe('Directions Questionnaire - ask court’s permission for expert page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -80,16 +80,14 @@ describe('Directions Questionnaire - expert required page', () => {
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(
-            'Using an expert',
-            'It’s rare for a judge to allow you to use an expert in a small claim. Most small claims don’t need an expert.'
+            'Do you want to ask for the court’s permission to hire an expert?'
           ))
       })
     })
   })
 
   describe('on POST', () => {
-    const expertRequiredFormData = { expertYes: true }
-
+    const formData = { requestPermissionForExpert: 'no' }
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
     checkAccessGuard(app, method)
@@ -105,7 +103,7 @@ describe('Directions Questionnaire - expert required page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(expertRequiredFormData)
+          .send(dashboardPage)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -116,7 +114,7 @@ describe('Directions Questionnaire - expert required page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(expertRequiredFormData)
+          .send(formData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -130,11 +128,11 @@ describe('Directions Questionnaire - expert required page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(expertRequiredFormData)
+            .send(formData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to self witness page when expert not needed', async () => {
+        it('should redirect to self witness page when permission for expert is not requested', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -143,11 +141,11 @@ describe('Directions Questionnaire - expert required page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ expertNo: true })
+            .send(formData)
             .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
 
-        it('should redirect to expert reports page when expert is needed', async () => {
+        it('should redirect to dashboard page when permission for expert is requested', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -156,8 +154,8 @@ describe('Directions Questionnaire - expert required page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(expertRequiredFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(expertReportsPage))
+            .send({ requestPermissionForExpert: 'yes' })
+            .expect(res => expect(res).to.be.redirect.toLocation(dashboardPage))
         })
       })
     })
