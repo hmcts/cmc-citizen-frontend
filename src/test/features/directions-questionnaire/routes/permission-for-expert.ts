@@ -25,7 +25,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
 const pagePath = Paths.permissionForExpertPage.evaluateUri({ externalId })
-const dashboardPage = DashboardPaths.dashboardPage.uri
+const expertEvidencePage = Paths.expertEvidencePage.evaluateUri({ externalId })
 
 function checkAccessGuard (app: any, method: string) {
 
@@ -103,7 +103,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(dashboardPage)
+          .send(undefined)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -155,7 +155,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send({ requestPermissionForExpert: 'yes' })
-            .expect(res => expect(res).to.be.redirect.toLocation(dashboardPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(expertEvidencePage))
         })
       })
     })
