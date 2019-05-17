@@ -3,7 +3,7 @@
 
 import { expect } from 'chai'
 import { Validator } from '@hmcts/class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { WhyExpertIsNeeded, ValidationErrors } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 
 describe('WhyExpertIsNeeded', () => {
@@ -32,6 +32,10 @@ describe('WhyExpertIsNeeded', () => {
   })
 
   describe('deserialize', () => {
+    it('should return an instance initialised with defaults for undefined', () => {
+      expect(new WhyExpertIsNeeded().deserialize(undefined)).to.deep.equal(new WhyExpertIsNeeded())
+    })
+
     it('should deserialize expert evidence to return instance of expert evidence', () => {
       const whyExpertIsNeeded: WhyExpertIsNeeded = new WhyExpertIsNeeded('Building needs inspecting')
 
@@ -40,6 +44,18 @@ describe('WhyExpertIsNeeded', () => {
   })
 
   describe('from object', () => {
+    it('undefined when undefined provided', () => {
+      const model = WhyExpertIsNeeded.fromObject(undefined)
+
+      expect(model).to.be.undefined
+    })
+
+    it('empty object when unknown value provided', () => {
+      const model = WhyExpertIsNeeded.fromObject({ explanation: undefined })
+
+      expect(model.explanation).to.be.undefined
+    })
+
     it('should return instance of whyExpertIsNeeded when passed WhyExpertIsNeeded object', () => {
       const explanation: string = 'Building needs inspecting'
 
