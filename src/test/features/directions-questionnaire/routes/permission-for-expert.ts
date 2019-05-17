@@ -24,8 +24,8 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
-const expertGuidance = Paths.expertGuidancePage.evaluateUri({ externalId })
-const pagePath = Paths.expertReportsPage.evaluateUri({ externalId })
+const pagePath = Paths.permissionForExpertPage.evaluateUri({ externalId })
+const dashboardPage = DashboardPaths.dashboardPage.uri
 
 function checkAccessGuard (app: any, method: string) {
 
@@ -38,7 +38,7 @@ function checkAccessGuard (app: any, method: string) {
   })
 }
 
-describe('Directions Questionnaire - expert reports page', () => {
+describe('Directions Questionnaire - ask court’s permission for expert page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -79,16 +79,15 @@ describe('Directions Questionnaire - expert reports page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
+          .expect(res => expect(res).to.be.successful.withText(
+            'Do you want to ask for the court’s permission to hire an expert?'
+          ))
       })
     })
   })
 
   describe('on POST', () => {
-    const validDeclaredFormData = { declared: 'yes', rows: [ { expertName: 'Kevin Bacon', reportDate: { year: 2019, month: 1, day: 1 } } ] }
-    const validDeclinedFormData = { declared: 'no', rows: [] }
-    const invalidFormData = { declared: 'yes', rows: [] }
-
+    const formData = { requestPermissionForExpert: 'no' }
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
     checkAccessGuard(app, method)
@@ -104,7 +103,7 @@ describe('Directions Questionnaire - expert reports page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(validDeclinedFormData)
+          .send(dashboardPage)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -115,7 +114,7 @@ describe('Directions Questionnaire - expert reports page', () => {
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(validDeclinedFormData)
+          .send(formData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -129,11 +128,11 @@ describe('Directions Questionnaire - expert reports page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validDeclinedFormData)
+            .send(formData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to self witness page when reports declared', async () => {
+        it('should redirect to self witness page when permission for expert is not requested', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -142,11 +141,11 @@ describe('Directions Questionnaire - expert reports page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validDeclaredFormData)
+            .send(formData)
             .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
 
-        it('should redirect to expert guidance page when reports declined', async () => {
+        it('should redirect to dashboard page when permission for expert is requested', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -155,25 +154,8 @@ describe('Directions Questionnaire - expert reports page', () => {
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(validDeclinedFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(expertGuidance))
-        })
-      })
-
-      context('when form is invalid', () => {
-        it('should return to the same page with an error message', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
-          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-          draftStoreServiceMock.resolveFind('response')
-
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .send(invalidFormData)
-            .expect(res => expect(res).to.be.successful.withText(
-              'Have you already got a report written by an expert?',
-              'div class="error-summary"'
-            ))
+            .send({ requestPermissionForExpert: 'yes' })
+            .expect(res => expect(res).to.be.redirect.toLocation(dashboardPage))
         })
       })
     })
