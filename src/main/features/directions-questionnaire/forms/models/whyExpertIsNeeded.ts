@@ -1,6 +1,5 @@
 import { CompletableTask } from 'models/task'
-import { IsDefined, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
-import { YesNoOption } from 'models/yesNoOption'
+import { IsDefined, IsNotEmpty } from '@hmcts/class-validator'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Explain why you believe an expert is needed'
@@ -8,7 +7,6 @@ export class ValidationErrors {
 
 export class WhyExpertIsNeeded implements CompletableTask {
 
-  @ValidateIf(o => o.expertEvidence && o.expertEvidence.option === YesNoOption.YES.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   explanation?: string

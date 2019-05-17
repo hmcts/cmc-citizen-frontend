@@ -14,7 +14,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
-const expertYesPage = Paths.expertYesPage.evaluateUri({ externalId: externalId })
+const expertYesPage = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
 const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,

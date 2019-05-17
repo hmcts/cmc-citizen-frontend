@@ -12,7 +12,7 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.expertPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
 const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
 const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
@@ -77,8 +77,8 @@ describe('Directions questionnaire - why expert is needed', () => {
   })
 
   describe('on Post', () => {
-    const validFormData = { whyExpertIsNeeded: 'example content' }
-    const invalidFormData = { whyExpertIsNeeded: undefined }
+    const validFormData = { explanation: 'example content' }
+    const invalidFormData = { explanation: undefined }
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
@@ -148,7 +148,7 @@ describe('Directions questionnaire - why expert is needed', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidFormData)
-            .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('Briefly explain why you believe an expert is needed', 'div class="error-summary"'))
         })
       })
     })
