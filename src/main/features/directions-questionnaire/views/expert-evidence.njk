@@ -12,6 +12,7 @@
 
       {% set error = form.errorFor('expertEvidence') %}
       <fieldset id="expertEvidence[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        <legend class="visually-hidden">{{ t(heading) }}</legend>
 
         <p>{{ t('This could include photographs or videos.') }}</p>
         {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}

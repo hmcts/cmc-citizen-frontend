@@ -1,7 +1,6 @@
 import * as express from 'express'
 import { Paths } from 'features/directions-questionnaire/paths'
 
-import { Paths as DashboardPaths } from 'features/dashboard/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Form } from 'forms/form'
 import { Claim } from 'claims/models/claim'
@@ -40,7 +39,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.requestPermissionForExpert.option === YesNoOption.YES.option) {
-          res.redirect(DashboardPaths.dashboardPage.uri)
+          res.redirect(Paths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }))
         }
