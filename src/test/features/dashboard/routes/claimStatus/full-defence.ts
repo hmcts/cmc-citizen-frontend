@@ -54,7 +54,7 @@ const testData = [
     },
     claimantAssertions: [
       'The defendant’s response',
-      fullDefenceClaim.claim.defendants[0].name + ' says they paid you £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount + ' on ',
+      fullDefenceClaim.claim.defendants[0].name + ` says they paid you ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)} on `,
       'You can accept or reject this response.',
       'View and respond'
     ],
