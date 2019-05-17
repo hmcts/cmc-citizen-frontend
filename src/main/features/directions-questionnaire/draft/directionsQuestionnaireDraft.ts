@@ -21,8 +21,8 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   expertRequired: ExpertRequired = new ExpertRequired()
   expertReports: ExpertReports = new ExpertReports()
   permissionForExpert: PermissionForExpert = new PermissionForExpert()
-  expertEvidence?: ExpertEvidence
-  whyExpertIsNeeded?: WhyExpertIsNeeded
+  expertEvidence: ExpertEvidence = new ExpertEvidence()
+  whyExpertIsNeeded: WhyExpertIsNeeded
 
   deserialize (input: any): DirectionsQuestionnaireDraft {
     if (input) {
@@ -36,7 +36,8 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.expertRequired = new ExpertRequired().deserialize(input.expertRequired)
       this.expertReports = new ExpertReports().deserialize(input.expertReports)
       this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert)
-      this.whyExpertIsNeeded = input.whyExpertIsNeeded
+      this.expertEvidence = new ExpertEvidence().deserialize(input.expertEvidence)
+      this.whyExpertIsNeeded = new WhyExpertIsNeeded().deserialize(input.whyExpertIsNeeded)
     }
     return this
   }
