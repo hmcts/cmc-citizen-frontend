@@ -14,7 +14,7 @@ import { YesNoOption } from 'models/yesNoOption'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
-const expertYesPage = Paths.expertYesPage.evaluateUri({ externalId: externalId })
+const whyExpertIsNeededPage = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
 const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -135,7 +135,7 @@ describe('Directions questionnaire - expert evidence', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(expertYesPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(whyExpertIsNeededPage))
         })
       })
 
