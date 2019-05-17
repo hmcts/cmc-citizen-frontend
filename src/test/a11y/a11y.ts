@@ -17,6 +17,7 @@ import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
 import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
+import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -98,7 +99,10 @@ const excludedPaths: DefendantResponsePaths[] = [
   OfferPaths.agreementReceiver,
   DefendantFirstContactPaths.receiptReceiver,
   ClaimantResponsePaths.receiptReceiver,
-  ClaimantResponsePaths.courtOfferedSetDatePage
+  ClaimantResponsePaths.courtOfferedSetDatePage,
+  DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
+  DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
+  DirectionQuestionnairePaths.hearingDatesPage
 ]
 
 describe('Accessibility', () => {
@@ -130,4 +134,5 @@ describe('Accessibility', () => {
   checkPaths(ClaimantResponsePaths)
   checkPaths(PaidInFullPaths)
   checkPaths(MediationPaths)
+  checkPaths(DirectionQuestionnairePaths)
 })

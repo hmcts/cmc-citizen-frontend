@@ -3,9 +3,9 @@
 
 
 {% if party === MadeBy.CLAIMANT %}
-  {% set heading = t('The hearing will be held at {{ courtName }}', { courtName: courtName }) %}
+  {% set heading = 'The hearing will be held at ' + courtName %}
 {% else %}
-  {% set heading = t('The hearing will be held at the claimant’s chosen court') %}
+  {% set heading = 'The hearing will be held at the claimant’s chosen court' %}
 {% endif %}
 
 {% block content %}
