@@ -43,6 +43,16 @@ export class Availability {
     )
   }
 
+  deserialize (input?: any): Availability {
+    if (input) {
+      this.hasUnavailableDates = input.hasUnavailableDates
+      this.unavailableDates = this.deserializeDates(input.unavailableDates)
+      this.newDate = new LocalDate().deserialize(input.newDate)
+    }
+
+    return this
+  }
+
   isCompleted (): boolean {
     if (this.hasUnavailableDates === undefined || this.hasUnavailableDates === null) {
       return false
@@ -53,5 +63,13 @@ export class Availability {
     }
 
     return true
+  }
+
+  private deserializeDates (dates: any[]): LocalDate[] {
+    if (!dates) {
+      return []
+    }
+
+    return dates.map(date => new LocalDate().deserialize(date))
   }
 }

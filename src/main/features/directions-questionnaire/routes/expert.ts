@@ -16,9 +16,15 @@ export default express.Router()
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
       const user: User = res.locals.user
 
-      draft.document.expertRequired = new ExpertRequired(req.body.expertYes ? YesNoOption.YES : YesNoOption.NO)
+      const expertRequired: boolean = !!req.body.expertYes
+      draft.document.expertRequired = new ExpertRequired(expertRequired ? YesNoOption.YES : YesNoOption.NO)
 
       await new DraftService().save(draft, user.bearerToken)
 
-      res.redirect(Paths.expertEvidencePage.evaluateUri({ externalId: res.locals.claim.externalId }))
+      const externalId = res.locals.claim.externalId
+      if (expertRequired) {
+        res.redirect(Paths.expertReportsPage.evaluateUri({ externalId }))
+      } else {
+        res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId }))
+      }
     }))
