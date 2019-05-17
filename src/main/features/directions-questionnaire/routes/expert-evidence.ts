@@ -38,7 +38,7 @@ export default express.Router()
         if (form.model.expertEvidence.option === YesNoOption.YES.option) {
           res.redirect(Paths.whyExpertIsNeededPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          res.redirect(Paths.expertNoPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
       }
     })
