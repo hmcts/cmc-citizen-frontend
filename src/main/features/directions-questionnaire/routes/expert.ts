@@ -20,5 +20,5 @@ export default express.Router()
 
       await new DraftService().save(draft, user.bearerToken)
 
-      res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+      res.redirect(Paths.expertEvidencePage.evaluateUri({ externalId: res.locals.claim.externalId }))
     }))

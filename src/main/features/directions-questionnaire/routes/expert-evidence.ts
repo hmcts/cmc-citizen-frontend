@@ -11,16 +11,16 @@ import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
 
 function renderPage (res: express.Response, form: Form<ExpertEvidence>) {
-  res.render(Paths.expertPage.associatedView, { form: form })
+  res.render(Paths.expertEvidencePage.associatedView, { form: form })
 }
 
 export default express.Router()
-  .get(Paths.expertPage.uri, (req: express.Request, res: express.Response) => {
+  .get(Paths.expertEvidencePage.uri, (req: express.Request, res: express.Response) => {
     const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
     renderPage(res, new Form<ExpertEvidence>(draft.document.expertEvidence))
   })
 
-  .post(Paths.expertPage.uri,
+  .post(Paths.expertEvidencePage.uri,
     FormValidator.requestHandler(ExpertEvidence, ExpertEvidence.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<ExpertEvidence> = req.body

@@ -13,7 +13,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = Paths.expertPage.evaluateUri({ externalId: externalId })
+const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
 const expertYesPage = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
 const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
