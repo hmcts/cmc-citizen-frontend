@@ -584,7 +584,8 @@ export const sampleMediationDraftObj = {
 export const sampleDirectionsQuestionnaireDraftObj = {
   selfWitness: { option: YesNoOption.NO },
   otherWitnesses: { otherWitnesses: YesNoOption.NO },
-  availability: { hasUnavailableDates: false }
+  availability: { hasUnavailableDates: false },
+  expertEvidence: { expertEvidence: YesNoOption.NO }
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
