@@ -23,11 +23,9 @@
         <fieldset id="exceptionalCircumstances[label]" class="form-group {% if error %} form-group-error {% endif %}">
 
           {% if party === MadeBy.CLAIMANT %}
-            <legend>
-              <span class="visuallyhidden">
+          <h1 class="heading-medium">
                 {{ t('Does this court meet your accessibility needs?') }}
-              </span>
-            </legend>
+            </h1>
 
             {{
             radioOption(
@@ -41,13 +39,13 @@
             {{
             radioOption(
               form = form,
-              label = 'No',
+              label = 'No - I want to request a different court',
               name = 'exceptionalCircumstances',
               value = YesNoOption.NO.option,
               checked = form.valueFor('exceptionalCircumstances').option === YesNoOption.NO.option,
               bold = true)
             }}
-            <div class="form-group panel panel-border-narrow js-hidden " id="exceptionalCircumstances-yes" aria-hidden="false">
+            <div class="form-group panel panel-border-narrow js-hidden " id="exceptionalCircumstances-no" aria-hidden="false">
               {{ textArea(label = 'Briefly explain your reasons', form = form, name = 'reason', inputClass = 'form-control-3-4') }}
             </div>
           {% else %}
