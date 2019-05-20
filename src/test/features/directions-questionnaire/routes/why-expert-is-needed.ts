@@ -3,29 +3,22 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import 'test/routes/expectations'
-
-import { Paths } from 'directions-questionnaire/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
-
 import { app } from 'main/app'
-
+import { checkAuthorizationGuards } from 'test/routes/authorization-check'
+import { Paths } from 'directions-questionnaire/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
+const pagePath = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
+const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
+const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
 }
-
-const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-
-const cookieName: string = config.get<string>('session.cookieName')
-const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId })
-const pagePath = Paths.permissionForExpertPage.evaluateUri({ externalId })
-const expertEvidencePage = Paths.expertEvidencePage.evaluateUri({ externalId })
 
 function checkAccessGuard (app: any, method: string) {
 
@@ -38,10 +31,10 @@ function checkAccessGuard (app: any, method: string) {
   })
 }
 
-describe('Directions Questionnaire - ask court’s permission for expert page', () => {
+describe('Directions questionnaire - why expert is needed', () => {
   attachDefaultHooks(app)
 
-  describe('on GET', () => {
+  describe('on Get', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
     checkAccessGuard(app, method)
@@ -49,7 +42,6 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -79,15 +71,15 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(
-            'Do you want to ask for the court’s permission to hire an expert?'
-          ))
+          .expect(res => expect(res).to.be.successful.withText('Briefly explain why you believe an expert is needed'))
       })
     })
   })
 
-  describe('on POST', () => {
-    const formData = { requestPermissionForExpert: 'no' }
+  describe('on Post', () => {
+    const validFormData = { explanation: 'example content' }
+    const invalidFormData = { explanation: undefined }
+
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
     checkAccessGuard(app, method)
@@ -103,7 +95,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(undefined)
+          .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -114,7 +106,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
         await request(app)
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .send(formData)
+          .send(validFormData)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
@@ -128,11 +120,11 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(formData)
+            .send(validFormData)
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to self witness page when permission for expert is not requested', async () => {
+        it('should redirect to self witnesses page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -141,21 +133,22 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send(formData)
+            .send(validFormData)
             .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
+      })
 
-        it('should redirect to dashboard page when permission for expert is requested', async () => {
+      context('when form is invalid', async () => {
+        it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ requestPermissionForExpert: 'yes' })
-            .expect(res => expect(res).to.be.redirect.toLocation(expertEvidencePage))
+            .send(invalidFormData)
+            .expect(res => expect(res).to.be.successful.withText('Briefly explain why you believe an expert is needed', 'div class="error-summary"'))
         })
       })
     })
