@@ -9,12 +9,10 @@
 {% macro claimRejectedAlreadyPaidForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
-    <p>{{ t('{{ defendantName }} believes that they’ve paid the claim in full. '
-        + 'Email {{ emailAddress }} if you want to proceed with the claim. '
-        + 'You must do this before 4pm on {{ respondToResponseDeadline }}.',
-        { defendantName: claim.claimData.defendant.name, emailAddress: supportEmailAddress,
-          respondToResponseDeadline: claim.respondToResponseDeadline | date }) }}</p>
-    <p>{{ _respond(claim, 'Respond') }}</p>
+    <p>{{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
+        { defendantName: claim.claimData.defendant.name, amount: claim.response.paymentDeclaration.paidAmount | numeral, paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}</p>
+    <p>{{ t('You can accept or reject this response.') }}</p>
+    <p>{{ _respond(claim, 'View and respond') }}</p>
   </div>
 {% endmacro %}
 
@@ -115,5 +113,5 @@
 {% endmacro %}
 
 {% macro _respond(claim, text) %}
-  <p>{{ internalLink(t(text), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-secondary') }}</p>
+  <p>{{ internalLink(t(text), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}</p>
 {% endmacro %}
