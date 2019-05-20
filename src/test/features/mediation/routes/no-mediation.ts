@@ -7,6 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
+import { Paths as responsePaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -19,10 +20,10 @@ import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = MediationPaths.howMediationWorksPage.evaluateUri({ externalId })
+const pagePath = MediationPaths.noMediationPage.evaluateUri({ externalId })
 
 if (FeatureToggles.isEnabled('mediation')) {
-  describe('Mediation: how mediation works page', () => {
+  describe.only('Mediation: You chose not to try free mediation', () => {
     attachDefaultHooks(app)
 
     describe('on GET for defendant', () => {
@@ -54,7 +55,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('How free mediation works'))
+              .expect(res => expect(res).to.be.successful.withText('You chose not to try free mediation'))
           })
         })
       })
@@ -89,7 +90,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('How free mediation works'))
+              .expect(res => expect(res).to.be.successful.withText('You chose not to try free mediation'))
           })
         })
       })
@@ -149,13 +150,13 @@ if (FeatureToggles.isEnabled('mediation')) {
 
               await request(app)
                 .post(pagePath)
-                .send({ mediationYes: true })
+                .send({ model: { option: 'yes' } })
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
             })
 
-            it('should redirect to the no mediation page when defendant said I don’t want to try free mediation', async () => {
+            it('should redirect to task list page when defendant said no to mediation', async () => {
               idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
               checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
@@ -165,9 +166,10 @@ if (FeatureToggles.isEnabled('mediation')) {
 
               await request(app)
                 .post(pagePath)
+                .send({ model: { option: 'no' } })
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.noMediationPage.evaluateUri({ externalId })))
+                  .toLocation(responsePaths.taskListPage.evaluateUri({ externalId })))
             })
 
             it('should redirect to the mediation agreement page when everything is fine for the claimant', async () => {
@@ -180,11 +182,12 @@ if (FeatureToggles.isEnabled('mediation')) {
 
               await request(app)
                 .post(pagePath)
-                .send({ mediationYes: true })
+                .send({ model: { option: 'yes' } })
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
             })
+
             it('should redirect to the no mediation page when claimant said I don’t want to try free mediation', async () => {
               idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
               checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
@@ -195,6 +198,7 @@ if (FeatureToggles.isEnabled('mediation')) {
 
               await request(app)
                 .post(pagePath)
+                .send({ model: { option: 'no' } })
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.redirect
                   .toLocation(MediationPaths.noMediationPage.evaluateUri({ externalId })))

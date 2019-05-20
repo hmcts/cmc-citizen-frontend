@@ -27,25 +27,25 @@ export default express.Router()
     FormValidator.requestHandler(FreeMediation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<FreeMediation> = req.body
-      if (form.hasErrors()) {
-        renderView(form, res)
-      } else {
-        const user: User = res.locals.user
-        const draft: Draft<MediationDraft> = res.locals.mediationDraft
-        draft.document.willYouTryMediation = new FreeMediation(req.body.model.option)
+      const { externalId } = req.params
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
+        if (form.hasErrors()) {
+          renderView(form, res)
+        } else {
+          const user: User = res.locals.user
+          const draft: Draft<MediationDraft> = res.locals.mediationDraft
+          draft.document.willYouTryMediation = new FreeMediation(req.body.model.option)
 
-        await new DraftService().save(draft, user.bearerToken)
+          await new DraftService().save(draft, user.bearerToken)
 
-        const { externalId } = req.params
-
-        if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
           if (req.body.model.option === FreeMediationOption.YES) {
             res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
           } else {
             res.redirect(responsePaths.taskListPage.evaluateUri({ externalId: externalId }))
           }
-        } else {
-          res.redirect(responsePaths.taskListPage.evaluateUri({ externalId: externalId }))
+
         }
+      } else {
+        res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
       }
     }))
