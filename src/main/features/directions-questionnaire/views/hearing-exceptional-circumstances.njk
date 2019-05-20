@@ -5,7 +5,7 @@
 {% if party === MadeBy.CLAIMANT %}
   {% set heading = 'The hearing will be held at ' + courtName %}
 {% else %}
-  {% set heading = t('Do your accessibility needs mean you want to ask for the hearing to be held at a specific court?') %}
+  {% set heading = 'Do your accessibility needs mean you want to ask for the hearing to be held at a specific court?' %}
 {% endif %}
 
 {% block content %}
@@ -48,7 +48,7 @@
               bold = true)
             }}
             <div class="form-group panel panel-border-narrow js-hidden " id="exceptionalCircumstances-yes" aria-hidden="false">
-              {{ textArea(label = t('Briefly explain your reasons'), form = form, name = 'reason', inputClass = 'form-control-3-4') }}
+              {{ textArea(label = 'Briefly explain your reasons', form = form, name = 'reason', inputClass = 'form-control-3-4') }}
             </div>
           {% else %}
 
@@ -62,7 +62,7 @@
               bold = true)
             }}
             <div class="form-group panel panel-border-narrow js-hidden " id="exceptionalCircumstances-yes" aria-hidden="false">
-              {{ textArea(label = t('Briefly explain your reasons'), form = form, name = 'reason', inputClass = 'form-control-3-4') }}
+              {{ textArea(label = 'Briefly explain your reasons', form = form, name = 'reason', inputClass = 'form-control-3-4') }}
             </div>
             {{
             radioOption(
