@@ -3925,10 +3925,10 @@ hsts@2.2.0:
   dependencies:
     depd "2.0.0"
 
-html_codesniffer@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/html_codesniffer/-/html_codesniffer-2.3.0.tgz#41640822514e3b3a50459b588fa71704d97c2b05"
-  integrity sha512-UrW8GdXUnj+zDOvd+/1cnmbQ1Y0ugzunCWdSd62JjZ2spBYo7ffoRA9i4baOrEj6/O3jRk80qyHLEKh/kNjedQ==
+html_codesniffer@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/html_codesniffer/-/html_codesniffer-2.4.0.tgz#cfb283347955aafe4ffe7dd28aac8a81e364cdbd"
+  integrity sha512-4LU3IaTLS7hMhueYE6a6G+QuwFkIA9S+V9KCXttnJ9YnJ/Kpl+L7R7aH+nohw1jaf0KjaHqQ7Y2uXgsWNIIxQA==
 
 http-cache-semantics@3.8.1:
   version "3.8.1"
