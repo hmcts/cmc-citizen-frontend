@@ -143,7 +143,7 @@ export class Claim {
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
-    } else if (this.isSettlementAgreementRejected()) {
+    } else if (this.isSettlementAgreementRejected) {
       return ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
@@ -398,7 +398,7 @@ export class Claim {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
 
-  private isSettlementAgreementRejected (): boolean {
+  get isSettlementAgreementRejected (): boolean {
     if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
       return false
     }
