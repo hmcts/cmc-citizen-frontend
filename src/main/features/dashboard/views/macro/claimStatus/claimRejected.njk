@@ -41,6 +41,50 @@
   {{ t('You’ve reject the defendant’s response.') }}
 {% endmacro %}
 
+{% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) %}
+  {{ t('Wait for the court to review the case') }}
+{% endmacro %}
+
+{% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) %}
+  {{ t('We’ll contact you with a mediation appointment') }}
+{% endmacro %}
+
+{% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
+  {{ t('The claim has been settled') }}
+{% endmacro %}
+
+{% macro claimantAcceptedDefendantDefenceClaimantDashboard(claim) %}
+  {{ t('You accepted the defendants defence') }}
+{% endmacro %}
+
+{% macro claimantAcceptedDefendantDefenceDefendantClaimDetails(claim) %}
+  {{ t('You accepted the defendants defence') }}
+{% endmacro %}
+
+{% macro claimantAcceptedDefendantDefenceClaimantClaimDetails(claim) %}
+  {{ t('You accepted the defendants defence') }}
+{% endmacro %}
+
+{% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+    <p>{{ t('{{ claimantName }} has rejected your defence.',
+        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange an appointment.') }}</p>
+    <p>{{ internalLink(t('Find out how mediation works'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+    <p>{{ t('{{ claimantName }} has rejected your defence.',
+        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange an appointment.') }}</p>
+    <p>{{ internalLink(t('Find out how mediation works'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}</p>
+  </div>
+{% endmacro %}
+
 {% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
@@ -126,7 +170,6 @@
         + 'this is a form you complete to tell us more about the claim.') }}</p>
     <p>{{ _downloadResponseLink(claim, 'Download your response') }}</p>
   </div>
-
 {% endmacro %}
 
 {% macro _downloadResponseLink(claim, text) %}

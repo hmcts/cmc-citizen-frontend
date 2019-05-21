@@ -169,6 +169,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantRejectedDefendantDefence()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE
+    } else if (this.hasClaimantAcceptedDefendantDefence()) {
+      return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE
     } else if (this.hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_PART_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE
     } else if (this.hasClaimantAcceptedDefendantFullAdmissionResponseWithAlternativePaymentIntention() && this.isDefendantBusiness()) {
@@ -505,5 +507,11 @@ export class Claim {
         || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.claimantResponse
       && (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+  }
+
+  private hasClaimantAcceptedDefendantDefence (): boolean {
+    return this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+      && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
   }
 }
