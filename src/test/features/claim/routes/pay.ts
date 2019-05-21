@@ -404,7 +404,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveSave()
-            draftStoreServiceMock.rejectDelete()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
