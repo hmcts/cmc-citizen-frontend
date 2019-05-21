@@ -65,6 +65,7 @@ export class ClaimStoreClient {
 
   saveClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+    console.log(convertedDraftClaim)
 
     return this.request
       .post(`${claimStoreApiUrl}/${claimant.id}`, {
