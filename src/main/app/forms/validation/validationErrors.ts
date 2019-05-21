@@ -18,7 +18,7 @@ export class ValidationErrors {
 
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly DATE_NOT_VALID: string = 'Enter a valid date'
-  static readonly DATE_IN_FUTURE: string = 'Correct the date. You can’t use a future date'
+  static readonly DATE_IN_FUTURE: string = 'Correct the date. You can’t use a future date.'
 
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly AMOUNT_NOT_VALID: string = 'Enter a valid amount'

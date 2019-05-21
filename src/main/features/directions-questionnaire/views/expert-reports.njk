@@ -1,0 +1,67 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, linkButton, saveAndContinueButton, errorSummary, textInput %}
+{% from "date.njk" import dateInput %}
+
+{% set heading = 'Have you already got a report written by an expert?' %}
+
+{% macro expertReportsRow(index, form) %}
+
+  {% set prefix = 'rows[' + index + ']' %}
+  {% set nameKey = prefix + '[expertName]' %}
+  {% set dateKey = prefix + '[reportDate]' %}
+
+  <div class="form-group {% if form.errorFor(nameKey) or form.errorFor(dateKey) %} form-group-error {% endif %}">
+
+    {{ textInput('Expert’s name', name = nameKey, form = form) }}
+    {{ dateInput(dateKey, form, 'When is the report dated?', 'For example, ' + ('now' | addDays(-30) | date)) }}
+
+  </div>
+
+{% endmacro %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate
+            class="analytics-submit-event-trigger"
+            data-event-action="DQ: Have you already got a report written by an expert?"
+            data-event-label-from="declared">
+
+        {{ csrfProtection(csrf) }}
+
+        {% set errorHasAnyExpertReports = form.errorFor('declared') %}
+        <fieldset id="declared[label]"
+                  class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Have you already got a report written by an expert?') }}</legend>
+          {% if errorHasAnyExpertReports %}<span
+            class="error-message">{{ t(errorHasAnyExpertReports) }}</span>{% endif %}
+
+          {{ radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true) }}
+
+          {% set noRowsError = form.errorFor('rows') %}
+          <div
+            class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
+            id="declared-true" aria-hidden="false">
+
+            {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
+
+            {% for row in form.model.rows %}
+              {{ expertReportsRow(loop.index0, form) }}
+            {% endfor %}
+
+            <div id="add-event-container" class="form-group">
+              {{ linkButton('Add another report', 'action[addRow]', 'button button-secondary') }}
+            </div>
+
+          </div>
+
+          {{ radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false) }}
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}
