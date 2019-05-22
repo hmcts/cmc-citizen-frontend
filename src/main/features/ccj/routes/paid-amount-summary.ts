@@ -26,7 +26,7 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     const response = claim.response
     if (response) {
       const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
-      if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+      if ((paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) || claim.isSettlementAgreementRejected) {
         return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
       } else {
         return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
