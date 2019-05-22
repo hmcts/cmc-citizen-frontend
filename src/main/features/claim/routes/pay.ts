@@ -115,7 +115,7 @@ async function successHandler (req, res, next) {
   if (savedClaim) {
     const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
     await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
- }
+  }
 
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
