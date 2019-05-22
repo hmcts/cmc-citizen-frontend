@@ -6,7 +6,9 @@ export class SoleTrader extends Party {
   businessName?: string
 
   constructor (
-              name?: string,
+              title?: string,
+              firstName?: string,
+              lastName?: string,
               address?: Address,
               correspondenceAddress?: Address,
               mobilePhone?: string,

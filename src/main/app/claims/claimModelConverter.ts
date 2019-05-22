@@ -66,7 +66,9 @@ export class ClaimModelConverter {
         const individualDetails = draftClaim.claimant.partyDetails as IndividualDetails
 
         return new ClaimantAsIndividual(
-          individualDetails.name,
+          StringUtils.trimToUndefined(individualDetails.title),
+          individualDetails.firstName,
+          individualDetails.lastName,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
           draftClaim.claimant.mobilePhone.number,
@@ -78,7 +80,9 @@ export class ClaimModelConverter {
         const soleTraderDetails: SoleTraderDetails = draftClaim.claimant.partyDetails as SoleTraderDetails
 
         return new ClaimantAsSoleTrader(
-          soleTraderDetails.name,
+          StringUtils.trimToUndefined(soleTraderDetails.title),
+          soleTraderDetails.firstName,
+          soleTraderDetails.lastName,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
           draftClaim.claimant.mobilePhone.number,
