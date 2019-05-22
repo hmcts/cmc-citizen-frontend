@@ -18,11 +18,21 @@
         <input type="hidden" name="type" value="{{ form.model.type }}">
 
         {% if form.model.type == 'individual' %}
-          {%
-            set fields = [
+          {% if form.model.firstName !== 'undefined' %}
+            {%  set fields = [
+              { label: 'Title', name: 'title' },
+              { label: 'First name', name: 'firstName' },
+              { label: 'Last name', name: 'lastName' }
+            ]
+              %}
+          {% else %}
+            {%
+              set fields = [
               { readOnly: true, label: 'Full name', value: claim.claimData.defendant.name }
             ]
-          %}
+            %}
+          {% endif %}
+
           {% set addressSectionHeading = 'Your address' %}
         {% elif form.model.type == 'soleTrader' %}
           {%
