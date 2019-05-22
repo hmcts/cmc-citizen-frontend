@@ -35,6 +35,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     envVariable: envVar
   ]
 }
+
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
@@ -45,11 +46,10 @@ env.FEATURE_TESTING_SUPPORT = 'true'
 // SAUCELABS config - configured on Jenkins (also IDAM_URL above used)
 env.SAUCELABS_BROWSER = 'chrome_win_latest'
 env.SAUCELABS_TUNNEL_IDENTIFIER = 'reformtunnel'
+env.TEST_URL = params.URL_TO_TEST
+env.CHUNKS = 3
 
 withNightlyPipeline("nodejs", product, component) {
-  env.TEST_URL = params.URL_TO_TEST
-  env.CITIZEN_APP_URL = params.URL_TO_TEST
-
   loadVaultSecrets(secrets)
   enableCrossBrowserTest()
   enableSecurityScan()
