@@ -281,6 +281,9 @@ export class Claim {
       if (input.reDeterminationRequestedAt) {
         this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
       }
+      if (input.ccdCaseId) {
+        this.ccdCaseId = input.ccdCaseId
+      }
     }
 
     return this

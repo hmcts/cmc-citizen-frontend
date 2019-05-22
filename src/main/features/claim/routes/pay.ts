@@ -106,14 +106,15 @@ async function successHandler (req, res, next) {
         draft.document.claimant.payment,
         `Payment processed successfully and claim ${externalId} already exists.`
       )
+      savedClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
     }
   }
   const payClient: PayClient = await getPayClient(req)
   const paymentReference = draft.document.claimant.payment.reference
 
   const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
-
   await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
+
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
