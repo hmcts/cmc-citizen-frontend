@@ -21,8 +21,7 @@ function renderView (form: Form<FreeMediation>, res: express.Response): void {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.noMediationPage.uri, (req: express.Request, res: express.Response) => {
-    const draft: Draft<any> = res.locals.mediationDraft
-    renderView(new Form(new FreeMediation(draft.document.willYouTryMediation.option)), res)
+    renderView(new Form(new FreeMediation()), res)
   })
   .post(
     Paths.noMediationPage.uri,
