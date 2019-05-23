@@ -11,7 +11,9 @@ export function prepareClaimDraft (userEmailAddress: string) {
     claimant: {
       partyDetails: {
         type: PartyType.INDIVIDUAL.value,
-        name: 'Jan Clark',
+        title: 'Ms.',
+        firstName: 'Jan',
+        lastName: 'Clark',
         address: {
           line1: 'Street 1',
           line2: 'Street 2',
