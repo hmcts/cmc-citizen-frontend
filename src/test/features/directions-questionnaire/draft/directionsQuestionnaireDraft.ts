@@ -16,15 +16,15 @@ describe('DirectionsQuestionnaireDraft', () => {
     it('should return a DirectionsQuestionnaireDraft instance initialised with valid data', () => {
       const draft: DirectionsQuestionnaireDraft = new DirectionsQuestionnaireDraft().deserialize({
         selfWitness: {
-          option: { option: 'yes' }
+          option: 'yes'
         },
         otherWitnesses: {
-          otherWitnesses: { option: 'yes' },
+          otherWitnesses: 'yes',
           howMany: 1
         },
         hearingLocation: 'Little Whinging, Surrey',
         exceptionalCircumstances: {
-          exceptionalCircumstances: { option: 'yes' },
+          exceptionalCircumstances: 'yes',
           reason: 'Poorly pet owl'
         },
         availability: {
@@ -43,6 +43,22 @@ describe('DirectionsQuestionnaireDraft', () => {
           disabledAccessSelected: true,
           otherSupportSelected: true,
           otherSupport: 'Life advice'
+        },
+        expertRequired: {
+          option: 'yes'
+        },
+        expertReports: {
+          declared: true,
+          rows: [
+            {
+              expertName: 'Prof. McGonagall',
+              reportDate: { year: 2018, month: 1, day: 10 }
+            },
+            {
+              expertName: 'Mr Rubeus Hagrid',
+              reportDate: { year: 2019, month: 2, day: 29 }
+            }
+          ]
         }
       })
 
@@ -65,6 +81,13 @@ describe('DirectionsQuestionnaireDraft', () => {
       expect(draft.supportRequired.disabledAccessSelected).to.be.true
       expect(draft.supportRequired.otherSupportSelected).to.be.true
       expect(draft.supportRequired.otherSupport).to.equal('Life advice')
+      expect(draft.expertRequired.option.option).to.equal('yes')
+      expect(draft.expertReports.declared).to.be.true
+      expect(draft.expertReports.rows).to.have.length(2)
+      expect(draft.expertReports.rows[0].expertName).to.equal('Prof. McGonagall')
+      expect(draft.expertReports.rows[0].reportDate).to.deep.equal({ year: 2018, month: 1, day: 10 })
+      expect(draft.expertReports.rows[1].expertName).to.equal('Mr Rubeus Hagrid')
+      expect(draft.expertReports.rows[1].reportDate).to.deep.equal({ year: 2019, month: 2, day: 29 })
     })
   })
 })

@@ -38,16 +38,6 @@ export class ClaimStoreClient {
     // Nothing to do
   }
 
-  savePrePayment (externalId: string, submitter: User): Promise<string> {
-    return this.request.post(`${claimStoreApiUrl}/${externalId}/pre-payment`, {
-      headers: {
-        Authorization: `Bearer ${submitter.bearerToken}`
-      }
-    }).then(caseReference => {
-      return caseReference.case_reference
-    })
-  }
-
   savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
     return this.request
       .put(`${claimStoreApiUrl}/${externalId}/paid-in-full`, {
