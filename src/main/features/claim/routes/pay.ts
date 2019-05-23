@@ -111,6 +111,7 @@ async function successHandler (req, res, next) {
   }
   const payClient: PayClient = await getPayClient(req)
   const paymentReference = draft.document.claimant.payment.reference
+  console.log("Just a log to trigger sonar scan. need to be removed")
 
   if (savedClaim) {
     const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
