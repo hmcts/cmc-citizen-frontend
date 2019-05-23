@@ -54,8 +54,9 @@ const testData = [
     },
     claimantAssertions: [
       'The defendant’s response',
-      fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.',
-      'Respond'
+      fullDefenceClaim.claim.defendants[0].name + ` says they paid you ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)} on `,
+      'You can accept or reject this response.',
+      'View and respond'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -344,20 +345,12 @@ const testData = [
     claimantAssertions: [
       'Agreement signed',
       'You’ve both signed a legal agreement. The claim is now settled.',
-      'Download the settlement agreement',
-      'Settle out of court',
-      fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
-      'View and respond to the offer',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Download the settlement agreement'
     ],
     defendantAssertions: [
       'Agreement signed',
       'You’ve both signed a legal agreement. The claim is now settled.',
-      'Download the settlement agreement',
-      'Settle out of court',
-      'You made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.'
-
+      'Download the settlement agreement'
     ]
   }
 ]

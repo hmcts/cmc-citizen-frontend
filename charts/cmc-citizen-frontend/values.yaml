@@ -2,7 +2,6 @@ nodejs:
   image: hmcts.azurecr.io/hmcts/cmc-citizen-frontend:latest
   applicationPort: 3000
   memoryRequests: 256Mi
-  cpuRequests: 0.2
   memoryLimits: 512Mi
   cpuLimits: 1
   environment:
@@ -23,6 +22,7 @@ nodejs:
     FEATURE_MOCK_PAY: false
     FEATURE_MEDIATION: false
     FEATURE_DIRECTIONS_QUESTIONNAIRE: false
+    FEATURE_NEW_DASHBOARD_STATUS: false
   keyVaults:
     cmc:
       resourceGroup: cmc
