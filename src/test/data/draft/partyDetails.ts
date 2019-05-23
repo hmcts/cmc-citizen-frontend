@@ -49,6 +49,9 @@ export const soleTraderDetails = {
 export const claimantSoleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
   name: 'Claimant SoleTrader',
+  title: undefined,
+  firstName: 'Claimant',
+  lastName: 'SoleTrader',
   businessName: 'Claimant SoleTrader Ltd.',
   ...addressCorrespondenceAddress
 }

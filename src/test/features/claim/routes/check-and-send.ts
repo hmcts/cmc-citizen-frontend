@@ -16,11 +16,10 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as feesServiceMock from 'test/http-mocks/fees'
 import { SignatureType } from 'common/signatureType'
 import {
-  claimantSoleTraderDetails,
   companyDetails,
-  defendantIndividualDetails,
-  defendantSoleTraderDetails,
-  individualDetails,
+  splitIndividualDetails,
+  splitSoleTraderDetails,
+  claimantSoleTraderDetails,
   organisationDetails
 } from 'test/data/draft/partyDetails'
 
@@ -68,7 +67,7 @@ describe('Claim issue: check and send page', () => {
       })
 
       it('Should validate check-and-send Page hyperlink with correct location and span', async () => {
-        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: individualDetails } , defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantIndividualDetails } })
+        draftStoreServiceMock.resolveFind('claim',{ claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: splitIndividualDetails } , defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: splitIndividualDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -96,7 +95,7 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by individual against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          { defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: splitSoleTraderDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -147,7 +146,7 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by soleTrader against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: claimantSoleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: claimantSoleTraderDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: splitSoleTraderDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -252,7 +251,7 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by company against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: companyDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: splitSoleTraderDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
@@ -325,7 +324,7 @@ describe('Claim issue: check and send page', () => {
 
       it('Should validate that a claim made by organisation against soleTrader and their details', async () => {
         draftStoreServiceMock.resolveFind('claim',
-          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: defendantSoleTraderDetails } })
+          { claimant: { ...draftStoreServiceMock.sampleClaimDraftObj.claimant, partyDetails: organisationDetails }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: splitSoleTraderDetails } })
         feesServiceMock.resolveCalculateIssueFee()
 
         await request(app)
