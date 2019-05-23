@@ -7,22 +7,18 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { claimDraft as draftTemplate } from 'test/data/draft/claimDraft'
 import {
   companyDetails,
-  defendantIndividualDetails,
-  defendantSoleTraderDetails,
-  individualDetails,
-  organisationDetails,
-  soleTraderDetails
+  splitIndividualDetails,
+  splitSoleTraderDetails,
+  organisationDetails
 } from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
 import { claimData as entityTemplate } from 'test/data/entity/claimData'
 import {
   company,
-  individual,
-  individualDefendant,
+  individualSplit,
   organisation,
-  soleTrader,
-  soleTraderDefendant
+  soleTraderSplit
 } from 'test/data/entity/party'
 import { YesNoOption } from 'models/yesNoOption'
 import { Interest } from 'claim/form/models/interest'
@@ -53,10 +49,10 @@ function convertObjectLiteralToJSON (value: object): object {
 
 describe('ClaimModelConverter', () => {
   [
-    [[individualDetails, individual], [defendantSoleTraderDetails, soleTraderDefendant]],
-    [[soleTraderDetails, soleTrader], [companyDetails, company]],
+    [[splitIndividualDetails, individualSplit], [splitSoleTraderDetails, soleTraderSplit]],
+    [[splitSoleTraderDetails, soleTraderSplit], [companyDetails, company]],
     [[companyDetails, company], [organisationDetails, organisation]],
-    [[organisationDetails, organisation], [defendantIndividualDetails, individualDefendant]]
+    [[organisationDetails, organisation], [splitIndividualDetails, individualSplit]]
   ].forEach(entry => {
     const [[claimantPartyDetails, claimantParty], [defendantPartyDetails, defendantParty]] = entry
 
@@ -70,15 +66,15 @@ describe('ClaimModelConverter', () => {
   })
 
   it('should not create interestDate if no interest is selected in the draft', () => {
-    const claimDraft = prepareClaimDraft(individualDetails, individual)
+    const claimDraft = prepareClaimDraft(splitIndividualDetails, individualSplit)
     claimDraft.interest = new Interest(YesNoOption.NO)
     const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
     expect(converted.interest.interestDate).to.be.undefined
   })
 
   it('should not contain title if blank', () => {
-    const defendantWithoutTitle = { ...individualDefendant, title: ' ' }
-    const claimDraft = prepareClaimDraft(defendantIndividualDetails, defendantWithoutTitle)
+    const defendantWithoutTitle = { ...individualSplit, title: ' ' }
+    const claimDraft = prepareClaimDraft(splitIndividualDetails, defendantWithoutTitle)
     const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
     expect((converted.defendant as Individual).title).to.be.undefined
   })

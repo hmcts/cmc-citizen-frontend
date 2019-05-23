@@ -27,7 +27,7 @@ export const individual = {
   email: 'individual@example.com'
 }
 
-export const individualDefendant = {
+export const individualSplit = {
   ...individual,
   name: 'Mr. John Smith',
   title: 'Mr.',
@@ -44,7 +44,7 @@ export const soleTrader = {
   email: 'sole-trader@example.com'
 }
 
-export const soleTraderDefendant = {
+export const soleTraderSplit = {
   ...soleTrader,
   businessName: 'Defendant SoleTrader Ltd.',
   name: 'Defendant SoleTrader',

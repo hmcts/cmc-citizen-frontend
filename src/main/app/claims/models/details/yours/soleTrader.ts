@@ -1,6 +1,7 @@
 import { Party } from './party'
 import { PartyType } from 'common/partyType'
 import { Address } from 'claims/models/address'
+import { NameFormatter } from 'utils/nameFormatter'
 
 export class SoleTrader extends Party {
   businessName?: string
@@ -14,7 +15,7 @@ export class SoleTrader extends Party {
               mobilePhone?: string,
               email?: string,
               businessName?: string) {
-    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value, name, address, correspondenceAddress, mobilePhone, email)
+    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value, NameFormatter.fullName(firstName, lastName, title), address, correspondenceAddress, mobilePhone, email)
     this.businessName = businessName
   }
 

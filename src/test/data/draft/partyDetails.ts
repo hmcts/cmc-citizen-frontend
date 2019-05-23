@@ -32,7 +32,7 @@ export const individualDetails = {
   }
 }
 
-export const defendantIndividualDetails = {
+export const splitIndividualDetails = {
   ...individualDetails,
   title: 'Mr.',
   firstName: 'John',
@@ -53,7 +53,7 @@ export const claimantSoleTraderDetails = {
   ...addressCorrespondenceAddress
 }
 
-export const defendantSoleTraderDetails = {
+export const splitSoleTraderDetails = {
   type: PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value,
   name: 'Defendant SoleTrader',
   title: undefined,

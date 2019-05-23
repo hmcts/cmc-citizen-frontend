@@ -1,4 +1,4 @@
-import { individualDetails, defendantIndividualDetails } from 'test/data/draft/partyDetails'
+import { splitIndividualDetails } from 'test/data/draft/partyDetails'
 import { InterestRate } from 'claim/form/models/interestRate'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 import { InterestDateType } from 'common/interestDateType'
@@ -39,13 +39,13 @@ export const claimDraft = {
         }
       }
     },
-    partyDetails: individualDetails,
+    partyDetails: splitIndividualDetails,
     mobilePhone: {
       number: '07000000000'
     }
   },
   defendant: {
-    partyDetails: defendantIndividualDetails,
+    partyDetails: splitIndividualDetails,
     email: {
       address: 'defendant@example.com'
     }
