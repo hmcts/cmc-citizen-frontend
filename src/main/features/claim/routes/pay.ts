@@ -111,11 +111,16 @@ async function successHandler (req, res, next) {
   }
   const payClient: PayClient = await getPayClient(req)
   const paymentReference = draft.document.claimant.payment.reference
-  console.log("Just a log to trigger sonar scan. need to be removed")
 
   if (savedClaim) {
     const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
     await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
+  } else {
+    logError(
+      user.id,
+      draft.document.claimant.payment,
+      `Saved claim is undefined`
+    )
   }
 
   await new DraftService().delete(draft.id, user.bearerToken)
