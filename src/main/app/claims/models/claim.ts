@@ -60,6 +60,7 @@ export class Claim {
   moneyReceivedOn: Moment
   reDetermination: ReDetermination
   reDeterminationRequestedAt: Moment
+  ccdCaseId: number
   template: ClaimTemplate
 
   get defendantOffer (): Offer {
@@ -279,6 +280,9 @@ export class Claim {
       }
       if (input.reDeterminationRequestedAt) {
         this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
+      }
+      if (input.ccdCaseId) {
+        this.ccdCaseId = input.ccdCaseId
       }
     }
 
