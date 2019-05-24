@@ -305,6 +305,12 @@ export class Claim {
       !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
 
+  private hasClaimantAcceptedAdmissionWithCourtOfferWithCCJ (): boolean {
+    return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementReachedThroughAdmission() &&
+      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
+      (this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
+  }
+
   hasClaimantAcceptedDefendantResponseWithCCJ (): boolean {
     return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
@@ -339,6 +345,10 @@ export class Claim {
 
   private isPaidInFullLinkEligible (): boolean {
     if (this.moneyReceivedOn || (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt)) {
+      return false
+    }
+
+    if (this.hasClaimantAcceptedAdmissionWithCourtOfferWithCCJ()) {
       return false
     }
 
