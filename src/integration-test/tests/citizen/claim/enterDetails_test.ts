@@ -10,7 +10,7 @@ const interestSteps: InterestSteps = new InterestSteps()
 
 Feature('Claimant Enter details of claim').retry(3)
 
-Scenario('I can prepare a claim with default interest @citizen @TEST', async (I: I) => {
+Scenario('I can prepare a claim with default interest @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
   claimSteps.completeEligibility()
