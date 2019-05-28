@@ -2,3 +2,4 @@ ignore:
 - "src/main/server.ts"
 - "src/main/ts-paths-bootstrap.ts"
 - "src/main/public/**"
+- "src/main/app/mocks/mockPayClient.ts"
