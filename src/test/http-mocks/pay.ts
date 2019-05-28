@@ -4,6 +4,7 @@ import * as config from 'config'
 
 const baseURL = config.get<string>('pay.url')
 const endpointPath = '/card-payments'
+const paymentsPath = '/payments'
 
 export const paymentInitiateResponse: object = {
   reference: 'RC-1520-4225-4161-2265',
@@ -61,6 +62,12 @@ export function resolveRetrieve (status: string) {
   mock(baseURL + endpointPath)
     .get(new RegExp(`\/[\\d]+`))
     .reply(HttpStatus.OK, { ...paymentRetrieveResponse, status: `${status}` })
+}
+
+export function resolveUpdate (paymentReference: string = 'RC-1520-4276-0065-8715'): mock.Scope {
+  return mock(baseURL + paymentsPath)
+    .patch(`/${paymentReference}`)
+    .reply(HttpStatus.OK)
 }
 
 export function resolveRetrieveToNotFound () {
