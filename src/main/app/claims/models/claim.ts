@@ -60,6 +60,7 @@ export class Claim {
   moneyReceivedOn: Moment
   reDetermination: ReDetermination
   reDeterminationRequestedAt: Moment
+  ccdCaseId: number
   template: ClaimTemplate
 
   get defendantOffer (): Offer {
@@ -143,7 +144,7 @@ export class Claim {
       } else {
         return ClaimStatus.CCJ_REQUESTED
       }
-    } else if (this.isSettlementAgreementRejected()) {
+    } else if (this.isSettlementAgreementRejected) {
       return ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED
     } else if (this.isSettlementReachedThroughAdmission()) {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
@@ -284,6 +285,9 @@ export class Claim {
       if (input.reDeterminationRequestedAt) {
         this.reDeterminationRequestedAt = MomentFactory.parse(input.reDeterminationRequestedAt)
       }
+      if (input.ccdCaseId) {
+        this.ccdCaseId = input.ccdCaseId
+      }
     }
 
     return this
@@ -410,7 +414,7 @@ export class Claim {
     return this.settlement && this.settlement.isThroughAdmissionsAndSettled()
   }
 
-  private isSettlementAgreementRejected (): boolean {
+  get isSettlementAgreementRejected (): boolean {
     if (!this.claimantResponse || this.claimantResponse.type !== ClaimantResponseType.ACCEPTATION) {
       return false
     }

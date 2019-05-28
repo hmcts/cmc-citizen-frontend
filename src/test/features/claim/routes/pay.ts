@@ -401,9 +401,12 @@ describe('Claim issue: post payment callback receiver', () => {
 
           it('should return 500 and render error page when cannot delete draft', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveSave()
+            claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.rejectDelete()
 
             await request(app)
@@ -460,6 +463,7 @@ describe('Claim issue: post payment callback receiver', () => {
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.resolveSaveClaimForUser()
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.rejectDelete()
 
             await request(app)
@@ -504,6 +508,7 @@ describe('Claim issue: post payment callback receiver', () => {
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
+            payServiceMock.resolveUpdate()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
@@ -520,6 +525,7 @@ describe('Claim issue: post payment callback receiver', () => {
             featureToggleApiMock.resolveIsAdmissionsAllowed(false)
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
+            payServiceMock.resolveUpdate()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
