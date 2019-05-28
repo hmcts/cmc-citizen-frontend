@@ -19,8 +19,11 @@ import {
   baseResponseData
 } from '../../../../data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { courtDeterminationChoseDefendantData } from '../../../../data/entity/courtDeterminationData'
-import { ccjDeterminationByInstalment } from '../../../../data/entity/ccjData'
+import {
+  courtDeterminationChoseClaimantData,
+  courtDeterminationChoseDefendantData
+} from '../../../../data/entity/courtDeterminationData'
+import { ccjDeterminationByInstalment, ccjDeterminationBySpecifiedDate } from '../../../../data/entity/ccjData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -184,6 +187,43 @@ const testData = [
       'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
       'If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15 to',
       'if you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'CCJ - full admission, pay by set date, rejected the defendants repayment plan and claimants suggested repayment plan accepted by the court then requests a CCJ.',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'CCJ',
+        courtDetermination: {
+          ...courtDeterminationChoseClaimantData
+        },
+        claimantPaymentIntention: {
+          paymentDate: '2020-01-01',
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      },
+      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
+    },
+    claimantAssertions: ['000MC050',
+      'You requested a County Court Judgment against John Doe',
+      'When we’ve processed your request, we’ll post a copy of the judgment to you and to John Doe',
+      'View the repayment plan',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve been paid'
+    ],
+    defendantAssertions: ['000MC050',
+      'John Smith requested a County Court Judgment (CCJ) against you',
+      'They rejected your repayment plan.',
+      'They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.',
+      'View the repayment plan',
+      'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
+      'If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15',
+      ' you need their payment details. Make sure you get receipts for any payments.',
       'Download your response'
     ]
   },

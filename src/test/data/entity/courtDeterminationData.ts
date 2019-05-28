@@ -27,3 +27,16 @@ export const courtDeterminationChoseDefendantData = {
     paymentOption: 'BY_SPECIFIED_DATE'
   }
 }
+
+export const courtDeterminationChoseClaimantData = {
+  decisionType: 'CLAIMANT',
+  courtDecision: {
+    paymentDate: '2020-01-01',
+    paymentOption: 'BY_SPECIFIED_DATE'
+  },
+  disposableIncome: 2332.43,
+  courtPaymentIntention: {
+    paymentDate: '2019-06-28',
+    paymentOption: 'BY_SPECIFIED_DATE'
+  }
+}

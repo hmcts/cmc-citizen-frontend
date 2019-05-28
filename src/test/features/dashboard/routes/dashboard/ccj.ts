@@ -21,8 +21,11 @@ import {
   basePayBySetDateData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
-import { courtDeterminationChoseDefendantData } from 'test/data/entity/courtDeterminationData'
-import { ccjDeterminationByInstalment } from 'test/data/entity/ccjData'
+import {
+  courtDeterminationChoseClaimantData,
+  courtDeterminationChoseDefendantData
+} from 'test/data/entity/courtDeterminationData'
+import { ccjDeterminationByInstalment, ccjDeterminationBySpecifiedDate } from 'test/data/entity/ccjData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -113,6 +116,28 @@ const testData = [
         }
       },
       countyCourtJudgment: { ...ccjDeterminationByInstalment },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
+    },
+    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+  },
+  {
+    status: 'CCJ - full admission, pay by set date, rejected the defendants repayment plan and claimants suggested repayment plan accepted by the court then requests a CCJ.',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'CCJ',
+        courtDetermination: {
+          ...courtDeterminationChoseClaimantData
+        },
+        claimantPaymentIntention: {
+          paymentDate: '2020-01-01',
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      },
+      countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
