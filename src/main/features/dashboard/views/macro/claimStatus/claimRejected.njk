@@ -137,7 +137,7 @@
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
-      {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+      {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
     {% endif %}
 
     <p>{{ _downloadResponseLink(claim, 'Download your response') }}</p>
