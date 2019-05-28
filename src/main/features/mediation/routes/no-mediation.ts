@@ -9,10 +9,10 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { Claim } from 'claims/models/claim'
+import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 
 function renderView (form: Form<FreeMediation>, res: express.Response): void {
   res.render(Paths.noMediationPage.associatedView, { form: form })
@@ -20,37 +20,36 @@ function renderView (form: Form<FreeMediation>, res: express.Response): void {
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.noMediationPage.uri, (req: express.Request, res: express.Response) => {
-    renderView(new Form(new FreeMediation()), res)
-  })
+  .get(Paths.noMediationPage.uri,
+    OptInFeatureToggleGuard.featureEnabledGuard('mediationPilot'),
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      renderView(new Form(new FreeMediation()), res)
+    }))
   .post(
     Paths.noMediationPage.uri,
+    OptInFeatureToggleGuard.featureEnabledGuard('mediationPilot'),
     FormValidator.requestHandler(FreeMediation),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<FreeMediation> = req.body
       const { externalId } = req.params
-      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
-        if (form.hasErrors()) {
-          renderView(form, res)
+      if (form.hasErrors()) {
+        renderView(form, res)
+      } else {
+        const user: User = res.locals.user
+        const claim: Claim = res.locals.claim
+        const draft: Draft<MediationDraft> = res.locals.mediationDraft
+        draft.document.willYouTryMediation = new FreeMediation(req.body.model.option)
+
+        await new DraftService().save(draft, user.bearerToken)
+
+        if (req.body.model.option === FreeMediationOption.YES) {
+          res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
         } else {
-          const user: User = res.locals.user
-          const claim: Claim = res.locals.claim
-          const draft: Draft<MediationDraft> = res.locals.mediationDraft
-          draft.document.willYouTryMediation = new FreeMediation(req.body.model.option)
-
-          await new DraftService().save(draft, user.bearerToken)
-
-          if (req.body.model.option === FreeMediationOption.YES) {
-            res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
+          if (user.id === claim.claimantId) {
+            res.redirect(claimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
           } else {
-            if (user.id === claim.claimantId) {
-              res.redirect(claimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-            } else {
-              res.redirect(responsePaths.taskListPage.evaluateUri({ externalId: externalId }))
-            }
+            res.redirect(responsePaths.taskListPage.evaluateUri({ externalId: externalId }))
           }
         }
-      } else {
-        res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId: externalId }))
       }
     }))
