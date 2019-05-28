@@ -16,9 +16,8 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
-
         {% if form.model.type == 'individual' %}
-          {% if form.model.firstName %}
+          {% if claim.claimData.defendants[0].firstName and claim.claimData.defendants[0].firstName !== 'undefined' %}
             {% set fields = [
               { label: 'Title', name: 'title' },
               { label: 'First name', name: 'firstName' },
@@ -32,7 +31,7 @@
 
           {% set addressSectionHeading = 'Your address' %}
           {% elif form.model.type == 'soleTrader' %}
-          {% if form.model.firstName %}
+          {% if claim.claimData.defendants[0].firstName and claim.claimData.defendants[0].firstName !== 'undefined' %}
             {% set fields = [
               { label: 'Title', name: 'title' },
               { label: 'First name', name: 'firstName' },

@@ -6,6 +6,9 @@ export class TheirDetails {
   name: string
   address: Address
   email?: string
+  title?: string
+  firstName?: string
+  lastName?: string
 
   constructor (type?: string, name?: string, address?: Address, email?: string) {
     this.type = type
@@ -24,6 +27,15 @@ export class TheirDetails {
       this.name = input.name
       if (input.address) {
         this.address = new Address().deserialize(input.address)
+      }
+      if (input.title) {
+        this.title = input.title
+      }
+      if (input.firstName) {
+        this.firstName = input.firstName
+      }
+      if (input.lastName) {
+        this.lastName = input.lastName
       }
       this.email = input.email
     }

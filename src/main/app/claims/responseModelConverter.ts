@@ -378,6 +378,15 @@ export class ResponseModelConverter {
     if (defendant.partyDetails.name) {
       party.name = defendant.partyDetails.name
     }
+    if (defendant.partyDetails.title) {
+      party.title = defendant.partyDetails.title
+    }
+    if (defendant.partyDetails.firstName) {
+      party.firstName = defendant.partyDetails.firstName
+    }
+    if (defendant.partyDetails.lastName) {
+      party.lastName = defendant.partyDetails.lastName
+    }
     if (defendant.email) {
       party.email = defendant.email.address
     }

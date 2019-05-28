@@ -63,12 +63,16 @@ export default express.Router()
     FormValidator.requestHandler(PartyDetails, deserializeFn, 'response'),
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<PartyDetails> = req.body
-
+      const claim: Claim = res.locals.claim
+      const draft: Draft<ResponseDraft> = res.locals.responseDraft
       if (form.hasErrors()) {
+        if (claim.claimData.defendants[0].firstName) {
+          draft.document.defendantDetails.partyDetails.firstName = claim.claimData.defendants[0].firstName
+        }
         renderView(form, res)
       } else {
         const claim: Claim = res.locals.claim
-        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        let draft: Draft<ResponseDraft> = res.locals.responseDraft
         const user: User = res.locals.user
         const oldPartyDetails: PartyDetails = draft.document.defendantDetails.partyDetails
         draft.document.defendantDetails.partyDetails = form.model
