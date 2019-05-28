@@ -12,7 +12,7 @@ import { isPastDeadline } from 'claims/isPastDeadline'
 import { StatementType } from 'offer/form/models/statementType'
 import { FullAdmissionStates } from 'claims/models/claim-states/full-admission-states'
 
-export function FullAdmissionTransitions (claim: Claim) {
+export function fullAdmissionTransitions (claim: Claim) {
   return new StateMachine({
     init: 'full-admission',
     transitions: [

@@ -21,7 +21,9 @@ import {
   fullDefenceWithStatesPaidGreaterThanClaimAmount,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
-  partialAdmissionWithSoMPaymentBySetDateData
+  partialAdmissionWithSoMPaymentBySetDateData,
+  partialAdmissionWithImmediatePaymentData,
+  defenceWithDisputeData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -276,6 +278,65 @@ export const settlementWithSetDateAndAcceptation = {
     ]
   }
 }
+export const partySettlementWithInstalmentsAndRejection = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: { 'paymentDate': MomentFactory.currentDate().year(2), 'paymentOption': 'BY_SPECIFIED_DATE' }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+}
+export const partySettlementWithInstalmentsAndAcceptation = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: {
+        paymentDate: MomentFactory.currentDate().year(2),
+        paymentOption: 'BY_SPECIFIED_DATE'
+      }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }]
+}
+
+export const partySettlementWithSetDateAndRejection = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+}
+export const partySettlementWithSetDateAndAcceptation = {
+  partyStatements: [{
+    type: 'OFFER',
+    offer: {
+      completionDate: MomentFactory.currentDate().year(2),
+      paymentIntention: {
+        paymentDate: MomentFactory.currentDate().year(2),
+        paymentOption: 'BY_SPECIFIED_DATE'
+      }
+    },
+    madeBy: 'DEFENDANT'
+  }, {
+    type: 'ACCEPTATION',
+    madeBy: 'CLAIMANT'
+  }]
+}
 
 export const settlementAndSettlementReachedAt: object = {
   settlementReachedAt: '2017-07-25T22:45:51.785',
@@ -313,6 +374,12 @@ export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithPaymentBySetDateCompanyData
+}
+
+export const samplePartialAdmissionWithPayImmediatelyData = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithImmediatePaymentData
 }
 
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
@@ -355,6 +422,11 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
 }
 
+export const sampleFullDefenceRejectEntirely = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: defenceWithDisputeData
+}
+
 export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullDefenceWithStatesPaidGreaterThanClaimAmount
@@ -377,6 +449,12 @@ export function resolveRetrieveClaimByExternalId (claimOverride?: object): mock.
   return mock(`${serviceBaseURL}/claims`)
     .get(new RegExp('/' + externalIdPattern))
     .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
+}
+
+export function resolveRetrieveByExternalId (claim: object = sampleClaimObj, claimOverride?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .get(new RegExp('/' + externalIdPattern))
+    .reply(HttpStatus.OK, { ...claim, ...claimOverride })
 }
 
 export function resolveRetrieveClaimBySampleExternalId (sampleData?: object): mock.Scope {

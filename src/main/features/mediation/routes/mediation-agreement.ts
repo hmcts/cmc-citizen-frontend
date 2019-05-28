@@ -11,7 +11,6 @@ import { FreeMediation, FreeMediationOption } from 'main/app/forms/models/freeMe
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 
-
 function renderView (res: express.Response): void {
   const user: User = res.locals.user
   const claim: Claim = res.locals.claim

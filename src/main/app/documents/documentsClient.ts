@@ -21,10 +21,6 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'defendantResponseReceipt', bearerToken)
   }
 
-  getCountyCourtJudgmentPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
-    return this.getPDF(claimExternalId, 'ccj', bearerToken)
-  }
-
   getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
@@ -39,15 +35,18 @@ export class DocumentsClient {
     if (StringUtils.isBlank(bearerToken)) {
       throw new Error('User authorisation cannot be blank')
     }
-    return request.get(
-      `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`,
-          Accept: 'application/pdf'
-        },
-        encoding: null
-      }
-    )
+
+    const options = {
+      uri: `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+        Accept: 'application/pdf'
+      },
+      encoding: null
+    }
+
+    return request(options).then(function (response) {
+      return response
+    })
   }
 }

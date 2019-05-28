@@ -16,7 +16,7 @@ import { RejectionClaimantResponse } from 'claims/models/claimant-response/rejec
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
 
-export function PartAdmissionTransitions (claim: Claim) {
+export function partAdmissionTransitions (claim: Claim) {
   return new StateMachine({
     init: PartAdmissionStates.PART_ADMISSION,
     transitions: [

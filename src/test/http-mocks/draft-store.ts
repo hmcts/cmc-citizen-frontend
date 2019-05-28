@@ -230,7 +230,8 @@ const commonIndividualDefendant = {
   defendant: {
     partyDetails: {
       type: 'individual',
-      name: 'Rose Smith',
+      firstName: 'Rose',
+      lastName: 'Smith',
       address: {
         line1: 'Apt 99',
         line2: '',
@@ -262,7 +263,8 @@ const commonIndividualResponsePartial = {
     mobilePhone: { number: '01223344444' } as MobilePhone,
     partyDetails: {
       type: 'individual',
-      name: 'John Smith',
+      firstName: 'John',
+      lastName: 'Smith',
       address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false,
       dateOfBirth: {
@@ -582,7 +584,8 @@ export const sampleMediationDraftObj = {
 export const sampleDirectionsQuestionnaireDraftObj = {
   selfWitness: { option: YesNoOption.NO },
   otherWitnesses: { otherWitnesses: YesNoOption.NO },
-  availability: { hasUnavailableDates: false }
+  availability: { hasUnavailableDates: false },
+  expertEvidence: { expertEvidence: YesNoOption.NO }
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
