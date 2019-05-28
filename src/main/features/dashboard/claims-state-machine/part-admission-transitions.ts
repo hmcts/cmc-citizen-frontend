@@ -108,27 +108,27 @@ export function PartAdmissionTransitions (claim: Claim) {
       },
 
       {
-        name: 'checkIsPayByInstallmentsWithMediation',
+        name: 'checkIsPayInInstallmentsWithMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION
       },
       {
-        name: 'checkIsPayByInstallmentsWithoutMediation',
+        name: 'checkIsPayInInstallmentsWithoutMediation',
         from: PartAdmissionStates.PART_ADMISSION,
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITHOUT_MEDIATION
       },
       {
-        name: 'checkIsPayByInstallmentsRejectedWithMediationClaimantWithoutMediation',
+        name: 'checkIsPayInInstallmentsRejectedWithMediationClaimantWithoutMediation',
         from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_REJECTED_WITH_MEDIATION_CLAIMANT_WITHOUT_MEDIATION
       },
       {
-        name: 'checkIsPayByInstallmentsRejectedWithMediationClaimantWithMediation',
+        name: 'checkIsPayInInstallmentsRejectedWithMediationClaimantWithMediation',
         from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_REJECTED_WITH_MEDIATION_CLAIMANT_WITH_MEDIATION
       },
       {
-        name: 'checkIsPayByInstallmentsRejectedWithoutMediation',
+        name: 'checkIsPayInInstallmentsRejectedWithoutMediation',
         from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_REJECTED_WITHOUT_MEDIATION
       },
@@ -419,23 +419,23 @@ export function PartAdmissionTransitions (claim: Claim) {
         return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION) && !!claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.REJECTION
       },
 
-      onBeforeCheckIsPayByInstallmentsWithMediation (): boolean {
+      onBeforeCheckIsPayInInstallmentsWithMediation (): boolean {
         return this.paymentOption === PaymentOption.INSTALMENTS && claim.response.freeMediation === FreeMediationOption.YES
       },
 
-      onBeforeCheckIsPayByInstallmentsWithoutMediation (): boolean {
+      onBeforeCheckIsPayInInstallmentsWithoutMediation (): boolean {
         return this.paymentOption === PaymentOption.INSTALMENTS && claim.response.freeMediation === FreeMediationOption.NO
       },
 
-      onBeforeCheckIsPayByInstallmentsRejectedWithMediationClaimantWithMediation (): boolean {
+      onBeforeCheckIsPayInInstallmentsRejectedWithMediationClaimantWithMediation (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION) && !!claim.claimantResponse && (claim.claimantResponse as RejectionClaimantResponse).freeMediation === FreeMediationOption.YES && claim.claimantResponse.type === ClaimantResponseType.REJECTION
       },
 
-      onBeforeCheckIsPayByInstallmentsRejectedWithMediationClaimantWithoutMediation (): boolean {
+      onBeforeCheckIsPayInInstallmentsRejectedWithMediationClaimantWithoutMediation (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION) && !!claim.claimantResponse && (claim.claimantResponse as RejectionClaimantResponse).freeMediation === FreeMediationOption.NO && claim.claimantResponse.type === ClaimantResponseType.REJECTION
       },
 
-      onBeforeCheckIsPayByInstallmentsRejectedWithoutMediation (): boolean {
+      onBeforeCheckIsPayInInstallmentsRejectedWithoutMediation (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITHOUT_MEDIATION) && !!claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.REJECTION
       },
 
