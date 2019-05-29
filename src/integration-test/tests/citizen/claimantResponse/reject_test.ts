@@ -11,7 +11,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Reject').retry(3)
+  Feature('Claimant Response: Reject')//.retry(3)
 
   Scenario('As a claimant I can reject the claim @citizen @admissions',
     async (I: I) => {
@@ -90,7 +90,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     })
 
   Scenario(
-    'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions',
+    'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions @debug',
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -125,7 +125,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see(testData.claimRef)
       I.see('Claim status')
       I.see('The defendant’s response')
-      I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+      I.see(`${testData.defendantName} says they paid you £125 on 1 January 2018.`)
       I.click('Sign out')
     })
 }
