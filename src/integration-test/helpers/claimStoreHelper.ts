@@ -49,13 +49,13 @@ class ClaimStoreHelper extends codecept_helper {
   }
 
   private async waitForOpenClaim (referenceNumber: string) {
-    const maxAttempts: number = 10 // 20 seconds
+    const maxAttempts: number = 120 // 60 seconds
     let isClaimOpen: boolean = false
     let attempts: number = 0
     do {
       attempts++
       isClaimOpen = await ClaimStoreClient.isOpen(referenceNumber)
-      await this.sleep(200)
+      await this.sleep(500)
     } while (!isClaimOpen && attempts < maxAttempts)
   }
 
