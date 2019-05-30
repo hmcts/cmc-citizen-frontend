@@ -1,3 +1,4 @@
+import { MomentFactory } from 'shared/momentFactory'
 
 export const ccjDeterminationByInstalment = {
   ccjType: 'DETERMINATION',
@@ -15,7 +16,14 @@ export const ccjDeterminationByInstalment = {
 
 export const ccjDeterminationBySpecifiedDate = {
   ccjType: 'DETERMINATION',
-  payBySetDate: '2020-01-01',
+  payBySetDate: MomentFactory.currentDate().add(2, 'year'),
+  paymentOption: 'BY_SPECIFIED_DATE',
+  defendantDateOfBirth: '1999-01-01'
+}
+
+export const ccjAdmissionBySpecifiedDate = {
+  ccjType: 'ADMISSIONS',
+  payBySetDate: MomentFactory.currentDate().add(2, 'year'),
   paymentOption: 'BY_SPECIFIED_DATE',
   defendantDateOfBirth: '1999-01-01'
 }

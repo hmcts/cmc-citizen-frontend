@@ -273,6 +273,10 @@ export const settlementWithSetDateAndAcceptation = {
         }
       },
       {
+        type: 'ACCEPTATION',
+        madeBy: MadeBy.CLAIMANT.value
+      },
+      {
         madeBy: MadeBy.DEFENDANT.value,
         type: 'COUNTERSIGNATURE'
       }
