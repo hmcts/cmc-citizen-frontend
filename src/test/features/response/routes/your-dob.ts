@@ -16,8 +16,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
-// import * as moment from 'moment'
-// import { MomentFactory } from 'shared/momentFactory'
+import * as moment from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -110,25 +110,24 @@ describe('Defendant user details: your date of birth page', () => {
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          // UNDO BEFORE MERGE
-          // it('should redirect to the under-18 hand-off page when the date is too recent', async () => {
-          //   draftStoreServiceMock.resolveFind('response')
-          //   const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().add(-15, 'years')
-          //
-          //   await request(app)
-          //     .post(pagePath)
-          //     .set('Cookie', `${cookieName}=ABC`)
-          //     .send({
-          //       known: 'true', date: {
-          //         year: fifteenYearsAgo.year(),
-          //         month: fifteenYearsAgo.month(),
-          //         day: fifteenYearsAgo.date()
-          //       }
-          //     })
-          //     .expect(res => expect(res).to.be.redirect
-          //       .toLocation(ResponsePaths.under18Page
-          //         .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-          // })
+          it('should redirect to the under-18 hand-off page when the date is too recent', async () => {
+            draftStoreServiceMock.resolveFind('response')
+            const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().add(-15, 'years')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({
+                known: 'true', date: {
+                  year: fifteenYearsAgo.year(),
+                  month: fifteenYearsAgo.month() + 1,
+                  day: fifteenYearsAgo.date()
+                }
+              })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.under18Page
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
         })
       })
     })
