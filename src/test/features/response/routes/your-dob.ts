@@ -112,7 +112,7 @@ describe('Defendant user details: your date of birth page', () => {
 
           it('should redirect to the under-18 hand-off page when the date is too recent', async () => {
             draftStoreServiceMock.resolveFind('response')
-            const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().add(-15, 'years')
+            const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().subtract(15, 'years')
 
             await request(app)
               .post(pagePath)
