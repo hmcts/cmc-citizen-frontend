@@ -3,6 +3,18 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 class ClaimStoreHelper extends codecept_helper {
 
+  async waitForOpenClaim (referenceNumber: string): Promise<boolean> {
+    const maxAttempts: number = 120 // 60 seconds
+    let isClaimOpen: boolean = false
+    let attempts: number = 0
+    do {
+      attempts++
+      isClaimOpen = await ClaimStoreClient.isOpen(referenceNumber)
+      await this.sleep(500)
+    } while (!isClaimOpen && attempts < maxAttempts)
+    return isClaimOpen
+  }
+
   async createClaim (claimData: ClaimData, submitterEmail: string): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, ['admissions'])
@@ -46,17 +58,6 @@ class ClaimStoreHelper extends codecept_helper {
     const jwt: string = await IdamClient.authenticateUser(userEmail)
     const user: User = await IdamClient.retrieveUser(jwt)
     return { ...user, bearerToken: jwt }
-  }
-
-  private async waitForOpenClaim (referenceNumber: string) {
-    const maxAttempts: number = 120 // 60 seconds
-    let isClaimOpen: boolean = false
-    let attempts: number = 0
-    do {
-      attempts++
-      isClaimOpen = await ClaimStoreClient.isOpen(referenceNumber)
-      await this.sleep(500)
-    } while (!isClaimOpen && attempts < maxAttempts)
   }
 
   private sleep (ms) {
