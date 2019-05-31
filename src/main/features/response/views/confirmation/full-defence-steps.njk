@@ -3,8 +3,7 @@
 {% set claimantName = claim.claimData.claimant.name %}
 
 {% if claim.response.freeMediation === FreeMediationOption.YES %}
-  <p>{{ t('We’ll ask {{ claimantName }} if they want to try mediation.', { claimantName: claimantName }) | safe }}</p>
-  <p>{{ t('If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.') }}</p>
+  <p>{{ t('We’ll ask {{ claimantName }} if they want to try mediation. If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.', { claimantName: claimantName }) | safe }}</p>
 {% else %}
   <p>{{ t('You’ll have to go to a hearing.') }}</p>
   <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
