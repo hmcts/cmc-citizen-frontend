@@ -65,7 +65,6 @@ const testData = [
     ]
   },
   {
-
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
     claim: fullDefenceClaim,
     claimOverride: {
@@ -74,15 +73,15 @@ const testData = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
-      'You’ve rejected the defendant’s admission',
-      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
-      'complete a directions questionnaire',
+      'Wait for the court to review the case',
+      `You’ve rejected ${fullDefenceClaim.claim.defendants[0].name}’s response and said you want to take the case to court.`,
+      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.',
       'Download their response'
     ],
     defendantAssertions: [
-      `${fullDefenceClaim.claim.claimants[0].name} rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
+      `The claimant has rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
       'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
-      'complete a directions questionnaire',
+      'You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
       'Download your response'
     ]
   },
