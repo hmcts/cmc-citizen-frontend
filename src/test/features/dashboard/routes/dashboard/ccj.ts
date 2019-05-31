@@ -25,7 +25,11 @@ import {
   courtDeterminationChoseClaimantData,
   courtDeterminationChoseDefendantData
 } from 'test/data/entity/courtDeterminationData'
-import { ccjDeterminationByInstalment, ccjDeterminationBySpecifiedDate } from 'test/data/entity/ccjData'
+import {
+  ccjAdmissionBySpecifiedDate,
+  ccjDeterminationByInstalment,
+  ccjDeterminationBySpecifiedDate
+} from 'test/data/entity/ccjData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -271,6 +275,30 @@ const testData = [
       settlement: claimStoreServiceMock.partySettlementWithSetDateAndAcceptation,
       claimantResponse: { type: 'ACCEPTATION', formaliseOption: 'SETTLEMENT' },
       countyCourtJudgment: { ...ccjDeterminationBySpecifiedDate },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
+    },
+    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+  },
+  {
+    status: 'CCJ - full admission, pay by repayment plan, claimant rejects the repayment plan, their offer is accepted by the court and offers a settlement agreement, defendant accepts the settlement agreement, claimant requests CCJ after set date',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
+      settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'CCJ',
+        courtDetermination: {
+          ...courtDeterminationChoseClaimantData
+        },
+        claimantPaymentIntention: {
+          paymentDate: '2020-01-01',
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },

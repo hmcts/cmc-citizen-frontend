@@ -500,6 +500,44 @@ const testData = [
       'you need their payment details. Make sure you get receipts for any payments.',
       'Download your response'
     ]
+  },
+  {
+    status: 'CCJ - full admission, pay by repayment plan, claimant rejects the repayment plan, their offer is accepted by the court and offers a settlement agreement, defendant accepts the settlement agreement, claimant requests CCJ after set date',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
+      settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'CCJ',
+        courtDetermination: {
+          ...courtDeterminationChoseClaimantData
+        },
+        claimantPaymentIntention: {
+          paymentDate: '2020-01-01',
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
+    },
+    claimantAssertions: ['000MC050',
+      'You requested a County Court Judgment against John Doe',
+      'When we’ve processed your request, we’ll post a copy of the judgment to you and to John Doe',
+      'View the repayment plan',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve been paid'
+    ],
+    defendantAssertions: ['000MC050',
+      'John Smith requested a County Court Judgment (CCJ) against you',
+      'They requested the judgment because you didn’t pay on time or didn’t pay the correct amount.',
+      'View the repayment plan',
+      'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
+      'If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
   }
 ]
 
