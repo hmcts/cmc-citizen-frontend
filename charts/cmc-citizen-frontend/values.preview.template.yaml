@@ -29,7 +29,7 @@ nodejs:
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
     FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
+    CLAIM_STORE_URL: http://cmc-claim-store-pr-987-java  #cmc-claim-store-aat.service.core-compute-aat.internal
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
 
 idam-pr:
