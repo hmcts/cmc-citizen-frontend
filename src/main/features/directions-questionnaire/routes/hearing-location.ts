@@ -59,14 +59,18 @@ export default express.Router()
         const postcode: string = getDefaultPostcode(res)
         const court: Court = await getNearestCourt(postcode)
         if (court) {
-          renderPage(res, new Form<HearingLocation>(new HearingLocation(court.name)), false)
+          renderPage(res,
+            new Form<HearingLocation>(
+              new HearingLocation(
+                court.name, undefined, court.facilities
+                )), false)
         } else {
           renderPage(res, new Form<HearingLocation>(new HearingLocation()), true)
         }
 
       } else {
         renderPage(res, new Form<HearingLocation>(
-          new HearingLocation(draft.document.hearingLocation, undefined, YesNoOption.YES)),
+          new HearingLocation(draft.document.hearingLocation, undefined, undefined, YesNoOption.YES)),
           false)
       }
     } catch (err) {

@@ -37,7 +37,13 @@ const apiData = [
     displayed: true,
     hide_aols: false,
     dx_number: '701990 Birmingham 7',
-    distance: 1
+    distance: 1,
+    facilities: [
+      {
+        name: 'Interview room',
+        description: 'Three interview rooms on upper floor and four in the family suite.'
+      }
+    ]
   }
 ]
 
@@ -54,7 +60,13 @@ const expectedResponse = {
         type: 'Visiting'
       },
       name: 'Birmingham District Probate Registry',
-      slug: 'birmingham-district-probate-registry'
+      slug: 'birmingham-district-probate-registry',
+      facilities: [
+        {
+          name: 'Interview room',
+          description: 'Three interview rooms on upper floor and four in the family suite.'
+        }
+      ]
     }
   ], statusCode: 200, valid: true
 }

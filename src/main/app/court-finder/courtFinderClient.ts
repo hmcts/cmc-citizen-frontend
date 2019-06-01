@@ -47,7 +47,9 @@ export class CourtFinderClient {
               court.address.address_lines,
               court.address.postcode,
               court.address.town,
-              court.address.type))
+              court.address.type),
+            court.facilities
+            )
         }))
       return courtFinderResponse
     })
