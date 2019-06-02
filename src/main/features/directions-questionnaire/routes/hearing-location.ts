@@ -17,6 +17,8 @@ import { MadeBy } from 'offer/form/models/madeBy'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { User } from 'idam/user'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { CourtDetails } from 'court-finder-client/courtDetails'
+import { CourtDetailsResponse } from 'court-finder-client/courtDetailsResponse'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, fallbackPage: boolean) {
   res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage, party: getUsersRole(res.locals.claim, res.locals.user) })
@@ -31,6 +33,13 @@ async function getNearestCourt (postcode: string): Promise<Court> {
   } else {
     return response.courts[0]
   }
+}
+
+async function getCourtDetails (slug: string): Promise<CourtDetails> {
+  const courtFinderClient: CourtFinderClient = new CourtFinderClient()
+  const courtDetailsResponse: CourtDetailsResponse = await courtFinderClient.getCourtDetails(slug)
+
+  return courtDetailsResponse.courtDetails
 }
 
 function getDefaultPostcode (res: express.Response): string {
@@ -54,17 +63,20 @@ export default express.Router()
   .get(Paths.hearingLocationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      //this is not right place - logic has to be moved to tasklist builder
+      //this is not right place - should be moved to tasklist builder
       draft.document.hearingLocation = undefined
 
       if (!draft.document.hearingLocation) {
         const postcode: string = getDefaultPostcode(res)
         const court: Court = await getNearestCourt(postcode)
+        const courtDetails: CourtDetails = await getCourtDetails(court.slug)
+
+        console.log('courtDetails--->',courtDetails.facilities)
         if (court) {
           renderPage(res,
             new Form<HearingLocation>(
               new HearingLocation(
-                court.name, undefined, court.facilities
+                court.name, undefined, courtDetails.facilities
                 )), false)
         } else {
           renderPage(res, new Form<HearingLocation>(new HearingLocation()), true)

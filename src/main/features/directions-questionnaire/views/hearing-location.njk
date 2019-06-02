@@ -18,6 +18,7 @@
 
           {% set courtName = form.valueFor('courtName') %}
           {% set courtPostcode = form.valueFor('courtPostcode') %}
+          {% set courtFacilities = form.valueFor('facilities') %}
           {% if not fallbackPage %}
             {% if courtPostcode %}
               <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
@@ -30,7 +31,7 @@
                 <summary>{{ t('See this court’s facilities') }}</summary>
 
                 <div class="panel">
-                  {% for facility in facilities %}
+                  {% for facility in courtFacilities %}
                     <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
                     <p>{{ facility.description }}</p>
                   {% endfor %}
