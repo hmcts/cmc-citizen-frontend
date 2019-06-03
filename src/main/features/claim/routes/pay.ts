@@ -73,8 +73,10 @@ async function successHandler (req, res, next) {
       features = 'admissions'
     }
 
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-      features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
+    if (draft.document.amount.totalAmount() <= 300) {
+      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
+        features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
+      }
     }
 
     if (draft.document.amount.totalAmount() <= 300) {
