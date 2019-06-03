@@ -71,7 +71,6 @@ export default express.Router()
         const court: Court = await getNearestCourt(postcode)
         const courtDetails: CourtDetails = await getCourtDetails(court.slug)
 
-        console.log('courtDetails--->',courtDetails.facilities)
         if (court) {
           renderPage(res,
             new Form<HearingLocation>(
