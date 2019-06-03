@@ -27,15 +27,15 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   deserialize (input: any): DirectionsQuestionnaireDraft {
     if (input) {
       this.externalId = input.externalId
-      this.selfWitness = new SelfWitness().deserialize(input.selfWitness)
+      this.selfWitness = new SelfWitness().deserialize(input.selfWitness.option)
       this.otherWitnesses = new OtherWitnesses().deserialize(input.otherWitnesses)
       this.supportRequired = new SupportRequired().deserialize(input.supportRequired)
       this.hearingLocation = input.hearingLocation
       this.exceptionalCircumstances = new ExceptionalCircumstances().deserialize(input.exceptionalCircumstances)
       this.availability = new Availability().deserialize(input.availability)
-      this.expertRequired = new ExpertRequired().deserialize(input.expertRequired)
+      this.expertRequired = new ExpertRequired().deserialize(input.expertRequired.option)
       this.expertReports = new ExpertReports().deserialize(input.expertReports)
-      this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert)
+      this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert.option)
       this.expertEvidence = new ExpertEvidence().deserialize(input.expertEvidence)
       this.whyExpertIsNeeded = new WhyExpertIsNeeded().deserialize(input.whyExpertIsNeeded)
     }

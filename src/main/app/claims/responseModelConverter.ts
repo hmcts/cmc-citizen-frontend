@@ -69,27 +69,29 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { FreeMediationOption } from 'forms/models/freeMediation'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { DirectionsQuestionnaire } from 'claims/models/directionsQuestionnaire'
 
 export class ResponseModelConverter {
 
-  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, claim: Claim): Response {
+  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): Response {
     switch (draft.response.type) {
       case FormResponseType.DEFENCE:
         if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
           return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft)
         }
-        return this.convertFullDefence(draft, claim, mediationDraft)
+        return this.convertFullDefence(draft, claim, mediationDraft, directionsQuestionnaireDraft)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft, claim, mediationDraft)
       case FormResponseType.PART_ADMISSION:
-        return this.convertPartAdmission(draft, claim, mediationDraft)
+        return this.convertPartAdmission(draft, claim, mediationDraft, directionsQuestionnaireDraft)
       default:
         throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullDefenceResponse {
+  private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -111,7 +113,8 @@ export class ResponseModelConverter {
         draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
         draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft)
     }
   }
 
@@ -153,7 +156,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): PartialAdmissionResponse {
+  private static convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     let amount
     if (draft.partialAdmission.alreadyPaid.option === DraftYesNoOption.YES) {
       amount = draft.partialAdmission.howMuchHaveYouPaid.amount
@@ -711,5 +714,9 @@ export class ResponseModelConverter {
     }
 
     return expenses
+  }
+
+  private static convertDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
+    return new DirectionsQuestionnaire().deserialize(directionsQuestionnaireDraft)
   }
 }

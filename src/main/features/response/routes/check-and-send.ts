@@ -22,6 +22,7 @@ import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeatur
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -101,6 +102,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+      const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
@@ -126,7 +128,7 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await draftService.save(draft, user.bearerToken)
         }
-        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
+        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, directionsQuestionnaireDraft, user)
         await draftService.delete(draft.id, user.bearerToken)
 
         if (FeatureToggles.isEnabled('mediation')) {
