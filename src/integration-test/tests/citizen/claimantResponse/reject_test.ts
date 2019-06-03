@@ -125,7 +125,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see(testData.claimRef)
       I.see('Claim status')
       I.see('The defendant’s response')
-      I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+      I.see(`${testData.defendantName} says they paid you £125 on 1 January 2018.`)
       I.click('Sign out')
     })
 }
