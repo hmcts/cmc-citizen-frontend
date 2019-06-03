@@ -35,7 +35,7 @@ exports.config = {
     }
   },
   helpers: {
-    WebDriverIO: {
+    WebDriver: {
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       browser: supportedBrowsers[browser].browserName,
       waitForTimeout: 30000,
