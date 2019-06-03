@@ -305,7 +305,7 @@ export class TaskListBuilder {
       ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       let path: string
       if (getPreferredParty(claim) === MadeBy.CLAIMANT) {
-        path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
+        path = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId })
       } else {
         path = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId })
       }
