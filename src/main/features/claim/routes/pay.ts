@@ -3,7 +3,7 @@ import * as config from 'config'
 
 import { Paths } from 'claim/paths'
 
-import { GovPayClient, MockPayClient, PayClient } from 'payment-hub-client/payClient'
+import { GovPayClient, PayClient } from 'payment-hub-client/payClient'
 import { Payment } from 'payment-hub-client/payment'
 
 import { FeesClient } from 'fees/feesClient'
@@ -24,6 +24,8 @@ import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
+import { Claim } from 'claims/models/claim'
+import { MockPayClient } from 'mock-clients/mockPayClient'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
@@ -53,10 +55,11 @@ function logError (id: string, payment: Payment, message: string) {
   logger.error(`${message} (User Id : ${id}, Payment: ${JSON.stringify(payment)})`)
 }
 
-async function successHandler (res, next) {
+async function successHandler (req, res, next) {
   const draft: Draft<DraftClaim> = res.locals.claimDraft
   const user: User = res.locals.user
   const externalId: string = draft.document.externalId
+  let savedClaim: Claim
 
   try {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
@@ -80,7 +83,7 @@ async function successHandler (res, next) {
       }
     }
 
-    await claimStoreClient.saveClaim(draft, user, features)
+    savedClaim = await claimStoreClient.saveClaim(draft, user, features)
 
   } catch (err) {
     if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
@@ -103,8 +106,17 @@ async function successHandler (res, next) {
         draft.document.claimant.payment,
         `Payment processed successfully and claim ${externalId} already exists.`
       )
+      savedClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
     }
   }
+  const payClient: PayClient = await getPayClient(req)
+  const paymentReference = draft.document.claimant.payment.reference
+
+  if (savedClaim) {
+    const ccdCaseNumber = savedClaim.ccdCaseId === undefined ? 'UNKNOWN' : String(savedClaim.ccdCaseId)
+    await payClient.update(user, paymentReference, savedClaim.externalId, ccdCaseNumber)
+  }
+
   await new DraftService().delete(draft.id, user.bearerToken)
   res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
 }
@@ -139,12 +151,10 @@ export default express.Router()
         }
       }
 
-      const caseReference: string = externalId
       const feeOutcome: FeeOutcome = await FeesClient.calculateFee(event, amount, channel)
       const payClient: PayClient = await getPayClient(req)
       const payment: Payment = await payClient.create(
         user,
-        caseReference,
         externalId,
         [new Fee(feeOutcome.amount, feeOutcome.code, feeOutcome.version)],
         getReturnURL(req, draft.document.externalId)
@@ -192,7 +202,7 @@ export default express.Router()
           res.redirect(Paths.checkAndSendPage.uri)
           break
         case 'Success':
-          await successHandler(res, next)
+          await successHandler(req, res, next)
           break
         default:
           logPaymentError(user.id, payment)

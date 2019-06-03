@@ -158,7 +158,7 @@ export class TaskListBuilder {
 
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
 
-      if (!claim.claimData.defendant.isBusiness()) {
+      if (!claim.claimData.defendant.isBusiness() || (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES)) {
         this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       }
 
@@ -200,7 +200,7 @@ export class TaskListBuilder {
       )
       this.buildProposeAlternateRepaymentPlanTask(draft, tasks, externalId)
 
-      if (!claim.claimData.defendant.isBusiness()) {
+      if (!claim.claimData.defendant.isBusiness() || (draft.acceptPaymentMethod && draft.acceptPaymentMethod.accept.option === YesNoOption.YES)) {
         this.buildFormaliseRepaymentPlan(draft, tasks, externalId)
       }
 

@@ -24,6 +24,8 @@ import {
 import { DateOfBirth } from 'forms/models/dateOfBirth'
 import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
+import { LocalDate } from 'forms/models/localDate'
 
 function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
   if (claim.response && claim.isAdmissionsResponse()) {
@@ -82,9 +84,13 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
 
 function retrieveAndSetValuesInDraft (claim: Claim, draft: Draft<DraftCCJ>): Draft<DraftCCJ> {
   const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
-  if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+  if (paymentOption) {
     draft.document.paymentOption = paymentOption
-    draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
+    if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+      draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
+    } else if (paymentOption && paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+      draft.document.payBySetDate = new PaymentDate(LocalDate.fromMoment(claim.settlement.getLastOffer().paymentIntention.paymentDate))
+    }
   }
   return draft
 }
