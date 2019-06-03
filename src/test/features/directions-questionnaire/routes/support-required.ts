@@ -6,8 +6,6 @@ import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
 import { Paths } from 'directions-questionnaire/paths'
-import { Paths as ResponsePaths } from 'response/paths'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { app } from 'main/app'
@@ -25,8 +23,7 @@ const claimWithDQ = {
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const defendantTaskListPage = ResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
-const claimantTaskListPage = ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: externalId })
+const hearingLocationPage = Paths.hearingLocationPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.supportPage.evaluateUri({ externalId: externalId })
 
 function checkAccessGuard (app: any, method: string) {
@@ -87,7 +84,7 @@ describe('Directions Questionnaire - support required page', () => {
   })
 
   describe('on POST', () => {
-    const validFormData = { }
+    const validFormData = {}
     const invalidFormData = { languageSelected: true, languageInterpreted: undefined }
 
     const method = 'post'
@@ -166,7 +163,7 @@ describe('Directions Questionnaire - support required page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
-          .expect(res => expect(res).to.be.redirect.toLocation(claimantTaskListPage))
+          .expect(res => expect(res).to.be.redirect.toLocation(hearingLocationPage))
       })
     })
 
@@ -182,7 +179,7 @@ describe('Directions Questionnaire - support required page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
-          .expect(res => expect(res).to.be.redirect.toLocation(defendantTaskListPage))
+          .expect(res => expect(res).to.be.redirect.toLocation(hearingLocationPage))
       })
     })
 
