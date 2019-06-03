@@ -30,6 +30,13 @@ export class ClaimStoreClient {
     })
   }
 
+  static isOpen (referenceNumber: string): Promise<boolean> {
+    return request.get(`${baseURL}/claims/${referenceNumber}/metadata`, {})
+      .then(function (response) {
+        return response.state === 'OPEN'
+      })
+  }
+
   /**
    * Saves claim in the claim store
    *
@@ -50,12 +57,13 @@ export class ClaimStoreClient {
       Authorization: `Bearer ${submitter.bearerToken}`,
       Features: features
     }
-    return request.post(`${baseURL}/claims/${claimData.externalId}/pre-payment`, {
-      headers
-    }).then(() => request.post(`${baseURL}/claims/${submitter.id}`, {
+
+    return request.post(`${baseURL}/claims/${submitter.id}`, {
       body: claimData,
       headers
-    }))
+    }).then(function (response) {
+      return response
+    })
   }
 
   /**
