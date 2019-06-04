@@ -38,7 +38,7 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        if (form.model.requestPermissionForExpert.option === YesNoOption.YES.option) {
+        if (draft.document.permissionForExpert.option === YesNoOption.YES.option) {
           res.redirect(Paths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }))

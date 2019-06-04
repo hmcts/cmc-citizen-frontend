@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 
-{% from "table.njk" import tableStart, tableEnd, row %}
+{% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
 {% from "statementOfTruth.njk" import statementOfTruth %}
 {% from "party/details.njk" import partyDetailsSummaryFragment %}
@@ -370,6 +370,58 @@
         )
         }}
       {% endif %}
+      {{ tableEnd() }}
+    {% endif %}
+
+    {% if dqsEnabled %}
+      {{ tableStart('hearingRequirements', 'Your hearing requirements') }}
+      {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
+        directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
+        directionsQuestionnaireDraft.supportRequired.otherSupportSelected %}
+        {{ rowWithMultipleValue(
+            label = 'Support required for a hearing',
+            values = [
+              directionsQuestionnaireDraft.languageInterpreted if directionsQuestionnaireDraft.supportRequired.languageSelected,
+              directionsQuestionnaireDraft.signLanguageInterpreted if directionsQuestionnaireDraft.supportRequired.signLanguageSelected,
+              t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected,
+              t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected,
+              t('Other') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected
+            ],
+            changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          ) }}
+      {% endif %}
+        {% if directionsQuestionnaireDraft.permissionForExpert %}
+          {{ row(
+              label = 'Do you want the court’s permission to hire an expert?',
+              value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
+              changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
+              bold = true
+            ) }}
+        {% endif %}
+        {{ row(
+          label = 'Have you already got a report written by an expert?',
+          value = t(directionsQuestionnaireDraft.expertReports.declared.option) | capitalize,
+          changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        ) }}
+      {% for report in directionsQuestionnaireDraft.expertReports.rows %}
+        {% set reportNumber = 1 %}
+        {{ rowWithMultipleValue(
+          label = 'Report ' + reportNumber,
+          values = [
+            directionsQuestionnaireDraft.expertReports.rows,
+            directionsQuestionnaireDraft.signLanguageInterpreted if directionsQuestionnaireDraft.supportRequired.signLanguageSelected,
+            t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected,
+            t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected,
+            t('Other') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected
+          ],
+          changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        ) }}
+        {% set reportNumber = reportNumber + 1 %}
+      {% endfor %}
+
       {{ tableEnd() }}
     {% endif %}
 

@@ -11,7 +11,7 @@ export class DetailsInCaseOfHearingTask {
         if (directionsQuestionnaireDraft.expertReports.declared && !directionsQuestionnaireDraft.expertReports.rows.length) {
           return false
         }
-      } else if (directionsQuestionnaireDraft.permissionForExpert.requestPermissionForExpert === undefined) {
+      } else if (directionsQuestionnaireDraft.permissionForExpert.option === undefined) {
         return false
       }
     }

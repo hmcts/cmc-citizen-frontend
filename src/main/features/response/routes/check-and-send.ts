@@ -30,6 +30,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+  const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
+  console.log(directionsQuestionnaireDraft)
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -39,7 +41,9 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
-    mediationDraft: mediationDraft.document
+    dqsEnabled: FeatureToggles.isEnabled('directionsQuestionnaire'),
+    mediationDraft: mediationDraft.document,
+    directionsQuestionnaireDraft: directionsQuestionnaireDraft.document
   })
 }
 

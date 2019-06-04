@@ -10,7 +10,7 @@ describe('PermissionForExpert', () => {
   context('constructor', () => {
     it('should set the primitive fields to undefined', () => {
       const permissionForExpert: PermissionForExpert = new PermissionForExpert()
-      expect(permissionForExpert.requestPermissionForExpert).to.be.undefined
+      expect(permissionForExpert.option).to.be.undefined
     })
   })
 
@@ -48,12 +48,12 @@ describe('PermissionForExpert', () => {
     it('empty object when unknown value provided', () => {
       const model = PermissionForExpert.fromObject({ requestPermissionForExpert: 'I do not know this value!' })
 
-      expect(model.requestPermissionForExpert).to.be.undefined
+      expect(model.option).to.be.undefined
     })
 
     it(`valid object when values provided`, () => {
       const model = PermissionForExpert.fromObject({ requestPermissionForExpert: 'yes' })
-      expect(model.requestPermissionForExpert).to.equal(YesNoOption.YES)
+      expect(model.option).to.equal(YesNoOption.YES)
     })
   })
 
