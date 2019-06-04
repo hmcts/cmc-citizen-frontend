@@ -46,13 +46,13 @@ describe('PermissionForExpert', () => {
     })
 
     it('empty object when unknown value provided', () => {
-      const model = PermissionForExpert.fromObject({ requestPermissionForExpert: 'I do not know this value!' })
+      const model = PermissionForExpert.fromObject({ option: 'I do not know this value!' })
 
       expect(model.option).to.be.undefined
     })
 
     it(`valid object when values provided`, () => {
-      const model = PermissionForExpert.fromObject({ requestPermissionForExpert: 'yes' })
+      const model = PermissionForExpert.fromObject({ option: 'yes' })
       expect(model.option).to.equal(YesNoOption.YES)
     })
   })
@@ -64,7 +64,7 @@ describe('PermissionForExpert', () => {
     })
 
     it('should return an instance from given object', () => {
-      const actual: PermissionForExpert = new PermissionForExpert().deserialize({ requestPermissionForExpert: 'yes' })
+      const actual: PermissionForExpert = new PermissionForExpert().deserialize({ option: 'yes' })
 
       expect(actual).to.deep.equal(new PermissionForExpert(YesNoOption.YES))
     })

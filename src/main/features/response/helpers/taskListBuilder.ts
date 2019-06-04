@@ -131,8 +131,8 @@ export class TaskListBuilder {
             )
           )
         } else if (draft.defendantDetails.partyDetails.isBusiness() &&
-            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
-            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+          !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+          !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
         ) {
           tasks.push(
             new TaskListItem(
@@ -212,9 +212,9 @@ export class TaskListBuilder {
             )
           )
         } else if (draft.defendantDetails.partyDetails.isBusiness() &&
-            !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
-            !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
-          ) {
+          !draft.isImmediatePaymentOptionSelected(draft.fullAdmission) &&
+          !draft.isImmediatePaymentOptionSelected(draft.partialAdmission)
+        ) {
           tasks.push(
             new TaskListItem(
               'Share your financial details',
@@ -240,7 +240,7 @@ export class TaskListBuilder {
     return new TaskList('Respond to claim', tasks)
   }
 
-  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft, directionQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
+  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft): TaskList {
     if (draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
@@ -345,13 +345,14 @@ export class TaskListBuilder {
   }
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionQuestionnaireDraft: DirectionsQuestionnaireDraft): TaskListItem[] {
-    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft, directionQuestionnaireDraft)
+    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
+    const resolveDirectionsQuestionnaireTaskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionQuestionnaireDraft)
 
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
       TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks,
-      TaskListBuilder.buildDirectionsQuestionnaireSection(draft,claim,directionQuestionnaireDraft).tasks,
-      resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : []
+      resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : [],
+      resolveDirectionsQuestionnaireTaskList !== undefined ? resolveDirectionsQuestionnaireTaskList.tasks : []
     )
       .filter(item => !item.completed)
   }

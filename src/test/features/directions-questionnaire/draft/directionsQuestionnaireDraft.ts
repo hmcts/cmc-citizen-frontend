@@ -16,10 +16,14 @@ describe('DirectionsQuestionnaireDraft', () => {
     it('should return a DirectionsQuestionnaireDraft instance initialised with valid data', () => {
       const draft: DirectionsQuestionnaireDraft = new DirectionsQuestionnaireDraft().deserialize({
         selfWitness: {
-          option: 'yes'
+          option: {
+            option: 'yes'
+          }
         },
         otherWitnesses: {
-          otherWitnesses: 'yes',
+          otherWitnesses: {
+            option: 'yes'
+          },
           howMany: 1
         },
         hearingLocation: 'Little Whinging, Surrey',
@@ -45,7 +49,9 @@ describe('DirectionsQuestionnaireDraft', () => {
           otherSupport: 'Life advice'
         },
         expertRequired: {
-          option: 'yes'
+          option: {
+            option: 'yes'
+          }
         },
         expertReports: {
           declared: true,

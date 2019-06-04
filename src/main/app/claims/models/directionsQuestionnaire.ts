@@ -6,7 +6,7 @@ import { ReportRow } from 'directions-questionnaire/forms/models/reportRow'
 export class DirectionsQuestionnaire {
 
   constructor (
-    public yesNoOption?: YesNoOption,
+    public selfWitness?: YesNoOption,
     public howManyOtherWitness?: number,
     public hearingLocation?: string,
     public hearingLocationSlug?: string,
@@ -26,7 +26,7 @@ export class DirectionsQuestionnaire {
 
   deserialize (input: any): DirectionsQuestionnaire {
     if (input) {
-      this.yesNoOption = input.yesNoOption,
+      this.selfWitness = input.yesNoOption,
         this.howManyOtherWitness = input.howManyOtherWitness,
         this.hearingLocation = input.hearingLocation,
         this.hearingLocationSlug = input.hearingLocationSlug,
@@ -47,7 +47,7 @@ export class DirectionsQuestionnaire {
   }
 
   fromObject (directionsQuestionnaire: any): DirectionsQuestionnaire {
-    this.yesNoOption = directionsQuestionnaire.selfWitness.option
+    this.selfWitness = directionsQuestionnaire.selfWitness.option
     if (directionsQuestionnaire.otherWitnesses.otherWitnesses === 'yes') {
       this.howManyOtherWitness = directionsQuestionnaire.otherWitnesses.howMany
     }

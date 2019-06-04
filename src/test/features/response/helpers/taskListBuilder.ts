@@ -579,7 +579,7 @@ describe('Defendant response task list builder', () => {
     it('Should return "Free telephone mediation" when not completed for fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
       if (FeatureToggles.isEnabled('mediation')) {
         expect(tasks.map(task => task.name)).to.contain(featureToggleMediationTaskLabel)
       } else {
@@ -590,7 +590,7 @@ describe('Defendant response task list builder', () => {
     it('Should not return "Free telephone mediation" when not fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
       if (FeatureToggles.isEnabled('mediation')) {
         expect(tasks.map(task => task.name)).to.not.contain(featureToggleMediationTaskLabel)
       } else {

@@ -582,10 +582,54 @@ export const sampleMediationDraftObj = {
 }
 
 export const sampleDirectionsQuestionnaireDraftObj = {
-  selfWitness: { option: YesNoOption.NO },
-  otherWitnesses: { otherWitnesses: YesNoOption.NO },
-  availability: { hasUnavailableDates: false },
-  expertEvidence: { expertEvidence: YesNoOption.NO }
+  'selfWitness': {
+    'option': {
+      'option': YesNoOption.YES
+    }
+  },
+  'otherWitnesses': {
+    'otherWitnesses': {
+      'option': YesNoOption.NO
+    }
+  },
+  'hearingLocation': 'Central London County Court',
+  'exceptionalCircumstances': {},
+  'availability': {
+    'hasUnavailableDates': false,
+    'unavailableDates': [],
+    'newDate': {}
+  },
+  'supportRequired': {
+    'languageInterpreted': '',
+    'signLanguageInterpreted': '',
+    'disabledAccessSelected': 'true',
+    'otherSupport': ''
+  },
+  'expertRequired': {
+    'option': {
+      'option': 'yes'
+    }
+  },
+  'expertReports': {
+    'rows': [
+      {}
+    ],
+    'declared': false
+  },
+  'permissionForExpert': {
+    'requestPermissionForExpert': {
+      'option': 'yes'
+    }
+  },
+  'expertEvidence': {
+    'expertEvidence': {
+      'option': 'yes'
+    },
+    'whatToExamine': 'dsfdsfs'
+  },
+  'whyExpertIsNeeded': {
+    'explanation': 'dsfdsfds'
+  }
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
