@@ -36,7 +36,7 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
         const claim: Claim = res.locals.claim
         if (getPreferredParty(claim) === MadeBy.CLAIMANT) {
-          res.redirect(Paths.supportPage.evaluateUri({ externalId: claim.externalId }))
+          res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }))
         }
