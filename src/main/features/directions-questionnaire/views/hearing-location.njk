@@ -3,6 +3,11 @@
 
 {% set heading = 'Choose a hearing location' %}
 
+{% macro commonContent()  %}
+  <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
+  <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
+{% endmacro %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
@@ -22,8 +27,7 @@
             {% if courtPostcode %}
               <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
             {% elseif party === MadeBy.DEFENDANT %}
-              <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
-              <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
+              {{ commonContent() }}
               <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}</p>
             {% elseif party === MadeBy.CLAIMANT %}
               <p>{{ t('You can request any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}
@@ -60,6 +64,7 @@
               </div>
             </div>
           {% else %}
+            {{ commonContent() }}
             <h1 class="heading-medium">{{ t('Enter a court name') }}</h1>
             {{ textInput(form = form, name = 'alternativeCourtName', inputClass = 'form-control-1-100') }}
           {% endif %}
