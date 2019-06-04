@@ -148,7 +148,7 @@ describe('Directions Questionnaire - support required page', () => {
     })
 
     context('when user is authorised claimant and form is valid', () => {
-      it('should redirect to claimant response task list page', async () => {
+      it('should redirect to hearing location page', async () => {
         const claim = {
           ...claimWithDQ,
           ...claimStoreServiceMock.sampleDefendantResponseObj
@@ -168,7 +168,7 @@ describe('Directions Questionnaire - support required page', () => {
     })
 
     context('when user is authorised defendant and form is valid', () => {
-      it('should redirect to response task list page', async () => {
+      it('should redirect to hearing location page', async () => {
         idamServiceMock.resolveRetrieveUserFor(claimWithDQ.defendantId, 'citizen')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
