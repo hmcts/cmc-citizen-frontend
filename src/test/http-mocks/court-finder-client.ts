@@ -1,8 +1,9 @@
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
+import * as config from 'config'
 
-const baseURL = 'https://courttribunalfinder.service.gov.uk'
-const endpointPath = /\/search\/results.json\?postcode=.+&aol=.+&spoe=.+/
+const baseURL = `${config.get<string>('claim-store.url')}`
+const endpointPath = /\/court-finder\/search-postcode\/.+/
 
 export const searchResponse = [
   {
