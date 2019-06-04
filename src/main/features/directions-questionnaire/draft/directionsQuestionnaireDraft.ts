@@ -35,7 +35,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.availability = new Availability().deserialize(input.availability)
       this.expertRequired = new ExpertRequired().deserialize(input.expertRequired.option)
       this.expertReports = new ExpertReports().deserialize(input.expertReports)
-      this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert.option)
+      this.permissionForExpert = new PermissionForExpert().deserialize(input.permissionForExpert)
       this.expertEvidence = new ExpertEvidence().deserialize(input.expertEvidence)
       this.whyExpertIsNeeded = new WhyExpertIsNeeded().deserialize(input.whyExpertIsNeeded)
     }

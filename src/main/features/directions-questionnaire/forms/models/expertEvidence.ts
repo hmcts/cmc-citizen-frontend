@@ -32,8 +32,8 @@ export class ExpertEvidence implements CompletableTask {
   }
 
   deserialize (input: any): ExpertEvidence {
-    if (input) {
-      this.expertEvidence = YesNoOption.fromObject(input.expertEvidence)
+    if (input && input.expertEvidence) {
+      this.expertEvidence = YesNoOption.fromObject(input.expertEvidence.option)
       this.whatToExamine = input.whatToExamine
     }
 

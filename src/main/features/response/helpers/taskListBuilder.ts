@@ -240,7 +240,7 @@ export class TaskListBuilder {
     return new TaskList('Respond to claim', tasks)
   }
 
-  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft): TaskList {
+  static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft, directionQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
     if (draft.isResponseRejectedFullyWithDispute()
       || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
@@ -344,12 +344,13 @@ export class TaskListBuilder {
       && ValidationUtils.isValid(draft.rejectAllOfClaim.whyDoYouDisagree)
   }
 
-  static buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): TaskListItem[] {
-    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
+  static buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionQuestionnaireDraft: DirectionsQuestionnaireDraft): TaskListItem[] {
+    const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft, directionQuestionnaireDraft)
 
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
       TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks,
+      TaskListBuilder.buildDirectionsQuestionnaireSection(draft,claim,directionQuestionnaireDraft).tasks,
       resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : []
     )
       .filter(item => !item.completed)

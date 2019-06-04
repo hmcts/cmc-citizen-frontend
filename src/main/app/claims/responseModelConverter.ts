@@ -79,7 +79,7 @@ export class ResponseModelConverter {
       case FormResponseType.DEFENCE:
         if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
-          return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft)
+          return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft, directionsQuestionnaireDraft)
         }
         return this.convertFullDefence(draft, claim, mediationDraft, directionsQuestionnaireDraft)
       case FormResponseType.FULL_ADMISSION:
@@ -118,7 +118,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): PartialAdmissionResponse {
+  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -139,7 +139,8 @@ export class ResponseModelConverter {
       mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
       mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft)
     }
   }
 
@@ -188,7 +189,8 @@ export class ResponseModelConverter {
       mediationPhoneNumber: this.convertMediationPhoneNumber(mediationDraft, draft, claim),
       mediationContactPerson: this.convertMediationContactPerson(mediationDraft, draft, claim),
       statementOfMeans: this.convertStatementOfMeans(draft),
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft)
     }
   }
 
@@ -717,6 +719,6 @@ export class ResponseModelConverter {
   }
 
   private static convertDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
-    return new DirectionsQuestionnaire().deserialize(directionsQuestionnaireDraft)
+    return new DirectionsQuestionnaire().fromObject(directionsQuestionnaireDraft)
   }
 }
