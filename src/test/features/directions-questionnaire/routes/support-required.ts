@@ -23,7 +23,7 @@ const claimWithDQ = {
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
-const hearingLocationPage = Paths.hearingLocationPage.evaluateUri({ externalId: externalId })
+const hearingExceptionalCircumstancesPage = Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.supportPage.evaluateUri({ externalId: externalId })
 
 function checkAccessGuard (app: any, method: string) {
@@ -148,7 +148,7 @@ describe('Directions Questionnaire - support required page', () => {
     })
 
     context('when user is authorised claimant and form is valid', () => {
-      it('should redirect to hearing location page', async () => {
+      it('should redirect to hearing exceptional circumstances page', async () => {
         const claim = {
           ...claimWithDQ,
           ...claimStoreServiceMock.sampleDefendantResponseObj
@@ -163,12 +163,12 @@ describe('Directions Questionnaire - support required page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
-          .expect(res => expect(res).to.be.redirect.toLocation(hearingLocationPage))
+          .expect(res => expect(res).to.be.redirect.toLocation(hearingExceptionalCircumstancesPage))
       })
     })
 
     context('when user is authorised defendant and form is valid', () => {
-      it('should redirect to hearing location page', async () => {
+      it('should redirect to hearing exceptional circumstances page', async () => {
         idamServiceMock.resolveRetrieveUserFor(claimWithDQ.defendantId, 'citizen')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -179,7 +179,7 @@ describe('Directions Questionnaire - support required page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
-          .expect(res => expect(res).to.be.redirect.toLocation(hearingLocationPage))
+          .expect(res => expect(res).to.be.redirect.toLocation(hearingExceptionalCircumstancesPage))
       })
     })
 

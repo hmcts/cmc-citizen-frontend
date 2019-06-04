@@ -26,8 +26,6 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
-import { MadeBy } from 'offer/form/models/madeBy'
-import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const validator: Validator = new Validator()
@@ -303,18 +301,12 @@ export class TaskListBuilder {
                                               directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
     if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
       ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
-      let path: string
-      if (getPreferredParty(claim) === MadeBy.CLAIMANT) {
-        path = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId })
-      } else {
-        path = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId })
-      }
 
       return new TaskList(
         'Tell us more about the claim', [
           new TaskListItem(
             `Give us details in case there’s a hearing`,
-            path,
+            DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
             DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
           )
         ]
