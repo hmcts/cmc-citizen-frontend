@@ -33,12 +33,11 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
-
         draft.document.permissionForExpert = form.model
 
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.permissionForExpert.option === YesNoOption.YES.option) {
+        if (draft.document.permissionForExpert.option.option === YesNoOption.YES.option) {
           res.redirect(Paths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }))

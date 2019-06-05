@@ -23,7 +23,7 @@ export class PermissionForExpert implements CompletableTask {
 
   deserialize (input?: any): PermissionForExpert {
     if (input && input.option) {
-      this.option = YesNoOption.fromObject(input.option)
+      this.option = YesNoOption.fromObject(input.option.option)
     }
 
     return this
