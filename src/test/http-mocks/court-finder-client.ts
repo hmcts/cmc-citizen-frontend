@@ -38,14 +38,14 @@ export const searchResponse = [
   }
 ]
 
-export function resolveFind () {
-  mock(baseURL)
+export function resolveFind (): mock.Scope {
+  return mock(baseURL)
     .get(endpointPath)
     .reply(HttpStatus.OK, searchResponse)
 }
 
-export function rejectFind () {
-  mock(baseURL)
+export function rejectFind (): mock.Scope {
+  return mock(baseURL)
     .get(endpointPath)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }

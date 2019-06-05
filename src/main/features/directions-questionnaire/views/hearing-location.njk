@@ -15,11 +15,8 @@
             data-event-label-from="courtAccepted" novalidate>
         {{ csrfProtection(csrf) }}
         <fieldset id="otherWitnesses[label]" class="form-group {% if form.hasErrors() %} form-group-error {% endif %}">
-          <legend>
-            <span class="visuallyhidden">
-              {{ t('Choose a hearing location') }}
-            </span>
-          </legend>
+
+          <legend class="visually-hidden">{{ t(heading) }}</legend>
 
           {% set courtName = form.valueFor('courtName') %}
           {% set courtPostcode = form.valueFor('courtPostcode') %}
