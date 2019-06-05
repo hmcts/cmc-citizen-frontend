@@ -262,8 +262,8 @@ describe('ResponseModelConverter', () => {
         selfWitness: new YesNoOption('yes'),
         hearingLocation: 'Central London County Court',
         disabledAccessSelected: new YesNoOption('yes'),
-        expertEvidenceToExamine: 'dsfdsfs',
-        whyExpertIsNeeded: 'dsfdsfds'
+        expertEvidenceToExamine: 'Photographs',
+        whyExpertIsNeeded: 'To give opinion'
       }
     }
 

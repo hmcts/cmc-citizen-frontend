@@ -582,53 +582,53 @@ export const sampleMediationDraftObj = {
 }
 
 export const sampleDirectionsQuestionnaireDraftObj = {
-  'selfWitness': {
-    'option': {
-      'option': YesNoOption.YES
+  selfWitness: {
+    option: {
+      option: YesNoOption.YES.option
     }
   },
-  'otherWitnesses': {
-    'otherWitnesses': {
-      'option': YesNoOption.NO
+  otherWitnesses: {
+    otherWitnesses: {
+      option: YesNoOption.NO.option
     }
   },
-  'hearingLocation': 'Central London County Court',
-  'exceptionalCircumstances': {},
-  'availability': {
-    'hasUnavailableDates': false,
-    'unavailableDates': [],
-    'newDate': {}
+  hearingLocation: 'Central London County Court',
+  exceptionalCircumstances: {},
+  availability: {
+    hasUnavailableDates: false,
+    unavailableDates: [],
+    newDate: {}
   },
-  'supportRequired': {
-    'languageInterpreted': '',
-    'signLanguageInterpreted': '',
-    'disabledAccessSelected': 'true',
-    'otherSupport': ''
+  supportRequired: {
+    languageInterpreted: '',
+    signLanguageInterpreted: '',
+    disabledAccessSelected: 'true',
+    otherSupport: ''
   },
-  'expertRequired': {
-    'option': {
-      'option': 'yes'
+  expertRequired: {
+    option: {
+      option: YesNoOption.YES.option
     }
   },
-  'expertReports': {
-    'rows': [
+  expertReports: {
+    rows: [
       {}
     ],
-    'declared': false
+    declared: false
   },
-  'permissionForExpert': {
-    'requestPermissionForExpert': {
-      'option': 'yes'
+  permissionForExpert: {
+    requestPermissionForExpert: {
+      option: YesNoOption.YES.option
     }
   },
-  'expertEvidence': {
-    'expertEvidence': {
-      'option': 'yes'
+  expertEvidence: {
+    expertEvidence: {
+      option: YesNoOption.YES.option
     },
-    'whatToExamine': 'dsfdsfs'
+    whatToExamine: 'Photographs'
   },
-  'whyExpertIsNeeded': {
-    'explanation': 'dsfdsfds'
+  whyExpertIsNeeded: {
+    explanation: 'To give opinion'
   }
 }
 
