@@ -26,21 +26,47 @@ export class DirectionsQuestionnaire {
 
   deserialize (input: any): DirectionsQuestionnaire {
     if (input) {
-      this.selfWitness = input.yesNoOption,
-        this.howManyOtherWitness = input.howManyOtherWitness,
-        this.hearingLocation = input.hearingLocation,
-        this.hearingLocationSlug = input.hearingLocationSlug,
-        this.exceptionalCircumstancesReason = input.exceptionalCircumstancesReason,
-        this.unavailableDates = input.unavailableDates,
-        this.availableDate = input.availableDate,
-        this.languageInterpreted = input.languageInterpreted,
-        this.signLanguageInterpreted = input.signLanguageInterpreted,
-        this.hearingLoopSelected = input.hearingLoopSelected,
-        this.disabledAccessSelected = input.disabledAccessSelected,
-        this.otherSupportRequired = input.otherSupportRequired,
-        this.expertReportsRows = input.expertReportsRows,
-        this.expertEvidenceToExamine = input.expertEvidenceToExamine,
+      this.selfWitness = input.selfWitness
+      if (input.howManyOtherWitness) {
+        this.howManyOtherWitness = input.howManyOtherWitness
+      }
+      this.hearingLocation = input.hearingLocation
+      if (input.hearingLocationSlug) {
+        this.hearingLocationSlug = input.hearingLocationSlug
+      }
+      if (input.exceptionalCircumstancesReason) {
+        this.exceptionalCircumstancesReason = input.exceptionalCircumstancesReason
+      }
+      if (input.unavailableDates) {
+        this.unavailableDates = input.unavailableDates
+      }
+      if (input.availableDate) {
+        this.availableDate = input.availableDate
+      }
+      if (input.languageInterpreted) {
+        this.languageInterpreted = input.languageInterpreted
+      }
+      if (input.signLanguageInterpreted) {
+        this.signLanguageInterpreted = input.signLanguageInterpreted
+      }
+      if (input.hearingLoopSelected) {
+        this.hearingLoopSelected = input.hearingLoopSelected
+      }
+      if (input.disabledAccessSelected) {
+        this.disabledAccessSelected = input.disabledAccessSelected
+      }
+      if (input.otherSupportRequired) {
+        this.otherSupportRequired = input.otherSupportRequired
+      }
+      if (input.expertReportsRows) {
+        this.expertReportsRows = input.expertReportsRows
+      }
+      if (input.expertEvidenceToExamine) {
+        this.expertEvidenceToExamine = input.expertEvidenceToExamine
+      }
+      if (input.whyExpertIsNeeded) {
         this.whyExpertIsNeeded = input.whyExpertIsNeeded
+      }
     }
 
     return this
