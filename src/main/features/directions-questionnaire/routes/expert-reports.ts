@@ -13,12 +13,16 @@ import { Claim } from 'claims/models/claim'
 import { makeSureThereIsAtLeastOneRow } from 'forms/utils/multiRowFormUtils'
 import { ExpertReports } from 'directions-questionnaire/forms/models/expertReports'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { YesNoOption } from 'models/yesNoOption'
 
 const page: RoutablePath = Paths.expertReportsPage
 
 function renderView (form: Form<ExpertReports>, res: express.Response): void {
   makeSureThereIsAtLeastOneRow(form.model)
-  res.render(page.associatedView, { form: form })
+  res.render(page.associatedView, {
+    form: form,
+    reportNumber: form.model.rows.length
+  })
 }
 
 function actionHandler (req: express.Request, res: express.Response, next: express.NextFunction): void {
@@ -38,7 +42,7 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response) => {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      renderView(new Form(draft.document.expertReports || new ExpertReports(undefined, [])), res)
+      renderView(new Form(draft.document.expertReports), res)
     })
   .post(
     page.uri,
@@ -57,14 +61,13 @@ export default express.Router()
         form.model.removeExcessRows()
         draft.document.expertReports = form.model
 
-        const declared: boolean = draft.document.expertReports.declared
-        if (!declared) {
+        if (draft.document.expertReports.declared === YesNoOption.NO) {
           draft.document.expertReports.rows = []
         }
 
         await new DraftService().save(draft, user.bearerToken)
 
-        if (declared) {
+        if (draft.document.expertReports.declared === YesNoOption.YES.option) {
           res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.expertGuidancePage.evaluateUri({ externalId: claim.externalId }))

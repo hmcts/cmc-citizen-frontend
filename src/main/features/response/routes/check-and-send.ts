@@ -31,7 +31,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
   const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
-  console.log(directionsQuestionnaireDraft)
+  const datesUnavailable: string[] = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -43,7 +43,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     dqsEnabled: FeatureToggles.isEnabled('directionsQuestionnaire'),
     mediationDraft: mediationDraft.document,
-    directionsQuestionnaireDraft: directionsQuestionnaireDraft.document
+    directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
+    datesUnavailable: datesUnavailable
   })
 }
 

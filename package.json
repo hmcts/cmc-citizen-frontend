@@ -49,7 +49,7 @@
     "@types/i18next": "^12.1.0",
     "@types/i18next-express-middleware": "^0.0.33",
     "@types/i18next-sprintf-postprocessor": "^0.0.29",
-    "@types/lodash": "^4.14.130",
+    "@types/lodash": "^4.14.133",
     "@types/nock": "^10.0.3",
     "@types/node": "<10.0.0",
     "@types/nunjucks": "^3.0.0",
@@ -95,8 +95,8 @@
     "to-boolean": "^1.0.0",
     "ts-node": "^8.1.0",
     "tsconfig-paths": "^3.8.0",
-    "typescript": "^3.4.5",
     "tslint-microsoft-contrib": "^6.1.1",
+    "typescript": "^3.4.5",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -108,11 +108,10 @@
     "@types/mocha": "*",
     "@types/sinon-chai": "^3.2.1",
     "@types/supertest": "*",
-    "html_codesniffer": "2.4.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codacy-coverage": "3.2.0",
-    "codeceptjs": "2.1.2",
+    "codeceptjs": "2.0.8",
     "codecov": "^3.2.0",
     "debug": "^4.1.1",
     "gulp-livereload": "^4.0.1",
@@ -121,6 +120,7 @@
     "gulp-rename": "^1.4.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
+    "html_codesniffer": "2.4.0",
     "husky": "^2.3.0",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^5.2.0",
@@ -140,10 +140,10 @@
     "sinon-express-mock": "^2.2.0",
     "sonarqube-scanner": "^2.4.0",
     "supertest": "^3.4.2",
-    "tslint": "^5.12.1",
+    "tslint": "^5.17.0",
     "tslint-config-standard": "^8.0.1",
     "urlencode": "^1.1.0",
-    "webdriverio": "^4.14.1"
+    "webdriverio": "5"
   },
   "nyc": {
     "extension": [
