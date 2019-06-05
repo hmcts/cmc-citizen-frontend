@@ -22,6 +22,8 @@
         {% set error = form.hasErrors() %}
         <fieldset id="exceptionalCircumstances[label]" class="form-group {% if error %} form-group-error {% endif %}">
 
+          <legend class="visually-hidden">{{ t(heading) }}</legend>
+
           {% if party === MadeBy.CLAIMANT %}
           <h1 class="heading-medium">
                 {{ t('Does this court meet your accessibility needs?') }}
