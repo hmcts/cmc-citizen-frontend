@@ -614,7 +614,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
     rows: [
       {}
     ],
-    declared: false
+    declared: 'no'
   },
   permissionForExpert: {
     requestPermissionForExpert: {

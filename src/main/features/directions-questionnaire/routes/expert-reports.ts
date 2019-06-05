@@ -67,7 +67,7 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        if (draft.document.expertReports.declared === YesNoOption.YES.option) {
+        if (form.model.declared.option === YesNoOption.YES.option) {
           res.redirect(Paths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.expertGuidancePage.evaluateUri({ externalId: claim.externalId }))
