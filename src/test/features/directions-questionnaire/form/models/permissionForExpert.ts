@@ -66,7 +66,7 @@ describe('PermissionForExpert', () => {
     it('should return an instance from given object', () => {
       const actual: PermissionForExpert = new PermissionForExpert().deserialize({ option: 'yes' })
 
-      expect(actual).to.deep.equal(new PermissionForExpert(YesNoOption.YES))
+      expect(actual).to.deep.equal(new PermissionForExpert(YesNoOption.fromObject(YesNoOption.YES)))
     })
 
   })
