@@ -13,10 +13,10 @@ export class DetailsInCaseOfHearingTask {
         }
       } else if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
         return false
-      } else {
+      } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === 'yes') {
         if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
           return false
-        } else if (!directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
+        } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === 'yes' && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
           return false
         }
       }
