@@ -400,6 +400,8 @@
             bottomBorder = false,
             bold = true
           ) }}
+      {% endif %}
+      {% if directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option %}
         {% for report in directionsQuestionnaireDraft.expertReports.rows %}
           {{ rowWithMultipleValue(
             label = 'Report ' + loop.index,

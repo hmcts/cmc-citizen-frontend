@@ -165,13 +165,11 @@ const commonCompanyClaimant = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: {
-        line1: 'Apartment 99',
+      address: { line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE'
-      } as Address,
+        postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails,
     mobilePhone: {
@@ -292,13 +290,11 @@ const commonCompanyResponsePartial = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: {
-        line1: 'Apartment 99',
+      address: { line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE'
-      } as Address,
+        postcode: 'SE28 0JE' } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails
   } as Defendant,
@@ -587,11 +583,13 @@ export const sampleMediationDraftObj = {
 
 export const sampleDirectionsQuestionnaireDraftObj = {
   selfWitness: {
-    option: YesNoOption.YES
+    option: {
+      option: YesNoOption.YES.option
+    }
   },
   otherWitnesses: {
     otherWitnesses: {
-      option: YesNoOption.NO
+      option: YesNoOption.NO.option
     }
   },
   hearingLocation: 'Central London County Court',
@@ -609,28 +607,28 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   },
   expertRequired: {
     option: {
-      option: 'yes'
+      option: YesNoOption.YES.option
     }
   },
   expertReports: {
     rows: [
       {}
     ],
-    declared: false
+    declared: 'no'
   },
   permissionForExpert: {
     requestPermissionForExpert: {
-      option: 'yes'
+      option: YesNoOption.YES.option
     }
   },
   expertEvidence: {
     expertEvidence: {
-      option: 'yes'
+      option: YesNoOption.YES.option
     },
-    whatToExamine: 'dsfdsfs'
+    whatToExamine: 'Photographs'
   },
   whyExpertIsNeeded: {
-    explanation: 'dsfdsfds'
+    explanation: 'To give opinion'
   }
 }
 
