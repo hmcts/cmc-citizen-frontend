@@ -303,7 +303,7 @@ export class TaskListBuilder {
       ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
 
       return new TaskList(
-        'Tell us more about the claim', [
+        'Your hearing requirements', [
           new TaskListItem(
             `Give us details in case there’s a hearing`,
             DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
