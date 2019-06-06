@@ -619,7 +619,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
     declared: 'no'
   },
   permissionForExpert: {
-    requestPermissionForExpert: {
+    option: {
       option: YesNoOption.YES.option
     }
   },

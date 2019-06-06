@@ -98,6 +98,34 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
               .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           })
+
+          it('should load page with direction questionnaire information', async () => {
+            draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+              .expect(res => expect(res).to.be.successful.withText('Support required for a hearing'))
+              .expect(res => expect(res).to.be.successful.withText('Disabled access'))
+              .expect(res => expect(res).to.be.successful.withText('Preferred hearing centre'))
+              .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
+              .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?'))
+              .expect(res => expect(res).to.be.successful.withText('What is there to examine?'))
+              .expect(res => expect(res).to.be.successful.withText('Photographs'))
+              .expect(res => expect(res).to.be.successful.withText('Do you want to give evidence as a witness?'))
+              .expect(res => expect(res).to.be.successful.withText('Do you want the court’s permission to hire an expert?'))
+              .expect(res => expect(res).to.be.successful.withText('Other witnesses'))
+              .expect(res => expect(res).to.be.successful.withText('Dates unavailable'))
+              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+              .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge.'))
+              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+          })
+
         })
         context('for company and organisation', () => {
           it('should return statement of truth with a tick box', async () => {
