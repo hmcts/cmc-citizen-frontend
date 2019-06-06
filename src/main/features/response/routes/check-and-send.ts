@@ -35,7 +35,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const dqsEnabled: boolean = FeatureToggles.isEnabled('directionsQuestionnaire')
   const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
   form.model.type = statementOfTruthType
-  console.log(directionsQuestionnaireDraft.document)
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -117,7 +116,6 @@ export default express.Router()
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
 
-      console.log(form)
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
         renderView(form, res)
       } else {

@@ -35,7 +35,6 @@ export class StatementOfTruth {
     if (!input) {
       return input
     }
-    console.log(input)
 
     if (input && input.type === SignatureType.BASIC) {
       return new StatementOfTruth(SignatureType.BASIC, input && input.signed === 'true')
