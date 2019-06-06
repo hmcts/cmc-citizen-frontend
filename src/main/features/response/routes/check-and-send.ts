@@ -31,10 +31,13 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
   const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
-  const datesUnavailable: string[] = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
-  const dqsEnabled: boolean = FeatureToggles.isEnabled('directionsQuestionnaire')
+  const dqsEnabled: boolean = (FeatureToggles.isEnabled('directionsQuestionnaire')) && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)
+  let datesUnavailable: string[]
+  if (dqsEnabled) {
+    datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
+  }
   const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
-  form.model.type = statementOfTruthType
+  form.model.type = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : form.model.type
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -144,6 +147,10 @@ export default express.Router()
 
         if (FeatureToggles.isEnabled('mediation')) {
           await draftService.delete(mediationDraft.id, user.bearerToken)
+        }
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)) {
+          await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
         }
 
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))

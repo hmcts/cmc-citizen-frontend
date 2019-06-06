@@ -52,7 +52,7 @@ macro statementOfTruth(
     legendHidden = true
   ) }}
 
-  {% if SignatureType.DIRECTION_QUESTIONNAIRE %}
+  {% if statementOfTruthType == SignatureType.DIRECTION_QUESTIONNAIRE %}
     {{ checkboxSingle(
       label = 'The hearing requirement details on this page are true to the best of my knowledge.',
       name = 'directionsQuestionnaireSigned',
