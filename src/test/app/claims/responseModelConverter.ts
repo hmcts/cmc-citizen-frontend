@@ -76,6 +76,17 @@ describe('ResponseModelConverter', () => {
   const mediationDraft = new MediationDraft().deserialize(sampleMediationDraftObj)
   const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft().deserialize(sampleDirectionsQuestionnaireDraftObj)
 
+  const directionsQuestionnaireResponseData = {
+    directionsQuestionnaire: {
+      selfWitness: new YesNoOption('yes'),
+      hearingLocation: 'Birmingham District Probate Registry',
+      disabledAccessSelected: new YesNoOption('yes'),
+      expertEvidenceToExamine: 'Photographs',
+      whyExpertIsNeeded: 'To give opinion',
+      expertReportsRows: [new ReportRow()]
+    }
+  }
+
   if (!FeatureToggles.isEnabled('mediation')) {
 
     context('full defence conversion', () => {
@@ -87,7 +98,7 @@ describe('ResponseModelConverter', () => {
       ].forEach(([partyDetails, party]) => {
         it(`should convert defence with dispute submitted by ${partyDetails.type}`, () => {
           const responseDraft = prepareResponseDraft(defenceWithDisputeDraft, partyDetails)
-          const responseData = prepareResponseData(defenceWithDisputeData, party)
+          const responseData = prepareResponseData({ ...defenceWithDisputeData, ...directionsQuestionnaireResponseData }, party)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
@@ -95,7 +106,7 @@ describe('ResponseModelConverter', () => {
 
         it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
           const responseDraft = prepareResponseDraft(defenceWithAmountClaimedAlreadyPaidDraft, partyDetails)
-          const responseData = preparePartialResponseData(partialAdmissionFromStatesPaidDefence, party)
+          const responseData = preparePartialResponseData({ ...partialAdmissionFromStatesPaidDefence, ...directionsQuestionnaireResponseData }, party)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
@@ -115,7 +126,7 @@ describe('ResponseModelConverter', () => {
             text: 'I paid in cash'
           }
         }, individualDetails)
-        const responseData = prepareResponseData(defenceWithDisputeData, individual)
+        const responseData = prepareResponseData({ ...defenceWithDisputeData, ...directionsQuestionnaireResponseData }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
         expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
@@ -184,7 +195,7 @@ describe('ResponseModelConverter', () => {
     context('partial admission conversion', () => {
       it('should convert already paid partial admission', () => {
         const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
-        const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
+        const responseData = preparePartialResponseData({ ...partialAdmissionAlreadyPaidData, ...directionsQuestionnaireResponseData }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
         expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
@@ -193,7 +204,7 @@ describe('ResponseModelConverter', () => {
 
       it('should convert partial admission paid immediately', () => {
         const responseDraft = prepareResponseDraft(partialAdmissionWithImmediatePaymentDraft, individualDetails)
-        const responseData = preparePartialResponseData(partialAdmissionWithImmediatePaymentData, individual)
+        const responseData = preparePartialResponseData({ ...partialAdmissionWithImmediatePaymentData, ...directionsQuestionnaireResponseData }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
         expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
@@ -202,7 +213,7 @@ describe('ResponseModelConverter', () => {
 
       it('should convert partial admission paid by set date', () => {
         const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentBySetDateDraft, individualDetails)
-        const responseData = preparePartialResponseData(partialAdmissionWithPaymentBySetDateData, individual)
+        const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentBySetDateData, ...directionsQuestionnaireResponseData }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
         expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
@@ -216,6 +227,7 @@ describe('ResponseModelConverter', () => {
         }, individualDetails)
         const responseData = preparePartialResponseData({
           ...partialAdmissionWithPaymentBySetDateData,
+          ...directionsQuestionnaireResponseData,
           statementOfMeans: { ...statementOfMeansWithMandatoryFieldsOnlyData }
         }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -226,7 +238,7 @@ describe('ResponseModelConverter', () => {
 
       it('should convert partial admission paid by instalments', () => {
         const responseDraft = prepareResponseDraft(partialAdmissionWithPaymentByInstalmentsDraft, individualDetails)
-        const responseData = preparePartialResponseData(partialAdmissionWithPaymentByInstalmentsData, individual)
+        const responseData = preparePartialResponseData({ ...partialAdmissionWithPaymentByInstalmentsData, ...directionsQuestionnaireResponseData }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
         expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
@@ -240,6 +252,7 @@ describe('ResponseModelConverter', () => {
         }, individualDetails)
         const responseData = preparePartialResponseData({
           ...partialAdmissionWithPaymentByInstalmentsData,
+          ...directionsQuestionnaireResponseData,
           statementOfMeans: { ...statementOfMeansWithAllFieldsData }
         }, individual)
         const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
@@ -257,18 +270,6 @@ describe('ResponseModelConverter', () => {
       mediationPhoneNumber: '07777777777',
       mediationContactPerson: 'Mary Richards'
     }
-
-    const directionsQuestionnaireResponseData = {
-      directionsQuestionnaire: {
-        selfWitness: new YesNoOption('yes'),
-        hearingLocation: 'Central London County Court',
-        disabledAccessSelected: new YesNoOption('yes'),
-        expertEvidenceToExamine: 'Photographs',
-        whyExpertIsNeeded: 'To give opinion',
-        expertReportsRows: [new ReportRow()]
-      }
-    }
-
     context('full defence conversion', () => {
       [
         [individualDetails, individual],

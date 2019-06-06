@@ -89,7 +89,6 @@ describe('Directions Questionnaire - hearing location', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
-          courtFinderMock.resolveFind()
 
           await request(app)
             .get(pagePath)
