@@ -149,6 +149,10 @@ export default express.Router()
           await draftService.delete(mediationDraft.id, user.bearerToken)
         }
 
+        if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)) {
+          await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
+        }
+
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))
