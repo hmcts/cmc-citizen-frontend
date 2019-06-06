@@ -587,7 +587,7 @@ export const sampleMediationDraftObj = {
 
 export const sampleDirectionsQuestionnaireDraftObj = {
   selfWitness: {
-    option: YesNoOption.YES.option
+    option: { option: 'yes' }
   },
   otherWitnesses: {
     otherWitnesses: {

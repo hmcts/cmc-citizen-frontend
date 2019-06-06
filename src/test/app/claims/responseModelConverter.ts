@@ -42,6 +42,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { YesNoOption } from 'models/yesNoOption'
+import { ReportRow } from 'directions-questionnaire/forms/models/reportRow'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
   return new ResponseDraft().deserialize({
@@ -263,7 +264,8 @@ describe('ResponseModelConverter', () => {
         hearingLocation: 'Central London County Court',
         disabledAccessSelected: new YesNoOption('yes'),
         expertEvidenceToExamine: 'Photographs',
-        whyExpertIsNeeded: 'To give opinion'
+        whyExpertIsNeeded: 'To give opinion',
+        expertReportsRows: [new ReportRow()]
       }
     }
 
