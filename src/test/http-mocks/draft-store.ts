@@ -594,7 +594,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
       option: YesNoOption.NO.option
     }
   },
-  hearingLocation: 'Central London County Court',
+  hearingLocation: 'Birmingham District Probate Registry',
   exceptionalCircumstances: {},
   availability: {
     hasUnavailableDates: false,
