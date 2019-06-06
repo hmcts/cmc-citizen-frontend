@@ -392,12 +392,31 @@
             bold = true
           ) }}
       {% endif %}
+      {% if directionsQuestionnaireDraft.hearingLocation %}
+        {{ row(
+          label = 'Preferred hearing centre',
+          value = directionsQuestionnaireDraft.hearingLocation,
+          changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false,
+          bold = true
+        ) }}
+      {% endif %}
+      {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances %}
+        {{ row(
+          label = 'Briefly explain your reasons',
+          value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,
+          changeLink = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false,
+          bold = true
+        ) }}
+      {% endif %}
       {% if directionsQuestionnaireDraft.expertReports %}
         {{ row(
             label = 'Have you already got a report written by an expert?',
             value = t(directionsQuestionnaireDraft.expertReports.declared.option) | capitalize,
             changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false,
+            topBorder = true,
             bold = true
           ) }}
       {% endif %}
