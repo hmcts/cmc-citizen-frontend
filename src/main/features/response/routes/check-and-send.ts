@@ -31,11 +31,13 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
   const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
-  const datesUnavailable: string[] = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
-  const dqsEnabled: boolean = FeatureToggles.isEnabled('directionsQuestionnaire')
+  const dqsEnabled: boolean = (FeatureToggles.isEnabled('directionsQuestionnaire')) && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)
+  let datesUnavailable: string[]
+  if (dqsEnabled) {
+    datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
+  }
   const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
-  form.model.type = statementOfTruthType
-  console.log(directionsQuestionnaireDraft.document)
+  form.model.type = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : form.model.type
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -117,7 +119,6 @@ export default express.Router()
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
 
-      console.log(form)
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
         renderView(form, res)
       } else {
