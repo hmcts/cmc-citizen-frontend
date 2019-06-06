@@ -53,8 +53,8 @@ const expectedResponse = {
         town: 'Birmingham',
         type: 'Visiting'
       },
-      distance: 1,
-      name: 'Birmingham District Probate Registry'
+      name: 'Birmingham District Probate Registry',
+      slug: 'birmingham-district-probate-registry'
     }
   ], statusCode: 200, valid: true
 }
@@ -66,7 +66,7 @@ describe('CourtFinderClient', () => {
   describe('findMoneyClaimCourtsByPostcode', () => {
     it('should return valid false if no court found', () => {
       nock(mockClient)
-          .get(/\/search\/results.json\?postcode=.+&aol=.+/)
+          .get(/\/court-finder\/search-postcode\/.+/)
           .reply(404, [])
 
       return courtFinderClient.findMoneyClaimCourtsByPostcode('A111AA')
@@ -77,7 +77,7 @@ describe('CourtFinderClient', () => {
 
     it('should return valid false for bad request', () => {
       nock(mockClient)
-        .get(/\/search\/results.json\?postcode=.+&aol=.+/)
+        .get(/\/court-finder\/search-postcode\/.+/)
         .reply(400, [])
 
       return courtFinderClient.findMoneyClaimCourtsByPostcode('B222BB')
@@ -88,7 +88,7 @@ describe('CourtFinderClient', () => {
 
     it('should return found courts', () => {
       nock(mockClient)
-          .get(/\/search\/results.json\?postcode=.+&aol=.+/)
+          .get(/\/court-finder\/search-postcode\/.+/)
           .reply(200, apiData)
       return courtFinderClient.findMoneyClaimCourtsByPostcode('C333CC')
           .then((courtResponse: CourtFinderResponse) => {
