@@ -87,7 +87,7 @@ describe('ResponseModelConverter', () => {
     }
   }
 
-  if (FeatureToggles.isEnabled('mediation')) {
+  if (!FeatureToggles.isEnabled('mediation')) {
 
     context('full defence conversion', () => {
       [
