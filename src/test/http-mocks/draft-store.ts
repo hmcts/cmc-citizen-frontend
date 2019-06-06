@@ -165,11 +165,13 @@ const commonCompanyClaimant = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails,
     mobilePhone: {
@@ -290,11 +292,13 @@ const commonCompanyResponsePartial = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails
   } as Defendant,
@@ -583,9 +587,7 @@ export const sampleMediationDraftObj = {
 
 export const sampleDirectionsQuestionnaireDraftObj = {
   selfWitness: {
-    option: {
-      option: YesNoOption.YES.option
-    }
+    option: YesNoOption.YES.option
   },
   otherWitnesses: {
     otherWitnesses: {
