@@ -32,6 +32,10 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
   const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
   const datesUnavailable: string[] = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
+  const dqsEnabled: boolean = FeatureToggles.isEnabled('directionsQuestionnaire')
+  const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
+  form.model.type = statementOfTruthType
+  console.log(directionsQuestionnaireDraft.document)
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -41,10 +45,11 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
-    dqsEnabled: FeatureToggles.isEnabled('directionsQuestionnaire'),
+    dqsEnabled: dqsEnabled,
     mediationDraft: mediationDraft.document,
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
-    datesUnavailable: datesUnavailable
+    datesUnavailable: datesUnavailable,
+    statementOfTruthType: statementOfTruthType
   })
 }
 
@@ -72,6 +77,7 @@ function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
 function deserializerFunction (value: any): StatementOfTruth | QualifiedStatementOfTruth {
   switch (value.type) {
     case SignatureType.BASIC:
+    case SignatureType.DIRECTION_QUESTIONNAIRE:
       return StatementOfTruth.fromObject(value)
     case SignatureType.QUALIFIED:
       return QualifiedStatementOfTruth.fromObject(value)
@@ -110,6 +116,8 @@ export default express.Router()
       const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
+
+      console.log(form)
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
         renderView(form, res)
       } else {

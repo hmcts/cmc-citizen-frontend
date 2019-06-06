@@ -178,6 +178,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PartyType', PartyType)
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
     nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
+    nunjucksEnv.addGlobal('SignatureType', SignatureType)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

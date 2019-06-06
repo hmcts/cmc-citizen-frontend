@@ -396,7 +396,7 @@
         {{ row(
             label = 'Have you already got a report written by an expert?',
             value = t(directionsQuestionnaireDraft.expertReports.declared.option) | capitalize,
-            changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
+            changeLink = DirectionsQuestionnairePaths.expertReportsPage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false,
             bold = true
           ) }}
@@ -414,7 +414,7 @@
           ) }}
         {% endfor %}
       {% endif %}
-      {% if directionsQuestionnaireDraft.expertEvidence %}
+      {% if directionsQuestionnaireDraft.expertEvidence.expertEvidence %}
         {{ row(
           label = 'Does the claim involve something an expert can still examine?',
           value = t(directionsQuestionnaireDraft.expertEvidence.expertEvidence.option) | capitalize,
@@ -429,7 +429,7 @@
           bold = true
         ) }}
       {% endif %}
-      {% if directionsQuestionnaireDraft.whyExpertIsNeeded %}
+      {% if directionsQuestionnaireDraft.whyExpertIsNeeded.explanation %}
         {{ row(
           label = 'Briefly explain why you believe an expert is needed',
           value = directionsQuestionnaireDraft.whyExpertIsNeeded.explanation,
@@ -437,7 +437,14 @@
           bold = true
         ) }}
       {% endif %}
-      {% if directionsQuestionnaireDraft.permissionForExpert %}
+      {{ row(
+        label = 'Do you want to give evidence as a witness?',
+        value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
+        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+        topBorder = true,
+        bold = true
+      ) }}
+      {% if directionsQuestionnaireDraft.permissionForExpert.option %}
         {{ row(
           label = 'Do you want the court’s permission to hire an expert?',
           value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
@@ -445,13 +452,7 @@
           bold = true
         ) }}
       {% endif %}
-      {{ row(
-        label = 'Do you want to give evidence as a witness?',
-        value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
-        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
+      {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
       {{ row(
         label = 'Other witnesses',
         value = directionsQuestionnaireDraft.otherWitnesses.howMany,
@@ -466,21 +467,21 @@
         bold = true
       ) }}
     {% endif %}
-    {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
-      {{ rowWithMultipleValue(
-        label = 'Dates unavailable',
-        values = datesUnavailable,
-        changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% else %}
-      {{ rowWithMultipleValue(
-        label = 'Dates unavailable',
-        values = 'None',
-        changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      ) }}
-    {% endif %}
+      {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
+        {{ rowWithMultipleValue(
+          label = 'Dates unavailable',
+          values = datesUnavailable,
+          changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        ) }}
+      {% else %}
+        {{ row(
+          label = 'Dates unavailable',
+          value = 'None',
+          changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        ) }}
+      {% endif %}
 
 
       {{ tableEnd() }}
@@ -491,7 +492,7 @@
         {{
           statementOfTruth(
             form,
-            statementOfTruthType = 'response',
+            statementOfTruthType = statementOfTruthType,
             label = 'I believe that the facts stated in this response are true.',
             isQualified = (signatureType === SignatureType.QUALIFIED)
           )
@@ -499,7 +500,7 @@
 
         {{ submitButton('Submit response') }}
 
-        <input type="hidden" name="type" value="{{ form.model.type }}">
+        <input type="hidden" name="type" value="{{ statementOfTruthType }}">
       </div>
     </div>
   </form>
