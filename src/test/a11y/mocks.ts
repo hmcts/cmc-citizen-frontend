@@ -15,6 +15,7 @@ import {
 } from 'test/data/entity/responseData'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import * as courtFinderMock from '../http-mocks/court-finder-client'
 
 idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
@@ -61,6 +62,7 @@ feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()
 feesMock.resolveGetHearingFeeRangeGroup().persist()
+courtFinderMock.resolveFind().persist()
 
 const justForwardRequestHandler = {
   requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
