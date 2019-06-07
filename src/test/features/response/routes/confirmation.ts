@@ -39,7 +39,42 @@ describe('Defendant response: confirmation page', () => {
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response'))
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'Settle out of court',
+            'For example you could offer to repair goods you sold the claimant or suggest a payment.',
+            'You can avoid getting a County Court Judgment if the claimant accepts your offer.'
+          ))
+      })
+
+      it('should render mediation option when mediation is yes', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimWithFullDefenceMediation)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'if they want to try mediation. If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.',
+            'Settle out of court',
+            'For example you could offer to repair goods you sold the claimant or suggest a payment.',
+            'You can avoid getting a County Court Judgment if the claimant accepts your offer.'
+          ))
+      })
+
+      it('should render full defence paper DQ page when no mediation is chosen', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimWithFullDefenceNoMediation)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'You’ll have to go to a hearing.',
+            'complete a directions questionnaire form',
+            'Your defence will be cancelled if you don’t complete and return the form by 4pm on',
+            'We’ll contact you when we set a hearing date to tell you how to prepare.',
+            'Settle out of court',
+            'For example you could offer to repair goods you sold the claimant or suggest a payment.',
+            'You can avoid getting a County Court Judgment if the claimant accepts your offer.'
+          ))
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
