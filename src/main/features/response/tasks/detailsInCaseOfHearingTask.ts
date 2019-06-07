@@ -8,16 +8,18 @@ export class DetailsInCaseOfHearingTask {
       return false
     } else if (directionsQuestionnaireDraft.expertRequired.option !== undefined) {
       if (directionsQuestionnaireDraft.expertRequired.option.option === 'yes') {
-        if (directionsQuestionnaireDraft.expertReports.declared && !directionsQuestionnaireDraft.expertReports.rows.length) {
+        if (directionsQuestionnaireDraft.expertReports.declared === undefined) {
           return false
-        }
-      } else if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
-        return false
-      } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === 'yes') {
-        if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
+        } else if (directionsQuestionnaireDraft.expertReports.declared.option === 'yes' && !directionsQuestionnaireDraft.expertReports.rows.length) {
           return false
-        } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === 'yes' && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
+        } else if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
           return false
+        } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === 'yes') {
+          if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
+            return false
+          } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === 'yes' && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
+            return false
+          }
         }
       }
     }
