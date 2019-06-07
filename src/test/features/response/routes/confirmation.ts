@@ -34,13 +34,16 @@ describe('Defendant response: confirmation page', () => {
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
-      it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+      it('should render page when DQs enabled and user said no to mediation', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(fullDefenceMock.sampleClaimWithFullDefenceNoMediationDQsEnabled)
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'accepts your response the claim will be settled. We’ll contact you by post when they respond.',
+            'If they reject your response the court will review the case. You might have to go to a hearing.',
+            'We’ll contact you by post if we set a hearing date to tell you how to prepare.',
             'Settle out of court',
             'For example you could offer to repair goods you sold the claimant or suggest a payment.',
             'You can avoid getting a County Court Judgment if the claimant accepts your offer.'
