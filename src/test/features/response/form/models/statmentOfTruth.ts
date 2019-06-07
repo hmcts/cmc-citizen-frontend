@@ -14,7 +14,7 @@ describe('StatementOfTruth', () => {
       expect(model.signed).to.be.undefined
     })
     it('should set signed to true', () => {
-      const model = new StatementOfTruth(SignatureType.BASIC,true)
+      const model = new StatementOfTruth(SignatureType.BASIC, true)
       expect(model.signed).to.be.true
     })
     it('should set signed to false', () => {
@@ -25,11 +25,14 @@ describe('StatementOfTruth', () => {
 
   describe('fromObject', () => {
     it('should return an instance initialised with truthy value', () => {
-      expect(StatementOfTruth.fromObject(undefined)).to.eql(new StatementOfTruth())
+      expect(StatementOfTruth.fromObject(undefined)).to.eql(undefined)
     })
 
     it('should return a valid object for "true"', () => {
-      expect(StatementOfTruth.fromObject({ signed: 'true' })).to.eql(new StatementOfTruth(SignatureType.BASIC,true))
+      expect(StatementOfTruth.fromObject({
+        type: 'basic',
+        signed: 'true'
+      })).to.eql(new StatementOfTruth(SignatureType.BASIC, true))
     })
   })
 
@@ -49,7 +52,7 @@ describe('StatementOfTruth', () => {
 
     describe('should accept', () => {
       it('statement of truth with true', () => {
-        const errors = validator.validateSync(new StatementOfTruth(SignatureType.BASIC,true))
+        const errors = validator.validateSync(new StatementOfTruth(SignatureType.BASIC, true))
         expect(errors.length).to.equal(0)
       })
     })

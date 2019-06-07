@@ -1,23 +1,24 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { YesNoOption } from 'models/yesNoOption'
 
 export class DetailsInCaseOfHearingTask {
   static isCompleted (responseDraft: ResponseDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
 
-    if (directionsQuestionnaireDraft.hearingLocation === '') {
+    if (!directionsQuestionnaireDraft.hearingLocation.length) {
       return false
     } else if (directionsQuestionnaireDraft.expertRequired.option !== undefined) {
-      if (directionsQuestionnaireDraft.expertRequired.option.option === 'yes') {
+      if (directionsQuestionnaireDraft.expertRequired.option.option === YesNoOption.YES.option) {
         if (directionsQuestionnaireDraft.expertReports.declared === undefined) {
           return false
-        } else if (directionsQuestionnaireDraft.expertReports.declared.option === 'yes' && !directionsQuestionnaireDraft.expertReports.rows.length) {
+        } else if (directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.expertReports.rows.length) {
           return false
         } else if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
           return false
-        } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === 'yes') {
+        } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
           if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
             return false
-          } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === 'yes' && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
+          } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
             return false
           }
         }

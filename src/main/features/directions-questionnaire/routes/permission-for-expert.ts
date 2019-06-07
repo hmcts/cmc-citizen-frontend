@@ -11,6 +11,8 @@ import { DraftService } from 'services/draftService'
 import { PermissionForExpert } from 'directions-questionnaire/forms/models/permissionForExpert'
 import { YesNoOption } from 'models/yesNoOption'
 import { FormValidator } from 'forms/validation/formValidator'
+import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvidence'
+import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 
 function renderPage (res: express.Response, form: Form<PermissionForExpert>) {
   res.render(Paths.permissionForExpertPage.associatedView, { form: form })
@@ -31,12 +33,17 @@ export default express.Router()
 
       if (form.hasErrors()) {
         res.render(Paths.permissionForExpertPage.associatedView, {
-          form: form })
+          form: form
+        })
       } else {
         const claim: Claim = res.locals.claim
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
 
+        if (form.model.option.option === YesNoOption.NO.option && draft.document.permissionForExpert && draft.document.permissionForExpert.option.option === YesNoOption.YES.option) {
+          draft.document.expertEvidence = new ExpertEvidence()
+          draft.document.whyExpertIsNeeded = new WhyExpertIsNeeded()
+        }
         draft.document.permissionForExpert = form.model
 
         await new DraftService().save(draft, user.bearerToken)

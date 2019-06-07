@@ -251,6 +251,27 @@ describe('Defendant response: check and send page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
           })
+
+          it('should stay in check and send page with error when hearing requirement details not checked', async () => {
+            draftStoreServiceMock.resolveFind(draftType)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+            let sendData: any = { signed: 'true', type: SignatureType.BASIC }
+            if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
+              sendData = {
+                signed: 'true',
+                type: SignatureType.DIRECTION_QUESTIONNAIRE
+              }
+            }
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(sendData)
+              .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge', 'div class="error-summary"'))
+          })
         })
 
         context('when form is valid', () => {
@@ -305,10 +326,21 @@ describe('Defendant response: check and send page', () => {
               draftStoreServiceMock.resolveDelete()
             }
 
+            let sendData: any = { signed: 'true', type: SignatureType.BASIC }
+            if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
+              sendData = {
+                signed: 'true',
+                type: SignatureType.DIRECTION_QUESTIONNAIRE,
+                directionsQuestionnaireSigned: 'true'
+              }
+
+              draftStoreServiceMock.resolveDelete()
+            }
+
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({ signed: 'true', type: SignatureType.BASIC })
+              .send(sendData)
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
@@ -317,12 +349,15 @@ describe('Defendant response: check and send page', () => {
             it('should redirect to confirmation page when form is valid with SignatureType as qualified', async () => {
               draftStoreServiceMock.resolveFind('response:company')
               draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire',{ directionsQuestionnaire: undefined })
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionWithPaymentByInstalmentsDataCompany)
               claimStoreServiceMock.resolveSaveResponse()
               draftStoreServiceMock.resolveSave()
               draftStoreServiceMock.resolveDelete()
               draftStoreServiceMock.resolveDelete()
+              if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
+                draftStoreServiceMock.resolveDelete()
+              }
 
               await request(app)
                 .post(pagePath)

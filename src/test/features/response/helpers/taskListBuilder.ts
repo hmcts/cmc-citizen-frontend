@@ -549,9 +549,8 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'yes' } },
+            expertRequired: { option: { option: 'no' } },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
-            exportReport: { declared: false, rows: [] },
             availability: { hasUnavailableDates: false, unavailableDates: [] }
           })
         )
@@ -569,7 +568,8 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'no' } },
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
             availability: { hasUnavailableDates: false, unavailableDates: [] }
           })
@@ -588,7 +588,7 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'no' } },
+            expertRequired: { option: { option: 'yes' } },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
             availability: { hasUnavailableDates: false, unavailableDates: [] },
             permissionForExpert: { option: { option: 'yes' } }
@@ -608,7 +608,8 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'no' } },
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
             availability: { hasUnavailableDates: false, unavailableDates: [] },
             permissionForExpert: { option: { option: 'yes' } },
@@ -710,9 +711,8 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'yes' } },
+            expertRequired: { option: { option: 'no' } },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
-            exportReport: { declared: false, rows: [] },
             availability: { hasUnavailableDates: false, unavailableDates: [] }
           })
         )
@@ -730,7 +730,8 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'no' } },
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
             availability: { hasUnavailableDates: false, unavailableDates: [] }
           })
@@ -749,7 +750,7 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'no' } },
+            expertRequired: { option: { option: 'yes' } },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
             availability: { hasUnavailableDates: false, unavailableDates: [] },
             permissionForExpert: { option: { option: 'yes' } }
@@ -769,7 +770,8 @@ describe('Defendant response task list builder', () => {
             externalId: claim.externalId,
             selfWitness: { option: { option: 'no' } },
             hearingLocation: 'central london',
-            expertRequired: { option: { option: 'no' } },
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
             otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
             availability: { hasUnavailableDates: false, unavailableDates: [] },
             permissionForExpert: { option: { option: 'yes' } },

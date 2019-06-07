@@ -14,6 +14,9 @@ import { makeSureThereIsAtLeastOneRow } from 'forms/utils/multiRowFormUtils'
 import { ExpertReports } from 'directions-questionnaire/forms/models/expertReports'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { YesNoOption } from 'models/yesNoOption'
+import { PermissionForExpert } from 'directions-questionnaire/forms/models/permissionForExpert'
+import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvidence'
+import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 
 const page: RoutablePath = Paths.expertReportsPage
 
@@ -59,6 +62,13 @@ export default express.Router()
         const user: User = res.locals.user
 
         form.model.removeExcessRows()
+
+        if (form.model.declared.option === YesNoOption.YES.option && draft.document.expertReports && draft.document.expertReports.declared.option === YesNoOption.NO.option) {
+          draft.document.permissionForExpert = new PermissionForExpert()
+          draft.document.expertEvidence = new ExpertEvidence()
+          draft.document.whyExpertIsNeeded = new WhyExpertIsNeeded()
+        }
+
         draft.document.expertReports = form.model
 
         if (draft.document.expertReports.declared === YesNoOption.NO) {

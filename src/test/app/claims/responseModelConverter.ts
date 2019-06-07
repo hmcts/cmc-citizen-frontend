@@ -41,7 +41,6 @@ import { sampleMediationDraftObj, sampleDirectionsQuestionnaireDraftObj } from '
 import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { YesNoOption } from 'models/yesNoOption'
 import { ReportRow } from 'directions-questionnaire/forms/models/reportRow'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
@@ -78,9 +77,9 @@ describe('ResponseModelConverter', () => {
 
   const directionsQuestionnaireResponseData = {
     directionsQuestionnaire: {
-      selfWitness: new YesNoOption('yes'),
+      selfWitness: 'yes',
       hearingLocation: 'Birmingham District Probate Registry',
-      disabledAccessSelected: new YesNoOption('yes'),
+      disabledAccessSelected: 'yes',
       expertEvidenceToExamine: 'Photographs',
       whyExpertIsNeeded: 'To give opinion',
       expertReportsRows: [new ReportRow()]
