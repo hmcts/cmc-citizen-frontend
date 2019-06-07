@@ -27,7 +27,7 @@ export class DetailsInCaseOfHearingTask {
       !directionsQuestionnaireDraft.otherWitnesses.isCompleted() ||
       !directionsQuestionnaireDraft.availability.isCompleted() ||
       (directionsQuestionnaireDraft.supportRequired.otherSupportSelected && !directionsQuestionnaireDraft.supportRequired.otherSupport.length) ||
-      (directionsQuestionnaireDraft.supportRequired.languageSelected && !directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted.length) ||
+      (directionsQuestionnaireDraft.supportRequired.languageSelected && !directionsQuestionnaireDraft.supportRequired.languageInterpreted.length) ||
       (directionsQuestionnaireDraft.supportRequired.signLanguageSelected && !directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted.length))
   }
 }
