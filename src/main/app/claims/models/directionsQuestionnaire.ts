@@ -1,4 +1,4 @@
-import { YesNoOption } from 'models/yesNoOption'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 import { LocalDate } from 'forms/models/localDate'
 import { ReportRow } from 'directions-questionnaire/forms/models/reportRow'
@@ -73,7 +73,7 @@ export class DirectionsQuestionnaire {
   }
 
   fromObject (directionsQuestionnaire: any): DirectionsQuestionnaire {
-    this.selfWitness = directionsQuestionnaire.selfWitness.option
+    this.selfWitness = directionsQuestionnaire.selfWitness.option.option
     if (directionsQuestionnaire.otherWitnesses.otherWitnesses === 'yes') {
       this.howManyOtherWitness = directionsQuestionnaire.otherWitnesses.howMany
     }
@@ -94,11 +94,11 @@ export class DirectionsQuestionnaire {
     }
 
     if (directionsQuestionnaire.supportRequired.hearingLoopSelected) {
-      this.hearingLoopSelected = new YesNoOption('yes')
+      this.hearingLoopSelected = YesNoOption.YES
     }
 
     if (directionsQuestionnaire.supportRequired.disabledAccessSelected) {
-      this.disabledAccessSelected = new YesNoOption('yes')
+      this.disabledAccessSelected = YesNoOption.YES
     }
 
     if (directionsQuestionnaire.supportRequired.otherSupportSelected) {
