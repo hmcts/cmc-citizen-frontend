@@ -15,8 +15,8 @@ export class DirectionsQuestionnaire {
     public availableDate?: string,
     public languageInterpreted?: string,
     public signLanguageInterpreted?: string,
-    public hearingLoopSelected?: YesNoOption,
-    public disabledAccessSelected?: YesNoOption,
+    public hearingLoop?: YesNoOption,
+    public disabledAccess?: YesNoOption,
     public otherSupportRequired?: string,
     public expertReportsRows?: ReportRow[],
     public expertEvidenceToExamine?: string,
@@ -50,10 +50,10 @@ export class DirectionsQuestionnaire {
         this.signLanguageInterpreted = input.signLanguageInterpreted
       }
       if (input.hearingLoopSelected) {
-        this.hearingLoopSelected = input.hearingLoopSelected
+        this.hearingLoop = input.hearingLoopSelected
       }
       if (input.disabledAccessSelected) {
-        this.disabledAccessSelected = input.disabledAccessSelected
+        this.disabledAccess = input.disabledAccessSelected
       }
       if (input.otherSupportRequired) {
         this.otherSupportRequired = input.otherSupportRequired
@@ -94,11 +94,11 @@ export class DirectionsQuestionnaire {
     }
 
     if (directionsQuestionnaire.supportRequired.hearingLoopSelected) {
-      this.hearingLoopSelected = YesNoOption.YES
+      this.hearingLoop = YesNoOption.YES
     }
 
     if (directionsQuestionnaire.supportRequired.disabledAccessSelected) {
-      this.disabledAccessSelected = YesNoOption.YES
+      this.disabledAccess = YesNoOption.YES
     }
 
     if (directionsQuestionnaire.supportRequired.otherSupportSelected) {
