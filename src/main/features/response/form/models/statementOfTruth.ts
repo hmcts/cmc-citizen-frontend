@@ -31,7 +31,7 @@ export class StatementOfTruth {
     }
   }
 
-  static fromObject (input: any) : StatementOfTruth {
+  static fromObject (input: any): StatementOfTruth {
     if (!input) {
       return input
     }

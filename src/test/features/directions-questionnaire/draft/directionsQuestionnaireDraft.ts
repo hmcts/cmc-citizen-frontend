@@ -28,7 +28,7 @@ describe('DirectionsQuestionnaireDraft', () => {
         },
         hearingLocation: 'Little Whinging, Surrey',
         exceptionalCircumstances: {
-          exceptionalCircumstances: 'yes',
+          exceptionalCircumstances: { option : 'yes' },
           reason: 'Poorly pet owl'
         },
         availability: {
