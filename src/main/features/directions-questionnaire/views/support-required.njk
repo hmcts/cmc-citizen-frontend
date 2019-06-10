@@ -21,8 +21,8 @@
           {% call expandableCheckboxOption(form = form, name = 'signLanguageSelected', value = 'true', label = t('Sign language interpreter'), checked = form.valueFor('signLanguageSelected'), headerEnabled = false) %}
             {{ textInput(label = 'Enter the sign language you need', form = form, name = 'signLanguageInterpreted', inputClass = '') }}
           {% endcall %}
-          {{ option(form = form, name = 'hearingLoopSelected', value = 'true', type = 'checkbox', checked = form.valueFor('hearingLoopSelected'), label = t('Hearing loop')) }}
-          {{ option(form = form, name = 'disabledAccessSelected', value = 'true', type = 'checkbox', checked = form.valueFor('disabledAccessSelected'), label = t('Disabled access')) }}
+          {{ option(form = form, name = 'hearingLoop', value = 'true', type = 'checkbox', checked = form.valueFor('hearingLoop'), label = t('Hearing loop')) }}
+          {{ option(form = form, name = 'disabledAccess', value = 'true', type = 'checkbox', checked = form.valueFor('disabledAccess'), label = t('Disabled access')) }}
           {% call expandableCheckboxOption(form = form, name = 'otherSupportSelected', value = 'true', label = 'Other support', checked = form.valueFor('otherSupportSelected'), headerEnabled = false) %}
             {{ textArea(label = 'The court can’t guarantee extra support, but it will consider other needs relating to physical or mental health impairments', form = form, name = 'otherSupport') }}
           {% endcall %}
