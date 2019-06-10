@@ -22,7 +22,7 @@ export default express.Router()
 
       const expertRequired: boolean = !!req.body.expertYes
 
-      if (!expertRequired && draft.document.expertRequired && draft.document.expertRequired.option.option === YesNoOption.YES.option) {
+      if (!expertRequired && draft.document.expertRequired && draft.document.expertRequired.option && draft.document.expertRequired.option.option === YesNoOption.YES.option) {
         draft.document.expertReports = new ExpertReports()
         draft.document.permissionForExpert = new PermissionForExpert()
         draft.document.expertEvidence = new ExpertEvidence()

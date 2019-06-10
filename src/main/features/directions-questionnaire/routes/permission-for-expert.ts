@@ -40,7 +40,7 @@ export default express.Router()
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
 
-        if (form.model.option.option === YesNoOption.NO.option && draft.document.permissionForExpert && draft.document.permissionForExpert.option.option === YesNoOption.YES.option) {
+        if (form.model.option.option === YesNoOption.NO.option && draft.document.permissionForExpert && draft.document.permissionForExpert.option && draft.document.permissionForExpert.option.option === YesNoOption.YES.option) {
           draft.document.expertEvidence = new ExpertEvidence()
           draft.document.whyExpertIsNeeded = new WhyExpertIsNeeded()
         }

@@ -74,7 +74,7 @@ export class DirectionsQuestionnaire {
 
   fromObject (directionsQuestionnaire: any): DirectionsQuestionnaire {
     this.selfWitness = directionsQuestionnaire.selfWitness.option.option
-    if (directionsQuestionnaire.otherWitnesses.otherWitnesses === 'yes') {
+    if (directionsQuestionnaire.otherWitnesses.otherWitnesses.option === 'yes') {
       this.howManyOtherWitness = directionsQuestionnaire.otherWitnesses.howMany
     }
     this.hearingLocation = directionsQuestionnaire.hearingLocation
@@ -86,7 +86,7 @@ export class DirectionsQuestionnaire {
     }
 
     if (directionsQuestionnaire.supportRequired.languageSelected) {
-      this.languageInterpreted = directionsQuestionnaire.supportRequired.signLanguageInterpreted
+      this.languageInterpreted = directionsQuestionnaire.supportRequired.languageInterpreted
     }
 
     if (directionsQuestionnaire.supportRequired.signLanguageSelected) {

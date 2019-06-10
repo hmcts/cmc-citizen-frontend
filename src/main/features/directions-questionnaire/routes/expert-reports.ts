@@ -63,7 +63,7 @@ export default express.Router()
 
         form.model.removeExcessRows()
 
-        if (form.model.declared.option === YesNoOption.YES.option && draft.document.expertReports && draft.document.expertReports.declared.option === YesNoOption.NO.option) {
+        if (form.model.declared.option === YesNoOption.YES.option && draft.document.expertReports && draft.document.expertReports.declared && draft.document.expertReports.declared.option === YesNoOption.NO.option) {
           draft.document.permissionForExpert = new PermissionForExpert()
           draft.document.expertEvidence = new ExpertEvidence()
           draft.document.whyExpertIsNeeded = new WhyExpertIsNeeded()
