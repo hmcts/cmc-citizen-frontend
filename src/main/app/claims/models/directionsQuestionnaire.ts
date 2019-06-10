@@ -20,7 +20,7 @@ export class DirectionsQuestionnaire {
     public otherSupportRequired?: string,
     public expertReportsRows?: ReportRow[],
     public expertEvidenceToExamine?: string,
-    public whyExpertIsNeeded?: string
+    public reasonForExpertAdvice?: string
   ) {
   }
 
@@ -65,7 +65,7 @@ export class DirectionsQuestionnaire {
         this.expertEvidenceToExamine = input.expertEvidenceToExamine
       }
       if (input.whyExpertIsNeeded) {
-        this.whyExpertIsNeeded = input.whyExpertIsNeeded
+        this.reasonForExpertAdvice = input.whyExpertIsNeeded
       }
     }
 
@@ -111,7 +111,7 @@ export class DirectionsQuestionnaire {
       this.expertEvidenceToExamine = directionsQuestionnaire.expertEvidence.whatToExamine
     }
     if (directionsQuestionnaire.whyExpertIsNeeded.explanation) {
-      this.whyExpertIsNeeded = directionsQuestionnaire.whyExpertIsNeeded.explanation
+      this.reasonForExpertAdvice = directionsQuestionnaire.whyExpertIsNeeded.explanation
     }
 
     return this
