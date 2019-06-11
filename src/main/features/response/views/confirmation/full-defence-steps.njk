@@ -2,13 +2,12 @@
 
 {% set claimantName = claim.claimData.claimant.name %}
 
-<h2 class="heading-small">{{ t('If you agreed to try mediation') }}</h2>
-
-<p>{{ t('We’ll ask {{ claimantName }} if they want to try mediation.', { claimantName: claimantName }) | safe }}</p>
-<p>{{ t('If they agree we’ll contact you to arrange an appointment. If not, we’ll tell you what to do.') }}</p>
-
-<h2 class="heading-small">{{ t('If you chose not to try mediation') }}</h2>
-<p>{{ t('We’ll contact you to tell you what to do.') }}</p>
+<h2 class="heading-small">{{ t('If {{ claimantName }} accepts your response', { claimantName: claimantName }) | safe }}</h2>
+<p>The claim will be settled.</p>
+<h2 class="heading-small">{{ t('If {{ claimantName }} rejects your response', { claimantName: claimantName }) | safe  }}</h2>
+<p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+<p>{{ t('If they don’t want to try mediation the court will review the case. You might have to go to a hearing.') }}</p>
+<p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
 
 {% if claim.response.defenceType !== DefenceType.ALREADY_PAID %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
