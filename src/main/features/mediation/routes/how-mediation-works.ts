@@ -8,6 +8,7 @@ import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { Paths as ClaimanatResponsePaths } from 'claimant-response/paths'
 
 function renderView (res: express.Response): void {
   res.render(Paths.howMediationWorksPage.associatedView, {
@@ -33,7 +34,9 @@ export default express.Router()
 
       const { externalId } = req.params
 
-      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
+      if (draft.document.willYouTryMediation.option === FreeMediationOption.NO) {
+        res.redirect(ClaimanatResponsePaths.taskListPage.evaluateUri({ externalId }))
+      } else if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
         res.redirect(Paths.mediationAgreementPage.evaluateUri({ externalId }))
       } else {
         res.redirect(Paths.willYouTryMediation.evaluateUri({ externalId }))

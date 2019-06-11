@@ -74,7 +74,7 @@ export class ClaimantResponseFeature {
         res.locals.draft = res.locals.claimantResponseDraft
         next()
       })
-    app.all(/^\/case\/.+\/claimant-response\/(task-list|check-and-send|intention-to-proceed).*$/,
+    app.all(allClaimantResponse,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
         return new MediationDraft().deserialize(value)
       }))

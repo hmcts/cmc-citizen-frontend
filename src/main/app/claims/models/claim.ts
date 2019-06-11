@@ -25,6 +25,7 @@ import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 interface State {
   status: ClaimStatus
@@ -158,6 +159,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
+    } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.isResponseSubmitted()) {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -500,7 +503,13 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
-    return this.claimantResponse
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
+  }
+
+  private hasClaimantRejectedDefendantDefenceWithoutDQs (): boolean {
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
   }

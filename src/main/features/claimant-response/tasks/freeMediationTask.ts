@@ -3,8 +3,8 @@ import { FreeMediationTask } from 'shared/components/free-mediation/freeMediatio
 
 export class ClaimantResponseFreeMediationTask extends FreeMediationTask {
   static isCompleted (mediationDraft: MediationDraft): boolean {
-    return (this.isWillYouTryMediationCompleted(mediationDraft)) ||
-      (this.isYouCanOnlyUseMediationCompleted(mediationDraft) &&
+    return (mediationDraft && this.isWillYouTryMediationCompleted(mediationDraft)) ||
+      (mediationDraft && this.isYouCanOnlyUseMediationCompleted(mediationDraft) &&
       this.isCanWeUseCompleted(mediationDraft))
   }
 }

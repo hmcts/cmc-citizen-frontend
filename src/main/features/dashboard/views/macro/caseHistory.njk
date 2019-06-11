@@ -29,7 +29,9 @@
   claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails,
   claimantAcceptedDefendantDefenceDefendantClaimDetails,
   claimantAcceptedDefendantDefenceClaimantClaimDetails,
-  claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails %}
+  claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails,
+  claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails,
+  claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
@@ -195,6 +197,8 @@
       {{ statesPaidClaimSettledClaimantDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
       {{ statesPaidInFullRejectedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
+      {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -282,6 +286,8 @@
         {{ statesPaidClaimSettledDefendantsDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
         {{ statesPaidRejectedDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
+        {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}
