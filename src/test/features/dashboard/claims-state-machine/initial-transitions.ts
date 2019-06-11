@@ -57,7 +57,7 @@ describe('State Machine for the dashboard status before response', () => {
       })
       let claimState = initialTransitions(claim)
       claimState.findState(claimState)
-      expect(claimState.state).to.equal('init')
+      expect(claimState.state).to.equal('full-admission')
     })
   })
 })
