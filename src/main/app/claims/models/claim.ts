@@ -25,6 +25,7 @@ import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 interface State {
   status: ClaimStatus
@@ -158,6 +159,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
+    } else if (this.hasDefendantRejectedClaimWithDQs()) {
+      return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.isResponseSubmitted()) {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -493,5 +496,11 @@ export class Claim {
         || this.response.responseType === ResponseType.PART_ADMISSION)
       && this.claimantResponse
       && (this.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
+  }
+
+  private hasDefendantRejectedClaimWithDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire')
+      && this.isResponseSubmitted()
+      && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }

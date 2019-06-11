@@ -81,6 +81,16 @@
   </div>
 {% endmacro %}
 
+{% macro claimRejectedWithDQsForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('Decide whether to proceed') }}</h2>
+    <p>{{ t('{{ defendantName }} has rejected your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
+    <p>{{ t('You need to respond before 4pm on {{ respondToMediationDeadline }}. Your claim won’t continue if you don’t respond by then.',
+        { respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}</p>
+    <p>{{ _respond(claim, 'View and respond') }}</p>
+  </div>
+{% endmacro %}
+
 {% macro claimRejectedFreeMediationYESForDefendantDashboard() %}
   {{ t('You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.') }}
 {% endmacro %}
