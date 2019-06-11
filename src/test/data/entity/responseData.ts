@@ -81,7 +81,7 @@ export const basePartialAdmissionData = {
   freeMediation: 'no'
 }
 
-const basePartialEvidencesAndTimeLines = {
+export const basePartialEvidencesAndTimeLines = {
   evidence: {
     rows: [
       {

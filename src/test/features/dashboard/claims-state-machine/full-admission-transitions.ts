@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Claim } from 'claims/models/claim'
 import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 
-import { FullAdmissionTransitions } from 'dashboard/claims-state-machine/full-admission-transitions'
+import { fullAdmissionTransitions } from 'dashboard/claims-state-machine/full-admission-transitions'
 import { ResponseType } from 'claims/models/response/responseType'
 import { MomentFactory } from 'shared/momentFactory'
 import { PaymentOption } from 'claims/models/paymentOption'
@@ -23,7 +23,7 @@ describe('State Machine for the dashboard status', () => {
           }
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-pay-by-immediately')
     })
@@ -41,7 +41,7 @@ describe('State Machine for the dashboard status', () => {
           }
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-pay-by-specified-date')
     })
@@ -59,7 +59,7 @@ describe('State Machine for the dashboard status', () => {
           }
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-pay-by-instalments')
     })
@@ -77,7 +77,7 @@ describe('State Machine for the dashboard status', () => {
           }
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-pay-by-immediately-past-deadline')
     })
@@ -96,7 +96,7 @@ describe('State Machine for the dashboard status', () => {
         },
         countyCourtJudgmentRequestedAt : MomentFactory.currentDate()
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-past-payment-deadline-by-admission')
     })
@@ -132,7 +132,7 @@ describe('State Machine for the dashboard status', () => {
           formaliseOption : FormaliseOption.REFER_TO_JUDGE
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-referred-to-judge')
     })
@@ -163,7 +163,7 @@ describe('State Machine for the dashboard status', () => {
           formaliseOption : FormaliseOption.CCJ
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-by-admission')
     })
@@ -200,7 +200,7 @@ describe('State Machine for the dashboard status', () => {
           formaliseOption : FormaliseOption.CCJ
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-by-determination')
     })
@@ -249,7 +249,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-claimant-offer-accepted-by-admission')
     })
@@ -304,7 +304,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-claimant-offer-accepted-by-determination')
     })
@@ -354,7 +354,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-past-counter-signature-deadline-by-admission')
     })
@@ -410,7 +410,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-past-counter-signature-deadline-by-determination')
     })
@@ -461,7 +461,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-past-counter-signature-deadline-by-admission')
     })
@@ -518,7 +518,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-past-counter-signature-deadline-by-determination')
     })
@@ -572,7 +572,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-defendant-rejected-claimant-offer-by-admission')
     })
@@ -632,7 +632,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-defendant-rejected-claimant-offer-by-determination')
     })
@@ -687,7 +687,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-defendant-rejected-claimant-offer-by-admission')
     })
@@ -748,7 +748,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-defendant-rejected-claimant-offer-by-determination')
     })
@@ -802,7 +802,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-settled-through-admission')
     })
@@ -862,7 +862,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-settled-through-determination')
     })
@@ -916,7 +916,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-past-payment-deadline-settled-through-admission')
     })
@@ -972,7 +972,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-past-payment-deadline-settled-through-admission')
     })
@@ -1032,7 +1032,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-past-payment-deadline-settled-through-determination')
     })
@@ -1093,7 +1093,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-past-payment-deadline-settled-through-determination')
     })
@@ -1148,7 +1148,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-past-payment-deadline-settled-through-admission')
     })
@@ -1209,7 +1209,7 @@ describe('State Machine for the dashboard status', () => {
           ]
         }
       })
-      let claimState = FullAdmissionTransitions(claim)
+      let claimState = fullAdmissionTransitions(claim)
       claimState.findState(claimState)
       expect(claimState.state).to.equal('fa-ccj-past-payment-deadline-settled-through-determination')
     })
