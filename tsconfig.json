@@ -14,6 +14,9 @@
     "module": "commonjs",
     "baseUrl": "src" ,
     "paths": {
+      "mock-clients/*": [
+        "main/app/mocks/*"
+      ],
       "payment-hub-client/*": [
         "main/app/pay/*"
       ],

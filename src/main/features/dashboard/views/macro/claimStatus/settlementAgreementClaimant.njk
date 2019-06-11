@@ -79,7 +79,8 @@
     <p>{{ t('The court will order them to pay the money. It doesn’t guarantee that they’ll pay you.') }}</p>
     <form class="form-group" novalidate method="post">
       {{ csrfProtection(csrf) }}
-      {{ linkButton('Request a County Court Judgment (CCJ)', '', 'button button-secondary') }}
+      {{ linkButton('Request a County Court Judgment (CCJ)', CCJPaths.paidAmountPage.evaluateUri({
+        externalId:claim.externalId }), 'button button-primary') }}
     </form>
   </div>
 {% endmacro %}
