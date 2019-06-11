@@ -263,7 +263,7 @@ describe('Defendant response: check and send page', () => {
                 .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
                 .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
                 .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned " value="true"'))
+                .expect(res => expect(res).to.be.successful.withText('<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"'))
             } else {
               await request(app)
                 .get(pagePath)
@@ -273,7 +273,6 @@ describe('Defendant response: check and send page', () => {
                 .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
                 .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
                 .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"'))
             }
           })
         })
