@@ -181,6 +181,8 @@
       {{ statesPaidClaimSettledClaimantDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
       {{ statesPaidInFullRejectedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
+      {{ claimRejectedWithDQsForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
