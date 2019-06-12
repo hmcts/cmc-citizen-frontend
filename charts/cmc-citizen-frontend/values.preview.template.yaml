@@ -6,8 +6,13 @@ postgresql:
   enabled: true # for rpe-feature-toggle-api
 
 rpe-feature-toggle-api:
-  releaseNameOverride: ${SERVICE_NAME}-java
+  java:
+    releaseNameOverride: ${SERVICE_NAME}-java
+    postgresql:
+      image:
+        tag:
   importer:
+    apiUrl: http://${SERVICE_NAME}-java/api/ff4j/store/features/
     kvSecretRef: kvcreds
     cron:
       enabled: false
