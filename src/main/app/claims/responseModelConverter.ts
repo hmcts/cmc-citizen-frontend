@@ -70,7 +70,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { DirectionsQuestionnaire } from 'claims/models/directionsQuestionnaire'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 export class ResponseModelConverter {
 

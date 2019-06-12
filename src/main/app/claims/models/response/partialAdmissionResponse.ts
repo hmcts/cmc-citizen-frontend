@@ -7,7 +7,7 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
-import { DirectionsQuestionnaire } from 'claims/models/directionsQuestionnaire'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 export interface PartialAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
@@ -44,7 +44,8 @@ export namespace PartialAdmissionResponse {
       } as DefendantEvidence,
       paymentIntention: PaymentIntention.deserialize(input.paymentIntention),
       statementOfMeans: input.statementOfMeans,
-      directionsQuestionnaire: new DirectionsQuestionnaire().deserialize(input.directionsQuestionnaire)
+      directionsQuestionnaire: input.directionsQuestionnaire &&
+        DirectionsQuestionnaire.deserialize(input.directionsQuestionnaire)
     }
   }
 }
