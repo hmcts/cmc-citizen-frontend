@@ -8,6 +8,7 @@ postgresql:
 rpe-feature-toggle-api:
   releaseNameOverride: ${SERVICE_NAME}-java
   importer:
+    kvSecretRef: kvcreds
     cron:
       enabled: false
     oneoff:
