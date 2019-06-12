@@ -719,6 +719,6 @@ export class ResponseModelConverter {
   }
 
   private static convertDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
-    return new DirectionsQuestionnaire().fromObject(directionsQuestionnaireDraft)
+    return DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
   }
 }
