@@ -719,7 +719,6 @@ export class ResponseModelConverter {
   }
 
   private static convertDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
-    console.log('dqAfterSez--->',DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft))
     return DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
   }
 }
