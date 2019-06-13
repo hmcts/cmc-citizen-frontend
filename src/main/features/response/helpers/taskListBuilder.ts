@@ -247,7 +247,7 @@ export class TaskListBuilder {
       return new TaskList(
         'Try to resolve the claim', [
           new TaskListItem(
-            'Free telephone mediation',
+            'Consider free mediation',
             MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
             ResponseFreeMediationTask.isCompleted(mediationDraft)
           )

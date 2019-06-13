@@ -33,7 +33,7 @@ export class ClaimantTaskListPage {
   }
 
   selectTaskFreeMediation (): void {
-    I.click('Free telephone mediation')
+    I.click('Consider free mediation')
   }
 
   selectTaskRequestCountyCourtJudgment (): void {
