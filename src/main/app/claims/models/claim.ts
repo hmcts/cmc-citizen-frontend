@@ -210,7 +210,7 @@ export class Claim {
 
   get admissionPayImmediatelyPastPaymentDate (): boolean {
     return this.response
-      && (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION)
+      && (this.response.responseType === ResponseType.FULL_ADMISSION)
       && this.response.paymentIntention
       && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
       && this.response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
