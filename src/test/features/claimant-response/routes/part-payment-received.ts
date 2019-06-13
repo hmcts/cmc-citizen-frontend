@@ -35,7 +35,6 @@ function checkPaymentLessThanClaimAmountGuard (app: any, method: string, pagePat
     claimStoreServiceMock.resolveRetrieveClaimByExternalId(equalToClaimAmountDefendantResponseClaim)
 
     draftStoreServiceMock.resolveFind('claimantResponse', {})
-    draftStoreServiceMock.resolveFind('mediation')
 
     await request(app)[method](pagePath)
       .set('Cookie', `${cookieName}=ABC`)
@@ -70,7 +69,6 @@ describe('Claimant Response: part payment received page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(lessThanClaimAmountDefendantResponseClaim)
-          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('claimantResponse', {
             freeMediation: {
               option: FreeMediationOption.NO
@@ -100,7 +98,6 @@ describe('Claimant Response: part payment received page', () => {
       context('when form is invalid', () => {
         it('should render page with error summary when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('claimantResponse', {})
-          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(lessThanClaimAmountDefendantResponseClaim)
 
           await request(app)
@@ -113,7 +110,6 @@ describe('Claimant Response: part payment received page', () => {
       context('when form is valid', () => {
         beforeEach(() => {
           draftStoreServiceMock.resolveFind('claimantResponse', {})
-          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(lessThanClaimAmountDefendantResponseClaim)
           draftStoreServiceMock.resolveSave()
         })

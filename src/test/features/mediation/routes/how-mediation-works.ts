@@ -7,6 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
 
@@ -15,6 +16,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -111,8 +113,25 @@ describe('Mediation: how mediation works page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationYes: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId })))
+          })
+
+          it('should redirect to the task list when defendant says no to mediation', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationNo: FreeMediationOption.NO })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId })))
           })
 
           it('should redirect to the free mediation page when everything is fine for the claimant', async () => {
@@ -126,8 +145,25 @@ describe('Mediation: how mediation works page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationYes: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.willYouTryMediation.evaluateUri({ externalId })))
+          })
+
+          it('should redirect to the task list when claimant says no to mediation', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationNo: FreeMediationOption.NO })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId })))
           })
         })
 
@@ -148,8 +184,25 @@ describe('Mediation: how mediation works page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationYes: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
+          })
+
+          it('should redirect to the task list when defendant says no to mediation', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationNo: FreeMediationOption.NO })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId })))
           })
 
           it('should redirect to the mediation agreement page when everything is fine for the claimant', async () => {
@@ -163,8 +216,25 @@ describe('Mediation: how mediation works page', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationYes: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(MediationPaths.mediationAgreementPage.evaluateUri({ externalId })))
+          })
+
+          it('should redirect to the task list when claimant says no to mediation', async () => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveSave()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ mediationNo: FreeMediationOption.NO })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId })))
           })
         })
       })
