@@ -1,18 +1,18 @@
 import { RequireSupport } from 'claims/models/directions-questionnaire/requireSupport'
 import { HearingLocation } from 'claims/models/directions-questionnaire/hearingLocation'
 import { Witness } from 'claims/models/directions-questionnaire/witness'
-import { ExpertReportRows } from 'claims/models/directions-questionnaire/expertReport'
+import { ExpertReport } from 'claims/models/directions-questionnaire/expertReport'
 import { ExpertRequest } from 'claims/models/directions-questionnaire/expertRequest'
-import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { YesNoOption } from 'models/yesNoOption'
+import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 
 export interface DirectionsQuestionnaire {
   requireSupport?: RequireSupport,
   hearingLocation?: HearingLocation,
   witness?: Witness,
-  expertReportRows?: ExpertReportRows,
-  unavailableDates?: UnavailableDate,
+  expertReports?: ExpertReport[],
+  unavailableDates?: UnavailableDate[],
   expertRequest?: ExpertRequest
 }
 
@@ -39,15 +39,15 @@ export namespace DirectionsQuestionnaire {
         selfWitness: directionsQuestionnaire.selfWitness.option ,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
       },
-      expertReportRows: directionsQuestionnaire.expertReports && {
-        expertReports: directionsQuestionnaire.expertReports.rows.map(row => ({
+      expertReports: directionsQuestionnaire.expertReports
+        && directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
           expertReportDate: row.reportDate
-        }))
-      },
-      unavailableDates: directionsQuestionnaire.availability && {
-        unavailableDate: directionsQuestionnaire.availability.unavailableDates
-      },
+        })),
+      unavailableDates: directionsQuestionnaire.availability &&
+        directionsQuestionnaire.availability.unavailableDates.map(unavailableDate => ({
+          unavailableDate: unavailableDate
+        })),
       expertRequest: directionsQuestionnaire.expertEvidence && {
         expertEvidenceToExamine: directionsQuestionnaire.expertRequired.option.option,
         reasonForExpertAdvice: directionsQuestionnaire.expertEvidence.whatToExamine

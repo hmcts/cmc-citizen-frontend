@@ -1,79 +1,11 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-
-export const directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft = new DirectionsQuestionnaireDraft().deserialize({
-  selfWitness: {
-    option: {
-      option: 'yes'
-    }
-  },
-  otherWitnesses: {
-    otherWitnesses: {
-      option: 'yes'
-    },
-    howMany: 1
-  },
-  hearingLocation: 'Little Whinging, Surrey',
-  exceptionalCircumstances: {
-    exceptionalCircumstances: { option : 'yes' },
-    reason: 'Poorly pet owl'
-  },
-  availability: {
-    hasUnavailableDates: true,
-    unavailableDates: [
-      { year: 2020, month: 1, day: 4 },
-      { year: 2020, month: 2, day: 8 }
-    ]
-  },
-  supportRequired: {
-    languageSelected: true,
-    languageInterpreted: 'Klingon',
-    signLanguageSelected: true,
-    signLanguageInterpreted: 'Makaton',
-    hearingLoopSelected: true,
-    disabledAccessSelected: true,
-    otherSupportSelected: true,
-    otherSupport: 'Life advice'
-  },
-  expertRequired: {
-    option: {
-      option: 'yes'
-    }
-  },
-  expertReports: {
-    declared: true,
-    rows: [
-      {
-        expertName: 'Prof. McGonagall',
-        reportDate: { year: 2018, month: 1, day: 10 }
-      },
-      {
-        expertName: 'Mr Rubeus Hagrid',
-        reportDate: { year: 2019, month: 2, day: 29 }
-      }
-    ]
-  },
-  permissionForExpert: {
-    option: {
-      option: 'yes'
-    }
-  },
-  expertEvidence: {
-    expertEvidence: {
-      option: {
-        option: 'yes'
-      }
-    },
-    whatToExamine: 'Photographs'
-  },
-  whyExpertIsNeeded: {
-    explanation: 'for expert opinion'
-  }
-})
+import { sampleDirectionsQuestionnaireDraftObj } from '../../../http-mocks/draft-store'
 
 describe('DirectionsQuestionnaireDraft', () => {
   describe('deserialization', () => {
+    const directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft = new DirectionsQuestionnaireDraft().deserialize(sampleDirectionsQuestionnaireDraftObj)
 
     it('should return a DirectionsQuestionnaireDraft instance initialised with defaults for undefined', () => {
       expect(new DirectionsQuestionnaireDraft().deserialize(undefined)).to.eql(new DirectionsQuestionnaireDraft())

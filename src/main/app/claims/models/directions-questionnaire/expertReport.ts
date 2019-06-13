@@ -1,10 +1,6 @@
 import { LocalDate } from 'forms/models/localDate'
 
-export interface ReportRow {
+export interface ExpertReport {
   expertName: string,
   expertReportDate: LocalDate
-}
-
-export interface ExpertReportRows {
-  expertReports: ReportRow[]
 }
