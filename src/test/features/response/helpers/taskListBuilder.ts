@@ -37,8 +37,8 @@ import { FeatureToggles } from 'utils/featureToggles'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
-const mediationTaskLabel = 'Free telephone mediation'
-const directionsQuestionnaireTaskLabel = 'Tell us more about the claim'
+const mediationTaskLabel = 'Consider free mediation'
+const directionsQuestionnaireTaskLabel = 'Your hearing requirements'
 
 describe('Defendant response task list builder', () => {
   let claim: Claim
@@ -451,7 +451,7 @@ describe('Defendant response task list builder', () => {
     })
   })
 
-  describe('"Tell us more about the claim"', () => {
+  describe('"Your hearing requirements"', () => {
     beforeEach(() => {
       claim.features = ['admissions', 'directionsQuestionnaire']
     })

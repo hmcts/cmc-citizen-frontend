@@ -662,7 +662,7 @@ describe('Claimant response task list builder', () => {
     })
   })
 
-  describe('"Tell us more about the claim"', () => {
+  describe('"Your hearing requirements"', () => {
     it('response is partial admission', () => {
 
       claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
@@ -682,7 +682,7 @@ describe('Claimant response task list builder', () => {
       )
 
       if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-        expect(taskList.name).to.contains('Tell us more about the claim')
+        expect(taskList.name).to.contains('Your hearing requirements')
       } else {
         expect(taskList).to.be.eq(undefined)
       }

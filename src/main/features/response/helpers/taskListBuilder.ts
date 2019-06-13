@@ -270,7 +270,7 @@ export class TaskListBuilder {
 
       if (draft.isResponsePartiallyAdmitted() || draft.isResponseRejected()) {
         return new TaskList(
-          'Tell us more about the claim', [
+          'Your hearing requirements', [
             new TaskListItem(
               `Give us details in case there’s a hearing`,
               path,
