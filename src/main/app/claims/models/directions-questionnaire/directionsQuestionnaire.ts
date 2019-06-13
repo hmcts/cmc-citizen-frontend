@@ -5,7 +5,7 @@ import { ExpertReportRows } from 'claims/models/directions-questionnaire/expertR
 import { ExpertRequest } from 'claims/models/directions-questionnaire/expertRequest'
 import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { YesNoOption } from 'models/yesNoOption'
 
 export interface DirectionsQuestionnaire {
   requireSupport?: RequireSupport,
@@ -36,7 +36,7 @@ export namespace DirectionsQuestionnaire {
           directionsQuestionnaire.exceptionalCircumstances.reason : undefined
       },
       witness: directionsQuestionnaire.selfWitness && {
-        selfWitness: directionsQuestionnaire.selfWitness.option ? YesNoOption.YES : YesNoOption.NO,
+        selfWitness: directionsQuestionnaire.selfWitness.option ,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
       },
       expertReportRows: directionsQuestionnaire.expertReports && {
@@ -49,7 +49,7 @@ export namespace DirectionsQuestionnaire {
         unavailableDate: directionsQuestionnaire.availability.unavailableDates
       },
       expertRequest: directionsQuestionnaire.expertEvidence && {
-        expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.expertEvidence ? YesNoOption.YES : YesNoOption.NO,
+        expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.expertEvidence.option,
         reasonForExpertAdvice: directionsQuestionnaire.expertEvidence.whatToExamine
       }
     }

@@ -1,4 +1,4 @@
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { YesNoOption } from 'models/yesNoOption'
 
 export interface RequireSupport {
   languageInterpreter?: string,
