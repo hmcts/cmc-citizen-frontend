@@ -17,17 +17,17 @@ import {
   baseFullAdmissionData, basePayByInstalmentsData, basePayBySetDateData,
   basePayImmediatelyDatePastData,
   baseResponseData, partialAdmissionWithSoMPaymentBySetDateData
-} from '../../../../data/entity/responseData'
+} from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import {
   courtDeterminationChoseClaimantData,
   courtDeterminationChoseDefendantData
-} from '../../../../data/entity/courtDeterminationData'
+} from 'test/data/entity/courtDeterminationData'
 import {
   ccjAdmissionBySpecifiedDate,
   ccjDeterminationByInstalment,
   ccjDeterminationBySpecifiedDate
-} from '../../../../data/entity/ccjData'
+} from 'test/data/entity/ccjData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
