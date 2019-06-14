@@ -18,7 +18,7 @@
             {{ linkButton('Continue with free mediation', 'mediationYes', 'link-button button block form-group') }}
             {{ linkButton('I don’t want to try free mediation', 'mediationNo', 'link-button form-group no-padding') }}
           {% else %}
-            {{ submitButton() }}
+            {{ linkButton('Continue', 'mediationYes', 'link-button button block form-group') }}
           {% endif %}
         </div>
       </form>
