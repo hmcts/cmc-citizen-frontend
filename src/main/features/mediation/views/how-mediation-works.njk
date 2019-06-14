@@ -15,8 +15,8 @@
 
         <div class="form-group">
           {% if mediationPilot %}
-            {{ submitButton('Continue with free mediation', 'mediationYes') }}
-            {{ linkButton('I don’t want to try free mediation', 'mediationNo', 'link-button') }}
+            {{ linkButton('Continue with free mediation', 'mediationYes', 'link-button button block form-group') }}
+            {{ linkButton('I don’t want to try free mediation', 'mediationNo', 'link-button form-group no-padding') }}
           {% else %}
             {{ submitButton() }}
           {% endif %}

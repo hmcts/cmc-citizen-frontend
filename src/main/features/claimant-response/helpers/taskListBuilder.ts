@@ -50,7 +50,7 @@ export class TaskListBuilder {
       )
     )
 
-    return new TaskList('Before you start', tasks)
+    return new TaskList('How they responded', tasks)
   }
 
   static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): TaskList {
