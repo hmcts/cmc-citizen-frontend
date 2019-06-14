@@ -1,11 +1,11 @@
 import { RequireSupport } from 'claims/models/directions-questionnaire/requireSupport'
-import { HearingLocation } from 'claims/models/directions-questionnaire/hearingLocation'
+import { CourtLocationType, HearingLocation } from 'claims/models/directions-questionnaire/hearingLocation'
 import { Witness } from 'claims/models/directions-questionnaire/witness'
 import { ExpertReport } from 'claims/models/directions-questionnaire/expertReport'
 import { ExpertRequest } from 'claims/models/directions-questionnaire/expertRequest'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { YesNoOption } from 'models/yesNoOption'
 import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 export interface DirectionsQuestionnaire {
   requireSupport?: RequireSupport,
@@ -28,15 +28,20 @@ export namespace DirectionsQuestionnaire {
         otherSupport: directionsQuestionnaire.supportRequired.otherSupport
       },
       hearingLocation: {
-        courtName: directionsQuestionnaire.hearingLocation ? directionsQuestionnaire.hearingLocation : undefined,
+        courtName: directionsQuestionnaire.hearingLocation &&
+          directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
+          directionsQuestionnaire.hearingLocation.courtName : directionsQuestionnaire.hearingLocation.alternativeCourtName,
         hearingLocationSlug: undefined,
         courtAddress: undefined,
-        locationOption: undefined,
+        locationOption: directionsQuestionnaire.hearingLocation &&
+          directionsQuestionnaire.hearingLocation.courtAccepted === YesNoOption.NO &&
+          directionsQuestionnaire.hearingLocation.alternativeCourtName ?
+          CourtLocationType.ALTERNATE_COURT : CourtLocationType.SUGGESTED_COURT,
         exceptionalCircumstancesReason: directionsQuestionnaire.exceptionalCircumstances ?
           directionsQuestionnaire.exceptionalCircumstances.reason : undefined
       },
       witness: directionsQuestionnaire.selfWitness && {
-        selfWitness: directionsQuestionnaire.selfWitness.option ,
+        selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
       },
       expertReports: directionsQuestionnaire.expertReports.rows

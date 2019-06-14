@@ -1,7 +1,8 @@
 import { Address } from 'claims/models/address'
 
 export enum CourtLocationType {
-  SUGGESTED_COURT, ALTERNATE_COURT
+  SUGGESTED_COURT = 'SUGGESTED_COURT',
+  ALTERNATE_COURT = 'ALTERNATE_COURT'
 }
 
 export interface HearingLocation {

@@ -9,12 +9,13 @@ import { ExpertEvidence } from 'directions-questionnaire/forms/models/expertEvid
 import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 import { ExpertReports } from 'directions-questionnaire/forms/models/expertReports'
 import { PermissionForExpert } from 'directions-questionnaire/forms/models/permissionForExpert'
+import { HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
 
 export class DirectionsQuestionnaireDraft extends DraftDocument {
 
   selfWitness: SelfWitness = new SelfWitness()
   otherWitnesses: OtherWitnesses = new OtherWitnesses()
-  hearingLocation: string = ''
+  hearingLocation: HearingLocation = new HearingLocation()
   hearingLocationSlug: string
   exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances()
   availability: Availability = new Availability()
@@ -31,7 +32,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
       this.selfWitness = new SelfWitness().deserialize(input.selfWitness.option)
       this.otherWitnesses = new OtherWitnesses().deserialize(input.otherWitnesses)
       this.supportRequired = new SupportRequired().deserialize(input.supportRequired)
-      this.hearingLocation = input.hearingLocation
+      this.hearingLocation = new HearingLocation().deserialize(input.hearingLocation)
       this.hearingLocationSlug = input.hearingLocationSlug
       this.exceptionalCircumstances = new ExceptionalCircumstances().deserialize(input.exceptionalCircumstances)
       this.availability = new Availability().deserialize(input.availability)
