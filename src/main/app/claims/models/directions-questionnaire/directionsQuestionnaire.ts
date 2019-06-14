@@ -49,7 +49,7 @@ export namespace DirectionsQuestionnaire {
           unavailableDate: unavailableDate
         })),
       expertRequest: directionsQuestionnaire.expertEvidence && {
-        expertEvidenceToExamine: directionsQuestionnaire.expertRequired.option.option,
+        expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
         reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
       }
     }

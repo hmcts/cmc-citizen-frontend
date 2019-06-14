@@ -42,7 +42,7 @@ describe('DirectionsQuestionnaire', () => {
             { unavailableDate: { year: 2020,month: 2,day: 8 } }],
           expertRequest:
           {
-            expertEvidenceToExamine: 'yes',
+            expertEvidenceToExamine: 'Photographs',
             reasonForExpertAdvice: 'for expert opinion'
           }
         })
