@@ -39,7 +39,7 @@ export namespace DirectionsQuestionnaire {
         selfWitness: directionsQuestionnaire.selfWitness.option ,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
       },
-      expertReports: directionsQuestionnaire.expertReports
+      expertReports: directionsQuestionnaire.expertReports.rows
         && directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
           expertReportDate: row.reportDate

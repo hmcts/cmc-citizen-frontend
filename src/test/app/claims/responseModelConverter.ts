@@ -37,11 +37,10 @@ import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { sampleMediationDraftObj, sampleDirectionsQuestionnaireDraftObj } from 'test/http-mocks/draft-store'
+import { sampleDirectionsQuestionnaireDraftObj, sampleMediationDraftObj } from 'test/http-mocks/draft-store'
 import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { ReportRow } from 'directions-questionnaire/forms/models/reportRow'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
   return new ResponseDraft().deserialize({
@@ -77,12 +76,30 @@ describe('ResponseModelConverter', () => {
 
   const directionsQuestionnaireResponseData = {
     directionsQuestionnaire: {
-      selfWitness: 'yes',
-      hearingLocation: 'Birmingham District Probate Registry',
-      disabledAccessSelected: 'yes',
-      expertEvidenceToExamine: 'Photographs',
-      whyExpertIsNeeded: 'To give opinion',
-      expertReportsRows: [new ReportRow()]
+      selfWitness: { option: { option: 'yes' } },
+      otherWitnesses: { howMany: 1 },
+      supportRequired: {
+        languageSelected: true,
+        languageInterpreted: 'Klingon',
+        signLanguageSelected: true,
+        signLanguageInterpreted: 'Makaton',
+        hearingLoopSelected: true,
+        disabledAccessSelected: true,
+        otherSupportSelected: true,
+        otherSupport: 'Life advice'
+      },
+      hearingLocation: 'Little Whinging, Surrey',
+      hearingLocationSlug: undefined,
+      exceptionalCircumstances: { reason: 'Poorly pet owl' },
+      availability: { unavailableDates: [ { year: 2020,month: 1,day: 4 }, { year: 2020,month: 2,day: 8 } ] },
+      expertRequired: undefined,
+      expertReports: { rows: [ { expertName: 'Prof. McGonagall',
+        reportDate: { year: 2018, month: 1, day: 10 } },
+        { expertName: 'Mr Rubeus Hagrid',
+          reportDate: { year: 2019, month: 2, day: 29 } } ]},
+      permissionForExpert: undefined,
+      expertEvidence: { whatToExamine: 'Photographs' },
+      whyExpertIsNeeded: { explanation: 'for expert opinion' }
     }
   }
 
