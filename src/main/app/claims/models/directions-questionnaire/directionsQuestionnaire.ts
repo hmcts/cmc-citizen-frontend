@@ -50,7 +50,7 @@ export namespace DirectionsQuestionnaire {
         })),
       expertRequest: directionsQuestionnaire.expertEvidence && {
         expertEvidenceToExamine: directionsQuestionnaire.expertRequired.option.option,
-        reasonForExpertAdvice: directionsQuestionnaire.expertEvidence.whatToExamine
+        reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
       }
     }
   }

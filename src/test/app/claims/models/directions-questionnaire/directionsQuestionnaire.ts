@@ -43,7 +43,7 @@ describe('DirectionsQuestionnaire', () => {
           expertRequest:
           {
             expertEvidenceToExamine: 'yes',
-            reasonForExpertAdvice: 'Photographs'
+            reasonForExpertAdvice: 'for expert opinion'
           }
         })
     })
