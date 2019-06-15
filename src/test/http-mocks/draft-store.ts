@@ -597,7 +597,12 @@ export const sampleDirectionsQuestionnaireDraftObj = {
     },
     howMany: 1
   },
-  hearingLocation: 'Little Whinging, Surrey',
+  hearingLocation: {
+    courtName: 'Little Whinging, Surrey',
+    courtPostCode: undefined,
+    courtAccepted: { option : 'yes' },
+    alternateCourtName: 'some other court name'
+  },
   exceptionalCircumstances: {
     exceptionalCircumstances: { option : 'yes' },
     reason: 'Poorly pet owl'

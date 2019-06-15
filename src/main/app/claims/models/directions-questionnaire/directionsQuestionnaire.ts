@@ -29,6 +29,7 @@ export namespace DirectionsQuestionnaire {
       },
       hearingLocation: {
         courtName: directionsQuestionnaire.hearingLocation &&
+          directionsQuestionnaire.hearingLocation.courtAccepted &&
           directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
           directionsQuestionnaire.hearingLocation.courtName : directionsQuestionnaire.hearingLocation.alternativeCourtName,
         hearingLocationSlug: undefined,
