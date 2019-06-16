@@ -411,6 +411,23 @@ export class Claim {
       && this.settlement && this.settlement.isOfferRejected()
   }
 
+  get isSettlementPaymentDateValid (): boolean {
+    if (this.settlement) {
+      const offer = this.settlement.getLastOffer()
+      const now = MomentFactory.currentDate()
+      if (offer && offer.paymentIntention && offer.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+        const paymentDate = offer.paymentIntention.paymentDate
+        return (paymentDate.isAfter(now) || paymentDate.isSame(now))
+      } else if (offer && offer.paymentIntention && offer.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
+        const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
+        return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
+      } else if (offer && offer.paymentIntention && offer.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY) {
+        return true
+      }
+    }
+    return false
+  }
+
   private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
     return this.settlement && this.settlement.isOfferAccepted() && this.settlement.isThroughAdmissions() &&
       this.claimantResponse && !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination
