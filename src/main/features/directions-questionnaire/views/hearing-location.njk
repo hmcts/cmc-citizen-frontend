@@ -27,23 +27,22 @@
               <p>{{ t('We’ll use the location you choose unless the claimant has an exceptional reason to object, for example accessibility needs.') }}</p>
               <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}</p>
 
-              <details class="form-group analytics-click-event-trigger" data-event-label="Response: Find out what each response means">
-                <summary>{{ t('See this court’s facilities') }}</summary>
-
-                <div class="panel">
-                  {% for facility in courtFacilities %}
-                    <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
-                    <p>{{ facility.description }}</p>
-                  {% endfor %}
-                </div>
-
-              </details>
-
             {% elseif party === MadeBy.CLAIMANT %}
               <p>{{ t('You can request any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}
             {% endif %}
-            <h1
-              class="heading-medium">{{ t('Do you want to choose {{ courtName }}', { courtName: form.valueFor('courtName') }) }}</h1>
+
+            <details class="form-group analytics-click-event-trigger" data-event-label="Response: Find out what each response means">
+              <summary>{{ t('See this court’s facilities') }}</summary>
+
+              <div class="panel">
+                {% for facility in courtFacilities %}
+                  <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
+                  {{ facility.description | safe }}
+                {% endfor %}
+              </div>
+            </details>
+
+            <h1 class="heading-medium">{{ t('Do you want to choose {{ courtName }}', { courtName: form.valueFor('courtName') }) }}</h1>
             {{ radioGroup(
               form = form,
               label = heading,

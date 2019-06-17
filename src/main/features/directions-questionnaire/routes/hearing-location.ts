@@ -104,7 +104,8 @@ export default express.Router()
           if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
             const court: Court = await getNearestCourt(form.model.alternativePostcode)
             if (court !== undefined) {
-              form.model = new HearingLocation(court.name, form.model.alternativePostcode)
+              const alternativeCourtDetails: CourtDetails = await getCourtDetails(court.slug)
+              form.model = new HearingLocation(court.name, form.model.alternativePostcode, alternativeCourtDetails.facilities)
             }
             renderPage(res, form, court === undefined)
 
