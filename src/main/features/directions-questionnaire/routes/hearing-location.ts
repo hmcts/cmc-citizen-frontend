@@ -55,7 +55,7 @@ export default express.Router()
     try {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
 
-      if (!draft.document.hearingLocation) {
+      if (draft.document.hearingLocation) {
         const postcode: string = getDefaultPostcode(res)
         const court: Court = await getNearestCourt(postcode)
         if (court) {
@@ -63,6 +63,10 @@ export default express.Router()
         } else {
           renderPage(res, new Form<HearingLocation>(new HearingLocation()), true)
         }
+      } else {
+        renderPage(res, new Form<HearingLocation>(
+          new HearingLocation(draft.document.hearingLocation.alternativeCourtName, undefined, YesNoOption.YES)),
+          false)
       }
     } catch (err) {
       next(err)

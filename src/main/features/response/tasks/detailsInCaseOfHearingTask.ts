@@ -5,7 +5,7 @@ import { YesNoOption } from 'models/yesNoOption'
 export class DetailsInCaseOfHearingTask {
   static isCompleted (responseDraft: ResponseDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
 
-    if (!directionsQuestionnaireDraft.hearingLocation.length) {
+    if (!directionsQuestionnaireDraft.hearingLocation) {
       return false
     } else if (directionsQuestionnaireDraft.expertRequired.option !== undefined) {
       if (directionsQuestionnaireDraft.expertRequired.option.option === YesNoOption.YES.option) {

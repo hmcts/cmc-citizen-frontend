@@ -638,7 +638,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
       },
       {
         expertName: 'Mr Rubeus Hagrid',
-        reportDate: { year: 2019, month: 2, day: 29 }
+        reportDate: { year: 2019, month: 2, day: 27 }
       }
     ]
   },

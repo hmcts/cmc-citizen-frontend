@@ -48,11 +48,11 @@ export namespace DirectionsQuestionnaire {
       expertReports: directionsQuestionnaire.expertReports.rows
         && directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
-          expertReportDate: row.reportDate
+          expertReportDate: row.reportDate.asString()
         })),
       unavailableDates: directionsQuestionnaire.availability &&
         directionsQuestionnaire.availability.unavailableDates.map(unavailableDate => ({
-          unavailableDate: unavailableDate
+          unavailableDate: unavailableDate.asString()
         })),
       expertRequest: directionsQuestionnaire.expertEvidence && {
         expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
