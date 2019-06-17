@@ -8,8 +8,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
-import { MadeBy } from 'offer/form/models/madeBy'
-import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { getPreferredParty, getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { Claim } from 'claims/models/claim'
 
 function renderPage (res: express.Response, form: Form<SupportRequired>) {
@@ -35,7 +34,7 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
         const claim: Claim = res.locals.claim
-        if (getPreferredParty(claim) === MadeBy.CLAIMANT) {
+        if (getUsersRole(claim, user) === getPreferredParty(claim)) {
           res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }))
