@@ -24,6 +24,7 @@ const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
 const cookieName: string = config.get<string>('session.cookieName')
 const hearingExceptionalCircumstancesPage = Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: externalId })
+const hearingLocationPage = Paths.hearingLocationPage.evaluateUri({ externalId: externalId })
 const pagePath = Paths.supportPage.evaluateUri({ externalId: externalId })
 
 function checkAccessGuard (app: any, method: string) {
@@ -168,7 +169,7 @@ describe('Directions Questionnaire - support required page', () => {
     })
 
     context('when user is authorised defendant and form is valid', () => {
-      it('should redirect to hearing exceptional circumstances page', async () => {
+      it('should redirect to hearing location page', async () => {
         idamServiceMock.resolveRetrieveUserFor(claimWithDQ.defendantId, 'citizen')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
         draftStoreServiceMock.resolveFind('directionsQuestionnaire')
@@ -179,7 +180,7 @@ describe('Directions Questionnaire - support required page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send(validFormData)
-          .expect(res => expect(res).to.be.redirect.toLocation(hearingExceptionalCircumstancesPage))
+          .expect(res => expect(res).to.be.redirect.toLocation(hearingLocationPage))
       })
     })
 
