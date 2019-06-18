@@ -228,7 +228,7 @@ const testData = [
     defendantAssertions: ['You’ve admitted part of the claim.']
   },
   {
-    status: 'Full admission - defendant responded pay in instalments - claimant rejects court repayment plan and referred to judge',
+    status: 'Partial admission - defendant responded pay in instalments - claimant rejects court repayment plan and referred to judge',
     claim: partialAdmissionClaim,
     claimOverride: {
       response: { ...partialAdmissionClaim.response, ...basePayByInstalmentsData },

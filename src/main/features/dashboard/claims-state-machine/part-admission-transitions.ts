@@ -93,7 +93,7 @@ export function partAdmissionTransitions (claim: Claim) {
       },
       {
         name: 'checkIsPayBySetDateRejectedWithMediationClaimantWithoutMediation',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_REJECTED_WITH_MEDIATION_CLAIMANT_WITHOUT_MEDIATION
       },
       {
@@ -140,28 +140,28 @@ export function partAdmissionTransitions (claim: Claim) {
       },
       {
         name: 'checkIsPayInInstalmentsReferredToJudge',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_REFERRED_TO_JUDGE
       },
 
       {
         name: 'checkCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByAdmission',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
         to: PartAdmissionStates.PA_CCJ_PAY_BY_SET_DATE_BY_ADMISSION
       },
       {
         name: 'checkCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByAdmission',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_CCJ_PAY_IN_INSTALMENTS_BY_ADMISSION
       },
       {
         name: 'checkPayBySetDateClaimantOfferAcceptedByAdmission',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION
       },
       {
         name: 'checkPayInInstalmentsClaimantOfferAcceptedByAdmission',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION
       },
       {
@@ -234,25 +234,24 @@ export function partAdmissionTransitions (claim: Claim) {
         from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION],
         to: PartAdmissionStates.PA_CCJ_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION
       },
-
       {
         name: 'checkPayBySetDateClaimantOfferAcceptedByDetermination',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION
       },
       {
         name: 'checkPayInInstalmentsClaimantOfferAcceptedByDetermination',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION
       },
       {
         name: 'checkCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByDetermination',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
         to: PartAdmissionStates.PA_CCJ_PAY_BY_SET_DATE_BY_DETERMINATION
       },
       {
         name: 'checkCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByDetermination',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION],
         to: PartAdmissionStates.PA_CCJ_PAY_IN_INSTALMENTS_BY_DETERMINATION
       },
       {
@@ -339,6 +338,10 @@ export function partAdmissionTransitions (claim: Claim) {
         this.log.invalidTransitions.push({ transition: transition, from: from, to: to })
       },
 
+      checkCCJRequested (): boolean {
+        return !!claim.countyCourtJudgmentRequestedAt
+      },
+
       onBeforeCheckIsStatesPaid (): boolean {
         return !!(claim.response as PartialAdmissionResponse).paymentDeclaration
       },
@@ -387,6 +390,34 @@ export function partAdmissionTransitions (claim: Claim) {
         return this.is(PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION_PAST_DEADLINE) && !!claim.countyCourtJudgmentRequestedAt
       },
 
+      checkPastCounterSignatureDeadline (): boolean {
+        return !claim.settlement.isSettled() && !!claim.claimantRespondedAt && claim.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
+      },
+
+      onBeforeCheckPayBySetDatePastCounterSignatureDeadlineByAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByAdmission() && this.checkPastCounterSignatureDeadline()
+      },
+
+      onBeforeCheckPayInInstalmentsPastCounterSignatureDeadlineByAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByAdmission() && this.checkPastCounterSignatureDeadline()
+      },
+
+      onBeforeCheckPayBySetDatePastCounterSignatureDeadlineByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByDetermination() && this.checkPastCounterSignatureDeadline()
+      },
+
+      onBeforeCheckPayInInstalmentsPastCounterSignatureDeadlineByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByDetermination() && this.checkPastCounterSignatureDeadline()
+      },
+
+      onBeforeCheckPayBySetDateDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkDefendantOfferRejected()
+      },
+
+      onBeforeCheckPayInInstalmentsDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkDefendantOfferRejected()
+      },
+
       onBeforeCheckCCJRequestedPayImmediatelyWithoutMediationPastDeadLine (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_IMMEDIATELY_WITHOUT_MEDIATION_PAST_DEADLINE) && !!claim.countyCourtJudgmentRequestedAt
       },
@@ -419,6 +450,39 @@ export function partAdmissionTransitions (claim: Claim) {
         return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_WITHOUT_MEDIATION) && !!claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.REJECTION
       },
 
+      checkIsSettled (): boolean {
+        return !!claim.settlement && claim.settlement.isThroughAdmissionsAndSettled()
+      },
+
+      onBeforeCheckIsPayBySetDateSettledThroughAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkIsSettled()
+      },
+
+      onBeforeCheckIsPayBySetDateSettledThroughDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_DETERMINATION) && this.checkIsSettled()
+      },
+
+      onBeforeCheckIsPayInInstalmentsSettledThroughAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkIsSettled()
+      },
+
+      onBeforeCheckPayBySetDateClaimantOfferAcceptedByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION) && this.checkClaimantOfferAcceptedByDetermination()
+      },
+
+      onBeforeCheckPayInInstalmentsClaimantOfferAcceptedByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION) && this.checkClaimantOfferAcceptedByDetermination()
+      },
+
+      checkClaimantOfferAcceptedByDetermination (): boolean {
+        return !!claim.settlement && claim.settlement.isOfferAccepted() && claim.settlement.isThroughAdmissions() &&
+          !!claim.claimantResponse && !!(claim.claimantResponse as AcceptationClaimantResponse).courtDetermination
+      },
+
+      onBeforeCheckPayBySetDateClaimantOfferAcceptedByAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION) && this.checkClaimantOfferAcceptedByAdmission()
+      },
+
       onBeforeCheckIsPayInInstallmentsWithMediation (): boolean {
         return this.paymentOption === PaymentOption.INSTALMENTS && claim.response.freeMediation === FreeMediationOption.YES
       },
@@ -439,12 +503,28 @@ export function partAdmissionTransitions (claim: Claim) {
         return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITHOUT_MEDIATION) && !!claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.REJECTION
       },
 
+      onBeforeCheckPayBySetDatePastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_SETTLED_THROUGH_ADMISSION) && this.checkPaymentDeadline()
+      },
+
+      onBeforeCheckPayInInstalmentsPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_ADMISSION) && this.checkPaymentDeadline()
+      },
+
+      onBeforeCheckPayBySetDatePastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_SETTLED_THROUGH_DETERMINATION) && this.checkPaymentDeadline()
+      },
+
+      onBeforeCheckPayInInstalmentsPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_DETERMINATION) && this.checkPaymentDeadline()
+      },
+
       onBeforeCheckIsPayBySpecifiedDateReferredToJudge (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE) && this.checkIsReferredToJudge()
       },
 
       onBeforeCheckIsPayInInstalmentsReferredToJudge (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS) && this.checkIsReferredToJudge()
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION) && this.checkIsReferredToJudge()
       },
 
       checkCCJRequestedWhenAcceptRepaymentPlanByAdmission (): boolean {
@@ -453,12 +533,15 @@ export function partAdmissionTransitions (claim: Claim) {
       },
 
       onBeforeCheckCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByAdmission (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE) && this.checkCCJRequestedWhenAcceptRepaymentPlanByAdmission()
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION) && this.checkCCJRequestedWhenAcceptRepaymentPlanByAdmission()
       },
 
       onBeforeCheckCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByAdmission (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS) && this.checkCCJRequestedWhenAcceptRepaymentPlanByAdmission()
+        return this.is(PartAdmissionStates.PA_CCJ_PAY_BY_SET_DATE_BY_ADMISSION) && this.checkCCJRequestedWhenAcceptRepaymentPlanByAdmission()
+      },
 
+      onBeforeCheckCCJPayBySetDateRequestedPastCounterSignatureDeadlineByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION) && this.checkCCJRequested()
       },
 
       checkClaimantOfferAcceptedByAdmission (): boolean {
@@ -466,29 +549,17 @@ export function partAdmissionTransitions (claim: Claim) {
           !!claim.claimantResponse && !(claim.claimantResponse as AcceptationClaimantResponse).courtDetermination
       },
 
-      onBeforeCheckPayBySetDateClaimantOfferAcceptedByAdmission (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE) && this.checkClaimantOfferAcceptedByAdmission()
+      checkIsReferredToJudge (): boolean {
+        return !!claim.claimantResponse && (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.REFER_TO_JUDGE
       },
 
       onBeforeCheckPayInInstalmentsClaimantOfferAcceptedByAdmission (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS) && this.checkClaimantOfferAcceptedByAdmission()
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION) && this.checkClaimantOfferAcceptedByAdmission()
       },
 
       checkDefendantOfferRejected (): boolean {
         return (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.SETTLEMENT
           && claim.settlement && claim.settlement.isOfferRejected()
-      },
-
-      checkPastCounterSignatureDeadline (): boolean {
-        return !claim.settlement.isSettled() && !!claim.claimantRespondedAt && claim.claimantRespondedAt.clone().add('7', 'days').isBefore(MomentFactory.currentDate())
-      },
-
-      onBeforeCheckPayBySetDatePastCounterSignatureDeadlineByAdmission (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByAdmission() && this.checkPastCounterSignatureDeadline()
-      },
-
-      onBeforeCheckPayInInstalmentsPastCounterSignatureDeadlineByAdmission (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && !this.checkDefendantOfferRejected() && this.checkClaimantOfferAcceptedByAdmission() && this.checkPastCounterSignatureDeadline()
       },
 
       onBeforeCheckPayBySetDateDefendantOfferRejectedByAdmission (): boolean {
@@ -497,6 +568,48 @@ export function partAdmissionTransitions (claim: Claim) {
 
       onBeforeCheckPayInInstalmentsDefendantOfferRejectedByAdmission (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_CLAIMANT_OFFER_ACCEPTED_BY_ADMISSION) && this.checkDefendantOfferRejected()
+      },
+
+      onBeforeCheckCCJRequestedPayImmediatelyPastDeadLine (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IMMEDIATELY_WITH_MEDIATION_PAST_DEADLINE) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayBySetDateRequestedDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedDefendantOfferRejectedByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_DEFENDANT_REJECTED_CLAIMANT_OFFER_BY_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayBySetDateRequestedPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedPastPaymentDeadLineDuringSettlementByAdmission (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_ADMISSION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayBySetDateRequestedPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedPastPaymentDeadLineDuringSettlementByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION) && this.checkCCJRequested()
+      },
+
+      checkCCJRequestedWhenAcceptRepaymentPlanByDetermination (): boolean {
+        return !!claim.countyCourtJudgmentRequestedAt && !!(claim.claimantResponse as AcceptationClaimantResponse).courtDetermination &&
+          (claim.claimantResponse as AcceptationClaimantResponse).formaliseOption === FormaliseOption.CCJ
+      },
+
+      onBeforeCheckCCJPayBySetDateRequestedWhenAcceptRepaymentPlanByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION) && this.checkCCJRequestedWhenAcceptRepaymentPlanByDetermination()
+      },
+
+      onBeforeCheckCCJPayInInstalmentsRequestedWhenAcceptRepaymentPlanByDetermination (): boolean {
+        return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_WITH_MEDIATION) && this.checkCCJRequestedWhenAcceptRepaymentPlanByDetermination()
+
       },
 
       onBeforeCheckCCJPayBySetDateRequestedDefendantOfferRejectedByAdmission (): boolean {
@@ -514,7 +627,6 @@ export function partAdmissionTransitions (claim: Claim) {
       onBeforeCheckCCJPayInInstalmentsRequestedPastCounterSignatureDeadlineByAdmission (): boolean {
         return this.is(PartAdmissionStates.PA_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_ADMISSION) && this.checkCCJRequested()
       },
-
       findState (currentSate: StateMachine) {
         _.each(currentSate.transitions(), function (eachTransaction) {
           currentSate[eachTransaction]()

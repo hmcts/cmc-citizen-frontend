@@ -1,4 +1,4 @@
 export interface ClaimTemplate {
   dashboard: string,
-  status: string
+  state: string
 }
