@@ -25,6 +25,7 @@ import { FrequencyViewFilter } from 'claimant-response/filters/frequency-view-fi
 import { MonthlyAmountViewFilter } from 'claimant-response/filters/monthly-amount-view-filter'
 import { PriorityDebtTypeViewFilter } from 'claimant-response/filters/priority-debts-type-view-filter'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -77,6 +78,11 @@ export class ClaimantResponseFeature {
     app.all(/^\/case\/.+\/claimant-response\/task-list|check-and-send.*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
         return new MediationDraft().deserialize(value)
+      }))
+
+    app.all(/^\/case\/.+\/response\/task-list|check-and-send|incomplete-submission.*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'directionsQuestionnaire', 100, (value: any): DirectionsQuestionnaireDraft => {
+        return new DirectionsQuestionnaireDraft().deserialize(value)
       }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

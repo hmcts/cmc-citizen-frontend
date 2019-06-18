@@ -27,6 +27,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { IntentionToProceedTask } from 'claimant-response/tasks/intentionToProceedTask'
 
 const validator: Validator = new Validator()
 
@@ -122,14 +123,34 @@ export class TaskListBuilder {
     const tasks: TaskListItem[] = []
 
     if (claim.response.responseType === ResponseType.FULL_DEFENCE
-      && claim.response.freeMediation === YesNoOption.NO) {
+      && claim.response.freeMediation === YesNoOption.YES) {
       tasks.push(
         new TaskListItem(
-          'Accept or reject their response',
-          Paths.notImplementedYetPage.evaluateUri({ externalId: externalId }),
-          false
+          'Decide whether to proceed',
+          Paths.intentionToProceedPage.evaluateUri({ externalId: externalId }),
+          IntentionToProceedTask.isCompleted(draft.intentionToProceed)
         )
       )
+
+      if (claim.response.freeMediation === YesNoOption.YES) {
+        if (FeatureToggles.isEnabled('mediation')) {
+          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            ))
+        } else {
+          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          tasks.push(
+            new TaskListItem(
+              'Consider free mediation',
+              path,
+              FreeMediationTask.isCompleted(draft, mediationDraft)
+            ))
+        }
+      }
     }
 
     if (claim.response.responseType === ResponseType.PART_ADMISSION
@@ -300,7 +321,8 @@ export class TaskListBuilder {
                                               claim: Claim,
                                               directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
     if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
-      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
+      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire') && ((claim.response.responseType === ResponseType.PART_ADMISSION)
+        || (claim.response.responseType === ResponseType.FULL_DEFENCE))) {
 
       return new TaskList(
         'Your hearing requirements', [

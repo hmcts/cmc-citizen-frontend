@@ -1,9 +1,36 @@
-import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { YesNoOption } from 'models/yesNoOption'
+import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 
 export class DetailsInCaseOfHearingTask {
-  static isCompleted (draft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
-    return directionsQuestionnaireDraft && directionsQuestionnaireDraft.otherWitnesses && directionsQuestionnaireDraft.otherWitnesses.isCompleted() &&
-       directionsQuestionnaireDraft.selfWitness && directionsQuestionnaireDraft.selfWitness.isCompleted()
+  static isCompleted (responseDraft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
+    return true
+    if (directionsQuestionnaireDraft.exceptionalCircumstances === undefined) {
+      return false
+    } else if (!directionsQuestionnaireDraft.hearingLocation.length) {
+      return false
+    } else if (directionsQuestionnaireDraft.expertRequired.option !== undefined) {
+      if (directionsQuestionnaireDraft.expertRequired.option.option === YesNoOption.YES.option) {
+        if (directionsQuestionnaireDraft.expertReports.declared === undefined) {
+          return false
+        } else if (directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.expertReports.rows.length) {
+          return false
+        } else if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
+          return false
+        } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
+          if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
+            return false
+          } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
+            return false
+          }
+        }
+      }
+    }
+    return !(directionsQuestionnaireDraft.selfWitness.option === undefined ||
+      !directionsQuestionnaireDraft.otherWitnesses.isCompleted() ||
+      !directionsQuestionnaireDraft.availability.isCompleted() ||
+      (directionsQuestionnaireDraft.supportRequired.otherSupportSelected && !directionsQuestionnaireDraft.supportRequired.otherSupport.length) ||
+      (directionsQuestionnaireDraft.supportRequired.languageSelected && !directionsQuestionnaireDraft.supportRequired.languageInterpreted.length) ||
+      (directionsQuestionnaireDraft.supportRequired.signLanguageSelected && !directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted.length))
   }
 }
