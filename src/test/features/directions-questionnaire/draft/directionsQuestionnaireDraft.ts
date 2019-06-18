@@ -20,7 +20,7 @@ describe('DirectionsQuestionnaireDraft', () => {
       expect(directionsQuestionnaireDraftSampleData.selfWitness.option.option).to.equal('yes')
       expect(directionsQuestionnaireDraftSampleData.otherWitnesses.otherWitnesses.option).to.equal('yes')
       expect(directionsQuestionnaireDraftSampleData.otherWitnesses.howMany).to.equal(1)
-      expect(directionsQuestionnaireDraftSampleData.hearingLocation).to.equal('Little Whinging, Surrey')
+      expect(directionsQuestionnaireDraftSampleData.hearingLocation.courtName).to.equal('Little Whinging, Surrey')
       expect(directionsQuestionnaireDraftSampleData.exceptionalCircumstances.exceptionalCircumstances.option).to.equal('yes')
       expect(directionsQuestionnaireDraftSampleData.exceptionalCircumstances.reason).to.equal('Poorly pet owl')
       expect(directionsQuestionnaireDraftSampleData.availability.hasUnavailableDates).to.be.true
@@ -42,7 +42,7 @@ describe('DirectionsQuestionnaireDraft', () => {
       expect(directionsQuestionnaireDraftSampleData.expertReports.rows[0].expertName).to.equal('Prof. McGonagall')
       expect(directionsQuestionnaireDraftSampleData.expertReports.rows[0].reportDate).to.deep.equal({ year: 2018, month: 1, day: 10 })
       expect(directionsQuestionnaireDraftSampleData.expertReports.rows[1].expertName).to.equal('Mr Rubeus Hagrid')
-      expect(directionsQuestionnaireDraftSampleData.expertReports.rows[1].reportDate).to.deep.equal({ year: 2019, month: 2, day: 29 })
+      expect(directionsQuestionnaireDraftSampleData.expertReports.rows[1].reportDate).to.deep.equal({ year: 2019, month: 2, day: 27 })
     })
   })
 })

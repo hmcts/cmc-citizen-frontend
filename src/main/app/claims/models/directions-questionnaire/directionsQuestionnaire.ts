@@ -6,6 +6,7 @@ import { ExpertRequest } from 'claims/models/directions-questionnaire/expertRequ
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { LocalDate } from 'forms/models/localDate'
 
 export interface DirectionsQuestionnaire {
   requireSupport?: RequireSupport,
@@ -19,6 +20,10 @@ export interface DirectionsQuestionnaire {
 export namespace DirectionsQuestionnaire {
 
   export function deserialize (directionsQuestionnaire: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
+    if (!directionsQuestionnaire) {
+      return undefined
+    }
+
     return {
       requireSupport: directionsQuestionnaire.supportRequired && {
         languageInterpreter: directionsQuestionnaire.supportRequired.languageInterpreted,
@@ -48,11 +53,11 @@ export namespace DirectionsQuestionnaire {
       expertReports: directionsQuestionnaire.expertReports.rows
         && directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
-          expertReportDate: row.reportDate.asString()
+          expertReportDate: row.reportDate ? LocalDate.fromObject(row.reportDate).asString() : undefined
         })),
       unavailableDates: directionsQuestionnaire.availability &&
         directionsQuestionnaire.availability.unavailableDates.map(unavailableDate => ({
-          unavailableDate: unavailableDate.asString()
+          unavailableDate: unavailableDate ? LocalDate.fromObject(unavailableDate).asString() : undefined
         })),
       expertRequest: directionsQuestionnaire.expertEvidence && {
         expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,

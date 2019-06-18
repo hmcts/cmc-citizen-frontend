@@ -88,15 +88,17 @@ describe('ResponseModelConverter', () => {
         otherSupportSelected: true,
         otherSupport: 'Life advice'
       },
-      hearingLocation: 'Little Whinging, Surrey',
-      hearingLocationSlug: undefined,
+      hearingLocation: {
+        courtName: 'Little Whinging, Surrey',
+        courtAccepted: { option: 'yes' }
+      },
       exceptionalCircumstances: { reason: 'Poorly pet owl' },
       availability: { unavailableDates: [ { year: 2020,month: 1,day: 4 }, { year: 2020,month: 2,day: 8 } ] },
       expertRequired: undefined,
       expertReports: { rows: [ { expertName: 'Prof. McGonagall',
         reportDate: { year: 2018, month: 1, day: 10 } },
         { expertName: 'Mr Rubeus Hagrid',
-          reportDate: { year: 2019, month: 2, day: 29 } } ]},
+          reportDate: { year: 2019, month: 2, day: 27 } } ]},
       permissionForExpert: undefined,
       expertEvidence: { whatToExamine: 'Photographs' },
       whyExpertIsNeeded: { explanation: 'for expert opinion' }
