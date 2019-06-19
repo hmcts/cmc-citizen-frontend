@@ -411,21 +411,26 @@ export class Claim {
       && this.settlement && this.settlement.isOfferRejected()
   }
 
-  get isSettlementPaymentDateValid (): boolean {
+  public isSettlementPaymentDateValid (): boolean {
     if (this.settlement) {
       const offer = this.settlement.getLastOffer()
       const now = MomentFactory.currentDate()
-      if (offer && offer.paymentIntention && offer.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
-        const paymentDate = offer.paymentIntention.paymentDate
-        return (paymentDate.isAfter(now) || paymentDate.isSame(now))
-      } else if (offer && offer.paymentIntention && offer.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
-        const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
-        return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
-      } else if (offer && offer.paymentIntention && offer.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY) {
-        return true
+      if (offer && offer.paymentIntention) {
+        switch (offer.paymentIntention.paymentOption) {
+          case PaymentOption.BY_SPECIFIED_DATE : const paymentDate = offer.paymentIntention.paymentDate
+            return (paymentDate.isAfter(now) || paymentDate.isSame(now))
+          case PaymentOption.INSTALMENTS : const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
+            return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
+          case PaymentOption.IMMEDIATELY : return true
+        }
       }
     }
     return false
+  }
+
+  public isSettlementRejectedOrBreached (): boolean {
+     return ((this.settlement && (!!this.settlementReachedAt || this.settlement.isOfferRejectedByDefendant()))
+      || this.hasDefendantNotSignedSettlementAgreementInTime())
   }
 
   private hasClaimantAcceptedOfferAndSignedSettlementAgreement (): boolean {
