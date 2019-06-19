@@ -649,9 +649,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   },
   expertEvidence: {
     expertEvidence: {
-      option: {
-        option: 'yes'
-      }
+      option: 'yes'
     },
     whatToExamine: 'Photographs'
   },

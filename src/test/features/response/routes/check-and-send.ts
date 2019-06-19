@@ -32,6 +32,10 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const draftType = 'response'
 const pagePath = ResponsePaths.checkAndSendPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const claimWithDQ = {
+  ...claimStoreServiceMock.sampleClaimObj,
+  ...{ features: ['admissions','directionsQuestionnaire'] }
+}
 
 describe('Defendant response: check and send page', () => {
   attachDefaultHooks(app)
@@ -103,14 +107,13 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind(draftType)
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
               .expect(res => expect(res).to.be.successful.withText('Support required for a hearing'))
-              .expect(res => expect(res).to.be.successful.withText('Disabled access'))
               .expect(res => expect(res).to.be.successful.withText('Preferred hearing centre'))
               .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
               .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?'))
