@@ -15,7 +15,7 @@
         {{ internalLink('contact them', claimantDetailsPageURI) }}
         {{ t('if you need their payment details') }}
     </li>
-    <li>make sure you get a receipt for your payment</li>
+    <li>{{ t('make sure you get a receipt for your payment') }}</li>
   </ul>
   <p>{{t('Because you’ve said you won’t pay immediately, {{ claimantName }} can either:', { claimantName:claimantName }) }}</p>
   <ul class="list list-bullet">
@@ -27,7 +27,7 @@
   <p>{{ t('The court will review the case for the full amount of {{fullAmount}}.', { fullAmount:fullAmount }) }}</p>
 
   <h3 class="heading-small">{{t('If {{ claimantName }} rejects your offer to pay by {{ paymentDate }}', { claimantName: claimantName, paymentDate: paymentDate }) }}</h3>
-  <p>The court will decide how you must pay.</p>
+  <p>{{ t('The court will decide how you must pay.') }}</p>
 
 {% endif %}
 
@@ -49,7 +49,7 @@
   </p>
 
   <h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer of {{amount}}', { claimantName: claimantName, amount: amount }) }}</h3>
-  <p>The claim will be settled.</p>
+  <p>{{ t('The claim will be settled.') }}</p>
 
   <h3 class="heading-small">{{ t('If {{ claimantName }} rejects your offer', { claimantName: claimantName } ) }}</h3>
 

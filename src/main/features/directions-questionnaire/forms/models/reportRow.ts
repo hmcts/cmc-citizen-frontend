@@ -6,7 +6,7 @@ import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 
 export class ValidationErrors {
-  static readonly NAME_REQUIRED = 'Please enter the expert’s name'
+  static readonly NAME_REQUIRED = 'Enter the expert’s name'
   static readonly DATE_REQUIRED = GlobalValidationErrors.DATE_REQUIRED
   static readonly PAST_DATE_REQUIRED = GlobalValidationErrors.DATE_IN_FUTURE
   static readonly VALID_DATE_REQUIRED = GlobalValidationErrors.DATE_NOT_VALID

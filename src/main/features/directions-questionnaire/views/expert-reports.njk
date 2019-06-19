@@ -40,8 +40,7 @@
           {{ radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true) }}
 
           {% set noRowsError = form.errorFor('rows') %}
-          <div
-            class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
+          <div class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
             id="declared-true" aria-hidden="false">
 
             {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}

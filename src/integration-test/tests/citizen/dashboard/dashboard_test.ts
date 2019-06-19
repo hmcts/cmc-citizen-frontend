@@ -14,7 +14,7 @@ Scenario('Check newly created claim is in my account dashboard with correct clai
   const email: string = await I.createCitizenUser()
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimRef: string = await claimSteps.makeAClaimAndSubmit(email, PartyType.COMPANY, PartyType.INDIVIDUAL, false)
-
+  I.waitForOpenClaim(claimRef)
   I.click('My account')
   I.see('Your money claims account')
   I.see(claimRef + ' ' + `${claimData.defendants[0].title} ${claimData.defendants[0].firstName} ${claimData.defendants[0].lastName}` + ' ' + AmountHelper.formatMoney(claimAmount.getTotal()))

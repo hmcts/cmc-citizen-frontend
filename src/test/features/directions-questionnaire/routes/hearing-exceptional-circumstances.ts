@@ -149,7 +149,7 @@ function checkAccessGuards (app: any, method: string) {
 
       it('Individual vs Business should access page', async () => {
         setupMocks(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.DEFENDANT)
-        await shouldRenderPageWithText('The hearing will be held at the claimant’s chosen court', method)
+        await shouldRenderPageWithText('Do your accessibility needs mean you want to ask for the hearing to be held at a specific court?', method)
       })
 
       it('Business vs Individual should redirect to dashboard', async () => {
@@ -159,7 +159,7 @@ function checkAccessGuards (app: any, method: string) {
 
       it('Business vs Business should access page', async () => {
         setupMocks(PartyType.ORGANISATION, PartyType.ORGANISATION, MadeBy.DEFENDANT)
-        await shouldRenderPageWithText('The hearing will be held at the claimant’s chosen court', method)
+        await shouldRenderPageWithText('Do your accessibility needs mean you want to ask for the hearing to be held at a specific court?', method)
       })
     })
   })
