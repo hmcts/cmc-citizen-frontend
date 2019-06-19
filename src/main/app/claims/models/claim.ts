@@ -429,7 +429,7 @@ export class Claim {
   }
 
   public isSettlementRejectedOrBreached (): boolean {
-     return ((this.settlement && (!!this.settlementReachedAt || this.settlement.isOfferRejectedByDefendant()))
+    return ((this.settlement && (!!this.settlementReachedAt || this.settlement.isOfferRejectedByDefendant()))
       || this.hasDefendantNotSignedSettlementAgreementInTime())
   }
 
