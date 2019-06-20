@@ -75,6 +75,7 @@
 
 {% macro statesPaidRejectedMediationYESDefendantClaimDetails(claim) %}
   <p>{{ t('They agreed to try mediation. We’ll contact you with details of your appointment.') }}</p>
+  {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
 {% endmacro %}
 
 {% macro statesPaidRejectedMediationNODefendantClaimDetails(claim) %}
