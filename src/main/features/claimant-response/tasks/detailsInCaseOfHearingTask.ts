@@ -4,10 +4,9 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 
 export class DetailsInCaseOfHearingTask {
   static isCompleted (responseDraft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
-    return true
     if (directionsQuestionnaireDraft.exceptionalCircumstances === undefined) {
       return false
-    } else if (!directionsQuestionnaireDraft.hearingLocation.length) {
+    } else if (!directionsQuestionnaireDraft.hearingLocation) {
       return false
     } else if (directionsQuestionnaireDraft.expertRequired.option !== undefined) {
       if (directionsQuestionnaireDraft.expertRequired.option.option === YesNoOption.YES.option) {
