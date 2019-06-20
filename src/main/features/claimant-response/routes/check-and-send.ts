@@ -22,6 +22,7 @@ import { Form } from 'forms/form'
 import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ResponseType } from 'claims/models/response/responseType'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -60,8 +61,9 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
   const paymentIntention: PaymentIntention = alreadyPaid ? undefined : getPaymentIntention(draft.document, claim)
-  const dqsEnabled: boolean = (FeatureToggles.isEnabled('directionsQuestionnaire') && ((claim.response.responseType === ResponseType.PART_ADMISSION)
-    || (claim.response.responseType === ResponseType.FULL_DEFENCE)))
+  const dqsEnabled: boolean = (FeatureToggles.isEnabled('directionsQuestionnaire') && ((claim.response.responseType === ResponseType.PART_ADMISSION && draft.document.settleAdmitted
+    && draft.document.settleAdmitted.admitted.option === YesNoOption.NO)
+    || (claim.response.responseType === ResponseType.FULL_DEFENCE && draft.document.intentionToProceed && draft.document.intentionToProceed.proceed.option === YesNoOption.YES)) && ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire'))
   let datesUnavailable: string[]
   if (dqsEnabled) {
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))

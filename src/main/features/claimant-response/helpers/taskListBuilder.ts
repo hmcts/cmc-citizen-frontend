@@ -65,21 +65,21 @@ export class TaskListBuilder {
     } else {
       if (StatesPaidHelper.isAlreadyPaidLessThanAmount(claim)) {
         tasks.push(
-          new TaskListItem(`Have you been paid the ${ NumberFormatter.formatMoney(response.amount) }?`,
+          new TaskListItem(`Have you been paid the ${NumberFormatter.formatMoney(response.amount)}?`,
             Paths.partPaymentReceivedPage.evaluateUri({ externalId: externalId }),
             PartPaymentReceivedTask.isCompleted(draft)
           ))
 
         if (draft.partPaymentReceived && draft.partPaymentReceived.received.option === YesNoOption.YES) {
           tasks.push(
-            new TaskListItem(`Settle the claim for ${ NumberFormatter.formatMoney(response.amount) }?`,
+            new TaskListItem(`Settle the claim for ${NumberFormatter.formatMoney(response.amount)}?`,
               Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
               ClaimSettledTask.isCompleted(draft)
             ))
         }
       } else {
         tasks.push(
-          new TaskListItem(`Have you been paid the full ${ NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue) }?`,
+          new TaskListItem(`Have you been paid the full ${NumberFormatter.formatMoney(claim.totalAmountTillDateOfIssue)}?`,
             Paths.settleClaimPage.evaluateUri({ externalId: externalId }),
             ClaimSettledTask.isCompleted(draft)
           ))
@@ -309,10 +309,13 @@ export class TaskListBuilder {
     return new TaskList('Submit', tasks)
   }
 
-  static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim, mediationDraft?: MediationDraft): TaskListItem[] {
+  static buildRemainingTasks (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskListItem[] {
+    const resolveDirectionsQuestionnaireTaskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionsQuestionnaireDraft)
+
     return [].concat(
       TaskListBuilder.buildDefendantResponseSection(draft, claim).tasks,
-      TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft).tasks
+      TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, mediationDraft).tasks,
+      resolveDirectionsQuestionnaireTaskList !== undefined ? resolveDirectionsQuestionnaireTaskList.tasks : []
     )
       .filter(item => !item.completed)
   }
@@ -321,8 +324,9 @@ export class TaskListBuilder {
                                               claim: Claim,
                                               directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
     if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
-      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire') && ((claim.response.responseType === ResponseType.PART_ADMISSION)
-        || (claim.response.responseType === ResponseType.FULL_DEFENCE))) {
+      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire') && ((claim.response.responseType === ResponseType.PART_ADMISSION && draft.settleAdmitted
+        && draft.settleAdmitted.admitted.option === YesNoOption.NO)
+        || (claim.response.responseType === ResponseType.FULL_DEFENCE && draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES))) {
 
       return new TaskList(
         'Your hearing requirements', [
