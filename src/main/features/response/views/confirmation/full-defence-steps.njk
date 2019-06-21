@@ -2,12 +2,21 @@
 
 {% set claimantName = claim.claimData.claimant.name %}
 
-<h2 class="heading-small">{{ t('If {{ claimantName }} accepts your response', { claimantName: claimantName }) | safe }}</h2>
-<p>The claim will be settled.</p>
-<h2 class="heading-small">{{ t('If {{ claimantName }} rejects your response', { claimantName: claimantName }) | safe  }}</h2>
-<p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
-<p>{{ t('If they don’t want to try mediation the court will review the case. You might have to go to a hearing.') }}</p>
-<p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+{% if claim.response.freeMediation === FreeMediationOption.YES %}
+  <h2 class="heading-small">{{ t('If {{ claimantName }} accepts your response', { claimantName: claimantName }) | safe }}</h2>
+  <p>The claim will be settled.</p>
+  <h2 class="heading-small">{{ t('If {{ claimantName }} rejects your response', { claimantName: claimantName }) | safe  }}</h2>
+  <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+  <p>{{ t('If they don’t want to try mediation the court will review the case. You might have to go to a hearing.') }}</p>
+  <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+{% else %}
+  <p>{{ t('You’ll have to go to a hearing.') }}</p>
+  <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
+      DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
+  <p>{{ t('Your defence will be cancelled if you don’t complete and return the form by 4pm on {{ deadline }}.',
+      { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+  <p>{{ t('We’ll contact you when we set a hearing date to tell you how to prepare.') }}</p>
+{% endif %}
 
 {% if claim.response.defenceType !== DefenceType.ALREADY_PAID %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
