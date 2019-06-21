@@ -65,7 +65,7 @@ const testData = [
     ]
   },
   {
-    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response without mediation',
     claim: fullDefenceClaim,
     claimOverride: {
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
@@ -82,6 +82,37 @@ const testData = [
       `The claimant has rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
       'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
       'You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithAmountClaimedAlreadyPaidData,
+        freeMediation: 'yes'
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: [
+      'You’ve rejected the defendant’s admission',
+      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}.`,
+      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.',
+      'Find out how mediation works',
+      'Download their response'
+    ],
+    defendantAssertions: [
+      'We’ll contact you with a mediation appointment',
+      'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      'They agreed to try mediation. We’ll contact you with details of your appointment.',
+      'Find out how mediation works',
       'Download your response'
     ]
   },
