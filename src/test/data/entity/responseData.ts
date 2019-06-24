@@ -471,3 +471,7 @@ export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
     explanation: 'I paid in cash'
   }
 }
+
+export const fullDefenceData = {
+  ...baseDefenceData
+}

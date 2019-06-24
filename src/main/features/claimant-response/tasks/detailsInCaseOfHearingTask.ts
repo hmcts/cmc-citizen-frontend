@@ -4,7 +4,7 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 
 export class DetailsInCaseOfHearingTask {
   static isCompleted (responseDraft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
-    if (directionsQuestionnaireDraft.exceptionalCircumstances === undefined) {
+    if (!directionsQuestionnaireDraft.exceptionalCircumstances.isCompleted()) {
       return false
     } else if (!directionsQuestionnaireDraft.hearingLocation) {
       return false
@@ -14,13 +14,15 @@ export class DetailsInCaseOfHearingTask {
           return false
         } else if (directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.expertReports.rows.length) {
           return false
-        } else if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
-          return false
-        } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
-          if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
+        } else if (directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.NO.option) {
+          if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
             return false
-          } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
-            return false
+          } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
+            if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
+              return false
+            } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
+              return false
+            }
           }
         }
       }

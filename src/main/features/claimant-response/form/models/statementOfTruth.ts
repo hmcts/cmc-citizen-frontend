@@ -20,7 +20,7 @@ export class StatementOfTruth {
     } else {
       this.type = SignatureType.BASIC
     }
-    if (directionsQuestionnaireSigned) {
+    if (directionsQuestionnaireSigned !== undefined) {
       this.directionsQuestionnaireSigned = directionsQuestionnaireSigned
     }
   }

@@ -112,7 +112,8 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const user: User = res.locals.user
-        await new ClaimStoreClient().saveClaimantResponse(claim, draft, user)
+        const directionsQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
+        await new ClaimStoreClient().saveClaimantResponse(claim, draft, user, directionsQuestionnaireDraft.document)
         await new DraftService().delete(draft.id, user.bearerToken)
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }

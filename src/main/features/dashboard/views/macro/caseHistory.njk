@@ -218,7 +218,7 @@
       {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
-    {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED %}
+    {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED or state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
             {{ claimRejectedAlreadyPaidForDefendantClaimDetails(claim) }}

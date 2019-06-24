@@ -19,7 +19,7 @@ import {
   partialAdmissionWithPaymentByInstalmentsData,
   fullAdmissionWithImmediatePaymentData,
   partialAdmissionAlreadyPaidData,
-  partialAdmissionWithImmediatePaymentData, defenceWithAmountClaimedAlreadyPaidData
+  partialAdmissionWithImmediatePaymentData, defenceWithAmountClaimedAlreadyPaidData, fullDefenceData
 } from 'test/data/entity/responseData'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { FeatureToggles } from 'utils/featureToggles'
@@ -73,7 +73,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(
-            task => task.name === `Have you been paid the ${ NumberFormatter.formatMoney(amount)}?`))
+            task => task.name === `Have you been paid the ${NumberFormatter.formatMoney(amount)}?`))
             .to.not.be.undefined
         })
       })
@@ -114,7 +114,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(
-            task => task.name === `Have you been paid the full ${ NumberFormatter.formatMoney(amount) }?`
+            task => task.name === `Have you been paid the full ${NumberFormatter.formatMoney(amount)}?`
           )).to.not.be.undefined
         })
       })
@@ -199,7 +199,7 @@ describe('Claimant response task list builder', () => {
 
         claim.response.freeMediation = YesNoOption.NO
         const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-        expect(taskList.tasks.find(task => task.name === 'Accept or reject their response')).not.to.be.undefined
+        expect(taskList.tasks.find(task => task.name === 'Accept or reject their response')).to.be.undefined
       })
     })
 
@@ -690,11 +690,11 @@ describe('Claimant response task list builder', () => {
   describe('"Your hearing requirements"', () => {
     it('response is partial admission', () => {
 
-      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
+      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithPaymentByInstalmentsData } })
       draft = new DraftClaimantResponse().deserialize({
         ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
-          acceptPaymentMethod: {
-            accept: {
+          settleAdmitted: {
+            admitted: {
               option: 'no'
             }
           }
@@ -712,6 +712,32 @@ describe('Claimant response task list builder', () => {
         expect(taskList).to.be.eq(undefined)
       }
     })
+
+    it('response is full defence', () => {
+
+      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullDefenceData } })
+      draft = new DraftClaimantResponse().deserialize({
+        ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          intentionToProceed: {
+            proceed: {
+              option: 'yes'
+            }
+          }
+        }
+      })
+      claim.features = ['admissions', 'directionsQuestionnaire']
+
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        draft, claim, new DirectionsQuestionnaireDraft()
+      )
+
+      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+        expect(taskList.name).to.contains('Your hearing requirements')
+      } else {
+        expect(taskList).to.be.eq(undefined)
+      }
+    })
+
   })
 
   describe('"Submit" section', () => {
@@ -721,7 +747,7 @@ describe('Claimant response task list builder', () => {
     })
 
     it('should list all incomplete tasks when tries to respond', () => {
-      const taskListItems: TaskListItem[] = TaskListBuilder.buildRemainingTasks(draft, claim)
+      const taskListItems: TaskListItem[] = TaskListBuilder.buildRemainingTasks(draft, claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
       expect(taskListItems.length).to.be.eq(2)
     })
   })

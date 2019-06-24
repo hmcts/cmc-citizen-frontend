@@ -114,6 +114,57 @@ const testData = [
     ]
   },
   {
+    status: 'Full defence - defendant dispute all of the claim and accepts mediation with directions questionnaire enabled',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES
+      }
+    },
+    claimantAssertions: [
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
+      'View and respond'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You have rejected the claim. You’ve suggested mediation.',
+      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
+      'Download your response',
+      'Settle out of court',
+      'settle the claim out of court'
+    ]
+  },
+  {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      directionsQuestionnaireDeadline: MomentFactory.currentDate().add(1, 'days'),
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.NO
+      }
+    },
+    claimantAssertions: [
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
+      'View and respond'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
+      'complete a directions questionnaire',
+      'Download your response',
+      'Settle out of court',
+      'settle the claim out of court'
+    ]
+  },
+  {
     status: 'Full defence - defendant dispute all of the claim and reject mediation',
     claim: fullDefenceClaim,
     claimOverride: {

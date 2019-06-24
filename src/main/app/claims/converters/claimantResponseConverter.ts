@@ -11,12 +11,15 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 export class ClaimantResponseConverter {
 
   public static convertToClaimantResponse (
     draftClaimantResponse: DraftClaimantResponse,
-    isDefendantBusiness: boolean
+    isDefendantBusiness: boolean,
+    directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft
   ): ClaimantResponse {
     if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
@@ -34,7 +37,7 @@ export class ClaimantResponseConverter {
       this.addStatesPaidOptions(draftClaimantResponse, reject)
 
       return reject
-    } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
+    } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness, directionsQuestionnaireDraft)
   }
 
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
@@ -52,7 +55,8 @@ export class ClaimantResponseConverter {
 
   private static createResponseAcceptance (
     draftClaimantResponse: DraftClaimantResponse,
-    isDefendentBusiness: boolean
+    isDefendentBusiness: boolean,
+    directionsQuestionnaireDraft: DirectionsQuestionnaireDraft
   ): ResponseAcceptance {
     const respAcceptance: ResponseAcceptance = new ResponseAcceptance()
     if (draftClaimantResponse.paidAmount) {
@@ -72,6 +76,11 @@ export class ClaimantResponseConverter {
     }
 
     this.addStatesPaidOptions(draftClaimantResponse, respAcceptance)
+
+    if (directionsQuestionnaireDraft !== undefined) {
+      this.addDirectionsQuestionnaire(directionsQuestionnaireDraft, respAcceptance)
+    }
+
     return respAcceptance
   }
 
@@ -122,6 +131,12 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.accepted) {
       claimantResponse.settleForAmount = draftClaimantResponse.accepted.accepted.option as YesNoOption
     }
+
+  }
+
+  private static addDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft,
+                                             respAcceptance: ResponseAcceptance) {
+    respAcceptance.directionsQuestionnaire = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
 
   }
 }
