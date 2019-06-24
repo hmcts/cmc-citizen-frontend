@@ -31,7 +31,7 @@ describe('Dashboard - How mediation works page', () => {
         await request(app)
           .get(howMediationWorksPage)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('We’ll try to contact you'))
+          .expect(res => expect(res).to.be.successful.withText('A mediator phones you'))
       })
     })
   })
