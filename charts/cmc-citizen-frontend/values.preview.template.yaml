@@ -29,7 +29,7 @@ nodejs:
   ingressHost: ${SERVICE_FQDN}
   environment:
     LOG_LEVEL: DEBUG
-    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl-api
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
     IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
