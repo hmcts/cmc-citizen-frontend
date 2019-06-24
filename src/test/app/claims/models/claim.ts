@@ -38,6 +38,7 @@ import { DecisionType } from 'common/court-calculations/decisionType'
 import { ClaimData } from 'claims/models/claimData'
 import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { User } from 'idam/user'
+import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -372,6 +373,7 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
 
       expect(claim.status).to.be.equal(ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED)
+      expect(claim.isSettlementPaymentDateValid()).to.be.false
     })
 
     it('should return CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
@@ -390,6 +392,107 @@ describe('Claim', () => {
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
 
       expect(claim.status).to.be.equal(ClaimStatus.CCJ_BY_DETERMINATION_AFTER_SETTLEMENT_BREACHED)
+      expect(claim.isSettlementPaymentDateValid()).to.be.false
+    })
+
+    it('should return true when settlement payment date is in the future for a CCJ after settlement terms broken', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().add(1, 'days')
+      }
+      claim.settlement = prepareSettlementWithCounterSignature(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.isSettlementPaymentDateValid()).to.be.true
+    })
+
+    it('should return true when settlement payment option is pay immediately for a CCJ after settlement terms broken', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        paymentDate: MomentFactory.currentDate().add(5, 'days')
+      }
+      const defendantPaymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().add(1, 'days')
+      }
+      claim.settlement = prepareSettlementWithCounterSignature(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: defendantPaymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.isSettlementPaymentDateValid()).to.be.true
+    })
+
+    it('should return true when settlement payment option is pay by instalments starting in future for a CCJ after settlement terms broken', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.INSTALMENTS,
+        repaymentPlan: {
+          instalmentAmount: 100,
+          firstPaymentDate: MomentFactory.currentDate().add(1,'day'),
+          paymentSchedule: PaymentSchedule.EACH_WEEK,
+          completionDate: '2051-12-31',
+          paymentLength: '1'
+        }
+      }
+      const defendantPaymentIntention = {
+        paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+        paymentDate: MomentFactory.currentDate().add(1, 'days')
+      }
+      claim.settlement = prepareSettlementWithCounterSignature(PaymentIntention.deserialize(paymentIntention), MadeBy.DEFENDANT)
+      claim.settlementReachedAt = MomentFactory.currentDate().subtract(1, 'month')
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: defendantPaymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.isSettlementPaymentDateValid()).to.be.true
+    })
+
+    it('should return false when settlement does not exists', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        paymentDate: MomentFactory.currentDate().add(5, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.isSettlementPaymentDateValid()).to.be.false
+    })
+
+    it('should return false when settlement does not exists', () => {
+      const paymentIntention = {
+        paymentOption: PaymentOption.IMMEDIATELY,
+        paymentDate: MomentFactory.currentDate().add(5, 'days')
+      }
+      claim.response = {
+        responseType: ResponseType.FULL_ADMISSION,
+        paymentIntention: paymentIntention,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = baseDeterminationAcceptationClaimantResponseData
+      claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
+
+      expect(claim.isSettlementPaymentDateValid()).to.be.false
     })
 
     it('should return PART_ADMIT_PAY_IMMEDIATELY when the claimant accepts a part admit with immediately as the payment option', () => {
@@ -607,6 +710,14 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.OFFER_REJECTED)
       expect(claim.stateHistory[2].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+    })
+
+    it('should return true when offer is rejected', () => {
+      claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+      claim.settlement = new Settlement().deserialize({
+        partyStatements: [offer, offerRejection]
+      })
+      expect(claim.isSettlementRejectedOrBreached()).to.be.true
     })
 
     it('should contain the claim status only if not responded to', () => {
