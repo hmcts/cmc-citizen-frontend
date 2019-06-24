@@ -582,6 +582,38 @@ describe('Claim', () => {
 
         expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_STATES_PAID)
       })
+
+      it('when claimant rejects defendants defence', () => {
+        claim.totalAmountTillToday = 100
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE,
+          defence: 'defence reasoning',
+          freeMediation: FreeMediationOption.NO,
+          defendant: new Individual().deserialize(individual)
+        }
+        claim.claimantResponse = {
+          type: 'REJECTION'
+        }
+
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+      })
+
+      it('when claimant accepts defendants defence', () => {
+        claim.totalAmountTillToday = 100
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE,
+          defence: 'defence reasoning',
+          freeMediation: FreeMediationOption.NO,
+          defendant: new Individual().deserialize(individual)
+        }
+        claim.claimantResponse = {
+          type: 'ACCEPTATION'
+        }
+
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE)
+      })
     })
   })
 
