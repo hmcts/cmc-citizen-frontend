@@ -20,7 +20,6 @@ Scenario('I can see the Claim amount page calculates properly and shows the corr
   userSteps.selectClaimAmount()
   I.see('Claim amount')
   claimantClaimAmountPage.enterAmount(11, 20.50, 32.25)
-  claimantClaimAmountPage.calculateTotal()
   I.see('£63.75')
   I.click('Save and continue')
   I.see('Do you want to claim interest?')
