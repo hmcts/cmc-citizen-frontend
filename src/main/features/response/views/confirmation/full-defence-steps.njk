@@ -2,7 +2,7 @@
 
 {% set claimantName = claim.claimData.claimant.name %}
 
-{% if claim.response.freeMediation === FreeMediationOption.YES %}
+{% if claim.response.freeMediation === 'yes' %}
   <h2 class="heading-small">{{ t('If {{ claimantName }} accepts your response', { claimantName: claimantName }) | safe }}</h2>
   <p>The claim will be settled.</p>
   <h2 class="heading-small">{{ t('If {{ claimantName }} rejects your response', { claimantName: claimantName }) | safe  }}</h2>
