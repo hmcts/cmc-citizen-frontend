@@ -7,6 +7,7 @@
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "internalLink.njk" import internalLink %}
 {% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "./macro/evidenceTable.njk" import evidenceFragment %}
 {% from "./macro/timelineTable.njk" import timelineFragment %}
@@ -68,6 +69,7 @@
         {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
           {{ evidenceFragment(claim.response.evidence) }}
         {% endif %}
+
       {% endif %}
       {% if alreadyPaid %}
         {% if partiallyPaid %}
@@ -168,6 +170,11 @@
           {% endif %}
         {% endif %}
       {% endif %}
+
+      <div class="form-group">
+        <h3 class="heading-small">{{ t('Full response') }}</h3>
+        {{ internalLink(t('Download their full response and hearing requirements '), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
+      </div>
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}

@@ -21,6 +21,7 @@ function renderView (form: Form<FreeMediation>, res: express.Response) {
 
   res.render(Paths.mediationDisagreementPage.associatedView, {
     form: form,
+    defendant: user.id === claim.defendantId,
     hint: hint
   })
 }
