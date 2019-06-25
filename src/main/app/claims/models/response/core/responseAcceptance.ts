@@ -4,7 +4,6 @@ import { ClaimantResponse } from 'claims/models/response/core/claimantResponse'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
-
 export class ResponseAcceptance implements ClaimantResponse {
   type: string
   amountPaid: number
