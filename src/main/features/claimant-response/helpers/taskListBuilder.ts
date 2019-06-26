@@ -122,8 +122,7 @@ export class TaskListBuilder {
     const externalId: string = claim.externalId
     const tasks: TaskListItem[] = []
 
-    if (claim.response.responseType === ResponseType.FULL_DEFENCE
-      && claim.response.freeMediation === YesNoOption.YES) {
+    if (claim.response.responseType === ResponseType.FULL_DEFENCE) {
       tasks.push(
         new TaskListItem(
           'Decide whether to proceed',

@@ -1,6 +1,7 @@
 import { ClaimantResponse } from 'claims/models/response/core/claimantResponse'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 export class ResponseRejection implements ClaimantResponse {
   type: string
@@ -10,6 +11,7 @@ export class ResponseRejection implements ClaimantResponse {
   freeMediation?: YesNoOption
   reason?: string
   claimantPaymentIntention?: PaymentIntention
+  directionsQuestionnaire?: DirectionsQuestionnaire
 
   constructor () {
     this.type = 'REJECTION'
