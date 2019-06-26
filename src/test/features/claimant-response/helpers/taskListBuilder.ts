@@ -28,7 +28,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 describe('Claimant response task list builder', () => {
   let claim: Claim
   let draft: DraftClaimantResponse
-  const mediationTaskLabel = 'Consider free mediation'
+  const mediationTaskLabel = 'Free telephone mediation'
   const featureToggleMediationTaskLabel = 'Free telephone mediation'
 
   beforeEach(() => {

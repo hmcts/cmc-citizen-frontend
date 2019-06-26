@@ -116,13 +116,6 @@
             bold = true
           ) }}
         {% endif %}
-        {{ row(
-          label = 'Do you want to give evidence as a witness?',
-          value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
-          changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-          topBorder = true,
-          bold = true
-        ) }}
         {% if directionsQuestionnaireDraft.permissionForExpert.option %}
           {{ row(
             label = 'Do you want the court’s permission to hire an expert?',
@@ -131,6 +124,13 @@
             bold = true
           ) }}
         {% endif %}
+        {{ row(
+          label = 'Do you want to give evidence as a witness?',
+          value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
+          changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+          topBorder = true,
+          bold = true
+        ) }}
         {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
           {{ row(
             label = 'Other witnesses',

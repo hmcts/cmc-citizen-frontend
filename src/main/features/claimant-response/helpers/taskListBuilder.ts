@@ -101,7 +101,7 @@ export class TaskListBuilder {
           const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
-              'Consider free mediation',
+              'Free telephone mediation',
               path,
               FreeMediationTask.isCompleted(draft, mediationDraft)
             ))
@@ -145,7 +145,7 @@ export class TaskListBuilder {
           const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
-              'Consider free mediation',
+              'Free telephone mediation',
               path,
               FreeMediationTask.isCompleted(draft, mediationDraft)
             ))
@@ -199,7 +199,7 @@ export class TaskListBuilder {
           const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
-              'Consider free mediation',
+              'Free telephone mediation',
               path,
               FreeMediationTask.isCompleted(draft, mediationDraft)
             ))

@@ -127,7 +127,7 @@
       {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
         {{
           timelineCheckAndSend(
-            header = 'Timeline of what happened (optional)',
+            header = 'Your timeline of what happened (optional)',
             timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
             url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false
@@ -381,8 +381,8 @@
         {{ rowWithMultipleValue(
             label = 'Support required for a hearing',
             values = [
-              directionsQuestionnaireDraft.supportRequired.languageInterpreted if directionsQuestionnaireDraft.supportRequired.languageSelected === 'true',
-              directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted if directionsQuestionnaireDraft.supportRequired.signLanguageSelected === 'true',
+              directionsQuestionnaireDraft.supportRequired.languageInterpreted + 'interpreter' if directionsQuestionnaireDraft.supportRequired.languageSelected === 'true',
+              directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted + 'interpreter' if directionsQuestionnaireDraft.supportRequired.signLanguageSelected === 'true',
               t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected === 'true',
               t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected === 'true',
               t('Other:') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true',
@@ -457,13 +457,6 @@
           bold = true
         ) }}
       {% endif %}
-      {{ row(
-        label = 'Do you want to give evidence as a witness?',
-        value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
-        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-        topBorder = true,
-        bold = true
-      ) }}
       {% if directionsQuestionnaireDraft.permissionForExpert.option %}
         {{ row(
           label = 'Do you want the court’s permission to hire an expert?',
@@ -472,6 +465,13 @@
           bold = true
         ) }}
       {% endif %}
+      {{ row(
+        label = 'Do you want to give evidence as a witness?',
+        value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
+        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+        topBorder = true,
+        bold = true
+      ) }}
       {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
       {{ row(
         label = 'Other witnesses',

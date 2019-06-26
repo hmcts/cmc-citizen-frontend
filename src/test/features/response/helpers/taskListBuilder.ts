@@ -37,7 +37,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
-const mediationTaskLabel = 'Consider free mediation'
+const mediationTaskLabel = 'Free telephone mediation'
 const featureToggleMediationTaskLabel = 'Free telephone mediation'
 const directionsQuestionnaireTaskLabel = 'Your hearing requirements'
 describe('Defendant response task list builder', () => {
