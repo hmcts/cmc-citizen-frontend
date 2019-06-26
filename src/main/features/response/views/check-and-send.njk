@@ -395,7 +395,7 @@
       {% if directionsQuestionnaireDraft.hearingLocation %}
         {{ row(
           label = 'Preferred hearing centre',
-          value = directionsQuestionnaireDraft.hearingLocation,
+          value = directionsQuestionnaireDraft.hearingLocation.courtName,
           changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
           bottomBorder = false,
           bold = true
