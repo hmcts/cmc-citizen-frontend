@@ -63,7 +63,7 @@ export default express.Router()
   .get(Paths.hearingLocationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      //this is not right place - should be moved to tasklist builder
+      // this is not right place - should be moved to tasklist builder
       draft.document.hearingLocation = undefined
 
       if (!draft.document.hearingLocation) {

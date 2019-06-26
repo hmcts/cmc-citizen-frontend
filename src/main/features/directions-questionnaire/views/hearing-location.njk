@@ -31,7 +31,7 @@
               <p>{{ t('You can request any location - {{ courtName }} is the nearest to your home address you gave us.', { courtName: courtName }) }}
             {% endif %}
 
-            <details class="form-group analytics-click-event-trigger" data-event-label="Response: Find out what each response means">
+            <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
               <summary>{{ t('See this court’s facilities') }}</summary>
 
               <div class="panel">
@@ -42,7 +42,7 @@
               </div>
             </details>
 
-            <h1 class="heading-medium">{{ t('Do you want to choose {{ courtName }}', { courtName: form.valueFor('courtName') }) }}</h1>
+            <h1 class="heading-medium">{{ t('Do you want to choose {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h1>
             {{ radioGroup(
               form = form,
               label = heading,
