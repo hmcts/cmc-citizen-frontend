@@ -9,4 +9,5 @@ export class Paths {
   static readonly directionsQuestionnairePage = new RoutablePath('/dashboard/:externalId/directions-questionnaire')
   static readonly contactThemPage = new RoutablePath('/dashboard/:externalId/contact-them')
   static readonly datePaidPage = new RoutablePath(`${paidInFullPath}/date-paid`)
+  static readonly disagreeReasonPage = new RoutablePath(`${paidInFullPath}/disagree-reason`)
 }
