@@ -113,8 +113,17 @@ export default express.Router()
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const user: User = res.locals.user
         const directionsQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
+        const draftService = new DraftService()
+
         await new ClaimStoreClient().saveClaimantResponse(claim, draft, user, directionsQuestionnaireDraft.document)
         await new DraftService().delete(draft.id, user.bearerToken)
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+          ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire') &&
+          (claim.response.responseType === ResponseType.PART_ADMISSION ||
+            claim.response.responseType === ResponseType.FULL_DEFENCE)) {
+          await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
+        }
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
     }))

@@ -132,7 +132,7 @@ export class TaskListBuilder {
         )
       )
 
-      if (claim.response.freeMediation === YesNoOption.YES) {
+      if (claim.response.freeMediation === YesNoOption.YES && draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES) {
         if (FeatureToggles.isEnabled('mediation')) {
           const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(

@@ -11,14 +11,17 @@ import { YesNoOption } from 'models/yesNoOption'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
 import { MadeBy } from 'offer/form/models/madeBy'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
   const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
-  const defendantCourt = 'Defendant’s Court Name'
+  const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
+  const defendantCourt = defendantDirectionsQuestionnaire.hearingLocation.courtName
   res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, {
     form: form,
     party: party,
-    courtName: defendantCourt })
+    courtName: defendantCourt
+  })
 }
 
 /* tslint:disable:no-default-export */
@@ -40,15 +43,19 @@ export default express.Router()
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
+        const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
 
         draft.document.exceptionalCircumstances = form.model
 
+        if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+          draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-          res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-        } else {
           res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+        } else {
+          res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
       }
     }))

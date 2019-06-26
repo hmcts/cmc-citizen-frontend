@@ -20,7 +20,28 @@
         bold = true
       )
       }}
-
+      {% if mediationEnabled %}
+        {{ tableStart('freeMediation', 'Free telephone mediation') }}
+        {{
+        row(
+          label = 'Will you try free mediation?',
+          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        )
+        }}
+        {% if mediationDraft.youCanOnlyUseMediation %}
+          {{
+          row(
+            label = 'Do you agree to the mediation conditions?',
+            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
+            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
+            bold = true
+          )
+          }}
+        {% endif %}
+        {{ tableEnd() }}
+      {% endif %}
         {{ tableStart('hearingRequirements', 'Your hearing requirements') }}
         {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
           directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
@@ -42,7 +63,7 @@
         {% if directionsQuestionnaireDraft.hearingLocation %}
           {{ row(
             label = 'Preferred hearing centre',
-            value = directionsQuestionnaireDraft.hearingLocation,
+            value = directionsQuestionnaireDraft.hearingLocation.courtName,
             changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false,
             bold = true
@@ -143,7 +164,7 @@
         {{ tableEnd() }}
 
         <div class="form-group">
-          <h2 class="heading-medium">{{ t('Declaration') }}</h2>
+          <h2 class="heading-medium">{{ t('Confirmation') }}</h2>
           {{ checkboxSingle(
               label = 'The hearing requirement details on this page are true to the best of my knowledge.',
               name = 'directionsQuestionnaireSigned',
