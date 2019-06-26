@@ -143,7 +143,7 @@ describe('Defendant response task list builder', () => {
       })
     })
 
-    describe('"Why do you disagree with the claim?" task', () => {
+    describe('"Tell us why you disagree with the claim" task', () => {
       let stub: sinon.SinonStub
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
 
@@ -159,14 +159,14 @@ describe('Defendant response task list builder', () => {
         stub.returns(true)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the claim?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Tell us why you disagree with the claim')
       })
 
       it('should be disabled when response is not rejected with dispute', () => {
         stub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the claim?')
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Tell us why you disagree with the claim')
       })
     })
 

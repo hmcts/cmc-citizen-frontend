@@ -41,7 +41,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskWhyDoYouDisagreeWithTheClaim (): void {
-    I.click('Why do you disagree with the claim?')
+    I.click('Tell us why you disagree with the claim')
   }
 
   selectTaskWhyDoYouDisagreeWithTheAmountClaimed (): void {

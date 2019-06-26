@@ -304,7 +304,7 @@ export class DefenceSteps {
     switch (defenceType) {
       case DefenceType.FULL_REJECTION_WITH_DISPUTE:
         this.rejectAllOfClaimAsDisputeClaim()
-        I.see('Why do you disagree with the claim?')
+        I.see('Tell us why you disagree with the claim')
         this.submitDefenceText('I fully dispute this claim')
         this.addTimeLineOfEvents({
           events: [{ date: 'may', description: 'ok' } as TimelineEvent, {
