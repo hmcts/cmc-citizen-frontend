@@ -38,6 +38,10 @@
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
+        {% if directionsQuestionnaireEnabled %}
+        <p><a href="http://hmcts-cmc-prototype.herokuapp.com/prototypes/features-to-be-built/claimant/correspondence/dqs">Download your hearing requirements</a> (PDF, 123KB)</p>
+        {% endif %}
+
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
@@ -80,6 +84,8 @@
         <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
             { deadline: claim.directionsQuestionnaireDeadline | date }) }}
         </p>
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and directionsQuestionnaireEnabled %}
+         <p>{{ t('We\'ll review the case. We\'ll contact you to tell you what to do next.') }}</p>
       {% endif %}
 
       {% include "includes/service_survey_link.njk" %}

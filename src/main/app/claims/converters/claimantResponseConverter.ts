@@ -36,8 +36,12 @@ export class ClaimantResponseConverter {
 
       this.addStatesPaidOptions(draftClaimantResponse, reject)
 
+      if (directionsQuestionnaireDraft !== undefined) {
+        this.addDirectionsQuestionnaire(directionsQuestionnaireDraft, reject)
+      }
+
       return reject
-    } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness, directionsQuestionnaireDraft)
+    } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
   }
 
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
@@ -47,6 +51,8 @@ export class ClaimantResponseConverter {
       return false
     } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received.option === YesNoOption.NO) {
       return false
+    } else if (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES) {
+      return false
     }
 
     return true
@@ -55,8 +61,7 @@ export class ClaimantResponseConverter {
 
   private static createResponseAcceptance (
     draftClaimantResponse: DraftClaimantResponse,
-    isDefendentBusiness: boolean,
-    directionsQuestionnaireDraft: DirectionsQuestionnaireDraft
+    isDefendentBusiness: boolean
   ): ResponseAcceptance {
     const respAcceptance: ResponseAcceptance = new ResponseAcceptance()
     if (draftClaimantResponse.paidAmount) {
@@ -76,10 +81,6 @@ export class ClaimantResponseConverter {
     }
 
     this.addStatesPaidOptions(draftClaimantResponse, respAcceptance)
-
-    if (directionsQuestionnaireDraft !== undefined) {
-      this.addDirectionsQuestionnaire(directionsQuestionnaireDraft, respAcceptance)
-    }
 
     return respAcceptance
   }
@@ -135,8 +136,8 @@ export class ClaimantResponseConverter {
   }
 
   private static addDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft,
-                                             respAcceptance: ResponseAcceptance) {
-    respAcceptance.directionsQuestionnaire = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
+                                             respRejection: ResponseRejection) {
+    respRejection.directionsQuestionnaire = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
 
   }
 }
