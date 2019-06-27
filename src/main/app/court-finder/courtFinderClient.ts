@@ -31,7 +31,7 @@ export class CourtFinderClient {
       return Promise.reject('Missing slug')
     }
 
-    let uri: string = `${this.apiUrl}/court-finder/court-details/${slug}`
+    const uri: string = `${this.apiUrl}/court-finder/court-details/${slug}`
 
     return this.performCourtDetailsRequest(uri)
   }
