@@ -315,7 +315,7 @@ export class Claim {
 
   private hasClaimantAcceptedAdmissionWithCourtOfferWithCCJ (): boolean {
     return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementReachedThroughAdmission() &&
-      (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
+      (this.response.responseType === ResponseType.FULL_ADMISSION) &&
       (this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }
 
