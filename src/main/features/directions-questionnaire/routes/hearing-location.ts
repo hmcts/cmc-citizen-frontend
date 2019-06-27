@@ -62,30 +62,21 @@ function getDefaultPostcode (res: express.Response): string {
 export default express.Router()
   .get(Paths.hearingLocationPage.uri, async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     try {
-      const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      // this is not right place - should be moved to tasklist builder
-      draft.document.hearingLocation = undefined
 
-      if (!draft.document.hearingLocation) {
-        const postcode: string = getDefaultPostcode(res)
-        const court: Court = await getNearestCourt(postcode)
-        const courtDetails: CourtDetails = await getCourtDetails(court.slug)
+      const postcode: string = getDefaultPostcode(res)
+      const court: Court = await getNearestCourt(postcode)
+      const courtDetails: CourtDetails = await getCourtDetails(court.slug)
 
-        if (court) {
-          renderPage(res,
-            new Form<HearingLocation>(
-              new HearingLocation(
-                court.name, undefined, courtDetails.facilities
-                )), false)
-        } else {
-          renderPage(res, new Form<HearingLocation>(new HearingLocation()), true)
-        }
-
+      if (court) {
+        renderPage(res,
+          new Form<HearingLocation>(
+            new HearingLocation(
+              court.name, undefined, courtDetails.facilities
+            )), false)
       } else {
-        renderPage(res, new Form<HearingLocation>(
-          new HearingLocation(draft.document.hearingLocation, undefined, undefined, YesNoOption.YES)),
-          false)
+        renderPage(res, new Form<HearingLocation>(new HearingLocation()), true)
       }
+
     } catch (err) {
       next(err)
     }
