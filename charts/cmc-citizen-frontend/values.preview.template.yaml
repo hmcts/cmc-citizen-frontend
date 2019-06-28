@@ -40,5 +40,5 @@ nodejs:
 
 idam-pr:
   redirect_uris:
-    Money Claims - Citizene:
+    Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
