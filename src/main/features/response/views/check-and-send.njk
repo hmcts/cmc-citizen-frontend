@@ -293,7 +293,7 @@
                 or (draft.isResponseRejectedFullyBecausePaidWhatOwed()
                     and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
           or draft.isResponseRejectedFullyWithDispute()) %}
-      {{ freeMediationBlock(claim, mediationDraft, contactPerson) }}
+      {{ freeMediationBlock(claim, draft, mediationDraft, contactPerson, contactNumber) }}
     {% endif %}
 
 

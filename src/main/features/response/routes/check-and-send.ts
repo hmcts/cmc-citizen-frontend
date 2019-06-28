@@ -38,7 +38,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationDraft: mediationDraft.document,
-    contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document)
+    contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
+    contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document)
   })
 }
 
