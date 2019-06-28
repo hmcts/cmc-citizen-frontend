@@ -17,6 +17,6 @@ export class MomentFactory {
     if (!value) {
       throw new Error('Value must be defined')
     }
-    return moment(value)
+    return moment.utc(value)
   }
 }
