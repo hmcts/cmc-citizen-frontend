@@ -130,6 +130,9 @@
       ],
       "directions-questionnaire/*": [
         "main/features/directions-questionnaire/*"
+      ],
+      "orders/*": [
+        "main/features/orders/*"
       ]
     },
     "typeRoots": [

@@ -588,6 +588,10 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   expertEvidence: { expertEvidence: YesNoOption.NO }
 }
 
+export const sampleOrdersDraftObj = {
+  disagreeReason: { reason: 'I want a judge to review it' }
+}
+
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
@@ -624,6 +628,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'directionsQuestionnaire':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
+      break
+    case 'directionsQuestionnaire':
+      documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
