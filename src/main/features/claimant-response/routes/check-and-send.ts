@@ -22,7 +22,7 @@ import { Form } from 'forms/form'
 import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ResponseType } from 'claims/models/response/responseType'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -61,9 +61,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
   const paymentIntention: PaymentIntention = alreadyPaid ? undefined : getPaymentIntention(draft.document, claim)
-  const dqsEnabled: boolean = (FeatureToggles.isEnabled('directionsQuestionnaire') && ((claim.response.responseType === ResponseType.PART_ADMISSION && draft.document.settleAdmitted
-    && draft.document.settleAdmitted.admitted.option === YesNoOption.NO)
-    || (claim.response.responseType === ResponseType.FULL_DEFENCE && draft.document.intentionToProceed && draft.document.intentionToProceed.proceed.option === YesNoOption.YES)) && ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire'))
+  const dqsEnabled: boolean = DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)
+  const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE && draft.document.intentionToProceed && draft.document.intentionToProceed.proceed.option === YesNoOption.YES
   let datesUnavailable: string[]
   if (dqsEnabled) {
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
@@ -85,7 +84,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     mediationDraft: mediationDraft.document,
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
-    statementOfTruthType: statementOfTruthType
+    statementOfTruthType: statementOfTruthType,
+    dispute: dispute
   })
 
 }
@@ -118,10 +118,7 @@ export default express.Router()
         await new ClaimStoreClient().saveClaimantResponse(claim, draft, user, directionsQuestionnaireDraft.document)
         await new DraftService().delete(draft.id, user.bearerToken)
 
-        if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
-          ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire') &&
-          (claim.response.responseType === ResponseType.PART_ADMISSION ||
-            claim.response.responseType === ResponseType.FULL_DEFENCE)) {
+        if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)) {
           await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
         }
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))

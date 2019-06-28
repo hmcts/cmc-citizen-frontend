@@ -20,7 +20,7 @@ export default express.Router()
       res.render(Paths.incompleteSubmissionPage.associatedView,
         {
           taskListUri: Paths.taskListPage.evaluateUri({ externalId: claim.externalId }),
-          tasks: TaskListBuilder.buildRemainingTasks(draft.document, claim, mediationDraft, directionQuestionnaireDraft)
+          tasks: TaskListBuilder.buildRemainingTasks(draft.document, claim, mediationDraft, directionQuestionnaireDraft.document)
         }
       )
     })

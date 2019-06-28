@@ -5,13 +5,150 @@
 
 {% set heading = 'Check your answers' %}
 
+{% macro directionsQuestionnaire() %}
+  {% if(directionsQuestionnaireEnabled) %}
+    {{ tableStart('hearingRequirements', 'Your hearing requirements') }}
+    {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
+      directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
+      directionsQuestionnaireDraft.supportRequired.otherSupportSelected %}
+      {{ rowWithMultipleValue(
+        label = 'Support required for a hearing',
+        values = [
+          directionsQuestionnaireDraft.supportRequired.languageInterpreted if directionsQuestionnaireDraft.supportRequired.languageSelected === 'true',
+          directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted if directionsQuestionnaireDraft.supportRequired.signLanguageSelected === 'true',
+          t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected === 'true',
+          t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected === 'true',
+          t('Other:') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true',
+          directionsQuestionnaireDraft.supportRequired.otherSupport if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true'
+        ],
+        changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.hearingLocation %}
+      {{ row(
+        label = 'Preferred hearing centre',
+        value = directionsQuestionnaireDraft.hearingLocation.courtName,
+        changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances %}
+      {{ row(
+        label = 'Briefly explain your reasons',
+        value = 'I require wheelchair access',
+        changeLink = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+    {% endif %}
+
+    {% if directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option %}
+      {% for report in directionsQuestionnaireDraft.expertReports.rows %}
+        {{ rowWithMultipleValue(
+          label = 'Report ' + loop.index,
+          values = [
+            t('Expert’s name: {{  expertsName }}', { expertsName:  report.expertName }),
+            t('Date of report: {{  reportDate }}', { reportDate:  report.reportDate.toMoment() | date })
+          ],
+          bottomBorder = false,
+          bold = true
+        ) }}
+      {% endfor %}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.expertEvidence.expertEvidence %}
+      {{ row(
+        label = 'Does the claim involve something an expert can still examine?',
+        value = t(directionsQuestionnaireDraft.expertEvidence.expertEvidence.option) | capitalize,
+        changeLink = DirectionsQuestionnairePaths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }),
+        topBorder = true,
+        bottomBorder = false,
+        bold = true
+      ) }}
+      {{ row(
+        label = 'What is there to examine?',
+        value = directionsQuestionnaireDraft.expertEvidence.whatToExamine,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.whyExpertIsNeeded.explanation %}
+      {{ row(
+        label = 'Briefly explain why you believe an expert is needed',
+        value = directionsQuestionnaireDraft.whyExpertIsNeeded.explanation,
+        changeLink = DirectionsQuestionnairePaths.whyExpertIsNeededPage.evaluateUri({ externalId: claim.externalId }),
+        bottomBorder = false,
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.permissionForExpert.option %}
+      {{ row(
+        label = 'Do you want the court’s permission to hire an expert?',
+        value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
+        changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% endif %}
+    {{ row(
+      label = 'Do you want to give evidence as a witness?',
+      value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
+      changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+      topBorder = true,
+      bold = true
+    ) }}
+    {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
+      {{ row(
+        label = 'Other witnesses',
+        value = directionsQuestionnaireDraft.otherWitnesses.howMany,
+        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% else %}
+      {{ row(
+        label = 'Other witnesses',
+        value = directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option | capitalize,
+        changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% endif %}
+    {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
+      {{ rowWithMultipleValue(
+        label = 'Dates unavailable',
+        values = datesUnavailable,
+        changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% else %}
+      {{ row(
+        label = 'Dates unavailable',
+        value = 'None',
+        changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
+        bold = true
+      ) }}
+    {% endif %}
+    {{ tableEnd() }}
+
+    <div class="form-group">
+      <h2 class="heading-medium">{{ t('Confirmation') }}</h2>
+      {{ checkboxSingle(
+        label = 'The hearing requirement details on this page are true to the best of my knowledge.',
+        name = 'directionsQuestionnaireSigned',
+        option = { label: 'The hearing requirement details on this page are true to the best of my knowledge.', value: true },
+        form = form,
+        legendHidden = true
+      ) }}
+      <input type="hidden" name="type" value="{{ form.model.type }}">
+    </div>
+  {% endif %}
+{% endmacro %}
+
 {% block content %}
   <form novalidate method="post">
     {{ csrfProtection(csrf) }}
 
     {{ tableStart('yourResponse', 'Your response') }}
 
-    {% if directionsQuestionnaireEnabled %}
+    {% if dispute %}
       {{
       row(
         label = 'Do you want to proceed with the claim?',
@@ -20,6 +157,7 @@
         bold = true
       )
       }}
+
       {% if mediationEnabled %}
         {{ tableStart('freeMediation', 'Free telephone mediation') }}
         {{
@@ -42,138 +180,9 @@
         {% endif %}
         {{ tableEnd() }}
       {% endif %}
-        {{ tableStart('hearingRequirements', 'Your hearing requirements') }}
-        {% if directionsQuestionnaireDraft.supportRequired.languageSelected or directionsQuestionnaireDraft.supportRequired.signLanguageSelected or
-          directionsQuestionnaireDraft.supportRequired.disabledAccessSelected or directionsQuestionnaireDraft.supportRequired.hearingLoopSelected or
-          directionsQuestionnaireDraft.supportRequired.otherSupportSelected %}
-          {{ rowWithMultipleValue(
-            label = 'Support required for a hearing',
-            values = [
-              directionsQuestionnaireDraft.supportRequired.languageInterpreted if directionsQuestionnaireDraft.supportRequired.languageSelected === 'true',
-              directionsQuestionnaireDraft.supportRequired.signLanguageInterpreted if directionsQuestionnaireDraft.supportRequired.signLanguageSelected === 'true',
-              t('Disabled access') if directionsQuestionnaireDraft.supportRequired.disabledAccessSelected === 'true',
-              t('Hearing loop') if directionsQuestionnaireDraft.supportRequired.hearingLoopSelected === 'true',
-              t('Other:') if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true',
-              directionsQuestionnaireDraft.supportRequired.otherSupport if directionsQuestionnaireDraft.supportRequired.otherSupportSelected === 'true'
-            ],
-            changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.hearingLocation %}
-          {{ row(
-            label = 'Preferred hearing centre',
-            value = directionsQuestionnaireDraft.hearingLocation.courtName,
-            changeLink = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances %}
-          {{ row(
-            label = 'Briefly explain your reasons',
-            value = 'I require wheelchair access',
-            changeLink = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
-        {% endif %}
 
-        {% if directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option %}
-          {% for report in directionsQuestionnaireDraft.expertReports.rows %}
-            {{ rowWithMultipleValue(
-              label = 'Report ' + loop.index,
-              values = [
-                t('Expert’s name: {{  expertsName }}', { expertsName:  report.expertName }),
-                t('Date of report: {{  reportDate }}', { reportDate:  report.reportDate.toMoment() | date })
-              ],
-              bottomBorder = false,
-              bold = true
-            ) }}
-          {% endfor %}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.expertEvidence.expertEvidence %}
-          {{ row(
-            label = 'Does the claim involve something an expert can still examine?',
-            value = t(directionsQuestionnaireDraft.expertEvidence.expertEvidence.option) | capitalize,
-            changeLink = DirectionsQuestionnairePaths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }),
-            topBorder = true,
-            bottomBorder = false,
-            bold = true
-          ) }}
-          {{ row(
-            label = 'What is there to examine?',
-            value = directionsQuestionnaireDraft.expertEvidence.whatToExamine,
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.whyExpertIsNeeded.explanation %}
-          {{ row(
-            label = 'Briefly explain why you believe an expert is needed',
-            value = directionsQuestionnaireDraft.whyExpertIsNeeded.explanation,
-            changeLink = DirectionsQuestionnairePaths.whyExpertIsNeededPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.permissionForExpert.option %}
-          {{ row(
-            label = 'Do you want the court’s permission to hire an expert?',
-            value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
-            changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% endif %}
-        {{ row(
-          label = 'Do you want to give evidence as a witness?',
-          value = t(directionsQuestionnaireDraft.selfWitness.option.option) | capitalize,
-          changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-          topBorder = true,
-          bold = true
-        ) }}
-        {% if directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option === YesNoOption.YES.option %}
-          {{ row(
-            label = 'Other witnesses',
-            value = directionsQuestionnaireDraft.otherWitnesses.howMany,
-            changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% else %}
-          {{ row(
-            label = 'Other witnesses',
-            value = directionsQuestionnaireDraft.otherWitnesses.otherWitnesses.option | capitalize,
-            changeLink = DirectionsQuestionnairePaths.selfWitnessPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% endif %}
-        {% if directionsQuestionnaireDraft.availability.hasUnavailableDates %}
-          {{ rowWithMultipleValue(
-            label = 'Dates unavailable',
-            values = datesUnavailable,
-            changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% else %}
-          {{ row(
-            label = 'Dates unavailable',
-            value = 'None',
-            changeLink = DirectionsQuestionnairePaths.hearingDatesPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          ) }}
-        {% endif %}
-        {{ tableEnd() }}
+      {{ directionsQuestionnaire() }}
 
-        <div class="form-group">
-          <h2 class="heading-medium">{{ t('Confirmation') }}</h2>
-          {{ checkboxSingle(
-              label = 'The hearing requirement details on this page are true to the best of my knowledge.',
-              name = 'directionsQuestionnaireSigned',
-              option = { label: 'The hearing requirement details on this page are true to the best of my knowledge.', value: true },
-              form = form,
-              legendHidden = true
-            ) }}
-          <input type="hidden" name="type" value="{{ form.model.type }}">
-      </div>
     {% elseif alreadyPaid %}
 
       {% if draft.partPaymentReceived %}
@@ -224,6 +233,8 @@
         {% endif %}
         {{ tableEnd() }}
       {% endif %}
+
+      {{ directionsQuestionnaire() }}
     {% else %}
       {% if draft.settleAdmitted %}
         {% if draft.settleAdmitted.admitted.option === 'yes' %}
@@ -243,6 +254,7 @@
           {{ row(label = 'Will you try free mediation?', bold = true, value = freeMediationResponse,
             changeLink = ClaimantResponsePaths.freeMediationPage.evaluateUri({ externalId: draft.externalId }), bottomBorder = true) }}
         {% endif %}
+        {{ directionsQuestionnaire() }}
       {% endif %}
 
       {% if draft.acceptPaymentMethod %}

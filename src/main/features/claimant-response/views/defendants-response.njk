@@ -49,8 +49,10 @@
 
 
 {% macro fullResponseFragment() %}
-  <h2 class="heading-medium">{{ t('Full response') }}</h2>
-  <p><a href="#">Download their full response and hearing requirements </a>(PDF).</p>
+  {% if(directionsQuestionnaireEnabled) %}
+    <h2 class="heading-medium">{{ t('Full response') }}</h2>
+    <p><a href="#">Download their full response and hearing requirements </a>(PDF).</p>
+  {% endif %}
 {% endmacro %}
 
 {% block content %}
@@ -82,9 +84,8 @@
           ) }}
 
           {{ paymentInformationFragment(paymentDeclaration = claim.response.paymentDeclaration) }}
-
         {% endif %}
-
+        {{ fullResponseFragment() }}
       {% elseif claim.response.responseType === ResponseType.FULL_ADMISSION.value or claim.response.responseType === ResponseType.PART_ADMISSION.value %}
         {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
           <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}</p>

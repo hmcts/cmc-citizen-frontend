@@ -20,13 +20,13 @@ import { ClaimSettledTask } from 'claimant-response/tasks/states-paid/claimSettl
 import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissionResponse'
 import { PartPaymentReceivedTask } from 'claimant-response/tasks/states-paid/partPaymentReceivedTask'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 import { FeatureToggles } from 'utils/featureToggles'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
-import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { IntentionToProceedTask } from 'claimant-response/tasks/intentionToProceedTask'
 
 const validator: Validator = new Validator()
@@ -322,10 +322,7 @@ export class TaskListBuilder {
   static buildDirectionsQuestionnaireSection (draft: DraftClaimantResponse,
                                               claim: Claim,
                                               directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
-    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
-      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire') && ((claim.response.responseType === ResponseType.PART_ADMISSION && draft.settleAdmitted
-        && draft.settleAdmitted.admitted.option === YesNoOption.NO)
-        || (claim.response.responseType === ResponseType.FULL_DEFENCE && draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES))) {
+    if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft, claim)) {
 
       return new TaskList(
         'Your hearing requirements', [
