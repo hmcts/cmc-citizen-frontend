@@ -156,7 +156,6 @@ gulp.task('default',
       'copy-files',
     ),
     gulp.parallel(
-      'develop',
       'watch'
     )
   )
