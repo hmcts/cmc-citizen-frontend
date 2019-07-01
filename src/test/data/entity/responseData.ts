@@ -471,3 +471,24 @@ export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
     explanation: 'I paid in cash'
   }
 }
+
+export const fullDefenceWithStatesLessThanClaimAmount = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
+  },
+  responseType: 'PART_ADMISSION'
+}
+
+export const fullDefenceWithStatesLessThanClaimAmountWithMediation = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
+  },
+  responseType: 'PART_ADMISSION',
+  freeMediation: 'yes'
+}
