@@ -322,7 +322,6 @@ export class DefenceSteps {
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
-        this.askForMediation()
         break
       case DefenceType.PART_ADMISSION_NONE_PAID:
         this.admitPartOfTheClaim(defence)
