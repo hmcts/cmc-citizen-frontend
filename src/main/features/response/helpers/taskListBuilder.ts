@@ -34,8 +34,6 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { getPreferredParty } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
-import { MadeBy } from 'offer/form/models/madeBy'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -242,7 +240,7 @@ export class TaskListBuilder {
 
   static buildResolvingClaimSection (draft: ResponseDraft, claim: Claim, mediationDraft?: MediationDraft): TaskList {
     if (draft.isResponseRejectedFullyWithDispute()
-      || TaskListBuilder.isRejectedFullyBecausePaidLessThanClaimAmountAndExplanationGiven(claim, draft)
+      || draft.isResponseRejectedFullyBecausePaidWhatOwed()
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
       let path: string
       if (FeatureToggles.isEnabled('mediation')) {
@@ -277,19 +275,13 @@ export class TaskListBuilder {
   static buildDirectionsQuestionnaireSection (draft: ResponseDraft, claim: Claim, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
     if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
       ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
-      let path: string
-      if (getPreferredParty(claim) === MadeBy.DEFENDANT) {
-        path = DirectionsQuestionnairePaths.hearingLocationPage.evaluateUri({ externalId: claim.externalId })
-      } else {
-        path = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId })
-      }
 
       if (draft.isResponsePartiallyAdmitted() || draft.isResponseRejected()) {
         return new TaskList(
           'Your hearing requirements', [
             new TaskListItem(
               `Give us details in case there’s a hearing`,
-              path,
+              DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
               DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
             )
           ]
