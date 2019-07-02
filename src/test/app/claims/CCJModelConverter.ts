@@ -20,6 +20,7 @@ import { MadeBy } from 'offer/form/models/madeBy'
 import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { LocalDate } from 'forms/models/localDate'
 import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
+import { MomentFactory } from 'shared/momentFactory'
 
 const ccjDraft = new DraftCCJ().deserialize({
   paymentOption: {
@@ -94,7 +95,7 @@ const repaymentPlanPaymentIntention = {
     paymentOption: PaymentOption.INSTALMENTS,
     repaymentPlan: {
       instalmentAmount: 100,
-      firstPaymentDate: new LocalDate(2010, 12, 30),
+      firstPaymentDate: MomentFactory.currentDate().add(1,'day'),
       paymentSchedule: PaymentSchedule.EACH_WEEK,
       completionDate: '2051-12-31',
       paymentLength: '1'
