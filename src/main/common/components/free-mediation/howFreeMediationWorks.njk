@@ -1,9 +1,13 @@
-{% macro howMediationWorks() %}
-  <h2 class="heading-medium">{{ t('We’ll try to contact you') }}</h2>
-  <p>{{ t('If we get through, we’ll try to arrange a phone call with a mediator from the Small Claims Mediation Service.') }}</p>
+{% macro howMediationWorks(mediationPilot) %}
+  {% if mediationPilot === true %}
+    <h2 class="heading-medium">{{ t('We’ll contact you with an appointment') }}</h2>
+    <p>{{ t('We’ll send you details of the date and time a mediator will phone you.') }}</p>
+  {% else %}
+    <h2 class="heading-medium">{{ t('We’ll try to contact you') }}</h2>
+    <p>{{ t('If we get through, we’ll try to arrange a phone call with a mediator from the Small Claims Mediation Service.') }}</p>
+  {% endif %}
 
-  <h2 class="heading-medium">{{ t('A mediator phones you') }}</h2>
-  <p>{{ t('We’ll contact you to arrange a phone call with a mediator from the Small Claims Mediation Service.') }}</p>
+  <h2 class="heading-medium">{{ t('A mediator phones youq') }}</h2>
 
   <p>{{ t('The mediator will:') }}</p>
   <ul class="list list-bullet">
