@@ -15,7 +15,9 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 const baseCompanyResponseData = {
@@ -26,7 +28,9 @@ const baseCompanyResponseData = {
 export const baseDefenceData = {
   responseType: 'FULL_DEFENCE',
   defence: 'My defence',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const defenceWithDisputeData = {
@@ -48,7 +52,9 @@ export const defenceWithAmountClaimedAlreadyPaidData = {
 
 export const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const basePayImmediatelyData = {
@@ -78,7 +84,9 @@ export const basePayBySetDateData = {
 }
 export const basePartialAdmissionData = {
   responseType: 'PART_ADMISSION',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 const basePartialEvidencesAndTimeLines = {
@@ -133,7 +141,9 @@ export const partialAdmissionFromStatesPaidDefence = {
   evidence: {
     rows: []
   },
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const partialAdmissionAlreadyPaidData = {

@@ -73,6 +73,7 @@ describe('Claimant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind(draftType, { acceptPaymentMethod: undefined })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -85,6 +86,7 @@ describe('Claimant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -97,6 +99,7 @@ describe('Claimant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
           draftStoreServiceMock.resolveFind(draftType, { courtDetermination: undefined })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -134,6 +137,8 @@ describe('Claimant response: check and send page', () => {
             }
           })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -174,6 +179,8 @@ describe('Claimant response: check and send page', () => {
             }
           })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -203,6 +210,8 @@ describe('Claimant response: check and send page', () => {
             }
           })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -230,6 +239,7 @@ describe('Claimant response: check and send page', () => {
               courtOfferedPaymentIntention: undefined
             })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -256,6 +266,7 @@ describe('Claimant response: check and send page', () => {
               courtOfferedPaymentIntention: undefined
             })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -281,6 +292,7 @@ describe('Claimant response: check and send page', () => {
               courtOfferedPaymentIntention: undefined
             })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -317,6 +329,7 @@ describe('Claimant response: check and send page', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.rejectSaveClaimantResponse('HTTP error')
 
           await request(app)
@@ -329,6 +342,7 @@ describe('Claimant response: check and send page', () => {
         it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
           draftStoreServiceMock.resolveFind(draftType)
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           claimStoreServiceMock.resolveClaimantResponse()
           draftStoreServiceMock.rejectDelete()
@@ -344,7 +358,9 @@ describe('Claimant response: check and send page', () => {
       it('should redirect to confirmation page when saved claimant response', async () => {
         draftStoreServiceMock.resolveFind(draftType)
         draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('directionsQuestionnaire')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+        draftStoreServiceMock.resolveDelete()
         draftStoreServiceMock.resolveDelete()
         claimStoreServiceMock.resolveClaimantResponse()
 

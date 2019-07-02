@@ -10,6 +10,8 @@ import { PaymentIntention as DomainPaymentIntention } from 'claims/models/respon
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { Claim } from 'claims/models/claim'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
@@ -17,7 +19,9 @@ import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/
 export class ClaimantResponseConverter {
 
   public static convertToClaimantResponse (
+    claim: Claim,
     draftClaimantResponse: DraftClaimantResponse,
+    mediationDraft: MediationDraft,
     isDefendantBusiness: boolean,
     directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft
   ): ClaimantResponse {
@@ -28,7 +32,9 @@ export class ClaimantResponseConverter {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
       }
 
-      reject.freeMediation = FreeMediationUtil.convertFreeMediation(draftClaimantResponse.freeMediation)
+      reject.freeMediation = FreeMediationUtil.getFreeMediation(mediationDraft)
+      reject.mediationPhoneNumber = FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft)
+      reject.mediationContactPerson = FreeMediationUtil.getMediationContactPerson(claim, mediationDraft)
 
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
@@ -50,6 +56,8 @@ export class ClaimantResponseConverter {
     } else if (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted.option === YesNoOption.NO) {
       return false
     } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received.option === YesNoOption.NO) {
+      return false
+    } else if (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES) {
       return false
     } else if (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES) {
       return false

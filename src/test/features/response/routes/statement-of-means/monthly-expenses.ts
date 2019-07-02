@@ -62,6 +62,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -111,6 +112,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should trigger validation when negative amount is given', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -132,6 +134,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should trigger validation when invalid decimal amount is given', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -153,6 +156,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should trigger validation when no amount is given', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -194,6 +198,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -226,6 +231,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should add new row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -272,6 +278,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should remove row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

@@ -36,6 +36,7 @@ export default express.Router()
   .get(Paths.confirmationPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
+      const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
       let directionsQuestionnaireEnabled = false
       if (claim.claimantResponse.type === ClaimantResponseType.REJECTION && claim.claimantResponse.directionsQuestionnaire) {
@@ -46,7 +47,7 @@ export default express.Router()
         {
           confirmationDate: MomentFactory.currentDate(),
           repaymentPlanOrigin: (alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE) ? undefined : claim.settlement && getRepaymentPlanOrigin(claim.settlement),
-          paymentIntentionAccepted: (alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE) ? undefined : hasAcceptedDefendantsPaymentIntention(claim),
+          paymentIntentionAccepted: (alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE) ? undefined : response.paymentIntention && hasAcceptedDefendantsPaymentIntention(claim),
           directionsQuestionnaireEnabled: directionsQuestionnaireEnabled
         })
     }))

@@ -597,6 +597,7 @@ describe('ResponseModelConverter', () => {
           ...partialAdmissionWithPaymentByInstalmentsData,
           ...{
             freeMediation: 'no',
+            mediationContactPerson: undefined,
             mediationPhoneNumber: '0700000000'
           },
           ...directionsQuestionnaireResponseData
