@@ -288,10 +288,8 @@
     {% endif %}
 
     {% if ((admissionsApplicable
-           and (draft.isResponsePartiallyAdmitted()
-                or (draft.isResponseRejectedFullyBecausePaidWhatOwed()
-                    and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
-          or draft.isResponseRejectedFullyWithDispute()) and mediationEnabled !== true %}
+        and (draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyBecausePaidWhatOwed()))
+      or draft.isResponseRejectedFullyWithDispute()) and mediationEnabled !== true %}
       {{ tableStart('freeMediation', 'Free mediation') }}
       {{
           row(
