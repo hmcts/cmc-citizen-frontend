@@ -41,6 +41,8 @@ import { sampleDirectionsQuestionnaireDraftObj, sampleMediationDraftObj } from '
 import { FeatureToggles } from 'utils/featureToggles'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
 
 function prepareResponseDraft (draftTemplate: any, partyDetails: object): ResponseDraft {
   return new ResponseDraft().deserialize({
@@ -76,32 +78,46 @@ describe('ResponseModelConverter', () => {
 
   const directionsQuestionnaireResponseData = {
     directionsQuestionnaire: {
-      selfWitness: { option: { option: 'yes' } },
-      otherWitnesses: { howMany: 1 },
-      supportRequired: {
-        languageSelected: true,
-        languageInterpreted: 'Klingon',
-        signLanguageSelected: true,
-        signLanguageInterpreted: 'Makaton',
-        hearingLoopSelected: true,
-        disabledAccessSelected: true,
-        otherSupportSelected: true,
+      witness: {
+        noOfOtherWitness: 1,
+        selfWitness: YesNoOption.YES
+      },
+      requireSupport: {
+        languageInterpreter: 'Klingon',
+        signLanguageInterpreter: 'Makaton',
+        hearingLoop: YesNoOption.YES,
+        disabledAccess: YesNoOption.YES,
         otherSupport: 'Life advice'
       },
       hearingLocation: {
         courtName: 'Little Whinging, Surrey',
-        courtAccepted: { option: 'yes' }
+        locationOption: CourtLocationType.SUGGESTED_COURT,
+        exceptionalCircumstancesReason: 'Poorly pet owl',
+        hearingLocationSlug: undefined,
+        courtAddress: undefined
       },
-      exceptionalCircumstances: { reason: 'Poorly pet owl' },
-      availability: { unavailableDates: [ { year: 2020,month: 1,day: 4 }, { year: 2020,month: 2,day: 8 } ] },
-      expertRequired: undefined,
-      expertReports: { rows: [ { expertName: 'Prof. McGonagall',
-        reportDate: { year: 2018, month: 1, day: 10 } },
-        { expertName: 'Mr Rubeus Hagrid',
-          reportDate: { year: 2019, month: 2, day: 27 } } ]},
-      permissionForExpert: undefined,
-      expertEvidence: { whatToExamine: 'Photographs' },
-      whyExpertIsNeeded: { explanation: 'for expert opinion' }
+      unavailableDates: [
+        {
+          unavailableDate: '2020-01-04'
+        },
+        {
+          unavailableDate: '2020-02-08'
+        }
+      ],
+      expertReports: [
+        {
+          expertName: 'Prof. McGonagall',
+          expertReportDate: '2018-01-10'
+        },
+        {
+          expertName: 'Mr Rubeus Hagrid',
+          expertReportDate: '2019-02-27'
+        }
+      ],
+      expertRequest: {
+        expertEvidenceToExamine: 'Photographs',
+        reasonForExpertAdvice: 'for expert opinion'
+      }
     }
   }
 
