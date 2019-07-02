@@ -65,9 +65,9 @@ export default express.Router()
 
       const postcode: string = getDefaultPostcode(res)
       const court: Court = await getNearestCourt(postcode)
-      const courtDetails: CourtDetails = await getCourtDetails(court.slug)
 
       if (court) {
+        const courtDetails: CourtDetails = await getCourtDetails(court.slug)
         renderPage(res,
           new Form<HearingLocation>(
             new HearingLocation(

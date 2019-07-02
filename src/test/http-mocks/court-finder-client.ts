@@ -4,6 +4,7 @@ import * as config from 'config'
 
 const baseURL = `${config.get<string>('claim-store.url')}`
 const endpointPath = /\/court-finder\/search-postcode\/.+/
+const detailEndpointPath = /\/court-finder\/court-details\/.+/
 
 export const searchResponse = [
   {
@@ -38,10 +39,22 @@ export const searchResponse = [
   }
 ]
 
+export const courtDetailsResponse = {
+  name: 'Birmingham District Probate Registry',
+  slug: 'birmingham-district-probate-registry',
+  facilities: []
+}
+
 export function resolveFind (): mock.Scope {
   return mock(baseURL)
     .get(endpointPath)
     .reply(HttpStatus.OK, searchResponse)
+}
+
+export function resolveCourtDetails (): mock.Scope {
+  return mock(baseURL)
+    .get(detailEndpointPath)
+    .reply(HttpStatus.OK, courtDetailsResponse)
 }
 
 export function rejectFind (): mock.Scope {
