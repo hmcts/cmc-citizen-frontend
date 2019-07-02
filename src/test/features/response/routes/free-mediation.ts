@@ -49,6 +49,7 @@ describe('Defendant response: free mediation page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -86,6 +87,7 @@ describe('Defendant response: free mediation page', () => {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -99,6 +101,7 @@ describe('Defendant response: free mediation page', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -111,6 +114,7 @@ describe('Defendant response: free mediation page', () => {
           it('should redirect to task list page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)

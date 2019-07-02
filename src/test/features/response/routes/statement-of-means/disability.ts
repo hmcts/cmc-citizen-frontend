@@ -113,6 +113,7 @@ describe('Statement of means', () => {
           it('should redirect to severe disability page when Yes is selected and defendant is severely disabled', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)

@@ -176,6 +176,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should trigger validation when no schedule is given', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -255,6 +256,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
         it('should remove row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

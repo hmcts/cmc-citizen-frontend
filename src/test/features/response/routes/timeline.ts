@@ -147,6 +147,7 @@ describe('Defendant response: timeline', () => {
           it('should render page when description undefined', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
