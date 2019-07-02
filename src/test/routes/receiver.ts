@@ -233,6 +233,18 @@ describe('Login receiver', async () => {
         })
       })
     })
+
+    describe('for expired user credentials', () => {
+      it('should redirect to login', async () => {
+        const token = 'I am dummy access token'
+        idamServiceMock.rejectExchangeCode(token)
+
+        await request(app)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .set('Cookie', 'state=123')
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
+      })
+    })
   })
 })
 
