@@ -60,13 +60,7 @@ const expectedResponse = {
         type: 'Visiting'
       },
       name: 'Birmingham District Probate Registry',
-      slug: 'birmingham-district-probate-registry',
-      facilities: [
-        {
-          name: 'Interview room',
-          description: 'Three interview rooms on upper floor and four in the family suite.'
-        }
-      ]
+      slug: 'birmingham-district-probate-registry'
     }
   ], statusCode: 200, valid: true
 }
