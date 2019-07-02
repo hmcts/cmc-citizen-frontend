@@ -11,14 +11,13 @@
       <p class="heading-medium">{{ t('Advantages of free mediation') }}</p>
 
       <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>
-      {% set footnote = true %}
 
       {% if defendant %}
-        <p>{{ t('The free service can help you:') }}</p>
+        <p>{{ t('Opting out can mean:') }}</p>
         <ul class="list list-bullet">
-          <li>{{ t('avoid a long wait for the claim to be resolved') }}</li>
-          <li>{{ t('avoid a court hearing, which can last a whole day') }}</li>
-          <li>{{ t('avoid a County Court Judgment') }}</li>
+          <li>{{ t('a long wait for the claim to be resolved') }}</li>
+          <li>{{ t('a court hearing, which can last a whole day') }}</li>
+          <li>{{ t('a County Court Judgment against you') }}</li>
           </li>
         </ul>
       {% else %}
@@ -61,9 +60,7 @@
         {{ saveAndContinueButton() }}
       </form>
 
-      {% if footnote %}
-        <p class="font-xsmall">{{ t('*Source: Small Claims Mediation Service statistics, November 2017 to October 2018.') }}</p>
-      {% endif %}
+      <p class="font-xsmall">{{ t('*Source: Small Claims Mediation Service statistics, November 2017 to October 2018.') }}</p>
     </div>
   </div>
 {% endblock %}
