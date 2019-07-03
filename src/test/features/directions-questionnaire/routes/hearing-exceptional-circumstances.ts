@@ -20,6 +20,8 @@ import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as RouteHelper from './helper/dqRouteHelper'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -31,6 +33,50 @@ const dashboardPath = DashboardPaths.dashboardPage.uri
 function setupMocks (claimant: PartyType, defendant: PartyType, currentParty: MadeBy) {
   const claimObject = RouteHelper.createClaim(claimant, defendant, currentParty)
   idamServiceMock.resolveRetrieveUserFor(currentParty === MadeBy.CLAIMANT ? claimObject.submitterId : claimObject.defendantId, 'citizen')
+  if (currentParty === MadeBy.CLAIMANT) {
+    claimObject.response.directionsQuestionnaire = {
+      witness: {
+        noOfOtherWitness: 1,
+        selfWitness: YesNoOption.YES
+      },
+      requireSupport: {
+        languageInterpreter: 'Klingon',
+        signLanguageInterpreter: 'Makaton',
+        hearingLoop: YesNoOption.YES,
+        disabledAccess: YesNoOption.YES,
+        otherSupport: 'Life advice'
+      },
+      hearingLocation: {
+        courtName: 'Little Whinging, Surrey',
+        locationOption: CourtLocationType.SUGGESTED_COURT,
+        exceptionalCircumstancesReason: 'Poorly pet owl',
+        hearingLocationSlug: undefined,
+        courtAddress: undefined
+      },
+      unavailableDates: [
+        {
+          unavailableDate: '2020-01-04'
+        },
+        {
+          unavailableDate: '2020-02-08'
+        }
+      ],
+      expertReports: [
+        {
+          expertName: 'Prof. McGonagall',
+          expertReportDate: '2018-01-10'
+        },
+        {
+          expertName: 'Mr Rubeus Hagrid',
+          expertReportDate: '2019-02-27'
+        }
+      ],
+      expertRequest: {
+        expertEvidenceToExamine: 'Photographs',
+        reasonForExpertAdvice: 'for expert opinion'
+      }
+    }
+  }
   claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimObject)
   draftStoreServiceMock.resolveFind('directionsQuestionnaire')
   draftStoreServiceMock.resolveFind('response')
@@ -207,8 +253,8 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       })
-      const validFormData = { exceptionalCircumstances: 'yes', reason: 'reason' }
-      const invalidFormData = { exceptionalCircumstances: 'yes' }
+      const validFormData = { exceptionalCircumstances: 'no', reason: 'reason' }
+      const invalidFormData = { exceptionalCircumstances: 'no' }
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -232,14 +278,14 @@ describe('Directions Questionnaire - Hearing exceptional circumstances page', ()
           await shouldBeServerError(method, 'Error', validFormData)
         })
 
-        it('should redirect to hearing location page when yes is selected', async () => {
+        it('should redirect to hearing location page when no is selected', async () => {
           draftStoreServiceMock.resolveSave()
           await shouldRedirect(method, hearingLocationPage, validFormData)
         })
 
-        it('should redirect to expert page when no is selected', async () => {
+        it('should redirect to expert page when yes is selected', async () => {
           draftStoreServiceMock.resolveSave()
-          await shouldRedirect(method, expertPath, { exceptionalCircumstances: 'no' })
+          await shouldRedirect(method, expertPath, { exceptionalCircumstances: 'yes' })
         })
       })
 
