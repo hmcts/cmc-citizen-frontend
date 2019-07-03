@@ -13,7 +13,6 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
-import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -53,7 +52,6 @@ describe('Defendant response: receipt', () => {
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
-        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.rejectRetrieveDocument('HTTP Error')
 
         await request(app)
@@ -65,7 +63,6 @@ describe('Defendant response: receipt', () => {
       it('should return receipt when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
         claimStoreServiceMock.resolveRetrieveDocument()
-        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
