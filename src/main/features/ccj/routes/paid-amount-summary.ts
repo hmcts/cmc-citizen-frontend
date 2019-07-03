@@ -48,11 +48,6 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     return undefined
   }
 
-  applyInterest (claim: Claim): boolean {
-    return !(claim.response && claim.response.responseType === ResponseType.PART_ADMISSION
-      && claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION)
-  }
-
   async saveDraft (locals: { user: User, draft: DraftWrapper<DraftCCJ> }): Promise<void> {
     const user: User = locals.user
     await new DraftService().save(locals.draft, user.bearerToken)
