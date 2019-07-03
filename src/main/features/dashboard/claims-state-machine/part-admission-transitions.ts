@@ -9,6 +9,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { StatementType } from 'offer/form/models/statementType'
 import { PartAdmissionStates } from 'claims/models/claim-states/part-admission-states'
+import { StatesPaidStates } from 'claims/models/claim-states/states-paid-states'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { RejectionClaimantResponse } from 'claims/models/claimant-response/rejectionClaimantResponse'
@@ -19,6 +20,11 @@ export function partAdmissionTransitions (claim: Claim) {
   return new StateMachine({
     init: PartAdmissionStates.PART_ADMISSION,
     transitions: [
+      {
+        name: 'checkIsStatesPaid',
+        from: PartAdmissionStates.PART_ADMISSION,
+        to: StatesPaidStates.STATES_PAID
+      },
       {
         name: 'checkIsPayImmediatelyWithMediation',
         from: PartAdmissionStates.PART_ADMISSION,
@@ -129,7 +135,7 @@ export function partAdmissionTransitions (claim: Claim) {
 
       {
         name: 'checkIsPayBySpecifiedDateReferredToJudge',
-        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION],
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE],
         to: PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE_REFERRED_TO_JUDGE
       },
       {
@@ -514,7 +520,7 @@ export function partAdmissionTransitions (claim: Claim) {
       },
 
       onBeforeCheckIsPayBySpecifiedDateReferredToJudge (): boolean {
-        return this.is(PartAdmissionStates.PA_PAY_BY_SET_DATE_WITH_MEDIATION) && this.checkIsReferredToJudge()
+        return this.is(PartAdmissionStates.PA_PAY_BY_SPECIFIED_DATE) && this.checkIsReferredToJudge()
       },
 
       onBeforeCheckIsPayInInstalmentsReferredToJudge (): boolean {
