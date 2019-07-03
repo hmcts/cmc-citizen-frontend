@@ -28,7 +28,6 @@ import {
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { organisation } from 'test/data/entity/party'
-import { Moment } from 'moment'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -441,7 +440,7 @@ export function mockCalculateInterestRate (expected: number): mock.Scope {
     .reply(HttpStatus.OK, { amount: expected })
 }
 
-export function mockNextWorkingDay (expected: Moment): mock.Scope {
+export function mockNextWorkingDay (expected: String): mock.Scope {
   return mock(serviceBaseURL)
     .get('/calendar/next-working-day')
     .query(true)
