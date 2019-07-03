@@ -225,10 +225,12 @@ export class Claim {
 
   get partAdmissionPayImmediatelyPastPaymentDate (): boolean {
     return this.response
+      && this.claimantResponse
       && (this.response.responseType === ResponseType.PART_ADMISSION)
       && this.response.paymentIntention
       && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
       && this.response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+
   }
 
   get retrieveDateOfBirthOfDefendant (): DateOfBirth {
