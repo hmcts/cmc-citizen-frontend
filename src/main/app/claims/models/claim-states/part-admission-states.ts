@@ -24,8 +24,6 @@ export enum PartAdmissionStates {
   PA_PAY_IN_INSTALMENTS_REJECTED_WITH_MEDIATION_CLAIMANT_WITH_MEDIATION = 'pa-pay-in-instalments-rejected-with-mediation-claimant-with-mediation',
   PA_PAY_IN_INSTALMENTS_REJECTED_WITHOUT_MEDIATION = 'pa-pay-in-instalments-rejected-without-mediation',
 
-  PA_PAY_BY_SPECIFIED_DATE = 'pa-pay-by-specified-date',
-  PA_PAY_IN_INSTALMENTS = 'pa-pay-in-instalments',
   PA_PAY_BY_SPECIFIED_DATE_REFERRED_TO_JUDGE = 'pa-pay-by-specified-date-referred-to-judge',
   PA_PAY_IN_INSTALMENTS_REFERRED_TO_JUDGE = 'pa-pay-in-instalments-referred-to-judge',
 
