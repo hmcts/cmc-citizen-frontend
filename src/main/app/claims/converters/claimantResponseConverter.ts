@@ -59,8 +59,6 @@ export class ClaimantResponseConverter {
       return false
     } else if (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES) {
       return false
-    } else if (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES) {
-      return false
     }
 
     return true

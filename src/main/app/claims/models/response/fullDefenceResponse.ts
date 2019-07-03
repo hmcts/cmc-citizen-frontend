@@ -15,7 +15,7 @@ export interface FullDefenceResponse extends ResponseCommon {
   defence: string,
   timeline: DefendantTimeline
   evidence: DefendantEvidence,
-  directionsQuestionnaire: DirectionsQuestionnaire
+  directionsQuestionnaire?: DirectionsQuestionnaire
 }
 
 export namespace FullDefenceResponse {

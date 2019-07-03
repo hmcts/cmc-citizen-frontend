@@ -19,7 +19,7 @@ export interface PartialAdmissionResponse extends ResponseCommon {
   freeMediation?: YesNoOption,
   paymentIntention?: PaymentIntention
   statementOfMeans?: StatementOfMeans,
-  directionsQuestionnaire: DirectionsQuestionnaire
+  directionsQuestionnaire?: DirectionsQuestionnaire
 }
 
 export namespace PartialAdmissionResponse {
