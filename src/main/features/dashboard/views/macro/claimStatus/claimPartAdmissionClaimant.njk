@@ -11,6 +11,8 @@
   {{ t('You’ve accepted the defendant’s part admission. They said they’d pay immediately.') }}
 {% endmacro %}
 
+
+
 {% macro claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('Respond to the defendant') }}</h2>
@@ -61,11 +63,11 @@
         { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
     {{ paidInFullClaimantButtonClaimDetails(claim) }}
-    {% if claim.admissionPayImmediatelyPastPaymentDate %}
+    {% if claim.admissionPayImmediatelyPastPaymentDate or claim.partAdmissionPayImmediatelyPastPaymentDate %}
       <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
       <p>{{ t('If the defendant has not paid you, you can '
           + internalLink('request a County Court Judgment.', CCJPaths.paidAmountPage.evaluateUri({ externalId:claim.externalId }) )) | safe }}</p>
-    {% elif not claim.admissionPayImmediatelyPastPaymentDate %}
+    {% else %}
       <h2 class="heading-small">{{ t('What to do if they don’t pay') }}</h2>
       <p>{{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% endif %}
