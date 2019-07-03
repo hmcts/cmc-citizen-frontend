@@ -70,6 +70,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 export class ResponseModelConverter {
 
@@ -113,7 +114,8 @@ export class ResponseModelConverter {
         draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
       statementOfTruth: this.convertStatementOfTruth(draft),
-      directionsQuestionnaire: this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft)
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
@@ -139,7 +141,8 @@ export class ResponseModelConverter {
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       statementOfTruth: this.convertStatementOfTruth(draft),
-      directionsQuestionnaire: this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft)
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
@@ -189,7 +192,8 @@ export class ResponseModelConverter {
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft),
-      directionsQuestionnaire: this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft)
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
