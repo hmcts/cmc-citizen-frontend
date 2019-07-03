@@ -37,7 +37,13 @@ const apiData = [
     displayed: true,
     hide_aols: false,
     dx_number: '701990 Birmingham 7',
-    distance: 1
+    distance: 1,
+    facilities: [
+      {
+        name: 'Interview room',
+        description: 'Three interview rooms on upper floor and four in the family suite.'
+      }
+    ]
   }
 ]
 
