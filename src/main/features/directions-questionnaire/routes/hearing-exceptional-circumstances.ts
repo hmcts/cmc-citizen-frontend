@@ -16,7 +16,7 @@ import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/
 function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
   const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
   let defendantCourt = ''
-  if (party === MadeBy.CLAIMANT) {
+  if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
     const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
     defendantCourt = defendantDirectionsQuestionnaire.hearingLocation.courtName
   }
