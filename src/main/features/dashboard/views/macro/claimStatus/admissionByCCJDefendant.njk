@@ -46,12 +46,18 @@
   <div class="status-block">
     <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-      <p>{{ t('They rejected your repayment plan.') }}</p>
+      {% if claim.claimantResponse.courtDetermination %}
+        <p>{{ t('They rejected your repayment plan.') }}</p>
+      {% else %}
+        <p>{{ t('They accepted your repayment plan.') }}</p>
+      {% endif %}
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount }) }}</p>
     {% endif %}
 
-    {% if claim.claimantResponse.courtDetermination %}
+    {% if claim.claimantResponse.courtDetermination.decisionType === DecisionType.CLAIMANT %}
+      <p>{{ t('They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.') }}</p>
+    {% else %}
       <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>
     {% endif %}
 

@@ -211,6 +211,7 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
+    console.log(statuses)
     return statuses
   }
 
@@ -310,7 +311,8 @@ export class Claim {
   }
 
   hasClaimantAcceptedAdmissionWithCCJ (): boolean {
-    return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementReachedThroughAdmission() &&
+    return this.countyCourtJudgment && this.response && this.claimantResponse && !this.isSettlementAgreementRejected &&
+      !this.isSettlementReachedThroughAdmission() &&
       (this.response.responseType === ResponseType.FULL_ADMISSION || this.response.responseType === ResponseType.PART_ADMISSION) &&
       !(this.claimantResponse as AcceptationClaimantResponse).courtDetermination && !this.reDeterminationRequestedAt
   }

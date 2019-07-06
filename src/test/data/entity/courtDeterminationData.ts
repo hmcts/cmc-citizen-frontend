@@ -1,5 +1,6 @@
 import { monthlyInstalmentPaymentIntentionData } from 'test/data/entity/paymentIntentionData'
 import { DecisionType } from 'common/court-calculations/decisionType'
+import { MomentFactory } from 'shared/momentFactory'
 
 export const courtDeterminationData = {
   courtDecision: monthlyInstalmentPaymentIntentionData,
@@ -39,4 +40,12 @@ export const courtDeterminationChoseClaimantData = {
     paymentDate: '2019-06-28',
     paymentOption: 'BY_SPECIFIED_DATE'
   }
+}
+
+export const courtDeterminationChoseCourtData = {
+  decisionType: 'COURT',
+  courtDecision: {
+    paymentOption: 'BY_SPECIFIED_DATE',
+    paymentDate: MomentFactory.parse('2018-11-01'),
+    repaymentPlan: undefined }
 }
