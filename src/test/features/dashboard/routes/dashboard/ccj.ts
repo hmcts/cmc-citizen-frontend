@@ -237,9 +237,8 @@ const testData = [
     status: 'CCJ - full admission, pay by repayment plan, claimant accepts the repayment plan and requests a CCJ',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
-      countyCourtJudgment: { 'ccjType': 'DETERMINATION', 'paidAmount': 10, 'payBySetDate': '2022-01-01', 'paymentOption': 'BY_SPECIFIED_DATE', 'defendantDateOfBirth': '2000-01-01' },
+      countyCourtJudgment: { 'ccjType': 'ADMISSIONS', 'paidAmount': 10, 'payBySetDate': '2022-01-01', 'paymentOption': 'BY_SPECIFIED_DATE', 'defendantDateOfBirth': '2000-01-01' },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
@@ -290,6 +289,29 @@ const testData = [
       claimantResponse: {
         type: 'ACCEPTATION',
         formaliseOption: 'CCJ',
+        courtDetermination: {
+          ...courtDeterminationChoseClaimantData
+        },
+        claimantPaymentIntention: {
+          paymentDate: '2020-01-01',
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
+    },
+    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+  },
+  {
+    status: 'CCJ - full admission, pay by repayment plan, claimant rejects the repayment plan, accepts the courts offer and offers a settlement agreement, defendant rejects the settlement agreement. Claimant then requests a CCJ',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      settlement: claimStoreServiceMock.partySettlementWithInstalmentsAndRejection,
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'SETTLEMENT',
         courtDetermination: {
           ...courtDeterminationChoseClaimantData
         },
