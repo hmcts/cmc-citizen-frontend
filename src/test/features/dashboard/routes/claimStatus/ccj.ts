@@ -267,7 +267,7 @@ const testData = [
     ],
     defendantAssertions: ['000MC050',
       'John Smith requested a County Court Judgment (CCJ) against you',
-      'They accepted your offer to pay 3000. They rejected your repayment plan.',
+      'They accepted your offer to pay £3,000. They rejected your repayment plan.',
       'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
       'View the repayment plan',
       'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
@@ -341,7 +341,7 @@ const testData = [
     ],
     defendantAssertions: ['000MC050',
       'John Smith requested a County Court Judgment (CCJ) against you',
-      'They accepted your offer to pay 3000. They rejected your repayment plan.',
+      'They accepted your offer to pay £3,000. They rejected your repayment plan.',
       'They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.',
       'View the repayment plan',
       'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
@@ -644,6 +644,115 @@ const testData = [
       'They asked you to sign a settlement agreement. Because you didn’t sign it, they requested a CCJ against you.',
       'View the repayment plan',
       'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
+      'If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'CCJ - part admission, pay by repayment plan, claimant rejects the repayment plan, the courts accepts their plan and offers a settlement agreement, defendant rejects the settlement agreement and claimant requests a CCJ',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      settlement: claimStoreServiceMock.partySettlementWithInstalmentsAndRejection,
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'SETTLEMENT',
+        courtDetermination: {
+          ...courtDeterminationChoseClaimantData
+        },
+        claimantPaymentIntention: {
+          paymentDate: '2020-01-01',
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...partialAdmissionWithSoMPaymentBySetDateData }
+    },
+    claimantAssertions: ['000MC050',
+      'You requested a County Court Judgment against John Doe',
+      'When we’ve processed your request, we’ll post a copy of the judgment to you and to John Doe',
+      'View the repayment plan',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve been paid'
+    ],
+    defendantAssertions: ['000MC050',
+      'A County Court Judgment (CCJ) has been issued against you',
+      'They accepted your offer to pay £3,000. They rejected your repayment plan.',
+      'They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.',
+      'They asked you to sign a settlement agreement. Because you didn’t sign it, they requested a CCJ against you.',
+      'View the repayment plan',
+      'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
+      'If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'CCJ - part admission, pay by repayment plan, claimant rejects the repayment plan, accepts the courts offer and offers a settlement agreement, defendant rejects the settlement agreement. Claimant then requests a CCJ',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      settlement: claimStoreServiceMock.partySettlementWithInstalmentsAndRejection,
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'SETTLEMENT',
+        courtDetermination: {
+          ...courtDeterminationChoseCourtData
+        },
+        claimantPaymentIntention: {
+          paymentDate: '2020-01-01',
+          paymentOption: 'BY_SPECIFIED_DATE'
+        }
+      },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...partialAdmissionWithSoMPaymentBySetDateData }
+    },
+    claimantAssertions: ['000MC050',
+      'You requested a County Court Judgment against John Doe',
+      'When we’ve processed your request, we’ll post a copy of the judgment to you and to John Doe',
+      'View the repayment plan',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve been paid'
+    ],
+    defendantAssertions: ['000MC050',
+      'A County Court Judgment (CCJ) has been issued against you',
+      'They accepted your offer to pay £3,000. They rejected your repayment plan.',
+      'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
+      'They asked you to sign a settlement agreement. Because you didn’t sign it, they requested a CCJ against you.',
+      'View the repayment plan',
+      'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith',
+      'If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'CCJ - part admission, pay by repayment plan, claimant accepts the repayment plan and they offer a settlement agreement, defendant rejects the settlement agreement. Claimant then requests a CCJ',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
+    claimOverride: {
+      settlement: claimStoreServiceMock.partySettlementWithInstalmentsAndRejection,
+      claimantResponse: {
+        type: 'ACCEPTATION',
+        formaliseOption: 'SETTLEMENT'
+      },
+      countyCourtJudgment: { ...ccjAdmissionBySpecifiedDate },
+      countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
+      response: { ...partialAdmissionWithSoMPaymentBySetDateData }
+    },
+    claimantAssertions: ['000MC050',
+      'You requested a County Court Judgment against John Doe',
+      'When we’ve processed your request, we’ll post a copy of the judgment to you and to John Doe',
+      'View the repayment plan',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve been paid'
+    ],
+    defendantAssertions: ['000MC050',
+      'A County Court Judgment (CCJ) has been issued against you',
+      'They accepted your repayment plan.',
+      'They asked you to sign a settlement agreement. Because you didn’t sign it, they requested a CCJ against you.',
+      'View the repayment plan',
+      'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
       'If you pay the debt within one month of the date of judgment, the CCJ is removed from the public register. You can pay £15',
       'you need their payment details. Make sure you get receipts for any payments.',
       'Download your response'

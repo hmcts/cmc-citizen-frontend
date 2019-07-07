@@ -211,7 +211,6 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
-    console.log(statuses)
     return statuses
   }
 
