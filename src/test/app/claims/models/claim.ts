@@ -155,7 +155,7 @@ describe('Claim', () => {
     })
 
     it('should return OFFER_SETTLEMENT_REACHED if an offer has been accepted', () => {
-      claim.settlement = new Settlement()
+      claim.settlement = prepareSettlementOfferByDefendantAndAcceptedByClaimant()
       claim.settlementReachedAt = moment()
 
       expect(claim.status).to.be.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
@@ -738,7 +738,7 @@ describe('Claim', () => {
     })
 
     it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_LINK_ELIGIBLE if an offer has been submitted.', () => {
-      claim.settlement = new Settlement()
+      claim.settlement = prepareSettlementOfferByDefendant()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
         defenceType: DefenceType.DISPUTE,
@@ -841,7 +841,7 @@ describe('Claim', () => {
     it('should contain settlement reached status only when response submitted and offers exchanged', () => {
       claim.respondedAt = moment()
       claim.response = { responseType: ResponseType.FULL_DEFENCE }
-      claim.settlement = new Settlement()
+      claim.settlement = prepareSettlementOfferByDefendantAndAcceptedByClaimant()
       claim.settlementReachedAt = moment()
 
       expect(claim.stateHistory).to.have.lengthOf(1)
@@ -881,6 +881,42 @@ function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): 
           content: 'My offer contents here.',
           completionDate: '2020-10-10',
           paymentIntention: paymentIntention
+        }
+      },
+      {
+        madeBy: MadeBy.CLAIMANT.value,
+        type: StatementType.ACCEPTATION.value
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}
+
+function prepareSettlementOfferByDefendant (): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2020-10-10'
+        }
+      }
+    ]
+  }
+  return new Settlement().deserialize(settlement)
+}
+
+function prepareSettlementOfferByDefendantAndAcceptedByClaimant (): Settlement {
+  const settlement = {
+    partyStatements: [
+      {
+        type: StatementType.OFFER.value,
+        madeBy: MadeBy.DEFENDANT,
+        offer: {
+          content: 'My offer contents here.',
+          completionDate: '2020-10-10'
         }
       },
       {
