@@ -73,9 +73,12 @@ export class IdamClient {
       })
       .catch((error: any) => {
         trackCustomEvent('failed to exchange code',{
-          errorValue: error
+          errorValue: {
+            message: error.name,
+            code: error.statusCode
+          }
         })
-        return undefined
+        throw error
       })
   }
 
