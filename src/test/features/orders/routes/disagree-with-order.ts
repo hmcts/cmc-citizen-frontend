@@ -15,7 +15,6 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
-import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = OrdersPaths.disagreeReasonPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -89,16 +88,18 @@ describe('Orders: why do you disagree with the order page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should show an error when nothing is entered', async () => {
+        it('should redirect to itself when nothing is entered', async () => {
           draftStoreServiceMock.resolveFind('orders')
+          draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ option: FreeMediationOption.YES })
-            .expect(res => expect(res).to.be.successful.withText(pageTitle, 'div class="error-summary"'))
-
+            .send({ reason: '' })
+            .expect(res => expect(res).to.be.redirect
+              .toLocation(OrdersPaths.disagreeReasonPage
+                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
         })
 
         it('should redirect to itself when everything is fine', async () => {

@@ -6,7 +6,7 @@ import { Validator } from '@hmcts/class-validator'
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { DisagreeReason, ValidationErrors } from 'orders/form/models/disagreeReason'
+import { DisagreeReason } from 'orders/form/models/disagreeReason'
 
 describe('DisagreeReason', () => {
 
@@ -41,32 +41,16 @@ describe('DisagreeReason', () => {
 
     const validator: Validator = new Validator()
 
-    it('should reject claim reason with undefined reason', () => {
-      const errors = validator.validateSync(new DisagreeReason(undefined))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
-    })
-
-    it('should reject claim reason with null type', () => {
-      const errors = validator.validateSync(new DisagreeReason(null))
-
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
-    })
-
-    it('should reject claim reason with empty string', () => {
+    it('should accept reason with empty string', () => {
       const errors = validator.validateSync(new DisagreeReason(''))
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
+      expect(errors.length).to.equal(0)
     })
 
-    it('should reject claim reason with white spaces string', () => {
+    it('should accept reason with white spaces string', () => {
       const errors = validator.validateSync(new DisagreeReason('   '))
 
-      expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
+      expect(errors.length).to.equal(0)
     })
 
     it('should reject claim reason with more than max allowed characters', () => {
