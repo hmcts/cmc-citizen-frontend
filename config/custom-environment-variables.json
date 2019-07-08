@@ -72,7 +72,6 @@
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "newFeaturesConsent": "FEATURE_NEW_FEATURES_CONSENT",
     "admissions": "FEATURE_ADMISSIONS",
-    "paidInFull": "FEATURE_PAID_IN_FULL",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY",
     "mediation": "FEATURE_MEDIATION",

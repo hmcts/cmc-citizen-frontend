@@ -29,7 +29,6 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "admissions": true,
-    "paidInFull": true,
     "returnErrorToUser": true,
     "mediation": true,
     "mediationPilot": true,
