@@ -13,7 +13,7 @@
         {% set error = form.errorFor(name) %}
         <div class="form-group {% if error %} form-group-error {% endif %}">
           <label for="{{ name }}" id="{{ name }}[label]">
-            <p>{{ t('You can continue without giving details if you prefer. If you enter details {{ otherParty }} will be able to see what you said.',
+            <p>{{ t('You can continue without giving details if you prefer. If you enter details {{ otherParty }} will be able to see what you said and add their own comments.',
                 { otherParty: otherParty }) }}</p>
 
             {% if error %}
