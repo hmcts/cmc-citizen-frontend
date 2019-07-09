@@ -15,7 +15,7 @@ export class DirectionsQuestionnaireDraft extends DraftDocument {
   selfWitness: SelfWitness = new SelfWitness()
   otherWitnesses: OtherWitnesses = new OtherWitnesses()
   hearingLocation: string = ''
-  hearingLocationSlug: string
+  hearingLocationSlug: string = ''
   exceptionalCircumstances: ExceptionalCircumstances = new ExceptionalCircumstances()
   availability: Availability = new Availability()
   supportRequired: SupportRequired = new SupportRequired()

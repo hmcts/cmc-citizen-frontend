@@ -91,6 +91,7 @@ describe('Directions Questionnaire - hearing location', () => {
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
           courtFinderMock.resolveFind()
+          courtFinderMock.resolveCourtDetails()
 
           await request(app)
             .get(pagePath)
@@ -196,6 +197,7 @@ describe('Directions Questionnaire - hearing location', () => {
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
             courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
 
             await request(app)
               .post(pagePath)
