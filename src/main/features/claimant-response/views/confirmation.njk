@@ -25,7 +25,7 @@
             {{ t('You’ve proposed a different repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
-          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === 'no' %}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
             {{ t('You’ve rejected their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
             {{ t('You’ve accepted their response') }}
