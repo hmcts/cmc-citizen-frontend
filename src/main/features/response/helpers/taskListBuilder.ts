@@ -273,21 +273,18 @@ export class TaskListBuilder {
   }
 
   static buildDirectionsQuestionnaireSection (draft: ResponseDraft, claim: Claim, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
-    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
-      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
-
-      if (draft.isResponsePartiallyAdmitted() || draft.isResponseRejected()) {
-        return new TaskList(
-          'Your hearing requirements', [
-            new TaskListItem(
-              `Give us details in case there’s a hearing`,
-              DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
-              DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
-            )
-          ]
-        )
-      }
+    if (draft.isResponsePartiallyAdmitted() || draft.isResponseRejected()) {
+      return new TaskList(
+        'Your hearing requirements', [
+          new TaskListItem(
+            `Give us details in case there’s a hearing`,
+            DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+            DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+          )
+        ]
+      )
     }
+
     return undefined
   }
 
@@ -338,7 +335,10 @@ export class TaskListBuilder {
 
   static buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionQuestionnaireDraft: DirectionsQuestionnaireDraft): TaskListItem[] {
     const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
-    const resolveDirectionsQuestionnaireTaskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionQuestionnaireDraft)
+    let resolveDirectionsQuestionnaireTaskList: TaskList
+    if (FeatureToggles.isEnabled('directionsQuestionnaire') && ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
+      resolveDirectionsQuestionnaireTaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionQuestionnaireDraft)
+    }
 
     return [].concat(
       TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
