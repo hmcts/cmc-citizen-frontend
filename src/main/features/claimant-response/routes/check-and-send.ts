@@ -23,6 +23,7 @@ import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth
 import { FormValidator } from 'forms/validation/formValidator'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -57,7 +58,7 @@ function deserializerFunction (value: any): StatementOfTruth {
 function renderView (form: Form<StatementOfTruth>, res: express.Response): void {
   const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
-  const directionsQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
+  const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
   const paymentIntention: PaymentIntention = alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE ? undefined : getPaymentIntention(draft.document, claim)

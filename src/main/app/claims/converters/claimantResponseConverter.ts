@@ -15,6 +15,7 @@ import { Claim } from 'claims/models/claim'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
+import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 
 export class ClaimantResponseConverter {
 
@@ -42,7 +43,7 @@ export class ClaimantResponseConverter {
 
       this.addStatesPaidOptions(draftClaimantResponse, reject)
 
-      if (directionsQuestionnaireDraft !== undefined) {
+      if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draftClaimantResponse, claim)) {
         this.addDirectionsQuestionnaire(directionsQuestionnaireDraft, reject)
       }
 
