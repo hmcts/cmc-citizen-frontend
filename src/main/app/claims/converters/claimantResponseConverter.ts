@@ -16,6 +16,7 @@ import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class ClaimantResponseConverter {
 
@@ -33,7 +34,7 @@ export class ClaimantResponseConverter {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
       }
 
-      reject.freeMediation = FreeMediationUtil.getFreeMediation(mediationDraft)
+      reject.freeMediation = this.convertFreeMediation(mediationDraft, draftClaimantResponse)
       reject.mediationPhoneNumber = FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft)
       reject.mediationContactPerson = FreeMediationUtil.getMediationContactPerson(claim, mediationDraft)
 
@@ -49,6 +50,14 @@ export class ClaimantResponseConverter {
 
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
+  }
+
+  private static convertFreeMediation (mediationDraft: MediationDraft, draft: DraftClaimantResponse): YesNoOption {
+    if (FeatureToggles.isEnabled('mediation')) {
+      return FreeMediationUtil.convertFreeMediation(mediationDraft.youCanOnlyUseMediation)
+    } else {
+      return FreeMediationUtil.convertFreeMediation(draft.freeMediation)
+    }
   }
 
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
