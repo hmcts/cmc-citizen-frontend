@@ -200,6 +200,23 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE)
     })
 
+    it('should return ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE when a defendant has not paid immediately', () => {
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION,
+        paymentIntention: {
+          paymentDate: MomentFactory.currentDate().subtract(6, 'days'),
+          paymentOption: 'IMMEDIATELY'
+        },
+        defendant: new Individual().deserialize(individual)
+      }
+
+      claim.claimantResponse = {
+        type: ClaimantResponseType.ACCEPTATION
+      }
+
+      expect(claim.status).to.be.equal(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE)
+    })
+
     it('should return CLAIMANT_ACCEPTED_ADMISSION when a claimant has signed a settlement agreement', () => {
       const paymentIntention = {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,

@@ -94,6 +94,7 @@ export class Claim {
   get eligibleForCCJ (): boolean {
     return !this.countyCourtJudgmentRequestedAt
       && (this.admissionPayImmediatelyPastPaymentDate
+        || this.partAdmissionPayImmediatelyPastPaymentDate
         || this.hasDefendantNotSignedSettlementAgreementInTime()
         || (!this.respondedAt && isPastDeadline(MomentFactory.currentDateTime(), this.responseDeadline))
       )
@@ -152,6 +153,8 @@ export class Claim {
       return ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED
     } else if (this.admissionPayImmediatelyPastPaymentDate && !this.claimantResponse) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
+    } else if (this.partAdmissionPayImmediatelyPastPaymentDate) {
+      return ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE
     } else if (this.hasDefendantNotSignedSettlementAgreementInTime()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_DEFENDANT_NOT_SIGNED
     } else if (this.hasClaimantAcceptedOfferAndSignedSettlementAgreement()) {
@@ -220,6 +223,16 @@ export class Claim {
       && this.response.paymentIntention
       && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
       && this.response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+  }
+
+  get partAdmissionPayImmediatelyPastPaymentDate (): boolean {
+    return this.response
+      && this.claimantResponse
+      && (this.response.responseType === ResponseType.PART_ADMISSION)
+      && this.response.paymentIntention
+      && this.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY
+      && this.response.paymentIntention.paymentDate.isBefore(MomentFactory.currentDateTime())
+
   }
 
   get retrieveDateOfBirthOfDefendant (): DateOfBirth {
