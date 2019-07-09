@@ -109,7 +109,7 @@ describe('Claimant response: view defendant response page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(`To view the full response, including their hearing requirements`))
+          .expect(res => expect(res).to.be.successful.withText(`has rejected the claim.`))
       })
 
       it('should render part admission with hearing requirements', async () => {
@@ -123,7 +123,7 @@ describe('Claimant response: view defendant response page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(`To view the full response, including their hearing requirements`))
+          .expect(res => expect(res).to.be.successful.withText(`They don’t believe they owe the full amount claimed.`))
       })
     })
 

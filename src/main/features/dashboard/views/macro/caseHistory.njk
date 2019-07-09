@@ -24,6 +24,15 @@
   claimRejectedFreeMediationNOForDefendantClaimDetails,
   claimRejectedFreeMediationYESForClaimantClaimDetails,
   claimRejectedFreeMediationYESForDefendantClaimDetails,
+  claimRejectedFreeMediationYESForDefendantClaimDetails,
+  claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails,
+  claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails,
+  claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails,
+  claimantAcceptedDefendantDefenceDefendantClaimDetails,
+  claimantAcceptedDefendantDefenceClaimantClaimDetails,
+  claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails,
+  claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails,
+  claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails,
   claimRejectedWithDQsForClaimantClaimDetails %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
@@ -156,6 +165,14 @@
       {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
         {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
       {% endif %}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+        {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
+      {% else %}
+        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+      {% endif %}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
+      {{ claimantAcceptedDefendantDefenceClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.OFFER_SUBMITTED %}
       {{ offerSubmittedForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
@@ -182,6 +199,8 @@
       {{ statesPaidClaimSettledClaimantDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
       {{ statesPaidInFullRejectedClaimantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
+      {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim) }}
     {% endif %}
@@ -218,6 +237,14 @@
       {{ claimFullAdmissionForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
+    {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+        {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
+      {% else %}
+        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+      {% endif %}
+    {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
+      {{ claimantAcceptedDefendantDefenceDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.RESPONSE_SUBMITTED or state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
@@ -263,6 +290,8 @@
         {{ statesPaidClaimSettledDefendantsDetails(claim, csrf) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
         {{ statesPaidRejectedDefendantClaimDetails(claim) }}
+      {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
+        {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
       {% endif %}
   {% endfor %}
 {% endmacro %}

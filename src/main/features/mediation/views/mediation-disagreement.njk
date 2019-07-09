@@ -1,0 +1,66 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroupWithHintPanel, errorSummary %}
+
+{% set heading = 'You chose not to try free mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('The claim will continue and you might have to go to a hearing.') }}</p>
+      <p class="heading-medium">{{ t('Advantages of free mediation') }}</p>
+
+      <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>
+
+      {% if defendant %}
+        <p>{{ t('Opting out can mean:') }}</p>
+        <ul class="list list-bullet">
+          <li>{{ t('a long wait for the claim to be resolved') }}</li>
+          <li>{{ t('a court hearing, which can last a whole day') }}</li>
+          <li>{{ t('a County Court Judgment against you') }}</li>
+          </li>
+        </ul>
+      {% else %}
+        <p>{{ t('Continuing the claim doesn’t guarantee you get paid - it can mean:') }}</p>
+        <ul class="list list-bullet">
+          <li>{{ t('it takes longer to resolve your claim') }}</li>
+          <li>{{ t('you have to go to a court hearing and pay a fee') }}</li>
+          </li>
+        </ul>
+      {% endif %}
+
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Defendant: disagree with mediation"
+            data-event-label-from="option"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <p class="heading-medium">{{ t('Will you change your decision and try free mediation?') }}</p>
+
+        {{ radioGroupWithHintPanel(
+          form = form,
+          label = 'Will you change your decision and try free mediation?',
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              label: 'Yes',
+              value: YesNoOption.YES.option,
+              checked: (form.valueFor('option') === YesNoOption.YES),
+              hint: hint
+            },
+            {
+              label: 'No',
+              value: YesNoOption.NO.option,
+              checked: (form.valueFor('option') === YesNoOption.NO)
+            }]
+        ) }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+      <p class="font-xsmall">{{ t('*Source: Small Claims Mediation Service statistics, November 2017 to October 2018.') }}</p>
+    </div>
+  </div>
+{% endblock %}

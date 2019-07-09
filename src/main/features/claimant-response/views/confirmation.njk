@@ -25,10 +25,12 @@
             {{ t('You’ve proposed a different repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
-          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === 'no' %}
             {{ t('You’ve rejected their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
             {{ t('You’ve accepted their response') }}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === 'yes'%}
+            {{ t('You’ve agreed to mediation') }}
           {% endif %}
         </h1>
         <p class="reference-number">
@@ -84,6 +86,8 @@
         <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
             { deadline: claim.directionsQuestionnaireDeadline | date }) }}
         </p>
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === 'yes'%}
+        <p>{{ t('The court will contact you and the defendant within 14 days to arrange a mediation appointment.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and directionsQuestionnaireEnabled %}
          <p>{{ t('We\'ll review the case. We\'ll contact you to tell you what to do next.') }}</p>
       {% endif %}

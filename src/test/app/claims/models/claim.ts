@@ -609,7 +609,7 @@ describe('Claim', () => {
           type: 'REJECTION'
         }
 
-        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
       })
 
       it('when claimant accepts defendants defence', () => {

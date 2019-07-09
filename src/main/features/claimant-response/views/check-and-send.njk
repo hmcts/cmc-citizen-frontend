@@ -2,6 +2,7 @@
 
 {% from "table.njk" import tableStart, tableEnd, row, rowWithMultipleValue %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary, checkboxSingle %}
+{% from "components/free-mediation/freeMediationCheckAndSendBlock.njk" import freeMediationBlock %}
 
 {% set heading = 'Check your answers' %}
 
@@ -159,32 +160,14 @@
       }}
 
       {% if mediationEnabled %}
-        {{ tableStart('freeMediation', 'Free telephone mediation') }}
-        {{
-        row(
-          label = 'Will you try free mediation?',
-          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-          bold = true
-        )
-        }}
-        {% if mediationDraft.youCanOnlyUseMediation %}
-          {{
-          row(
-            label = 'Do you agree to the mediation conditions?',
-            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
-            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-          }}
+        {% if draft.intentionToProceed.proceed.option === 'yes' and claim.response.freeMediation === 'yes' %}
+          {{ freeMediationBlock(claim, draft, mediationDraft, contactPerson, contactNumber) }}
         {% endif %}
-        {{ tableEnd() }}
       {% endif %}
 
       {{ directionsQuestionnaire() }}
 
     {% elseif alreadyPaid %}
-
       {% if draft.partPaymentReceived %}
         {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
           value = draft.partPaymentReceived.received | yesNo,
@@ -212,26 +195,7 @@
       {% endif %}
 
       {% if mediationEnabled %}
-        {{ tableStart('freeMediation', 'Free telephone mediation') }}
-        {{
-        row(
-          label = 'Will you try free mediation?',
-          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-          bold = true
-        )
-        }}
-        {% if mediationDraft.youCanOnlyUseMediation %}
-          {{
-          row(
-            label = 'Do you agree to the mediation conditions?',
-            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
-            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-          }}
-        {% endif %}
-        {{ tableEnd() }}
+        {{ freeMediationBlock(claim, draft, mediationDraft, contactPerson, contactNumber) }}
       {% endif %}
 
       {{ directionsQuestionnaire() }}

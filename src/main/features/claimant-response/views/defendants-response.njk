@@ -1,12 +1,13 @@
 {% extends "layout.njk" %}
 
-{% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page === 1 %}
+{% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page === 1 %}
   {% set heading = 'How they want to pay' %}
 {% else %}
   {% set heading = 'The defendant’s response' %}
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "internalLink.njk" import internalLink %}
 {% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "./macro/evidenceTable.njk" import evidenceFragment %}
 {% from "./macro/timelineTable.njk" import timelineFragment %}
@@ -58,6 +59,26 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
+      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+        <p>{{ t('{{ defendantName }} has rejected the claim.', { defendantName: defendantName }) }}</p>
+
+        <h2 class="heading-medium">{{ t('Their defence') }}</h2>
+
+        <h3 class="heading-small form-group-related">{{ t('Why they disagree with the claim') }}</h3>
+        <p>{{ claim.response.defence }}</p>
+
+        {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
+          <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+          <div class="form-group">
+            {{ timelineFragment(claim.response.timeline) }}
+          </div>
+        {% endif %}
+
+        {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
+          {{ evidenceFragment(claim.response.evidence) }}
+        {% endif %}
+
+      {% endif %}
       {% if alreadyPaid %}
         {% if partiallyPaid %}
           <p>{{ t('{{ defendantName }} said they paid you {{ amount }}. They said this is all they owe, not the amount you claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
@@ -87,7 +108,7 @@
         {% endif %}
         {{ fullResponseFragment() }}
       {% elseif claim.response.responseType === ResponseType.FULL_ADMISSION.value or claim.response.responseType === ResponseType.PART_ADMISSION.value %}
-        {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
+        {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
           <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}</p>
           <p>
             {{ paymentIntentionFragment(
@@ -96,30 +117,28 @@
             ) }}
           </p>
 
-        {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-          {{
-            repaymentPlanBlock(
-              heading = 'How they want to pay',
-              repaymentPlan = claim.response.paymentIntention.repaymentPlan
-            )
-          }}
-        {% endif %}
-
-        {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-
-        {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
-
-      {% endif %}
-
-      {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
-        {% if page === 0 %}
-          <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
-          <p>
+          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
             {{
-              paymentIntentionFragment(
-                amount = claim.response.amount,
-                paymentIntention = claim.response.paymentIntention
-              ) }}
+              repaymentPlanBlock(
+                heading = 'How they want to pay',
+                repaymentPlan = claim.response.paymentIntention.repaymentPlan
+              )
+            }}
+          {% endif %}
+
+          {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+
+          {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
+        {% endif %}
+        {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+          {% if page === 0 %}
+            <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
+            <p>
+              {{
+                paymentIntentionFragment(
+                  amount = claim.response.amount,
+                  paymentIntention = claim.response.paymentIntention
+                ) }}
             </p>
 
             <h2 class="heading-medium">{{ t('Their defence') }}</h2>
@@ -134,29 +153,26 @@
             </div>
             {% endif %}
 
-          {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
-            {{ evidenceFragment(claim.response.evidence) }}
-          {% endif %}
-          {{ fullResponseFragment() }}
-        {% elseif page === 1 %}
-          {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-            <p>{{ t('The defendant suggested this repayment plan:') }}</p>
-            {{ repaymentPlanBlock(repaymentPlan = claim.response.paymentIntention.repaymentPlan) }}
-
-          {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-
-              {{paymentIntentionFragment(
+            {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
+              {{ evidenceFragment(claim.response.evidence) }}
+            {% endif %}
+            {{ fullResponseFragment() }}
+          {% elseif page === 1 %}
+            {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+              <p>{{ t('The defendant suggested this repayment plan:') }}</p>
+              {{ repaymentPlanBlock(repaymentPlan = claim.response.paymentIntention.repaymentPlan) }}
+            {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+              {{ paymentIntentionFragment(
                 amount = claim.response.amount,
                 paymentIntention = claim.response.paymentIntention
               ) }}
             {% endif %}
 
             {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-          {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
-
+            {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
           {% endif %}
         {% endif %}
-        {% else %}
+      {% else %}
           <p>{{ t('{{ defendantName }} has rejected the claim.', { defendantName: defendantName}) }}</p>
 
           <h2 class="heading-medium">{{ t('Their defence') }}</h2>
@@ -176,10 +192,15 @@
           {{ fullResponseFragment() }}
       {% endif %}
 
+      <div class="form-group">
+        <h3 class="heading-small">{{ t('Full response') }}</h3>
+        {{ internalLink(t('Download their full response and hearing requirements '), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
+      </div>
+
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
+        {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
           <input type="hidden" name="action[showPage]" value="{{ page + 1 }}">
         {% endif %}
 

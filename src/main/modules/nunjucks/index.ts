@@ -60,6 +60,8 @@ import { MadeBy } from 'offer/form/models/madeBy'
 import { PartyType } from 'common/partyType'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { ResponseType as DomainResponseType } from 'claims/models/response/responseType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -179,6 +181,11 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
     nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
     nunjucksEnv.addGlobal('SignatureType', SignatureType)
+    nunjucksEnv.addGlobal('domain', {
+      ResponseType: DomainResponseType,
+      PaymentOption: PaymentOption,
+      PaymentSchedule: PaymentSchedule
+    })
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

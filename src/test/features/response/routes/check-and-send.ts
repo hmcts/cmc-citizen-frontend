@@ -205,6 +205,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             const claimStoreOverride = {
+              features: ['admissions','directionsQuestionnaire'],
               claim: {
                 claimants: [
                   {
