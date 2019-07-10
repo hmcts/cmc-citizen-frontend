@@ -105,7 +105,7 @@ describe('Defendant response task list builder', () => {
         isResponseRejectedFullyBecausePaidWhatOwedStub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(new ResponseDraft(), claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Tell us how much you’ve paid')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Tell us how much you’ve paid')
       })
     })
 
@@ -139,7 +139,7 @@ describe('Defendant response task list builder', () => {
           new HowMuchHaveYouPaid(claim.totalAmountTillToday + 1)
         )
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the amount claimed?')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Why do you disagree with the amount claimed?')
       })
     })
 
@@ -166,7 +166,7 @@ describe('Defendant response task list builder', () => {
         stub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Why do you disagree with the claim?')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Why do you disagree with the claim?')
       })
     })
 
@@ -204,7 +204,7 @@ describe('Defendant response task list builder', () => {
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Decide how you’ll pay')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Decide how you’ll pay')
       })
     })
 
@@ -243,7 +243,7 @@ describe('Defendant response task list builder', () => {
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Your repayment plan')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Your repayment plan')
       })
     })
 
@@ -306,7 +306,7 @@ describe('Defendant response task list builder', () => {
         draft.fullAdmission = new FullAdmission()
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.not.contain('Share your financial details')
+        expect(taskList.tasks.map(task => task.name)).not.to.contain('Share your financial details')
       })
     })
 
@@ -362,8 +362,8 @@ describe('Defendant response task list builder', () => {
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(draft, claim)
         expect(taskList.tasks.map(task => task.name)).to.contain('How much have you paid?')
         expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the amount claimed?')
-        expect(draft.partialAdmission.paymentIntention).eq(undefined)
-        expect(draft.statementOfMeans).eq(undefined)
+        expect(draft.partialAdmission.paymentIntention).to.be.undefined
+        expect(draft.statementOfMeans).to.be.undefined
       })
 
     })
@@ -399,15 +399,18 @@ describe('Defendant response task list builder', () => {
     describe('"Free telephone mediation" task', () => {
       let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
       let isResponsePartiallyAdmitted: sinon.SinonStub
+      let isResponseRejectedFullyBecausePaidWhatOwed: sinon.SinonStub
 
       beforeEach(() => {
         isResponseRejectedFullyWithDisputeStub = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyWithDispute')
         isResponsePartiallyAdmitted = sinon.stub(ResponseDraft.prototype, 'isResponsePartiallyAdmitted')
+        isResponseRejectedFullyBecausePaidWhatOwed = sinon.stub(ResponseDraft.prototype, 'isResponseRejectedFullyBecausePaidWhatOwed')
       })
 
       afterEach(() => {
         isResponseRejectedFullyWithDisputeStub.restore()
         isResponsePartiallyAdmitted.restore()
+        isResponseRejectedFullyBecausePaidWhatOwed.restore()
       })
 
       context('should be enabled when', () => {
@@ -415,6 +418,7 @@ describe('Defendant response task list builder', () => {
         it('response is rejected with dispute', () => {
           isResponseRejectedFullyWithDisputeStub.returns(true)
           isResponsePartiallyAdmitted.returns(false)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new MediationDraft()
@@ -427,9 +431,25 @@ describe('Defendant response task list builder', () => {
           }
         })
 
+        it('response is rejected with already paid', () => {
+          isResponseRejectedFullyWithDisputeStub.returns(false)
+          isResponsePartiallyAdmitted.returns(false)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(true)
+
+          const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
+            new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
+          )
+          if (FeatureToggles.isEnabled('mediation')) {
+            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
+          } else {
+            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
+          }
+        })
+
         it('response is partial admission and why do you disagree is completed', () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(true)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
@@ -447,12 +467,13 @@ describe('Defendant response task list builder', () => {
         it('response is not rejected with dispute', () => {
           isResponseRejectedFullyWithDisputeStub.returns(false)
           isResponsePartiallyAdmitted.returns(false)
+          isResponseRejectedFullyBecausePaidWhatOwed.returns(false)
 
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim
           )
 
-          expect(taskList).to.be.eq(undefined)
+          expect(taskList).to.be.undefined
         })
       })
     })
@@ -561,7 +582,7 @@ describe('Defendant response task list builder', () => {
       isResponsePartiallyAdmittedStub.returns(false)
 
       const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
-      expect(taskList).to.be.equal(undefined)
+      expect(taskList).to.be.undefined
     })
   })
 
@@ -592,9 +613,9 @@ describe('Defendant response task list builder', () => {
 
       const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
       if (FeatureToggles.isEnabled('mediation')) {
-        expect(tasks.map(task => task.name)).to.not.contain(featureToggleMediationTaskLabel)
+        expect(tasks.map(task => task.name)).not.to.contain(featureToggleMediationTaskLabel)
       } else {
-        expect(tasks.map(task => task.name)).to.not.contain(mediationTaskLabel)
+        expect(tasks.map(task => task.name)).not.to.contain(mediationTaskLabel)
       }
     })
   })
