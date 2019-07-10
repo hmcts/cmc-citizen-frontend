@@ -435,11 +435,8 @@ describe('Defendant response task list builder', () => {
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('response is partial admission and why do you disagree is completed', () => {
