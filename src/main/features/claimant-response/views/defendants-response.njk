@@ -65,7 +65,7 @@
         <h2 class="heading-medium">{{ t('Their defence') }}</h2>
 
         <h3 class="heading-small form-group-related">{{ t('Why they disagree with the claim') }}</h3>
-        <p>{{ claim.response.defence }}</p>
+        <p>"{{ claim.response.defence }}"</p>
 
         {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
           <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
@@ -77,9 +77,8 @@
         {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
           {{ evidenceFragment(claim.response.evidence) }}
         {% endif %}
-
-      {% endif %}
-      {% if alreadyPaid %}
+        {{ fullResponseFragment() }}
+      {% elif alreadyPaid %}
         {% if partiallyPaid %}
           <p>{{ t('{{ defendantName }} said they paid you {{ amount }}. They said this is all they owe, not the amount you claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
 
@@ -144,7 +143,7 @@
             <h2 class="heading-medium">{{ t('Their defence') }}</h2>
 
             <h3 class="heading-small form-group-related">{{ t('Why they don’t owe the amount claimed') }}</h3>
-            <p>{{ t('"{{ defence }}"', { defence: claim.response.defence }) }}</p>
+            <p>"{{ claim.response.defence }}"</p>
 
             {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
               <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
@@ -191,11 +190,6 @@
 
           {{ fullResponseFragment() }}
       {% endif %}
-
-      <div class="form-group">
-        <h3 class="heading-small">{{ t('Full response') }}</h3>
-        {{ internalLink(t('Download their full response and hearing requirements '), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
-      </div>
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
