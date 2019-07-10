@@ -358,7 +358,7 @@
           )
           }}
         {% endif %}
-      {% else %}
+      {% elif mediationDraft.youCanOnlyUseMediation.option === YesNoOption.YES.option %}
         {{
         row(
           label = 'Contact number',
@@ -389,6 +389,13 @@
             changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
             bold = true
           ) }}
+      {% else %}
+        {{ row(
+          label = 'Support required for a hearing',
+          value = 'None',
+          changeLink = DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+          bold = true
+        ) }}
       {% endif %}
       {% if directionsQuestionnaireDraft.hearingLocation.courtName %}
         {{ row(
@@ -444,6 +451,7 @@
           label = 'Do you want the court’s permission to hire an expert?',
           value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
           changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
+          topBorder = true,
           bold = true
         ) }}
       {% endif %}
@@ -452,7 +460,6 @@
           label = 'Does the claim involve something an expert can still examine?',
           value = t(directionsQuestionnaireDraft.expertEvidence.expertEvidence.option) | capitalize,
           changeLink = DirectionsQuestionnairePaths.expertEvidencePage.evaluateUri({ externalId: claim.externalId }),
-          topBorder = true,
           bottomBorder = false,
           bold = true
         ) }}
