@@ -25,7 +25,6 @@ export enum PartAdmissionStates {
   PA_PAY_IN_INSTALMENTS_REJECTED_WITHOUT_MEDIATION = 'pa-pay-in-instalments-rejected-without-mediation',
 
   PA_PAY_BY_SPECIFIED_DATE = 'pa-pay-by-specified-date',
-  PA_PAY_IN_INSTALMENTS = 'pa-pay-in-instalments',
   PA_PAY_BY_SPECIFIED_DATE_REFERRED_TO_JUDGE = 'pa-pay-by-specified-date-referred-to-judge',
   PA_PAY_IN_INSTALMENTS_REFERRED_TO_JUDGE = 'pa-pay-in-instalments-referred-to-judge',
 
@@ -67,6 +66,11 @@ export enum PartAdmissionStates {
   PA_CCJ_PAY_IN_INSTALMENTS_PAST_COUNTER_SIGNATURE_DEADLINE_BY_DETERMINATION = 'pa-ccj-pay-in-instalments-past-counter-signature-deadline-by-determination',
   PA_PAY_IN_INSTALMENTS_SETTLED_THROUGH_DETERMINATION = 'pa-pay-in-instalments-settled-through-determination',
   PA_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION = 'pa-pay-in-instalments-past-payment-deadline-settled-through-determination',
-  PA_CCJ_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION = 'pa-ccj-pay-in-instalments-past-payment-deadline-settled-through-determination'
+  PA_CCJ_PAY_IN_INSTALMENTS_PAST_PAYMENT_DEADLINE_SETTLED_THROUGH_DETERMINATION = 'pa-ccj-pay-in-instalments-past-payment-deadline-settled-through-determination',
+
+  PA_STATES_PAID = 'pa-states-paid',
+  PA_STATES_PAID_REJECTED_WITH_MEDIATION = 'pa-states-paid-rejected-with-mediation',
+  PA_STATES_PAID_REJECTED_WITHOUT_MEDIATION = 'pa-states-paid-rejected-without-mediation',
+  PA_STATES_PAID_ACCEPTED = 'pa-states-paid-accepted'
 
 }

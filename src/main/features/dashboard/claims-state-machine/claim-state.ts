@@ -21,8 +21,9 @@ export function claimState (claims: Claim[], type: string): void {
     } else if (claimantState.is(PartAdmissionStates.PART_ADMISSION)) {
       claimantState = partAdmissionTransitions(eachClaim)
       claimantState.findState(claimantState)
+    } else if (claimantState.is(PartAdmissionStates.PA_STATES_PAID)) {
+      claimantState.findState(claimantState)
     }
-
     eachClaim.template = claimantState.getTemplate(type)
   })
 }

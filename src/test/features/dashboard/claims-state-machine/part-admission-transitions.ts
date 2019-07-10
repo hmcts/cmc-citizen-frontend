@@ -1235,4 +1235,89 @@ describe('State Machine for the dashboard status', () => {
       expect(claim.template.state).to.equal('pa-ccj-pay-by-set-date-past-payment-deadline-settled-through-determination')
     })
   })
+
+  describe('given the claim with part admission - states paid', () => {
+    it('should extract the correct state when part admission is states paid',() => {
+      const claim: Claim = new Claim().deserialize({
+        ...sampleClaimIssueObj,
+        response: {
+          responseType: ResponseType.PART_ADMISSION,
+          freeMediation: 'yes',
+          paymentDeclaration: {
+            paidDate: '01-01-2019',
+            paidAmount: 100,
+            explanation: 'test'
+          }
+        }
+      })
+      claimState([claim],'claimant')
+      expect(claim.template.state).to.equal('pa-states-paid')
+    })
+  })
+
+  describe('given the claim with part admission - states paid', () => {
+    it('should extract the correct state when part admission states paid is accepted',() => {
+      const claim: Claim = new Claim().deserialize({
+        ...sampleClaimIssueObj,
+        response: {
+          responseType: ResponseType.PART_ADMISSION,
+          freeMediation: 'yes',
+          paymentDeclaration: {
+            paidDate: '01-01-2019',
+            paidAmount: 100,
+            explanation: 'test'
+          }
+        },
+        claimantResponse: {
+          type: ClaimantResponseType.ACCEPTATION
+        }
+      })
+      claimState([claim],'claimant')
+      expect(claim.template.state).to.equal('pa-states-paid-accepted')
+    })
+  })
+
+  describe('given the claim with part admission - states paid', () => {
+    it('should extract the correct state when part admission states paid is rejected with mediation',() => {
+      const claim: Claim = new Claim().deserialize({
+        ...sampleClaimIssueObj,
+        response: {
+          responseType: ResponseType.PART_ADMISSION,
+          freeMediation: 'yes',
+          paymentDeclaration: {
+            paidDate: '01-01-2019',
+            paidAmount: 100,
+            explanation: 'test'
+          }
+        },
+        claimantResponse: {
+          type: ClaimantResponseType.REJECTION
+        }
+      })
+      claimState([claim],'claimant')
+      expect(claim.template.state).to.equal('pa-states-paid-rejected-with-mediation')
+    })
+  })
+
+  describe('given the claim with part admission - states paid', () => {
+    it('should extract the correct state when part admission states paid is rejected without mediation', () => {
+      const claim: Claim = new Claim().deserialize({
+        ...sampleClaimIssueObj,
+        response: {
+          responseType: ResponseType.PART_ADMISSION,
+          freeMediation: 'no',
+          paymentDeclaration: {
+            paidDate: '01-01-2019',
+            paidAmount: 100,
+            explanation: 'test'
+          }
+        },
+        claimantResponse: {
+          type: ClaimantResponseType.REJECTION
+        }
+      })
+      claimState([claim], 'claimant')
+      expect(claim.template.state).to.equal('pa-states-paid-rejected-without-mediation')
+    })
+  })
 })

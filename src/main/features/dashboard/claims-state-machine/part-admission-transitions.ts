@@ -9,7 +9,6 @@ import { MomentFactory } from 'shared/momentFactory'
 import { isPastDeadline } from 'claims/isPastDeadline'
 import { StatementType } from 'offer/form/models/statementType'
 import { PartAdmissionStates } from 'claims/models/claim-states/part-admission-states'
-import { StatesPaidStates } from 'claims/models/claim-states/states-paid-states'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 import { RejectionClaimantResponse } from 'claims/models/claimant-response/rejectionClaimantResponse'
@@ -23,7 +22,22 @@ export function partAdmissionTransitions (claim: Claim) {
       {
         name: 'checkIsStatesPaid',
         from: PartAdmissionStates.PART_ADMISSION,
-        to: StatesPaidStates.STATES_PAID
+        to: PartAdmissionStates.PA_STATES_PAID
+      },
+      {
+        name: 'checkStatesPaidAccepted',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_STATES_PAID],
+        to: PartAdmissionStates.PA_STATES_PAID_ACCEPTED
+      },
+      {
+        name: 'checkStatesPaidRejectedWithMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_STATES_PAID],
+        to: PartAdmissionStates.PA_STATES_PAID_REJECTED_WITH_MEDIATION
+      },
+      {
+        name: 'checkStatesPaidRejectedWithoutMediation',
+        from: [PartAdmissionStates.PART_ADMISSION, PartAdmissionStates.PA_STATES_PAID],
+        to: PartAdmissionStates.PA_STATES_PAID_REJECTED_WITHOUT_MEDIATION
       },
       {
         name: 'checkIsPayImmediatelyWithMediation',
@@ -342,8 +356,26 @@ export function partAdmissionTransitions (claim: Claim) {
         return !!claim.countyCourtJudgmentRequestedAt
       },
 
+      checkStatesPaidResponse (): boolean {
+        return !!claim.claimantResponse
+          && !!claim.claimantResponse.type
+          && !!(claim.response as PartialAdmissionResponse).paymentDeclaration
+      },
+
       onBeforeCheckIsStatesPaid (): boolean {
-        return !!(claim.response as PartialAdmissionResponse).paymentDeclaration
+        return this.is(PartAdmissionStates.PART_ADMISSION) && !!(claim.response as PartialAdmissionResponse).paymentDeclaration
+      },
+
+      onBeforeCheckStatesPaidAccepted (): boolean {
+        return this.is(PartAdmissionStates.PA_STATES_PAID) && this.checkStatesPaidResponse() && (claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION)
+      },
+
+      onBeforeCheckStatesPaidRejectedWithoutMediation (): boolean {
+        return this.is(PartAdmissionStates.PA_STATES_PAID) && this.checkStatesPaidResponse() && (claim.claimantResponse.type === ClaimantResponseType.REJECTION) && (claim.response.freeMediation === FreeMediationOption.NO)
+      },
+
+      onBeforeCheckStatesPaidRejectedWithMediation (): boolean {
+        return this.is(PartAdmissionStates.PA_STATES_PAID) && this.checkStatesPaidResponse() && (claim.claimantResponse.type === ClaimantResponseType.REJECTION) && (claim.response.freeMediation === FreeMediationOption.YES)
       },
 
       onBeforeCheckIsPayImmediatelyWithMediation (): boolean {
