@@ -36,7 +36,7 @@ describe('Claimant response task list builder', () => {
     draft = new DraftClaimantResponse().deserialize({})
   })
 
-  describe('"Before you start section" section', () => {
+  describe('"How they responded section" section', () => {
     describe('"View the defendant’s response" task', () => {
       it('should be available when claimant tries to respond', () => {
         const taskList: TaskList = TaskListBuilder.buildDefendantResponseSection(draft, claim)
@@ -45,7 +45,7 @@ describe('Claimant response task list builder', () => {
     })
   })
 
-  describe('"How do you want to respond?" section', () => {
+  describe('"Choose what to do next" section', () => {
 
     describe('States paid task', () => {
       describe('"Accept or reject their response" task', () => {

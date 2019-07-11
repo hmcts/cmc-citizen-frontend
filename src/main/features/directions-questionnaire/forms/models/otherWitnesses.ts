@@ -1,6 +1,5 @@
-import { IsDefined, IsInt, MaxLength, Min, ValidateIf } from '@hmcts/class-validator'
+import { IsDefined, IsInt, Min, ValidateIf } from '@hmcts/class-validator'
 import {
-  ValidationErrors as DefaultValidationErrors,
   ValidationErrors as GlobalValidationErrors
 } from 'forms/validation/validationErrors'
 import { CompletableTask } from 'models/task'
@@ -15,8 +14,6 @@ export class OtherWitnesses implements CompletableTask {
   @IsDefined()
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
   @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
-  @MaxLength(100, { message: DefaultValidationErrors.TEXT_TOO_LONG })
-
   howMany?: number
 
   constructor (otherWitnesses?: YesNoOption, howMany?: number) {

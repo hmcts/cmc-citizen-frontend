@@ -24,6 +24,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ResponseType } from 'claims/models/response/responseType'
 import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -83,6 +84,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     directionsQuestionnaireEnabled: dqsEnabled,
     mediationDraft: mediationDraft.document,
+    contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document),
+    contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document),
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType,

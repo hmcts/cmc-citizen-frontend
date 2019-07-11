@@ -48,7 +48,7 @@ export class TaskListBuilder {
       )
     )
 
-    return new TaskList('Before you start', tasks)
+    return new TaskList('How they responded', tasks)
   }
 
   static buildStatesPaidHowYouWantToRespondSection (draft: DraftClaimantResponse, claim: Claim, mediationDraft: MediationDraft): TaskList {
@@ -226,7 +226,7 @@ export class TaskListBuilder {
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
     }
 
-    return new TaskList('How do you want to respond?', tasks)
+    return new TaskList('Choose what to do next', tasks)
   }
 
   private static buildProposeAlternateRepaymentPlanTask (draft: DraftClaimantResponse, tasks: TaskListItem[], externalId: string) {
