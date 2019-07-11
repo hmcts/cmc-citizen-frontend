@@ -1,4 +1,4 @@
-import { IsDefined, IsInt, MaxLength, Min, ValidateIf } from '@hmcts/class-validator'
+import { IsDefined, IsInt, Max, Min, ValidateIf } from '@hmcts/class-validator'
 import {
   ValidationErrors as DefaultValidationErrors,
   ValidationErrors as GlobalValidationErrors
@@ -15,7 +15,7 @@ export class OtherWitnesses implements CompletableTask {
   @IsDefined()
   @IsInt({ message: GlobalValidationErrors.INTEGER_REQUIRED })
   @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
-  @MaxLength(100, { message: DefaultValidationErrors.TEXT_TOO_LONG })
+  @Max(100, { message: DefaultValidationErrors.BELOW_OR_EQUAL_TO_100_REQUIRED })
 
   howMany?: number
 
