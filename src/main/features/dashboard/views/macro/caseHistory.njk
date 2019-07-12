@@ -76,7 +76,7 @@
   paidInFullCCJCancelledDefendantClaimDetails %}
 {% from "./claimStatus/statesPaidRejected.njk" import
   statesPaidRejectedDefendantClaimDetails,
-  statesPaidInFullRejectedClaimantClaimDetails %}
+  statesPaidRejectedClaimantClaimDetails %}
 
 {% from "./claimStatus/admissionByCCJClaimant.njk" import admissionByCCJClaimantClaimDetails %}
 {% from "./claimStatus/admissionByCCJDefendant.njk" import
@@ -185,7 +185,7 @@
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
       {{ statesPaidClaimSettledClaimantDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
-      {{ statesPaidInFullRejectedClaimantClaimDetails(claim) }}
+      {{ statesPaidRejectedClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
