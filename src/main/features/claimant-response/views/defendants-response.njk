@@ -52,7 +52,10 @@
 {% macro fullResponseFragment() %}
   {% if(directionsQuestionnaireEnabled) %}
     <h2 class="heading-medium">{{ t('Full response') }}</h2>
-    <p><a href="#">Download their full response and hearing requirements </a>(PDF).</p>
+    <p>{{ internalLink(t('Download their full response and hearing requirements'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}(PDF).</p>
+  {% else %}
+    <h2 class="heading-medium">{{ t('Full response') }}</h2>
+    <p>{{ internalLink(t('Download their full response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}(PDF).</p>
   {% endif %}
 {% endmacro %}
 

@@ -53,7 +53,7 @@
     {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances %}
       {{ row(
         label = 'Briefly explain your reasons',
-        value = 'I require wheelchair access',
+        value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,
         changeLink = DirectionsQuestionnairePaths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }),
         bottomBorder = false,
         bold = true
