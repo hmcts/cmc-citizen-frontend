@@ -1,28 +1,42 @@
+{% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
-{% from "./utilityMacros.njk" import downloadResponseLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink, downloadTheirResponseLink %}
 
-{% macro statesPaidInFullRejectedClaimantDashboard(claim) %}
+{% macro statesPaidRejectedClaimantDashboard(claim) %}
   {{ t('You’ve rejected the defendant’s admission.') }}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('You’ve both agreed to try mediation.') }}
   {% endif %}
 {% endmacro %}
 
-{% macro statesPaidInFullRejectedClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
+{% macro statesPaidRejectedClaimantClaimDetails(claim) %}
+  {% if claim.claimantResponse.freeMediation and claim.claimantResponse.freeMediation === YesNoOption.YES.option %}
+    {{ statesPaidRejectedMediationYESClaimantClaimDetails(claim) }}
+  {% else %}
+    {{ statesPaidRejectedMediationNOClaimantClaimDetails(claim) }}
+  {% endif %}
+
+  <p>{{ downloadTheirResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro statesPaidRejectedMediationYESClaimantClaimDetails(claim) %}
   {% if claim.response.responseType === 'PART_ADMISSION' %}
     {% set amount = claim.response.amount %}
   {% else %}
     {% set amount = claim.response.paymentDeclaration.paidAmount  %}
   {% endif %}
+
+  <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
   <p>{{ t('They said they owe {{ amount }}.', { amount: amount | numeral }) }}</p>
+  <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
+  {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+{% endmacro %}
 
-  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
-  <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {
-      dqDeadline: claim.directionsQuestionnaireDeadline | date
-    }) }}</p>
-
-  <p>{{ _downloadResponseLink(claim, 'Download their response') }} {{ t('(PDF)') }}</p>
+{% macro statesPaidRejectedMediationNOClaimantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
+  <p>{{ t('You’ve rejected {{ defendantName }}’s response and said you want to take the case to court.',
+      { defendantName: claim.claimData.defendant.name }) }}</p>
+  <p>{{ t('The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.') }}</p>
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
@@ -43,17 +57,32 @@
   {% else %}
     {% set amount = claim.response.paymentDeclaration.paidAmount  %}
   {% endif %}
-  <h2 class="heading-small">{{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
-      claimantName: claim.claimData.claimant.name,
-      amount: amount | numeral
-    }) }}</h2>
+  {% set mediation = claim.claimantResponse.freeMediation and claim.claimantResponse.freeMediation === YesNoOption.YES.option %}
+
+  {% if mediation %}
+    <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+  {% else %}
+    <h2 class="heading-small">{{ t('The claimant has rejected your admission of {{ amount }}', { amount: amount | numeral}) }}</h2>
+  {% endif %}
+
   <p>{{ t('They said you didn’t pay them {{ amount }}.', { amount: amount | numeral }) }}</p>
-  <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
-  {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
-  <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before 4pm on {{ dqDeadline }}.', {
-      dqDeadline: claim.directionsQuestionnaireDeadline | date
-    }) }}</p>
+
+  {% if mediation %}
+    {{ statesPaidRejectedMediationYESDefendantClaimDetails(claim) }}
+  {% else %}
+    {{ statesPaidRejectedMediationNODefendantClaimDetails(claim) }}
+  {% endif %}
+
   <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro statesPaidRejectedMediationYESDefendantClaimDetails(claim) %}
+  <p>{{ t('They agreed to try mediation. We’ll contact you with details of your appointment.') }}</p>
+  {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+{% endmacro %}
+
+{% macro statesPaidRejectedMediationNODefendantClaimDetails(claim) %}
+  <p>{{ t('You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
 {% endmacro %}
 
 {% macro _linkToDirectionsQuestionnairePage(externalId) %}
@@ -64,8 +93,4 @@
       }
     ) | safe
     }}</p>
-{% endmacro %}
-
-{% macro _downloadResponseLink(claim, text) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t(text) }}</a>
 {% endmacro %}
