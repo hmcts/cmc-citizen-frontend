@@ -37,7 +37,7 @@ export namespace DirectionsQuestionnaire {
         directionsQuestionnaire.hearingLocation.courtAccepted &&
         directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
           directionsQuestionnaire.hearingLocation.courtName : directionsQuestionnaire.hearingLocation.alternativeCourtName,
-        hearingLocationSlug: directionsQuestionnaire.hearingLocationSlug.length ? directionsQuestionnaire.hearingLocationSlug : undefined,
+        hearingLocationSlug: (directionsQuestionnaire.hearingLocationSlug && directionsQuestionnaire.hearingLocationSlug.length) ? directionsQuestionnaire.hearingLocationSlug : undefined,
         courtAddress: undefined,
         locationOption: directionsQuestionnaire.hearingLocation &&
         directionsQuestionnaire.hearingLocation.alternativeCourtName &&
