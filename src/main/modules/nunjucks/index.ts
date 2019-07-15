@@ -185,6 +185,7 @@ export class Nunjucks {
       PaymentOption: PaymentOption,
       PaymentSchedule: PaymentSchedule
     })
+    nunjucksEnv.addGlobal('PaymentOption', PaymentOption)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {
