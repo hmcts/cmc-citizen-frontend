@@ -13,7 +13,7 @@ export class ExceptionalCircumstances implements CompletableTask {
   @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
   exceptionalCircumstances?: YesNoOption
 
-  @ValidateIf(o => o.exceptionalCircumstances && o.exceptionalCircumstances.option === YesNoOption.YES.option)
+  @ValidateIf(o => o.exceptionalCircumstances && o.exceptionalCircumstances.option === YesNoOption.NO.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   reason?: string
@@ -32,8 +32,12 @@ export class ExceptionalCircumstances implements CompletableTask {
   }
 
   deserialize (input: any): ExceptionalCircumstances {
-    if (input) {
-      this.exceptionalCircumstances = YesNoOption.fromObject(input.exceptionalCircumstances)
+    if (!input) {
+      return input
+    }
+
+    if (input && input.exceptionalCircumstances && input.exceptionalCircumstances.option) {
+      this.exceptionalCircumstances = YesNoOption.fromObject(input.exceptionalCircumstances.option)
       this.reason = input.reason
     }
 
