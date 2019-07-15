@@ -63,6 +63,12 @@ export const basePayImmediatelyData = {
     paymentDate: MomentFactory.currentDate().add(5, 'days')
   }
 }
+export const basePayImmediatelyDatePastData = {
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().subtract(5, 'days')
+  }
+}
 
 export const basePayByInstalmentsData = {
   paymentIntention: {

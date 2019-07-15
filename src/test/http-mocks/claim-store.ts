@@ -273,6 +273,10 @@ export const settlementWithSetDateAndAcceptation = {
         }
       },
       {
+        type: 'ACCEPTATION',
+        madeBy: MadeBy.CLAIMANT.value
+      },
+      {
         madeBy: MadeBy.DEFENDANT.value,
         type: 'COUNTERSIGNATURE'
       }
@@ -283,8 +287,8 @@ export const partySettlementWithInstalmentsAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
-      paymentIntention: { 'paymentDate': MomentFactory.currentDate().year(2), 'paymentOption': 'BY_SPECIFIED_DATE' }
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
+      paymentIntention: { 'paymentDate': MomentFactory.currentDate().add(2, 'years'), 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
   }, {
@@ -296,9 +300,9 @@ export const partySettlementWithInstalmentsAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: {
-        paymentDate: MomentFactory.currentDate().year(2),
+        paymentDate: MomentFactory.currentDate().add(2, 'years'),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
@@ -313,7 +317,7 @@ export const partySettlementWithSetDateAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
@@ -326,9 +330,9 @@ export const partySettlementWithSetDateAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: {
-        paymentDate: MomentFactory.currentDate().year(2),
+        paymentDate: MomentFactory.currentDate().add(2, 'years'),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
