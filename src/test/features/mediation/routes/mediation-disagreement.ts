@@ -21,10 +21,11 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = MediationPaths.mediationDisagreementPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pageHeading = 'You chose not to try free mediation'
 
 if (FeatureToggles.isEnabled('mediation')) {
-  describe('Free mediation: will you try free mediation page', () => {
+  describe('Free mediation: mediation disagreement page', () => {
     attachDefaultHooks(app)
 
     describe('on GET', () => {
@@ -56,7 +57,7 @@ if (FeatureToggles.isEnabled('mediation')) {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Will you try free mediation?'))
+              .expect(res => expect(res).to.be.successful.withText(pageHeading))
           })
         })
       })
