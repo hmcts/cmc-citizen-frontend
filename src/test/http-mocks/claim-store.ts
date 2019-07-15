@@ -365,6 +365,60 @@ export const sampleDefendantResponseObj = {
   }
 }
 
+export const sampleDefendantResponseWithDQAndMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    },
+    directionsQuestionnaire: {
+      hearingLoop: 'NO',
+      selfWitness: 'NO',
+      disabledAccess: 'NO',
+      hearingLocation: 'Central London County Court',
+      hearingLocationOption: 'SUGGESTED_COURT'
+    }
+  }
+}
+
+export const sampleDefendantResponseWithDQAndNoMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'no',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    },
+    directionsQuestionnaire: {
+      hearingLoop: 'NO',
+      selfWitness: 'NO',
+      disabledAccess: 'NO',
+      hearingLocation: 'Central London County Court',
+      hearingLocationOption: 'SUGGESTED_COURT'
+    }
+  }
+}
+
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
