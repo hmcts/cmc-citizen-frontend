@@ -4,7 +4,10 @@
 import { expect } from 'chai'
 import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { ExceptionalCircumstances, ValidationErrors } from 'directions-questionnaire/forms/models/exceptionalCircumstances'
+import {
+  ExceptionalCircumstances,
+  ValidationErrors
+} from 'directions-questionnaire/forms/models/exceptionalCircumstances'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { YesNoOption } from 'models/yesNoOption'
 
@@ -34,13 +37,13 @@ describe('ExceptionalCircumstances', () => {
       expectValidationError(errors, GlobalValidationErrors.YES_NO_REQUIRED)
     })
 
-    it('should reject exceptional circumstances with yes option and no reason', () => {
-      const errors = validator.validateSync(new ExceptionalCircumstances(YesNoOption.YES))
+    it('should reject exceptional circumstances with no option and no reason', () => {
+      const errors = validator.validateSync(new ExceptionalCircumstances(YesNoOption.NO))
       expect(errors).to.not.be.empty
       expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
     })
 
-    it('should accept other witness with option and reason present' , () => {
+    it('should accept other witness with option and reason present', () => {
       const errors = validator.validateSync(new ExceptionalCircumstances(YesNoOption.YES, 'reason'))
       expect(errors).to.be.empty
     })

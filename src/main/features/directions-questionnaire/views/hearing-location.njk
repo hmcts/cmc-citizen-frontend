@@ -52,12 +52,12 @@
                 {
                   label: 'Yes',
                   value: YesNoOption.YES.option,
-                  checked: form.valueFor('courtAccepted') === YesNoOption.YES
+                  checked: form.valueFor('courtAccepted').option === YesNoOption.YES.option
                 },
                 {
                   label: 'No',
                   value: YesNoOption.NO.option,
-                  checked: form.valueFor('courtAccepted') === YesNoOption.NO
+                  checked: form.valueFor('courtAccepted').option === YesNoOption.NO.option
                 }
               ]
             ) }}
@@ -65,7 +65,7 @@
               <h1 class="heading-medium">{{ t('Choose another court') }}</h1>
               {{ radioOption(form = form, label = 'Enter a court name', name = 'alternativeOption', value = 'name', checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
-                {{ textInput(label = 'Court name', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}
+                {{ textInput(label = 'Court name', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}Do you want to choose
               </div>
               {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">
