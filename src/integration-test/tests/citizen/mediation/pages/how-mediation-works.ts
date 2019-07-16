@@ -3,7 +3,7 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const buttons = {
-  submit: '#mediationYes',
+  submit: 'input[id="mediationYes"]',
   disagree: '#mediationNo'
 }
 
