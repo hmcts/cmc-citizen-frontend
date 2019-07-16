@@ -8,6 +8,7 @@ import { DraftService } from 'services/draftService'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { IntentionToProceed } from 'claimant-response/form/models/intentionToProceed'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 function renderView (form: Form<IntentionToProceed>, res: express.Response): void {
   res.render(Paths.intentionToProceedPage.associatedView,{
@@ -33,7 +34,8 @@ export default express.Router()
         const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
         const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
-        if (form.model.proceed && mediationDraft.id) {
+
+        if (form.model.proceed.option === YesNoOption.NO && mediationDraft.id) {
           await new DraftService().delete(mediationDraft.id, user.bearerToken)
         }
 
