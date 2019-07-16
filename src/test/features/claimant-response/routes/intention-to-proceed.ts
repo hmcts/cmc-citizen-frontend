@@ -128,7 +128,6 @@ describe('Claimant response: intention to proceed page', () => {
         draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveSave()
-        draftStoreServiceMock.resolveDelete()
 
         await request(app)
           .post(pagePath)
