@@ -67,7 +67,7 @@ describe('Defendant user details: your name page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        // idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
