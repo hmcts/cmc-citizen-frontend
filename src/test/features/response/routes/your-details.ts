@@ -67,7 +67,7 @@ describe('Defendant user details: your name page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        // idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
       checkAlreadySubmittedGuard(app, method, pagePath)
@@ -104,7 +104,7 @@ describe('Defendant user details: your name page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to your address page when everything is fine', async () => {
+          it('should redirect to date of birth page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
@@ -118,6 +118,30 @@ describe('Defendant user details: your name page', () => {
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
+      })
+    })
+
+    context('When it is company v company', () => {
+      it('should redirect to defendants phone number page when everything is fine', async () => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj.defendantId, 'citizen')
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+        draftStoreServiceMock.resolveFind('response:company')
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveSave()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: 'company',
+            name: 'John Smith',
+            address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' },
+            contactPerson: 'Joe Blogs'
+          })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ResponsePaths.defendantMobilePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
     })
   })
