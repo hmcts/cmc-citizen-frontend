@@ -57,6 +57,7 @@ export class Claim {
   totalInterest: number
   features: string[]
   directionsQuestionnaireDeadline: Moment
+  mediationDeadline: Moment
   moneyReceivedOn: Moment
   reDetermination: ReDetermination
   reDeterminationRequestedAt: Moment
@@ -81,10 +82,7 @@ export class Claim {
   }
 
   get respondToMediationDeadline (): Moment {
-    if (!this.respondedAt) {
-      return undefined
-    }
-    return this.respondedAt.clone().add('5', 'days')
+    return this.mediationDeadline
   }
 
   get remainingDays (): number {
@@ -300,6 +298,9 @@ export class Claim {
       }
       if (input.ccdCaseId) {
         this.ccdCaseId = input.ccdCaseId
+      }
+      if (input.mediationDeadline) {
+        this.mediationDeadline = input.mediationDeadline
       }
     }
 
