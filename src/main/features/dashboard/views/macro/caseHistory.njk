@@ -203,7 +203,11 @@
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
       {{ statesPaidRejectedClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
-      {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+      {% else %}
+        {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -299,7 +303,11 @@
       {% elif state.status === ClaimStatus.CLAIMANT_REQUESTS_CCJ_AFTER_DEFENDANT_REJECTS_SETTLEMENT %}
         {{ CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
-        {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
+        {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
+        {% endif %}
       {% endif %}
   {% endfor %}
 {% endmacro %}
