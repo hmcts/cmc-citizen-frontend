@@ -26,6 +26,7 @@ import {
   respondedAt,
   claimantRejectAlreadyPaid,
   directionsQuestionnaireDeadline,
+  mediationDeadline,
   settlementOffer,
   settlementOfferAccept,
   settlementOfferReject,
@@ -37,6 +38,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const fullDefenceClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
   responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+  mediationDeadline: mediationDeadline,
   response: {
     ...baseResponseData,
     ...baseDefenceData,

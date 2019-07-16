@@ -17,6 +17,10 @@ export const directionsQuestionnaireDeadline = {
   directionsQuestionnaireDeadline: MomentFactory.currentDate()
 }
 
+export const mediationDeadline = {
+  mediationDeadline: MomentFactory.currentDate()
+}
+
 export const defendantOffersSettlement = [{
   type: 'OFFER',
   madeBy: 'DEFENDANT',

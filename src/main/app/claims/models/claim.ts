@@ -82,6 +82,10 @@ export class Claim {
   }
 
   get respondToMediationDeadline (): Moment {
+    if (!this.mediationDeadline) {
+      return undefined
+    }
+
     return this.mediationDeadline
   }
 
