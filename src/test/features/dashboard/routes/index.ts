@@ -117,16 +117,16 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by']
   },
   {
-    status: 'full admission, pay by set date , claimant and defendant both accept the repayment plan and sign',
+    status: 'full admission, pay by set date, claimant and defendant both accept the repayment plan and sign settlement agreement',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-      claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
+      ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
+      claimantResponse: { type: 'ACCEPTATION', formaliseOption: 'SETTLEMENT' },
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You’ve both signed a legal agreement'],
-    defendantAssertions: ['000MC050', 'You’ve both signed a legal agreement']
+    claimantAssertions: ['000MC050', 'You’ve both signed a settlement agreement'],
+    defendantAssertions: ['000MC050', 'You’ve both signed a settlement agreement']
   },
   {
     status: 'full admission, pay by set date , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
@@ -143,7 +143,6 @@ const testData = [
     status: 'full admission, pay by set date, claimant accept the repayment plan and request a CCJ',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
       countyCourtJudgment: { 'ccjType': 'DETERMINATION', 'paidAmount': 10, 'payBySetDate': '2022-01-01', 'paymentOption': 'BY_SPECIFIED_DATE', 'defendantDateOfBirth': '2000-01-01' },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
@@ -199,16 +198,16 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
   },
   {
-    status: 'full admission, pay by repayment plan, claimant and defendant both accept the repayment plan and sign',
+    status: 'full admission, pay by repayment plan, claimant and defendant both accept the repayment plan and sign settlement agreement',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
+      ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You’ve both signed a legal agreement'],
-    defendantAssertions: ['000MC050', 'You’ve both signed a legal agreement']
+    claimantAssertions: ['000MC050', 'You’ve both signed a settlement agreement'],
+    defendantAssertions: ['000MC050', 'You’ve both signed a settlement agreement']
   },
   {
     status: 'full admission, pay by repayment plan , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
@@ -225,7 +224,6 @@ const testData = [
     status: 'full admission, pay by repayment plan, claimant accept the repayment plan and request a CCJ',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
       countyCourtJudgment: { 'ccjType': 'DETERMINATION', 'paidAmount': 10, 'payBySetDate': '2022-01-01', 'paymentOption': 'BY_SPECIFIED_DATE', 'defendantDateOfBirth': '2000-01-01' },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
