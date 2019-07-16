@@ -13,13 +13,15 @@ export class DetailsInCaseOfHearingTask {
           return false
         } else if (directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.expertReports.rows.length) {
           return false
-        } else if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
-          return false
-        } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
-          if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
+        } else if (directionsQuestionnaireDraft.expertReports.declared.option === YesNoOption.NO.option) {
+          if (!directionsQuestionnaireDraft.permissionForExpert.isCompleted()) {
             return false
-          } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
-            return false
+          } else if (directionsQuestionnaireDraft.permissionForExpert.option.option === YesNoOption.YES.option) {
+            if (!directionsQuestionnaireDraft.expertEvidence.isCompleted()) {
+              return false
+            } else if (directionsQuestionnaireDraft.expertEvidence.expertEvidence.option === YesNoOption.YES.option && !directionsQuestionnaireDraft.whyExpertIsNeeded.isCompleted()) {
+              return false
+            }
           }
         }
       }

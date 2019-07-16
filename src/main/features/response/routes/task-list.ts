@@ -9,6 +9,8 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { MomentFactory } from 'shared/momentFactory'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -24,8 +26,11 @@ export default express.Router()
         .buildRespondToClaimSection(draft.document, claim)
       const resolvingClaimSection = TaskListBuilder
         .buildResolvingClaimSection(draft.document, claim, draftMediation.document)
-      const directionsQuestionnaireSection = TaskListBuilder
-        .buildDirectionsQuestionnaireSection(draft.document, claim, directionQuestionnaireDraft.document)
+
+      let directionsQuestionnaireSection
+      if (FeatureToggles.isEnabled('directionsQuestionnaire') && ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
+        directionsQuestionnaireSection = TaskListBuilder.buildDirectionsQuestionnaireSection(draft.document, claim, directionQuestionnaireDraft.document)
+      }
 
       const submitSection = TaskListBuilder.buildSubmitSection(claim, draft.document, claim.externalId, claim.features)
 
