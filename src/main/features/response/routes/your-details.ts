@@ -95,7 +95,7 @@ export default express.Router()
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
-            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
+            res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
             break
           default:
             throw new Error(`Unknown party type: ${draft.document.defendantDetails.partyDetails.type}`)

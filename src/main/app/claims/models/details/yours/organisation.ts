@@ -9,10 +9,10 @@ export class Organisation extends Party {
               name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              mobilePhone?: string,
+              phoneNumber?: string,
               email?: string,
               contactPerson?: string) {
-    super(PartyType.ORGANISATION.value, name, address, correspondenceAddress, mobilePhone, email)
+    super(PartyType.ORGANISATION.value, name, address, correspondenceAddress, phoneNumber, email)
     this.contactPerson = contactPerson
   }
 

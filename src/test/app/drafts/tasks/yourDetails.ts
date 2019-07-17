@@ -8,7 +8,7 @@ describe('Your details', () => {
     it('should return true when the task is completed', () => {
       const input = {
         claimant: {
-          mobilePhone: {
+          phone: {
             number: '7123123123'
           },
           partyDetails: {

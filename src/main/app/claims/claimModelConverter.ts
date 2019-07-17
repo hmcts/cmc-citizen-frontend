@@ -69,7 +69,7 @@ export class ClaimModelConverter {
           individualDetails.name,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           individualDetails.dateOfBirth.date.asString()
         )
@@ -81,7 +81,7 @@ export class ClaimModelConverter {
           soleTraderDetails.name,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           soleTraderDetails.businessName
         )
@@ -93,7 +93,7 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           companyDetails.contactPerson
         )
@@ -105,7 +105,7 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           organisationDetails.contactPerson
         )

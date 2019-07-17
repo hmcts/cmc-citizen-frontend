@@ -38,6 +38,6 @@ export default express.Router()
         (draft.document.claimant.partyDetails as IndividualDetails).dateOfBirth = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.claimantMobilePage.uri)
+        res.redirect(Paths.claimantPhonePage.uri)
       }
     }))

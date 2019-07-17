@@ -25,7 +25,7 @@
         }
       )
     }}
-    {{ row(label = 'Contact number (optional)', value = draft.defendantDetails.mobilePhone.number, changeLink = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+    {{ row(label = 'Contact number (optional)', value = draft.defendantDetails.phone.number, changeLink = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
     {{ tableEnd() }}
 

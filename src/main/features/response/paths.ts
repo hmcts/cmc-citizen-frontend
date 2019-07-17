@@ -7,7 +7,7 @@ export class Paths {
   static readonly taskListPage = new RoutablePath(`${responsePath}/task-list`)
   static readonly defendantYourDetailsPage = new RoutablePath(`${responsePath}/your-details`)
   static readonly defendantDateOfBirthPage = new RoutablePath(`${responsePath}/your-dob`)
-  static readonly defendantMobilePage = new RoutablePath(`${responsePath}/your-mobile`)
+  static readonly defendantPhonePage = new RoutablePath(`${responsePath}/your-phone`)
   static readonly moreTimeRequestPage = new RoutablePath(`${responsePath}/more-time-request`)
   static readonly moreTimeConfirmationPage = new RoutablePath(`${responsePath}/more-time-confirmation`)
   static readonly responseTypePage = new RoutablePath(`${responsePath}/response-type`)

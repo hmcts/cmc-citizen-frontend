@@ -209,9 +209,9 @@ export class ResponseModelConverter {
       } else if (mediationDraft.canWeUse) {
         if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
           if (!claim.isResponseSubmitted()) {
-            return draft.defendantDetails.mobilePhone.number
+            return draft.defendantDetails.phone.number
           } else {
-            return claim.claimData.claimant.mobilePhone ? claim.claimData.claimant.mobilePhone : mediationDraft.canWeUse.mediationPhoneNumber
+            return claim.claimData.claimant.phoneNumber ? claim.claimData.claimant.phoneNumber : mediationDraft.canWeUse.mediationPhoneNumber
           }
         } else {
           return mediationDraft.canWeUse.mediationPhoneNumber
@@ -381,8 +381,8 @@ export class ResponseModelConverter {
     if (defendant.email) {
       party.email = defendant.email.address
     }
-    if (defendant.mobilePhone) {
-      party.mobilePhone = defendant.mobilePhone.number
+    if (defendant.phone) {
+      party.phoneNumber = defendant.phone.number
     }
     return party
   }

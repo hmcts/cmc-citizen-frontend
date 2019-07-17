@@ -8,7 +8,7 @@ import { DefendantEnterClaimReferencePage } from 'integration-test/tests/citizen
 import { DefendantFreeMediationPage } from 'integration-test/tests/citizen/defence/pages/defendant-free-mediation'
 import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
 import { DefendantImpactOfDisputePage } from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
-import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
+import { DefendantPhonePage } from 'integration-test/tests/citizen/defence/pages/defendant-phone'
 import { DefendantMoreTimeRequestPage } from 'integration-test/tests/citizen/defence/pages/defendant-more-time-request'
 import { DefendantNameAndAddressPage } from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
 import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
@@ -44,7 +44,7 @@ const defendantViewClaimPage: DefendantViewClaimPage = new DefendantViewClaimPag
 const defendantRegisterPage: DefendantRegisterPage = new DefendantRegisterPage()
 const defendantNameAndAddressPage: DefendantNameAndAddressPage = new DefendantNameAndAddressPage()
 const defendantDobPage: DefendantDobPage = new DefendantDobPage()
-const defendantMobilePage: DefendantMobilePage = new DefendantMobilePage()
+const defendantPhonePage: DefendantPhonePage = new DefendantPhonePage()
 const defendantMoreTimeRequestPage: DefendantMoreTimeRequestPage = new DefendantMoreTimeRequestPage()
 const defendantDefenceTypePage: DefendantDefenceTypePage = new DefendantDefenceTypePage()
 const defendantRejectAllOfClaimPage: DefendantRejectAllOfClaimPage = new DefendantRejectAllOfClaimPage()
@@ -115,7 +115,7 @@ export class DefenceSteps {
     if (defendant.type === PartyType.INDIVIDUAL) {
       defendantDobPage.enterDOB(defendant.dateOfBirth)
     }
-    defendantMobilePage.enterMobile(defendant.mobilePhone)
+    defendantPhonePage.enterPhone(defendant.phoneNumber)
   }
 
   requestNoExtraTimeToRespond (): void {

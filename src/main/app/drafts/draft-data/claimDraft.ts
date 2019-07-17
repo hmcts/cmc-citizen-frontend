@@ -28,7 +28,7 @@ export function prepareClaimDraft (userEmailAddress: string) {
           }
         }
       },
-      mobilePhone: {
+      phone: {
         number: '(0)207 127 0000'
       }
     },

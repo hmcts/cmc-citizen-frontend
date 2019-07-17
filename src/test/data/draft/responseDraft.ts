@@ -18,7 +18,7 @@ import { Carer, CarerOption } from 'response/form/models/statement-of-means/care
 const baseResponseDraft = {
   defendantDetails: {
     partyDetails: individualDetails,
-    mobilePhone: {
+    phone: {
       number: '0700000000'
     },
     email: {

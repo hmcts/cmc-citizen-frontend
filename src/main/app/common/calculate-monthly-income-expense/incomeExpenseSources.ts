@@ -79,8 +79,8 @@ export class IncomeExpenseSources {
       incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.hirePurchase))
     }
 
-    if (monthlyExpenses.mobilePhone && monthlyExpenses.mobilePhone.populated) {
-      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.mobilePhone))
+    if (monthlyExpenses.phone && monthlyExpenses.phone.populated) {
+      incomeExpenseSources.push(IncomeExpenseSource.fromFormExpenseSource(monthlyExpenses.phone))
     }
 
     if (monthlyExpenses.maintenance && monthlyExpenses.maintenance.populated) {

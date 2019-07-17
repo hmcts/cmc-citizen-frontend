@@ -142,7 +142,7 @@ export class MonthlyExpenses {
       value.foodAndHousekeepingDeclared, ExpenseSource.fromObject(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, value.foodAndHousekeeping),
       value.tvAndBroadbandDeclared, ExpenseSource.fromObject(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, value.tvAndBroadband),
       value.hirePurchaseDeclared, ExpenseSource.fromObject(MonthlyExpenseType.HIRE_PURCHASES.displayValue, value.hirePurchase),
-      value.mobilePhoneDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MOBILE_PHONE.displayValue, value.mobilePhone),
+      value.mobilePhoneDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MOBILE_PHONE.displayValue, value.phoneNumber),
       value.maintenanceDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, value.maintenance),
       value.otherDeclared, value.other && value.other
       .map(source => ExpenseSource.fromObject(source.name, source))
@@ -175,7 +175,7 @@ export class MonthlyExpenses {
       this.hirePurchaseDeclared = input.hirePurchaseDeclared
       this.hirePurchase = new ExpenseSource().deserialize(input.hirePurchase)
       this.mobilePhoneDeclared = input.mobilePhoneDeclared
-      this.mobilePhone = new ExpenseSource().deserialize(input.mobilePhone)
+      this.mobilePhone = new ExpenseSource().deserialize(input.phoneNumber)
       this.maintenanceDeclared = input.maintenanceDeclared
       this.maintenance = new ExpenseSource().deserialize(input.maintenance)
       this.otherDeclared = input.otherDeclared

@@ -53,7 +53,7 @@ function getSampleMonthtlyExpensesObject (options?: object) {
       amount: 100,
       schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
-    mobilePhone: {
+    phone: {
       amount: 100,
       schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
@@ -86,7 +86,7 @@ function forConstructor () {
     undefined, new ExpenseSource(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, this.sampleData.foodAndHousekeeping.amount, this.sampleData.foodAndHousekeeping.schedule),
     undefined, new ExpenseSource(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, this.sampleData.tvAndBroadband.amount, this.sampleData.tvAndBroadband.schedule),
     undefined, new ExpenseSource(MonthlyExpenseType.HIRE_PURCHASES.displayValue, this.sampleData.hirePurchase.amount, this.sampleData.hirePurchase.schedule),
-    undefined, new ExpenseSource(MonthlyExpenseType.MOBILE_PHONE.displayValue, this.sampleData.mobilePhone.amount, this.sampleData.mobilePhone.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.MOBILE_PHONE.displayValue, this.sampleData.phone.amount, this.sampleData.phone.schedule),
     undefined, new ExpenseSource(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, this.sampleData.maintenance.amount, this.sampleData.maintenance.schedule)
   )
 }
@@ -149,9 +149,9 @@ function forFromObjectMethod () {
       schedule: this.sampleData.hirePurchase.schedule.value
     },
     mobilePhoneDeclared: this.sampleData.mobilePhoneDeclared,
-    mobilePhone: {
-      amount: this.sampleData.mobilePhone.amount,
-      schedule: this.sampleData.mobilePhone.schedule.value
+    phone: {
+      amount: this.sampleData.phone.amount,
+      schedule: this.sampleData.phone.schedule.value
     },
     maintenanceDeclared: this.sampleData.maintenanceDeclared,
     maintenance: {
@@ -230,10 +230,10 @@ function forDeserialize () {
       schedule: this.sampleData.hirePurchase.schedule
     },
     mobilePhoneDeclared: this.sampleData.mobilePhoneDeclared,
-    mobilePhone: {
+    phone: {
       name: MonthlyExpenseType.MOBILE_PHONE.displayValue,
-      amount: this.sampleData.mobilePhone.amount,
-      schedule: this.sampleData.mobilePhone.schedule
+      amount: this.sampleData.phone.amount,
+      schedule: this.sampleData.phone.schedule
     },
     maintenanceDeclared: this.sampleData.maintenanceDeclared,
     maintenance: {

@@ -9,10 +9,10 @@ export class Company extends Party {
               name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              mobilePhone?: string,
+              phoneNumber?: string,
               email?: string,
               contactPerson?: string) {
-    super(PartyType.COMPANY.value, name, address, correspondenceAddress, mobilePhone, email)
+    super(PartyType.COMPANY.value, name, address, correspondenceAddress, phoneNumber, email)
     this.contactPerson = contactPerson
   }
 
