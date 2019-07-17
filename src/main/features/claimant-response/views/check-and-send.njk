@@ -48,11 +48,11 @@
       </div>
     {% else %}
       {% if draft.settleAdmitted %}
-        {% if draft.settleAdmitted.admitted.option === YesNoOption.YES %}
+        {% if draft.settleAdmitted.admitted === YesNoOption.YES %}
           {% set settleAdmittedResponse = 'I accept this amount' %}
         {% else %}
           {% set settleAdmittedResponse = 'I reject this amount' %}
-        {% if draft.freeMediation.option === YesNoOption.YES %}
+        {% if draft.freeMediation === YesNoOption.YES %}
           {% set freeMediationResponse =  'Yes' %}
         {% else %}
           {% set freeMediationResponse = 'No' %}
@@ -61,13 +61,13 @@
 
         {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
           changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-        {% if draft.settleAdmitted.admitted.option === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES %}
+        {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES %}
           {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot) }}
         {% endif %}
       {% endif %}
 
       {% if draft.acceptPaymentMethod %}
-        {% if draft.acceptPaymentMethod.accept.option === YesNoOption.YES %}
+        {% if draft.acceptPaymentMethod.accept === YesNoOption.YES %}
           {% set acceptPaymentMethodResponse = 'I accept this repayment plan' %}
         {% else %}
           {% set acceptPaymentMethodResponse = 'I reject this repayment plan' %}
@@ -76,7 +76,7 @@
         {{ row(label = 'Do you accept the defendant’s repayment plan?', bold = true, value = acceptPaymentMethodResponse,
           changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
-        {% if draft.acceptPaymentMethod.accept.option === YesNoOption.NO %}
+        {% if draft.acceptPaymentMethod.accept === YesNoOption.NO %}
           {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
             {% set alternatePaymentMethodResponse = t('Immediately') %}
           {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
