@@ -17,7 +17,7 @@
       bold = true
     ) }}
   {% endif %}
-  {% if mediationPilot and not ( mediationDraft.youCanOnlyUseMediation === YesNoOption.YES and mediationDraft.willYouTryMediation === YesNoOption.YES ) %}
+  {% if not ( mediationDraft.youCanOnlyUseMediation === YesNoOption.YES and mediationDraft.willYouTryMediation === YesNoOption.YES ) %}
     {{ row(
       label = 'Agree to mediation conditions',
       value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
