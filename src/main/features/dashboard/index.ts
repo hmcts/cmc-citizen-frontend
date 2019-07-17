@@ -66,7 +66,7 @@ export class DashboardFeature {
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
     app.use((err, req, res, next) => {
-      if (err.statusCode === 500) {
+      if (err.stack.split('\n')[0].startsWith('Template render error')) {
         trackCustomEvent('CMC Dashboard Failure', {
           error: err
         })
