@@ -12,3 +12,11 @@ dependencies:
     repository: '@hmcts'
     tags:
       - rpe-feature-toggle-api-pod
+  - name: cmc-claim-store
+    version: ~1.1.0
+    repository: '@hmcts'
+    tags:
+      - cmc-claim-store
+  - name: postgresql
+    version: ~2.6.5
+    repository: '@stable'
