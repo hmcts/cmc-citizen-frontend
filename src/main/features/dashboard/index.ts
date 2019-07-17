@@ -66,12 +66,12 @@ export class DashboardFeature {
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
     app.use((err, req, res, next) => {
-      if (err) {
+      if (err.statusCode === 500) {
         trackCustomEvent('CMC Dashboard Failure', {
           error: err
         })
       }
-      next()
+      next(err)
     })
   }
 }
