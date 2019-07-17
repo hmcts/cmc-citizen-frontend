@@ -29,6 +29,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+  const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -39,7 +40,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     mediationDraft: mediationDraft.document,
     contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
-    contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document)
+    contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document),
+    mediationPilot: mediationPilot
   })
 }
 

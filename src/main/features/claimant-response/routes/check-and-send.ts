@@ -18,6 +18,7 @@ import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { ResponseType } from 'claims/models/response/responseType'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -56,6 +57,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
       const paymentIntention: PaymentIntention = alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE ? undefined : getPaymentIntention(draft.document, claim)
+      const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
 
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
@@ -66,7 +68,8 @@ export default express.Router()
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
         mediationDraft: mediationDraft.document,
         contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document),
-        contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document)
+        contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document),
+        mediationPilot: mediationPilot
       })
     })
   )

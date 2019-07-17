@@ -1,14 +1,23 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
 
-{% macro freeMediationBlock(claim, draft, mediationDraft, contactPerson, contactNumber) %}
+{% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot) %}
   {{ tableStart('freeMediation', 'Consider free mediation') }}
-  {{ row(
-    label = 'Will you try free mediation?',
-    value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-    changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-    bold = true
-  ) }}
-  {% if mediationDraft.youCanOnlyUseMediation %}
+  {% if mediationPilot %}
+    {{ row(
+      label = 'Will you try free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% else %}
+    {{ row(
+      label = 'Will you try free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% endif %}
+  {% if mediationPilot and not ( mediationDraft.youCanOnlyUseMediation === YesNoOption.YES and mediationDraft.willYouTryMediation === YesNoOption.YES ) %}
     {{ row(
       label = 'Agree to mediation conditions',
       value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
