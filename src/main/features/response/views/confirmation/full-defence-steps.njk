@@ -15,8 +15,8 @@
     <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
   {% endif %}
 {% elif claim.response.directionsQuestionnaire.selfWitness %}
-  <p>{{ t('We’ll contact you when {{ claimantName }} responds, to tell you what to do next.', { claimantName: claimantName }) | safe }}</p>
-  <p>{{ t('If {{ claimantName }} accepts your response the claim will be settled.', { claimantName: claimantName }) | safe }}</p>
+  <p>{{ t('We’ll contact you when {{ claimantName }} responds, to tell you what to do next.', { claimantName: claimantName }) }}</p>
+  <p>{{ t('If {{ claimantName }} accepts your response the claim will be settled.', { claimantName: claimantName }) }}</p>
 
   {% if claim.response.freeMediation === FreeMediationOption.YES %}
     <p>{{ t('If they reject your response and agree to try mediation we’ll contact you to arrange an appointment.') }}</p>
