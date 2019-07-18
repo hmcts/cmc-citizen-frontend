@@ -43,15 +43,18 @@ const testData = [
       ...data.nonMonetaryOfferAwaitingClaimantResponsePartyStatements
     },
     claimantAssertions: [
-      'They said they dispute your claim.',
-      'complete a directions questionnaire',
+      'Decide whether to proceed',
+      'John Doe has rejected your claim.',
+      'You need to decide whether to proceed with the claim. You need to respond before',
+      'Your claim won’t continue if you don’t respond by then.',
       `${claimStoreServiceMock.sampleClaimObj.claim.defendants[0].name} has made an offer to settle out of court.`,
       'View and respond to the offer'
     ],
     defendantAssertions: [
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it.',
-      'You’ll have to go to a hearing.',
-      'complete a directions questionnaire',
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
       'You made an offer to settle the claim out of court.',
       `${claimStoreServiceMock.sampleClaimObj.claim.claimants[0].name} can accept or reject your offer.`
     ]
