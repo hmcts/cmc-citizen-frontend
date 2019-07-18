@@ -165,11 +165,13 @@ const commonCompanyClaimant = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails,
     mobilePhone: {
@@ -290,11 +292,13 @@ const commonCompanyResponsePartial = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails
   } as Defendant,
@@ -581,11 +585,91 @@ export const sampleMediationDraftObj = {
   }
 }
 
+export const sampleCompanyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.YES
+  },
+  youCanOnlyUseMediation: {
+    option: FreeMediationOption.YES
+  },
+  canWeUseCompany: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777',
+    mediationContactPerson: 'Mary Richards'
+  }
+}
+
 export const sampleDirectionsQuestionnaireDraftObj = {
-  selfWitness: { option: YesNoOption.NO },
-  otherWitnesses: { otherWitnesses: YesNoOption.NO },
-  availability: { hasUnavailableDates: false },
-  expertEvidence: { expertEvidence: YesNoOption.NO }
+  selfWitness: {
+    option: {
+      option: 'yes'
+    }
+  },
+  otherWitnesses: {
+    otherWitnesses: {
+      option: 'yes'
+    },
+    howMany: 1
+  },
+  hearingLocation: {
+    courtName: 'Little Whinging, Surrey',
+    courtPostCode: undefined,
+    courtAccepted: { option : 'yes' },
+    alternateCourtName: 'some other court name'
+  },
+  exceptionalCircumstances: {
+    exceptionalCircumstances: { option : 'yes' },
+    reason: 'Poorly pet owl'
+  },
+  availability: {
+    hasUnavailableDates: true,
+    unavailableDates: [
+      { year: 2020, month: 1, day: 4 },
+      { year: 2020, month: 2, day: 8 }
+    ]
+  },
+  supportRequired: {
+    languageSelected: true,
+    languageInterpreted: 'Klingon',
+    signLanguageSelected: true,
+    signLanguageInterpreted: 'Makaton',
+    hearingLoopSelected: true,
+    disabledAccessSelected: true,
+    otherSupportSelected: true,
+    otherSupport: 'Life advice'
+  },
+  expertRequired: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertReports: {
+    declared: true,
+    rows: [
+      {
+        expertName: 'Prof. McGonagall',
+        reportDate: { year: 2018, month: 1, day: 10 }
+      },
+      {
+        expertName: 'Mr Rubeus Hagrid',
+        reportDate: { year: 2019, month: 2, day: 27 }
+      }
+    ]
+  },
+  permissionForExpert: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertEvidence: {
+    expertEvidence: {
+      option: 'yes'
+    },
+    whatToExamine: 'Photographs'
+  },
+  whyExpertIsNeeded: {
+    explanation: 'for expert opinion'
+  }
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {

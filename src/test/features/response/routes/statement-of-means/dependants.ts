@@ -61,6 +61,7 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -113,6 +114,7 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('other dependants page when no children', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -129,6 +131,7 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('dependants disability page when some children but 0 between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -148,6 +151,7 @@ describe('Defendant response: Statement of means: dependants', () => {
         it('education page when > 0 children between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
