@@ -18,6 +18,9 @@ import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-i
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
+const fullDefenceWithStatesPaidLessThanClaimAmount = claimStoreServiceMock.sampleFullDefenceWithStatesPaidLessThanClaimAmount
+const fullDefenceWithStatesPaidLessThanClaimAmountWithMediation = claimStoreServiceMock.sampleFullDefenceWithStatesPaidLessThanClaimAmountWithMediation
+
 describe('Defendant response: confirmation page', () => {
   attachDefaultHooks(app)
 
@@ -174,6 +177,24 @@ describe('Defendant response: confirmation page', () => {
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.serverError.withText('Error'))
+      })
+
+      it('should render states paid with less than claim amount with next step - NO MEDIATION', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithStatesPaidLessThanClaimAmount)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('The court will review the case. You might have to go to a hearing.'))
+      })
+
+      it('should render states paid with less than claim amount with next step - WITH MEDIATION', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithStatesPaidLessThanClaimAmountWithMediation)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.'))
       })
     })
   })

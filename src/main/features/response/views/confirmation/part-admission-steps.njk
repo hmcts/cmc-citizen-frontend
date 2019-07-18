@@ -85,6 +85,19 @@
 
   <p>{{ t('The court will decide how you must pay.') }}</p>
 
+{% elif claim.response.paymentIntention === undefined %}
+  <!-- States Paid -->
+  <h3 class="bold">{{ t('If {{ claimantName }} accepts your response', { claimantName: claimantName }) }}</h3>
+  <p>The claim will be settled.</p>
+  <h3 class="bold">{{ t('If {{ claimantName }} rejects your response', { claimantName: claimantName }) }}</h3>
+  {%  if claim.response.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('If they don’t want to try mediation the court will review the case. You might have to go to a hearing.') }}</p>
+    <p>{{ t('We’ll contact you to tell you what to do next.') }}</p>
+  {% else %}
+    <p>{{ t('The court will review the case. You might have to go to a hearing.') }}</p>
+    <p>{{ t('We’ll contact you to tell you what to do next.') }}</p>
+    <p></p>
+  {% endif %}
 {% endif %}
-
 
