@@ -86,9 +86,7 @@
 
   <p>{{ t('The court will decide how you must pay.') }}</p>
 
-{% endif %}
-
-{% if (claim.response.paymentIntention === undefined ) %}
+{% elif claim.response.paymentIntention === undefined %}
   <!-- States Paid -->
   <h3 class="bold">{{ t('If {{ claimantName }} accepts your response', { claimantName: claimantName }) }}</h3>
   <p>The claim will be settled.</p>
