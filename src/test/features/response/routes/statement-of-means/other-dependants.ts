@@ -61,6 +61,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -113,6 +114,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
         it('"no" selected', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
@@ -129,6 +131,7 @@ describe('Defendant response: Statement of means: other dependants', () => {
         it('"yes" selected', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveSave()
 
           await request(app)
