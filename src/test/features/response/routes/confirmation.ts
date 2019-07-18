@@ -44,6 +44,20 @@ describe('Defendant response: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response'))
       })
 
+      it('when full defence already paid with mediation should render page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleFullDefenceRejectEntirely)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'We’ve emailed John Smith your response, explaining why you reject the claim.',
+            'We’ll contact you when John Smith responds, to tell you what to do next.',
+            'If John Smith accepts your response the claim will be settled.',
+            'If they reject your response the court will review the case. You might have to go to a hearing.'
+          ))
+      })
+
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('internal service error when retrieving response')
 

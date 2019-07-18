@@ -25,12 +25,12 @@
             {{ t('You’ve proposed a different repayment plan') }}
           {% elseif repaymentPlanOrigin === 'COURT' %}
             {{ t('You’ve signed a settlement agreement') }}
-          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === YesNoOption.NO %}
-            {{ t('You’ve rejected their response') }}
-          {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
-            {{ t('You’ve accepted their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === YesNoOption.YES %}
             {{ t('You’ve agreed to mediation') }}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
+            {{ t('You’ve accepted their response') }}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
+            {{ t('You’ve rejected their response') }}
           {% endif %}
         </h1>
         <p class="reference-number">

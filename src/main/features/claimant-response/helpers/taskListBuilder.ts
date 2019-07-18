@@ -1,5 +1,5 @@
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
-import { Paths, CCJPaths } from 'claimant-response/paths'
+import { CCJPaths, Paths } from 'claimant-response/paths'
 import { AcceptPaymentMethodTask } from 'claimant-response/tasks/acceptPaymentMethodTask'
 import { SettleAdmittedTask } from 'claimant-response/tasks/settleAdmittedTask'
 import { Claim } from 'claims/models/claim'
@@ -163,11 +163,8 @@ export class TaskListBuilder {
             ClaimantResponseFreeMediationTask.isCompleted(mediationDraft)
           ))
       }
-    }
-
-    if (claim.response.responseType === ResponseType.FULL_ADMISSION
-      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY
-    ) {
+    } else if (claim.response.responseType === ResponseType.FULL_ADMISSION
+      && claim.response.paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY) {
       tasks.push(
         new TaskListItem(
           'Accept or reject their repayment plan',
@@ -183,9 +180,7 @@ export class TaskListBuilder {
 
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
-    }
-
-    if (claim.response.responseType === ResponseType.FULL_DEFENCE
+    } else if (claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.freeMediation === YesNoOption.YES
       && (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES)) {
       tasks.push(
         new TaskListItem(

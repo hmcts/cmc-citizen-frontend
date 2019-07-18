@@ -428,6 +428,7 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
 }
 
 export const sampleFullDefenceRejectEntirely = {
+  ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   response: defenceWithDisputeData
 }

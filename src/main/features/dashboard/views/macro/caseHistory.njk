@@ -20,9 +20,8 @@
 {% from "./claimStatus/claimRejected.njk" import
   claimRejectedAlreadyPaidForClaimantClaimDetails,
   claimRejectedAlreadyPaidForDefendantClaimDetails,
-  claimRejectedFreeMediationNOForClaimantClaimDetails,
   claimRejectedFreeMediationNOForDefendantClaimDetails,
-  claimRejectedFreeMediationYESForClaimantClaimDetails,
+  claimRejectedForClaimantClaimDetails,
   claimRejectedFreeMediationYESForDefendantClaimDetails,
   claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails,
   claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails,
@@ -154,10 +153,8 @@
       {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
           {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
-        {% elif claim.response.freeMediation === FreeMediationOption.NO %}
-          {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
         {% else %}
-          {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
+          {{ claimRejectedForClaimantClaimDetails(claim) }}
         {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if claim.response.paymentDeclaration %}
