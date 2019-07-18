@@ -23,7 +23,9 @@ import {
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData,
   partialAdmissionWithImmediatePaymentData,
-  defenceWithDisputeData
+  defenceWithDisputeData,
+  partialAdmissionWithSoMPaymentBySetDateWithMediationData,
+  partialAdmissionWithPaymentByInstalmentsWithMediationData, partialAdmissionWithPaymentByInstalmentsData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -370,9 +372,17 @@ export const sampleDefendantResponseObj = {
 }
 
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
+  ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithSoMPaymentBySetDateData
+}
+
+export const samplePartialAdmissionWithPaymentBySetDateWithMediationResponseObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithSoMPaymentBySetDateWithMediationData
 }
 
 export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
@@ -381,7 +391,22 @@ export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
   response: partialAdmissionWithPaymentBySetDateCompanyData
 }
 
+export const samplePartialAdmissionWithPaymentByInstalmentDateResponseObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithPaymentByInstalmentsData
+}
+
+export const samplePartialAdmissionWithPaymentByInstalmentWithMediationResponseObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithPaymentByInstalmentsWithMediationData
+}
+
 export const samplePartialAdmissionWithPayImmediatelyData = {
+  ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithImmediatePaymentData
