@@ -54,6 +54,7 @@ describe('Defendant response: full admission options', () => {
 
         it('should redirect to response type page when response type is not full admission', async () => {
           draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -66,6 +67,7 @@ describe('Defendant response: full admission options', () => {
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response', draftOverride)
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -91,6 +93,7 @@ describe('Defendant response: full admission options', () => {
       context('when response not submitted', () => {
         it('should redirect to response type page when response type is not full admission', async () => {
           draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -112,6 +115,7 @@ describe('Defendant response: full admission options', () => {
 
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response', draftOverride)
+            draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
@@ -125,6 +129,7 @@ describe('Defendant response: full admission options', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -137,6 +142,7 @@ describe('Defendant response: full admission options', () => {
           it('should redirect to how much paid claimant page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
@@ -151,6 +157,7 @@ describe('Defendant response: full admission options', () => {
           it('should redirect to send your response by email page when counterclaim option is selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)

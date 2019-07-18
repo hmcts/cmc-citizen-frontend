@@ -32,8 +32,12 @@ export class ExceptionalCircumstances implements CompletableTask {
   }
 
   deserialize (input: any): ExceptionalCircumstances {
-    if (input) {
-      this.exceptionalCircumstances = YesNoOption.fromObject(input.exceptionalCircumstances)
+    if (!input) {
+      return input
+    }
+
+    if (input && input.exceptionalCircumstances && input.exceptionalCircumstances.option) {
+      this.exceptionalCircumstances = YesNoOption.fromObject(input.exceptionalCircumstances.option)
       this.reason = input.reason
     }
 
