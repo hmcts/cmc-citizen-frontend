@@ -40,25 +40,34 @@ export default express.Router()
     FormValidator.requestHandler(ExceptionalCircumstances, ExceptionalCircumstances.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const form: Form<ExceptionalCircumstances> = req.body
+      const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
 
       if (form.hasErrors()) {
         renderPage(res, form)
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
-        const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
-
         draft.document.exceptionalCircumstances = form.model
+        if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
+          const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
 
-        if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-          draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
+          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+            draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
+          }
         }
         await new DraftService().save(draft, user.bearerToken)
-
-        if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-          res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+        if (party === MadeBy.CLAIMANT) {
+          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          } else {
+            res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          }
         } else {
-          res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+            res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          } else {
+            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          }
         }
       }
     }))
