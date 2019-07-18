@@ -44,7 +44,6 @@ describe('Claimant response: confirmation page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
-          claimStoreServiceMock.mockNextWorkingDay('2019-07-01')
 
           await request(app)
             .get(pagePath)

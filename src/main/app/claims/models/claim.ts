@@ -58,6 +58,7 @@ export class Claim {
   features: string[]
   directionsQuestionnaireDeadline: Moment
   mediationDeadline: Moment
+  acceptedPaymentPlanClaimantDeadline: Moment
   moneyReceivedOn: Moment
   reDetermination: ReDetermination
   reDeterminationRequestedAt: Moment
@@ -82,10 +83,6 @@ export class Claim {
   }
 
   get respondToMediationDeadline (): Moment {
-    if (!this.mediationDeadline) {
-      return undefined
-    }
-
     return this.mediationDeadline
   }
 
@@ -307,6 +304,9 @@ export class Claim {
       }
       if (input.mediationDeadline) {
         this.mediationDeadline = input.mediationDeadline
+      }
+      if (input.acceptedPaymentPlanClaimantDeadline) {
+        this.acceptedPaymentPlanClaimantDeadline = input.acceptedPaymentPlanClaimantDeadline
       }
     }
 

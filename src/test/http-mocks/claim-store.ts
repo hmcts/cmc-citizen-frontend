@@ -225,7 +225,8 @@ export const sampleClaimObj = {
       }
     ]
   },
-  features: ['admissions']
+  features: ['admissions'],
+  acceptedPaymentPlanClaimantDeadline: MomentFactory.currentDate()
 }
 
 export const settlementWithInstalmentsAndAcceptation = {
@@ -444,12 +445,12 @@ export function mockCalculateInterestRate (expected: number): mock.Scope {
     .reply(HttpStatus.OK, { amount: expected })
 }
 
-export function mockNextWorkingDay (expected: String): mock.Scope {
-  return mock(serviceBaseURL)
-    .get('/calendar/next-working-day')
-    .query(true)
-    .reply(HttpStatus.OK, { nextWorkingDay: expected })
-}
+// export function mockNextWorkingDay (expected: String): mock.Scope {
+//   return mock(serviceBaseURL)
+//     .get('/calendar/next-working-day')
+//     .query(true)
+//     .reply(HttpStatus.OK, { nextWorkingDay: expected })
+// }
 
 export function resolveRetrieveClaimIssueByExternalId (claimOverride?: object): mock.Scope {
   return mock(`${serviceBaseURL}/claims`)
