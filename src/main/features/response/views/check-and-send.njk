@@ -127,7 +127,7 @@
       {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
         {{
           timelineCheckAndSend(
-            header = 'Your timeline of what happened (optional)',
+            header = 'Timeline of what happened (optional)',
             timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
             url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false
@@ -358,7 +358,7 @@
           )
           }}
         {% endif %}
-      {% elif mediationDraft.youCanOnlyUseMediation.option === YesNoOption.YES.option %}
+      {% else %}
         {{
         row(
           label = 'Contact number',
