@@ -91,6 +91,7 @@ export default express.Router()
         try {
           const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
           const user: User = res.locals.user
+          draft.document.hearingLocation = form.model
 
           if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
             const court: Court = await getNearestCourt(form.model.alternativePostcode)
@@ -103,9 +104,9 @@ export default express.Router()
           } else {
 
             if (form.model.courtAccepted === undefined) {
-              draft.document.hearingLocation = form.model.alternativeCourtName
+              draft.document.hearingLocation.alternativeCourtName = form.model.alternativeCourtName
             } else {
-              draft.document.hearingLocation = form.model.courtName
+              draft.document.hearingLocation.courtName = form.model.courtName
             }
 
             await new DraftService().save(draft, user.bearerToken)
