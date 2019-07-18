@@ -152,18 +152,16 @@ const testData = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
-      'The defendant has rejected your claim',
-      'They said they dispute your claim.',
-      'complete a directions questionnaire',
-      'Download their response',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Decide whether to proceed',
+      'John Doe has rejected your claim.',
+      'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
+      'Your claim won’t continue if you don’t respond by then.'
     ],
     defendantAssertions: [
-      'Your response to the claim',
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
-      'complete a directions questionnaire',
-      'Download your response',
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
       'Settle out of court',
       'settle the claim out of court'
     ]
@@ -181,7 +179,10 @@ const testData = [
       ...settlementOffer
     },
     claimantAssertions: [
+      'Decide whether to proceed',
       fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim',
+      'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
+      'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'View and respond to the offer',
@@ -209,20 +210,20 @@ const testData = [
       ...settlementOffer
     },
     claimantAssertions: [
-      'The defendant has rejected your claim',
-      'They said they dispute your claim.',
-      'complete a directions questionnaire',
-      'Download their response',
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim',
+      'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
+      'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'If you’ve been paid',
       'Tell us if you want to end the claim'
     ],
     defendantAssertions: [
-      'Your response to the claim',
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it.',
-      'complete a directions questionnaire',
-      'Download your response',
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
       'Settle out of court',
       'You made an offer to settle the claim out of court. ' + fullDefenceClaim.claim.claimants[0].name + ' can accept or reject your offer.'
     ]
@@ -240,7 +241,10 @@ const testData = [
       ...settlementOfferAccept
     },
     claimantAssertions: [
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim',
+      'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
+      'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
       'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
@@ -269,10 +273,10 @@ const testData = [
       ...settlementOfferAccept
     },
     claimantAssertions: [
-      'The defendant has rejected your claim',
-      'They said they dispute your claim.',
-      'complete a directions questionnaire',
-      'Download their response',
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim',
+      'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
+      'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
       'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
@@ -280,10 +284,10 @@ const testData = [
       'request a County Court Judgment'
     ],
     defendantAssertions: [
-      'Your response to the claim',
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
-      'complete a directions questionnaire',
-      'Download your response',
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
       'Settle out of court',
       'The claimant has accepted your offer and signed a legal agreement. You need to sign the agreement to settle out of court.',
       'Sign the settlement agreement'
@@ -302,7 +306,10 @@ const testData = [
       ...settlementOfferReject
     },
     claimantAssertions: [
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim',
+      'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
+      'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'If you’ve been paid',
@@ -329,20 +336,20 @@ const testData = [
       ...settlementOfferReject
     },
     claimantAssertions: [
-      'The defendant has rejected your claim',
-      'They said they dispute your claim.',
-      'complete a directions questionnaire',
-      'Download their response',
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim',
+      'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
+      'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'If you’ve been paid',
       'Tell us if you want to end the claim'
     ],
     defendantAssertions: [
-      'Your response to the claim',
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
-      'complete a directions questionnaire',
-      'Download your response',
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
       'Settle out of court',
       'The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.'
     ]
