@@ -1,8 +1,8 @@
-import { request } from 'client/request'
 import { claimApiBaseUrl } from 'claims/claimStoreClient'
 import { MomentFormatter } from 'utils/momentFormatter'
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import * as requestPromise from 'request-promise-native'
 
 export class CalendarClient {
   constructor (
@@ -15,11 +15,13 @@ export class CalendarClient {
       return Promise.reject('Missing date')
     }
 
-    const formattedDate: string = MomentFormatter.formatDate(date.add(addDays, 'day'))
-
-    return request
-      .get(`${this.url}?date=${formattedDate}`)
-      .then(response => MomentFactory.parse(response.nextWorkingDay))
+    const formattedDate: string = encodeURI(MomentFormatter.formatDate(date.add(addDays, 'day')))
+    return requestPromise
+      .get({
+        json: true,
+        uri: `${this.url}?date=${formattedDate}`
+      })
+      .then(res => MomentFactory.parse(res.nextWorkingDay))
       .catch(error => {
         throw new Error(`Unable to get next working day - ${error}`)
       })

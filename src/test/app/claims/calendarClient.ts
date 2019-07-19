@@ -1,15 +1,11 @@
 import { MomentFactory } from 'shared/momentFactory'
-import { mockNextWorkingDay } from '../../http-mocks/claim-store'
 import { expect } from 'chai'
 import { CalendarClient } from 'claims/calendarClient'
-import * as nock from 'nock'
-import { claimApiBaseUrl } from 'claims/claimStoreClient'
+import { mockNextWorkingDay, rejectNextWorkingDay } from 'test/http-mocks/claim-store'
 
 describe('calendar', () => {
-  const mockClient = 'http://localhost'
-  const url: string = `${claimApiBaseUrl}/calendar/next-working-day`
   const SATURDAY = MomentFactory.parse('2019-06-29')
-  const MONDAY_AFTER = '2019-07-01'
+  const MONDAY_AFTER = '2019-06-29'
   let calendarClient: CalendarClient = new CalendarClient()
 
   beforeEach(() => {
@@ -17,17 +13,15 @@ describe('calendar', () => {
   })
 
   it(`should return following Monday when date is Saturday and no days to add`, async () => {
-    mockNextWorkingDay(MONDAY_AFTER)
+    mockNextWorkingDay(SATURDAY)
 
-    const nextWorkingDay = await calendarClient.getNextWorkingDay(SATURDAY, 0)
+    const nextWorkingDay = await calendarClient.getNextWorkingDay(SATURDAY, 5)
 
-    expect(nextWorkingDay.toISOString(false)).to.equal(MomentFactory.parse(MONDAY_AFTER).toISOString(false))
+    expect(nextWorkingDay.toISOString()).to.equal(MomentFactory.parse(MONDAY_AFTER).toISOString())
   })
 
   it('should return Unable to get next working day bad request', () => {
-    nock(mockClient)
-      .get(url)
-      .reply(400)
+    rejectNextWorkingDay(SATURDAY)
 
     return calendarClient.getNextWorkingDay(SATURDAY, 0)
       .catch(err =>
@@ -36,7 +30,7 @@ describe('calendar', () => {
   })
 
   it('should return Missing date when no date is passed', () => {
-    mockNextWorkingDay(MONDAY_AFTER)
+    mockNextWorkingDay(SATURDAY)
 
     return calendarClient.getNextWorkingDay(undefined, 0)
       .catch(err =>
