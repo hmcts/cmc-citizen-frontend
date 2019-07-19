@@ -65,28 +65,32 @@ import { CohabitingOption } from 'response/form/models/statement-of-means/cohabi
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { FeatureToggles } from 'utils/featureToggles'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 export class ResponseModelConverter {
 
-  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, claim: Claim): Response {
+  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): Response {
     switch (draft.response.type) {
       case FormResponseType.DEFENCE:
         if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
-          return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft)
+          return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft, directionsQuestionnaireDraft)
         }
-        return this.convertFullDefence(draft, claim, mediationDraft)
+        return this.convertFullDefence(draft, claim, mediationDraft, directionsQuestionnaireDraft)
       case FormResponseType.FULL_ADMISSION:
         return this.convertFullAdmission(draft, claim, mediationDraft)
       case FormResponseType.PART_ADMISSION:
-        return this.convertPartAdmission(draft, claim, mediationDraft)
+        return this.convertPartAdmission(draft, claim, mediationDraft, directionsQuestionnaireDraft)
       default:
         throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullDefenceResponse {
+  private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -108,11 +112,13 @@ export class ResponseModelConverter {
         draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
         draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
-  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): PartialAdmissionResponse {
+  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -133,7 +139,9 @@ export class ResponseModelConverter {
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
@@ -150,7 +158,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): PartialAdmissionResponse {
+  private static convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     let amount
     if (draft.partialAdmission.alreadyPaid.option === DraftYesNoOption.YES) {
       amount = draft.partialAdmission.howMuchHaveYouPaid.amount
@@ -182,7 +190,9 @@ export class ResponseModelConverter {
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       statementOfMeans: this.convertStatementOfMeans(draft),
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
@@ -661,5 +671,9 @@ export class ResponseModelConverter {
     }
 
     return expenses
+  }
+
+  private static convertDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
+    return DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
   }
 }

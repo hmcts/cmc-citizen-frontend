@@ -474,29 +474,329 @@ describe('Defendant response task list builder', () => {
       claim.features = ['admissions', 'directionsQuestionnaire']
     })
 
-    it('response is partial admission', () => {
+    describe('response is partial admission', () => {
+      it('Give us details in case there is a hearing should appear in task list', () => {
 
-      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
-        new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new DirectionsQuestionnaireDraft()
-      )
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new DirectionsQuestionnaireDraft()
+        )
 
-      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-        expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
-      } else {
-        expect(taskList).to.be.undefined
-      }
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no hearing location selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert report selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: 'yes' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no other witnesses selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no availability selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be enabled after choosing availability and next steps', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'no' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(true)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no permission for expert not selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert evidence selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no selection of why expert is needed', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } },
+            expertEvidence: { expertEvidence: { option: 'yes' }, whatToExamine: 'evidence' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
     })
 
-    it('response is full defence', () => {
-      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
-        new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
-      )
+    describe('response is full defence', () => {
+      it('Give us details in case there is a hearing should appear in task list', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+        )
 
-      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-        expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
-      } else {
-        expect(taskList).to.be.undefined
-      }
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no hearing location selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft()
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert report selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: 'yes' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no other witnesses selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no availability selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            exportReport: { declared: false, rows: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be enabled after choosing availability and next steps', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'no' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(true)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no permission for expert not selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no expert evidence selected', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
+      it('Give us details in case there is a hearing should be disabled when there is no selection of why expert is needed', () => {
+        const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+          new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new DirectionsQuestionnaireDraft().deserialize({
+            externalId: claim.externalId,
+            selfWitness: { option: { option: 'no' } },
+            hearingLocation: 'central london',
+            expertRequired: { option: { option: 'yes' } },
+            exportReport: { declared: false, rows: [] },
+            otherWitnesses: { otherWitnesses: { option: 'yes' }, howMany: 1 },
+            availability: { hasUnavailableDates: false, unavailableDates: [] },
+            permissionForExpert: { option: { option: 'yes' } },
+            expertEvidence: { expertEvidence: { option: 'yes' }, whatToExamine: 'evidence' }
+          })
+        )
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          expect(taskList.tasks[0].completed).equal(false)
+        } else {
+          expect(taskList).to.be.undefined
+        }
+      })
+
     })
 
     it('response is full admit', () => {
@@ -590,14 +890,14 @@ describe('Defendant response task list builder', () => {
     it('Should return "Consider free mediation" when not completed for fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
       expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
     })
 
     it('Should not return "Consider free mediation" when not fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
-      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft())
+      const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
       expect(tasks.map(task => task.name)).not.to.contain(mediationTaskLabel)
     })
   })

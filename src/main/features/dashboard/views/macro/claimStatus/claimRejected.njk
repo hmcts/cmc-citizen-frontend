@@ -145,9 +145,13 @@
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s response.') }}</h2>
-    <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
-        {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
-    <p>{{ _downloadResponseLink(claim, 'Download your response') }}</p>
+
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
+      {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+    {% endif %}
+
+    <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
   </div>
 {% endmacro %}
 

@@ -87,7 +87,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
   })
 
   describe('on POST', () => {
-    const formData = { requestPermissionForExpert: 'no' }
+    const formData = { option : 'no' }
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
     checkAccessGuard(app, method)
@@ -145,7 +145,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
             .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
 
-        it('should redirect to dashboard page when permission for expert is requested', async () => {
+        it('should redirect to expert evidence page when permission for expert is requested', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -154,7 +154,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
           await request(app)
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ requestPermissionForExpert: 'yes' })
+            .send({ option: 'yes' })
             .expect(res => expect(res).to.be.redirect.toLocation(expertEvidencePage))
         })
       })

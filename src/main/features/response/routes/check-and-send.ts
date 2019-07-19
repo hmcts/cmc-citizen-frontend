@@ -21,7 +21,9 @@ import { Claim } from 'claims/models/claim'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -29,6 +31,14 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+  const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
+  const dqsEnabled: boolean = (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)
+  let datesUnavailable: string[]
+  if (dqsEnabled) {
+    datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
+  }
+  const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
+  form.model.type = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : form.model.type
   const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
 
   res.render(Paths.checkAndSendPage.associatedView, {
@@ -38,7 +48,11 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
+    dqsEnabled: dqsEnabled,
     mediationDraft: mediationDraft.document,
+    directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
+    datesUnavailable: datesUnavailable,
+    statementOfTruthType: statementOfTruthType,
     contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
     contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document),
     mediationPilot: mediationPilot
@@ -69,6 +83,7 @@ function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
 function deserializerFunction (value: any): StatementOfTruth | QualifiedStatementOfTruth {
   switch (value.type) {
     case SignatureType.BASIC:
+    case SignatureType.DIRECTION_QUESTIONNAIRE:
       return StatementOfTruth.fromObject(value)
     case SignatureType.QUALIFIED:
       return QualifiedStatementOfTruth.fromObject(value)
@@ -104,8 +119,10 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+      const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
+
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
         renderView(form, res)
       } else {
@@ -129,9 +146,13 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await draftService.save(draft, user.bearerToken)
         }
-        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
+        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, directionsQuestionnaireDraft, user)
         await draftService.delete(draft.id, user.bearerToken)
         await draftService.delete(mediationDraft.id, user.bearerToken)
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)) {
+          await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
+        }
 
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
       }
