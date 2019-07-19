@@ -32,7 +32,7 @@
     "@hmcts/cmc-common-frontend": "^1.56.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/cmc-validators": "^0.2.3",
-    "@hmcts/draft-store-client": "^1.1.1",
+    "@hmcts/draft-store-client": "^1.2.1",
     "@hmcts/info-provider": "^1.0.0",
     "@hmcts/nodejs-healthcheck": "^1.5.1",
     "@hmcts/nodejs-logging": "^3.0.0",
