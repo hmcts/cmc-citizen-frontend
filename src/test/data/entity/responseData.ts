@@ -130,6 +130,15 @@ export const partialAdmissionWithImmediatePaymentData = {
   amount: 3000
 }
 
+export const partialAdmissionWithImmediatePaymentDataV2 = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayImmediatelyData,
+  amount: 3000
+}
+
 export const partialAdmissionFromStatesPaidDefence = {
   ...baseResponseData,
   ...basePartialAdmissionData,

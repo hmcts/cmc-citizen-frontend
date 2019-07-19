@@ -27,7 +27,9 @@ import {
   partialAdmissionWithImmediatePaymentData,
   defenceWithDisputeData,
   partialAdmissionWithSoMPaymentBySetDateWithMediationData,
-  partialAdmissionWithPaymentByInstalmentsWithMediationData, partialAdmissionWithPaymentByInstalmentsData
+  partialAdmissionWithPaymentByInstalmentsWithMediationData,
+  partialAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithImmediatePaymentDataV2
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -412,6 +414,13 @@ export const samplePartialAdmissionWithPayImmediatelyData = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithImmediatePaymentData
+}
+
+export const samplePartialAdmissionWithPayImmediatelyDataV2 = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithImmediatePaymentDataV2
 }
 
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {

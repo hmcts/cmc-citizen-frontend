@@ -36,17 +36,8 @@ describe('Defendant response: confirmation page', () => {
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
-      it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
-
-        await request(app)
-          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response'))
-      })
-
       it('when part admit pay immediately should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData)
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyDataV2)
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
@@ -66,6 +57,15 @@ describe('Defendant response: confirmation page', () => {
             'If John Smith rejects your offer',
             'The court will review the case for the full amount of £200.'
           ))
+      })
+
+      it('should render page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response'))
       })
 
       it('when part admit pay by set date without mediation should render page when everything is fine', async () => {
