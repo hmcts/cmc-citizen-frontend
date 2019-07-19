@@ -78,7 +78,7 @@
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "3.4.1",
     "js-base64": "^2.5.1",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "mime": "^2.4.3",
     "moment": "^2.24.0",
     "moment-precise-range-plugin": "^1.3.0",
