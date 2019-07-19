@@ -19,6 +19,8 @@ import {
   fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
   fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  fullDefenceWithStatesLessThanClaimAmount,
+  fullDefenceWithStatesLessThanClaimAmountWithMediation,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData,
@@ -487,6 +489,16 @@ export const sampleFullDefenceRejectEntirely = {
 export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullDefenceWithStatesPaidGreaterThanClaimAmount
+}
+
+export const sampleFullDefenceWithStatesPaidLessThanClaimAmount = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesLessThanClaimAmount
+}
+
+export const sampleFullDefenceWithStatesPaidLessThanClaimAmountWithMediation = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesLessThanClaimAmountWithMediation
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
