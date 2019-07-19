@@ -119,7 +119,6 @@ describe('Defendant response: more time needed - confirmation page', () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -133,7 +132,6 @@ describe('Defendant response: more time needed - confirmation page', () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
             draftStoreServiceMock.resolveFind('mediation')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
