@@ -63,6 +63,7 @@ feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()
 feesMock.resolveGetHearingFeeRangeGroup().persist()
 courtFinderMock.resolveFind().persist()
+courtFinderMock.resolveCourtDetails().persist()
 
 const justForwardRequestHandler = {
   requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {
