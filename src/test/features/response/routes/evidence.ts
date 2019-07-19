@@ -64,6 +64,7 @@ describe('Defendant response: evidence', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -119,6 +120,7 @@ describe('Defendant response: evidence', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
             draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -132,6 +134,7 @@ describe('Defendant response: evidence', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -145,6 +148,7 @@ describe('Defendant response: evidence', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission', { response: { type: ResponseType.PART_ADMISSION } })
             draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -160,6 +164,7 @@ describe('Defendant response: evidence', () => {
           it('should render page when description too long', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -180,6 +185,7 @@ describe('Defendant response: evidence', () => {
         it('should render page when valid input', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
