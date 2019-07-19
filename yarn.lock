@@ -125,7 +125,7 @@
   dependencies:
     "@hmcts/class-validator" "^0.9.1-e"
 
-"@hmcts/draft-store-client@^1.1.1", "@hmcts/draft-store-client@^1.2.1":
+"@hmcts/draft-store-client@^1.2.1":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@hmcts/draft-store-client/-/draft-store-client-1.2.1.tgz#0406d7d772b5a29b75caf957738763c6a3c1ee62"
   integrity sha512-XdfpzCUNBBmx9uurNfhDNgigK0tuvtp530KRO5zQqxXtHEToz6XLLvyrnz8t3/o6bZExfbozOV6mt08jSrP7MA==
