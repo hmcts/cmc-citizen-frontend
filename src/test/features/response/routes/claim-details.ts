@@ -35,6 +35,7 @@ describe('Defendant response: claim details page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -59,6 +60,7 @@ describe('Defendant response: claim details page', () => {
           }
         })
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -70,6 +72,7 @@ describe('Defendant response: claim details page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(
           { claim: { ...claimStoreServiceMock.sampleClaimObj.claim, evidence: null } })
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)

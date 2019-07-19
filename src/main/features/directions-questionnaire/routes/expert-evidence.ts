@@ -9,6 +9,7 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
+import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 
 function renderPage (res: express.Response, form: Form<ExpertEvidence>) {
   res.render(Paths.expertEvidencePage.associatedView, { form: form })
@@ -30,6 +31,10 @@ export default express.Router()
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
+
+        if (form.model.expertEvidence.option === YesNoOption.NO.option && draft.document.expertEvidence && draft.document.expertEvidence.expertEvidence && draft.document.expertEvidence.expertEvidence.option === YesNoOption.YES.option) {
+          draft.document.whyExpertIsNeeded = new WhyExpertIsNeeded()
+        }
 
         draft.document.expertEvidence = form.model
 

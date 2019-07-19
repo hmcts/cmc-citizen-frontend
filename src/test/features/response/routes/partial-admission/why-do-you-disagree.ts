@@ -66,6 +66,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
               type: ResponseType.PART_ADMISSION
             }
           })
+          draftStoreServiceMock.resolveFind('mediation')
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -109,6 +110,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
           it('should return 500 and render error page when cannot save response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -127,6 +129,7 @@ describe('Defendant: partial admission - why do you disagree?', () => {
                 type: ResponseType.PART_ADMISSION
               }
             })
+            draftStoreServiceMock.resolveFind('mediation')
           })
 
           it('when form is valid should render page', async () => {
