@@ -81,7 +81,7 @@ describe('Directions Questionnaire - hearing location', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withoutText('is the nearest to the home address you gave us.'))
+            .expect(res => expect(res).to.be.successful.withoutText('is the nearest to your address you gave us.'))
         })
       })
 
@@ -91,11 +91,12 @@ describe('Directions Questionnaire - hearing location', () => {
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
           courtFinderMock.resolveFind()
+          courtFinderMock.resolveCourtDetails()
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name} is the nearest to the home address you gave us.`))
+            .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name} is the nearest to your home address you gave us.`))
         })
       })
 
@@ -196,6 +197,7 @@ describe('Directions Questionnaire - hearing location', () => {
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
             courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
 
             await request(app)
               .post(pagePath)

@@ -86,9 +86,9 @@ export class DefendantResponseSteps {
         claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
         claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
       )
-      defendantSteps.selectTaskFreeMediation()
-      freeMediationPage.chooseNo()
     }
+    defendantSteps.selectTaskFreeMediation()
+    freeMediationPage.chooseNo()
     defendantSteps.selectCheckAndSubmitYourDefence()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
     I.see('You’ve submitted your response')

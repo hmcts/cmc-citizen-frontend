@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput %}
 
-{% set heading = t('Do you want witnesses to give evidence?') %}
+{% set heading = 'Do you want other people to give evidence?' %}
 
 {% block content %}
   <div class="grid-row">
@@ -13,11 +13,11 @@
         <fieldset class="form-group {% if error %} form-group-error {% endif %}">
           <legend>
             <span class="visuallyhidden">
-              {{ t('Do you want witnesses to give evidence?') }}
+              {{ t('Do you want other people to give evidence?') }}
             </span>
           </legend>
 
-          <p>{{ t('A witness is someone who can confirm facts about the claim, for example someone who saw work being done.') }}</p>
+          <p>{{ t('This could be anyone who can confirm your version of events.') }}</p>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
           {{
           radioOption(form = form, label = 'Yes', name = 'otherWitnesses', value = YesNoOption.YES.option, checked = form.valueFor('otherWitnesses').option === YesNoOption.YES.option)

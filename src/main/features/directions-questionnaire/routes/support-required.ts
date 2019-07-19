@@ -1,7 +1,5 @@
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
-import { Paths as ResponsePaths } from 'response/paths'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Form } from 'forms/form'
 import { SupportRequired } from 'directions-questionnaire/forms/models/supportRequired'
 import { Draft } from '@hmcts/draft-store-client'
@@ -9,10 +7,9 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
-import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
-import { MadeBy } from 'offer/form/models/madeBy'
-import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
+import { getPreferredParty, getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { Claim } from 'claims/models/claim'
 
 function renderPage (res: express.Response, form: Form<SupportRequired>) {
   res.render(Paths.supportPage.associatedView, { form: form })
@@ -33,15 +30,14 @@ export default express.Router()
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
-        const claim: Claim = res.locals.claim
         draft.document.supportRequired = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-
-        if (getUsersRole(claim, user) === MadeBy.DEFENDANT) {
-          res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+        const claim: Claim = res.locals.claim
+        if (getUsersRole(claim, user) === getPreferredParty(claim)) {
+          res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: claim.externalId }))
         } else {
-          res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+          res.redirect(Paths.hearingExceptionalCircumstancesPage.evaluateUri({ externalId: claim.externalId }))
         }
       }
     }))

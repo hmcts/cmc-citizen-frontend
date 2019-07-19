@@ -1,8 +1,10 @@
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
+import * as config from 'config'
 
-const baseURL = 'https://courttribunalfinder.service.gov.uk'
-const endpointPath = /\/search\/results.json\?postcode=.+&aol=.+&spoe=.+/
+const baseURL = `${config.get<string>('claim-store.url')}`
+const endpointPath = /\/court-finder\/search-postcode\/.+/
+const detailEndpointPath = /\/court-finder\/court-details\/.+/
 
 export const searchResponse = [
   {
@@ -37,14 +39,26 @@ export const searchResponse = [
   }
 ]
 
-export function resolveFind () {
-  mock(baseURL)
+export const courtDetailsResponse = {
+  name: 'Birmingham District Probate Registry',
+  slug: 'birmingham-district-probate-registry',
+  facilities: []
+}
+
+export function resolveFind (): mock.Scope {
+  return mock(baseURL)
     .get(endpointPath)
     .reply(HttpStatus.OK, searchResponse)
 }
 
-export function rejectFind () {
-  mock(baseURL)
+export function resolveCourtDetails (): mock.Scope {
+  return mock(baseURL)
+    .get(detailEndpointPath)
+    .reply(HttpStatus.OK, courtDetailsResponse)
+}
+
+export function rejectFind (): mock.Scope {
+  return mock(baseURL)
     .get(endpointPath)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR)
 }

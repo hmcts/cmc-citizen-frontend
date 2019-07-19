@@ -3,29 +3,24 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import 'test/routes/expectations'
-
-import { Paths } from 'directions-questionnaire/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
-
 import { app } from 'main/app'
-
+import { checkAuthorizationGuards } from 'test/routes/authorization-check'
+import { Paths } from 'directions-questionnaire/paths'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 import { YesNoOption } from 'models/yesNoOption'
 
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
+const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
+const whyExpertIsNeededPage = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
+const selfWitnessPage = Paths.selfWitnessPage.evaluateUri({ externalId: externalId })
+const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
 }
-
-const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-
-const cookieName: string = config.get<string>('session.cookieName')
-const datesPage = Paths.hearingDatesPage.evaluateUri({ externalId: externalId })
-const pagePath = Paths.otherWitnessesPage.evaluateUri({ externalId: externalId })
 
 function checkAccessGuard (app: any, method: string) {
 
@@ -38,10 +33,10 @@ function checkAccessGuard (app: any, method: string) {
   })
 }
 
-describe('Directions Questionnaire - other witnesses page', () => {
+describe('Directions questionnaire - expert evidence', () => {
   attachDefaultHooks(app)
 
-  describe('on GET', () => {
+  describe('on Get', () => {
     const method = 'get'
     checkAuthorizationGuards(app, method, pagePath)
     checkAccessGuard(app, method)
@@ -49,7 +44,6 @@ describe('Directions Questionnaire - other witnesses page', () => {
     context('when user authorised', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-
       })
 
       it('should return 500 and render error page when cannot retrieve claims', async () => {
@@ -79,14 +73,14 @@ describe('Directions Questionnaire - other witnesses page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Do you want witnesses to give evidence?'))
+          .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?'))
       })
     })
   })
 
-  describe('on POST', () => {
-    const validFormData = { otherWitnesses: YesNoOption.NO.option }
-    const invalidFormData = { otherWitnesses: YesNoOption.YES.option }
+  describe('on Post', () => {
+    const validFormData = { expertEvidence: YesNoOption.YES.option, whatToExamine: 'bank statements' }
+    const invalidFormData = { expertEvidence: undefined }
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
@@ -120,10 +114,10 @@ describe('Directions Questionnaire - other witnesses page', () => {
 
       context('when form is valid', async () => {
         it('should return 500 and render error page when cannot save DQ draft', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.rejectSave()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
           await request(app)
             .post(pagePath)
@@ -132,7 +126,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to dates page', async () => {
+        it('should redirect to whyExpertIsNeededPage', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
@@ -142,7 +136,20 @@ describe('Directions Questionnaire - other witnesses page', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(validFormData)
-            .expect(res => expect(res).to.be.redirect.toLocation(datesPage))
+            .expect(res => expect(res).to.be.redirect.toLocation(whyExpertIsNeededPage))
+        })
+
+        it('should redirect to self witnesses page', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveSave()
+
+          await request(app)
+            .post(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .send({ expertEvidence: YesNoOption.NO.option })
+            .expect(res => expect(res).to.be.redirect.toLocation(selfWitnessPage))
         })
       })
 
@@ -156,7 +163,7 @@ describe('Directions Questionnaire - other witnesses page', () => {
             .post(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .send(invalidFormData)
-            .expect(res => expect(res).to.be.successful.withText('Do you want witnesses to give evidence', 'div class="error-summary"'))
+            .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?', 'div class="error-summary"'))
         })
       })
     })

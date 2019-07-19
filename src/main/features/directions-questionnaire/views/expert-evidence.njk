@@ -1,0 +1,38 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, textArea, saveAndContinueButton %}
+
+{% set heading = 'Does the claim involve something an expert can still examine?' %}
+
+{% block content %}
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Expert Evidence" data-event-label-from="expertEvidence" novalidate>
+      {{ csrfProtection(csrf) }}
+
+      {% set error = form.errorFor('expertEvidence') %}
+      <fieldset id="expertEvidence[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        <legend class="visually-hidden">{{ t(heading) }}</legend>
+
+        <p>{{ t('This could include photographs or videos.') }}</p>
+        {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+
+        {{ radioOption(label = 'Yes', name = 'expertEvidence', value = YesNoOption.YES.option, checked = form.valueFor('expertEvidence').option === YesNoOption.YES.option) }}
+
+        <div class="form-group panel panel-border-narrow js-hidden" id="expertEvidence-yes" aria-hidden="false">
+          {{ textArea(label = 'What is there to examine?', name = 'whatToExamine', form = form) }}
+        </div>
+
+        {{ radioOption(label = 'No', name = 'expertEvidence', value = YesNoOption.NO.option, checked = form.valueFor('expertEvidence').option === YesNoOption.NO.option) }}
+
+        <div class="panel panel-border-narrow js-hidden" id="expertEvidence-no" aria-hidden="false">
+          {{ t('You can’t use an expert in this case.') }}
+        </div>
+
+      </fieldset>
+        {{ saveAndContinueButton() }}
+    </form>
+  </div>
+</div>
+{% endblock %}
+

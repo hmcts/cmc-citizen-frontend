@@ -14,6 +14,7 @@ import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResp
 import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -36,16 +37,6 @@ function buildCaseSubmissionHeaders (claimant: User, features: string[]): object
 export class ClaimStoreClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
     // Nothing to do
-  }
-
-  savePrePayment (externalId: string, submitter: User): Promise<string> {
-    return this.request.post(`${claimStoreApiUrl}/${externalId}/pre-payment`, {
-      headers: {
-        Authorization: `Bearer ${submitter.bearerToken}`
-      }
-    }).then(caseReference => {
-      return caseReference.case_reference
-    })
   }
 
   savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
@@ -84,8 +75,8 @@ export class ClaimStoreClient {
       })
   }
 
-  saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, mediationDraft: Draft<MediationDraft>, user: User): Promise<void> {
-    const response = ResponseModelConverter.convert(draft.document, mediationDraft.document, claim)
+  saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, mediationDraft: Draft<MediationDraft>, directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft>, user: User): Promise<void> {
+    const response = ResponseModelConverter.convert(draft.document, mediationDraft.document, directionsQuestionnaireDraft.document, claim)
     const externalId: string = claim.externalId
 
     const options = {
