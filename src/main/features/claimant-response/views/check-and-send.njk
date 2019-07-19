@@ -50,7 +50,7 @@
         bold = true
       ) }}
     {% endif %}
-    {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances %}
+    {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === 'no' %}
       {{ row(
         label = 'Briefly explain your reasons',
         value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,

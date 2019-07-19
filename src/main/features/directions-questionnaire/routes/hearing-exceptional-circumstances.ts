@@ -12,6 +12,7 @@ import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestio
 import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
 import { MadeBy } from 'offer/form/models/madeBy'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
+import { HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
 
 function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
   const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
@@ -47,14 +48,22 @@ export default express.Router()
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
-        draft.document.exceptionalCircumstances = form.model
         if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
           const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
 
           if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
+            form.model.reason = undefined
+          }
+        } else {
+          if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
+            draft.document.hearingLocation = new HearingLocation()
+            // todo remove the below line once the backend validation of mandatory is removed for courtName
+            draft.document.hearingLocation.courtName = ''
+            form.model.reason = undefined
           }
         }
+        draft.document.exceptionalCircumstances = form.model
         await new DraftService().save(draft, user.bearerToken)
         if (party === MadeBy.CLAIMANT) {
           if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
