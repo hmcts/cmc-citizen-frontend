@@ -1,10 +1,11 @@
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { YesNoOption } from 'models/yesNoOption'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
+import { Claim } from 'claims/models/claim'
 
 export class DetailsInCaseOfHearingTask {
-  static isCompleted (responseDraft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): boolean {
-    if (!directionsQuestionnaireDraft.exceptionalCircumstances.isCompleted()) {
+  static isCompleted (responseDraft: DraftClaimantResponse, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): boolean {
+    if (!claim.claimData.defendant.isBusiness() && !directionsQuestionnaireDraft.exceptionalCircumstances.isClaimantCompleted()) {
       return false
     } else if (!directionsQuestionnaireDraft.hearingLocation) {
       return false
