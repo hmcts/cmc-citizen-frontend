@@ -96,7 +96,7 @@
           {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
             {% set alternatePaymentMethodResponse = t('Immediately') %}
           {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-            {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: alternatePaymentMethod | date }) %}
+            {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: alternatePaymentMethodDate | date }) %}
           {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
             {% set alternatePaymentMethodResponse = t('By instalments') %}
           {% endif %}

@@ -65,7 +65,8 @@ export default express.Router()
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
         mediationEnabled: FeatureToggles.isEnabled('mediation'),
         mediationDraft: mediationDraft.document,
-        alternatePaymentMethod: draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+        alternatePaymentMethodDate: (draft.document.alternatePaymentMethod && draft.document.alternatePaymentMethod.paymentDate) ?
+          draft.document.alternatePaymentMethod.paymentDate.date.toMoment() : undefined
       })
     })
   )
