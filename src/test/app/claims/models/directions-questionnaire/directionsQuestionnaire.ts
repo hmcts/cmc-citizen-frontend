@@ -55,5 +55,17 @@ describe('DirectionsQuestionnaire', () => {
 
       expect(DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)).to.deep.equal(expectedData)
     })
+
+    it('should deserialize undefined directions questionnaire and it should return undefined', () => {
+      expect(DirectionsQuestionnaire.deserialize(undefined)).to.be.equal(undefined)
+    })
+
+    it('from object should return response object when we pass the dqs from backend', () => {
+      const directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft =
+        new DirectionsQuestionnaireDraft().deserialize(sampleDirectionsQuestionnaireDraftObj)
+      const directionsQuestionnaireResponseData = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)
+
+      expect(DirectionsQuestionnaire.fromObject(directionsQuestionnaireResponseData)).to.deep.equal(directionsQuestionnaireResponseData)
+    })
   })
 })
