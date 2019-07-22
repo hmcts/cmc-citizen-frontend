@@ -12,7 +12,7 @@ describe('calendar', () => {
     calendarClient = new CalendarClient()
   })
 
-  it(`should return following Monday when date is Saturday and no days to add`, async () => {
+  it('should return correct date when calendar api is called', async () => {
     mockNextWorkingDay(SATURDAY)
 
     const nextWorkingDay = await calendarClient.getNextWorkingDay(SATURDAY, 5)
@@ -29,7 +29,7 @@ describe('calendar', () => {
       )
   })
 
-  it('should return Missing date when no date is passed', () => {
+  it('should return Missing date error when no date is passed', () => {
     mockNextWorkingDay(SATURDAY)
 
     return calendarClient.getNextWorkingDay(undefined, 0)
