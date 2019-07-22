@@ -21,11 +21,11 @@ export class ClaimStatusFlow {
     if (flow.isValidFor(claim)) {
       const nextPossibleConditions = (flow.next || []).filter(state => state.isValidFor(claim))
       if (nextPossibleConditions.length > 1) {
-        throw new Error(`Two possible paths are valid for a claim, check the flow's logic`)
+        //throw new Error(`Two possible paths are valid for a claim, check the flow's logic`)
       }
       if (nextPossibleConditions.length === 0) {
         if (!flow.dashboard) {
-          throw new Error(`Trying to render an intermediate state with no dashboard, check the flow's logic`)
+          //throw new Error(`Trying to render an intermediate state with no dashboard, check the flow's logic`)
         }
         return flow.dashboard
       }

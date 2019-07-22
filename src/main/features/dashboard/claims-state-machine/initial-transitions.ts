@@ -10,6 +10,33 @@ import * as path from 'path'
 import { InitialStates } from 'claims/models/claim-states/initial-states'
 import { FullDefenceStates } from 'claims/models/claim-states/full-defence-states'
 
+function noResponse (claim): StateMachine {
+  return new StateMachine({
+    init: InitialStates.NO_RESPONSE,
+    transitions: [
+      {
+        name: 'checkMoreTimeRequested',
+        from: [InitialStates.NO_RESPONSE],
+        to: InitialStates.MORE_TIME_REQUESTED
+      },
+      {
+        name: 'checkCCJEnabled',
+        from: [InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
+        to: InitialStates.NO_RESPONSE_PAST_DEADLINE
+      }
+    ],
+    methods: {
+      onBeforeCheckMoreTimeRequested () {
+        return !claim.moreTimeRequested
+      },
+
+      onBeforeCheckCCJEnabled () {
+        return isPastDeadline(MomentFactory.currentDateTime(), claim.responseDeadline)
+      }
+    }
+  })
+}
+
 export function initialTransitions (claim: Claim): StateMachine {
   return new StateMachine({
     init: 'init',
@@ -21,17 +48,6 @@ export function initialTransitions (claim: Claim): StateMachine {
         to: InitialStates.NO_RESPONSE
       },
       {
-        name: 'checkMoreTimeRequested',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE],
-        to: InitialStates.MORE_TIME_REQUESTED
-      },
-      {
-        name: 'checkCCJEnabled',
-        from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
-        to: InitialStates.NO_RESPONSE_PAST_DEADLINE
-      },
-
-      {
         name: 'checkIsFullDefence',
         from: [InitialStates.INIT],
         to: FullDefenceStates.FULL_DEFENCE
@@ -40,7 +56,8 @@ export function initialTransitions (claim: Claim): StateMachine {
     data: {
       log: {
         invalidTransitions: []
-      }
+      },
+      noResponse: noResponse(claim)
     },
     methods: {
 
@@ -49,11 +66,15 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       onBeforeCheckNoResponse () {
-        return !claim.response
-      },
+        if (!claim.response) {
+          let noRepsonse = this.noResponse
 
-      onBeforeCheckMoreTimeRequested () {
-        return this.state !== 'init' && claim.moreTimeRequested
+          _.each(noRepsonse.transitions(), function (eachTransaction) {
+            noRepsonse[eachTransaction]()
+          })
+        }
+
+        return !claim.response
       },
 
       onBeforeCheckIsFullDefence () {
@@ -65,6 +86,9 @@ export function initialTransitions (claim: Claim): StateMachine {
       },
 
       findState (currentSate: StateMachine) {
+        _.each(currentSate.transitions(), function (eachTransaction) {
+          currentSate[eachTransaction]()
+        })
         _.each(currentSate.transitions(), function (eachTransaction) {
           currentSate[eachTransaction]()
         })
