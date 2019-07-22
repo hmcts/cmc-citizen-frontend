@@ -19,6 +19,8 @@ import {
   fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
   fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  fullDefenceWithStatesLessThanClaimAmount,
+  fullDefenceWithStatesLessThanClaimAmountWithMediation,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData,
@@ -274,6 +276,10 @@ export const settlementWithSetDateAndAcceptation = {
         }
       },
       {
+        type: 'ACCEPTATION',
+        madeBy: MadeBy.CLAIMANT.value
+      },
+      {
         madeBy: MadeBy.DEFENDANT.value,
         type: 'COUNTERSIGNATURE'
       }
@@ -284,8 +290,8 @@ export const partySettlementWithInstalmentsAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
-      paymentIntention: { 'paymentDate': MomentFactory.currentDate().year(2), 'paymentOption': 'BY_SPECIFIED_DATE' }
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
+      paymentIntention: { 'paymentDate': MomentFactory.currentDate().add(2, 'years'), 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
   }, {
@@ -297,9 +303,9 @@ export const partySettlementWithInstalmentsAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: {
-        paymentDate: MomentFactory.currentDate().year(2),
+        paymentDate: MomentFactory.currentDate().add(2, 'years'),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
@@ -314,7 +320,7 @@ export const partySettlementWithSetDateAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
@@ -327,9 +333,9 @@ export const partySettlementWithSetDateAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: {
-        paymentDate: MomentFactory.currentDate().year(2),
+        paymentDate: MomentFactory.currentDate().add(2, 'years'),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
@@ -432,6 +438,16 @@ export const sampleFullDefenceRejectEntirely = {
 export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullDefenceWithStatesPaidGreaterThanClaimAmount
+}
+
+export const sampleFullDefenceWithStatesPaidLessThanClaimAmount = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesLessThanClaimAmount
+}
+
+export const sampleFullDefenceWithStatesPaidLessThanClaimAmountWithMediation = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesLessThanClaimAmountWithMediation
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {

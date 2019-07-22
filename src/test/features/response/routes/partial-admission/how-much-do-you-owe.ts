@@ -74,6 +74,8 @@ describe('Defendant: partial admission - ' + header, () => {
               howMuchDoYouOwe: new HowMuchDoYouOwe().deserialize({ amount: 100 })
             }
           })
+          draftStoreServiceMock.resolveFind('mediation')
+
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -117,6 +119,7 @@ describe('Defendant: partial admission - ' + header, () => {
           it('should return 500 and render error page when cannot save response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -138,6 +141,7 @@ describe('Defendant: partial admission - ' + header, () => {
           })
 
           it('when form is valid should render page', async () => {
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
             await request(app)
               .post(pagePath)
@@ -148,6 +152,8 @@ describe('Defendant: partial admission - ' + header, () => {
           })
 
           it('when form is invalid should render page', async () => {
+            draftStoreServiceMock.resolveFind('mediation')
+
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)

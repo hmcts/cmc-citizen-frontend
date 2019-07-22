@@ -26,6 +26,7 @@ export default express.Router()
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
       }
+
       res.render(Paths.claimantPage.associatedView, {
         claim: claim,
         mediationDeadline: mediationDeadline
