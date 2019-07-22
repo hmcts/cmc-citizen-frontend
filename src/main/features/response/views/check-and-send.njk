@@ -66,6 +66,15 @@
 
     {% endif %}
 
+    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+      {{
+      whenWillYouPayRow(
+        value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
+        url = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
+      )
+      }}
+    {% endif %}
+
     {{ tableEnd() }}
 
     {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
@@ -264,15 +273,6 @@
       {% endif %}
     {% endif %}
 
-    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
-      {{
-      whenWillYouPayRow(
-        value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
-        url = FullAdmissionPaths.paymentOptionPage.evaluateUri({ externalId: claim.externalId })
-      )
-      }}
-    {% endif %}
-
     {% if draft.isResponseFullyAdmitted() and not draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
       {{
       notImmediatePayment(
@@ -302,7 +302,9 @@
       {{ tableEnd() }}
     {% endif %}
 
-    {% if mediationEnabled %}
+    {% if mediationEnabled and ((admissionsApplicable
+      and (draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyBecausePaidWhatOwed()))
+      or draft.isResponseRejectedFullyWithDispute()) %}
       {{ tableStart('freeMediation', 'Free telephone mediation') }}
       {{
         row(
@@ -312,7 +314,9 @@
           bold = true
         )
       }}
-      {% if mediationDraft.youCanOnlyUseMediation %}
+      {% if mediationDraft.youCanOnlyUseMediation
+        and mediationDraft.willYouTryMediation.option === 'yes'
+        and not ( mediationDraft.youCanOnlyUseMediation.option === 'yes' and mediationDraft.willYouTryMediation.option === 'yes' ) %}
         {{
           row(
             label = 'Agree to mediation conditions',
