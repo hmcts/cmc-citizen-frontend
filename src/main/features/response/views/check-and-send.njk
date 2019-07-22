@@ -312,7 +312,9 @@
           bold = true
         )
       }}
-      {% if mediationDraft.youCanOnlyUseMediation %}
+      {% if mediationDraft.youCanOnlyUseMediation
+        and mediationDraft.willYouTryMediation.option === 'yes'
+        and not ( mediationDraft.youCanOnlyUseMediation.option === 'yes' and mediationDraft.willYouTryMediation.option === 'yes' ) %}
         {{
           row(
             label = 'Agree to mediation conditions',
