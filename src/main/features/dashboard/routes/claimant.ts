@@ -9,6 +9,7 @@ import { Claim } from 'claims/models/claim'
 import { PartyType } from 'common/partyType'
 import { User } from 'idam/user'
 import { ForbiddenError } from 'errors'
+import { Moment } from 'moment'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 const draftExternalId = 'draft'
@@ -20,11 +21,14 @@ export default express.Router()
       const { externalId } = req.params
 
       const claim = externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
+      const mediationDeadline: Moment = await claim.respondToMediationDeadline()
+
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
       }
       res.render(Paths.claimantPage.associatedView, {
-        claim: claim
+        claim: claim,
+        mediationDeadline: mediationDeadline
       })
     }))
   .post(Paths.claimantPage.uri,

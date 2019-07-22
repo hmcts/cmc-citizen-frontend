@@ -25,6 +25,7 @@ import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
+import { CalendarClient } from 'claims/calendarClient'
 
 interface State {
   status: ClaimStatus
@@ -80,11 +81,12 @@ export class Claim {
     return this.respondedAt.clone().add(daysForService + daysForResponse, 'days')
   }
 
-  get respondToMediationDeadline (): Moment {
+  async respondToMediationDeadline (): Promise<Moment> {
     if (!this.respondedAt) {
       return undefined
     }
-    return this.respondedAt.clone().add('5', 'days')
+
+    return new CalendarClient().getNextWorkingDay(this.respondedAt, 5)
   }
 
   get remainingDays (): number {

@@ -151,7 +151,7 @@
         { defendantName: claim.claimData.defendant.name }) }}</p>
     <p>{{ t(externalLink('Find out how mediation works', 'https://formfinder.hmctsformfinder.justice.gov.uk/ex730-eng.pdf') + ' (PDF, 399KB)') | safe }}</p>
     <p>{{ t('You need to email {{ emailAddress }} before before 4pm on {{ respondToMediationDeadline }} to tell us if you agree to mediation or not.',
-        { emailAddress: supportEmailAddress, respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}</p>
+        { emailAddress: supportEmailAddress, respondToMediationDeadline: mediationDeadline | date }) }}</p>
     <p>{{ t('If you don’t send an email before the deadline, the claim will proceed without mediation.') }}</p>
     <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
   </div>
