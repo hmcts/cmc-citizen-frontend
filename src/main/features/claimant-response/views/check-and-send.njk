@@ -37,7 +37,6 @@
       {% if mediationDraft %}
         {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot) }}
       {% endif %}
-
     {% elseif draft.intentionToProceed %}
       <div class="form-group">
         {{ row(label = 'Do you want to proceed with the claim?', bold = true, value = draft.intentionToProceed.proceed | yesNo,
@@ -61,7 +60,7 @@
 
         {{ row(label = 'Do you accept or reject the defendant’s admission?', bold = true, value = settleAdmittedResponse,
           changeLink = ClaimantResponsePaths.settleAdmittedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
-        {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES %}
+        {% if draft.settleAdmitted.admitted === YesNoOption.NO and claim.response.freeMediation === YesNoOption.YES.option %}
           {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot) }}
         {% endif %}
       {% endif %}
