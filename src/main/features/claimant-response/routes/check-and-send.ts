@@ -55,6 +55,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
       const paymentIntention: PaymentIntention = alreadyPaid ? undefined : getPaymentIntention(draft.document, claim)
+
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
         claim: claim,
@@ -63,7 +64,8 @@ export default express.Router()
         alreadyPaid: alreadyPaid,
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
         mediationEnabled: FeatureToggles.isEnabled('mediation'),
-        mediationDraft: mediationDraft.document
+        mediationDraft: mediationDraft.document,
+        alternatePaymentMethod: draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
       })
     })
   )
