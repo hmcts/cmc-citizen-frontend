@@ -14,6 +14,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -44,7 +45,7 @@ describe('Claimant response: confirmation page', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
-          claimStoreServiceMock.mockNextWorkingDay('2019-07-01')
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)
             .get(pagePath)
