@@ -24,7 +24,7 @@
   <p>
     {{ t('{{ claimantName }} confirmed you paid {{ amount }} on {{ moneyReceivedOn }}.',
       { claimantName: claim.claimData.claimant.name,
-        amount: claim.response.paymentDeclaration.paidAmount | numeral,
+        amount: claim.response.amount | numeral,
         moneyReceivedOn: claim.response.paymentDeclaration.paidDate | date }) }}
   </p>
   <p>{{ downloadResponseLink(claim) }}</p>
