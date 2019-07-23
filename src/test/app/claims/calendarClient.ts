@@ -6,7 +6,7 @@ import { mockNextWorkingDay, rejectNextWorkingDay } from 'test/http-mocks/claim-
 describe('calendar', () => {
   const SATURDAY = MomentFactory.parse('2019-06-29')
   const MONDAY_AFTER = '2019-06-29'
-  let calendarClient: CalendarClient = new CalendarClient()
+  let calendarClient: CalendarClient
 
   beforeEach(() => {
     calendarClient = new CalendarClient()
@@ -23,7 +23,7 @@ describe('calendar', () => {
   it('should return Unable to get next working day bad request', () => {
     rejectNextWorkingDay(SATURDAY)
 
-    return calendarClient.getNextWorkingDay(SATURDAY, 0)
+    calendarClient.getNextWorkingDay(SATURDAY, 0)
       .catch(err =>
         expect(err.toString()).to.contains('Unable to get next working day')
       )
@@ -32,7 +32,7 @@ describe('calendar', () => {
   it('should return Missing date error when no date is passed', () => {
     mockNextWorkingDay(SATURDAY)
 
-    return calendarClient.getNextWorkingDay(undefined, 0)
+    calendarClient.getNextWorkingDay(undefined, 0)
       .catch(err =>
         expect(err.toString()).to.contains('Missing date')
       )
