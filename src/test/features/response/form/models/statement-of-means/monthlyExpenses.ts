@@ -7,7 +7,7 @@ import { ExpenseSource, ValidationErrors as MonthlyExpensesSourceValidationError
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 
-function getSampleMonthtlyExpensesObject (options?: object) {
+function getSampleMonthlyExpensesObject (options?: object) {
   const DEFAULT_SAMPLE_VALID_MONTHLY_EXPENSES = {
     mortgage: {
       amount: 100,
@@ -53,7 +53,7 @@ function getSampleMonthtlyExpensesObject (options?: object) {
       amount: 100,
       schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
-    phone: {
+    mobilePhone: {
       amount: 100,
       schedule: IncomeExpenseSchedule.TWO_WEEKS
     },
@@ -86,7 +86,7 @@ function forConstructor () {
     undefined, new ExpenseSource(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, this.sampleData.foodAndHousekeeping.amount, this.sampleData.foodAndHousekeeping.schedule),
     undefined, new ExpenseSource(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, this.sampleData.tvAndBroadband.amount, this.sampleData.tvAndBroadband.schedule),
     undefined, new ExpenseSource(MonthlyExpenseType.HIRE_PURCHASES.displayValue, this.sampleData.hirePurchase.amount, this.sampleData.hirePurchase.schedule),
-    undefined, new ExpenseSource(MonthlyExpenseType.MOBILE_PHONE.displayValue, this.sampleData.phone.amount, this.sampleData.phone.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.MOBILE_PHONE.displayValue, this.sampleData.mobilePhone.amount, this.sampleData.mobilePhone.schedule),
     undefined, new ExpenseSource(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, this.sampleData.maintenance.amount, this.sampleData.maintenance.schedule)
   )
 }
@@ -149,9 +149,9 @@ function forFromObjectMethod () {
       schedule: this.sampleData.hirePurchase.schedule.value
     },
     mobilePhoneDeclared: this.sampleData.mobilePhoneDeclared,
-    phone: {
-      amount: this.sampleData.phone.amount,
-      schedule: this.sampleData.phone.schedule.value
+    mobilePhone: {
+      amount: this.sampleData.mobilePhone.amount,
+      schedule: this.sampleData.mobilePhone.schedule.value
     },
     maintenanceDeclared: this.sampleData.maintenanceDeclared,
     maintenance: {
@@ -230,10 +230,10 @@ function forDeserialize () {
       schedule: this.sampleData.hirePurchase.schedule
     },
     mobilePhoneDeclared: this.sampleData.mobilePhoneDeclared,
-    phone: {
+    mobilePhone: {
       name: MonthlyExpenseType.MOBILE_PHONE.displayValue,
-      amount: this.sampleData.phone.amount,
-      schedule: this.sampleData.phone.schedule
+      amount: this.sampleData.mobilePhone.amount,
+      schedule: this.sampleData.mobilePhone.schedule
     },
     maintenanceDeclared: this.sampleData.maintenanceDeclared,
     maintenance: {
@@ -285,8 +285,8 @@ describe('MonthlyExpenses', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const sampleMonthlyExpensesData = getSampleMonthtlyExpensesObject().forFromObjectMethod()
-      const expectedMonthlyExpensesObject = getSampleMonthtlyExpensesObject().forConstructor()
+      const sampleMonthlyExpensesData = getSampleMonthlyExpensesObject().forFromObjectMethod()
+      const expectedMonthlyExpensesObject = getSampleMonthlyExpensesObject().forConstructor()
 
       expect(MonthlyExpenses.fromObject(sampleMonthlyExpensesData)).to.deep.equal(expectedMonthlyExpensesObject)
     })
@@ -298,7 +298,7 @@ describe('MonthlyExpenses', () => {
     })
 
     it('should return instance initialised with set fields from object provided', () => {
-      expect(new MonthlyExpenses().deserialize(getSampleMonthtlyExpensesObject().forDeserialize())).to.deep.equal(getSampleMonthtlyExpensesObject().forConstructor())
+      expect(new MonthlyExpenses().deserialize(getSampleMonthlyExpensesObject().forDeserialize())).to.deep.equal(getSampleMonthlyExpensesObject().forConstructor())
     })
   })
 
@@ -343,7 +343,7 @@ describe('MonthlyExpenses', () => {
 
       describe('when successful', () => {
         it('should return no error when `hasSource` is true and `source` is invalid', () => {
-          const sampleMonthlyExpensesData = getSampleMonthtlyExpensesObject().forFromObjectMethod()
+          const sampleMonthlyExpensesData = getSampleMonthlyExpensesObject().forFromObjectMethod()
 
           const errors = validator.validateSync(sampleMonthlyExpensesData)
           expect(errors.length).to.equal(0)

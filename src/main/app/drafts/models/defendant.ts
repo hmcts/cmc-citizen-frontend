@@ -24,8 +24,8 @@ export class Defendant implements CompletableTask {
       if (input.email) {
         this.email = new Email().deserialize(input.email)
       }
-      if (input.phoneNumber) {
-        this.phone = Phone.fromObject(input.phoneNumber)
+      if (input.phone) {
+        this.phone = Phone.fromObject(input.phone)
       }
       if (input.partyDetails && input.partyDetails.type) {
         switch (input.partyDetails.type) {
