@@ -79,7 +79,7 @@ const testData = [
       'Download their response'
     ],
     defendantAssertions: [
-      `The claimant has rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
+      `John Smith has rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
       'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
       'You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
       'Download your response'
