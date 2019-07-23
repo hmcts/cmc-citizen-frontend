@@ -46,6 +46,7 @@ describe('Defendant user details: your date of birth page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -77,6 +78,7 @@ describe('Defendant user details: your date of birth page', () => {
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -88,6 +90,7 @@ describe('Defendant user details: your date of birth page', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
 
             await request(app)
@@ -99,6 +102,7 @@ describe('Defendant user details: your date of birth page', () => {
 
           it('should redirect to your phone page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
 
             await request(app)
@@ -112,6 +116,7 @@ describe('Defendant user details: your date of birth page', () => {
 
           it('should redirect to the under-18 hand-off page when the date is too recent', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().subtract(15, 'years')
 
             await request(app)

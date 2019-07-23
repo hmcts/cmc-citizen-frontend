@@ -899,23 +899,23 @@ describe('ResponseModelConverter', () => {
             expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
           })
 
-        it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
-          const responseDraft = prepareResponseDraft({
-            ...defenceWithAmountClaimedAlreadyPaidDraft,
-            ...sampleMediationDraftObj
-          }, partyDetails)
-          const responseData = preparePartialResponseData({
-            ...partialAdmissionFromStatesPaidDefence,
-            ...mediationResponseData
-          }, party)
-          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+          it(`should convert defence with amount claimed already paid submitted by ${partyDetails.type} to partial admission`, () => {
+            const responseDraft = prepareResponseDraft({
+              ...defenceWithAmountClaimedAlreadyPaidDraft,
+              ...sampleMediationDraftObj
+            }, partyDetails)
+            const responseData = preparePartialResponseData({
+              ...partialAdmissionFromStatesPaidDefence,
+              ...mediationResponseData
+            }, party)
+            const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
             expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
               .to.deep.equal(Response.deserialize(responseData))
           })
         })
 
-      it(`should convert company who says YES to mediation and confirm number`, () => {
+        it(`should convert company who says YES to mediation and confirm number`, () => {
 
           const mediationDraft = new MediationDraft().deserialize({
             youCanOnlyUseMediation: {
@@ -944,24 +944,24 @@ describe('ResponseModelConverter', () => {
             .to.deep.equal(Response.deserialize(responseData))
         })
 
-      it('should not convert payment declaration for defence with dispute', () => {
-        const responseDraft = prepareResponseDraft({
-          ...defenceWithDisputeDraft,
-          ...sampleMediationDraftObj,
-          whenDidYouPay: {
-            date: {
-              year: 2017,
-              month: 12,
-              day: 31
-            },
-            text: 'I paid in cash'
-          }
-        }, individualDetails)
-        const responseData = prepareResponseData({
-          ...defenceWithDisputeData,
-          ...mediationResponseData
-        }, individual)
-        const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+        it('should not convert payment declaration for defence with dispute', () => {
+          const responseDraft = prepareResponseDraft({
+            ...defenceWithDisputeDraft,
+            ...sampleMediationDraftObj,
+            whenDidYouPay: {
+              date: {
+                year: 2017,
+                month: 12,
+                day: 31
+              },
+              text: 'I paid in cash'
+            }
+          }, individualDetails)
+          const responseData = prepareResponseData({
+            ...defenceWithDisputeData,
+            ...mediationResponseData
+          }, individual)
+          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)).to.deep.equal(responseData)
         })
@@ -1186,7 +1186,7 @@ describe('ResponseModelConverter', () => {
             }
           })
 
-        const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
@@ -1194,4 +1194,5 @@ describe('ResponseModelConverter', () => {
       })
     }
   }
+
 })
