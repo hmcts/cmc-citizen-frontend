@@ -76,8 +76,7 @@
           <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
         {% endif %}
       {% elseif claim.claimantResponse.freeMediation === YesNoOption.YES.option %}
-        <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
-        <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
+        <p>{{ t('The court will contact you and the defendant within 14 days to arrange a mediation appointment.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.directionsQuestionnaireDeadline %}
         <p>
           {{ t('You need to') }}
