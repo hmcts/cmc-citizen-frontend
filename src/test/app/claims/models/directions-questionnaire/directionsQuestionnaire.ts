@@ -67,5 +67,9 @@ describe('DirectionsQuestionnaire', () => {
 
       expect(DirectionsQuestionnaire.fromObject(directionsQuestionnaireResponseData)).to.deep.equal(directionsQuestionnaireResponseData)
     })
+
+    it('from object should return undefined when input is undefined', () => {
+      expect(DirectionsQuestionnaire.fromObject(undefined)).to.be.equal(undefined)
+    })
   })
 })
