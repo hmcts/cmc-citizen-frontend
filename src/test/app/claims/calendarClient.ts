@@ -24,8 +24,19 @@ describe('calendar', () => {
     mockNextWorkingDay(undefined)
 
     calendarClient.getNextWorkingDay(SATURDAY, 5)
-      .then(res => expect(res).to.throw('Invalid next working day'))
-      .catch(err => expect(err.toString()).to.contains('Unable to get next working day - Error: Invalid next working day'))
+      .then(undefined,
+        rej => {
+          expect(rej.toString()).to.contains('Invalid next working day')
+        })
+  })
+
+  it('should return Missing date error when no date is passed', () => {
+    mockNextWorkingDay(SATURDAY)
+
+    calendarClient.getNextWorkingDay(undefined, 0)
+      .then(undefined, rej =>
+        expect(rej.toString()).to.contains('Missing date')
+      )
   })
 
   it('should return Unable to get next working day bad request', () => {
@@ -36,14 +47,4 @@ describe('calendar', () => {
         expect(err.toString()).to.contains('Unable to get next working day')
       )
   })
-
-  it('should return Missing date error when no date is passed', () => {
-    mockNextWorkingDay(SATURDAY)
-
-    calendarClient.getNextWorkingDay(undefined, 0)
-      .catch(err =>
-        expect(err.toString()).to.contains('Missing date')
-      )
-  })
-
 })
