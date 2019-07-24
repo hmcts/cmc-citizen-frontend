@@ -35,7 +35,7 @@ export default express.Router()
         const draft: Draft<DraftClaim> = res.locals.claimDraft
         const user: User = res.locals.user
 
-        draft.document.claimant.phoneNumber = form.model
+        draft.document.claimant.phone = form.model
         await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.taskListPage.uri)
