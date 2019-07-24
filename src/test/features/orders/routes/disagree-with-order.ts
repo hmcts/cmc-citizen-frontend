@@ -7,7 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as OrdersPaths } from 'orders/paths'
-import { Paths as DashbaordPaths } from 'dashboard/paths'
+import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { app } from 'main/app'
 
@@ -99,7 +99,7 @@ describe('Orders: why do you disagree with the order page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ reason: '' })
             .expect(res => expect(res).to.be.redirect
-              .toLocation(DashbaordPaths.dashboardPage.uri))
+              .toLocation(DashboardPaths.dashboardPage.uri))
         })
 
         it('should redirect to the dashboard when everything is fine', async () => {
@@ -112,7 +112,7 @@ describe('Orders: why do you disagree with the order page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ reason: 'I want a judge to review' })
             .expect(res => expect(res).to.be.redirect
-              .toLocation(DashbaordPaths.dashboardPage.uri))
+              .toLocation(DashboardPaths.dashboardPage.uri))
         })
       })
     })
