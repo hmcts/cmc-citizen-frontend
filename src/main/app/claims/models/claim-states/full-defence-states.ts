@@ -6,6 +6,7 @@ export enum FullDefenceStates {
   FD_ALREADY_PAID_REJECT= 'fd-already-paid-reject',
   FD_REJECT_WITH_MEDIATION= 'fd-reject-with-mediation',
   FD_REJECT_WITHOUT_MEDIATION= 'fd-reject-without-mediation',
+  FD_CLAIMANT_REJECTS_WITH_MEDIATION= 'fd-claimant-rejects-with-mediation',
   FD_SETTLEMENT_OFFER_WITH_MEDIATION= 'fd-settlement-offer-with-mediation',
   FD_SETTLEMENT_OFFER_WITHOUT_MEDIATION= 'fd-settlement-offer-without-mediation',
   FD_SETTLEMENT_OFFER_REJECT_WITH_MEDIATION= 'fd-settlement-offer-reject-with-mediation',

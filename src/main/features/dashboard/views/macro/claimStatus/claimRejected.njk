@@ -38,15 +38,11 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) %}
-  {{ t('You’ve reject the defendant’s response.') }}
+  {{ t('You’ve rejected the defendant’s response.') }}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) %}
   {{ t('Wait for the court to review the case') }}
-{% endmacro %}
-
-{% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) %}
-  {{ t('We’ll contact you with a mediation appointment') }}
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
@@ -121,6 +117,31 @@
 {% macro claimRejectedFreeMediationYESForClaimantDashboard(claim) %}
   {{ t('{{ defendantName }} has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.',
     { defendantName: claim.claimData.defendant.name }) }}
+{% endmacro %}
+
+{% macro claimRejectedDefendantDefenceFreeMediationDashboard() %}
+  {{ t('We’ll contact you with a mediation appointment') }}
+{% endmacro %}
+
+{% macro claimRejectedDefendantDefenceFreeMediationForDefendantDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+    <p>{{ t('{{ claimantName }} has rejected your defence.',
+        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange an appointment.') }}</p>
+    <p>{{ internalLink(t('Find out how mediation works'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro claimRejectedDefendantDefenceFreeMediationForClaimantDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
+    <p>{{ t('You’ve rejected the defendant’s response.') }}</p>
+
+    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange an appointment.') }}</p>
+
+    {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+  </div>
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}

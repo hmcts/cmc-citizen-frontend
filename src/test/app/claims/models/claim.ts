@@ -328,6 +328,21 @@ describe('Claim', () => {
       expect(claim.stateHistory.map(state => state.status)).includes(ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT)
     })
 
+    it('should return CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION if claimants rejects rejects defendant response and both select free mediaation', () => {
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        freeMediation: FreeMediationOption.YES,
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.REJECTION,
+        freeMediation: FreeMediationOption.YES
+      }
+      claim.respondedAt = MomentFactory.currentDateTime().subtract(5, 'days')
+
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION)
+    })
+
     it('should return CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ when there is a CCJ and a claimant response with a court decision', () => {
       const paymentIntention = {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,

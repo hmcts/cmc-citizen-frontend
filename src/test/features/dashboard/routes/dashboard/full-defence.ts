@@ -19,7 +19,7 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   baseDefenceData,
   baseResponseData,
-  defenceWithAmountClaimedAlreadyPaidData
+  defenceWithAmountClaimedAlreadyPaidData, defenceWithDisputeData
 } from 'test/data/entity/responseData'
 
 import {
@@ -192,6 +192,23 @@ const testData = [
     },
     claimantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.'],
     defendantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.']
+  },
+  {
+    status: 'Full defence - claimant rejects full defence with free mediation - claimant accepts free mediation',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate()
+    },
+    claimantAssertions: ['We’ll contact you with a mediation appointment'],
+    defendantAssertions: ['We’ll contact you with a mediation appointment']
   }
 ]
 

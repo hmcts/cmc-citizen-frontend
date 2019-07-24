@@ -28,7 +28,9 @@
   claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard,
   claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard,
   claimRejectedWithDQsForDefendantDashboard,
-  claimRejectedWithDQsForClaimantDashboard %}
+  claimRejectedWithDQsForClaimantDashboard,
+  claimRejectedDefendantDefenceFreeMediationDashboard,
+  claimRejectedFreeMediationYESForDefendantDashboard %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
@@ -155,6 +157,8 @@
   {% elif status === ClaimStatus.OFFER_SETTLEMENT_REACHED
     or status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
     {{ offerSettlementReachedDashboard() }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION %}
+    {{ claimRejectedDefendantDefenceFreeMediationDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
     {{ partAdmitRejectedByClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
@@ -238,6 +242,8 @@
     {{ offerRejectedForDefendantDashboard() }}
   {% elif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ offerAcceptedForDefendantDashboard() }}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION %}
+    {{ claimRejectedDefendantDefenceFreeMediationDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
     or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
     {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}

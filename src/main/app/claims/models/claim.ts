@@ -25,6 +25,8 @@ import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
+import { FreeMediationOption } from "forms/models/freeMediation";
+import { RejectionClaimantResponse } from "claims/models/claimant-response/rejectionClaimantResponse";
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 interface State {
@@ -174,6 +176,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
       return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
+    } else if (this.hasClaimantRejectedDefendantResponseWithFreeMediationForBothParties()) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
@@ -489,6 +493,12 @@ export class Claim {
 
   private hasClaimantRejectedDefendantResponse (): boolean {
     return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+  }
+
+  private hasClaimantRejectedDefendantResponseWithFreeMediationForBothParties (): boolean {
+    return this.response && this.response.freeMediation === FreeMediationOption.YES
+    && this.hasClaimantRejectedDefendantResponse()
+    && (this.claimantResponse as RejectionClaimantResponse).freeMediation === FreeMediationOption.YES
   }
 
   private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {

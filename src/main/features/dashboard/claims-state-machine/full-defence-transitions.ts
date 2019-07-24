@@ -44,7 +44,11 @@ export function fullDefenceTransitions (claim: Claim): StateMachine {
         from: FullDefenceStates.FULL_DEFENCE,
         to: FullDefenceStates.FD_REJECT_WITHOUT_MEDIATION
       },
-
+      {
+        name: 'checkClaimantRejectsWithMediation',
+        from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_REJECT_WITH_MEDIATION],
+        to: FullDefenceStates.FD_CLAIMANT_REJECTS_WITH_MEDIATION
+      },
       {
         name: 'checkSettlementOfferWithMediation',
         from: [FullDefenceStates.FULL_DEFENCE, FullDefenceStates.FD_REJECT_WITH_MEDIATION],
@@ -136,6 +140,13 @@ export function fullDefenceTransitions (claim: Claim): StateMachine {
 
       onBeforeCheckSettlementOfferRejectWithMediation (): boolean {
         return this.state === FullDefenceStates.FD_SETTLEMENT_OFFER_WITH_MEDIATION && claim.settlement.isOfferRejected() && !claim.settlementReachedAt
+      },
+
+      onBeforeCheckClaimantRejectsWithMediation (): boolean {
+        return this.state === FullDefenceStates.FD_REJECT_WITH_MEDIATION
+          && !!claim.claimantResponse
+          && claim.claimantResponse.type === ClaimantResponseType.REJECTION
+          && claim.claimantResponse.freeMediation === FreeMediationOption.YES
       },
 
       onBeforeCheckSettlementOfferRejectWithoutMediation (): boolean {

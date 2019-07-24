@@ -188,6 +188,8 @@
       {{ offerRejectedForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
       {{ offerAcceptedForClaimantClaimDetails(claim) }}
+    {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION %}
+      {{ claimRejectedDefendantDefenceFreeMediationForClaimantDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
       {{ claimantWithDefendantAsBusinessResponseDetailedStatus(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
@@ -282,6 +284,8 @@
         {{ offerRejectedForDefendantClaimDetails() }}
       {% elif state.status === ClaimStatus.OFFER_ACCEPTED %}
         {{ offerAcceptedForDefendantClaimDetails(claim) }}
+      {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION %}
+        {{ claimRejectedDefendantDefenceFreeMediationForDefendantDetails(claim) }}
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
