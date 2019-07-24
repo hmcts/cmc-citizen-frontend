@@ -22,7 +22,6 @@
   claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard,
   claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard,
   claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard,
-  claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard,
   claimantAcceptedDefendantDefenceDefendantDashboard,
   claimantAcceptedDefendantDefenceClaimantDashboard,
   claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard,
@@ -232,7 +231,7 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
     {% else %}
-      {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+      {{ claimRejectedDefendantDefenceFreeMediationDashboard() }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceDefendantDashboard() }}
@@ -243,7 +242,7 @@
   {% elif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ offerAcceptedForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_RESPONSE_WITH_MEDIATION %}
-    {{ claimRejectedDefendantDefenceFreeMediationDashboard(claim) }}
+    {{ claimRejectedDefendantDefenceFreeMediationDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
     or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
     {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}

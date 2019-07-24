@@ -25,9 +25,9 @@ import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
-import { FreeMediationOption } from "forms/models/freeMediation";
-import { RejectionClaimantResponse } from "claims/models/claimant-response/rejectionClaimantResponse";
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { FreeMediationOption } from 'forms/models/freeMediation'
+import { RejectionClaimantResponse } from 'claims/models/claimant-response/rejectionClaimantResponse'
 
 interface State {
   status: ClaimStatus

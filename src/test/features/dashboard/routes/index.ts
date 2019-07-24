@@ -23,10 +23,11 @@ import {
   basePayImmediatelyData,
   baseResponseData,
   defenceWithAmountClaimedAlreadyPaidData,
-  partialAdmissionAlreadyPaidData, partialAdmissionWithPaymentBySetDateData
+  partialAdmissionAlreadyPaidData,
+  partialAdmissionWithPaymentBySetDateData
 } from 'test/data/entity/responseData'
 import { baseAcceptationClaimantResponseData } from 'test/data/entity/claimantResponseData'
-import {FreeMediationOption} from "forms/models/freeMediation";
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -344,14 +345,14 @@ const testData = [
     defendantAssertions: ['We’ll contact you with a mediation appointment']
   },
   {
-  status: 'partial admission, states paid rejected',
+    status: 'partial admission, states paid rejected',
     claim: partAdmissionClaim,
     claimOverride: {
-    response: { ...partialAdmissionAlreadyPaidData },
-    claimantResponse: { type: 'REJECTION' }
-  },
-   claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-   defendantAssertions: ['000MC000', 'John Smith rejected your admission of £3,000']
+      response: { ...partialAdmissionAlreadyPaidData },
+      claimantResponse: { type: 'REJECTION' }
+    },
+    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
+    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £3,000']
   },
   {
     status: 'full defence, states paid accepted',

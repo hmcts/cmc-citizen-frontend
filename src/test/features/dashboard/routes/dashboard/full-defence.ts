@@ -19,7 +19,8 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   baseDefenceData,
   baseResponseData,
-  defenceWithAmountClaimedAlreadyPaidData, defenceWithDisputeData
+  defenceWithAmountClaimedAlreadyPaidData,
+  defenceWithDisputeData
 } from 'test/data/entity/responseData'
 
 import {
