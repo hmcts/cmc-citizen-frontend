@@ -23,6 +23,7 @@ function requestHandler (): express.RequestHandler {
 export class OrdersFeature {
   enableFor (app: express.Express) {
     const allOrders = '/case/*/orders/*'
+    // todo add in order guard so people can't get to these pages when they shouldn't
     app.all(allOrders, requestHandler())
     app.all(allOrders, ClaimMiddleware.retrieveByExternalId)
     app.all(allOrders, CountyCourtJudgmentRequestedGuard.requestHandler)

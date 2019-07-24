@@ -7,7 +7,6 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as OrdersPaths } from 'orders/paths'
-import { Paths as DashbaordPaths } from 'dashboard/paths'
 
 import { app } from 'main/app'
 
@@ -18,6 +17,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const pagePath = OrdersPaths.disagreeReasonPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageTitle = 'How and why do you want the order changed?'
 
@@ -99,7 +99,7 @@ describe('Orders: why do you disagree with the order page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ reason: '' })
             .expect(res => expect(res).to.be.redirect
-              .toLocation(DashbaordPaths.dashboardPage.uri))
+              .toLocation(OrdersPaths.confirmationPage.evaluateUri({ externalId: externalId })))
         })
 
         it('should redirect to the dashboard when everything is fine', async () => {
@@ -112,7 +112,7 @@ describe('Orders: why do you disagree with the order page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ reason: 'I want a judge to review' })
             .expect(res => expect(res).to.be.redirect
-              .toLocation(DashbaordPaths.dashboardPage.uri))
+              .toLocation(OrdersPaths.confirmationPage.evaluateUri({ externalId: externalId })))
         })
       })
     })

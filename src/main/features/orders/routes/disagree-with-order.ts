@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { Paths } from 'orders/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DisagreeReason } from 'orders/form/models/disagreeReason'
@@ -47,7 +46,7 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(DashboardPaths.dashboardPage.uri)
+        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
       }
     })
   )
