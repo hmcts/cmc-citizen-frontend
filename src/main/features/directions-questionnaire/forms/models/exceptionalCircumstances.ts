@@ -1,4 +1,3 @@
-import { CompletableTask } from 'models/task'
 import { YesNoOption } from 'models/yesNoOption'
 import { IsDefined, IsIn, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
@@ -7,13 +6,13 @@ export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Explain your reason for the hearing to be in a different location'
 }
 
-export class ExceptionalCircumstances implements CompletableTask {
+export class ExceptionalCircumstances {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
   @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
   exceptionalCircumstances?: YesNoOption
 
-  @ValidateIf(o => o.exceptionalCircumstances && o.exceptionalCircumstances.option === YesNoOption.YES.option)
+  @ValidateIf(o => o.exceptionalCircumstances && o.exceptionalCircumstances.option === YesNoOption.NO.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   reason?: string
@@ -44,10 +43,20 @@ export class ExceptionalCircumstances implements CompletableTask {
     return this
   }
 
-  isCompleted (): boolean {
+  isDefendantCompleted (): boolean {
     if (this.exceptionalCircumstances === undefined) {
       return false
     } else if (this.exceptionalCircumstances.option === YesNoOption.YES.option) {
+      return this.reason !== undefined
+    } else {
+      return true
+    }
+  }
+
+  isClaimantCompleted (): boolean {
+    if (this.exceptionalCircumstances === undefined) {
+      return false
+    } else if (this.exceptionalCircumstances.option === YesNoOption.NO.option) {
       return this.reason !== undefined
     } else {
       return true
