@@ -7,6 +7,7 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as OrdersPaths } from 'orders/paths'
+import { Paths as DashbaordPaths } from 'dashboard/paths'
 
 import { app } from 'main/app'
 
@@ -88,7 +89,7 @@ describe('Orders: why do you disagree with the order page', () => {
             .expect(res => expect(res).to.be.serverError.withText('Error'))
         })
 
-        it('should redirect to itself when nothing is entered', async () => {
+        it('should redirect to the dashboard when nothing is entered', async () => {
           draftStoreServiceMock.resolveFind('orders')
           draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
@@ -98,11 +99,10 @@ describe('Orders: why do you disagree with the order page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ reason: '' })
             .expect(res => expect(res).to.be.redirect
-              .toLocation(OrdersPaths.disagreeReasonPage
-                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+              .toLocation(DashbaordPaths.dashboardPage.uri))
         })
 
-        it('should redirect to itself when everything is fine', async () => {
+        it('should redirect to the dashboard when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('orders')
           draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
@@ -112,8 +112,7 @@ describe('Orders: why do you disagree with the order page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .send({ reason: 'I want a judge to review' })
             .expect(res => expect(res).to.be.redirect
-              .toLocation(OrdersPaths.disagreeReasonPage
-                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+              .toLocation(DashbaordPaths.dashboardPage.uri))
         })
       })
     })

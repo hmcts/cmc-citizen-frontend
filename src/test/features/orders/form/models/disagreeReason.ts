@@ -43,31 +43,30 @@ describe('DisagreeReason', () => {
 
     it('should accept reason with empty string', () => {
       const errors = validator.validateSync(new DisagreeReason(''))
-
-      expect(errors.length).to.equal(0)
+      expect(errors).to.be.empty
     })
 
     it('should accept reason with white spaces string', () => {
       const errors = validator.validateSync(new DisagreeReason('   '))
 
-      expect(errors.length).to.equal(0)
+      expect(errors).to.be.empty
     })
 
     it('should reject claim reason with more than max allowed characters', () => {
       const errors = validator.validateSync(new DisagreeReason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)))
-      expect(errors.length).to.equal(1)
+      expect(errors).to.have.lengthOf(1)
       expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should accept claim reason with max allowed characters', () => {
       const errors = validator.validateSync(new DisagreeReason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH)))
-      expect(errors.length).to.equal(0)
+      expect(errors).to.be.empty
     })
 
     it('should accept valid claim reason', () => {
       const errors = validator.validateSync(new DisagreeReason('i am owed money £300'))
 
-      expect(errors.length).to.equal(0)
+      expect(errors).to.be.empty
     })
 
   })
