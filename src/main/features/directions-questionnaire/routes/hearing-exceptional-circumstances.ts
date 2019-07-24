@@ -55,13 +55,11 @@ export default express.Router()
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
             form.model.reason = undefined
           }
-        } else {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
-            draft.document.hearingLocation = new HearingLocation()
-            // todo remove the below line once the backend validation of mandatory is removed for courtName
-            draft.document.hearingLocation.courtName = ''
-            form.model.reason = undefined
-          }
+        } else if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
+          draft.document.hearingLocation = new HearingLocation()
+          // todo remove the below line once the backend validation of mandatory is removed for courtName
+          draft.document.hearingLocation.courtName = ''
+          form.model.reason = undefined
         }
         draft.document.exceptionalCircumstances = form.model
         await new DraftService().save(draft, user.bearerToken)
