@@ -21,7 +21,15 @@ export class CalendarClient {
         json: true,
         uri: `${this.url}?date=${formattedDate}`
       })
-      .then(res => MomentFactory.parse(res.nextWorkingDay))
+      .then(
+        res => {
+          if (!res.nextWorkingDay) {
+            throw new Error('Invalid next working day')
+          }
+
+          return MomentFactory.parse(res.nextWorkingDay)
+        }
+      )
       .catch(error => {
         throw new Error(`Unable to get next working day - ${error}`)
       })

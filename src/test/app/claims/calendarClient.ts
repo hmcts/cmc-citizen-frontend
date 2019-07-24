@@ -20,6 +20,14 @@ describe('calendar', () => {
     expect(nextWorkingDay.toISOString()).to.equal(MomentFactory.parse(MONDAY_AFTER).toISOString())
   })
 
+  it('should return Invalid next working day', async () => {
+    mockNextWorkingDay(undefined)
+
+    calendarClient.getNextWorkingDay(SATURDAY, 5)
+      .then(res => expect(res).to.throw('Invalid next working day'))
+      .catch(err => expect(err.toString()).to.contains('Unable to get next working day - Error: Invalid next working day'))
+  })
+
   it('should return Unable to get next working day bad request', () => {
     rejectNextWorkingDay(SATURDAY)
 

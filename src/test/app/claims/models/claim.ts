@@ -40,7 +40,6 @@ import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { User } from 'idam/user'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
-import { mockNextWorkingDay } from 'test/http-mocks/claim-store'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -677,7 +676,7 @@ describe('Claim', () => {
       const claim = new Claim()
       claim.respondedAt = moment()
 
-      mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
 
       claim.respondToMediationDeadline().then(
         res => expect(res.format('YYYY-MM-DD'))
