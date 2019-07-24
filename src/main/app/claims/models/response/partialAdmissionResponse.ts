@@ -7,6 +7,7 @@ import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 export interface PartialAdmissionResponse extends ResponseCommon {
   responseType: ResponseType.PART_ADMISSION
@@ -17,7 +18,8 @@ export interface PartialAdmissionResponse extends ResponseCommon {
   evidence: DefendantEvidence
   freeMediation?: YesNoOption,
   paymentIntention?: PaymentIntention
-  statementOfMeans?: StatementOfMeans
+  statementOfMeans?: StatementOfMeans,
+  directionsQuestionnaire?: DirectionsQuestionnaire
 }
 
 export namespace PartialAdmissionResponse {
@@ -41,7 +43,9 @@ export namespace PartialAdmissionResponse {
         comment: input.evidence && input.evidence.comment || undefined
       } as DefendantEvidence,
       paymentIntention: PaymentIntention.deserialize(input.paymentIntention),
-      statementOfMeans: input.statementOfMeans
+      statementOfMeans: input.statementOfMeans,
+      directionsQuestionnaire: input.directionsQuestionnaire &&
+        DirectionsQuestionnaire.fromObject(input.directionsQuestionnaire)
     }
   }
 }
