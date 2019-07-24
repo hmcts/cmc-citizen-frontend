@@ -57,6 +57,12 @@ export const basePayImmediatelyData = {
     paymentDate: MomentFactory.currentDate().add(5, 'days')
   }
 }
+export const basePayImmediatelyDatePastData = {
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().subtract(5, 'days')
+  }
+}
 
 export const basePayByInstalmentsData = {
   paymentIntention: {
@@ -470,4 +476,25 @@ export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
     paidAmount: '20000',
     explanation: 'I paid in cash'
   }
+}
+
+export const fullDefenceWithStatesLessThanClaimAmount = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
+  },
+  responseType: 'PART_ADMISSION'
+}
+
+export const fullDefenceWithStatesLessThanClaimAmountWithMediation = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
+  },
+  responseType: 'PART_ADMISSION',
+  freeMediation: 'yes'
 }

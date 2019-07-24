@@ -48,6 +48,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -83,6 +84,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -94,6 +96,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -106,6 +109,7 @@ describe('Defendant response: how much money do you believe you owe', () => {
 
           it('should redirect to timeline page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 

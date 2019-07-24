@@ -13,6 +13,8 @@ import { User } from 'idam/user'
 import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 import { retrievePaymentOptionsFromClaim } from 'claims/ccjModelConverter'
+import { ResponseType } from 'claims/models/response/responseType'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
 
@@ -38,6 +40,11 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
   }
 
   amountSettledFor (claim: Claim, draft: DraftCCJ): number {
+    if (claim.response && claim.response.responseType === ResponseType.PART_ADMISSION
+      && claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION) {
+      return claim.response.amount
+
+    }
     return undefined
   }
 

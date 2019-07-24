@@ -34,6 +34,7 @@ describe('Defendant response: send your response by email', () => {
 
       it('should return 500 and render error page when retrieving issue fee range group failed', async () => {
         draftStoreServiceMock.resolveFind('response')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         feesServiceMock.rejectGetIssueFeeRangeGroup()
 
@@ -45,6 +46,7 @@ describe('Defendant response: send your response by email', () => {
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('response')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
 
