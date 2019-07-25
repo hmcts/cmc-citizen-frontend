@@ -103,7 +103,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       // as defendant
       defendantResponseSteps.disputeClaimAsAlreadyPaid(testData, claimantResponseTestData, true)
       I.see(testData.claimRef)
-      I.see(`We’ve emailed ${testData.claimantName} your response, explaining why you reject the claim.`)
+      I.see(`You told us you paid £125. We've sent ${testData.claimantName} this response`)
       // check dashboard
       I.click('My account')
       I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
