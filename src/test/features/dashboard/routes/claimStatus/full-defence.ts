@@ -65,8 +65,7 @@ const testData = [
     ]
   },
   {
-
-    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response without mediation',
     claim: fullDefenceClaim,
     claimOverride: {
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
@@ -74,15 +73,46 @@ const testData = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
-      'You’ve rejected the defendant’s admission',
-      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
-      'complete a directions questionnaire',
+      'Wait for the court to review the case',
+      `You’ve rejected ${fullDefenceClaim.claim.defendants[0].name}’s response and said you want to take the case to court.`,
+      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.',
       'Download their response'
     ],
     defendantAssertions: [
-      `${fullDefenceClaim.claim.claimants[0].name} rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
+      `The claimant has rejected your admission of ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}`,
       'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
-      'complete a directions questionnaire',
+      'You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithAmountClaimedAlreadyPaidData,
+        freeMediation: 'yes'
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: [
+      'You’ve rejected the defendant’s admission',
+      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}.`,
+      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.',
+      'Find out how mediation works',
+      'Download their response'
+    ],
+    defendantAssertions: [
+      'We’ll contact you with a mediation appointment',
+      'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      'They agreed to try mediation. We’ll contact you with details of your appointment.',
+      'Find out how mediation works',
       'Download your response'
     ]
   },
@@ -223,9 +253,7 @@ const testData = [
       'Download their response',
       'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
-      'Request County Court Judgment',
-      'request a County Court Judgment'
+      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -255,9 +283,7 @@ const testData = [
       'Download their response',
       'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
-      'Request County Court Judgment',
-      'request a County Court Judgment'
+      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
     ],
     defendantAssertions: [
       'Your response to the claim',

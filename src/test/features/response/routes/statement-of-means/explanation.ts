@@ -61,6 +61,7 @@ describe('Statement of means: Briefly explain why cannot page immediately page',
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -110,6 +111,7 @@ describe('Statement of means: Briefly explain why cannot page immediately page',
         context('when form is valid', () => {
           it('should return 500 and render error page when form is valid and cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
@@ -122,6 +124,7 @@ describe('Statement of means: Briefly explain why cannot page immediately page',
 
           it('should redirect to task list page when form is valid and everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 

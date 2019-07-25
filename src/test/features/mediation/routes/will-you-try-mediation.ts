@@ -99,7 +99,7 @@ if (FeatureToggles.isEnabled('mediation')) {
                 .expect(res => expect(res).to.be.serverError.withText('Error'))
             })
 
-            it('should redirect to can we use page when everything is fine', async () => {
+            it('should redirect to mediation agreement page when everything is fine', async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
               draftStoreServiceMock.resolveFind('mediation')
               draftStoreServiceMock.resolveFind('response')

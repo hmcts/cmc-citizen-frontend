@@ -7,8 +7,6 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as MediationPaths } from 'mediation/paths'
-import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
-import { Paths as ResponsePaths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -161,7 +159,7 @@ if (FeatureToggles.isEnabled('mediation')) {
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ reject: 'I don’t agree' })
                 .expect(res => expect(res).to.be.redirect
-                  .toLocation(ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+                  .toLocation(MediationPaths.continueWithoutMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
             })
 
             it('should redirect to claimant response task list when No was chosen and it is claimant', async () => {
@@ -177,7 +175,7 @@ if (FeatureToggles.isEnabled('mediation')) {
                 .set('Cookie', `${cookieName}=ABC`)
                 .send({ reject: 'I don’t agree' })
                 .expect(res => expect(res).to.be.redirect
-                  .toLocation(ClaimantResponsePaths.taskListPage
+                  .toLocation(MediationPaths.continueWithoutMediationPage
                     .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
             })
           })
