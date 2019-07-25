@@ -79,7 +79,8 @@ async function successHandler (req, res, next) {
       }
     }
 
-    if (draft.document.amount.totalAmount() <= 300) {
+    const totalAmount = await draftClaimAmountWithInterest(draft.document)
+    if (totalAmount <= 300) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
         features += features === undefined ? 'mediationPilot' : ', mediationPilot'
       }
