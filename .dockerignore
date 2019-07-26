@@ -19,3 +19,4 @@
 !server.js
 !acb.yaml
 !Dockerfile
+!integration-tests.Dockerfile
