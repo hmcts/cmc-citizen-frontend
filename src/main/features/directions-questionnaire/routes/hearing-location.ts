@@ -138,7 +138,11 @@ export default express.Router()
             } else if (!draft.document.hearingLocationSlug.length) {
               const postcode: string = getDefaultPostcode(res)
               const court: Court = await getNearestCourt(postcode)
-              draft.document.hearingLocationSlug = court.slug
+              if (court !== undefined) {
+                draft.document.hearingLocationSlug = court.slug
+              } else {
+                draft.document.hearingLocationSlug = ''
+              }
             }
             draft.document.hearingLocation.courtName = form.model.courtName
             draft.document.hearingLocation.courtAccepted = form.model.courtAccepted

@@ -329,7 +329,7 @@ export class TaskListBuilder {
           new TaskListItem(
             `Give us details in case there’s a hearing`,
             DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
-            DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
+            DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)
           )
         ]
       )

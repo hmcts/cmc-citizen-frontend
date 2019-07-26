@@ -148,7 +148,7 @@ export default express.Router()
         await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, directionsQuestionnaireDraft, user)
         await draftService.delete(draft.id, user.bearerToken)
 
-        if (mediationDraft.id) {
+        if (FeatureToggles.isEnabled('mediation')) {
           await draftService.delete(mediationDraft.id, user.bearerToken)
         }
 

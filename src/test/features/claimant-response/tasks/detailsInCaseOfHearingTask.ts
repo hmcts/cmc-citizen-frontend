@@ -14,21 +14,30 @@ import { SupportRequired } from 'directions-questionnaire/forms/models/supportRe
 import { WhyExpertIsNeeded } from 'directions-questionnaire/forms/models/whyExpertIsNeeded'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { ExceptionalCircumstances } from 'directions-questionnaire/forms/models/exceptionalCircumstances'
+import { Claim } from 'claims/models/claim'
+import * as claimStoreMock from '../../../http-mocks/claim-store'
 
 describe('Details In case of hearing task', () => {
   it('should not be completed when all directions questionnaire are not filled', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
+
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when hearing location is not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when only hearing location and exceptional circumstances are selected', () => {
@@ -36,46 +45,61 @@ describe('Details In case of hearing task', () => {
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when only hearing location and self witness filled', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when expert reports are not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when permission for expert is not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when export evidence is not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -83,12 +107,15 @@ describe('Details In case of hearing task', () => {
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
     directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when export evidence is not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -96,12 +123,15 @@ describe('Details In case of hearing task', () => {
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
     directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when `why expert is needed` is not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -113,12 +143,15 @@ describe('Details In case of hearing task', () => {
       whatToExamine: 'documents'
     })
     directionsQuestionnaireDraft.whyExpertIsNeeded = new WhyExpertIsNeeded()
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when availability is not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -135,12 +168,15 @@ describe('Details In case of hearing task', () => {
       howMany: 1
     })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when other support is selected but not filled', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -165,12 +201,15 @@ describe('Details In case of hearing task', () => {
       otherSupport: ''
     })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when language selected is selected but not filled', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -197,12 +236,15 @@ describe('Details In case of hearing task', () => {
       languageInterpreted: ''
     })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should not be completed when signLanguage selected is selected but not filled', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -231,12 +273,15 @@ describe('Details In case of hearing task', () => {
       signLanguageInterpreted: ''
     })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.false
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
   it('should be completed when expert required and all other fields are filled', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -265,12 +310,15 @@ describe('Details In case of hearing task', () => {
       signLanguageInterpreted: 'sign language documents '
     })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.true
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.true
   })
 
   it('should be completed when expert is not required and all other fields are filled', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
     directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
@@ -292,6 +340,6 @@ describe('Details In case of hearing task', () => {
       signLanguageInterpreted: 'sign language documents '
     })
 
-    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)).to.be.true
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.true
   })
 })
