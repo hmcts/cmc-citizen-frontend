@@ -13,6 +13,7 @@ import { Paths } from 'dashboard/paths'
 import { Claim } from 'claims/models/claim'
 import { ClaimStatusFlow } from 'dashboard/helpers/claimStatusFlow'
 import { app } from 'main/app'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -64,5 +65,13 @@ export class DashboardFeature {
       }))
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+    app.use((err, req, res, next) => {
+      if (err.stack.split('\n')[0].startsWith('Template render error')) {
+        trackCustomEvent('CMC Dashboard Failure', {
+          error: err
+        })
+      }
+      next(err)
+    })
   }
 }

@@ -1,3 +1,4 @@
+http_timeout = "60000"
 feature_fine_print = "true"
 feature_new_features_consent = "true"
 external_host_name = "moneyclaims.aat.platform.hmcts.net"

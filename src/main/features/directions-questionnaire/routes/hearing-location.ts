@@ -108,6 +108,7 @@ export default express.Router()
         try {
           const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
           const user: User = res.locals.user
+          draft.document.hearingLocation = form.model
 
           if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
             const court: Court = await getNearestCourt(form.model.alternativePostcode)

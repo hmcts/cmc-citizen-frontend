@@ -27,6 +27,7 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
+  const dqsEnabled: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')
   let directionsQuestionnaireEnabled = false
 
   if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
@@ -37,6 +38,7 @@ function renderView (res: express.Response, page: number): void {
     claim: claim,
     page: page,
     alreadyPaid: alreadyPaid,
+    dqsEnabled: dqsEnabled,
     partiallyPaid: alreadyPaid ? StatesPaidHelper.isAlreadyPaidLessThanAmount(claim) : undefined,
     directionsQuestionnaireEnabled: directionsQuestionnaireEnabled
   })

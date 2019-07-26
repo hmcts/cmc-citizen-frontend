@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { sampleDirectionsQuestionnaireDraftObj } from '../../../http-mocks/draft-store'
+import { sampleDirectionsQuestionnaireDraftObj } from 'test/http-mocks/draft-store'
 
 describe('DirectionsQuestionnaireDraft', () => {
   describe('deserialization', () => {

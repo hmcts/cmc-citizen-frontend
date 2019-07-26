@@ -34,14 +34,14 @@ export namespace DirectionsQuestionnaire {
       },
       hearingLocation: {
         courtName: directionsQuestionnaire.hearingLocation &&
-        directionsQuestionnaire.hearingLocation.courtAccepted &&
-        directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
+          directionsQuestionnaire.hearingLocation.courtAccepted &&
+          directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
           directionsQuestionnaire.hearingLocation.courtName : directionsQuestionnaire.hearingLocation.alternativeCourtName,
-        hearingLocationSlug: (directionsQuestionnaire.hearingLocationSlug && directionsQuestionnaire.hearingLocationSlug.length) ? directionsQuestionnaire.hearingLocationSlug : undefined,
+        hearingLocationSlug: undefined,
         courtAddress: undefined,
         locationOption: directionsQuestionnaire.hearingLocation &&
-        directionsQuestionnaire.hearingLocation.alternativeCourtName &&
-        directionsQuestionnaire.hearingLocation.alternativeCourtName.length ?
+          directionsQuestionnaire.hearingLocation.courtAccepted === YesNoOption.NO &&
+          directionsQuestionnaire.hearingLocation.alternativeCourtName ?
           CourtLocationType.ALTERNATE_COURT : CourtLocationType.SUGGESTED_COURT,
         exceptionalCircumstancesReason: directionsQuestionnaire.exceptionalCircumstances ?
           directionsQuestionnaire.exceptionalCircumstances.reason : undefined
@@ -50,7 +50,7 @@ export namespace DirectionsQuestionnaire {
         selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
       },
-      expertReports: directionsQuestionnaire.expertReports.rows
+      expertReports: directionsQuestionnaire.expertReports && directionsQuestionnaire.expertReports.rows
         && directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
           expertReportDate: row.reportDate ? LocalDate.fromObject(row.reportDate).asString() : undefined

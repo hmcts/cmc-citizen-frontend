@@ -261,7 +261,7 @@
 {% endif %}
 
 {% set income = draft.statementOfMeans.monthlyIncome %}
-{{ row('Regular income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), topBorder = true, bottomBorder = false, bold = true) }}
+{{ row('Regular income', '', StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }), topBorder = true, bold = true) }}
 {% if income.salarySource.populated %}
   {{ row(MonthlyIncomeType.JOB.displayValue | capitalize, income.salarySource.amount | numeral, '', false, bold = true) }}
 {% endif %}
