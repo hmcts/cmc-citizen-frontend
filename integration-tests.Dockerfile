@@ -1,4 +1,4 @@
-FROM node:8.12.0-slim
+FROM hmctspublic.azurecr.io/base/node/stretch-slim-lts-8:8-stretch-slim
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
