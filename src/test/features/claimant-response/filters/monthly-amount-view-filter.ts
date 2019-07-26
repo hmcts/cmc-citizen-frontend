@@ -63,7 +63,7 @@ describe('Monthly amount view filter', () => {
     })
 
     it('should accept zero amount', () => {
-      test(PaymentFrequency.MONTH, 0, 0);
+      test(PaymentFrequency.MONTH, 0, 0)
     })
   })
 })
