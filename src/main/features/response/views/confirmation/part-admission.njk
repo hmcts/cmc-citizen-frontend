@@ -16,12 +16,13 @@
   {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount by {{ paymentDate }}.',
         { amount: amount, claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    <p>{{ t('We’ve also sent them your explanation of why you don’t believe you owe the amount claimed.') }}</p>
   {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
     <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount by instalments.',
         { amount: amount, claimantName: claimantName }) }}</p>
+    <p>{{ t('We’ve also sent them your explanation of why you don’t believe you owe the amount claimed.') }}</p>
   {% endif %}
 
-  <p>{{ t('We’ve also sent them your explanation of why you don’t believe you owe the amount claimed.') }}</p>
   <p>{{ t('We’ll contact you when they respond.') }}</p>
 
   {% if (claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or
