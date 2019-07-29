@@ -9,12 +9,12 @@
   <div class="column-two-thirds">
 
     <div class="form-group">
-      {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
+      {% set total = claim.totalAmountTillToday if amountSettledFor === undefined else amountSettledFor + (claimFee | pennies2pounds) %}
 
       <p>{{ t('Judgment will be entered against the defendant for this amount.') }}</p>
 
       <table class="table-form">
-        <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
+`        <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
         <thead>
         <tr>
           <th scope="col"></th>
@@ -22,7 +22,7 @@
         </tr>
         </thead>
         <tbody>
-        {% if not amountSettledFor %}
+        {% if amountSettledFor === undefined %}
           <tr>
             <th scope="row">{{ t('Claim amount') }}</th>
             <td class="numeric last">
@@ -37,7 +37,7 @@
             </td>
           </tr>
         {% endif %}
-        {% if not amountSettledFor and interestDetails %}
+        {% if amountSettledFor === undefined and interestDetails %}
         <tr>
           <th scope="row">
             {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
@@ -51,7 +51,7 @@
         <tr>
           <th scope="row">{{ t('Claim fee') }}</th>
           <td class="numeric last">
-            <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
+            <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
           </td>
         </tr>
         {% if alreadyPaid %}
