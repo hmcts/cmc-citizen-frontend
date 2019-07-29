@@ -868,6 +868,15 @@ describe('ResponseModelConverter', () => {
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
+
+        it('should convert partial admission already paid', () => {
+          const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
+          const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
+          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, undefined, undefined, claim)))
+            .to.deep.equal(convertObjectLiteralToJSON(responseData))
+        })
       })
     }
 
