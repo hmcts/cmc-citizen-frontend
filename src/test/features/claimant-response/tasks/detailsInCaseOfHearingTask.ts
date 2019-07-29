@@ -282,12 +282,12 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'yes' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
-    directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
+    directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'no' } })
     directionsQuestionnaireDraft.expertEvidence = new ExpertEvidence().deserialize({
       expertEvidence: { option: 'yes' },
       whatToExamine: 'documents'
@@ -319,7 +319,7 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'yes' } })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'no' })
