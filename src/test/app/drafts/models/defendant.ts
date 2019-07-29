@@ -28,6 +28,12 @@ describe('Defendant', () => {
     it('should a Defendant instance initialised with defaults for null', () => {
       expect(new Defendant().deserialize(null)).to.eql(new Defendant())
     })
+
+    it('should try to extract from old mobile field if new phone field is undefined', () => {
+      const num = '07123456789'
+      const actual = new Defendant().deserialize({ mobilePhone: { number: num } })
+      expect(actual.phone.number).to.equal(num)
+    })
   })
 
   describe('task state', () => {
