@@ -18,6 +18,8 @@ export class Claimant implements CompletableTask {
       this.payment = Payment.deserialize(input.payment)
       if (input.phone) {
         this.phone = new Phone().deserialize(input.phone)
+      } else if (input.mobilePhone) {
+        this.phone = new Phone().deserialize(input.mobilePhone)
       }
       if (input.partyDetails && input.partyDetails.type) {
         switch (input.partyDetails.type) {

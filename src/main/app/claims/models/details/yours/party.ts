@@ -35,6 +35,9 @@ export class Party {
       this.type = input.type
       this.email = input.email
       this.phoneNumber = input.phoneNumber
+      if (!this.phoneNumber && input.mobilePhone) {
+        this.phoneNumber = input.mobilePhone
+      }
       if (input.address) {
         this.address = new Address().deserialize(input.address)
       }
