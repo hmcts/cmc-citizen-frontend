@@ -17,6 +17,8 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { Moment } from 'moment'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -55,6 +57,16 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
       const paymentIntention: PaymentIntention = alreadyPaid ? undefined : getPaymentIntention(draft.document, claim)
+      let alternatePaymentMethodDate: Moment
+      if (draft.document.alternatePaymentMethod) {
+        if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.INSTALMENTS) {
+          alternatePaymentMethodDate = draft.document.alternatePaymentMethod.paymentPlan.firstPaymentDate.toMoment()
+        } else if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.BY_SET_DATE) {
+          alternatePaymentMethodDate = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+        } else {
+          alternatePaymentMethodDate = undefined
+        }
+      }
 
       res.render(Paths.checkAndSendPage.associatedView, {
         draft: draft.document,
@@ -65,8 +77,7 @@ export default express.Router()
         amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
         mediationEnabled: FeatureToggles.isEnabled('mediation'),
         mediationDraft: mediationDraft.document,
-        alternatePaymentMethodDate: (draft.document.alternatePaymentMethod && draft.document.alternatePaymentMethod.paymentDate) ?
-          draft.document.alternatePaymentMethod.paymentDate.date.toMoment() : draft.document.alternatePaymentMethod.paymentPlan.firstPaymentDate.toMoment()
+        alternatePaymentMethodDate: alternatePaymentMethodDate
       })
     })
   )
