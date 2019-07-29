@@ -66,7 +66,7 @@ export default express.Router()
         mediationEnabled: FeatureToggles.isEnabled('mediation'),
         mediationDraft: mediationDraft.document,
         alternatePaymentMethodDate: (draft.document.alternatePaymentMethod && draft.document.alternatePaymentMethod.paymentDate) ?
-          draft.document.alternatePaymentMethod.paymentDate.date.toMoment() : undefined
+          draft.document.alternatePaymentMethod.paymentDate.date.toMoment() : draft.document.alternatePaymentMethod.paymentPlan.firstPaymentDate.toMoment()
       })
     })
   )

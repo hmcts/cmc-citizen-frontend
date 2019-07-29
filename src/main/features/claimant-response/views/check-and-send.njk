@@ -107,11 +107,11 @@
             changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
           {% if paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-            {{ row(label = 'Regular payments of', bold = true, value = paymentIntention.repaymentPlan.instalmentAmount | numeral,
+            {{ row(label = 'Regular payments of', bold = true, value = draft.alternatePaymentMethod.paymentPlan.instalmentAmount | numeral,
               changeLink = ClaimantResponsePaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
-            {{ row(label = 'Frequency of payments', bold = true, value = paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule,
+            {{ row(label = 'Frequency of payments', bold = true, value = draft.alternatePaymentMethod.paymentPlan.paymentSchedule.value | renderPaymentSchedule,
               bottomBorder = false) }}
-            {{ row(label = 'Date for first instalment', bold = true, value = paymentIntention.repaymentPlan.firstPaymentDate | date,
+            {{ row(label = 'Date for first instalment', bold = true, value = alternatePaymentMethodDate | date,
               bottomBorder = true) }}
           {% endif %}
         {% endif %}
