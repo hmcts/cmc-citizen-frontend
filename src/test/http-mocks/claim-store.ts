@@ -371,6 +371,58 @@ export const sampleDefendantResponseObj = {
   }
 }
 
+export const sampleDefendantResponseAlreadyPaidWithMediationObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'ALREADY_PAID',
+    paymentDeclaration: {
+      paidDate: '1999-01-01',
+      paidAmount: 100,
+      explanation: 'I paid you'
+    },
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  }
+}
+
+export const sampleDefendantResponseAlreadyPaidWithNoMediationObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'ALREADY_PAID',
+    paymentDeclaration: {
+      paidDate: '1999-01-01',
+      paidAmount: 100,
+      explanation: 'I paid you'
+    },
+    defence: 'I reject this money claim',
+    freeMediation: 'no',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  }
+}
+
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
