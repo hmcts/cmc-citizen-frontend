@@ -127,12 +127,20 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-    {{ t('You’ve rejected the defendant’s response.') }}
+  {{ t('You’ve rejected the defendant’s response.') }}
 
-    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('You’ve both agreed to try mediation.') }}
-    {% endif %}
-  {% endmacro %}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('You’ve both agreed to try mediation.') }}
+  {% endif %}
+{% endmacro %}
+
+{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
+  {{ t('You’ve rejected the defendant’s response.') }}
+
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('You’ve both agreed to try mediation.') }}
+  {% endif %}
+{% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
     {{ t('You’ve rejected the defendant’s response.') }}

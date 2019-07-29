@@ -35,7 +35,7 @@ export default express.Router()
         const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
 
-        if (form.model.proceed.option === YesNoOption.NO && mediationDraft.id) {
+        if (form.model.proceed.option === YesNoOption.NO && mediationDraft) {
           await new DraftService().delete(mediationDraft.id, user.bearerToken)
         }
 

@@ -137,11 +137,11 @@ describe('Claimant response: intention to proceed page', () => {
       })
 
       it('should redirect to task list page when No is selected and everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse')
         draftStoreServiceMock.resolveFind('mediation')
-        claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-        draftStoreServiceMock.resolveSave()
         draftStoreServiceMock.resolveDelete()
+        draftStoreServiceMock.resolveSave()
 
         await request(app)
           .post(pagePath)

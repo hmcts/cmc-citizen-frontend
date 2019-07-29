@@ -247,9 +247,7 @@ const testData = [
       'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
-      'Request County Court Judgment',
-      'request a County Court Judgment'
+      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -279,9 +277,7 @@ const testData = [
       'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
       'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.',
-      'Request County Court Judgment',
-      'request a County Court Judgment'
+      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
     ],
     defendantAssertions: [
       'Wait for the claimant to respond',
