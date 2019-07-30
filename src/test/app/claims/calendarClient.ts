@@ -15,7 +15,7 @@ describe('calendar', () => {
   it('should return correct date when calendar api is called', async () => {
     mockNextWorkingDay(SATURDAY)
 
-    const nextWorkingDay = await calendarClient.getNextWorkingDay(SATURDAY, 5)
+    const nextWorkingDay = await calendarClient.getNextWorkingDay(SATURDAY)
 
     expect(nextWorkingDay.toISOString()).to.equal(MomentFactory.parse(MONDAY_AFTER).toISOString())
   })
@@ -23,7 +23,7 @@ describe('calendar', () => {
   it('should return Invalid next working day', async () => {
     mockNextWorkingDay(undefined)
 
-    calendarClient.getNextWorkingDay(SATURDAY, 5)
+    calendarClient.getNextWorkingDay(SATURDAY)
       .then(undefined,
         rej => {
           expect(rej.toString()).to.contains('Invalid next working day')
@@ -33,7 +33,7 @@ describe('calendar', () => {
   it('should return Missing date error when no date is passed', () => {
     mockNextWorkingDay(SATURDAY)
 
-    calendarClient.getNextWorkingDay(undefined, 0)
+    calendarClient.getNextWorkingDayAfterDays(undefined, 0)
       .then(undefined, rej =>
         expect(rej.toString()).to.contains('Missing date')
       )
@@ -42,7 +42,7 @@ describe('calendar', () => {
   it('should return Unable to get next working day bad request', () => {
     rejectNextWorkingDay(SATURDAY)
 
-    calendarClient.getNextWorkingDay(SATURDAY, 0)
+    calendarClient.getNextWorkingDay(SATURDAY)
       .catch(err =>
         expect(err.toString()).to.contains('Unable to get next working day')
       )

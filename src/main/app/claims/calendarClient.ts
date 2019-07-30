@@ -10,12 +10,20 @@ export class CalendarClient {
   ) {
   }
 
-  getNextWorkingDay (date: Moment, addDays: number = 0): Promise<Moment> {
+  getNextWorkingDayAfterDays (date: Moment, addDays: number): Promise<Moment> {
     if (!date) {
       return Promise.reject('Missing date')
     }
 
-    const formattedDate: string = encodeURI(MomentFormatter.formatDate(date.add(addDays, 'day')))
+    return this.getNextWorkingDay(date.add(addDays, 'day'))
+  }
+
+  getNextWorkingDay (date: Moment): Promise<Moment> {
+    if (!date) {
+      return Promise.reject('Missing date')
+    }
+
+    const formattedDate: string = encodeURI(MomentFormatter.formatDate(date))
     return requestPromise
       .get({
         json: true,

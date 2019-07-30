@@ -86,7 +86,7 @@ export class Claim {
       return undefined
     }
 
-    return new CalendarClient().getNextWorkingDay(this.respondedAt, 5)
+    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
   }
 
   get remainingDays (): number {

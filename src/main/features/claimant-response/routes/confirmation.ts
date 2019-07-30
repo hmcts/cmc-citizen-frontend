@@ -36,7 +36,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const claim: Claim = res.locals.claim
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
-      const acceptedPaymentPlanClaimantDeadline = await new CalendarClient().getNextWorkingDay(claim.claimantRespondedAt, 7)
+      const acceptedPaymentPlanClaimantDeadline = await new CalendarClient().getNextWorkingDayAfterDays(claim.claimantRespondedAt, 7)
 
       res.render(
         Paths.confirmationPage.associatedView,
