@@ -101,7 +101,7 @@ export class ClaimStoreClient {
     const externalId: string = ordersDraft.externalId
 
     const options = {
-      method: 'POST',
+      method: 'PUT',
       uri: `${claimStoreApiUrl}/${externalId}/review-order`,
       body: reviewOrder,
       headers: {

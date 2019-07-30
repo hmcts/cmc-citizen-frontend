@@ -653,7 +653,7 @@ export function resolveSaveOrder () {
     requestedAt: '2017-07-25T22:45:51.785'
   }
   mock(`${serviceBaseURL}/claims`)
-    .post(new RegExp('/' + externalIdPattern + '/review-order'))
+    .put(new RegExp('/' + externalIdPattern + '/review-order'))
     .reply(HttpStatus.OK, expectedData)
 }
 

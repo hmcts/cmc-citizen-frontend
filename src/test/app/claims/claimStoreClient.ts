@@ -144,7 +144,7 @@ describe('ClaimStoreClient', () => {
 
       function mockInternalServerErrorOnAllAttempts () {
         mock(`${claimStoreApiUrl}`)
-          .post(`/${ordersDraft.externalId}/review-order`)
+          .put(`/${ordersDraft.externalId}/review-order`)
           .times(retryAttempts)
           .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
       }
