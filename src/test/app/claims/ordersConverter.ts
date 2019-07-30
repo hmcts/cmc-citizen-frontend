@@ -1,6 +1,6 @@
-import { sampleOrdersDraftObj } from '../../http-mocks/draft-store'
+import { sampleOrdersDraftObj } from 'test/http-mocks/draft-store'
 import { Claim } from 'claims/models/claim'
-import { sampleClaimIssueObj } from '../../http-mocks/claim-store'
+import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { RequestedBy, ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersConverter } from 'claims/ordersConverter'
@@ -25,10 +25,9 @@ describe('OrdersConverter', () => {
     const claim: Claim = new Claim().deserialize(sampleClaimIssueObj)
 
     const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
+    const expectedReviewOrder: ReviewOrder = new ReviewOrder('I want a judge to review it', RequestedBy.CLAIMANT)
 
-    expect(reviewOrder.reason).to.equal(
-      new ReviewOrder('I want a judge to review it', RequestedBy.CLAIMANT).reason)
-    expect(reviewOrder.requestedBy).to.equal(
-      new ReviewOrder('I want a judge to review it', RequestedBy.CLAIMANT).requestedBy)
+    expect(reviewOrder.reason).to.equal(expectedReviewOrder.reason)
+    expect(reviewOrder.requestedBy).to.equal(expectedReviewOrder.requestedBy)
   })
 })

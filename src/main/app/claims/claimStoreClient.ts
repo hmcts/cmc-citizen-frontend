@@ -110,9 +110,7 @@ export class ClaimStoreClient {
     }
 
     return requestPromiseApi(options)
-      .then(reviewOrder => {
-        return new ReviewOrder().deserialize(reviewOrder)
-      })
+      .then(reviewOrder => new ReviewOrder().deserialize(reviewOrder))
   }
 
   retrieveByClaimantId (user: User): Promise<Claim[]> {
