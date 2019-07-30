@@ -7,7 +7,7 @@
   {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
     <p>{{ t('You’ve accepted the defendant’s part admission.') }}</p>
     <p>{{ t('You agreed they owed {{ amount }} and that they’ve paid it already.',
-        {amount: claim.response.paymentDeclaration.paidAmount | numeral}) }}</p>
+        {amount: claim.response.amount | numeral}) }}</p>
   {% else %}
     <p>{{ t('{{ claimantName }} paid you {{ amount }} on {{ moneyReceivedOn }}.',
         { claimantName: claim.claimData.claimant.name,
@@ -24,7 +24,7 @@
   <p>
     {{ t('{{ claimantName }} confirmed you paid {{ amount }} on {{ moneyReceivedOn }}.',
       { claimantName: claim.claimData.claimant.name,
-        amount: claim.response.paymentDeclaration.paidAmount | numeral,
+        amount: claim.response.amount | numeral,
         moneyReceivedOn: claim.response.paymentDeclaration.paidDate | date }) }}
   </p>
   <p>{{ downloadResponseLink(claim) }}</p>
