@@ -30,10 +30,19 @@ describe('calendar', () => {
         })
   })
 
-  it('should return Missing date error when no date is passed', () => {
+  it('should return Missing date error when no date is passed - getNextWorkingDayAfterDays', () => {
     mockNextWorkingDay(SATURDAY)
 
     calendarClient.getNextWorkingDayAfterDays(undefined, 0)
+      .then(undefined, rej =>
+        expect(rej.toString()).to.contains('Missing date')
+      )
+  })
+
+  it('should return Missing date error when no date is passed - getNextWorkingDay', () => {
+    mockNextWorkingDay(SATURDAY)
+
+    calendarClient.getNextWorkingDay(undefined)
       .then(undefined, rej =>
         expect(rej.toString()).to.contains('Missing date')
       )
