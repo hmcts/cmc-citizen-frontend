@@ -34,8 +34,10 @@
           changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
-      {% if mediationDraft %}
+      {% if claim.response.freeMediation === YesNoOption.YES.option %}
         {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot) }}
+      {% else %}
+        {{ tableEnd() }}
       {% endif %}
     {% elseif draft.intentionToProceed %}
       <div class="form-group">
