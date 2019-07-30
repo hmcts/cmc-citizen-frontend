@@ -30,6 +30,7 @@ import {
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { organisation } from 'test/data/entity/party'
+import { RequestedBy } from 'claims/models/reviewOrder'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -643,6 +644,17 @@ export function resolveSaveOffer () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/offers/defendant'))
     .reply(HttpStatus.CREATED)
+}
+
+export function resolveSaveOrder () {
+  const expectedData = {
+    reason: 'some reason',
+    requestedBy: RequestedBy.CLAIMANT,
+    requestedAt: '2017-07-25T22:45:51.785'
+  }
+  mock(`${serviceBaseURL}/claims`)
+    .post(new RegExp('/' + externalIdPattern + '/review-order'))
+    .reply(HttpStatus.OK, expectedData)
 }
 
 export function resolveAcceptOffer (by: string = 'claimant') {

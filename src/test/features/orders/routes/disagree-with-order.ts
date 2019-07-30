@@ -93,6 +93,8 @@ describe('Orders: why do you disagree with the order page', () => {
           draftStoreServiceMock.resolveFind('orders')
           draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+          claimStoreServiceMock.resolveSaveOrder()
+          draftStoreServiceMock.resolveDelete()
 
           await request(app)
             .post(pagePath)
@@ -106,6 +108,8 @@ describe('Orders: why do you disagree with the order page', () => {
           draftStoreServiceMock.resolveFind('orders')
           draftStoreServiceMock.resolveSave()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+          claimStoreServiceMock.resolveSaveOrder()
+          draftStoreServiceMock.resolveDelete()
 
           await request(app)
             .post(pagePath)
