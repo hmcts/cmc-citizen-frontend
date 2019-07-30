@@ -28,10 +28,10 @@ describe('Monthly amount view filter', () => {
       })).to.throw(errorMessage)
     })
 
-    it('has zero amount', () => {
+    it('has negative amount', () => {
       expect(() => MonthlyAmountViewFilter.render({
         frequency: PaymentFrequency.FOUR_WEEKS,
-        amount: 0
+        amount: -1
       })).to.throw(errorMessage)
     })
   })
@@ -60,6 +60,10 @@ describe('Monthly amount view filter', () => {
 
     it('should convert weekly frequency', () => {
       test(PaymentFrequency.WEEK, 123.45, 534.95)
+    })
+
+    it('should accept zero amount', () => {
+      test(PaymentFrequency.MONTH, 0, 0)
     })
   })
 })
