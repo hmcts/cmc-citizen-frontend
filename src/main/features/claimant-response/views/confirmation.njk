@@ -85,7 +85,7 @@
         <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
         <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and directionsQuestionnaireEnabled %}
-        <p>{{ t('We\'ll review the case. We\'ll contact you to tell you what to do next.') }}</p>
+        <p>{{ t('We’ll review the case. We’ll contact you to tell you what to do next.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.directionsQuestionnaireDeadline %}
         <p>
           {{ t('You need to') }}
