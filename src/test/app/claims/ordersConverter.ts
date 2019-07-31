@@ -25,9 +25,8 @@ describe('OrdersConverter', () => {
     const claim: Claim = new Claim().deserialize(sampleClaimIssueObj)
 
     const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
-    const expectedReviewOrder: ReviewOrder = new ReviewOrder('I want a judge to review it', RequestedBy.CLAIMANT)
 
-    expect(reviewOrder.reason).to.equal(expectedReviewOrder.reason)
-    expect(reviewOrder.requestedBy).to.equal(expectedReviewOrder.requestedBy)
+    expect(reviewOrder.reason).to.equal('I want a judge to review it')
+    expect(reviewOrder.requestedBy).to.equal(RequestedBy.CLAIMANT)
   })
 })
