@@ -2,7 +2,6 @@ import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { StatementType } from 'features/offer/form/models/statementType'
-import { MadeBy } from 'features/offer/form/models/madeBy'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
@@ -30,7 +29,7 @@ import {
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { organisation } from 'test/data/entity/party'
-import { RequestedBy } from 'claims/models/reviewOrder'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -649,7 +648,7 @@ export function resolveSaveOffer () {
 export function resolveSaveOrder () {
   const expectedData = {
     reason: 'some reason',
-    requestedBy: RequestedBy.CLAIMANT,
+    requestedBy: MadeBy.CLAIMANT,
     requestedAt: '2017-07-25T22:45:51.785'
   }
   mock(`${serviceBaseURL}/claims`)

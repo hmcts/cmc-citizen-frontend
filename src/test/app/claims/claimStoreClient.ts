@@ -16,9 +16,10 @@ import { ClaimData } from 'claims/models/claimData'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import * as moment from 'moment'
 import { sampleOrdersDraftObj } from 'test/http-mocks/draft-store'
-import { RequestedBy, ReviewOrder } from 'claims/models/reviewOrder'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { resolveSaveOrder, sampleClaimIssueObj } from 'test/http-mocks/claim-store'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 
@@ -130,7 +131,7 @@ describe('ClaimStoreClient', () => {
     describe('saveOrder', () => {
       const expectedData = {
         reason: 'some reason',
-        requestedBy: RequestedBy.CLAIMANT,
+        requestedBy: MadeBy.CLAIMANT,
         requestedAt: '2017-07-25T22:45:51.785'
       }
       const ordersDraft: OrdersDraft = new OrdersDraft().deserialize(sampleOrdersDraftObj)

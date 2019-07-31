@@ -1,12 +1,13 @@
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 export class ReviewOrder {
   reason: string
-  requestedBy: RequestedBy
+  requestedBy: MadeBy
   requestedAt: Moment
 
-  constructor (reason?: string, requestedBy?: RequestedBy, requestedAt?: Moment) {
+  constructor (reason?: string, requestedBy?: MadeBy, requestedAt?: Moment) {
     this.reason = reason
     this.requestedBy = requestedBy
     this.requestedAt = requestedAt
@@ -21,9 +22,4 @@ export class ReviewOrder {
 
     return this
   }
-}
-
-export enum RequestedBy {
-  CLAIMANT = 'CLAIMANT',
-  DEFENDANT = 'DEFENDANT'
 }

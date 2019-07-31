@@ -2,9 +2,10 @@ import { sampleOrdersDraftObj } from 'test/http-mocks/draft-store'
 import { Claim } from 'claims/models/claim'
 import { sampleClaimIssueObj } from 'test/http-mocks/claim-store'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
-import { RequestedBy, ReviewOrder } from 'claims/models/reviewOrder'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersConverter } from 'claims/ordersConverter'
 import { expect } from 'chai'
+import { MadeBy } from 'offer/form/models/madeBy'
 
 const user = {
   id: '1',
@@ -27,6 +28,6 @@ describe('OrdersConverter', () => {
     const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
 
     expect(reviewOrder.reason).to.equal('I want a judge to review it')
-    expect(reviewOrder.requestedBy).to.equal(RequestedBy.CLAIMANT)
+    expect(reviewOrder.requestedBy).to.equal(MadeBy.CLAIMANT)
   })
 })
