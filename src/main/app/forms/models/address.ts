@@ -28,7 +28,7 @@ export class ValidationErrors {
 }
 
 export class ValidationConstants {
-  static readonly ADDRESS_MAX_LENGTH: number = 20
+  static readonly ADDRESS_MAX_LENGTH: number = 35
 }
 
 export class Address implements CompletableTask {
