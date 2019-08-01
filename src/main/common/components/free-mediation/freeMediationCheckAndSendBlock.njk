@@ -2,7 +2,7 @@
 
 {% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot) %}
   {{ tableStart('freeMediation', 'Consider free mediation') }}
-  {% if mediationPilot %}
+  {% if mediationPilot and mediationDraft.willYouTryMediation.option %}
     {{ row(
       label = 'Will you try free mediation?',
       value = t(mediationDraft.willYouTryMediation.option) | capitalize,
