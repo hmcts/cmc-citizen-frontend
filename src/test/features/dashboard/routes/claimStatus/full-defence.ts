@@ -131,8 +131,9 @@ const testData = [
       'Find out how mediation works',
       'If you don’t send an email before the deadline, the claim will proceed without mediation',
       'Download their response',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -158,8 +159,9 @@ const testData = [
       'They said they dispute your claim.',
       'complete a directions questionnaire',
       'Download their response',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -191,8 +193,9 @@ const testData = [
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'View and respond to the offer',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -221,8 +224,9 @@ const testData = [
       'Download their response',
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -315,8 +319,9 @@ const testData = [
       'Download their response',
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -345,8 +350,9 @@ const testData = [
       'Download their response',
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
