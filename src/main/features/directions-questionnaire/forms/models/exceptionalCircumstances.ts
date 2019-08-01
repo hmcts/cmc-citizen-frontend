@@ -1,6 +1,10 @@
 import { YesNoOption } from 'models/yesNoOption'
-import { IsDefined, IsIn, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { IsDefined, IsIn, IsNotEmpty, MaxLength, ValidateIf } from '@hmcts/class-validator'
+import {
+  ValidationErrors as DefaultValidationErrors,
+  ValidationErrors as GlobalValidationErrors
+} from 'forms/validation/validationErrors'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Explain your reason for the hearing to be in a different location'
@@ -15,6 +19,7 @@ export class ExceptionalCircumstances {
   @ValidateIf(o => o.exceptionalCircumstances && o.exceptionalCircumstances.option === YesNoOption.NO.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   reason?: string
 
   constructor (exceptionalCircumstances?: YesNoOption, reason?: string) {
