@@ -1,0 +1,47 @@
+{% macro tableStart(id, heading) %}
+<fieldset id="{{ id }}" class="form-group">
+  <p class="heading-medium bottom-border">{{ t( heading ) }}</p>
+  <legend>
+    <span class="visually-hidden">{{ t( heading ) }}</span>
+  </legend>
+{% endmacro %}
+
+{% macro tableEnd() %}
+</fieldset>
+{% endmacro %}
+
+{% macro row(label, value, changeLink, bottomBorder = true, bold = false, topBorder = false) %}
+  <div class="{% if topBorder %}top-border {% else %}no-top-border {% endif %} {% if bottomBorder %} bottom-border{% else %} no-bottom-border{% endif %}">
+    <div class="column-one-quarter  {% if not label %}if-empty{% endif %}">
+      <span {% if bold %}class="form-label-bold"{% endif %}>{{ t( label ) }}</span>
+    </div>
+    <div class="column-one-half {% if not value %}if-empty{% endif %}">
+      <span>{{ value }}</span>
+    </div>
+    {% if changeLink %}
+      <div class="column-one-quarter change-link-column">
+        <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }} <span class="visuallyhidden">{{ label | lower }}</span></a>
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro rowWithMultipleValue( label, values, changeLink, bottomBorder = true, bold = false) %}
+  <div class="{% if bottomBorder %}bottom-border{% else %}no-bottom-border{% endif %}">
+    <div class="column-one-quarter {% if not label %}if-empty{% endif %}">
+      <span {% if bold %}class="form-label-bold"{% endif %}>{{ t( label ) }}</span>
+    </div>
+    <div class="column-one-half">
+      {% for value in values %}
+        <span class="block">{{ value }}</span>
+      {% endfor %}
+    </div>
+    {% if changeLink %}
+      <div class="column-one-quarter change-link-column">
+        <a href="{{ changeLink | safe }}" class="bold">{{ t('Change') }} <span class="visuallyhidden">{{ label | lower }}</span></a>
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+
