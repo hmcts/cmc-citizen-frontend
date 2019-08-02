@@ -29,6 +29,17 @@ describe('Details In case of hearing task', () => {
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
+  it('should not be completed when hearing location is not defined', () => {
+    const draft = new DraftClaimantResponse()
+    const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.hearingLocation = undefined
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
+  })
+
   it('should not be completed when hearing location is not selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
@@ -123,6 +134,26 @@ describe('Details In case of hearing task', () => {
     directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
     directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
 
+    expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
+  })
+
+  it('should not be completed when `why expert is needed` is not selected and expertEvidence option is no', () => {
+    const draft = new DraftClaimantResponse()
+    const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
+    const claim: Claim = new Claim().deserialize({
+      ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+    })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
+    directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
+    directionsQuestionnaireDraft.expertReports = new ExpertReports().deserialize({ declared: false, rows: [] })
+    directionsQuestionnaireDraft.permissionForExpert = new PermissionForExpert().deserialize({ option: { option: 'yes' } })
+    directionsQuestionnaireDraft.expertEvidence = new ExpertEvidence().deserialize({
+      expertEvidence: { option: 'no' },
+      whatToExamine: 'documents'
+    })
+    directionsQuestionnaireDraft.whyExpertIsNeeded = new WhyExpertIsNeeded()
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
 
