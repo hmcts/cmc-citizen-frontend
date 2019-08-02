@@ -52,11 +52,11 @@ export class ClaimantResponseConverter {
     } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
   }
 
-  private static convertFreeMediation (mediationDraft: MediationDraft, draft: DraftClaimantResponse): YesNoOption {
+  private static convertFreeMediation (mediationDraft: MediationDraft, claimantResponseDraft: DraftClaimantResponse): YesNoOption {
     if (FeatureToggles.isEnabled('mediation')) {
       return FreeMediationUtil.convertFreeMediation(mediationDraft.youCanOnlyUseMediation)
     } else {
-      return FreeMediationUtil.convertFreeMediation(draft.freeMediation)
+      return FreeMediationUtil.convertFreeMediation(claimantResponseDraft.freeMediation)
     }
   }
 

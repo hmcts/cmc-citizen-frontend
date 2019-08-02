@@ -418,7 +418,7 @@
           bold = true
         ) }}
       {% endif %}
-      {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === 'yes' %}
+      {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === YesNoOption.YES.option %}
         {{ row(
           label = 'Briefly explain your reasons',
           value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,

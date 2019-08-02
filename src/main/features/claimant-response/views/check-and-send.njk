@@ -184,7 +184,7 @@
       }}
 
       {% if mediationEnabled %}
-        {% if draft.intentionToProceed.proceed.option === 'yes' and claim.response.freeMediation === 'yes' %}
+        {% if draft.intentionToProceed.proceed.option === YesNoOption.YES.option and claim.response.freeMediation === YesNoOption.YES.option %}
           {{ freeMediationBlock(claim, draft, mediationDraft, contactPerson, contactNumber) }}
         {% endif %}
       {% endif %}
