@@ -24,7 +24,7 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantR
     return AmountHelper.calculateAmountSettledFor(claim, draft)
   }
 
-  claimFeeInPennies (claim: Claim, draft: DraftClaimantResponse): number {
+  claimFeeInPennies (claim: Claim): number {
     return claim.claimData.feeAmountInPennies
   }
 }

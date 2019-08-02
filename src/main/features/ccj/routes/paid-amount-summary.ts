@@ -38,7 +38,7 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     }
   }
 
-  claimFeeInPennies (claim: Claim, draft: DraftCCJ): number {
+  claimFeeInPennies (claim: Claim): number {
     return CCJHelper.claimFeeInPennies(claim)
   }
 

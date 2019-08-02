@@ -16,12 +16,9 @@ export function claimFeeInPennies (claim: Claim): number {
     const response: PartialAdmissionResponse = claim.response as PartialAdmissionResponse
     if (amountSettledFor(claim) === 0 && response.amount < claim.claimData.feeAmountInPennies / 100) {
       return response.amount * 100
-    } else {
-      return claim.claimData.feeAmountInPennies
     }
-  } else {
-    return claim.claimData.feeAmountInPennies
   }
+  return claim.claimData.feeAmountInPennies
 }
 
 export function isPartAdmissionAcceptation (claim: Claim): boolean {

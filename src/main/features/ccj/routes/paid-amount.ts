@@ -13,7 +13,7 @@ class PaidAmountPage extends AbstractPaidAmountPage<DraftCCJ> {
     return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
   }
 
-  totalAmount (claim: Claim, draft: DraftCCJ): number {
+  totalAmount (claim: Claim, DraftCCJ): number {
     if (CCJHelper.isPartAdmissionAcceptation(claim)) {
       return CCJHelper.amountSettledFor(claim) + CCJHelper.claimFeeInPennies(claim) / 100
     } else {
