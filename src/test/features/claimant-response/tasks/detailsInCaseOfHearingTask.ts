@@ -35,7 +35,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation = undefined
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
@@ -46,7 +49,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
 
     expect(DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)).to.be.false
   })
@@ -54,7 +60,11 @@ describe('Details In case of hearing task', () => {
   it('should not be completed when only hearing location and exceptional circumstances are selected', () => {
     const draft = new DraftClaimantResponse()
     const directionsQuestionnaireDraft = new DirectionsQuestionnaireDraft()
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
+
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
@@ -69,7 +79,11 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
+
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
 
@@ -82,7 +96,11 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
+
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -96,7 +114,11 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
+
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -111,7 +133,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -127,7 +152,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -143,7 +171,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -163,7 +194,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -183,7 +217,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -208,7 +245,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -241,7 +281,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -276,7 +319,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'no' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -313,7 +359,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'yes' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'yes' })
@@ -350,7 +399,10 @@ describe('Details In case of hearing task', () => {
     const claim: Claim = new Claim().deserialize({
       ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
     })
-    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({ exceptionalCircumstances: { option: 'yes' } })
+    directionsQuestionnaireDraft.exceptionalCircumstances = new ExceptionalCircumstances().deserialize({
+      exceptionalCircumstances: { option: 'no' },
+      reason: 'No Disable Access'
+    })
     directionsQuestionnaireDraft.hearingLocation.courtName = 'London'
     directionsQuestionnaireDraft.selfWitness = new SelfWitness().deserialize({ option: 'yes' })
     directionsQuestionnaireDraft.expertRequired = new ExpertRequired().deserialize({ option: 'no' })
