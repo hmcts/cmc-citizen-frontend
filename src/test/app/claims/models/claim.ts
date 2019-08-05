@@ -566,6 +566,19 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID)
     })
 
+    it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
+      claim.respondedAt = moment()
+      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.response = {
+        paymentIntention: null,
+        responseType: 'FULL_DEFENCE',
+        freeMediation: 'no'
+      }
+
+      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
+    })
+
     context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
       it('when defendant states paid amount equal to claim amount', () => {
         claim.totalAmountTillToday = 100
@@ -634,7 +647,7 @@ describe('Claim', () => {
           type: 'REJECTION'
         }
 
-        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
       })
 
       it('when claimant accepts defendants defence', () => {

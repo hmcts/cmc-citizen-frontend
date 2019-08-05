@@ -180,6 +180,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PartyType', PartyType)
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
     nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
+    nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('domain', {
       ResponseType: DomainResponseType,
       PaymentOption: PaymentOption,
