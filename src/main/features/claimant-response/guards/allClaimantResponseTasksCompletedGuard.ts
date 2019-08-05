@@ -16,10 +16,11 @@ export class AllClaimantResponseTasksCompletedGuard {
     try {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+      const directionsQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
       const claim: Claim = res.locals.claim
 
       const allTasksCompleted: boolean = TaskListBuilder
-        .buildRemainingTasks(draft.document, claim, mediationDraft.document).length === 0
+        .buildRemainingTasks(draft.document, claim, mediationDraft.document, directionsQuestionnaireDraft.document).length === 0
 
       if (allTasksCompleted) {
         return next()
