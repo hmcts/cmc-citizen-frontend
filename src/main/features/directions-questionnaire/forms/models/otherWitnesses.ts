@@ -30,8 +30,8 @@ export class OtherWitnesses implements CompletableTask {
   }
 
   deserialize (input?: any): OtherWitnesses {
-    if (input) {
-      this.otherWitnesses = YesNoOption.fromObject(input.otherWitnesses)
+    if (input && input.otherWitnesses) {
+      this.otherWitnesses = YesNoOption.fromObject(input.otherWitnesses.option)
       if (input.otherWitnesses) {
         this.howMany = toNumberOrUndefined(input.howMany)
       }
