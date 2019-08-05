@@ -31,7 +31,7 @@ function getPhoneNumber (res: express.Response) {
     const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
     return draftResponse.document.defendantDetails.phone ? draftResponse.document.defendantDetails.phone.number : undefined
   } else {
-    return claim.claimData.claimant.phoneNumber
+    return claim.claimData.claimant.phone
   }
 }
 

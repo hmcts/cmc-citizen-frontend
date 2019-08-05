@@ -220,7 +220,7 @@ export class ResponseModelConverter {
           if (!claim.isResponseSubmitted()) {
             return draft.defendantDetails.phone.number
           } else {
-            return claim.claimData.claimant.phoneNumber ? claim.claimData.claimant.phoneNumber : mediationDraft.canWeUse.mediationPhoneNumber
+            return claim.claimData.claimant.phone ? claim.claimData.claimant.phone : mediationDraft.canWeUse.mediationPhoneNumber
           }
         } else {
           return mediationDraft.canWeUse.mediationPhoneNumber
@@ -391,7 +391,7 @@ export class ResponseModelConverter {
       party.email = defendant.email.address
     }
     if (defendant.phone) {
-      party.phoneNumber = defendant.phone.number
+      party.phone = defendant.phone.number
     }
     return party
   }

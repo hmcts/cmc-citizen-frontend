@@ -25,7 +25,7 @@ function renderView (form: Form<CanWeUse>, res: express.Response): void {
     const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
     phoneNumber = draftResponse.document.defendantDetails.phone ? draftResponse.document.defendantDetails.phone.number : undefined
   } else {
-    phoneNumber = claim.claimData.claimant.phoneNumber
+    phoneNumber = claim.claimData.claimant.phone
   }
   res.render(Paths.canWeUsePage.associatedView, {
     form: form,

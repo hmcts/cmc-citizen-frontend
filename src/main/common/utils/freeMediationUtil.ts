@@ -37,7 +37,7 @@ export class FreeMediationUtil {
         if (!claim.isResponseSubmitted() && draft) {
           return draft.defendantDetails.phone.number || undefined
         } else {
-          return claim.claimData.claimant.phoneNumber || mediationDraft.canWeUse.mediationPhoneNumber
+          return claim.claimData.claimant.phone || mediationDraft.canWeUse.mediationPhoneNumber
         }
       } else {
         return mediationDraft.canWeUse.mediationPhoneNumber

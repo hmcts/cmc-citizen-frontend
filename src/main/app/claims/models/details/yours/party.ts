@@ -6,7 +6,7 @@ export class Party {
   name: string
   address: Address
   correspondenceAddress?: Address
-  phoneNumber?: string
+  phone?: string
   email?: string
 
   constructor (
@@ -14,14 +14,14 @@ export class Party {
               name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              phoneNumber?: string,
+              phone?: string,
               email?: string
   ) {
     this.type = type
     this.name = name
     this.address = address
     this.correspondenceAddress = correspondenceAddress
-    this.phoneNumber = phoneNumber
+    this.phone = phone
     this.email = email
   }
 
@@ -34,7 +34,7 @@ export class Party {
       this.name = input.name
       this.type = input.type
       this.email = input.email
-      this.phoneNumber = input.phoneNumber || input.mobilePhone
+      this.phone = input.phone || input.mobilePhone
       if (input.address) {
         this.address = new Address().deserialize(input.address)
       }
