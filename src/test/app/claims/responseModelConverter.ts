@@ -370,6 +370,7 @@ describe('ResponseModelConverter', () => {
             const claim: Claim = new Claim().deserialize({
               ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
             })
+
             expect(Response.deserialize(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
               .to.deep.equal(Response.deserialize(responseData))
           })

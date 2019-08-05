@@ -32,7 +32,7 @@ export class DefendantCheckAndSendPage {
     I.see('Why this is what you owe?')
     I.see('Your timeline of events (optional)')
     I.see('Your evidence (optional)')
-    I.see('Consider free mediation')
+    I.see('Free telephone mediation')
   }
 
   verifyFactsPartialResponseIBelieveIPaidWhatIOwe (): void {
@@ -43,7 +43,7 @@ export class DefendantCheckAndSendPage {
     I.see('Explain why you don’t owe the full amount')
     I.see('Your timeline of events (optional)')
     I.see('Your evidence (optional)')
-    I.see('Consider free mediation')
+    I.see('Free telephone mediation')
   }
 
 }
