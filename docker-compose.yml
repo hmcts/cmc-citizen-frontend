@@ -17,4 +17,4 @@ services:
         - http_proxy
         - https_proxy
         - no_proxy
-    image: hmcts/cmc-citizen-integration-tests
+    image: hmctspublic.azurecr.io/cmc/citizen-integration-tests
