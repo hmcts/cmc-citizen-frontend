@@ -10,7 +10,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/offer/routes/checks/authorization-check'
 import { StatementType } from 'offer/form/models/statementType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'

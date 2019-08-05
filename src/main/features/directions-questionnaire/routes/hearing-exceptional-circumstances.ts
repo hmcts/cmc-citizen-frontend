@@ -10,7 +10,7 @@ import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
   const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
