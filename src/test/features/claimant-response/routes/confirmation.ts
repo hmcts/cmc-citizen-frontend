@@ -10,6 +10,7 @@ import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/rou
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { rejectionClaimantResponseData } from 'test/data/entity/claimantResponseData'
 
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
@@ -44,7 +45,11 @@ describe('Claimant response: confirmation page', () => {
         })
 
         it('should render page when everything is fine', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+          let claimantResponseData = {
+            ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
+            ...{ claimantResponse: rejectionClaimantResponseData }
+          }
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimantResponseData)
           claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)

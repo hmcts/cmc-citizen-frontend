@@ -1,5 +1,7 @@
-import { IsDefined, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
+import { IsDefined, IsNotEmpty, MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
   static readonly NO_LANGUAGE_ENTERED = 'Enter the language that needs to be interpreted'
@@ -13,6 +15,7 @@ export class SupportRequired {
   @IsDefined({ message: ValidationErrors.NO_LANGUAGE_ENTERED })
   @IsNotEmpty({ message: ValidationErrors.NO_LANGUAGE_ENTERED })
   @IsNotBlank({ message: ValidationErrors.NO_LANGUAGE_ENTERED })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   languageInterpreted?: string
 
   signLanguageSelected?: boolean
@@ -20,6 +23,8 @@ export class SupportRequired {
   @IsDefined({ message: ValidationErrors.NO_SIGN_LANGUAGE_ENTERED })
   @IsNotEmpty({ message: ValidationErrors.NO_SIGN_LANGUAGE_ENTERED })
   @IsNotBlank({ message: ValidationErrors.NO_SIGN_LANGUAGE_ENTERED })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
+
   signLanguageInterpreted?: string
 
   hearingLoopSelected?: boolean
@@ -31,6 +36,8 @@ export class SupportRequired {
   @IsDefined({ message: ValidationErrors.NO_OTHER_SUPPORT })
   @IsNotEmpty({ message: ValidationErrors.NO_OTHER_SUPPORT })
   @IsNotBlank({ message: ValidationErrors.NO_OTHER_SUPPORT })
+  @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
+
   otherSupport?: string
 
   constructor (

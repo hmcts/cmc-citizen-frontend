@@ -72,7 +72,7 @@ describe('Defendant response: full admission options', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?'))
+            .expect(res => expect(res).to.be.successful.withText('Why do you believe you don’t owe'))
         })
       })
     })
@@ -121,7 +121,7 @@ describe('Defendant response: full admission options', () => {
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Why do you reject the claim?', 'div class="error-summary"'))
+              .expect(res => expect(res).to.be.successful.withText('Why do you believe you don’t owe', 'div class="error-summary"'))
           })
         })
 
