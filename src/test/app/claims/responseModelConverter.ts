@@ -331,7 +331,7 @@ describe('ResponseModelConverter', () => {
 
       const mediationResponseData = {
         freeMediation: 'yes',
-        mediationphone: '07777777777',
+        mediationPhoneNumber: '07777777777',
         mediationContactPerson: 'Mary Richards'
       }
       context('full defence conversion', () => {
@@ -383,7 +383,7 @@ describe('ResponseModelConverter', () => {
             },
             canWeUseCompany: {
               option: FreeMediationOption.YES,
-              mediationphoneConfirmation: '07777777788',
+              mediationPhoneNumberConfirmation: '07777777788',
               mediationContactPerson: 'Mary Richards'
             }
           })
@@ -394,7 +394,7 @@ describe('ResponseModelConverter', () => {
             ...partialAdmissionFromStatesPaidDefence,
             ...{
               freeMediation: 'yes',
-              mediationphone: '07777777788',
+              mediationPhoneNumber: '07777777788',
               mediationContactPerson: 'Company Smith'
             },
             ...directionsQuestionnaireResponseData
@@ -646,14 +646,14 @@ describe('ResponseModelConverter', () => {
             ...partialAdmissionWithPaymentByInstalmentsData,
             ...{
               freeMediation: 'no',
-              mediationphone: '07777777799'
+              mediationPhoneNumber: '07777777799'
             },
             ...directionsQuestionnaireResponseData
           }, individual)
           const mediationDraft = new MediationDraft().deserialize({
             canWeUse: {
               option: FreeMediationOption.NO,
-              mediationphone: '07777777799'
+              mediationPhoneNumber: '07777777799'
             }
           })
 
@@ -674,7 +674,7 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'no',
               mediationContactPerson: undefined,
-              mediationphone: '0700000000'
+              mediationPhoneNumber: '0700000000'
             },
             ...directionsQuestionnaireResponseData
           }, individual)
@@ -884,7 +884,7 @@ describe('ResponseModelConverter', () => {
 
       const mediationResponseData = {
         freeMediation: 'yes',
-        mediationphone: '07777777777',
+        mediationPhoneNumber: '07777777777',
         mediationContactPerson: 'Mary Richards'
       }
       context('full defence conversion', () => {
@@ -932,7 +932,7 @@ describe('ResponseModelConverter', () => {
             },
             canWeUseCompany: {
               option: FreeMediationOption.YES,
-              mediationphoneConfirmation: '07777777788',
+              mediationPhoneNumberConfirmation: '07777777788',
               mediationContactPerson: 'Mary Richards'
             }
           })
@@ -943,7 +943,7 @@ describe('ResponseModelConverter', () => {
             ...partialAdmissionFromStatesPaidDefence,
             ...{
               freeMediation: 'yes',
-              mediationphone: '07777777788',
+              mediationPhoneNumber: '07777777788',
               mediationContactPerson: 'Company Smith'
             }
           }, company)
@@ -1161,13 +1161,13 @@ describe('ResponseModelConverter', () => {
             ...partialAdmissionWithPaymentByInstalmentsData,
             ...{
               freeMediation: 'no',
-              mediationphone: '07777777799'
+              mediationPhoneNumber: '07777777799'
             }
           }, individual)
           const mediationDraft = new MediationDraft().deserialize({
             canWeUse: {
               option: FreeMediationOption.NO,
-              mediationphone: '07777777799'
+              mediationPhoneNumber: '07777777799'
             }
           })
 
@@ -1186,7 +1186,7 @@ describe('ResponseModelConverter', () => {
             ...{
               freeMediation: 'no',
               mediationContactPerson: undefined,
-              mediationphone: '0700000000'
+              mediationPhoneNumber: '0700000000'
             }
           }, individual)
           const mediationDraft = new MediationDraft().deserialize({
