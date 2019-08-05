@@ -152,6 +152,25 @@ export const partialAdmissionFromStatesPaidDefence = {
   mediationContactPerson: undefined
 }
 
+export const partialAdmissionFromStatesPaidWithMediationDefence = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  freeMediation: 'yes'
+}
+
 export const partialAdmissionAlreadyPaidData = {
   ...baseResponseData,
   ...basePartialAdmissionData,
