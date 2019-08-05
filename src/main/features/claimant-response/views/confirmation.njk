@@ -40,6 +40,10 @@
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
+        {% if directionsQuestionnaireEnabled %}
+        <p><a href="http://hmcts-cmc-prototype.herokuapp.com/prototypes/features-to-be-built/claimant/correspondence/dqs">Download your hearing requirements</a> (PDF, 123KB)</p>
+        {% endif %}
+
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
@@ -78,7 +82,10 @@
           <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
         {% endif %}
       {% elseif claim.claimantResponse.freeMediation === YesNoOption.YES.option %}
-        <p>{{ t('The court will contact you and the defendant within 14 days to arrange a mediation appointment.') }}</p>
+        <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
+        <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
+      {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and directionsQuestionnaireEnabled %}
+        <p>{{ t('We’ll review the case. We’ll contact you to tell you what to do next.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.directionsQuestionnaireDeadline %}
         <p>
           {{ t('You need to') }}

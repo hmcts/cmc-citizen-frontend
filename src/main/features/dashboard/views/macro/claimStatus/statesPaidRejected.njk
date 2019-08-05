@@ -2,8 +2,11 @@
 {% from "internalLink.njk" import internalLink %}
 {% from "./utilityMacros.njk" import downloadResponseLink, downloadTheirResponseLink %}
 
-{% macro statesPaidRejectedClaimantDashboard() %}
+{% macro statesPaidRejectedClaimantDashboard(claim) %}
   {{ t('You’ve rejected the defendant’s admission.') }}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {{ t('You’ve both agreed to try mediation.') }}
+  {% endif %}
 {% endmacro %}
 
 {% macro statesPaidRejectedClaimantClaimDetails(claim) %}

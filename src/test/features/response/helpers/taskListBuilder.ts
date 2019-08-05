@@ -37,7 +37,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const features: string[] = ['admissions']
-const mediationTaskLabel = 'Consider free mediation'
+const mediationTaskLabel = 'Free telephone mediation'
 const featureToggleMediationTaskLabel = 'Free telephone mediation'
 const directionsQuestionnaireTaskLabel = 'Your hearing requirements'
 describe('Defendant response task list builder', () => {
@@ -143,7 +143,7 @@ describe('Defendant response task list builder', () => {
       })
     })
 
-    describe('"Why do you disagree with the claim?" task', () => {
+    describe('"Tell us why you disagree with the claim" task', () => {
       let stub: sinon.SinonStub
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
 
@@ -159,14 +159,14 @@ describe('Defendant response task list builder', () => {
         stub.returns(true)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).to.contain('Why do you disagree with the claim?')
+        expect(taskList.tasks.map(task => task.name)).to.contain('Tell us why you disagree with the claim')
       })
 
       it('should be disabled when response is not rejected with dispute', () => {
         stub.returns(false)
 
         const taskList: TaskList = TaskListBuilder.buildRespondToClaimSection(responseDraft, claim)
-        expect(taskList.tasks.map(task => task.name)).not.to.contain('Why do you disagree with the claim?')
+        expect(taskList.tasks.map(task => task.name)).to.not.contain('Tell us why you disagree with the claim')
       })
     })
 
