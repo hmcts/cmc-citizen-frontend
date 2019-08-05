@@ -65,4 +65,12 @@ export namespace DirectionsQuestionnaire {
       }
     }
   }
+
+  export function fromObject (directionsQuestionnaire: DirectionsQuestionnaire): DirectionsQuestionnaire {
+    if (!directionsQuestionnaire) {
+      return undefined
+    }
+
+    return directionsQuestionnaire
+  }
 }
