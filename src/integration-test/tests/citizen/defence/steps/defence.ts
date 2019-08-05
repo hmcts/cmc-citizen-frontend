@@ -115,7 +115,7 @@ export class DefenceSteps {
     if (defendant.type === PartyType.INDIVIDUAL) {
       defendantDobPage.enterDOB(defendant.dateOfBirth)
     }
-    defendantPhonePage.enterPhone(defendant.phoneNumber)
+    defendantPhonePage.enterPhone(defendant.phone)
   }
 
   requestNoExtraTimeToRespond (): void {

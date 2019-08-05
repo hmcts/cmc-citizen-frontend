@@ -9,10 +9,10 @@ export class Individual extends Party {
               name?: string,
               address?: Address,
               correspondenceAddress?: Address,
-              phoneNumber?: string,
+              phone?: string,
               email?: string,
               dateOfBirth?: string) {
-    super(PartyType.INDIVIDUAL.value, name, address, correspondenceAddress, phoneNumber, email)
+    super(PartyType.INDIVIDUAL.value, name, address, correspondenceAddress, phone, email)
     this.dateOfBirth = dateOfBirth
   }
 

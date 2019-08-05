@@ -100,7 +100,7 @@ export class ClaimSteps {
       default:
         throw new Error('non-matching claimant type for claim')
     }
-    citizenPhonePage.enterPhone(claimant.phoneNumber)
+    citizenPhonePage.enterPhone(claimant.phone)
   }
 
   enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): void {
@@ -252,7 +252,7 @@ export class ClaimSteps {
       default:
         throw new Error('non-matching claimant type for claim')
     }
-    citizenPhonePage.enterPhone(claimant.phoneNumber)
+    citizenPhonePage.enterPhone(claimant.phone)
   }
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
