@@ -259,6 +259,14 @@
   <p>{{ internalLink(t(text), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}</p>
 {% endmacro %}
 
+{% macro claimRejectedForClaimantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('Decide whether to proceed') }}</h2>
+  <p>{{ t('{{ defendantName }} has rejected your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
+  <p>{{ t('You need to decide whether to proceed with the claim. You need to respond before 4pm on {{ respondToMediationDeadline }}. Your claim won’t continue if you don’t respond by then.',
+      { respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}</p>
+  <p>{{ internalLink(t('View and respond'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}</p>
+{% endmacro %}
+
 {% macro claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('The defendant has rejected your claim') }}</h2>
