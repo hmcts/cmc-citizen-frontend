@@ -16,7 +16,7 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
-import { ResponseFreeMediationTask } from 'response/tasks/freeMediationTask'
+import { FreeMediationTask } from 'shared/components/free-mediation/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastDeadline } from 'claims/isPastDeadline'
@@ -242,15 +242,30 @@ export class TaskListBuilder {
     if (draft.isResponseRejectedFullyWithDispute()
       || draft.isResponseRejectedFullyBecausePaidWhatOwed()
       || TaskListBuilder.isPartiallyAdmittedAndWhyDoYouDisagreeTaskCompleted(draft)) {
-      return new TaskList(
-        'Try to resolve the claim', [
-          new TaskListItem(
-            'Consider free mediation',
-            MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
-            ResponseFreeMediationTask.isCompleted(mediationDraft, claim)
-          )
-        ]
-      )
+      let path: string
+      if (FeatureToggles.isEnabled('mediation')) {
+        path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Try to resolve the claim', [
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(mediationDraft, claim)
+            )
+          ]
+        )
+      } else {
+        path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
+        return new TaskList(
+          'Resolving the claim', [
+            new TaskListItem(
+              'Free telephone mediation',
+              path,
+              FreeMediationTask.isCompleted(mediationDraft, claim)
+            )
+          ]
+        )
+      }
     }
 
     return undefined
@@ -275,7 +290,7 @@ export class TaskListBuilder {
     return undefined
   }
 
-  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string, features: string[]): TaskList {
+  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()

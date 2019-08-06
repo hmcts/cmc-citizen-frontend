@@ -36,8 +36,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { FeatureToggles } from 'utils/featureToggles'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
-const features: string[] = ['admissions']
-const mediationTaskLabel = 'Consider free mediation'
+const mediationTaskLabel = 'Free telephone mediation'
 const directionsQuestionnaireTaskLabel = 'Your hearing requirements'
 
 describe('Defendant response task list builder', () => {
@@ -396,7 +395,7 @@ describe('Defendant response task list builder', () => {
       })
     })
 
-    describe('"Consider free mediation" task', () => {
+    describe('"Free telephone mediation" task', () => {
       let isResponseRejectedFullyWithDisputeStub: sinon.SinonStub
       let isResponsePartiallyAdmitted: sinon.SinonStub
       let isResponseRejectedFullyBecausePaidWhatOwed: sinon.SinonStub
@@ -835,7 +834,7 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputePaidStub.returns(true)
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
@@ -844,7 +843,7 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
@@ -852,14 +851,14 @@ describe('Defendant response task list builder', () => {
       isResponseFullyAdmittedStub.returns(true)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
     it('should be enabled when claim is fully rejected because paid in full gte claim amount', () => {
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
 
     })
@@ -871,7 +870,7 @@ describe('Defendant response task list builder', () => {
       isResponseFullyAdmittedStub.returns(false)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList).to.be.undefined
     })
   })
@@ -887,14 +886,14 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputeStub.restore()
     })
 
-    it('Should return "Consider free mediation" when not completed for fully reject', () => {
+    it('Should return "Free telephone mediation" when not completed for fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
       const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
       expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
     })
 
-    it('Should not return "Consider free mediation" when not fully reject', () => {
+    it('Should not return "Free telephone mediation" when not fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
       const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())

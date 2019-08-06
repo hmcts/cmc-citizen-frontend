@@ -19,6 +19,7 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { ResponseType } from 'claims/models/response/responseType'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { FeatureToggles } from 'utils/featureToggles'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -69,7 +70,8 @@ export default express.Router()
         mediationDraft: mediationDraft.document,
         contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document),
         contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document),
-        mediationPilot: mediationPilot
+        mediationPilot: mediationPilot,
+        mediationEnabled: FeatureToggles.isEnabled('mediation')
       })
     })
   )

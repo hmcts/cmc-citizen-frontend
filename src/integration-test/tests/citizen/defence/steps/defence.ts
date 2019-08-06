@@ -5,6 +5,7 @@ import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
 import { DefendantEnterClaimPinNumberPage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-pin-number'
 import { DefendantEnterClaimReferencePage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-reference'
+import { DefendantFreeMediationPage } from 'integration-test/tests/citizen/defence/pages/defendant-free-mediation'
 import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
 import { DefendantImpactOfDisputePage } from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
 import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
@@ -33,7 +34,6 @@ import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pa
 import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/statement-of-means/already-paid'
 import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
 import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
-import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import I = CodeceptJS.I
 
 const I: I = actor()
@@ -49,6 +49,7 @@ const defendantMoreTimeRequestPage: DefendantMoreTimeRequestPage = new Defendant
 const defendantDefenceTypePage: DefendantDefenceTypePage = new DefendantDefenceTypePage()
 const defendantRejectAllOfClaimPage: DefendantRejectAllOfClaimPage = new DefendantRejectAllOfClaimPage()
 const defendantYourDefencePage: DefendantYourDefencePage = new DefendantYourDefencePage()
+const defendantFreeMediationPage: DefendantFreeMediationPage = new DefendantFreeMediationPage()
 const alreadyPaidPage: AlreadyPaidPage = new AlreadyPaidPage()
 const defendantCheckAndSendPage: DefendantCheckAndSendPage = new DefendantCheckAndSendPage()
 const defendantHowMuchHaveYouPaidTheClaimant: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
@@ -68,7 +69,6 @@ const defendantHowMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new Def
 const haveYouPaidTheClaimantPage: DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage = new DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage()
 const defendantHowMuchYouOwePage: DefendantHowMuchYouOwePage = new DefendantHowMuchYouOwePage()
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'BS1 5TL' }
-const mediationSteps: MediationSteps = new MediationSteps()
 
 const defendantRepaymentPlan: PaymentPlan = {
   equalInstalment: 20.00,
@@ -256,13 +256,9 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence(text)
   }
 
-  askForMediation (defendantType: PartyType = PartyType.INDIVIDUAL): void {
-    defendantTaskListPage.selectTaskFreeMediation()
-    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-      mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
-    } else {
-      mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
-    }
+  askForMediation (): void {
+    defendantSteps.selectTaskFreeMediation()
+    defendantFreeMediationPage.chooseYes()
   }
 
   verifyCheckAndSendPageCorrespondsTo (defenceType: DefenceType): void {
@@ -317,7 +313,7 @@ export class DefenceSteps {
           } as TimelineEvent]
         } as Timeline)
         this.enterEvidence('description', 'comment')
-        this.askForMediation(defendantType)
+        this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
@@ -329,7 +325,7 @@ export class DefenceSteps {
         break
       case DefenceType.PART_ADMISSION_NONE_PAID:
         this.admitPartOfTheClaim(defence)
-        this.askForMediation(defendantType)
+        this.askForMediation()
         if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
           defendantTaskListPage.selectShareYourFinancialDetailsTask()
           sendCompanyDetailsPage.continue()
@@ -340,7 +336,7 @@ export class DefenceSteps {
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)
-        this.askForMediation(defendantType)
+        this.askForMediation()
         defendantSteps.selectCheckAndSubmitYourDefence()
         if (isClaimAlreadyPaid) {
           I.see('How much money have you paid?')
@@ -435,7 +431,7 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence('I have already paid for the bill')
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
-    this.askForMediation(defendantType)
+    this.askForMediation()
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
     I.see('You’ve submitted your response')
@@ -475,7 +471,7 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediation()
+    defendantFreeMediationPage.chooseNo()
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     this.checkAndSendAndSubmit(defendantType)
     I.see('You’ve submitted your response')

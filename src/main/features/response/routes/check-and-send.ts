@@ -55,7 +55,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     statementOfTruthType: statementOfTruthType,
     contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
     contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document),
-    mediationPilot: mediationPilot
+    mediationPilot: mediationPilot,
+    mediationEnabled: FeatureToggles.isEnabled('mediation')
   })
 }
 

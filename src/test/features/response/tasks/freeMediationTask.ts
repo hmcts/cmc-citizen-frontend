@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 
-import { ResponseFreeMediationTask } from 'response/tasks/freeMediationTask'
+import { FreeMediationTask } from 'shared/components/free-mediation/freeMediationTask'
 import { FreeMediation, FreeMediationOption } from 'forms/models/freeMediation'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { CanWeUse } from 'mediation/form/models/CanWeUse'
@@ -18,7 +18,7 @@ describe('Free mediation task', () => {
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = undefined
 
-    expect(ResponseFreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
+    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
   })
 
   it('should not be completed when willYouTryMediation is yes and youCanOnlyUseMediation is undefined', () => {
@@ -26,7 +26,7 @@ describe('Free mediation task', () => {
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = undefined
 
-    expect(ResponseFreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
+    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
   })
 
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is yes and canWeUse is yes', () => {
@@ -35,7 +35,7 @@ describe('Free mediation task', () => {
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.canWeUse = new CanWeUse(FreeMediationOption.YES)
 
-    expect(ResponseFreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
+    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
   })
 
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is no', () => {
@@ -43,7 +43,7 @@ describe('Free mediation task', () => {
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.NO)
 
-    expect(ResponseFreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
+    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
   })
 
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is Yes and can we use is no and phone number is provided', () => {
@@ -52,7 +52,7 @@ describe('Free mediation task', () => {
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.canWeUse = new CanWeUse(FreeMediationOption.NO, '07777777777')
 
-    expect(ResponseFreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
+    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
   })
 
   it('should be completed when WeCanUseCompany is yes and phone number confirmation is provided', () => {
@@ -61,7 +61,7 @@ describe('Free mediation task', () => {
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.canWeUseCompany = new CanWeUseCompany(FreeMediationOption.YES, '', '', '07777777777')
 
-    expect(ResponseFreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
+    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
   })
 
   it('should be completed when WeCanUseCompany is no and phone number and contact person is provided', () => {
@@ -70,6 +70,6 @@ describe('Free mediation task', () => {
     mediationDraft.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
     mediationDraft.canWeUseCompany = new CanWeUseCompany(FreeMediationOption.YES, '07777777777', 'Mary Richards', '')
 
-    expect(ResponseFreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
+    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.true
   })
 })
