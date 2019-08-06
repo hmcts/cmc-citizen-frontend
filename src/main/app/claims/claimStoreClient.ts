@@ -246,9 +246,9 @@ export class ClaimStoreClient {
     })
   }
 
-  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, mediationDraft: Draft<MediationDraft>, user: User): Promise<void> {
+  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, mediationDraft: Draft<MediationDraft>, user: User, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): Promise<void> {
     const isDefendantBusiness = claim.claimData.defendant.isBusiness()
-    const response = ClaimantResponseConverter.convertToClaimantResponse(claim, draft.document, mediationDraft.document, isDefendantBusiness)
+    const response = ClaimantResponseConverter.convertToClaimantResponse(claim, draft.document, mediationDraft.document, isDefendantBusiness, directionsQuestionnaireDraft)
     const externalId: string = claim.externalId
 
     const options = {

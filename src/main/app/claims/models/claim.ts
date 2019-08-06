@@ -166,6 +166,8 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
+    } else if (this.hasDefendantRejectedClaimWithDQs()) {
+      return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.isResponseSubmitted()) {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -413,10 +415,10 @@ export class Claim {
     }
 
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
-          && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
-          PaymentOption.IMMEDIATELY
-          && !this.isSettlementReachedThroughAdmission() && this.isResponseSubmitted())
-        && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ()))
+      && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
+      PaymentOption.IMMEDIATELY
+      && !this.isSettlementReachedThroughAdmission() && this.isResponseSubmitted())
+      && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ()))
       || !this.response)
   }
 
@@ -590,5 +592,11 @@ export class Claim {
     return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
       && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
+  }
+
+  private hasDefendantRejectedClaimWithDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire')
+      && this.isResponseSubmitted()
+      && this.response.responseType === ResponseType.FULL_DEFENCE
   }
 }

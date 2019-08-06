@@ -20,7 +20,7 @@ import {
   partialAdmissionWithPaymentByInstalmentsData,
   fullAdmissionWithImmediatePaymentData,
   partialAdmissionAlreadyPaidData,
-  partialAdmissionWithImmediatePaymentData, defenceWithAmountClaimedAlreadyPaidData
+  partialAdmissionWithImmediatePaymentData, defenceWithAmountClaimedAlreadyPaidData, fullDefenceData
 } from 'test/data/entity/responseData'
 import { NumberFormatter } from 'utils/numberFormatter'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
@@ -35,7 +35,7 @@ describe('Claimant response task list builder', () => {
     draft = new DraftClaimantResponse().deserialize({})
   })
 
-  describe('"Before you start section" section', () => {
+  describe('"How they responded section" section', () => {
     describe('"View the defendant’s response" task', () => {
       it('should be available when claimant tries to respond', () => {
         const taskList: TaskList = TaskListBuilder.buildDefendantResponseSection(draft, claim)
@@ -72,7 +72,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(
-            task => task.name === `Have you been paid the ${ NumberFormatter.formatMoney(amount)}?`))
+            task => task.name === `Have you been paid the ${NumberFormatter.formatMoney(amount)}?`))
             .to.not.be.undefined
         })
       })
@@ -113,7 +113,7 @@ describe('Claimant response task list builder', () => {
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
           expect(taskList.tasks.find(
-            task => task.name === `Have you been paid the full ${ NumberFormatter.formatMoney(amount) }?`
+            task => task.name === `Have you been paid the full ${NumberFormatter.formatMoney(amount)}?`
           )).to.not.be.undefined
         })
       })
@@ -665,11 +665,11 @@ describe('Claimant response task list builder', () => {
   describe('"Your hearing requirements"', () => {
     it('response is partial admission', () => {
 
-      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullAdmissionWithPaymentByInstalmentsData } })
+      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: partialAdmissionWithPaymentByInstalmentsData } })
       draft = new DraftClaimantResponse().deserialize({
         ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
-          acceptPaymentMethod: {
-            accept: {
+          settleAdmitted: {
+            admitted: {
               option: 'no'
             }
           }
@@ -687,6 +687,32 @@ describe('Claimant response task list builder', () => {
         expect(taskList).to.be.eq(undefined)
       }
     })
+
+    it('response is full defence', () => {
+
+      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullDefenceData } })
+      draft = new DraftClaimantResponse().deserialize({
+        ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          intentionToProceed: {
+            proceed: {
+              option: 'yes'
+            }
+          }
+        }
+      })
+      claim.features = ['admissions', 'directionsQuestionnaire']
+
+      const taskList: TaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(
+        draft, claim, new DirectionsQuestionnaireDraft()
+      )
+
+      if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+        expect(taskList.name).to.contains('Your hearing requirements')
+      } else {
+        expect(taskList).to.be.eq(undefined)
+      }
+    })
+
   })
 
   describe('"Submit" section', () => {
@@ -696,7 +722,7 @@ describe('Claimant response task list builder', () => {
     })
 
     it('should list all incomplete tasks when tries to respond', () => {
-      const taskListItems: TaskListItem[] = TaskListBuilder.buildRemainingTasks(draft, claim)
+      const taskListItems: TaskListItem[] = TaskListBuilder.buildRemainingTasks(draft, claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
       expect(taskListItems.length).to.be.eq(2)
     })
   })

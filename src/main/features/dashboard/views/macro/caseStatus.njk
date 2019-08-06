@@ -26,7 +26,9 @@
   claimantAcceptedDefendantDefenceDefendantDashboard,
   claimantAcceptedDefendantDefenceClaimantDashboard,
   claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard,
-  claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard %}
+  claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard,
+  claimRejectedWithDQsForDefendantDashboard,
+  claimRejectedWithDQsForClaimantDashboard %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
@@ -169,6 +171,8 @@
     {{ partAdmittedClaimantAcceptsClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
     {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard() }}
+  {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
+    {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
   {% endif %}
 {% endmacro %}
 
@@ -254,5 +258,7 @@
     {{ settlementAgreementRejectedForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
     {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard() }}
+  {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
+    {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
   {% endif %}
 {% endmacro %}

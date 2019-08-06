@@ -13,6 +13,10 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
+import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class ClaimantResponseConverter {
 
@@ -20,7 +24,8 @@ export class ClaimantResponseConverter {
     claim: Claim,
     draftClaimantResponse: DraftClaimantResponse,
     mediationDraft: MediationDraft,
-    isDefendantBusiness: boolean
+    isDefendantBusiness: boolean,
+    directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft
   ): ClaimantResponse {
     if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
@@ -39,8 +44,20 @@ export class ClaimantResponseConverter {
 
       this.addStatesPaidOptions(draftClaimantResponse, reject)
 
+      if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draftClaimantResponse, claim)) {
+        this.addDirectionsQuestionnaire(directionsQuestionnaireDraft, reject)
+      }
+
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
+  }
+
+  private static convertFreeMediation (mediationDraft: MediationDraft, claimantResponseDraft: DraftClaimantResponse): YesNoOption {
+    if (FeatureToggles.isEnabled('mediation')) {
+      return FreeMediationUtil.convertFreeMediation(mediationDraft.youCanOnlyUseMediation)
+    } else {
+      return FreeMediationUtil.convertFreeMediation(claimantResponseDraft.freeMediation)
+    }
   }
 
   private static isResponseAcceptance (draftClaimantResponse: DraftClaimantResponse): boolean {
@@ -80,6 +97,7 @@ export class ClaimantResponseConverter {
     }
 
     this.addStatesPaidOptions(draftClaimantResponse, respAcceptance)
+
     return respAcceptance
   }
 
@@ -130,6 +148,12 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.accepted) {
       claimantResponse.settleForAmount = draftClaimantResponse.accepted.accepted.option as YesNoOption
     }
+
+  }
+
+  private static addDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft,
+                                             respRejection: ResponseRejection) {
+    respRejection.directionsQuestionnaire = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
 
   }
 }

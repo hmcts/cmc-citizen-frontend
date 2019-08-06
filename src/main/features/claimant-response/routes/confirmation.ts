@@ -10,6 +10,8 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { ResponseType } from 'claims/models/response/responseType'
+import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 function hasAcceptedDefendantsPaymentIntention (claim: Claim): boolean {
   const paymentIntentionFromResponse: PaymentIntention = (claim.response as FullAdmissionResponse | PartialAdmissionResponse).paymentIntention
@@ -36,13 +38,16 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
-
+      let directionsQuestionnaireEnabled = false
+      if (claim.claimantResponse.type === ClaimantResponseType.REJECTION && claim.claimantResponse.directionsQuestionnaire) {
+        directionsQuestionnaireEnabled = true
+      }
       res.render(
         Paths.confirmationPage.associatedView,
         {
           confirmationDate: MomentFactory.currentDate(),
-          repaymentPlanOrigin: alreadyPaid ? undefined : claim.settlement && getRepaymentPlanOrigin(claim.settlement),
-          paymentIntentionAccepted: alreadyPaid ? undefined : response.paymentIntention && hasAcceptedDefendantsPaymentIntention(claim)
+          repaymentPlanOrigin: (alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE) ? undefined : claim.settlement && getRepaymentPlanOrigin(claim.settlement),
+          paymentIntentionAccepted: (alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE) ? undefined : response.paymentIntention && hasAcceptedDefendantsPaymentIntention(claim),
+          directionsQuestionnaireEnabled: directionsQuestionnaireEnabled
         })
-
     }))

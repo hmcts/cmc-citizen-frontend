@@ -301,7 +301,7 @@ describe('claimant response converter', () => {
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentInFullBySetDate,
         intentionOfPaymentByInstalments)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq(
+      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -326,7 +326,7 @@ describe('claimant response converter', () => {
         FormaliseRepaymentPlanOption.REQUEST_COUNTY_COURT_JUDGEMENT,
         intentionOfPaymentByInstalments,
         intentionOfPaymentByInstalments)
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq(
+      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'amountPaid': 10,
@@ -459,7 +459,7 @@ describe('claimant response converter', () => {
       draftClaimantResponse.formaliseRepaymentPlan = new FormaliseRepaymentPlan(FormaliseRepaymentPlanOption.REFER_TO_JUDGE)
       draftClaimantResponse.alternatePaymentMethod = payImmediatelyIntent
       draftClaimantResponse.paidAmount = undefined
-      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq(
+      expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,true)).to.deep.eq(
         {
           'type': 'ACCEPTATION',
           'claimantPaymentIntention': {

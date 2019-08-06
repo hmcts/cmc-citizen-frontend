@@ -50,6 +50,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
     dqsEnabled: dqsEnabled,
     mediationDraft: mediationDraft.document,
+    contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
+    contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document),
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType,
