@@ -24,10 +24,8 @@ import { SignatureType } from 'common/signatureType'
 import { Form } from 'forms/form'
 import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth'
 import { FormValidator } from 'forms/validation/formValidator'
-import { ResponseType } from 'claims/models/response/responseType'
 import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse

@@ -27,7 +27,6 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Paths as DirectionsQuestionnairePaths } from 'directions-questionnaire/paths'
 import { DetailsInCaseOfHearingTask } from 'claimant-response/tasks/detailsInCaseOfHearingTask'
-import { FeatureToggles } from 'utils/featureToggles'
 import { IntentionToProceedTask } from 'claimant-response/tasks/intentionToProceedTask'
 
 const validator: Validator = new Validator()
@@ -139,15 +138,15 @@ export class TaskListBuilder {
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             ))
         } else {
-          const path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             ))
         }
       }
