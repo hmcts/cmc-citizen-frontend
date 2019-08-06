@@ -10,11 +10,10 @@
   {% set nameKey = prefix + '[expertName]' %}
   {% set dateKey = prefix + '[reportDate]' %}
 
-  <div class="form-group {% if form.errorFor(nameKey) or form.errorFor(dateKey) %} form-group-error {% endif %}">
-
+  <div class="form-group">
+    {% if index !== 0 %}<p class="bold">{{ t('Report ' + reportNumber) }}</p>{% endif %}
     {{ textInput('Expert’s name', name = nameKey, form = form) }}
-    {{ dateInput(dateKey, form, 'When is the report dated?', 'For example, ' + ('now' | addDays(-30) | date)) }}
-
+    {{ dateInput(dateKey, form, 'When is the report dated?', 'For example, ' + ('now' | addDays(-30) | date), bold=false) }}
   </div>
 
 {% endmacro %}
@@ -22,26 +21,19 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-
-      <form method="post" novalidate
-            class="analytics-submit-event-trigger"
-            data-event-action="DQ: Have you already got a report written by an expert?"
-            data-event-label-from="declared">
-
+      <form method="post" novalidate class="analytics-submit-event-trigger" data-event-action="DQ: Have you already got a report written by an expert?" data-event-label-from="declared">
         {{ csrfProtection(csrf) }}
 
         {% set errorHasAnyExpertReports = form.errorFor('declared') %}
-        <fieldset id="declared[label]"
-                  class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
+        <fieldset id="declared[label]" class="form-group {% if errorHasAnyCourtOrders %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Have you already got a report written by an expert?') }}</legend>
           {% if errorHasAnyExpertReports %}<span
             class="error-message">{{ t(errorHasAnyExpertReports) }}</span>{% endif %}
 
-          {{ radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true) }}
+          {{ radioOption(form = form, label = 'Yes', name = 'declared', value = YesNoOption.YES.option, checked = (form.valueFor('declared').option === YesNoOption.YES.option)) }}
 
           {% set noRowsError = form.errorFor('rows') %}
-          <div class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
-            id="declared-true" aria-hidden="false">
+          <div class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}" id="declared-yes" aria-hidden="false">
 
             {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
 
@@ -55,7 +47,7 @@
 
           </div>
 
-          {{ radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false) }}
+          {{ radioOption(form = form, label = 'No', name = 'declared', value = YesNoOption.NO.option, checked = (form.valueFor('declared').option === YesNoOption.NO.option)) }}
         </fieldset>
 
         {{ saveAndContinueButton() }}

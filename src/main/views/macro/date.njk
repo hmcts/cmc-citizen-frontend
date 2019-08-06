@@ -1,0 +1,29 @@
+{% macro dateInput(name, form, hint='For example, 31 3 1980', label, bold=true) %}
+  {% set dayError = form.errorFor(name + "[day]") %}
+  {% set monthError = form.errorFor(name + "[month]") %}
+  {% set yearError = form.errorFor(name + "[year]") %}
+  {% set dateError = form.errorFor(name) %}
+  {% set error = dayError or monthError or yearError or dateError %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    {% if label %}<label for="{{ name }}[label]" {% if bold %}class="form-label-bold"{% endif %}>{{ t(label) }}</label>{% endif %}
+    {% if hint %}<span class="form-hint" id="{{ name }}-hint">{{ t(hint) }}</span>{% endif %}
+    {% if dayError %}<span class="error-message">{{ t(dayError) }}</span>{% endif %}
+    {% if monthError %}<span class="error-message">{{ t(monthError) }}</span>{% endif %}
+    {% if yearError %}<span class="error-message">{{ t(yearError) }}</span>{% endif %}
+    {% if dateError %}<span class="error-message">{{ t(dateError) }}</span>{% endif %}
+    <div class="form-date" id="{{ name }}[label]">
+      <div class="form-group form-group-day">
+        <label class="form-label" id="{{ name }}[day][label]" for="{{ name }}[day]">{{ t('Day') }}</label>
+        <input class="form-control {% if dayError or dateError %} form-control-error {% endif %}" id="{{ name }}[day]" name="{{ name }}[day]" value="{{ form.valueFor(name).day | default('') }}" type="number" aria-describedby="dob-hint">
+      </div>
+      <div class="form-group form-group-month">
+        <label class="form-label" id="{{ name }}[month][label]" for="{{ name }}[month]">{{ t('Month') }}</label>
+        <input class="form-control {% if monthError or dateError %} form-control-error {% endif %}" id="{{ name }}[month]" name="{{ name }}[month]" value="{{ form.valueFor(name).month | default('') }}" type="number">
+      </div>
+      <div class="form-group form-group-year">
+        <label class="form-label" id="{{ name }}[year][label]" for="{{ name }}[year]">{{ t('Year') }}</label>
+        <input class="form-control {% if yearError or dateError %} form-control-error {% endif %}" id="{{ name }}[year]" name="{{ name }}[year]" value="{{ form.valueFor(name).year | default('') }}" type="number">
+      </div>
+    </div>
+  </div>
+{% endmacro %}

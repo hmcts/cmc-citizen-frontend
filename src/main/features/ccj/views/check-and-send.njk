@@ -47,7 +47,7 @@
           {{ row('When you want the defendant to pay',
           draft.payBySetDate.date.toMoment() | date, bottomBorder = true) }}
         {% endif %}
-        {% if draft.paymentOption.option.value === PaymentType.INSTALMENTS %}
+        {% if draft.paymentOption.option === PaymentType.INSTALMENTS %}
           {{ row('Instalments of',
           draft.repaymentPlan.instalmentAmount | numeral, bottomBorder = false) }}
          {{ row('When you want them to make the first payment',

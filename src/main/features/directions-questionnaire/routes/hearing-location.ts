@@ -17,9 +17,15 @@ import { MadeBy } from 'offer/form/models/madeBy'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { User } from 'idam/user'
 import { PartyDetails } from 'forms/models/partyDetails'
+import { CourtDetails } from 'court-finder-client/courtDetails'
+import { CourtDetailsResponse } from 'court-finder-client/courtDetailsResponse'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, fallbackPage: boolean) {
-  res.render(Paths.hearingLocationPage.associatedView, { form: form, fallbackPage: fallbackPage, party: getUsersRole(res.locals.claim, res.locals.user) })
+  res.render(Paths.hearingLocationPage.associatedView, {
+    form: form,
+    fallbackPage: fallbackPage,
+    party: getUsersRole(res.locals.claim, res.locals.user)
+  })
 }
 
 async function getNearestCourt (postcode: string): Promise<Court> {
@@ -31,6 +37,13 @@ async function getNearestCourt (postcode: string): Promise<Court> {
   } else {
     return response.courts[0]
   }
+}
+
+async function getCourtDetails (slug: string): Promise<CourtDetails> {
+  const courtFinderClient: CourtFinderClient = new CourtFinderClient()
+  const courtDetailsResponse: CourtDetailsResponse = await courtFinderClient.getCourtDetails(slug)
+
+  return courtDetailsResponse.courtDetails
 }
 
 function getDefaultPostcode (res: express.Response): string {
@@ -55,19 +68,31 @@ export default express.Router()
     try {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
 
-      if (!draft.document.hearingLocation) {
+      if (draft.document.hearingLocation.alternativeOption !== undefined && draft.document.hearingLocation.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
+        renderPage(res,
+          new Form<HearingLocation>(
+            new HearingLocation(
+              draft.document.hearingLocation.courtName, draft.document.hearingLocation.alternativePostcode, draft.document.hearingLocation.facilities, draft.document.hearingLocation.courtAccepted
+            )), false)
+      } else if (draft.document.hearingLocation.alternativeOption !== undefined && draft.document.hearingLocation.alternativeOption === AlternativeCourtOption.BY_NAME) {
+        renderPage(res,
+          new Form<HearingLocation>(
+            new HearingLocation(
+              draft.document.hearingLocation.courtName, undefined, undefined, draft.document.hearingLocation.courtAccepted, draft.document.hearingLocation.alternativeOption, draft.document.hearingLocation.alternativeCourtName
+            )), false)
+      } else {
         const postcode: string = getDefaultPostcode(res)
         const court: Court = await getNearestCourt(postcode)
         if (court) {
-          renderPage(res, new Form<HearingLocation>(new HearingLocation(court.name)), false)
+          const courtDetails: CourtDetails = await getCourtDetails(court.slug)
+          renderPage(res,
+            new Form<HearingLocation>(
+              new HearingLocation(
+                court.name, undefined, courtDetails.facilities, draft.document.hearingLocation.courtAccepted
+              )), false)
         } else {
           renderPage(res, new Form<HearingLocation>(new HearingLocation()), true)
         }
-
-      } else {
-        renderPage(res, new Form<HearingLocation>(
-          new HearingLocation(draft.document.hearingLocation, undefined, YesNoOption.YES)),
-          false)
       }
     } catch (err) {
       next(err)
@@ -83,21 +108,44 @@ export default express.Router()
         try {
           const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
           const user: User = res.locals.user
+          draft.document.hearingLocation = form.model
 
           if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
             const court: Court = await getNearestCourt(form.model.alternativePostcode)
             if (court !== undefined) {
-              form.model = new HearingLocation(court.name, form.model.alternativePostcode)
+              const alternativeCourtDetails: CourtDetails = await getCourtDetails(court.slug)
+              draft.document.hearingLocation.alternativeCourtName = court.name
+              draft.document.hearingLocation.alternativePostcode = form.model.alternativePostcode
+              draft.document.hearingLocation.alternativeOption = form.model.alternativeOption
+              draft.document.hearingLocation.facilities = alternativeCourtDetails.facilities
+              draft.document.hearingLocationSlug = court.slug
+              form.model = new HearingLocation(court.name, form.model.alternativePostcode, alternativeCourtDetails.facilities)
             }
+            await new DraftService().save(draft, user.bearerToken)
             renderPage(res, form, court === undefined)
+          } else if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
+            draft.document.hearingLocation = form.model
+            draft.document.hearingLocation.alternativeOption = form.model.alternativeOption
+            draft.document.hearingLocation.courtName = form.model.alternativeCourtName
+            draft.document.hearingLocationSlug = ''
 
+            await new DraftService().save(draft, user.bearerToken)
+            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
           } else {
-
-            if (form.model.courtAccepted === undefined) {
-              draft.document.hearingLocation = form.model.alternativeCourtName
-            } else {
-              draft.document.hearingLocation = form.model.courtName
+            if (form.model.alternativeOption !== undefined && form.model.alternativeOption === AlternativeCourtOption.BY_NAME) {
+              draft.document.hearingLocation.alternativeCourtName = ''
+              draft.document.hearingLocation.alternativeOption = undefined
+            } else if (draft.document.hearingLocationSlug && !draft.document.hearingLocationSlug.length) {
+              const postcode: string = getDefaultPostcode(res)
+              const court: Court = await getNearestCourt(postcode)
+              if (court !== undefined) {
+                draft.document.hearingLocationSlug = court.slug
+              } else {
+                draft.document.hearingLocationSlug = ''
+              }
             }
+            draft.document.hearingLocation.courtName = form.model.courtName
+            draft.document.hearingLocation.courtAccepted = form.model.courtAccepted
 
             await new DraftService().save(draft, user.bearerToken)
             res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))

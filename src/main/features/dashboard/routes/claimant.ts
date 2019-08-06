@@ -23,6 +23,7 @@ export default express.Router()
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
       }
+
       res.render(Paths.claimantPage.associatedView, {
         claim: claim
       })
@@ -41,7 +42,7 @@ export default express.Router()
         throw new ForbiddenError()
       }
 
-      if (claim.claimData.defendant.type === PartyType.INDIVIDUAL.value) {
+      if (claim.claimData.defendant.type === PartyType.INDIVIDUAL.value && !claim.retrieveDateOfBirthOfDefendant) {
         res.redirect(CCJPaths.dateOfBirthPage.evaluateUri({ externalId: externalId }))
       } else {
         res.redirect(CCJPaths.paidAmountPage.evaluateUri({ externalId: externalId }))
