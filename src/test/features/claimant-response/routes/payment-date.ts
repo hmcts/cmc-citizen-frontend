@@ -31,7 +31,7 @@ const claimantResponseDraftOverrideWithDisposableIncome: object = {
       }
     }
   },
-  courtDetermination: { disposableIncome: 100 }
+  courtDetermination: { disposableIncome: 1000 }
 }
 
 const claimantResponseDraftOverrideWithNoDisposableIncome: object = {
