@@ -17,6 +17,15 @@ export const claimantRejectAlreadyPaid = {
   claimantRespondedAt: MomentFactory.currentDate()
 }
 
+export const claimantRejectAlreadyPaidWithMediation = {
+  claimantResponse: {
+    freeMediation: 'yes',
+    settleForAmount: 'no',
+    type: 'REJECTION'
+  },
+  claimantRespondedAt: MomentFactory.currentDate()
+}
+
 export const directionsQuestionnaireDeadline = {
   directionsQuestionnaireDeadline: MomentFactory.currentDate()
 }

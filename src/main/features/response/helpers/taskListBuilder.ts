@@ -63,7 +63,7 @@ export class TaskListBuilder {
       )
     }
 
-    return new TaskList('Before you start', tasks)
+    return new TaskList('Prepare your response', tasks)
   }
 
   static buildRespondToClaimSection (draft: ResponseDraft, claim: Claim): TaskList {
@@ -103,7 +103,7 @@ export class TaskListBuilder {
     if (draft.isResponseRejectedFullyWithDispute()) {
       tasks.push(
         new TaskListItem(
-          'Why do you disagree with the claim?',
+          'Tell us why you disagree with the claim',
           Paths.defencePage.evaluateUri({ externalId: externalId }),
           YourDefenceTask.isCompleted(draft)
         )
@@ -259,7 +259,7 @@ export class TaskListBuilder {
         return new TaskList(
           'Resolving the claim', [
             new TaskListItem(
-              'Consider free mediation',
+              'Free telephone mediation',
               path,
               FreeMediationTask.isCompleted(draft, mediationDraft)
             )
@@ -273,21 +273,18 @@ export class TaskListBuilder {
   }
 
   static buildDirectionsQuestionnaireSection (draft: ResponseDraft, claim: Claim, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): TaskList {
-    if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
-      ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
-
-      if (draft.isResponsePartiallyAdmitted() || draft.isResponseRejected()) {
-        return new TaskList(
-          'Your hearing requirements', [
-            new TaskListItem(
-              `Give us details in case there’s a hearing`,
-              DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
-              DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft)
-            )
-          ]
-        )
-      }
+    if (draft.isResponsePartiallyAdmitted() || draft.isResponseRejected()) {
+      return new TaskList(
+        'Your hearing requirements', [
+          new TaskListItem(
+            `Give us details in case there’s a hearing`,
+            DirectionsQuestionnairePaths.supportPage.evaluateUri({ externalId: claim.externalId }),
+            DetailsInCaseOfHearingTask.isCompleted(draft, directionsQuestionnaireDraft, claim)
+          )
+        ]
+      )
     }
+
     return undefined
   }
 
