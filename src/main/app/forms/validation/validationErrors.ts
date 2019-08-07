@@ -13,6 +13,7 @@ export class ValidationErrors {
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
   static readonly NON_NEGATIVE_NUMBER_REQUIRED: string = 'Don’t enter a negative number'
   static readonly POSITIVE_NUMBER_REQUIRED: string = 'Enter a number higher than 0'
+  static readonly BELOW_OR_EQUAL_TO_100_REQUIRED: string = 'Enter a number lesser than or equal to 100'
   static readonly INTEGER_REQUIRED: string = 'Enter a numeric, for example 3'
   static readonly DEFENDANT_AGE_REQUIRED: string = 'Select yes, no, or company/organisation'
 

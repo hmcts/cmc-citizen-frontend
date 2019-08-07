@@ -11,13 +11,15 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { ResponseType } from 'claims/models/response/responseType'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
+import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
   const claim: Claim = res.locals.claim
 
   return claim.response.responseType === ResponseType.FULL_ADMISSION
     || (claim.response.responseType === ResponseType.PART_ADMISSION)
-    || (claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.paymentDeclaration !== undefined)
+    || (claim.response.responseType === ResponseType.FULL_DEFENCE)
 }, (req: express.Request): void => {
   throw new NotFoundError(req.path)
 })
@@ -25,12 +27,20 @@ const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((re
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
+  const dqsEnabled: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')
+  let directionsQuestionnaireEnabled = false
 
+  if (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+    ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
+    directionsQuestionnaireEnabled = true
+  }
   res.render(Paths.defendantsResponsePage.associatedView, {
     claim: claim,
     page: page,
     alreadyPaid: alreadyPaid,
-    partiallyPaid: alreadyPaid ? StatesPaidHelper.isAlreadyPaidLessThanAmount(claim) : undefined
+    dqsEnabled: dqsEnabled,
+    partiallyPaid: alreadyPaid ? StatesPaidHelper.isAlreadyPaidLessThanAmount(claim) : undefined,
+    directionsQuestionnaireEnabled: directionsQuestionnaireEnabled
   })
 }
 

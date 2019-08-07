@@ -34,14 +34,14 @@ export namespace DirectionsQuestionnaire {
       },
       hearingLocation: {
         courtName: directionsQuestionnaire.hearingLocation &&
-          directionsQuestionnaire.hearingLocation.courtAccepted &&
-          directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
+        directionsQuestionnaire.hearingLocation.courtAccepted &&
+        directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
           directionsQuestionnaire.hearingLocation.courtName : directionsQuestionnaire.hearingLocation.alternativeCourtName,
-        hearingLocationSlug: undefined,
+        hearingLocationSlug: (directionsQuestionnaire.hearingLocationSlug && directionsQuestionnaire.hearingLocationSlug.length) ? directionsQuestionnaire.hearingLocationSlug : undefined,
         courtAddress: undefined,
         locationOption: directionsQuestionnaire.hearingLocation &&
-          directionsQuestionnaire.hearingLocation.courtAccepted === YesNoOption.NO &&
-          directionsQuestionnaire.hearingLocation.alternativeCourtName ?
+        directionsQuestionnaire.hearingLocation.alternativeCourtName &&
+        directionsQuestionnaire.hearingLocation.alternativeCourtName.length ?
           CourtLocationType.ALTERNATE_COURT : CourtLocationType.SUGGESTED_COURT,
         exceptionalCircumstancesReason: directionsQuestionnaire.exceptionalCircumstances ?
           directionsQuestionnaire.exceptionalCircumstances.reason : undefined
@@ -64,5 +64,13 @@ export namespace DirectionsQuestionnaire {
         reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
       }
     }
+  }
+
+  export function fromObject (directionsQuestionnaire: DirectionsQuestionnaire): DirectionsQuestionnaire {
+    if (!directionsQuestionnaire) {
+      return undefined
+    }
+
+    return directionsQuestionnaire
   }
 }
