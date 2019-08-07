@@ -184,10 +184,10 @@ const testData = [
       'View and respond'
     ],
     defendantAssertions: [
-      'Your response to the claim',
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
-      'complete a directions questionnaire',
-      'Download your response',
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
       'Settle out of court',
       'settle the claim out of court'
     ]
