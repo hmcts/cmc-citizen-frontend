@@ -15,7 +15,9 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const baseResponseDataWithMediation = {
@@ -33,7 +35,9 @@ const baseCompanyResponseData = {
 export const baseDefenceData = {
   responseType: 'FULL_DEFENCE',
   defence: 'My defence',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const defenceWithDisputeData = {
@@ -55,7 +59,9 @@ export const defenceWithAmountClaimedAlreadyPaidData = {
 
 export const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const basePayImmediatelyData = {
@@ -155,7 +161,28 @@ export const partialAdmissionFromStatesPaidDefence = {
   evidence: {
     rows: []
   },
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
+}
+
+export const partialAdmissionFromStatesPaidWithMediationDefence = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  freeMediation: 'yes'
 }
 
 export const partialAdmissionAlreadyPaidData = {
@@ -531,6 +558,10 @@ export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
     paidAmount: '20000',
     explanation: 'I paid in cash'
   }
+}
+
+export const fullDefenceData = {
+  ...baseDefenceData
 }
 
 export const fullDefenceWithStatesLessThanClaimAmount = {
