@@ -158,7 +158,7 @@ describe('Claimant response: payment date', () => {
       context('when service is healthy', () => {
         const dataToSend = {
           date: {
-            year: 2019,
+            year: 2039,
             month: 11,
             day: 1
           }
