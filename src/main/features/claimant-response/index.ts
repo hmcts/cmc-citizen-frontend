@@ -69,7 +69,7 @@ export class ClaimantResponseFeature {
     app.all(allClaimantResponse, ResponseGuard.checkResponseExists())
     app.all(/^\/case\/.+\/claimant-response\/claimant-receipt/, OnlyClaimantLinkedToClaimCanDoIt.check())
     app.all(/^\/case\/.+\/claimant-response\/(?!confirmation|claimant-receipt).*$/, ClaimantResponseGuard.checkClaimantResponseDoesNotExist())
-    app.all(/^\/case\/.+\/claimant-response\/(?!confirmation).*$/,
+    app.all(/^\/case\/.+\/claimant-response\/(?!confirmation|claimant-receipt).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claimantResponse', 100, (value: any): DraftClaimantResponse => {
         return new DraftClaimantResponse().deserialize(value)
       }),

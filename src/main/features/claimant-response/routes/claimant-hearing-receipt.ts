@@ -1,11 +1,8 @@
 import * as express from 'express'
 import { Paths } from 'claimant-response/paths'
-
 import { Claim } from 'claims/models/claim'
 import { DocumentsClient } from 'documents/documentsClient'
-
 import { ErrorHandling } from 'shared/errorHandling'
-
 import { DownloadUtils } from 'utils/downloadUtils'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
