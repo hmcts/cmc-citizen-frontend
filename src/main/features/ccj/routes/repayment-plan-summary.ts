@@ -32,7 +32,7 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
     form: form,
     claim: claim,
     paymentIntention: paymentIntention,
-    remainingAmountToPay: CCJHelper.amountSettledFor(claim) + CCJHelper.claimFeeInPennies(claim) / 100 - claim.amountPaid(),
+    remainingAmountToPay: CCJHelper.totalRemainingToPay(claim),
     requestedBy: req.params.madeBy,
     payByDate: payByDate
   })
