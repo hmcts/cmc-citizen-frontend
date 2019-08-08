@@ -30,8 +30,8 @@
         paymentLength = paymentIntention.repaymentPlan.paymentLength
         )
       }}
-    {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-      <p>{{ t('The defendant will pay {{ amount }} by {{ paymentDate }}.', { amount: remainingAmountToPay | numeral, paymentDate: paymentIntention.paymentDate | date }) }}<p>
+    {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY   %}
+      <p>{{ t('The defendant will pay {{ amount }} by {{ date }}.', { amount: remainingAmountToPay | numeral, date: payByDate | date}) }}<p>
     {% endif %}
 
     {% if claim.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT %}
