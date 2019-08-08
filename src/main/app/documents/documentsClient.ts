@@ -25,6 +25,10 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
 
+  getDirectionsOrder (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'ORDER_DIRECTIONS', bearerToken)
+  }
+
   private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')

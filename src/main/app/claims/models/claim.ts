@@ -26,6 +26,7 @@ import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { DirectionOrder } from 'claims/models/directionOrder'
 
 interface State {
   status: ClaimStatus
@@ -63,6 +64,7 @@ export class Claim {
   reDeterminationRequestedAt: Moment
   ccdCaseId: number
   template: ClaimTemplate
+  directionOrder: DirectionOrder
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -308,6 +310,9 @@ export class Claim {
       }
       if (input.ccdCaseId) {
         this.ccdCaseId = input.ccdCaseId
+      }
+      if (input.directionOrder) {
+        this.directionOrder = DirectionOrder.deserialize(input.directionOrder)
       }
     }
 
