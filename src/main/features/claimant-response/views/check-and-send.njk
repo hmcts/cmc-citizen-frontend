@@ -84,7 +84,7 @@
     {% endif %}
     {% if directionsQuestionnaireDraft.permissionForExpert.option %}
       {{ row(
-        label = 'Do you want the court’s permission to hire an expert?',
+        label = 'Do you want the court’s permission to use an expert?',
         value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
         changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
         topBorder = true,
