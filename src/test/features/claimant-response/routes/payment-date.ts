@@ -16,6 +16,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { MomentFactory } from 'shared/momentFactory'
+import { LocalDate } from 'forms/models/localDate'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -31,7 +33,7 @@ const claimantResponseDraftOverrideWithDisposableIncome: object = {
       }
     }
   },
-  courtDetermination: { disposableIncome: 100 }
+  courtDetermination: { disposableIncome: 1000 }
 }
 
 const claimantResponseDraftOverrideWithNoDisposableIncome: object = {
@@ -157,11 +159,7 @@ describe('Claimant response: payment date', () => {
 
       context('when service is healthy', () => {
         const dataToSend = {
-          date: {
-            year: 2019,
-            month: 11,
-            day: 1
-          }
+          date: LocalDate.fromMoment(MomentFactory.currentDate().add(10, 'years'))
         }
 
         context('when form is valid', async () => {
