@@ -33,7 +33,8 @@
   claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails,
   claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails,
   claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails,
-  claimRejectedWithDQsForClaimantClaimDetails %}
+  claimRejectedWithDQsForClaimantClaimDetails,
+  directionsOrderIssued %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
@@ -171,10 +172,16 @@
         {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
-      {% else %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+      {% if claim.directionsOrder === undefined and claim.reviewOrder === undefined %}
+        {{ directionsOrderIssued(claim) }}
+        {% elif claim.reviewOrder !== undefined %}
+        {{ reconsiderationRequested(claim) }}
+        {% else %}
+            {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+              {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
+            {% else %}
+              {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+          {% endif %}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
       {{ claimantAcceptedDefendantDefenceClaimantClaimDetails(claim) }}
@@ -248,10 +255,18 @@
     {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
-      {% else %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+      {{ claim.directionsOrder }}
+
+      {% if claim.directionsOrder !== undefined and claim.reviewOrder === undefined %}
+          {{ directionsOrderIssued(claim) }}
+        {% elif claim.reviewOrder !== undefined %}
+          {{ reviewOrderIssues(claim) }}
+        {% else %}
+          {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+            {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
+          {% else %}
+            {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+          {% endif %}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
       {{ claimantAcceptedDefendantDefenceDefendantClaimDetails(claim) }}
