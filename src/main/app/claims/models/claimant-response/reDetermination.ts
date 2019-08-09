@@ -1,4 +1,4 @@
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 export interface ReDetermination {
   explanation?: string

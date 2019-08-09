@@ -156,6 +156,7 @@ describe('claimant response converter', () => {
       const draftClaimantResponse = new DraftClaimantResponse()
       draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
       draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
 
       expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
         'type': 'REJECTION',
@@ -170,6 +171,7 @@ describe('claimant response converter', () => {
     it('Should convert to rejection when given a no option in part payment received', () => {
       const draftClaimantResponse = new DraftClaimantResponse()
       draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.NO)
+      draftClaimantResponse.freeMediation = new FreeMediation('yes')
 
       expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft,false)).to.deep.eq({
         'type': 'REJECTION',

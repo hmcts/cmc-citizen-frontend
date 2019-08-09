@@ -87,37 +87,6 @@ const testData = [
     ]
   },
   {
-    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      response: {
-        ...defenceWithAmountClaimedAlreadyPaidData,
-        freeMediation: 'yes'
-      },
-      claimantResponse: {
-        freeMediation: 'yes',
-        settleForAmount: 'no',
-        type: 'REJECTION'
-      },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
-    },
-    claimantAssertions: [
-      'You’ve rejected the defendant’s admission',
-      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}.`,
-      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.',
-      'Find out how mediation works',
-      'Download their response'
-    ],
-    defendantAssertions: [
-      'We’ll contact you with a mediation appointment',
-      'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
-      'They agreed to try mediation. We’ll contact you with details of your appointment.',
-      'Find out how mediation works',
-      'Download your response'
-    ]
-  },
-  {
     status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
     claim: fullDefenceClaim,
     claimOverride: {
@@ -242,33 +211,6 @@ const legacyClaimDetails = [
     ]
   },
   {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation with directions questionnaire enabled',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      features: ['admissions', 'directionsQuestionnaire'],
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
-      }
-    },
-    claimantAssertions: [
-      'The defendant’s response',
-      'John Doe has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
-      'Find out how mediation works',
-      'You need to email CONTACT_EMAIL before before',
-      'If you don’t send an email before the deadline, the claim will proceed without mediation.'
-    ],
-    defendantAssertions: [
-      'Your response to the claim',
-      'You have rejected the claim. You’ve suggested mediation.',
-      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
-      'Download your response',
-      'Settle out of court',
-      'settle the claim out of court'
-    ]
-  },
-  {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation',
     claim: fullDefenceClaim,
     claimOverride: {
@@ -290,33 +232,6 @@ const legacyClaimDetails = [
       'You have rejected the claim. You’ve suggested mediation.',
       'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
       'Download your response',
-      'Settle out of court',
-      'settle the claim out of court'
-    ]
-  },
-  {
-    status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      directionsQuestionnaireDeadline: MomentFactory.currentDate().add(1, 'days'),
-      features: ['admissions', 'directionsQuestionnaire'],
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.NO
-      }
-    },
-    claimantAssertions: [
-      'The defendant has rejected your claim',
-      'They said they dispute your claim.',
-      'You need to ',
-      'Your claim won’t proceed if you don’t complete and return the form before'
-    ],
-    defendantAssertions: [
-      'Your response to the claim',
-      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
-      'You need to',
-      'Your defence will be cancelled if you don’t complete and return the form before',
       'Settle out of court',
       'settle the claim out of court'
     ]
@@ -438,6 +353,37 @@ const legacyClaimDetails = [
 ]
 
 const mediationDQEnabledClaimDetails = [
+  {
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithAmountClaimedAlreadyPaidData,
+        freeMediation: 'yes'
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: [
+      'You’ve rejected the defendant’s admission',
+      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}.`,
+      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.',
+      'Find out how mediation works',
+      'Download their response'
+    ],
+    defendantAssertions: [
+      'We’ll contact you with a mediation appointment',
+      'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
+      'They agreed to try mediation. We’ll contact you with details of your appointment.',
+      'Find out how mediation works',
+      'Download your response'
+    ]
+  },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
