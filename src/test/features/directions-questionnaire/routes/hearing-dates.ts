@@ -12,7 +12,7 @@ import { Paths } from 'directions-questionnaire/paths'
 import { Paths as ResponsePaths } from 'response/paths'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import { PartyType } from 'integration-test/data/party-type'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { daysFromNow } from 'test/localDateUtils'
 
 const claimWithDQ = {

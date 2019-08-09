@@ -6,7 +6,7 @@ import { Form } from 'main/app/forms/form'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'main/app/claims/models/claim'
 import { PaymentIntention } from 'main/app/claims/models/response/core/paymentIntention'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { PartyStatement } from 'claims/models/partyStatement'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
