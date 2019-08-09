@@ -23,7 +23,7 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
   }
 
   if (paymentIntention.paymentOption === PaymentOption.IMMEDIATELY) {
-    payByDate = claim.countyCourtJudgmentRequestedAt ? claim.countyCourtJudgmentRequestedAt : claim.settlementReachedAt
+    payByDate = claim.countyCourtJudgmentRequestedAt ? claim.countyCourtJudgmentRequestedAt.add(5, 'days') : claim.settlementReachedAt.add(5, 'days')
   } else if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
     payByDate = paymentIntention.paymentDate
   }
