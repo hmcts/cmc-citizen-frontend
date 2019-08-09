@@ -14,7 +14,7 @@ import { checkAuthorizationGuards } from 'test/routes/authorization-check'
 
 import { createClaim } from './helper/dqRouteHelper'
 import { PartyType } from 'integration-test/data/party-type'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { LocalDate } from 'forms/models/localDate'
 import { daysFromNow } from 'test/localDateUtils'
 

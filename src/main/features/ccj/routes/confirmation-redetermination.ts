@@ -3,7 +3,7 @@ import * as express from 'express'
 import { Paths } from 'ccj/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Claim } from 'claims/models/claim'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 /* tslint:disable:no-default-export */
 export default express.Router()

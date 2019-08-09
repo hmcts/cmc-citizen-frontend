@@ -17,7 +17,7 @@ import * as courtFinderMock from 'test/http-mocks/court-finder-client'
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 
 import { createClaim } from 'test/features/directions-questionnaire/routes/helper/dqRouteHelper'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { PartyType } from 'integration-test/data/party-type'
 
 const claim = createClaim(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.CLAIMANT)
