@@ -18,6 +18,7 @@ import { Paths as OfferPaths } from 'offer/paths'
 import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
+import { Paths as OrdersPaths } from 'orders/paths'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
@@ -135,4 +136,5 @@ describe('Accessibility', () => {
   checkPaths(PaidInFullPaths)
   checkPaths(MediationPaths)
   checkPaths(DirectionQuestionnairePaths)
+  checkPaths(OrdersPaths)
 })
