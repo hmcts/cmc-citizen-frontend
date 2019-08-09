@@ -80,7 +80,7 @@ describe('Directions Questionnaire - ask court’s permission for expert page', 
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(
-            'Do you want to ask for the court’s permission to hire an expert?'
+            'Do you want to ask for the court’s permission to use an expert?'
           ))
       })
     })

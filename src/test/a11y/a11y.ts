@@ -22,7 +22,7 @@ import { Paths as OrdersPaths } from 'orders/paths'
 
 import 'test/a11y/mocks'
 import { app } from 'main/app'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 app.locals.csrf = 'dummy-token'
 

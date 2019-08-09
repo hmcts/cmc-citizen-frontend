@@ -23,6 +23,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -49,6 +50,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
     dqsEnabled: dqsEnabled,
     mediationDraft: mediationDraft.document,
+    contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
+    contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document),
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType

@@ -56,7 +56,7 @@ import { PriorityDebtType } from 'response/form/models/statement-of-means/priori
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 import { DecisionType } from 'common/court-calculations/decisionType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { PartyType } from 'common/partyType'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
@@ -180,6 +180,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PartyType', PartyType)
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
     nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
+    nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('domain', {
       ResponseType: DomainResponseType,
       PaymentOption: PaymentOption,

@@ -42,7 +42,60 @@ describe('Defendant response: confirmation page', () => {
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response'))
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'We’ll ask John Smith if they want to try mediation. If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.'))
+      })
+
+      it('should render page when yes for mediation and DQ', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimStoreServiceMock.sampleDefendantResponseWithDQAndMediationObj)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'We’ll contact you when John Smith responds, to tell you what to do next.',
+            'If John Smith accepts your response the claim will be settled.',
+            'If they reject your response and agree to try mediation we’ll contact you to arrange an appointment.',
+            'If they reject your response and don’t want to try mediation, the court will review the case. You might have to go to a hearing.'))
+      })
+
+      it('should render page when no for mediation and DQ', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimStoreServiceMock.sampleDefendantResponseWithDQAndNoMediationObj)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'We’ll contact you when John Smith responds, to tell you what to do next.',
+            'If John Smith accepts your response the claim will be settled.',
+            'If they reject your response the court will review the case. You might have to go to a hearing.'))
+      })
+
+      it('when full defence already paid with mediation should render page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleDefendantResponseAlreadyPaidWithMediationObj)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'If John Smith accepts your response the claim will be settled. We’ll contact you when they respond.',
+            'If John Smith rejects your response we’ll ask them to try mediation. If they agree, we’ll contact you to arrange an appointment.',
+            'If they reject mediation the court will review the case. You might have to go to a hearing.',
+            'We’ll contact you to tell you what to do next.'
+          ))
+      })
+
+      it('when full defence already paid without mediation should render page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleDefendantResponseAlreadyPaidWithNoMediationObj)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'If John Smith accepts your response the claim will be settled. We’ll contact you when they respond.',
+            'If they reject your response the court will review the case. You might have to go to a hearing.',
+            'We’ll contact you if we set a hearing date to tell you how to prepare.'
+          ))
       })
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
