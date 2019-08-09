@@ -16,13 +16,13 @@ const buttons = {
 export class ClaimantFreeMediationPage {
 
   accept (): void {
-    I.see('Free Telephone Mediation')
+    I.see('Free telephone mediation')
     I.checkOption(fields.wantFreeMediation.yes)
     I.click(buttons.submit)
   }
 
   reject (): void {
-    I.see('Free Telephone Mediation')
+    I.see('Free telephone mediation')
     I.checkOption(fields.wantFreeMediation.no)
     I.click(buttons.submit)
   }
