@@ -77,8 +77,8 @@ describe('Defendant response: confirmation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
-            'If John Smith accepts your response the claim will be settled.',
-            'If they reject your response and agree to try mediation we’ll contact you to arrange an appointment.',
+            'If John Smith accepts your response the claim will be ended.',
+            'If they reject your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
             'If they reject your response and don’t want to try mediation, the court will review the case. You might have to go to a hearing.'))
       })
 
@@ -90,7 +90,7 @@ describe('Defendant response: confirmation page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
-            'If John Smith accepts your response the claim will be settled.',
+            'If John Smith accepts your response the claim will be ended.',
             'If they reject your response the court will review the case. You might have to go to a hearing.'))
       })
 
@@ -101,8 +101,8 @@ describe('Defendant response: confirmation page', () => {
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'If John Smith accepts your response the claim will be settled. We’ll contact you when they respond.',
-            'If John Smith rejects your response we’ll ask them to try mediation. If they agree, we’ll contact you to arrange an appointment.',
+            'If John Smith accepts your response the claim will be ended. We’ll contact you when they respond.',
+            'If John Smith rejects your response we’ll ask them to try mediation. If they agree, we’ll contact you to arrange a call with the mediator.',
             'If they reject mediation the court will review the case. You might have to go to a hearing.',
             'We’ll contact you to tell you what to do next.'
           ))
@@ -115,7 +115,7 @@ describe('Defendant response: confirmation page', () => {
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'If John Smith accepts your response the claim will be settled. We’ll contact you when they respond.',
+            'If John Smith accepts your response the claim will be ended. We’ll contact you when they respond.',
             'If they reject your response the court will review the case. You might have to go to a hearing.',
             'We’ll contact you if we set a hearing date to tell you how to prepare.'
           ))
