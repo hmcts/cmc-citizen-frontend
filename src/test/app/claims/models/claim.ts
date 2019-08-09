@@ -576,7 +576,7 @@ describe('Claim', () => {
       }
 
       expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.RESPONSE_SUBMITTED)
     })
 
     context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
