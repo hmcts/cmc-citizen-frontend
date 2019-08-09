@@ -79,7 +79,7 @@
     <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
     <p>{{ t('{{ claimantName }} has rejected your defence.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
-    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange an appointment.') }}</p>
+    <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>
     <p>{{ internalLink(t('Find out how mediation works'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}</p>
   </div>
 {% endmacro %}
@@ -144,7 +144,7 @@
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s response.') }}</h2>
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
+      <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
       {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
     {% endif %}
 
@@ -163,7 +163,7 @@
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s response.') }}</h2>
-    <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
+    <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
     {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
     <p>{{ _downloadResponseLink(claim, 'Download your response') }}</p>
   </div>
