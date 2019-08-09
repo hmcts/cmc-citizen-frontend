@@ -43,7 +43,7 @@ describe('Defendant response: confirmation page', () => {
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'We’ll ask John Smith if they want to try mediation. If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.'))
+            'We’ll ask John Smith if they want to try mediation. If they agree, we’ll contact you to arrange a call with the mediator. If not, we’ll tell you what to do.'))
       })
 
       it('should render page when yes for mediation and DQ', async () => {
@@ -122,7 +122,7 @@ describe('Defendant response: confirmation page', () => {
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.'))
+          .expect(res => expect(res).to.be.successful.withText('We’ll ask if they want to try mediation. If they agree, contact you to arrange a call with the mediator.'))
       })
     })
   })
