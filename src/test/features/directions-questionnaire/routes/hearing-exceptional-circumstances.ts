@@ -12,7 +12,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 
 import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 import { PartyType } from 'integration-test/data/party-type'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { Interest } from 'claims/models/interest'
 import { InterestDateType } from 'common/interestDateType'

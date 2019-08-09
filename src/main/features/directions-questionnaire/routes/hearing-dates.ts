@@ -12,7 +12,7 @@ import { Availability, ValidationErrors } from 'directions-questionnaire/forms/m
 import { LocalDate } from 'forms/models/localDate'
 import { Claim } from 'claims/models/claim'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
