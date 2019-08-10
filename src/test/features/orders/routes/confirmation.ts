@@ -19,7 +19,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 
 const pagePath = OrdersPaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Claimant response: confirmation page', () => {
+describe('Orders confirmation page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -44,7 +44,7 @@ describe('Claimant response: confirmation page', () => {
 
         it('should render page when everything is fine', async () => {
           // todo update to use correct data model when save reconsideration is done
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
 
           await request(app)
             .get(pagePath)

@@ -28,7 +28,7 @@ export class OrdersFeature {
     app.all(allOrders, ClaimMiddleware.retrieveByExternalId)
     app.all(allOrders, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(allOrders, DirectionsQuestionnaireGuard.requestHandler)
-    app.all(allOrders,
+    app.all(/^\/case\/.+\/orders\/(?!confirmation).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'orders', 100, (value: any): OrdersDraft => {
         return new OrdersDraft().deserialize(value)
       }),
