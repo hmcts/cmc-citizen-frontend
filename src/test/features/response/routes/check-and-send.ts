@@ -103,32 +103,33 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           })
 
-          it('should load page with direction questionnaire information', async () => {
-            draftStoreServiceMock.resolveFind(draftType)
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+            it('should load page with direction questionnaire information', async () => {
+              draftStoreServiceMock.resolveFind(draftType)
+              draftStoreServiceMock.resolveFind('mediation')
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
-            await request(app)
-              .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
-              .expect(res => expect(res).to.be.successful.withText('Support required for a hearing'))
-              .expect(res => expect(res).to.be.successful.withText('Preferred hearing centre'))
-              .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
-              .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?'))
-              .expect(res => expect(res).to.be.successful.withText('What is there to examine?'))
-              .expect(res => expect(res).to.be.successful.withText('Photographs'))
-              .expect(res => expect(res).to.be.successful.withText('Do you want to give evidence?'))
-              .expect(res => expect(res).to.be.successful.withText('Do you want the court’s permission to use an expert?'))
-              .expect(res => expect(res).to.be.successful.withText('Other witnesses'))
-              .expect(res => expect(res).to.be.successful.withText('Dates unavailable'))
-              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-              .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge.'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
-          })
-
+              await request(app)
+                .get(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+                .expect(res => expect(res).to.be.successful.withText('Support required for a hearing'))
+                .expect(res => expect(res).to.be.successful.withText('Preferred hearing centre'))
+                .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
+                .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?'))
+                .expect(res => expect(res).to.be.successful.withText('What is there to examine?'))
+                .expect(res => expect(res).to.be.successful.withText('Photographs'))
+                .expect(res => expect(res).to.be.successful.withText('Do you want to give evidence?'))
+                .expect(res => expect(res).to.be.successful.withText('Do you want the court’s permission to use an expert?'))
+                .expect(res => expect(res).to.be.successful.withText('Other witnesses'))
+                .expect(res => expect(res).to.be.successful.withText('Dates unavailable'))
+                .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
+                .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
+                .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge.'))
+                .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+            })
+          }
         })
         context('for company and organisation', () => {
           it('should return statement of truth with a tick box', async () => {
@@ -336,26 +337,28 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
           })
 
-          it('should stay in check and send page with error when hearing requirement details not checked', async () => {
-            draftStoreServiceMock.resolveFind(draftType)
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+            it('should stay in check and send page with error when hearing requirement details not checked', async () => {
+              draftStoreServiceMock.resolveFind(draftType)
+              draftStoreServiceMock.resolveFind('mediation')
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
-            let sendData: any = { signed: 'true', type: SignatureType.BASIC }
-            if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
-              sendData = {
-                signed: 'true',
-                type: SignatureType.DIRECTION_QUESTIONNAIRE
+              let sendData: any = { signed: 'true', type: SignatureType.BASIC }
+              if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
+                sendData = {
+                  signed: 'true',
+                  type: SignatureType.DIRECTION_QUESTIONNAIRE
+                }
               }
-            }
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(sendData)
-              .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge', 'div class="error-summary"'))
-          })
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(sendData)
+                .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge', 'div class="error-summary"'))
+            })
+          }
         })
 
         context('when form is valid', () => {

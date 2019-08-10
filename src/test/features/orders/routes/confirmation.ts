@@ -14,44 +14,48 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths as OrdersPaths } from 'orders/paths'
 
 import { app } from 'main/app'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const pagePath = OrdersPaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Orders confirmation page', () => {
-  attachDefaultHooks(app)
+if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
-  describe('on GET', () => {
-    const method = 'get'
-    checkAuthorizationGuards(app, method, pagePath)
-    checkNotClaimantInCaseGuard(app, method, pagePath)
+  describe('Orders confirmation page', () => {
+    attachDefaultHooks(app)
 
-    context('when user authorised', () => {
-      beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
-      })
+    describe('on GET', () => {
+      const method = 'get'
+      checkAuthorizationGuards(app, method, pagePath)
+      checkNotClaimantInCaseGuard(app, method, pagePath)
 
-      context('when claimant response submitted', () => {
-        it('should return 500 and render error page when cannot retrieve claim', async () => {
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
+      context('when user authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
         })
 
-        it('should render page when everything is fine', async () => {
-          // todo update to use correct data model when save reconsideration is done
-          claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+        context('when claimant response submitted', () => {
+          it('should return 500 and render error page when cannot retrieve claim', async () => {
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('You’ve asked the court to review the order'))
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('should render page when everything is fine', async () => {
+            // todo update to use correct data model when save reconsideration is done
+            claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('You’ve asked the court to review the order'))
+          })
         })
       })
     })
   })
-})
+}
