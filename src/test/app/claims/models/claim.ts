@@ -4,7 +4,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { expect } from 'chai'
 import { Settlement } from 'claims/models/settlement'
 import { StatementType } from 'offer/form/models/statementType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { Offer } from 'claims/models/offer'
 import { ClaimStatus } from 'claims/models/claimStatus'
 import { ResponseType } from 'claims/models/response/responseType'
@@ -40,6 +40,7 @@ import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { User } from 'idam/user'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
+import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -566,18 +567,20 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID)
     })
 
-    it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
-      claim.respondedAt = moment()
-      claim.features = ['admissions', 'directionsQuestionnaire']
-      claim.response = {
-        paymentIntention: null,
-        responseType: 'FULL_DEFENCE',
-        freeMediation: 'no'
-      }
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          paymentIntention: null,
+          responseType: 'FULL_DEFENCE',
+          freeMediation: 'no'
+        }
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
-    })
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
+      })
+    }
 
     context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
       it('when defendant states paid amount equal to claim amount', () => {
@@ -685,16 +688,22 @@ describe('Claim', () => {
 
   describe('respondToMediationDeadline', () => {
 
-    it('should add 5 days to the response deadline', () => {
+    it('should return mediation deadline date', () => {
       const claim = new Claim()
       claim.respondedAt = moment()
 
-      expect(claim.respondToMediationDeadline.toISOString()).to.equal(claim.respondedAt.add(5, 'days').toISOString())
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
+
+      claim.respondToMediationDeadline().then(
+        res => expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
+      )
     })
 
-    it('should return undefined if claim is not responded to', () => {
+    it('should return undefined if claim is not responded to', async () => {
       const claim = new Claim()
-      expect(claim.respondToMediationDeadline).to.equal(undefined)
+      const mediationDeadline = await claim.respondToMediationDeadline()
+      expect(mediationDeadline).to.be.undefined
     })
   })
 

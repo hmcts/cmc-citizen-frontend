@@ -493,8 +493,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -505,8 +503,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -522,8 +518,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -540,8 +534,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -559,8 +551,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -578,8 +568,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(true)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -598,8 +586,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -618,8 +604,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -640,8 +624,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -655,8 +637,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.name).to.contain(directionsQuestionnaireTaskLabel)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -667,8 +647,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -684,8 +662,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -702,8 +678,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -721,8 +695,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -740,8 +712,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(true)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -760,8 +730,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -780,8 +748,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
@@ -802,8 +768,6 @@ describe('Defendant response task list builder', () => {
 
         if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           expect(taskList.tasks[0].completed).equal(false)
-        } else {
-          expect(taskList).to.be.undefined
         }
       })
 
