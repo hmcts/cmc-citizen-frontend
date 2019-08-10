@@ -169,15 +169,17 @@
   </div>
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationYESForClaimantClaimDetails(claim) %}
+{% macro claimRejectedFreeMediationYESForClaimantClaimDetails(claim, mediationDeadline) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
     <p>{{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
         { defendantName: claim.claimData.defendant.name }) }}</p>
     <p>{{ t(externalLink('Find out how mediation works', 'https://formfinder.hmctsformfinder.justice.gov.uk/ex730-eng.pdf') + ' (PDF, 399KB)') | safe }}</p>
-    <p>{{ t('You need to email {{ emailAddress }} before before 4pm on {{ respondToMediationDeadline }} to tell us if you agree to mediation or not.',
-        { emailAddress: supportEmailAddress, respondToMediationDeadline: claim.respondToMediationDeadline | date }) }}</p>
+    {% if mediationDeadline %}
+    <p>{{ t('You need to email {{ emailAddress }} before 4pm on {{ respondToMediationDeadline }} to tell us if you agree to mediation or not.',
+        { emailAddress: supportEmailAddress, respondToMediationDeadline: mediationDeadline | date }) }}</p>
     <p>{{ t('If you don’t send an email before the deadline, the claim will proceed without mediation.') }}</p>
+    {% endif %}
     <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
   </div>
 {% endmacro %}

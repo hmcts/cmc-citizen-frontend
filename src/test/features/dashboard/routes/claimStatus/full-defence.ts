@@ -31,6 +31,7 @@ import {
   settlementOfferReject,
   settledWithAgreement
 } from 'test/data/entity/fullDefenceData'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -455,15 +456,23 @@ describe('Dashboard page', () => {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
           })
 
-          testData.forEach(data => {
-            it(`should render claim status: ${data.status}`, async () => {
-              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
-              await request(app)
-                .get(claimPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+          testData
+            .filter(data => {
+              if (!FeatureToggles.isEnabled('directionsQuestionnaire')) {
+                return !data.claimOverride.features || (data.claimOverride.features && !data.claimOverride.features.includes('directionsQuestionnaire'))
+              }
             })
-          })
+            .forEach(data => {
+              it(`should render claim status: ${data.status}`, async () => {
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+                claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
+                await request(app)
+                  .get(claimPagePath)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+              })
+            })
         })
 
         context('as a defendant', () => {
@@ -471,15 +480,21 @@ describe('Dashboard page', () => {
             idamServiceMock.resolveRetrieveUserFor('123', 'citizen')
           })
 
-          testData.forEach(data => {
-            it(`should render dashboard: ${data.status}`, async () => {
-              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
-              await request(app)
-                .get(defendantPagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+          testData
+            .filter(data => {
+              if (!FeatureToggles.isEnabled('directionsQuestionnaire')) {
+                return !data.claimOverride.features || (data.claimOverride.features && !data.claimOverride.features.includes('directionsQuestionnaire'))
+              }
             })
-          })
+            .forEach(data => {
+              it(`should render dashboard: ${data.status}`, async () => {
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+                await request(app)
+                  .get(defendantPagePath)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              })
+            })
         })
       })
     })

@@ -11,6 +11,7 @@ import {
 import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { FeatureToggles } from 'utils/featureToggles'
 
 describe('directionsQuestionnaireHelper', () => {
 
@@ -28,7 +29,9 @@ describe('directionsQuestionnaireHelper', () => {
         }
       }
     })
-    expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    }
   })
 
   it('Should return true if response is full defense and defense type is dispute and claimant wants to proceed with the claim', () => {
@@ -47,7 +50,9 @@ describe('directionsQuestionnaireHelper', () => {
       }
     })
 
-    expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    }
   })
 
   it('Should return true if response is part admission and there is no payment intention and claimant rejects the defence', () => {
@@ -65,7 +70,9 @@ describe('directionsQuestionnaireHelper', () => {
         }
       }
     })
-    expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      expect(DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(claimantResponseDraft, claim)).to.equal(true)
+    }
   })
 
   it('Should return false if response is part admission and there is a payment intention and claimant reject admission', () => {
