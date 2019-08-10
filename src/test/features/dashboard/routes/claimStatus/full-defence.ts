@@ -459,6 +459,8 @@ describe('Dashboard page', () => {
             .forEach(data => {
               it(`should render claim status: ${data.status}`, async () => {
                 claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+                claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
                 await request(app)
                   .get(claimPagePath)
                   .set('Cookie', `${cookieName}=ABC`)
