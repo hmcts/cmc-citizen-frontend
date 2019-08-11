@@ -22,7 +22,6 @@
   claimRejectedAlreadyPaidForDefendantClaimDetails,
   claimRejectedFreeMediationNOForDefendantClaimDetails,
   claimRejectedForClaimantClaimDetails,
-  claimRejectedFreeMediationYESForClaimantClaimDetails,
   claimRejectedFreeMediationYESForDefendantClaimDetails,
   claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails,
   claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails,
@@ -112,7 +111,7 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
@@ -156,7 +155,7 @@
         {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
           {{ claimRejectedAlreadyPaidForClaimantClaimDetails(claim) }}
         {% else %}
-          {{ claimRejectedForClaimantClaimDetails(claim) }}
+          {{ claimRejectedForClaimantClaimDetails(claim, mediationDeadline) }}
         {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if claim.response.paymentDeclaration %}
@@ -208,7 +207,7 @@
         {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
       {% endif %}
     {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
-      {{ claimRejectedWithDQsForClaimantClaimDetails(claim) }}
+      {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}

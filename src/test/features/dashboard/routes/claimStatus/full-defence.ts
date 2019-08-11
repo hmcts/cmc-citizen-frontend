@@ -372,7 +372,7 @@ const mediationDQEnabledClaimDetails = [
     claimantAssertions: [
       'You’ve rejected the defendant’s admission',
       `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}.`,
-      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.',
+      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.',
       'Find out how mediation works',
       'Download their response'
     ],
@@ -686,12 +686,14 @@ describe('Dashboard page', () => {
         context('as a claimant', () => {
           beforeEach(() => {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-08-16'))
           })
 
           if (FeatureToggles.isEnabled('mediation')) {
             mediationDQEnabledClaimDetails.forEach(data => {
-              it(`should render mediation or DQ claim status: ${data.status}`, async () => {
+              it(`should render mediation or DQ status: ${data.status}`, async () => {
                 claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
                 await request(app)
                   .get(claimPagePath)
                   .set('Cookie', `${cookieName}=ABC`)
@@ -702,6 +704,7 @@ describe('Dashboard page', () => {
             legacyClaimDetails.forEach(data => {
               it(`should render legacy claim status: ${data.status}`, async () => {
                 claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
                 await request(app)
                   .get(claimPagePath)
                   .set('Cookie', `${cookieName}=ABC`)
@@ -713,6 +716,7 @@ describe('Dashboard page', () => {
           testData.forEach(data => {
             it(`should render claim status: ${data.status}`, async () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
               await request(app)
                 .get(claimPagePath)
                 .set('Cookie', `${cookieName}=ABC`)
@@ -729,12 +733,37 @@ describe('Dashboard page', () => {
           testData.forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
               await request(app)
                 .get(defendantPagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })
+
+          if (FeatureToggles.isEnabled('mediation')) {
+            mediationDQEnabledClaimDetails.forEach(data => {
+              it(`should render mediation or DQ dashboard: ${data.status}`, async () => {
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
+                await request(app)
+                  .get(defendantPagePath)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              })
+            })
+          } else {
+            legacyClaimDetails.forEach(data => {
+              it(`should render non mediation or DQ dashboard: ${data.status}`, async () => {
+                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
+                await request(app)
+                  .get(defendantPagePath)
+                  .set('Cookie', `${cookieName}=ABC`)
+                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+              })
+            })
+          }
         })
       })
     })

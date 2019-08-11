@@ -191,6 +191,10 @@
 
       {{ directionsQuestionnaire() }}
 
+    {% if not directionsQuestionnaireEnabled %}
+      {{ tableEnd() }}
+    {% endif %}
+
     {% elseif alreadyPaid %}
       {% if draft.partPaymentReceived %}
         {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,

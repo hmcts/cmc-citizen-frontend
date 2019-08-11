@@ -13,6 +13,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { sampleClaimDraftObj } from 'test/http-mocks/draft-store'
 import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId: string = sampleClaimDraftObj.externalId
@@ -227,6 +228,7 @@ describe('Settlement claim statuses', () => {
         it(claimantContext.party, async () => {
           idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen')
           claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)
             .get(claimantContext.url)
@@ -237,6 +239,7 @@ describe('Settlement claim statuses', () => {
         it(defendantContext.party, async () => {
           idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen')
           claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)
             .get(defendantContext.url)
@@ -251,6 +254,7 @@ describe('Settlement claim statuses', () => {
         it(claimantContext.party, async () => {
           idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen')
           claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)
             .get(claimantContext.url)
@@ -261,6 +265,7 @@ describe('Settlement claim statuses', () => {
         it(defendantContext.party, async () => {
           idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen')
           claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)
             .get(defendantContext.url)
@@ -276,6 +281,7 @@ describe('Settlement claim statuses', () => {
       it(claimantContext.party, async () => {
         idamServiceMock.resolveRetrieveUserFor(claimantContext.id, 'citizen')
         claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
         await request(app)
           .get(claimantContext.url)
@@ -286,6 +292,7 @@ describe('Settlement claim statuses', () => {
       it(defendantContext.party, async () => {
         idamServiceMock.resolveRetrieveUserFor(defendantContext.id, 'citizen')
         claimStoreServiceMock.resolveRetrieveByExternalId(data.claim)
+        claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
         await request(app)
           .get(defendantContext.url)
