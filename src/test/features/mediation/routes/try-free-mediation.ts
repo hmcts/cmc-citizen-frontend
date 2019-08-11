@@ -20,9 +20,9 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
-const pagePath = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-describe('Free mediation: will you try free mediation page', () => {
+describe('Free mediation: try free mediation page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -54,7 +54,7 @@ describe('Free mediation: will you try free mediation page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Will you try free mediation?'))
+            .expect(res => expect(res).to.be.successful.withText('Free mediation'))
         })
       })
     })
@@ -97,7 +97,7 @@ describe('Free mediation: will you try free mediation page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to mediation agreement page when everything is fine', async () => {
+          it('should redirect to response task list when yes was chosen', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -108,11 +108,11 @@ describe('Free mediation: will you try free mediation page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: FreeMediationOption.YES })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(MediationPaths.mediationAgreementPage
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          it('should redirect to response task list when No was chosen and no response is available', async () => {
+          it('should redirect to response task list when No was chosen', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
@@ -147,6 +147,21 @@ describe('Free mediation: will you try free mediation page', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ option: FreeMediationOption.NO })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ClaimantResponsePaths.taskListPage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+      })
+
+      it('should redirect to claimant response task list when Yes was chosen and there is a response', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('claimant-response')
+        draftStoreServiceMock.resolveSave()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ option: FreeMediationOption.YES })
           .expect(res => expect(res).to.be.redirect
             .toLocation(ClaimantResponsePaths.taskListPage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
