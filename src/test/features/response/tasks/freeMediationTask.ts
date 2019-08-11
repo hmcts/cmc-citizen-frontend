@@ -8,6 +8,7 @@ import { CanWeUse } from 'mediation/form/models/CanWeUse'
 import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from '../../../http-mocks/claim-store'
+import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Free mediation task', () => {
   const claim: Claim = new Claim().deserialize({
@@ -21,13 +22,15 @@ describe('Free mediation task', () => {
     expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
   })
 
-  it('should not be completed when willYouTryMediation is yes and youCanOnlyUseMediation is undefined', () => {
-    const mediationDraft = new MediationDraft()
-    mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
-    mediationDraft.youCanOnlyUseMediation = undefined
+  if (FeatureToggles.isEnabled('mediation')) {
+    it('should not be completed when willYouTryMediation is yes and youCanOnlyUseMediation is undefined', () => {
+      const mediationDraft = new MediationDraft()
+      mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.YES)
+      mediationDraft.youCanOnlyUseMediation = undefined
 
-    expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
-  })
+      expect(FreeMediationTask.isCompleted(mediationDraft, claim)).to.be.false
+    })
+  }
 
   it('should be completed when willYouTryMediation is yes and youCanOnlyUseMediation is yes and canWeUse is yes', () => {
     const mediationDraft = new MediationDraft()

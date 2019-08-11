@@ -887,20 +887,22 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
     })
 
-    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
-      claim.respondedAt = moment()
-      claim.features = ['admissions', 'directionsQuestionnaire']
-      claim.response = {
-        responseType: ResponseType.FULL_DEFENCE,
-        defenceType: DefenceType.DISPUTE
-      }
-      claim.claimantResponse = {
-        type: ClaimantResponseType.REJECTION
-      }
-      expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
-      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
-    })
+    if (FeatureToggles.isEnabled('mediation')) {
+      it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE
+        }
+        claim.claimantResponse = {
+          type: ClaimantResponseType.REJECTION
+        }
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+        expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+      })
+    }
 
     it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
       claim.respondedAt = moment()
