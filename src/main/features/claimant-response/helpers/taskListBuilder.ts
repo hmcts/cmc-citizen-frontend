@@ -98,7 +98,7 @@ export class TaskListBuilder {
               FreeMediationTask.isCompleted(mediationDraft, claim)
             ))
         } else {
-          const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+          const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
           tasks.push(
             new TaskListItem(
               'Free telephone mediation',
