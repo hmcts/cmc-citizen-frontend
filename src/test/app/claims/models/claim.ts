@@ -688,16 +688,22 @@ describe('Claim', () => {
 
   describe('respondToMediationDeadline', () => {
 
-    it('should add 5 days to the response deadline', () => {
+    it('should return mediation deadline date', () => {
       const claim = new Claim()
       claim.respondedAt = moment()
 
-      expect(claim.respondToMediationDeadline.toISOString()).to.equal(claim.respondedAt.add(5, 'days').toISOString())
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
+
+      claim.respondToMediationDeadline().then(
+        res => expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
+      )
     })
 
-    it('should return undefined if claim is not responded to', () => {
+    it('should return undefined if claim is not responded to', async () => {
       const claim = new Claim()
-      expect(claim.respondToMediationDeadline).to.equal(undefined)
+      const mediationDeadline = await claim.respondToMediationDeadline()
+      expect(mediationDeadline).to.be.undefined
     })
   })
 

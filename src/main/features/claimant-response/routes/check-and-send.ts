@@ -64,7 +64,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
   const paymentIntention: PaymentIntention = alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE ? undefined : getPaymentIntention(draft.document, claim)
   const dqsEnabled: boolean = DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)
-  const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE && draft.document.intentionToProceed && draft.document.intentionToProceed.proceed.option === YesNoOption.YES
+  const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE
   let datesUnavailable: string[]
   if (dqsEnabled) {
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
