@@ -66,7 +66,7 @@ describe('Expert Reports', () => {
         declared: YesNoOption.NO.option
       })
       expect(reports.declared).to.equal(YesNoOption.NO.option)
-      expect(reports.rows).to.have.length(0)
+      expect(reports.rows).to.be.empty
     })
 
     it('should deserialize populated values sensibly', () => {
