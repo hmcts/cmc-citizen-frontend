@@ -1,6 +1,8 @@
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
+import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
+const mediationSteps: MediationSteps = new MediationSteps()
 
 export class DefendantSteps {
 
@@ -54,6 +56,7 @@ export class DefendantSteps {
 
   selectTaskFreeMediation (): void {
     defendantTaskListPage.selectTaskFreeMediation()
+    mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
   }
 
   selectTaskWhenYouWillPay (): void {
