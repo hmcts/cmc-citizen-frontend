@@ -57,15 +57,14 @@ describe('DirectionsQuestionnaire', () => {
     })
 
     it('should deserialize directions questionnaire correctly when no expert reports and no expert evidence', () => {
-      let directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft
-      // @ts-ignore
-      directionsQuestionnaireDraftSampleData = new DirectionsQuestionnaireDraft().deserialize({...sampleDirectionsQuestionnaireDraftObj, ...{
-        expertReports: {
-          declared: true,
-          rows: [{}]
-        },
-        expertEvidence: undefined
-      }})
+      const directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft
+        = new DirectionsQuestionnaireDraft().deserialize({...sampleDirectionsQuestionnaireDraftObj, ...{
+          expertReports: {
+            declared: true,
+            rows: [{}]
+          },
+          expertEvidence: undefined
+        }})
 
       expect(DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)).to.deep.equal({...expectedData, ...{
         expertReports: undefined,
