@@ -50,8 +50,7 @@ export namespace DirectionsQuestionnaire {
         selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
       },
-      expertReports: (!(directionsQuestionnaire.expertReports.rows.length === 1
-        && directionsQuestionnaire.expertReports.rows[0].isEmpty())) ?
+      expertReports: (directionsQuestionnaire.expertReports && directionsQuestionnaire.expertReports.rows.length > 0) ?
         directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
           expertReportDate: row.reportDate ? LocalDate.fromObject(row.reportDate).asString() : undefined
