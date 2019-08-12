@@ -9,7 +9,7 @@ import { FeatureToggles } from 'utils/featureToggles'
 export class FreeMediationUtil {
 
   static getFreeMediation (mediationDraft: MediationDraft): YesNoOption {
-    if (!FeatureToggles.isEnabled('mediation')) {
+    if (!FeatureToggles.isEnabled('mediation') && mediationDraft.willYouTryMediation) {
       return mediationDraft.willYouTryMediation.option as YesNoOption
     } else {
       const freeMediation = mediationDraft.youCanOnlyUseMediation
