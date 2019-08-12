@@ -17,40 +17,37 @@ const tryFreeMediationPage: TryFreeMediationPage = new TryFreeMediationPage()
 export class MediationSteps {
 
   acceptMediationAsIndividualPhoneNumberProvidedIsUsed (): void {
-    // this.legacyFreeMediationAccept()
-
-    // if (process.env.FEATURE_MEDIATION === 'true') {
-    freeMediationPage.clickHowFreeMediationWorks()
-    howMediationWorksPage.chooseContinue()
-    willYouTryMediationPage.chooseYes()
-    mediationAgreementPage.chooseAgree()
-    canWeUsePage.chooseYes()
-    // } else {
-    // }
+    if (process.env.FEATURE_MEDIATION === 'true') {
+      freeMediationPage.clickHowFreeMediationWorks()
+      howMediationWorksPage.chooseContinue()
+      willYouTryMediationPage.chooseYes()
+      mediationAgreementPage.chooseAgree()
+      canWeUsePage.chooseYes()
+    } else {
+      this.legacyFreeMediationAccept()
+    }
   }
 
   acceptMediationAsCompanyPhoneNumberProvided (): void {
-    // this.legacyFreeMediationAccept()
-
-    // if (process.env.FEATURE_MEDIATION === 'true') {
-    freeMediationPage.clickHowFreeMediationWorks()
-    howMediationWorksPage.chooseContinue()
-    willYouTryMediationPage.chooseYes()
-    mediationAgreementPage.chooseAgree()
-    canWeUseCompanyPage.chooseYes()
-    // } else {
-    // }
+    if (process.env.FEATURE_MEDIATION === 'true') {
+      freeMediationPage.clickHowFreeMediationWorks()
+      howMediationWorksPage.chooseContinue()
+      willYouTryMediationPage.chooseYes()
+      mediationAgreementPage.chooseAgree()
+      canWeUseCompanyPage.chooseYes()
+    } else {
+      this.legacyFreeMediationAccept()
+    }
   }
 
   rejectMediation (): void {
-    // this.legacyFreeMediationReject()
-
-    // if (process.env.FEATURE_MEDIATION === 'true') {
-    freeMediationPage.clickHowFreeMediationWorks()
-    howMediationWorksPage.chooseContinue()
-    willYouTryMediationPage.chooseNo()
-    // } else {
-    // }
+    if (process.env.FEATURE_MEDIATION === 'true') {
+      freeMediationPage.clickHowFreeMediationWorks()
+      howMediationWorksPage.chooseContinue()
+      willYouTryMediationPage.chooseNo()
+    } else {
+      this.legacyFreeMediationReject()
+    }
   }
 
   legacyFreeMediationAccept (): void {
