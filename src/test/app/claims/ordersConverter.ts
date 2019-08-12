@@ -5,7 +5,7 @@ import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersConverter } from 'claims/ordersConverter'
 import { expect } from 'chai'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 const user = {
   id: '1',

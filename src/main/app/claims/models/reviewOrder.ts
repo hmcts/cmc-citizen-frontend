@@ -1,6 +1,6 @@
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 export class ReviewOrder {
   reason: string

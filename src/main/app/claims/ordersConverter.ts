@@ -2,7 +2,7 @@ import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { MomentFactory } from 'shared/momentFactory'
 import { Claim } from 'claims/models/claim'
 import { ReviewOrder } from 'claims/models/reviewOrder'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 export class OrdersConverter {
   static convert (ordersDraft: OrdersDraft, claim: Claim, user: User): ReviewOrder {

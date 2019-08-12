@@ -19,7 +19,7 @@ import { sampleOrdersDraftObj } from 'test/http-mocks/draft-store'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { resolveSaveOrder, sampleClaimIssueObj } from 'test/http-mocks/claim-store'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 const claimDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 
