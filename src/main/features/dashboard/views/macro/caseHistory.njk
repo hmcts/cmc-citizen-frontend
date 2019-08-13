@@ -118,7 +118,7 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, csrf) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
@@ -164,7 +164,7 @@
         {% elif claim.response.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedFreeMediationNOForClaimantClaimDetails(claim) }}
         {% else %}
-          {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim) }}
+          {{ claimRejectedFreeMediationYESForClaimantClaimDetails(claim, mediationDeadline) }}
         {% endif %}
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if claim.response.paymentDeclaration %}

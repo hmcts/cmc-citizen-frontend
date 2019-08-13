@@ -26,6 +26,7 @@ import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 
 interface State {
@@ -83,11 +84,12 @@ export class Claim {
     return this.respondedAt.clone().add(daysForService + daysForResponse, 'days')
   }
 
-  get respondToMediationDeadline (): Moment {
+  async respondToMediationDeadline (): Promise<Moment> {
     if (!this.respondedAt) {
       return undefined
     }
-    return this.respondedAt.clone().add('5', 'days')
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
   }
 
   get remainingDays (): number {

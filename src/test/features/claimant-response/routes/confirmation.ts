@@ -15,6 +15,7 @@ import { rejectionClaimantResponseData } from 'test/data/entity/claimantResponse
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 import { app } from 'main/app'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -49,6 +50,7 @@ describe('Claimant response: confirmation page', () => {
             ...{ claimantResponse: rejectionClaimantResponseData }
           }
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimantResponseData)
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)
             .get(pagePath)

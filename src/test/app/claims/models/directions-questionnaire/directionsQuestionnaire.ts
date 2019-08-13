@@ -56,6 +56,22 @@ describe('DirectionsQuestionnaire', () => {
       expect(DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)).to.deep.equal(expectedData)
     })
 
+    it('should deserialize directions questionnaire correctly when no expert reports and no expert evidence', () => {
+      const directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft
+        = new DirectionsQuestionnaireDraft().deserialize({...sampleDirectionsQuestionnaireDraftObj, ...{
+          expertReports: {
+            declared: true,
+            rows: [{}]
+          },
+          expertEvidence: undefined
+        }})
+
+      expect(DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)).to.deep.equal({...expectedData, ...{
+        expertReports: undefined,
+        expertRequest: undefined
+      }})
+    })
+
     it('should deserialize undefined directions questionnaire and it should return undefined', () => {
       expect(DirectionsQuestionnaire.deserialize(undefined)).to.be.equal(undefined)
     })

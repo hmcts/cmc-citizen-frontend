@@ -2,7 +2,7 @@ import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { StatementType } from 'features/offer/form/models/statementType'
-import { MadeBy } from 'features/offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
@@ -30,6 +30,7 @@ import {
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { organisation } from 'test/data/entity/party'
+import { Moment } from 'moment'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -560,6 +561,20 @@ export function mockCalculateInterestRate (expected: number): mock.Scope {
     .get('/interest/calculate')
     .query(true)
     .reply(HttpStatus.OK, { amount: expected })
+}
+
+export function mockNextWorkingDay (expected: Moment): mock.Scope {
+  return mock(serviceBaseURL)
+    .get('/calendar/next-working-day')
+    .query(true)
+    .reply(HttpStatus.OK, { nextWorkingDay: expected })
+}
+
+export function rejectNextWorkingDay (expected: Moment): mock.Scope {
+  return mock(serviceBaseURL)
+    .get('/calendar/next-working-day')
+    .query({ date: expected })
+    .reply(400)
 }
 
 export function resolveRetrieveClaimIssueByExternalId (claimOverride?: object): mock.Scope {
