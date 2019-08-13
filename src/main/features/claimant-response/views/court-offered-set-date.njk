@@ -3,21 +3,22 @@
 {% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set heading = 'The defendant can’t pay by your proposed date' %}
-{% set date = t('Do you accept a repayment date of {{ paymentDate }}?', { paymentDate: paymentDate | date }) %}
+{% set date = paymentDate | date %}
+{% set dateQuery = t('Do you accept a repayment date of {{ paymentDate }}?', { paymentDate: date }) %}
 
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
       <p>{{ t('Based on financial details the defendant gave us, we don’t believe they can pay by your proposed date.') }}</p>
-      <p>{{ t('The court’s calculator has determined {{ paymentDate }} as the date when they can pay you in full.', { paymentDate: paymentDate | date }) }}</p>
+      <p>{{ t('The court’s calculator has determined {{ paymentDate }} as the date when they can pay you in full.', { paymentDate: date }) }}</p>
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
         {{
         radioGroup(
-          label = date,
+          label = dateQuery,
           labelForScreenReadersOnly = false,
           form = form,
           name = 'accept',
