@@ -10,7 +10,7 @@ const buttons = {
 export class HowMediationWorksPage {
 
   chooseContinue (): void {
-    I.click(buttons.submit)
+    I.click('Continue')
   }
 
   chooseDisagree (): void {

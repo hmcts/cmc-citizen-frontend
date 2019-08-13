@@ -125,10 +125,10 @@ export default express.Router()
         await new ClaimStoreClient().saveClaimantResponse(claim, draft, mediationDraft, user, directionsQuestionnaireDraft.document)
         await new DraftService().delete(draft.id, user.bearerToken)
 
-        if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)) {
+        if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim) && directionsQuestionnaireDraft.id) {
           await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
         }
-        if (mediationDraft.id) {
+        if (claim.response.responseType !== ResponseType.FULL_ADMISSION && mediationDraft.id) {
           await draftService.delete(mediationDraft.id, user.bearerToken)
         }
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
