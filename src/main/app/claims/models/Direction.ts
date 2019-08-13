@@ -1,12 +1,11 @@
 import { Moment } from 'moment'
 import * as _ from 'lodash'
-import * as DirectionType from 'claims/models/directionType'
 
 export interface Direction {
   directionParty?: string
   directionType?: string
   directionHeaderType?: string
-  LocalDate?: Moment
+  directionActionedBy?: Moment
   directionComment?: string
   extraDocuments?: string[]
   expertReports?: string[]
@@ -22,9 +21,9 @@ export namespace Direction {
     _.each(input, function (eachDirection) {
       directions.push({
         directionParty: eachDirection.directionParty,
-        directionType: DirectionType[eachDirection.directionType],
+        directionType: eachDirection.directionType,
         directionHeaderType: eachDirection.directionHeaderType,
-        LocalDate: eachDirection.directionHeaderType,
+        directionActionedBy: eachDirection.directionActionedBy,
         directionComment: eachDirection.directionHeaderType,
         extraDocuments: eachDirection.directionHeaderType
       })
