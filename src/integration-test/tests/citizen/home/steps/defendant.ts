@@ -1,5 +1,6 @@
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { PartyType } from '../../../../data/party-type'
 
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const mediationSteps: MediationSteps = new MediationSteps()
@@ -54,9 +55,13 @@ export class DefendantSteps {
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
   }
 
-  selectTaskFreeMediation (): void {
+  selectTaskFreeMediation (defendantType: PartyType): void {
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+    if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+      mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
+    } else {
+      mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+    }
   }
 
   selectTaskWhenYouWillPay (): void {

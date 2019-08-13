@@ -256,8 +256,8 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence(text)
   }
 
-  askForMediation (): void {
-    defendantSteps.selectTaskFreeMediation()
+  askForMediation (defendantType: PartyType = PartyType.INDIVIDUAL): void {
+    defendantSteps.selectTaskFreeMediation(defendantType)
   }
 
   verifyCheckAndSendPageCorrespondsTo (defenceType: DefenceType): void {
@@ -312,19 +312,19 @@ export class DefenceSteps {
           } as TimelineEvent]
         } as Timeline)
         this.enterEvidence('description', 'comment')
-        this.askForMediation()
+        this.askForMediation(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
         break
       case DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID:
         this.enterWhenDidYouPay(defence)
-        this.askForMediation()
+        this.askForMediation(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
         I.see('When did you pay this amount?')
         I.see('How did you pay this amount?')
         break
       case DefenceType.PART_ADMISSION_NONE_PAID:
         this.admitPartOfTheClaim(defence)
-        this.askForMediation()
+        this.askForMediation(defendantType)
         if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
           defendantTaskListPage.selectShareYourFinancialDetailsTask()
           sendCompanyDetailsPage.continue()
@@ -335,7 +335,7 @@ export class DefenceSteps {
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)
-        this.askForMediation()
+        this.askForMediation(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
         if (isClaimAlreadyPaid) {
           I.see('How much money have you paid?')
@@ -430,7 +430,7 @@ export class DefenceSteps {
     defendantYourDefencePage.enterYourDefence('I have already paid for the bill')
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
-    this.askForMediation()
+    this.askForMediation(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType)
     I.see('You’ve submitted your response')
