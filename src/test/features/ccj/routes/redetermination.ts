@@ -16,7 +16,7 @@ import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not
 import { MomentFactory } from 'shared/momentFactory'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 
 const cookieName: string = config.get<string>('session.cookieName')

@@ -50,19 +50,20 @@ export namespace DirectionsQuestionnaire {
         selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
       },
-      expertReports: directionsQuestionnaire.expertReports && directionsQuestionnaire.expertReports.rows
-        && directionsQuestionnaire.expertReports.rows.map(row => ({
+      expertReports: (directionsQuestionnaire.expertReports && directionsQuestionnaire.expertReports.rows.length > 0) ?
+        directionsQuestionnaire.expertReports.rows.map(row => ({
           expertName: row.expertName,
           expertReportDate: row.reportDate ? LocalDate.fromObject(row.reportDate).asString() : undefined
-        })),
+        })) : undefined,
       unavailableDates: directionsQuestionnaire.availability &&
         directionsQuestionnaire.availability.unavailableDates.map(unavailableDate => ({
           unavailableDate: unavailableDate ? LocalDate.fromObject(unavailableDate).asString() : undefined
         })),
-      expertRequest: directionsQuestionnaire.expertEvidence && {
-        expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
-        reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
-      }
+      expertRequest: (directionsQuestionnaire.expertEvidence.expertEvidence &&
+        directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
+          expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
+          reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
+        } : undefined
     }
   }
 
