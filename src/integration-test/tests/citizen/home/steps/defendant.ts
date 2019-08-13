@@ -1,6 +1,6 @@
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
-import { PartyType } from '../../../../data/party-type'
+import { PartyType } from 'integration-test/data/party-type'
 
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const mediationSteps: MediationSteps = new MediationSteps()

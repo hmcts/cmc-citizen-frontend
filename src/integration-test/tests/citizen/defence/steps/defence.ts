@@ -5,7 +5,6 @@ import { DefendantDefenceTypePage } from 'integration-test/tests/citizen/defence
 import { DefendantDobPage } from 'integration-test/tests/citizen/defence/pages/defendant-dob'
 import { DefendantEnterClaimPinNumberPage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-pin-number'
 import { DefendantEnterClaimReferencePage } from 'integration-test/tests/citizen/defence/pages/defendant-enter-claim-reference'
-import { TryFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/try-free-mediation'
 import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
 import { DefendantImpactOfDisputePage } from 'integration-test/tests/citizen/defence/pages/defendant-impact-of-dispute'
 import { DefendantMobilePage } from 'integration-test/tests/citizen/defence/pages/defendant-mobile'
@@ -35,6 +34,7 @@ import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/st
 import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
 import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import I = CodeceptJS.I
+import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -49,7 +49,6 @@ const defendantMoreTimeRequestPage: DefendantMoreTimeRequestPage = new Defendant
 const defendantDefenceTypePage: DefendantDefenceTypePage = new DefendantDefenceTypePage()
 const defendantRejectAllOfClaimPage: DefendantRejectAllOfClaimPage = new DefendantRejectAllOfClaimPage()
 const defendantYourDefencePage: DefendantYourDefencePage = new DefendantYourDefencePage()
-const defendantFreeMediationPage: TryFreeMediationPage = new TryFreeMediationPage()
 const alreadyPaidPage: AlreadyPaidPage = new AlreadyPaidPage()
 const defendantCheckAndSendPage: DefendantCheckAndSendPage = new DefendantCheckAndSendPage()
 const defendantHowMuchHaveYouPaidTheClaimant: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
@@ -69,6 +68,7 @@ const defendantHowMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new Def
 const haveYouPaidTheClaimantPage: DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage = new DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage()
 const defendantHowMuchYouOwePage: DefendantHowMuchYouOwePage = new DefendantHowMuchYouOwePage()
 const updatedAddress = { line1: 'ABC Street', line2: 'A cool place', city: 'Bristol', postcode: 'BS1 5TL' }
+const mediationSteps: MediationSteps = new MediationSteps()
 
 const defendantRepaymentPlan: PaymentPlan = {
   equalInstalment: 20.00,
@@ -470,7 +470,7 @@ export class DefenceSteps {
         throw new Error(`Unknown payment option: ${paymentOption}`)
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    defendantFreeMediationPage.chooseNo()
+    mediationSteps.rejectMediation()
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     this.checkAndSendAndSubmit(defendantType)
     I.see('You’ve submitted your response')

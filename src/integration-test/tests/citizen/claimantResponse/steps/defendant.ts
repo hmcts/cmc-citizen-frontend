@@ -11,7 +11,7 @@ import { DefendantWhyDoYouDisagreePage } from 'integration-test/tests/citizen/de
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
-import { DefendantTaskListPage } from '../../defence/pages/defendant-task-list'
+import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 
 const I: I = actor()
 const defendantSteps: DefendantSteps = new DefendantSteps()
