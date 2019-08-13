@@ -11,6 +11,7 @@ import { DefendantWhyDoYouDisagreePage } from 'integration-test/tests/citizen/de
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { DefendantTaskListPage } from '../../defence/pages/defendant-task-list'
 
 const I: I = actor()
 const defendantSteps: DefendantSteps = new DefendantSteps()
@@ -21,6 +22,7 @@ const howMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHow
 const youHavePaidLessPage: DefendantYouHavePaidLessPage = new DefendantYouHavePaidLessPage()
 const whyYouDisagreePage: DefendantWhyDoYouDisagreePage = new DefendantWhyDoYouDisagreePage()
 const mediationSteps: MediationSteps = new MediationSteps()
+const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const claimDetailsHeading: string = 'Claim details'
 
 export class DefendantResponseSteps {
@@ -47,7 +49,7 @@ export class DefendantResponseSteps {
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
-    defendantSteps.selectTaskFreeMediation()
+    defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
     defendantSteps.selectCheckAndSubmitYourDefence()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
@@ -87,7 +89,7 @@ export class DefendantResponseSteps {
         claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
       )
     }
-    defendantSteps.selectTaskFreeMediation()
+    defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
     defendantSteps.selectCheckAndSubmitYourDefence()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
