@@ -69,7 +69,7 @@ const testData = [
     },
     claimantAssertions: ['You’ve rejected the defendant’s admission',
       'They said they owe £100.',
-      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.',
+      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.',
       'Find out how mediation works',
       'Download their response'
     ],
@@ -100,6 +100,8 @@ describe('Dashboard page', () => {
           testData.forEach(data => {
             it(`should render claim status: ${data.status}`, async () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+              claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
               await request(app)
                 .get(claimPagePath)
                 .set('Cookie', `${cookieName}=ABC`)

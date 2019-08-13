@@ -15,7 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 import { MomentFactory } from 'shared/momentFactory'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
