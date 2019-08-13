@@ -117,16 +117,16 @@ describe('Timeline', () => {
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
     })
 
-    it(`adds only up to ${MAX_NUMBER_OF_ROWS} elements`, () => {
+    it(`adds only up to the maximum row count elements`, () => {
       const actual: Timeline = new Timeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
-      for (let i = 0; i < MAX_NUMBER_OF_ROWS + 1; i++) {
+      for (let i = 0; i < actual.getMaxNumberOfRows() + 1; i++) {
         actual.appendRow()
       }
 
-      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_ROWS)
+      expect(actual.rows.length).to.be.eq(actual.getMaxNumberOfRows())
     })
   })
 
