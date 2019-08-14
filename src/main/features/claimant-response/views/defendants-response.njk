@@ -58,7 +58,7 @@
 
   <div class="form-group">
     <h3 class="heading-small">{{ t('Full response') }}</h3>
-    {{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
+    <p>{{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}(PDF)</p>
   </div>
 {% endmacro %}
 
