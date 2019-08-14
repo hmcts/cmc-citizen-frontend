@@ -64,6 +64,7 @@ describe('Claimant response: confirmation page', () => {
             ...{ claimantResponse: rejectionClaimantResponseWithDQ }
           }
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimantResponseData)
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
           await request(app)
             .get(pagePath)
