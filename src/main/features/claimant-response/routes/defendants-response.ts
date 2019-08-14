@@ -1,28 +1,15 @@
-import { NotFoundError } from 'errors'
 import * as express from 'express'
 
 import { Paths } from 'claimant-response/paths'
-import { GuardFactory } from 'response/guards/guardFactory'
 import { ErrorHandling } from 'shared/errorHandling'
 import { Claim } from 'claims/models/claim'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
-import { ResponseType } from 'claims/models/response/responseType'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-
-const stateGuardRequestHandler: express.RequestHandler = GuardFactory.create((res: express.Response): boolean => {
-  const claim: Claim = res.locals.claim
-
-  return claim.response.responseType === ResponseType.FULL_ADMISSION
-    || (claim.response.responseType === ResponseType.PART_ADMISSION)
-    || (claim.response.responseType === ResponseType.FULL_DEFENCE)
-}, (req: express.Request): void => {
-  throw new NotFoundError(req.path)
-})
 
 function renderView (res: express.Response, page: number): void {
   const claim: Claim = res.locals.claim
@@ -48,7 +35,6 @@ function renderView (res: express.Response, page: number): void {
 export default express.Router()
   .get(
     Paths.defendantsResponsePage.uri,
-    stateGuardRequestHandler,
     (req: express.Request, res: express.Response) => {
       const page: number = 0
       renderView(res, page)
@@ -56,7 +42,6 @@ export default express.Router()
   )
   .post(
     Paths.defendantsResponsePage.uri,
-    stateGuardRequestHandler,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user

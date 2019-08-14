@@ -412,6 +412,10 @@ export class Claim {
       return true
     }
 
+    if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
+      return true
+    }
+
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
       && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
       PaymentOption.IMMEDIATELY
