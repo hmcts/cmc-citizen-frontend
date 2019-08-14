@@ -7,18 +7,38 @@
 
 {% macro partAdmitRejectedByClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
-
-    <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
-
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+
+      <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
       <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>
       <p>{{ internalLink('Find out how mediation works', DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
     {% else %}
+      <h2 class="heading-small">{{ t('Tell us your hearing requirements') }}</h2>
+
+      <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
       <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
       <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
           { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro partAdmitRejectedByClaimantDQClaimDetails(claim) %}
+  <div class="status-block">
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+
+      <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
+      <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>
+      <p>{{ internalLink('Find out how mediation works', DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+    {% else %}
+      <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
+
+      <p>{{ t('You’ve rejected {{ defendantName }}’s response and said you want to take the case to court.',
+          { defendantName: claim.claimData.defendant.name }) }}</p>
+      <p>{{ t('The court will review the case. We’ll contact you to tell you what to do next.') }}</p>
     {% endif %}
   </div>
 {% endmacro %}

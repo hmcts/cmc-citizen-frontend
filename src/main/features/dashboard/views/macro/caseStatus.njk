@@ -157,7 +157,8 @@
     {{ offerSettlementReachedDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
     {{ partAdmitRejectedByClaimantDashboard(claim) }}
-  {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    or status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ %}
     {{ partAdmitRejectedByClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
     {{ statesPaidRejectedClaimantDashboard(claim) }}
@@ -239,7 +240,8 @@
   {% elif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ offerAcceptedForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
-    or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
+    or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
+    or status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ%}
     {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
     {{ statesPaidRejectedDefendantDashboard(claim) }}
