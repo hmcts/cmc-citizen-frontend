@@ -283,41 +283,43 @@
   {{ t('You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.') }}
 {% endmacro %}
 
-{% macro reviewRequester(claim) %}
+{% macro reviewRequester(claim, name) %}
   <h2 class="heading-medium">{{ t('You’ve asked the court to review the order') }} </h2>
-  {% if(claim.reviewOrder.requestedBy === 'CLAIMANT') %}
-    <p>{{ t('We’ll tell {{ defendantName }}. They can comment until 25 August 2019.',{defendantName: claim.claimData.defendants[0].name}) }}</p>
-  {% else %}
-    <p>{{ t('We’ll tell {{ claimantName }}. They can comment until 25 August 2019.',{claimantName: claim.claimData.claimants[0].name}) }}</p>
-  {% endif %}
+  <p>{{ t('We’ll tell {{ partyName }}. They can comment until {{commentsLastDay}}.',{partyName: name, commentsLastDay: claim.reviewOrder.commentsLastDay | date}) }}</p>
   <p>{{ t('A judge will then review the order and any comments. We’ll contact you by post to tell you what to do next.') }}</p>
   <p>{{ t('Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.') }}</p>
   <div class="bottom-border"></div>
 {% endmacro %}
 
-{% macro reviewReceiver(claim) %}
-  <h2 class="heading-small">{{ t('Read {{ defendantName }}’ request',{defendantName: claim.claimData.defendants[0].name}) }}</h2>
-  <p>{{ t('{{ defendantName }} has asked the court to change the order.',{defendantName: claim.claimData.defendants[0].name}) }}</p>
+{% macro reviewReceiver(claim, name, email) %}
+  <h2 class="heading-small">{{ t('Read {{ partyName }}’ request',{partyName: name}) }}</h2>
+  <p>{{ t('{{ partyName }} has asked the court to change the order.',{partyName: name}) }}</p>
 
   <p>{{ t('A judge will review their request and any comments you’ve sent. We’ll contact you by post if the judge makes a new order.') }}</p>
 
   <p>{{ t('Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.') }}</p>
 
-  {{ internalLink(t('Download {{ defendantName }}’ request to see what they asked ',{defendantName: claim.claimData.defendants[0].name}), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-  {{ t('(PDF)') }} to find out the details you need to send.
+  {{ internalLink(t('Download {{ partyName }}’ request to see what they asked ',{partyName: name}), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+  {{ t('(PDF)') }} {{ t('to find out the details you need to send.') }}
 
 
-  <h2 class="heading-small">{{ t('Comment on {{ defendantName }}’ request',{defendantName: claim.claimData.defendants[0].name}) }}</h2>
+  <h2 class="heading-small">{{ t('Comment on {{ partyName }}’ request',{partyName: name}) }}</h2>
 
-  <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ defendantName }} before 4pm on 25 August 2019.', {defendantName: claim.claimData.defendants[0].name}) }}</p>
+  <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ partyName }} before 4pm on {{commentsLastDay}}.', {partyName: name, commentsLastDay: claim.reviewOrder.commentsLastDay | date}) }}</p>
   <p>{{ t('Include the claim number ({{claimNumber}}) in the emails.',{claimNumber: claim.claimNumber}) }}</p>
   <p>{{ t('The court’s email address is:') }} <a href="#"> moneyclaims@justice.gov.uk </a></p>
-  <p>{{ t('{{ defendantName }}’ email address is:',{defendantName: claim.claimData.defendants[0].name}) }} <a href="#"> mary.richards@gmail.com </a></p>
+  <p>{{ t('{{ partyName }}’ email address is:',{partyName: name}) }} <a href="#"> {{ t('{{ email}}', {email:email}) }} </a></p>
 
   <div class="bottom-border"></div>
 {% endmacro %}
 
 {% macro directionsOrderIssuedForDefendant(claim) %}
+  {% if(claim.reviewOrder and claim.reviewOrder.requestedBy === 'CLAIMANT') %}
+    {{ reviewReceiver(claim,claim.claimData.claimants[0].name, claim.claimData.claimants[0].email) }}
+  {% elseif(claim.reviewOrder and claim.reviewOrder.requestedBy === 'DEFENDANT') %}
+    {{ reviewRequester(claim,claim.claimData.claimants[0].name) }}
+  {% endif %}
+
   <h2 class="heading-small">{{ t('Send us more details before the hearing') }}</h2>
   <p>{{ t('The court has ordered you to send more details.') }}</p>
   <p>
@@ -362,6 +364,11 @@
 {% endmacro %}
 
 {% macro directionsOrderIssuedForClaimant(claim) %}
+  {% if(claim.reviewOrder and claim.reviewOrder.requestedBy === 'CLAIMANT') %}
+    {{ reviewRequester(claim,claim.claimData.defendants[0].name) }}
+  {% elseif(claim.reviewOrder and claim.reviewOrder.requestedBy === 'DEFENDANT') %}
+    {{ reviewReceiver(claim,claim.claimData.defendants[0].name,claim.claimData.defendants[0].email) }}
+  {% endif %}
   <h2 class="heading-small">{{ t('Send us more details before the hearing') }}</h2>
   <p>{{ t('The court has ordered you to send more details.') }}</p>
   <p>

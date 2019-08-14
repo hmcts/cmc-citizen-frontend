@@ -28,6 +28,7 @@ import { ClaimTemplate } from 'claims/models/claimTemplate'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 
 interface State {
   status: ClaimStatus
@@ -66,6 +67,7 @@ export class Claim {
   ccdCaseId: number
   template: ClaimTemplate
   directionOrder: DirectionOrder
+  reviewOrder: ReviewOrder
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -315,6 +317,9 @@ export class Claim {
       }
       if (input.directionOrder) {
         this.directionOrder = DirectionOrder.deserialize(input.directionOrder)
+      }
+      if (input.reviewOrder) {
+        this.reviewOrder = ReviewOrder.deserialize(input.reviewOrder)
       }
     }
 
