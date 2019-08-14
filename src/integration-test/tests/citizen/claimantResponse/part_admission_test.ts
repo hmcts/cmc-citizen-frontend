@@ -37,7 +37,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.reject(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForPartAdmitRejection()
     checkAndSendPage.checkFactsTrueAndSubmit()
-    I.see('You’ve rejected their response')
+    I.see('You agreed to try to resolve the claim using mediation')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve rejected the defendant’s admission.')

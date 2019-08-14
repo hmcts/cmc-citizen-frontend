@@ -16,15 +16,16 @@ import { PartialAdmissionResponse } from 'claims/models/response/partialAdmissio
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { ResponseType } from 'claims/models/response/responseType'
+import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FeatureToggles } from 'utils/featureToggles'
 import { SignatureType } from 'common/signatureType'
 import { Form } from 'forms/form'
 import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth'
 import { FormValidator } from 'forms/validation/formValidator'
-import { ResponseType } from 'claims/models/response/responseType'
 import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
-import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -63,6 +64,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
   const paymentIntention: PaymentIntention = alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE ? undefined : getPaymentIntention(draft.document, claim)
+  const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
   const dqsEnabled: boolean = DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)
   const dispute: boolean = claim.response.responseType === ResponseType.FULL_DEFENCE
   let datesUnavailable: string[]
@@ -89,9 +91,9 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType,
-    dispute: dispute
+    dispute: dispute,
+    mediationPilot: mediationPilot
   })
-
 }
 
 /* tslint:disable:no-default-export */
@@ -123,10 +125,10 @@ export default express.Router()
         await new ClaimStoreClient().saveClaimantResponse(claim, draft, mediationDraft, user, directionsQuestionnaireDraft.document)
         await new DraftService().delete(draft.id, user.bearerToken)
 
-        if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim)) {
+        if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draft.document, claim) && directionsQuestionnaireDraft.id) {
           await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
         }
-        if (mediationDraft.id) {
+        if (claim.response.responseType !== ResponseType.FULL_ADMISSION && mediationDraft.id) {
           await draftService.delete(mediationDraft.id, user.bearerToken)
         }
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))
