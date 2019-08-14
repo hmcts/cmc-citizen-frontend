@@ -407,7 +407,7 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Wait for the claimant to respond',
@@ -467,7 +467,7 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Wait for the claimant to respond',
@@ -543,7 +543,7 @@ const mediationDQEnabledClaimDetails = [
       fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
       'You need to decide whether to proceed with the claim',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -630,7 +630,6 @@ const mediationDQEnabledClaimDetails = [
       'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
       'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
-      'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'Tell us you’ve ended the claim',
       'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
       'Tell us you’ve settled'
@@ -665,7 +664,7 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Your response to the claim',
