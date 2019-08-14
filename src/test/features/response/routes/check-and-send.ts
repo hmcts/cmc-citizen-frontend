@@ -25,8 +25,8 @@ import { InterestDateType } from 'common/interestDateType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
-import { FeatureToggles } from 'utils/featureToggles'
 import { fullAdmissionWithPaymentByInstalmentsDataCompany } from 'test/data/entity/responseData'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -206,7 +206,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             const claimStoreOverride = {
-              features: ['admissions','directionsQuestionnaire'],
+              features: ['admissions', 'directionsQuestionnaire'],
               claim: {
                 claimants: [
                   {
@@ -408,10 +408,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
-
-            if (FeatureToggles.isEnabled('mediation')) {
-              draftStoreServiceMock.resolveDelete()
-            }
+            draftStoreServiceMock.resolveDelete()
 
             let sendData: any = { signed: 'true', type: SignatureType.BASIC }
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
@@ -432,28 +429,26 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            it('should redirect to confirmation page when form is valid with SignatureType as qualified', async () => {
-              draftStoreServiceMock.resolveFind('response:company')
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire', { directionsQuestionnaire: undefined })
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionWithPaymentByInstalmentsDataCompany)
-              claimStoreServiceMock.resolveSaveResponse()
-              draftStoreServiceMock.resolveSave()
+          it('should redirect to confirmation page when form is valid with SignatureType as qualified', async () => {
+            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire', { directionsQuestionnaire: undefined })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionWithPaymentByInstalmentsDataCompany)
+            claimStoreServiceMock.resolveSaveResponse()
+            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveDelete()
+            draftStoreServiceMock.resolveDelete()
+            if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
               draftStoreServiceMock.resolveDelete()
-              draftStoreServiceMock.resolveDelete()
-              if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
-                draftStoreServiceMock.resolveDelete()
-              }
+            }
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: 'signer', signerRole: 'role' })
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-            })
-          }
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: 'signer', signerRole: 'role' })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
 
           it('should redirect to counter-claim hand off page when defendant is counter claiming', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
