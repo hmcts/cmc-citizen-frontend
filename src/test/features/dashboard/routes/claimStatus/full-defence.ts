@@ -198,7 +198,7 @@ const legacyClaimDetails = [
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'View and respond to the offer',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
