@@ -20,8 +20,8 @@ import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/
 import { ClaimantCourtOfferedInstalmentsPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-instalments'
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
 import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
-import { ClaimantFreeMediationPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-free-mediation'
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
+import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -40,7 +40,7 @@ const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBy
 const defendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
 const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
 const settleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
-const freeMediationPage: ClaimantFreeMediationPage = new ClaimantFreeMediationPage()
+const mediationSteps: MediationSteps = new MediationSteps()
 
 export class ClaimantResponseSteps {
 
@@ -127,7 +127,7 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    freeMediationPage.accept()
+    mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 

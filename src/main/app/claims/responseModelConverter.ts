@@ -64,13 +64,12 @@ import { CarerOption } from 'response/form/models/statement-of-means/carer'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
-import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { FeatureToggles } from 'utils/featureToggles'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 export class ResponseModelConverter {
 
@@ -105,7 +104,7 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: this.convertFreeMediation(mediationDraft, draft),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
@@ -136,7 +135,7 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: this.convertFreeMediation(mediationDraft, draft),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -149,7 +148,7 @@ export class ResponseModelConverter {
   private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
-      freeMediation: FeatureToggles.isEnabled('mediation') ? this.convertFreeMediation(mediationDraft, draft) : FreeMediationUtil.getFreeMediation(mediationDraft),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -187,21 +186,13 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
-      freeMediation: this.convertFreeMediation(mediationDraft, draft),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
       mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
       mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       statementOfMeans: this.convertStatementOfMeans(draft),
       statementOfTruth: this.convertStatementOfTruth(draft),
       directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
         ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
-    }
-  }
-
-  private static convertFreeMediation (mediationDraft: MediationDraft, draft: ResponseDraft): YesNoOption {
-    if (FeatureToggles.isEnabled('mediation')) {
-      return FreeMediationUtil.convertFreeMediation(mediationDraft.youCanOnlyUseMediation)
-    } else {
-      return FreeMediationUtil.convertFreeMediation(draft.freeMediation)
     }
   }
 

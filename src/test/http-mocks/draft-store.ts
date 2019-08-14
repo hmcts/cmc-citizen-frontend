@@ -585,6 +585,12 @@ export const sampleMediationDraftObj = {
   }
 }
 
+export const sampleLegacyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.NO
+  }
+}
+
 export const sampleCompanyMediationDraftObj = {
   willYouTryMediation: {
     option: FreeMediationOption.YES

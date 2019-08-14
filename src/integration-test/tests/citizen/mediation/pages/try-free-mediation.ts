@@ -6,7 +6,7 @@ const buttons = {
   submit: 'input[type=submit]'
 }
 
-export class DefendantFreeMediationPage {
+export class TryFreeMediationPage {
 
   chooseYes (): void {
     I.checkOption('Yes')
