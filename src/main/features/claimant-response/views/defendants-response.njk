@@ -159,6 +159,7 @@
           {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
             {{ evidenceFragment(claim.response.evidence) }}
           {% endif %}
+          {{ fullResponseFragment() }}
         {% elseif page === 1 %}
           {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
             <p>{{ t('The defendant suggested this repayment plan:') }}</p>
@@ -174,7 +175,6 @@
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
           {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
-          {{ fullResponseFragment() }}
         {% endif %}
       {% endif %}
 
