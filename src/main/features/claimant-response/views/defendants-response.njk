@@ -185,6 +185,11 @@
         {% endif %}
       {% endif %}
 
+      <div class="form-group">
+        <h3 class="heading-small">{{ t('Full response') }}</h3>
+        {{ internalLink(t('Download their full response and hearing requirements '), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
+      </div>
+
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
