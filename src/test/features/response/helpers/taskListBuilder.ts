@@ -32,14 +32,13 @@ import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/r
 import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
 import { PaymentIntention } from 'shared/components/payment-intention/model/paymentIntention'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
-import { FeatureToggles } from 'utils/featureToggles'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
-const features: string[] = ['admissions']
 const mediationTaskLabel = 'Free telephone mediation'
-const featureToggleMediationTaskLabel = 'Free telephone mediation'
 const directionsQuestionnaireTaskLabel = 'Your hearing requirements'
+
 describe('Defendant response task list builder', () => {
   let claim: Claim
 
@@ -424,11 +423,7 @@ describe('Defendant response task list builder', () => {
             new ResponseDraft().deserialize(defenceWithDisputeDraft), claim, new MediationDraft()
           )
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('response is rejected with already paid', () => {
@@ -439,11 +434,8 @@ describe('Defendant response task list builder', () => {
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('response is partial admission and why do you disagree is completed', () => {
@@ -454,11 +446,8 @@ describe('Defendant response task list builder', () => {
           const taskList: TaskList = TaskListBuilder.buildResolvingClaimSection(
             new ResponseDraft().deserialize(partiallyAdmittedDefenceWithWhyDoYouDisagreeCompleted), claim, new MediationDraft()
           )
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
       })
 
@@ -809,7 +798,7 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputePaidStub.returns(true)
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
@@ -818,7 +807,7 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
@@ -826,14 +815,14 @@ describe('Defendant response task list builder', () => {
       isResponseFullyAdmittedStub.returns(true)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
     })
 
     it('should be enabled when claim is fully rejected because paid in full gte claim amount', () => {
       isResponseRejectedFullyBecausePaidWhatOwedStub.returns(true)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList.tasks.map(task => task.name)).to.contain('Check and submit your response')
 
     })
@@ -845,7 +834,7 @@ describe('Defendant response task list builder', () => {
       isResponseFullyAdmittedStub.returns(false)
       isResponsePartiallyAdmittedStub.returns(false)
 
-      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId, features)
+      const taskList: TaskList = TaskListBuilder.buildSubmitSection(claim, new ResponseDraft(), externalId)
       expect(taskList).to.be.undefined
     })
   })
@@ -865,22 +854,14 @@ describe('Defendant response task list builder', () => {
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
       const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
-      if (FeatureToggles.isEnabled('mediation')) {
-        expect(tasks.map(task => task.name)).to.contain(featureToggleMediationTaskLabel)
-      } else {
-        expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
-      }
+      expect(tasks.map(task => task.name)).to.contain(mediationTaskLabel)
     })
 
     it('Should not return "Free telephone mediation" when not fully reject', () => {
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
       const tasks: TaskListItem[] = TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
-      if (FeatureToggles.isEnabled('mediation')) {
-        expect(tasks.map(task => task.name)).not.to.contain(featureToggleMediationTaskLabel)
-      } else {
-        expect(tasks.map(task => task.name)).not.to.contain(mediationTaskLabel)
-      }
+      expect(tasks.map(task => task.name)).not.to.contain(mediationTaskLabel)
     })
   })
 })
