@@ -5,7 +5,7 @@ export interface Direction {
   directionParty?: string
   directionType?: string
   directionHeaderType?: string
-  directionActionedBy?: Moment
+  directionActionedDate?: Moment
   directionComment?: string
   extraDocuments?: string[]
   expertReports?: string[]
@@ -23,7 +23,7 @@ export namespace Direction {
         directionParty: eachDirection.directionParty,
         directionType: eachDirection.directionType,
         directionHeaderType: eachDirection.directionHeaderType,
-        directionActionedBy: eachDirection.directionActionedBy,
+        directionActionedDate: eachDirection.directionActionedDate,
         directionComment: eachDirection.directionHeaderType,
         extraDocuments: eachDirection.directionHeaderType
       })

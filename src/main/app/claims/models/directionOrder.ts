@@ -51,7 +51,7 @@ export namespace DirectionOrder {
       .filter(o => o.directionType === 'DOCUMENTS')
       .pop()
 
-    return direction.directionActionedBy
+    return direction.directionActionedDate
   }
 
   export function findIsReviewOrderEligible (createdOn: string): boolean {
