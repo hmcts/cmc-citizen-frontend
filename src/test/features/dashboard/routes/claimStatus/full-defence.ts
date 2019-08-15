@@ -130,10 +130,9 @@ const legacyClaimDetails = [
       'You need to email CONTACT_EMAIL before 4pm on',
       'If you don’t send an email before the deadline, the claim will proceed without mediation.',
       'Download their response',
-      'Settle out of court',
-      'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -199,7 +198,7 @@ const legacyClaimDetails = [
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'View and respond to the offer',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -248,9 +247,11 @@ const legacyClaimDetails = [
     },
     claimantAssertions: [
       'They said they dispute your claim.',
-      'You need to',
-      'Your claim won’t proceed if you don’t complete and return the form before',
-      'John Doe has made an offer to settle out of court.'
+      'complete a directions questionnaire',
+      'Download their response',
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -279,8 +280,10 @@ const legacyClaimDetails = [
       'Your claim won’t proceed if you don’t complete and return the form before',
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'View and respond to the offer',
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -339,8 +342,9 @@ const legacyClaimDetails = [
       'Your claim won’t proceed if you don’t complete and return the form before ',
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -403,7 +407,7 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Wait for the claimant to respond',
@@ -463,7 +467,7 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Wait for the claimant to respond',
@@ -539,7 +543,7 @@ const mediationDQEnabledClaimDetails = [
       fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
       'You need to decide whether to proceed with the claim',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -595,8 +599,9 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       fullDefenceClaim.claim.defendants[0].name + ' has made an offer to settle out of court.',
       'View and respond to the offer',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -625,8 +630,9 @@ const mediationDQEnabledClaimDetails = [
       'You need to decide whether to proceed with the claim. You need to respond before 4pm on',
       'Your claim won’t continue if you don’t respond by then.',
       'Settle out of court',
-      'You’ve agreed to the offer made by ' + fullDefenceClaim.claim.defendants[0].name + ' and signed an agreement to settle your claim.',
-      'We’ve asked ' + fullDefenceClaim.claim.defendants[0].name + ' to sign the agreement.'
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -658,7 +664,7 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
       'Your response to the claim',
