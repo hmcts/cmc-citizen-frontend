@@ -46,7 +46,6 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           })
 
           it('should render page when everything is fine', async () => {
-            // todo update to use correct data model when save reconsideration is done
             claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
 
             await request(app)

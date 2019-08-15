@@ -23,7 +23,6 @@ import { Paths as OrdersPaths } from 'orders/paths'
 import 'test/a11y/mocks'
 import { app } from 'main/app'
 import { MadeBy } from 'claims/models/madeBy'
-import { FeatureToggles } from 'utils/featureToggles'
 
 app.locals.csrf = 'dummy-token'
 
@@ -104,7 +103,8 @@ const excludedPaths: DefendantResponsePaths[] = [
   ClaimantResponsePaths.courtOfferedSetDatePage,
   DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
   DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
-  DirectionQuestionnairePaths.hearingDatesPage
+  DirectionQuestionnairePaths.hearingDatesPage,
+  OrdersPaths.reviewOrderReceiver
 ]
 
 describe('Accessibility', () => {
@@ -136,8 +136,6 @@ describe('Accessibility', () => {
   checkPaths(ClaimantResponsePaths)
   checkPaths(PaidInFullPaths)
   checkPaths(MediationPaths)
-  if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-    checkPaths(DirectionQuestionnairePaths)
-    checkPaths(OrdersPaths)
-  }
+  checkPaths(DirectionQuestionnairePaths)
+  checkPaths(OrdersPaths)
 })

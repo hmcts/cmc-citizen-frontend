@@ -9,6 +9,7 @@ import { RouterFinder } from 'shared/router/routerFinder'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
+import { Paths as OrdersPaths } from 'orders/paths'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -22,6 +23,10 @@ function requestHandler (): express.RequestHandler {
 
 export class OrdersFeature {
   enableFor (app: express.Express) {
+    if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.OrdersPaths = OrdersPaths
+    }
+
     const allOrders = '/case/*/orders/*'
     // todo add in order guard so people can't get to these pages when they shouldn't
     app.all(allOrders, requestHandler())
