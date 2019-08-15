@@ -201,7 +201,7 @@ export class Claim {
     } else if (!this.response) {
       return ClaimStatus.NO_RESPONSE
     } else {
-      throw new Error('Unknown Status')
+      throw new Error('Unknown Status change')
     }
   }
 
