@@ -9,7 +9,7 @@ export class ValidationErrors {
   static readonly SIGNER_NAME_TOO_LONG: string = 'You’ve entered too many characters'
   static readonly SIGNER_ROLE_REQUIRED: string = 'Enter the role of the person signing the statement'
   static readonly SIGNER_ROLE_TOO_LONG: string = 'You’ve entered too many characters'
-  static readonly DIRECTION_QUESTIONNAIRE_REQUIRED_MESSAGE: string = 'The hearing requirement details on this page are true to the best of my knowledge.'
+  static readonly DIRECTION_QUESTIONNAIRE_REQUIRED_MESSAGE: string = 'Please select the hearing requirement details on this page are true to the best of my knowledge.'
 
 }
 
