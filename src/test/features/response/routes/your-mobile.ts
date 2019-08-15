@@ -103,6 +103,7 @@ describe('Defendant user details: your mobile page', () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveSave()
 
             await request(app)
               .post(pagePath)
