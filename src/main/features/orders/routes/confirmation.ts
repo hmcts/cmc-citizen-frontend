@@ -5,6 +5,7 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { MomentFactory } from 'shared/momentFactory'
 import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
+import { CalendarClient } from 'claims/calendarClient'
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -15,6 +16,6 @@ export default express.Router()
 
       res.render(Paths.confirmationPage.associatedView, {
         otherParty: claim.otherPartyName(user),
-        deadline: MomentFactory.currentDate().add(12, 'days')
+        deadline: await new CalendarClient().getNextWorkingDayAfterDays(MomentFactory.currentDate(), 12)
       })
     }))

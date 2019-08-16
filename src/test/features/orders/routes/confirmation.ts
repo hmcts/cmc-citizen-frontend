@@ -15,6 +15,7 @@ import { Paths as OrdersPaths } from 'orders/paths'
 
 import { app } from 'main/app'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -47,6 +48,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
           it('should render page when everything is fine', async () => {
             claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
 
             await request(app)
               .get(pagePath)
