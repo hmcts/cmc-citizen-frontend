@@ -225,6 +225,10 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
+    if (this.directionOrder && this.reviewOrder) {
+      statuses.unshift({ status: ClaimStatus.REVIEW_ORDER_REQUESTED })
+    }
+
     return statuses
   }
 
