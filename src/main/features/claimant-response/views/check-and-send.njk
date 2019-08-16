@@ -173,7 +173,7 @@
 
     {{ tableStart('yourResponse', 'Your response') }}
 
-    {% if dispute %}
+    {% if dispute and not alreadyPaid %}
       {{
       row(
         label = 'Do you want to proceed with the claim?',
@@ -191,9 +191,9 @@
 
       {{ directionsQuestionnaire() }}
 
-    {% if not directionsQuestionnaireEnabled %}
-      {{ tableEnd() }}
-    {% endif %}
+      {% if not directionsQuestionnaireEnabled %}
+        {{ tableEnd() }}
+      {% endif %}
 
     {% elseif alreadyPaid %}
       {% if draft.partPaymentReceived %}
@@ -217,7 +217,7 @@
           changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
-      {% if claim.response.freeMediation === YesNoOption.YES.option %}
+      {% if claim.response.freeMediation === YesNoOption.YES.option and draft.freeMediation === YesNoOption.YES.option %}
         {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
       {% else %}
         {{ tableEnd() }}
