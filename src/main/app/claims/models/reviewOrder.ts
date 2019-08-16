@@ -1,23 +1,25 @@
 import { Moment } from 'moment'
-import { ActorType } from 'claims/models/claim-states/actor-type'
+import { MomentFactory } from 'shared/momentFactory'
+import { MadeBy } from 'claims/models/madeBy'
 
-export interface ReviewOrder {
+export class ReviewOrder {
+  reason: string
+  requestedBy: MadeBy
+  requestedAt: Moment
 
-  requestedBy?: ActorType
-  reason?: String
-  requestedAt?: Moment
-}
+  constructor (reason?: string, requestedBy?: MadeBy, requestedAt?: Moment) {
+    this.reason = reason
+    this.requestedBy = requestedBy
+    this.requestedAt = requestedAt
+  }
 
-export namespace ReviewOrder {
-  export function deserialize (input?: any): ReviewOrder {
-    if (!input) {
-      return input
+  deserialize (input: any): ReviewOrder {
+    if (input) {
+      this.reason = input.reason
+      this.requestedBy = input.requestedBy
+      this.requestedAt = MomentFactory.parse(input.requestedAt)
     }
-    return {
-      requestedBy: input.requestdBy,
-      reason: input.reason,
-      requestedAt: input.requestAt
-    }
 
+    return this
   }
 }

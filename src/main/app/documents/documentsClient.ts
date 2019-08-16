@@ -25,6 +25,10 @@ export class DocumentsClient {
     return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
 
+  getReviewOrderPdf (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'REVIEW_ORDER', bearerToken)
+  }
+
   getDirectionsOrder (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'ORDER_DIRECTIONS', bearerToken)
   }
