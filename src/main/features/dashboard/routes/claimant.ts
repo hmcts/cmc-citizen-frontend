@@ -22,13 +22,15 @@ export default express.Router()
 
       const claim = externalId !== draftExternalId ? await claimStoreClient.retrieveByExternalId(externalId, res.locals.user as User) : undefined
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
+      const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
 
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
       }
       res.render(Paths.claimantPage.associatedView, {
         claim: claim,
-        mediationDeadline: mediationDeadline
+        mediationDeadline: mediationDeadline,
+        reconsiderationDeadline: reconsiderationDeadline
       })
     }))
   .post(Paths.claimantPage.uri,

@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { Paths } from 'dashboard/paths'
+import { Paths } from 'orders/paths'
 
 import { Claim } from 'claims/models/claim'
 import { ClaimMiddleware } from 'claims/claimMiddleware'

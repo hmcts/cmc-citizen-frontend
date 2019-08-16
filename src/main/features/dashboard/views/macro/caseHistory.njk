@@ -31,10 +31,13 @@
   claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails,
   claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails,
   claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails,
-  claimRejectedWithDQsForClaimantClaimDetails,
-  directionsOrderIssuedForDefendant,
-  directionsOrderIssuedForClaimant
+  claimRejectedWithDQsForClaimantClaimDetails
   %}
+
+{% from "./claimStatus/orders.njk" import
+  directionsOrderIssued,
+  reviewRequester,
+  reviewReceiver %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
@@ -171,7 +174,7 @@
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
       {% if claim.directionOrder !== undefined %}
-        {{ directionsOrderIssuedForClaimant(claim) }}
+        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT) }}
       {% else %}
         {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
@@ -201,7 +204,7 @@
       {{ requestCCJ(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
       {% if claim.directionOrder !== undefined %}
-        {{ directionsOrderIssuedForClaimant(claim) }}
+        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT) }}
       {% else %}
         {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
       {% endif %}
@@ -219,6 +222,12 @@
       {% endif %}
     {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
+    {% elif state.status === ClaimStatus.REVIEW_ORDER_ELIGIBLE %}
+      {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
+        {{ reviewRequester(claim) }}
+      {% else %}
+        {{ reviewReceiver(claim) }}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -260,7 +269,7 @@
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
       {% if claim.directionOrder !== undefined %}
-        {{ directionsOrderIssuedForDefendant(claim) }}
+        {{ directionsOrderIssued(claim, MadeBy.DEFENDANT) }}
       {% else %}
         {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
@@ -301,7 +310,7 @@
         {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
         {% if claim.directionOrder !== undefined %}
-          {{ directionsOrderIssuedForDefendant(claim) }}
+          {{ directionsOrderIssued(claim, MadeBy.DEFENDANT) }}
         {% else %}
           {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
         {% endif %}
@@ -322,11 +331,17 @@
       {% elif state.status === ClaimStatus.CLAIMANT_REQUESTS_CCJ_AFTER_DEFENDANT_REJECTS_SETTLEMENT %}
         {{ CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
-      {% else %}
-        {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
-      {% endif %}
+        {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
+        {% endif %}
+      {% elif state.status === ClaimStatus.REVIEW_ORDER_ELIGIBLE %}
+        {% if claim.reviewOrder.requestedBy === MadeBy.DEFENDANT.value %}
+          {{ reviewRequester(claim) }}
+        {% else %}
+          {{ reviewReceiver(claim) }}
+        {% endif %}
       {% endif %}
   {% endfor %}
 {% endmacro %}

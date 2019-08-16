@@ -89,7 +89,15 @@ export class Claim {
       return undefined
     }
 
-    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 5)
+  }
+
+  async respondToReconsiderationDeadline (): Promise<Moment> {
+    if (!this.respondedAt) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 12)
   }
 
   get remainingDays (): number {
@@ -223,6 +231,7 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
+
     return statuses
   }
 
