@@ -441,7 +441,7 @@
     {{ claim.claimData.defendants[0].address.postcode }}</p>
 
   <h2 class="heading-small">{{ t('If you don’t send us more details') }}</h2>
-  <p>{{ t('The court can cancel your claim after 4pm on {{ postDocumentsLastDay }}',{postDocumentsLastDay:claim.directionOrder.postDocumentsLastDay | date}) }}</p>
+  <p>{{ t('The court may cancel your claim.') }}</p>
   {% if(claim.directionOrder.isReviewOrderEligible and claim.reviewOrder === undefined) %}
     <h2 class="heading-small">{{ t('If you have a problem with the order') }}</h2>
 
