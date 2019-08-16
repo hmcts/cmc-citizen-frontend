@@ -49,6 +49,7 @@ function setupMocks (claimant: PartyType, defendant: PartyType, currentParty: Ma
       },
       hearingLocation: {
         courtName: 'Little Whinging, Surrey',
+        courtAccepted: YesNoOption.YES,
         locationOption: CourtLocationType.SUGGESTED_COURT,
         exceptionalCircumstancesReason: 'Poorly pet owl',
         hearingLocationSlug: undefined,
