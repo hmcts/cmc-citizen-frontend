@@ -16,7 +16,7 @@ export default express.Router()
 
       res.render(Paths.confirmationPage.associatedView, {
         otherParty: claim.otherPartyName(user),
-        //todo: Below current date should be changed to directionsOrder.createdOn when other reconideration stories are merged to master
+        // todo:Below current date should be changed to directionsOrder.createdOn when other reconideration stories are merged to master
         deadline: await new CalendarClient().getNextWorkingDayAfterDays(MomentFactory.currentDate(), 12)
       })
     }))
