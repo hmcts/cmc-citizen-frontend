@@ -53,6 +53,7 @@ export default express.Router()
 
           if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
+            draft.document.hearingLocation.courtAccepted = YesNoOption.YES
             form.model.reason = undefined
           }
         } else {

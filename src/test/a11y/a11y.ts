@@ -103,7 +103,8 @@ const excludedPaths: DefendantResponsePaths[] = [
   ClaimantResponsePaths.courtOfferedSetDatePage,
   DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
   DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
-  DirectionQuestionnairePaths.hearingDatesPage
+  DirectionQuestionnairePaths.hearingDatesPage,
+  OrdersPaths.reviewOrderReceiver
 ]
 
 describe('Accessibility', () => {

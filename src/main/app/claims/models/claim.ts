@@ -319,7 +319,7 @@ export class Claim {
         this.directionOrder = DirectionOrder.deserialize(input.directionOrder)
       }
       if (input.reviewOrder) {
-        this.reviewOrder = ReviewOrder.deserialize(input.reviewOrder)
+        this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
     }
 
@@ -419,6 +419,10 @@ export class Claim {
     }
 
     if (this.hasClaimantRejectedDefendantDefence()) {
+      return true
+    }
+
+    if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return true
     }
 

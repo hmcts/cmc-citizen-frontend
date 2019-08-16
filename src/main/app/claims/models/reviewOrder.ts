@@ -1,30 +1,25 @@
 import { Moment } from 'moment'
-import { ActorType } from 'claims/models/claim-states/actor-type'
 import { MomentFactory } from 'shared/momentFactory'
+import { MadeBy } from 'claims/models/madeBy'
 
-export interface ReviewOrder {
+export class ReviewOrder {
+  reason: string
+  requestedBy: MadeBy
+  requestedAt: Moment
 
-  requestedBy?: ActorType
-  reason?: String
-  requestedAt?: Moment,
-  commentsLastDay?: Moment
-}
-
-export namespace ReviewOrder {
-  export function deserialize (input?: any): ReviewOrder {
-    if (!input) {
-      return input
-    }
-    return {
-      requestedBy: input.requestedBy,
-      reason: input.reason,
-      requestedAt: input.requestedAt,
-      commentsLastDay: getCommentsLastDay(input.requestedAt)
-    }
-
+  constructor (reason?: string, requestedBy?: MadeBy, requestedAt?: Moment) {
+    this.reason = reason
+    this.requestedBy = requestedBy
+    this.requestedAt = requestedAt
   }
 
-  export function getCommentsLastDay (requestedAt) {
-    return MomentFactory.parse(requestedAt).add(12, 'days')
+  deserialize (input: any): ReviewOrder {
+    if (input) {
+      this.reason = input.reason
+      this.requestedBy = input.requestedBy
+      this.requestedAt = MomentFactory.parse(input.requestedAt)
+    }
+
+    return this
   }
 }

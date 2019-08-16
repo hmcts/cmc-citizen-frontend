@@ -29,7 +29,12 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
-      I.see('You’ve rejected the claim and said you don’t want to use mediation to solve it.')
+      if (process.env.FEATURE_MEDIATION === 'true') {
+        I.see('Wait for the claimant to respond')
+        I.see('You’ve rejected the claim')
+      } else {
+        I.see('You’ve rejected the claim and said you don’t want to use mediation to solve it.')
+      }
       I.click('Sign out')
 
       // as claimant
@@ -43,8 +48,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
-      I.see('The defendant has rejected your claim')
-      I.see(`They said they dispute your claim.`)
+      if (process.env.FEATURE_MEDIATION === 'true') {
+        I.see('Decide whether to proceed')
+        I.see('Mrs. Rose Smith has rejected your claim')
+      } else {
+        I.see('The defendant has rejected your claim')
+        I.see(`They said they dispute your claim.`)
+      }
       I.click('Sign out')
     })
 

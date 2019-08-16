@@ -31,7 +31,10 @@ describe('Claim issue: timeline page', () => {
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.successful.withText('Timeline of events'))
+        .expect(res => expect(res).to.be.successful.withText(
+          'Timeline of events',
+          'If you don’t know the exact date, tell us the month and year.'
+        ))
     })
   })
 
