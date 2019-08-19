@@ -147,27 +147,15 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s response.') }}
-
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('You’ve both agreed to try mediation.') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s response.') }}
-
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('You’ve both agreed to try mediation.') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
+  {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s response.') }}
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       <p>{{ t('You’ve both agreed to try mediation.') }}
     {% endif %}
+  {% else %}
+    {{ t('Wait for the court to review the case') }}
+  {% endif %}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
@@ -181,14 +169,6 @@
 
     <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
   </div>
-{% endmacro %}
-
-{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s response.') }}
-
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('You’ve both agreed to try mediation.') }}</p>
-  {% endif %}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
