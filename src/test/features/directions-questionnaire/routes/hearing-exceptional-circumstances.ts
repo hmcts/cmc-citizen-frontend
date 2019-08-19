@@ -290,7 +290,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
 
           it('should redirect to expert page when no is selected', async () => {
             draftStoreServiceMock.resolveSave()
-            await shouldRedirect(method, hearingLocationPage,  { exceptionalCircumstances: 'no' })
+            await shouldRedirect(method, hearingLocationPage, { exceptionalCircumstances: 'no' })
           })
         })
 
