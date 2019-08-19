@@ -89,7 +89,7 @@ export class Claim {
       return undefined
     }
 
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 5)
+    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
   }
 
   async respondToReconsiderationDeadline (): Promise<Moment> {
@@ -97,7 +97,7 @@ export class Claim {
       return undefined
     }
 
-    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 12)
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 12)
   }
 
   get remainingDays (): number {
@@ -264,6 +264,7 @@ export class Claim {
 
   deserialize (input: any): Claim {
     if (input) {
+
       this.id = input.id
       this.claimantId = input.submitterId
       this.externalId = input.externalId

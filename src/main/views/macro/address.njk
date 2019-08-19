@@ -1,6 +1,6 @@
 {% macro address(address, label) %}
   <div class="form-group">
-    {% if title %}
+    {% if label %}
       <span class="block">{{ t(label) }}</span>
     {% endif %}
     <span class="block">{{ address.line1 }}</span>

@@ -1,63 +1,48 @@
-{% macro reviewRequester(claim) %}
-  <div class="status-block">
-    <h2 class="heading-medium">{{ t('You’ve asked the court to review the order') }} </h2>
-    {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-      <p>{{ t('We’ll tell {{ defendantName }}. They can comment until 25 August 2019.', { defendantName: claim.claimData.defendant.name }) }}</p>
-    {% else %}
-      <p>{{ t('We’ll tell {{ claimantName }}. They can comment until 25 August 2019.', { claimantName: claim.claimData.claimant.name }) }}</p>
-    {% endif %}
-    <p>{{ t('A judge will then review the order and any comments. We’ll contact you by post to tell you what to do next.') }}</p>
-    <p>{{ t('Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.') }}</p>
-  </div>
+{% from "internalLink.njk" import internalLink %}
+{% from "address.njk" import address %}
+
+{% macro directionsOrderIssuedClaimantDashboard() %}
+  {{ t('Send us more details before the hearing') }}
 {% endmacro %}
 
-{% macro reviewReceiver(claim) %}
-  <div class="status-block">
-    <h2 class="heading-small">{{ t('Read {{ defendantName }}’ request', { defendantName: claim.claimData.defendant.name }) }}</h2>
-    <p>{{ t('{{ defendantName }} has asked the court to change the order.', { defendantName: claim.claimData.defendant.name }) }}</p>
-
-    <p>{{ t('A judge will review their request and any comments you’ve sent. We’ll contact you by post if the judge makes a new order.') }}</p>
-
-    <p>{{ t('Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.') }}</p>
-
-    {{ internalLink(t('Download {{ defendantName }}’ request to see what they asked ', { defendantName: claim.claimData.defendant.name }), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-    {{ t('(PDF) to find out the details you need to send.') }}
-
-
-    <h2 class="heading-small">{{ t('Comment on {{ defendantName }}’ request', { defendantName: claim.claimData.defendant.name}) }}</h2>
-    <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ defendantName }} before 4pm on 25 August 2019.', { defendantName: claim.claimData.defendant.name }) }}</p>
-    <p>{{ t('Include the claim number ({{claimNumber}}) in the emails.', { claimNumber: claim.claimNumber }) }}</p>
-    <p>{{ t('The court’s email address is:') }} <a href="mailto:{{ supportEmailAddress }}">{{ supportEmailAddress }}</a></p>
-    <p>{{ t('{{ defendantName }}’ email address is:', { defendantName: claim.claimData.defendant.name }) }} <a href="#"> mary.richards@gmail.com </a></p>
-  </div>
+{% macro directionsOrderIssuedDefendantDashboard() %}
+  {{ t('Send us more details before the hearing') }}
 {% endmacro %}
 
-{% macro directionsOrderIssued(claim, party) %}
+{% macro directionsOrderIssued(claim, party, reconsiderationDeadline, isReviewOrderEligible) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('Send us more details before the hearing') }}</h2>
-    <p>{{ t('The court has ordered you to send more details.') }}</p>
-    <p>{{ internalLink(t('Download the court’s order '), DashboardPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
+    <p>{{ t('The court has ordered you to send us more details.') }}</p>
+    <p>{{ internalLink(t('Download the court’s order '), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
       {{ t('(PDF) to find out the details you need to send.') }}</p>
     <p>{{ t('Make sure you include the claim number ({{ claimNumber }}) in the letter.', { claimNumber: claim.claimNumber }) }}</p>
 
     <h2 class="heading-small">{{ t('Deadline for posting the details') }}</h2>
-    <p>{{ t('You must make sure the court and the claimant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}', { postDocumentsLastDay:claim.directionOrder.postDocumentsLastDay | date }) }}
+    {% if party === MadeBy.DEFENDANT.value %}
+      <p>{{ t('You must make sure the court and the claimant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
+    {% else %}
+      <p>{{ t('You must make sure the court and the defendant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
+    {% endif %}
 
-      <h2 class="heading-small">{{ t('Where to post the details') }}
-        {{ address(claim.directionOrder.hearingCourtAddress, 'The court’s address is:') }}
-        {% if party === MadeBy.DEFNDANT %}
-          {{ address(claim.claimData.claimant.address, 'The claimant’s address is:') }}
-        {% else %}
-          {{ address(claim.claimData.defendant.address, 'The defendant’s address is:') }}
-        {% endif %}
+    <h2 class="heading-small">{{ t('Where to post the details') }}
+    {{ address(claim.directionOrder.hearingCourtAddress, 'The court’s address is:') }}
+    {% if party === MadeBy.DEFENDANT.value %}
+      {{ address(claim.claimData.claimant.address, 'The claimant’s address is:') }}
+    {% else %}
+      {{ address(claim.claimData.defendant.address, 'The defendant’s address is:') }}
+    {% endif %}
 
-        <h2 class="heading-small">{{ t('If you don’t send us more details') }}</h2>
-    <p>{{ t('The court can cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.') }}</p>
+    <h2 class="heading-small">{{ t('If you don’t send us more details') }}</h2>
+    {% if party === MadeBy.DEFENDANT.value %}
+      <p>{{ t('The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.') }}</p>
+    {% else %}
+      <p>{{ t('The court may cancel your claim.') }}</p>
+    {% endif %}
 
-    {% if (claim.directionOrder.isReviewOrderEligible and claim.reviewOrder === undefined) %}
+    {% if (isReviewOrderEligible and claim.reviewOrder === undefined) %}
       <h2 class="heading-small">{{ t('If you have a problem with the order') }}</h2>
-      <p>{{ t('You can ') }}{{ internalLink(t('ask the court to review it.'), DashboardPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
-        {{ t('You need to do this before 4pm on {{ reviewLastDay }}', { reviewLastDay : claim.directionOrder.reviewLastDay | date }) }}
+      <p>{{ t('You can ') }}{{ internalLink(t('ask the court to review it.'), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
+        {{ t('You need to do this before 4pm on {{ reviewLastDay }}', { reviewLastDay : reconsiderationDeadline | date }) }}
       </p>
       <p>{{ t('A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.') }}</p>
     {% endif %}

@@ -1,5 +1,6 @@
 import { Moment } from 'moment'
 import * as _ from 'lodash'
+import { MomentFactory } from 'shared/momentFactory'
 
 export interface Direction {
   directionParty?: string
@@ -23,7 +24,7 @@ export namespace Direction {
         directionParty: eachDirection.directionParty,
         directionType: eachDirection.directionType,
         directionHeaderType: eachDirection.directionHeaderType,
-        directionActionedDate: eachDirection.directionActionedDate,
+        directionActionedDate: MomentFactory.parse(eachDirection.directionActionedDate),
         directionComment: eachDirection.directionHeaderType,
         extraDocuments: eachDirection.directionHeaderType
       })
