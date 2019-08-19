@@ -1,5 +1,5 @@
 {% from "internalLink.njk" import internalLink %}
-{% from "address.njk" import address %}
+{% from "addressFragment.njk" import addressFragment %}
 
 {% macro directionsOrderIssuedClaimantDashboard() %}
   {{ t('Send us more details before the hearing') }}
@@ -25,11 +25,11 @@
     {% endif %}
 
     <h2 class="heading-small">{{ t('Where to post the details') }}
-    {{ address(claim.directionOrder.hearingCourtAddress, 'The court’s address is:') }}
+    {{ addressFragment(claim.directionOrder.hearingCourtAddress, 'The court’s address is:') }}
     {% if party === MadeBy.DEFENDANT.value %}
-      {{ address(claim.claimData.claimant.address, 'The claimant’s address is:') }}
+      {{ addressFragment(claim.claimData.claimant.address, 'The claimant’s address is:') }}
     {% else %}
-      {{ address(claim.claimData.defendant.address, 'The defendant’s address is:') }}
+      {{ addressFragment(claim.claimData.defendant.address, 'The defendant’s address is:') }}
     {% endif %}
 
     <h2 class="heading-small">{{ t('If you don’t send us more details') }}</h2>

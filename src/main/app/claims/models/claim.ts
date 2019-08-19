@@ -93,7 +93,7 @@ export class Claim {
   }
 
   async respondToReconsiderationDeadline (): Promise<Moment> {
-    if (!this.respondedAt) {
+    if (!this.directionOrder) {
       return undefined
     }
 

@@ -47,6 +47,10 @@ export namespace DirectionOrder {
   }
 
   export function isReviewOrderEligible (deadline: Moment): boolean {
+    if (!deadline) {
+      return false
+    }
+
     return MomentFactory.currentDateTime().isAfter(deadline.set({ h: 16, m: 0 }))
   }
 }
