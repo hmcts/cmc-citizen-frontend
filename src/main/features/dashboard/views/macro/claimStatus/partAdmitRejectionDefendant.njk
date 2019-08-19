@@ -3,7 +3,11 @@
 {% from "./utilityMacros.njk" import downloadResponseLink %}
 
 {% macro partAdmitRejectedByClaimantDefendantDashboard(claim) %}
-  {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
+  {% else %}
+    {{ t('Wait for the court to review the case') }}
+  {% endif %}
 {% endmacro %}
 
 {% macro partAdmitRejectedByClaimantDefendantClaimDetails(claim) %}

@@ -2,7 +2,11 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% macro partAdmitRejectedByClaimantDashboard() %}
-  {{ t('You’ve rejected the defendant’s admission.') }}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {{ t('You’ve rejected the defendant’s admission.') }}
+  {% else %}
+    {{ t('Wait for the court to review the case') }}
+  {% endif %}
 {% endmacro %}
 
 {% macro partAdmitRejectedByClaimantClaimDetails(claim) %}
