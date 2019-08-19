@@ -41,7 +41,7 @@
 
     {% if (isReviewOrderEligible and claim.reviewOrder === undefined) %}
       <h2 class="heading-small">{{ t('If you have a problem with the order') }}</h2>
-      <p>{{ t('You can ') }}{{ internalLink(t('ask the court to review it.'), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
+      <p>{{ t('You can ') }}{{ internalLink(t('ask the court to review it.'), OrdersPaths.disagreeReasonPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ t('You need to do this before 4pm on {{ reviewLastDay }}', { reviewLastDay : reconsiderationDeadline | date }) }}
       </p>
       <p>{{ t('A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.') }}</p>
