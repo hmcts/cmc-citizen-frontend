@@ -585,6 +585,12 @@ export const sampleMediationDraftObj = {
   }
 }
 
+export const sampleLegacyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.NO
+  }
+}
+
 export const sampleCompanyMediationDraftObj = {
   willYouTryMediation: {
     option: FreeMediationOption.YES
@@ -673,6 +679,7 @@ export const sampleDirectionsQuestionnaireDraftObj = {
 }
 
 export const sampleOrdersDraftObj = {
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
   disagreeReason: { reason: 'I want a judge to review it' }
 }
 

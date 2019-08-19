@@ -537,6 +537,7 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
 }
 
 export const sampleFullDefenceRejectEntirely = {
+  ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   response: defenceWithDisputeData
 }
@@ -764,6 +765,17 @@ export function resolveSaveOffer () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/offers/defendant'))
     .reply(HttpStatus.CREATED)
+}
+
+export function resolveSaveOrder () {
+  const expectedData = {
+    reason: 'some reason',
+    requestedBy: MadeBy.CLAIMANT,
+    requestedAt: '2017-07-25T22:45:51.785'
+  }
+  mock(`${serviceBaseURL}/claims`)
+    .put(new RegExp('/' + externalIdPattern + '/review-order'))
+    .reply(HttpStatus.OK, expectedData)
 }
 
 export function resolveAcceptOffer (by: string = 'claimant') {
