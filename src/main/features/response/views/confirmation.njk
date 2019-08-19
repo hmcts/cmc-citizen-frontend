@@ -18,7 +18,7 @@
         <p>
           <span class="bold">{{ claim.respondedAt | date }}</span>
         </p>
-        {% if claim.response.directionsQuestionnaire.selfWitness %}
+        {% if claim.response.directionsQuestionnaire %}
           <p class="receipt-download-container">
             {{ internalLink(t('Download your response and hearing requirements'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
             {{ t('(PDF)') }}
