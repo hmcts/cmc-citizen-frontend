@@ -258,8 +258,8 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         })
-        const validFormData = { exceptionalCircumstances: 'no', reason: 'reason' }
-        const invalidFormData = { exceptionalCircumstances: 'no' }
+        const validFormData = { exceptionalCircumstances: 'yes', reason: 'reason' }
+        const invalidFormData = { exceptionalCircumstances: 'yes' }
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -283,14 +283,14 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             await shouldBeServerError(method, 'Error', validFormData)
           })
 
-          it('should redirect to hearing location page when no is selected', async () => {
+          it('should redirect to hearing location page when yes is selected', async () => {
             draftStoreServiceMock.resolveSave()
-            await shouldRedirect(method, hearingLocationPage, validFormData)
+            await shouldRedirect(method, expertPath, validFormData)
           })
 
-          it('should redirect to expert page when yes is selected', async () => {
+          it('should redirect to expert page when no is selected', async () => {
             draftStoreServiceMock.resolveSave()
-            await shouldRedirect(method, expertPath, { exceptionalCircumstances: 'yes' })
+            await shouldRedirect(method, hearingLocationPage,  { exceptionalCircumstances: 'no' })
           })
         })
 
