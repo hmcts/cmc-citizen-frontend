@@ -53,7 +53,7 @@ describe('Claimant paid in full: money received on page', () => {
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('When did you settle the claim?'))
+            .expect(res => expect(res).to.be.successful.withText('When did you settle with the defendant?'))
         })
       })
 

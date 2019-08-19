@@ -11,25 +11,26 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { Claim } from 'claims/models/claim'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { TaskListItem } from 'drafts/tasks/taskListItem'
+import { FeatureToggles } from 'utils/featureToggles'
 
 import {
-  fullAdmissionWithPaymentBySetDateData,
-  fullAdmissionWithPaymentByInstalmentsData,
-  partialAdmissionWithPaymentBySetDateData,
-  partialAdmissionWithPaymentByInstalmentsData,
+  defenceWithAmountClaimedAlreadyPaidData,
   fullAdmissionWithImmediatePaymentData,
+  fullAdmissionWithPaymentByInstalmentsData,
+  fullAdmissionWithPaymentBySetDateData,
+  fullDefenceData,
   partialAdmissionAlreadyPaidData,
-  partialAdmissionWithImmediatePaymentData, defenceWithAmountClaimedAlreadyPaidData, fullDefenceData
+  partialAdmissionWithImmediatePaymentData,
+  partialAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithPaymentBySetDateData
 } from 'test/data/entity/responseData'
 import { NumberFormatter } from 'utils/numberFormatter'
-import { FeatureToggles } from 'utils/featureToggles'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 describe('Claimant response task list builder', () => {
   let claim: Claim
   let draft: DraftClaimantResponse
   const mediationTaskLabel = 'Free telephone mediation'
-  const featureToggleMediationTaskLabel = 'Free telephone mediation'
 
   beforeEach(() => {
     claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj })
@@ -136,11 +137,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('Should be available when settle the claim has been rejected', () => {
@@ -160,11 +157,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('Should be available when "Have you been paid the full amount" is rejected', () => {
@@ -184,11 +177,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildStatesPaidHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
       })
     })
@@ -198,6 +187,14 @@ describe('Claimant response task list builder', () => {
         claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleDefendantResponseObj })
 
         claim.response.freeMediation = YesNoOption.NO
+        const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
+        expect(taskList.tasks.find(task => task.name === 'Accept or reject their response')).to.be.undefined
+      })
+
+      it('should be available when full defence response and yes free mediation', () => {
+        claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...claimStoreServiceMock.sampleDefendantResponseObj })
+
+        claim.response.freeMediation = YesNoOption.YES
         const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
         expect(taskList.tasks.find(task => task.name === 'Accept or reject their response')).to.be.undefined
       })
@@ -348,11 +345,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('should be available when payment will be made by instalments, defendant requested free mediation and claimant rejected response', () => {
@@ -375,11 +368,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).not.to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).not.to.be.undefined
         })
 
         it('should be not available when defendant did not request free mediation and claimant rejected response', () => {
@@ -402,11 +391,7 @@ describe('Claimant response task list builder', () => {
           })
 
           const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(draft, claim, new MediationDraft())
-          if (FeatureToggles.isEnabled('mediation')) {
-            expect(taskList.tasks.find(task => task.name === featureToggleMediationTaskLabel)).to.be.undefined
-          } else {
-            expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).to.be.undefined
-          }
+          expect(taskList.tasks.find(task => task.name === mediationTaskLabel)).to.be.undefined
         })
 
         it('should be not available when defendant requested free mediation and claimant accepted response', () => {
@@ -736,6 +721,29 @@ describe('Claimant response task list builder', () => {
       } else {
         expect(taskList).to.be.eq(undefined)
       }
+    })
+
+    it('response is full defence with mediation', () => {
+
+      claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimObj, ...{ response: fullDefenceData } })
+      draft = new DraftClaimantResponse().deserialize({
+        ...draftStoreServiceMock.sampleClaimantResponseDraftObj, ...{
+          intentionToProceed: {
+            proceed: {
+              option: 'yes'
+            }
+          }
+        }
+      })
+      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.response.freeMediation = YesNoOption.YES
+
+      const taskList: TaskList = TaskListBuilder.buildHowYouWantToRespondSection(
+        draft, claim, new MediationDraft()
+      )
+
+      expect(taskList.tasks.find(task => task.name === 'Free telephone mediation')).not.to.be.undefined
+
     })
 
   })

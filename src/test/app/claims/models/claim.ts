@@ -40,6 +40,7 @@ import { TheirDetails } from 'claims/models/details/theirs/theirDetails'
 import { User } from 'idam/user'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
+import { FeatureToggles } from 'utils/featureToggles'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -566,18 +567,20 @@ describe('Claim', () => {
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID)
     })
 
-    it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
-      claim.respondedAt = moment()
-      claim.features = ['admissions', 'directionsQuestionnaire']
-      claim.response = {
-        paymentIntention: null,
-        responseType: 'FULL_DEFENCE',
-        freeMediation: 'no'
-      }
+    if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+      it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          paymentIntention: null,
+          responseType: 'FULL_DEFENCE',
+          freeMediation: 'no'
+        }
 
-      expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
-    })
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
+      })
+    }
 
     context('should return CLAIMANT_REJECTED_STATES_PAID', () => {
       it('when defendant states paid amount equal to claim amount', () => {
@@ -685,16 +688,22 @@ describe('Claim', () => {
 
   describe('respondToMediationDeadline', () => {
 
-    it('should add 5 days to the response deadline', () => {
+    it('should return mediation deadline date', () => {
       const claim = new Claim()
       claim.respondedAt = moment()
 
-      expect(claim.respondToMediationDeadline.toISOString()).to.equal(claim.respondedAt.add(5, 'days').toISOString())
+      claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-06-28'))
+
+      claim.respondToMediationDeadline().then(
+        res => expect(res.format('YYYY-MM-DD'))
+          .to.equal(MomentFactory.parse('2019-06-28').format('YYYY-MM-DD'))
+      )
     })
 
-    it('should return undefined if claim is not responded to', () => {
+    it('should return undefined if claim is not responded to', async () => {
       const claim = new Claim()
-      expect(claim.respondToMediationDeadline).to.equal(undefined)
+      const mediationDeadline = await claim.respondToMediationDeadline()
+      expect(mediationDeadline).to.be.undefined
     })
   })
 
@@ -876,6 +885,37 @@ describe('Claim', () => {
 
       expect(claim.stateHistory).to.have.lengthOf(1)
       expect(claim.stateHistory[0].status).to.equal(ClaimStatus.OFFER_SETTLEMENT_REACHED)
+    })
+
+    if (FeatureToggles.isEnabled('mediation')) {
+      it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          responseType: ResponseType.FULL_DEFENCE,
+          defenceType: DefenceType.DISPUTE
+        }
+        claim.claimantResponse = {
+          type: ClaimantResponseType.REJECTION
+        }
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
+        expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
+      })
+    }
+
+    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
+      claim.respondedAt = moment()
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE
+      }
+      claim.claimantResponse = {
+        type: ClaimantResponseType.REJECTION
+      }
+      expect(claim.stateHistory).to.have.lengthOf(2)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
+      expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
   })
 
