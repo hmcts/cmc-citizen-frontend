@@ -1,3 +1,4 @@
+{% extends "layout.njk" %}
 {% from "./claimStatus/noReponse.njk" import
   noResponseForClaimantDashboard,
   noResponseForDefendantDashboard %}
@@ -88,7 +89,6 @@
 {% from "./claimStatus/partAdmitRejectionDefendant.njk" import partAdmitRejectedByClaimantDefendantDashboard %}
 
 {% from "./claimStatus/breachOfPaymentDefendant.njk" import CCJAfterBreakingSettlementAgreementClaimDetails %}
-
 
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
@@ -225,10 +225,10 @@
       {{ claimFullAdmissionForDefendantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-    {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-      {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
-    {% else %}
+    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+    {% else %}
+      {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceDefendantDashboard() }}
