@@ -38,7 +38,7 @@ describe('ExceptionalCircumstances', () => {
     })
 
     it('should reject exceptional circumstances with no option and no reason', () => {
-      const errors = validator.validateSync(new ExceptionalCircumstances(YesNoOption.NO))
+      const errors = validator.validateSync(new ExceptionalCircumstances(YesNoOption.YES))
       expect(errors).to.not.be.empty
       expectValidationError(errors, ValidationErrors.REASON_REQUIRED)
     })
