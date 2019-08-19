@@ -120,7 +120,7 @@ const mediationDQEnabledClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['You’ve rejected the defendant’s admission.'],
+    claimantAssertions: ['Wait for the court to review the case'],
     defendantAssertions: [partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of']
   },
   {
@@ -141,7 +141,7 @@ const mediationDQEnabledClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['You’ve rejected the defendant’s admission.'],
+    claimantAssertions: ['Wait for the court to review the case'],
     defendantAssertions: [partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of']
   }
 ]
