@@ -333,7 +333,7 @@ const testData = [
       claimantResponse: { type: 'REJECTION' }
     },
     claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £3,000']
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   },
   {
     status: 'full defence, states paid accepted',
@@ -353,7 +353,7 @@ const testData = [
       claimantResponse: { type: 'REJECTION' }
     },
     claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £100']
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   }
 ]
 

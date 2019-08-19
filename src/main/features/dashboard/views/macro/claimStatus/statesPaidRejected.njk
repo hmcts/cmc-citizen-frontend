@@ -44,15 +44,19 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
-  {% if claim.response.responseType === 'PART_ADMISSION' %}
-    {% set amount = claim.response.amount %}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {% if claim.response.responseType === 'PART_ADMISSION' %}
+      {% set amount = claim.response.amount %}
+    {% else %}
+      {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+    {% endif %}
+    {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+      claimantName: claim.claimData.claimant.name,
+      amount: amount | numeral
+    }) }}
   {% else %}
-    {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+    {{ t('Wait for the court to review the case') }}
   {% endif %}
-  {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
-    claimantName: claim.claimData.claimant.name,
-    amount: amount | numeral
-  }) }}
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantClaimDetails(claim) %}
