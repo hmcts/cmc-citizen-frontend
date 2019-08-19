@@ -3,8 +3,11 @@
 {% macro paidInFullClaimantClaimDetails(externalId) %}
   {% if featureToggles.paidInFull %}
     <div class="status-block">
-      <h2 class="heading-small">{{ t('If you’ve been paid') }}</h2>
-      <p>{{ t(internalLink('Tell us if you want to end the claim', DashboardPaths.datePaidPage.evaluateUri({ externalId: externalId })) + ' because the defendant has paid you.') | safe }}</p>
+      <h2 class="heading-small">{{ t('Tell us you’ve ended the claim') }}</h2>
+      <p>{{ t('If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.') }}</p>
+      <p>{{ internalLink(t('Tell us you’ve settled'),
+                         DashboardPaths.datePaidPage.evaluateUri({ externalId: externalId }),
+                         'button button-secondary') | safe }}</p>
     </div>
   {% endif %}
 {% endmacro %}
