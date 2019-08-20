@@ -38,7 +38,13 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
   }
   const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
-  form.model.type = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : form.model.type
+  if (dqsEnabled) {
+    if (form.model.type === SignatureType.QUALIFIED) {
+      form.model.type = SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED
+    } else {
+      form.model.type = SignatureType.DIRECTION_QUESTIONNAIRE
+    }
+  }
   const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
 
   res.render(Paths.checkAndSendPage.associatedView, {
@@ -87,6 +93,7 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
     case SignatureType.DIRECTION_QUESTIONNAIRE:
       return StatementOfTruth.fromObject(value)
     case SignatureType.QUALIFIED:
+    case SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED:
       return QualifiedStatementOfTruth.fromObject(value)
     default:
       throw new Error(`Unknown statement of truth type: ${value.type}`)
@@ -143,7 +150,7 @@ export default express.Router()
         }
 
         const draftService = new DraftService()
-        if (form.model.type === SignatureType.QUALIFIED) {
+        if (form.model.type === SignatureType.QUALIFIED || form.model.type === SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED) {
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await draftService.save(draft, user.bearerToken)
         }
