@@ -109,7 +109,8 @@ describe('Claimant response: view defendant response page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(`has rejected the claim.`))
+          .expect(res => expect(res).to.be.successful.withText(`has rejected the claim.`,
+            `Download their full response and hearing requirements`))
       })
 
       it('should render part admission with hearing requirements', async () => {
