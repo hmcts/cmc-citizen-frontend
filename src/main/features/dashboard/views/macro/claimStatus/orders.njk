@@ -19,10 +19,10 @@
 {% macro reviewReceiver(claim, reconsiderationDeadline) %}
   <div class="status-block">
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-      <h2 class="heading-small">{{ t('Read {{ claimantName }}’ request', { claimantName: claim.claimData.claimant.name }) }}</h2>
+      <h2 class="heading-small">{{ t('Read {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
       <p>{{ t('{{ claimantName }} has asked the court to change the order.', { claimantName: claim.claimData.claimant.name }) }}</p>
     {% else %}
-      <h2 class="heading-small">{{ t('Read {{ defendantName }}’ request', { defendantName: claim.claimData.defendant.name }) }}</h2>
+      <h2 class="heading-small">{{ t('Read {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h2>
       <p>{{ t('{{ defendantName }} has asked the court to change the order.', { defendantName: claim.claimData.defendant.name }) }}</p>
     {% endif %}
 
@@ -30,24 +30,24 @@
     <p>{{ t('Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.') }}</p>
 
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-      {{ internalLink(t('Download {{ claimantName }}’ request to see what they asked ', { claimantName: claim.claimData.claimant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
+      {{ internalLink(t('Download {{ claimantName }}’s request to see what they asked ', { claimantName: claim.claimData.claimant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
       {{ t('(PDF).') }}
-      <h2 class="heading-small">{{ t('Comment on {{ claimantName }}’ request', { claimantName: claim.claimData.claimant.name }) }}</h2>
+      <h2 class="heading-small">{{ t('Comment on {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
       <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ claimantName }} before 4pm on {{ deadline }}.',
           { claimantName: claim.claimData.claimant.name, deadline: reconsiderationDeadline | date }) }}</p>
     {% else %}
-      {{ internalLink(t('Download {{ defendantName }}’ request to see what they asked ', { defendantName: claim.claimData.defendant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
+      {{ internalLink(t('Download {{ defendantName }}’s request to see what they asked ', { defendantName: claim.claimData.defendant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
       {{ t('(PDF).') }}
-      <h2 class="heading-small">{{ t('Comment on {{ defendantName }}’ request', { defendantName: claim.claimData.defendant.name }) }}</h2>
+      <h2 class="heading-small">{{ t('Comment on {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h2>
       <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ defendantName }} before 4pm on {{ deadline }}.',
           { defendantName: claim.claimData.defendant.name, deadline: reconsiderationDeadline | date }) }}</p>
     {% endif %}
     <p>{{ t('Include the claim number ({{ claimNumber }}) in the emails.', { claimNumber: claim.claimNumber }) }}</p>
     <p>{{ t('The court’s email address is:') }} <a href="mailto:{{ supportEmailAddress }}">{{ supportEmailAddress }}</a></p>
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-      <p>{{ t('{{ claimantName }}’ email address is:', { claimantName: claim.claimData.claimant.name }) }} <a href="mailto:{{ claim.claimData.claimant.email }}">{{ claim.claimData.claimant.email }}</a></p>
+      <p>{{ t('{{ claimantName }}’s email address is:', { claimantName: claim.claimData.claimant.name }) }} <a href="mailto:{{ claim.claimData.claimant.email }}">{{ claim.claimData.claimant.email }}</a></p>
     {% else %}
-      <p>{{ t('{{ defendantName }}’ email address is:', { defendantName: claim.claimData.defendant.name }) }} <a href="mailto:{{ claim.claimData.defendant.email }}">{{ claim.claimData.defendant.email }}</a></p>
+      <p>{{ t('{{ defendantName }}’s email address is:', { defendantName: claim.claimData.defendant.name }) }} <a href="mailto:{{ claim.claimData.defendant.email }}">{{ claim.claimData.defendant.email }}</a></p>
     {% endif %}
   </div>
 {% endmacro %}
