@@ -3,7 +3,6 @@
 {% set claimantName = claim.claimData.claimant.name %}
 {% set directionsQuestionnaireUri = 'https://www.gov.uk/government/publications/form-n180-directions-questionnaire-small-claims-track' %}
 
-
 {% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
   {% if claim.response.freeMediation === FreeMediationOption.YES %}
     <p>{{ t('If {{ claimant }} accepts your response the claim will be ended. We’ll contact you when they respond.', { claimant: claim.claimData.claimant.name }) }}</p>
