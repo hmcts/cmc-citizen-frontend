@@ -17,7 +17,7 @@ export class FreeMediationTask {
   }
 
   static isMediationDisagreementCompleted (mediationDraft: MediationDraft): boolean {
-    return (mediationDraft.willYouTryMediation.option === FreeMediationOption.NO && mediationDraft.mediationDisagreement.option === FreeMediationOption.NO)
+    return !!mediationDraft.mediationDisagreement
   }
 
   static isCanWeUseCompleted (mediationDraft: MediationDraft): boolean {
