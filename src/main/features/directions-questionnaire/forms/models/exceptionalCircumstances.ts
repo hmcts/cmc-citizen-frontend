@@ -16,7 +16,7 @@ export class ExceptionalCircumstances {
   @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
   exceptionalCircumstances?: YesNoOption
 
-  @ValidateIf(o => o.exceptionalCircumstances && o.exceptionalCircumstances.option === YesNoOption.NO.option)
+  @ValidateIf(o => o.exceptionalCircumstances && o.exceptionalCircumstances.option === YesNoOption.YES.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
