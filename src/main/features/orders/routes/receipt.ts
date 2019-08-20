@@ -13,7 +13,7 @@ const documentsClient: DocumentsClient = new DocumentsClient()
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.directionsOrderReceiver.uri,
+  .get(Paths.directionsOrderDocument.uri,
     ClaimMiddleware.retrieveByExternalId,
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const claim: Claim = res.locals.claim

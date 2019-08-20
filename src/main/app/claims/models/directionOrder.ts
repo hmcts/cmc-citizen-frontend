@@ -15,9 +15,7 @@ export interface DirectionOrder {
   preferredCourtObjectingReason?: string
   hearingCourt?: string
   estimatedHearingDuration?: string,
-  reviewLastDay?: Moment,
-  postDocumentsLastDay?: Moment,
-  isReviewOrderEligible?: boolean
+  postDocumentsLastDay?: Moment
 }
 
 export namespace DirectionOrder {
@@ -26,7 +24,7 @@ export namespace DirectionOrder {
       return input
     }
     return {
-      createdOn: input.createdOn,
+      createdOn: MomentFactory.parse(input.createdOn),
       hearingCourtAddress: input.hearingCourtAddress,
       directions: Direction.deserialize(input.directions),
       extraDocUploadList: input.extraDocUploadList,
@@ -36,14 +34,8 @@ export namespace DirectionOrder {
       preferredCourtObjectingReason: input.preferredCourtObjectingReason,
       hearingCourt: input.hearingCourt,
       estimatedHearingDuration: input.estimatedHearingDuration,
-      reviewLastDay: getLastDateForReview(input.createdOn),
-      postDocumentsLastDay: getPostDocumentsLastDay(input.directions),
-      isReviewOrderEligible: findIsReviewOrderEligible(input.createdOn)
+      postDocumentsLastDay: getPostDocumentsLastDay(input.directions)
     }
-  }
-
-  export function getLastDateForReview (createdOn: string): Moment {
-    return MomentFactory.parse(createdOn).add(12, 'days')
   }
 
   export function getPostDocumentsLastDay (directions: Direction[]): Moment {
@@ -51,10 +43,14 @@ export namespace DirectionOrder {
       .filter(o => o.directionType === 'DOCUMENTS')
       .pop()
 
-    return direction.directionActionedBy
+    return direction.directionActionedDate
   }
 
-  export function findIsReviewOrderEligible (createdOn: string): boolean {
-    return MomentFactory.currentDate() < getLastDateForReview(createdOn)
+  export function isReviewOrderEligible (deadline: Moment): boolean {
+    if (!deadline) {
+      return false
+    }
+
+    return MomentFactory.currentDateTime().isAfter(deadline.set({ h: 16, m: 0 }))
   }
 }

@@ -94,6 +94,14 @@ export class Claim {
     return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
   }
 
+  async respondToReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 12)
+  }
+
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }

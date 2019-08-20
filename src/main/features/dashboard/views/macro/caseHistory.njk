@@ -116,7 +116,7 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
@@ -173,7 +173,7 @@
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
       {% if claim.directionOrder !== undefined %}
-        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT) }}
+        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
       {% else %}
         {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
@@ -203,7 +203,7 @@
       {{ requestCCJ(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
       {% if claim.directionOrder !== undefined %}
-        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT) }}
+        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
       {% else %}
         {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
       {% endif %}
@@ -221,17 +221,17 @@
       {% endif %}
     {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
-    {% elif state.status === ClaimStatus.REVIEW_ORDER_ELIGIBLE %}
+    {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
       {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-        {{ reviewRequester(claim) }}
+        {{ reviewRequester(claim, reconsiderationDeadline) }}
       {% else %}
-        {{ reviewReceiver(claim) }}
+        {{ reviewReceiver(claim, reconsiderationDeadline) }}
       {% endif %}
     {% endif %}
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantClaimDetails(claim) %}
+{% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForDefendantClaimDetails(claim) }}
@@ -268,7 +268,7 @@
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
       {% if claim.directionOrder !== undefined %}
-        {{ directionsOrderIssued(claim, MadeBy.DEFENDANT) }}
+        {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
       {% else %}
         {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
           {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
@@ -309,7 +309,7 @@
         {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
         {% if claim.directionOrder !== undefined %}
-          {{ directionsOrderIssued(claim, MadeBy.DEFENDANT) }}
+          {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
         {% else %}
           {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
         {% endif %}
@@ -335,11 +335,11 @@
         {% else %}
           {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
         {% endif %}
-      {% elif state.status === ClaimStatus.REVIEW_ORDER_ELIGIBLE %}
+      {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
         {% if claim.reviewOrder.requestedBy === MadeBy.DEFENDANT.value %}
-          {{ reviewRequester(claim) }}
+          {{ reviewRequester(claim, reconsiderationDeadline) }}
         {% else %}
-          {{ reviewReceiver(claim) }}
+          {{ reviewReceiver(claim, reconsiderationDeadline) }}
         {% endif %}
       {% endif %}
   {% endfor %}

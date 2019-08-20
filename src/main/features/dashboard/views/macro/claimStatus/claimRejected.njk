@@ -1,6 +1,5 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
-{% from "address.njk" import address %}
 
 {% macro claimRejectedAlreadyPaidForClaimantDashboard(claim) %}
   {{ t('{{ defendantName }} believes that they’ve paid the claim in full.',
@@ -151,36 +150,35 @@
   {{ t('You’ve rejected the defendant’s response.') }}
 
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-<p>{{ t('You’ve both agreed to try mediation.') }}
+    <p>{{ t('You’ve both agreed to try mediation.') }}
   {% endif %}
-  {% endmacro %}
+{% endmacro %}
 
-  {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
+{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
   {{ t('You’ve rejected the defendant’s response.') }}
 
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-<p>{{ t('You’ve both agreed to try mediation.') }}
+    <p>{{ t('You’ve both agreed to try mediation.') }}
   {% endif %}
-  {% endmacro %}
+{% endmacro %}
 
-  {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s response.') }}
+{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
+    {{ t('You’ve rejected the defendant’s response.') }}
 
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-<p>{{ t('You’ve both agreed to try mediation.') }}
-  {% endif %}
-  {% endmacro %}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      <p>{{ t('You’ve both agreed to try mediation.') }}
+    {% endif %}
+{% endmacro %}
 
-  {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
+{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s response.') }}</h2>
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-  <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
-  {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+      <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
+      {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
     {% endif %}
-
-  <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+    <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
   </div>
 {% endmacro %}
 
@@ -257,12 +255,12 @@
 
 {% macro _linkToDirectionsQuestionnairePage(externalId) %}
   <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
-      { completeDQ: internalLink(
-        'complete a directions questionnaire',
-        DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
-      }
-    ) | safe
-    }}</p>
+        { completeDQ: internalLink(
+          'complete a directions questionnaire',
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
+        }
+      ) | safe
+  }}</p>
 {% endmacro %}
 
 {% macro _respond(claim, text) %}
@@ -278,7 +276,7 @@
           { respondToMediationDeadline: mediationDeadline | date }) }}</p>
       <p>{{ internalLink(t('View and respond'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}</p>
     </div>
-    {% elif claim.response.freeMediation === YesNoOption.YES.option %}
+  {% elif claim.response.freeMediation === YesNoOption.YES.option %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('The defendant’s response') }}</h2>
       <p>{{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
@@ -289,7 +287,12 @@
             { emailAddress: supportEmailAddress, respondToMediationDeadline: mediationDeadline | date }) }}</p>
         <p>{{ t('If you don’t send an email before the deadline, the claim will proceed without mediation.') }}</p>
       {% endif %}
-      <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+
+      {% if claim.response.directionsQuestionnaire %}
+        <p>{{ _downloadResponseLink(claim, 'Download their full response and hearing requirements') }}</p>
+      {% else %}
+        <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+      {% endif %}
     </div>
   {% else %}
     <div class="status-block">
@@ -298,7 +301,11 @@
       {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
       <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ deadline }}.',
           { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-      <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+      {% if claim.response.directionsQuestionnaire %}
+        <p>{{ _downloadResponseLink(claim, 'Download their full response and hearing requirements') }}</p>
+      {% else %}
+        <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+      {% endif %}
     </div>
   {% endif %}
 {% endmacro %}
