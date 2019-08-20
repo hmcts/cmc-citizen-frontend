@@ -1,7 +1,7 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
 
 {% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) %}
-  {{ tableStart('freeMediation', 'Mediation') }}
+  {{ tableStart('freeMediation', 'Free telephone mediation') }}
   {% if not mediationEnabled %}
     {{ row(
       label = 'Free mediation?',
