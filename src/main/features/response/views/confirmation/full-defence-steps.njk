@@ -34,8 +34,8 @@
       + externalLink('complete a directions questionnaire form', directionsQuestionnaireUri )
       + ' to tell us more about the claim.') | safe }}
   </p>
-  <p>{{ t('Your defence will be cancelled if you don’t complete and return the form by 4pm on {{ deadline }}'),
-        { deadline: claim.directionsQuestionnaireDeadline | date }}}</p>
+  <p>{{ t('Your defence will be cancelled if you don’t complete and return the form by 4pm on {{ deadline }}',
+        { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
   <p>{{ t('We’ll contact you when we set a hearing date to tell you how to prepare.') }}</p>
 {% endif %}
 
