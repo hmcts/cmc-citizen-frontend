@@ -53,8 +53,8 @@ const testData = [
       },
       ...claimantRejectAlreadyPaidWithMediation
     },
-    claimantAssertions: ['You’ve rejected the defendant’s admission.'],
-    defendantAssertions: [statesPaidClaim.claim.claimants[0].name + ' rejected your admission of £100']
+    claimantAssertions: ['We’ll contact you with a mediation appointment'],
+    defendantAssertions: ['We’ll contact you with a mediation appointment']
   }
 ]
 
