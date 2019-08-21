@@ -45,9 +45,13 @@ async function renderPage (res: express.Response, form: Form<ExceptionalCircumst
 export default express.Router()
   .get(Paths.hearingExceptionalCircumstancesPage.uri,
     ExceptionalCircumstancesGuard.requestHandler,
-    (req: express.Request, res: express.Response) => {
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      renderPage(res, new Form<ExceptionalCircumstances>(draft.document.exceptionalCircumstances))
+      try {
+        await renderPage(res, new Form<ExceptionalCircumstances>(draft.document.exceptionalCircumstances))
+      } catch (err) {
+        next(err)
+      }
     })
   .post(Paths.hearingExceptionalCircumstancesPage.uri,
     ExceptionalCircumstancesGuard.requestHandler,
@@ -57,7 +61,7 @@ export default express.Router()
       const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
 
       if (form.hasErrors()) {
-        renderPage(res, form)
+        await renderPage(res, form)
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
