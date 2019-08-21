@@ -99,7 +99,7 @@ export class Claim {
       return undefined
     }
 
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 12)
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
   get remainingDays (): number {
