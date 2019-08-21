@@ -33,7 +33,10 @@
   claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails,
   claimRejectedWithDQsForClaimantClaimDetails %}
 
-{% from "./claimStatus/orders.njk" import directionsOrderIssued %}
+{% from "./claimStatus/orders.njk" import
+  directionsOrderIssued,
+  reviewRequester,
+  reviewReceiver %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
@@ -225,6 +228,12 @@
       {% endif %}
     {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
+    {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
+      {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
+        {{ reviewRequester(claim, reconsiderationDeadline) }}
+      {% else %}
+        {{ reviewReceiver(claim, reconsiderationDeadline) }}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -334,6 +343,12 @@
           {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
         {% else %}
           {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
+        {% endif %}
+      {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
+        {% if claim.reviewOrder.requestedBy === MadeBy.DEFENDANT.value %}
+          {{ reviewRequester(claim, reconsiderationDeadline) }}
+        {% else %}
+          {{ reviewReceiver(claim, reconsiderationDeadline) }}
         {% endif %}
       {% endif %}
   {% endfor %}
