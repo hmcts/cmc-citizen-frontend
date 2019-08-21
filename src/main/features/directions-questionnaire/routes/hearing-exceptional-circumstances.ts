@@ -12,19 +12,32 @@ import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestio
 import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
 import { MadeBy } from 'claims/models/madeBy'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
-import { HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
+import { Court } from 'court-finder-client/court'
+import { CourtDetails } from 'court-finder-client/courtDetails'
+import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
+import { Claim } from 'claims/models/claim'
 
-function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
+async function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
   const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
   let defendantCourt = ''
+  let courtDetails: CourtDetails = undefined
+
   if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
+    const claim: Claim = res.locals.claim
     const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
+    const postcode: string = defendantDirectionsQuestionnaire.hearingLocation.locationOption === CourtLocationType.SUGGESTED_COURT ?
+      claim.response.defendant.address.postcode : defendantDirectionsQuestionnaire.hearingLocation.courtAddress.postcode
+    const court: Court = await Court.getNearestCourt(postcode)
+    if (court) {
+      courtDetails = await Court.getCourtDetails(court.slug)
+    }
     defendantCourt = defendantDirectionsQuestionnaire.hearingLocation.courtName
   }
   res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, {
     form: form,
     party: party,
-    courtName: defendantCourt
+    courtName: defendantCourt,
+    facilities: courtDetails ? courtDetails.facilities : undefined
   })
 }
 
@@ -51,16 +64,14 @@ export default express.Router()
         if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
           const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
 
-          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+          if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
-            draft.document.hearingLocation.courtAccepted = YesNoOption.YES
+            draft.document.hearingLocation.courtAccepted = YesNoOption.NO
             form.model.reason = undefined
           }
         } else {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
-            draft.document.hearingLocation = new HearingLocation()
-            // todo remove the below line once the backend validation of mandatory is removed for courtName
-            draft.document.hearingLocation.courtName = ''
+          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+            draft.document.hearingLocation = undefined
             form.model.reason = undefined
           }
         }
