@@ -76,9 +76,11 @@ describe('CCJ - repayment plan summary page', () => {
 
       context('When defendant response is part admission', async () => {
         it('should render correctly when repayment option is IMMEDIATELY', async () => {
+
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({
             response: {
-              ...partialAdmissionWithImmediatePaymentData
+              ...partialAdmissionWithImmediatePaymentData,
+              amount: 3000
             },
             respondedAt: MomentFactory.currentDateTime(),
             countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
@@ -104,7 +106,8 @@ describe('CCJ - repayment plan summary page', () => {
         it('should render correctly when repayment option is SET_DATE', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({
             response: {
-              ...partialAdmissionWithImmediatePaymentData
+              ...partialAdmissionWithImmediatePaymentData,
+              amount: 3000
             },
             respondedAt: MomentFactory.currentDateTime(),
             countyCourtJudgmentRequestedAt: '2017-10-10T22:45:51.785',
