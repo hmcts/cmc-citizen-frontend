@@ -174,6 +174,7 @@ export const sampleClaimObj = {
       {
         type: 'individual',
         name: 'John Smith',
+        email: 'johnsmith@example.com',
         address: {
           line1: 'line1',
           line2: 'line2',
@@ -187,6 +188,7 @@ export const sampleClaimObj = {
       {
         type: 'individual',
         name: 'John Doe',
+        email: 'johndoe@example.com',
         address: {
           line1: 'line1',
           line2: 'line2',
