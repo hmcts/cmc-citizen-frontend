@@ -147,27 +147,15 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s response.') }}
-
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('You’ve both agreed to try mediation.') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s response.') }}
-
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('You’ve both agreed to try mediation.') }}
-  {% endif %}
-{% endmacro %}
-
-{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
+  {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s response.') }}
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       <p>{{ t('You’ve both agreed to try mediation.') }}
     {% endif %}
+  {% else %}
+    {{ t('Wait for the court to review the case') }}
+  {% endif %}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
@@ -178,17 +166,8 @@
       <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
       {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
     {% endif %}
-
     <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
   </div>
-{% endmacro %}
-
-{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s response.') }}
-
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('You’ve both agreed to try mediation.') }}</p>
-  {% endif %}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
@@ -215,7 +194,7 @@
     <h2 class="heading-small">{{ t('Wait for the claimant to respond') }}</h2>
     {% if claim.response.freeMediation === YesNoOption.Yes %}
       <p>{{ t('You have rejected the claim. You’ve suggested mediation.') }}</p>
-      <p>{{ t('We’ll ask {{ claimantName }} if they agree to take part in mediation.',{ claimantName: claim.claimData.claimant.name }) }}</p>
+      <p>{{ t('We’ll ask {{ claimantName }} if they agree to take part in mediation.', { claimantName: claim.claimData.claimant.name }) }}</p>
       <p>{{ t('If they agree, we’ll contact you with details of your appointment. If not, you might have to go to a hearing.') }}</p>
     {% endif %}
 
@@ -288,7 +267,12 @@
             { emailAddress: supportEmailAddress, respondToMediationDeadline: mediationDeadline | date }) }}</p>
         <p>{{ t('If you don’t send an email before the deadline, the claim will proceed without mediation.') }}</p>
       {% endif %}
-      <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+
+      {% if claim.response.directionsQuestionnaire %}
+        <p>{{ _downloadResponseLink(claim, 'Download their full response and hearing requirements') }}</p>
+      {% else %}
+        <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+      {% endif %}
     </div>
   {% else %}
     <div class="status-block">
@@ -297,7 +281,11 @@
       {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
       <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ deadline }}.',
           { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-      <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+      {% if claim.response.directionsQuestionnaire %}
+        <p>{{ _downloadResponseLink(claim, 'Download their full response and hearing requirements') }}</p>
+      {% else %}
+        <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
+      {% endif %}
     </div>
   {% endif %}
 {% endmacro %}

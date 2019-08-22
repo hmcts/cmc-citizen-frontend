@@ -14,47 +14,65 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import { MomentFactory } from 'shared/momentFactory'
-import {
-  partialAdmissionFromStatesPaidDefence, partialAdmissionFromStatesPaidWithMediationDefence
-} from 'test/data/entity/responseData'
-import {
-  claimantRejectAlreadyPaid,
-  claimantRejectAlreadyPaidWithMediation,
-  respondedAt
-} from 'test/data/entity/fullDefenceData'
 
-const statesPaidClaim = {
-  ...claimStoreServiceMock.sampleClaimObj,
-  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-  ...respondedAt
-}
+import {
+  baseResponseData,
+  defenceWithDisputeData
+} from 'test/data/entity/responseData'
+
+import { respondedAt } from 'test/data/entity/fullDefenceData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
+const ordersClaim = {
+  ...claimStoreServiceMock.sampleClaimObj,
+  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
+  features: ['admissions', 'directionsQuestionnaire'],
+  response: {
+    ...baseResponseData,
+    ...defenceWithDisputeData
+  },
+  claimantResponse: {
+    type: 'REJECTION'
+  },
+  claimantRespondedAt: MomentFactory.currentDate(),
+  ...respondedAt,
+  directionOrder: {
+    directions: [
+      {
+        id: 'd2832981-a23a-4a4c-8b6a-a013c2c8a637',
+        directionParty: 'BOTH',
+        directionType: 'DOCUMENTS',
+        directionActionedDate: '2019-09-20'
+      },
+      {
+        id: '8e3a20c2-10a4-49fd-b1a7-da66b088f978',
+        directionParty: 'BOTH',
+        directionType: 'EYEWITNESS',
+        directionActionedDate: '2019-09-20'
+      }
+    ],
+    paperDetermination: 'no',
+    preferredDQCourt: 'Central London County Court',
+    hearingCourt: 'CLERKENWELL',
+    hearingCourtAddress: {
+      line1: 'The Gee Street Courthouse',
+      line2: '29-41 Gee Street',
+      city: 'London',
+      postcode: 'EC1V 3RE'
+    },
+    estimatedHearingDuration: 'HALF_HOUR',
+    createdOn: '2019-08-09T09:27:42.04'
+  }
+}
+
 const testData = [
   {
-    status: 'States paid defence - defendant paid what he believed he owed - claimant rejects',
-    claim: statesPaidClaim,
-    claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidDefence
-      },
-      ...claimantRejectAlreadyPaid
-    },
-    claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: ['Wait for the court to review the case']
-  },
-  {
-    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects',
-    claim: statesPaidClaim,
-    claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidWithMediationDefence
-      },
-      ...claimantRejectAlreadyPaidWithMediation
-    },
-    claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: ['Wait for the court to review the case']
+    status: 'Orders - defendant fully defended - claimant rejected defence - orders drawn',
+    claim: ordersClaim,
+    claimOverride: {},
+    claimantAssertions: ['Send us more details before the hearing'],
+    defendantAssertions: ['Send us more details before the hearing']
   }
 ]
 
