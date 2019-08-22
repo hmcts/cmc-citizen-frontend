@@ -59,17 +59,6 @@ describe('Defendant response: confirmation page', () => {
           ))
       })
 
-      it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
-
-        await request(app)
-          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'We’ve emailed John Smith your response, explaining why you reject the claim.',
-            'We’ll ask John Smith if they want to try mediation. If they agree, we’ll contact you to arrange a call with the mediator. If not, we’ll tell you what to do.'))
-      })
-
       it('should render page when yes for mediation and DQ', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimStoreServiceMock.sampleDefendantResponseWithDQAndMediationObj)
 
