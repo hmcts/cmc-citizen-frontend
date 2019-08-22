@@ -1,13 +1,12 @@
 import { Moment } from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
-import { MadeBy } from 'claims/models/madeBy'
 
 export class ReviewOrder {
   reason: string
-  requestedBy: MadeBy
+  requestedBy: string
   requestedAt: Moment
 
-  constructor (reason?: string, requestedBy?: MadeBy, requestedAt?: Moment) {
+  constructor (reason?: string, requestedBy?: string, requestedAt?: Moment) {
     this.reason = reason
     this.requestedBy = requestedBy
     this.requestedAt = requestedAt
