@@ -16,6 +16,10 @@ export class FreeMediationTask {
       !!mediationDraft.youCanOnlyUseMediation
   }
 
+  static isMediationDisagreementCompleted (mediationDraft: MediationDraft): boolean {
+    return mediationDraft.willYouTryMediation.option === FreeMediationOption.NO && mediationDraft.mediationDisagreement.option === FreeMediationOption.NO
+  }
+
   static isCanWeUseCompleted (mediationDraft: MediationDraft): boolean {
     return ((!!mediationDraft.canWeUse && !!mediationDraft.canWeUseCompany) ||
       (!!mediationDraft.canWeUse && mediationDraft.canWeUse.isCompleted()) ||
@@ -26,7 +30,7 @@ export class FreeMediationTask {
     if (!FeatureToggles.isEnabled('mediation')) {
       return (!!mediationDraft.willYouTryMediation)
     } else if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')) {
-      return (this.isCanWeUseCompleted(mediationDraft) && this.isYouCanOnlyUseMediationCompleted(mediationDraft))
+      return (this.isCanWeUseCompleted(mediationDraft) && this.isYouCanOnlyUseMediationCompleted(mediationDraft)) || this.isMediationDisagreementCompleted(mediationDraft)
     } else {
       return (this.isYouCanOnlyUseMediationCompleted(mediationDraft)) || this.isWillYouTryMediationCompleted(mediationDraft)
     }
