@@ -356,7 +356,7 @@ describe('Defendant response: check and send page', () => {
                 .post(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
                 .send(sendData)
-                .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge', 'div class="error-summary"'))
+                .expect(res => expect(res).to.be.successful.withText('Tell us if you believe the hearing requirement details on this page are true', 'div class="error-summary"'))
             })
           }
         })
