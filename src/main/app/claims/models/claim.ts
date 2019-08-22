@@ -27,6 +27,8 @@ import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
+import { DirectionOrder } from 'claims/models/directionOrder'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 
 interface State {
   status: ClaimStatus
@@ -64,6 +66,8 @@ export class Claim {
   reDeterminationRequestedAt: Moment
   ccdCaseId: number
   template: ClaimTemplate
+  directionOrder: DirectionOrder
+  reviewOrder: ReviewOrder
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -88,6 +92,14 @@ export class Claim {
     }
 
     return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
+  }
+
+  async respondToReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 12)
   }
 
   get remainingDays (): number {
@@ -221,6 +233,10 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
+    if (this.directionOrder && this.reviewOrder) {
+      statuses.unshift({ status: ClaimStatus.REVIEW_ORDER_REQUESTED })
+    }
+
     return statuses
   }
 
@@ -310,6 +326,12 @@ export class Claim {
       }
       if (input.ccdCaseId) {
         this.ccdCaseId = input.ccdCaseId
+      }
+      if (input.directionOrder) {
+        this.directionOrder = DirectionOrder.deserialize(input.directionOrder)
+      }
+      if (input.reviewOrder) {
+        this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
     }
 

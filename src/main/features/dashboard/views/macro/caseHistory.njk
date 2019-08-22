@@ -33,6 +33,11 @@
   claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails,
   claimRejectedWithDQsForClaimantClaimDetails %}
 
+{% from "./claimStatus/orders.njk" import
+  directionsOrderIssued,
+  reviewRequester,
+  reviewReceiver %}
+
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedToOweForDefendantClaimDetails,
   claimPartAdmittedAlreadyPaidForDefendantClaimDetails,
@@ -111,7 +116,7 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
@@ -167,10 +172,14 @@
         {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
+      {% if claim.directionOrder !== undefined %}
+        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
       {% else %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+        {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+          {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
+        {% else %}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+        {% endif %}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
       {{ claimantAcceptedDefendantDefenceClaimantClaimDetails(claim) }}
@@ -193,7 +202,11 @@
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_BREACHED_SETTLEMENT %}
       {{ requestCCJ(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
-      {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
+      {% if claim.directionOrder !== undefined %}
+        {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+      {% else %}
+        {{ partAdmitRejectedByClaimantClaimDetails(claim) }}
+      {% endif %}
     {% elif state.status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
       {{ settlementAgreementRejectedClaimantClaimDetails(claim, csrf) }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
@@ -208,11 +221,17 @@
       {% endif %}
     {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
+    {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
+      {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
+        {{ reviewRequester(claim, reconsiderationDeadline) }}
+      {% else %}
+        {{ reviewReceiver(claim, reconsiderationDeadline) }}
+      {% endif %}
     {% endif %}
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantClaimDetails(claim) %}
+{% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForDefendantClaimDetails(claim) }}
@@ -248,10 +267,14 @@
     {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
+      {% if claim.directionOrder !== undefined %}
+        {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
       {% else %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+        {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+          {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
+        {% else %}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+        {% endif %}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
       {{ claimantAcceptedDefendantDefenceDefendantClaimDetails(claim) }}
@@ -285,7 +308,11 @@
       {% elif state.status === ClaimStatus.OFFER_SETTLEMENT_REACHED %}
         {{ offerSettlementReachedForDefendant(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
-        {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
+        {% if claim.directionOrder !== undefined %}
+          {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+        {% else %}
+          {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
+        {% endif %}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
         {{ partAdmitRejectedByClaimantDefendantClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_FULL_ADMISSION_AS_BUSINESS_WITH_ALTERNATIVE_PAYMENT_INTENTION_RESPONSE %}
@@ -303,11 +330,17 @@
       {% elif state.status === ClaimStatus.CLAIMANT_REQUESTS_CCJ_AFTER_DEFENDANT_REJECTS_SETTLEMENT %}
         {{ CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) }}
       {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
-      {% else %}
-        {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
-      {% endif %}
+        {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
+        {% endif %}
+      {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
+        {% if claim.reviewOrder.requestedBy === MadeBy.DEFENDANT.value %}
+          {{ reviewRequester(claim, reconsiderationDeadline) }}
+        {% else %}
+          {{ reviewReceiver(claim, reconsiderationDeadline) }}
+        {% endif %}
       {% endif %}
   {% endfor %}
 {% endmacro %}
