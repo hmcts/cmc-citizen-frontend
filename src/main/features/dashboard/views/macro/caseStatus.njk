@@ -142,14 +142,10 @@
       {{ claimFullAdmissionForClaimantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-    {% if claim.directionOrder !== undefined %}
-      {{ directionsOrderIssuedClaimantDashboard() }}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+      {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
     {% else %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
-      {% else %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
-      {% endif %}
+      {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceClaimantDashboard() }}
@@ -180,6 +176,8 @@
     {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard() }}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.ORDER_DRAWN %}
+    {{ directionsOrderIssuedClaimantDashboard() }}
   {% endif %}
 {% endmacro %}
 
@@ -232,14 +230,10 @@
       {{ claimFullAdmissionForDefendantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-    {% if claim.directionOrder !== undefined %}
-      {{ directionsOrderIssuedDefendantDashboard() }}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+      {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
     {% else %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
-      {% else %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
-      {% endif %}
+      {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceDefendantDashboard() }}
@@ -271,5 +265,7 @@
     {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard() }}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.ORDER_DRAWN %}
+    {{ directionsOrderIssuedDefendantDashboard() }}
   {% endif %}
 {% endmacro %}
