@@ -192,6 +192,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    } else if (this.hasClaimantRejectedPartAdmissionDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantRejectedDefendantDefence()) {
@@ -432,7 +434,7 @@ export class Claim {
       return false
     }
 
-    if (this.hasClaimantRejectedDefendantDefence()) {
+    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
       return true
     }
 
@@ -556,7 +558,12 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && this.response.responseType === ResponseType.PART_ADMISSION
+  }
+
+  private hasClaimantRejectedPartAdmissionDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && this.response.responseType === ResponseType.PART_ADMISSION
   }
 

@@ -396,6 +396,19 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION)
     })
 
+    it('should return CLAIMANT_REJECTED_PART_ADMISSION_DQ when the claimant rejects the part admission with DQs', () => {
+      claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.claimData = {
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION
+      }
+      claim.features = ['admissions', 'directionsQuestionnaire']
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ)
+    })
+
     it('should return CCJ_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
       const paymentIntention = {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
