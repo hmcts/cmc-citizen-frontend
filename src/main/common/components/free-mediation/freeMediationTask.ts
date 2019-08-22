@@ -30,8 +30,9 @@ export class FreeMediationTask {
     if (!FeatureToggles.isEnabled('mediation')) {
       return (!!mediationDraft.willYouTryMediation)
     } else if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')) {
-      return (this.isCanWeUseCompleted(mediationDraft) && this.isYouCanOnlyUseMediationCompleted(mediationDraft) ||
-        this.isWillYouTryMediationCompleted(mediationDraft) && this.isMediationDisagreementCompleted(mediationDraft))
+      return (this.isCanWeUseCompleted(mediationDraft) && this.isYouCanOnlyUseMediationCompleted(mediationDraft)) ||
+        (this.isWillYouTryMediationCompleted(mediationDraft) && (this.isMediationDisagreementCompleted(mediationDraft)
+        || this.isYouCanOnlyUseMediationCompleted(mediationDraft)))
     } else {
       return (this.isYouCanOnlyUseMediationCompleted(mediationDraft)) || this.isWillYouTryMediationCompleted(mediationDraft)
     }
