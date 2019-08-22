@@ -7,6 +7,8 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { UnavailableDate } from 'claims/models/directions-questionnaire/unavailableDate'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { LocalDate } from 'forms/models/localDate'
+import { HearingLocation as DraftHearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
+
 
 export interface DirectionsQuestionnaire {
   requireSupport?: RequireSupport,
@@ -32,20 +34,7 @@ export namespace DirectionsQuestionnaire {
         disabledAccess: directionsQuestionnaire.supportRequired.disabledAccessSelected ? YesNoOption.YES : YesNoOption.NO,
         otherSupport: directionsQuestionnaire.supportRequired.otherSupport
       },
-      hearingLocation: {
-        courtName: directionsQuestionnaire.hearingLocation &&
-        directionsQuestionnaire.hearingLocation.courtAccepted &&
-        directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
-          directionsQuestionnaire.hearingLocation.courtName : directionsQuestionnaire.hearingLocation.alternativeCourtName,
-        hearingLocationSlug: (directionsQuestionnaire.hearingLocationSlug && directionsQuestionnaire.hearingLocationSlug.length) ? directionsQuestionnaire.hearingLocationSlug : undefined,
-        courtAddress: undefined,
-        locationOption: directionsQuestionnaire.hearingLocation &&
-        directionsQuestionnaire.hearingLocation.alternativeCourtName &&
-        directionsQuestionnaire.hearingLocation.alternativeCourtName.length ?
-          CourtLocationType.ALTERNATE_COURT : CourtLocationType.SUGGESTED_COURT,
-        exceptionalCircumstancesReason: directionsQuestionnaire.exceptionalCircumstances ?
-          directionsQuestionnaire.exceptionalCircumstances.reason : undefined
-      },
+      hearingLocation: toHearingLocation(directionsQuestionnaire),
       witness: directionsQuestionnaire.selfWitness && {
         selfWitness: directionsQuestionnaire.selfWitness.option.option as YesNoOption,
         noOfOtherWitness: directionsQuestionnaire.otherWitnesses ? directionsQuestionnaire.otherWitnesses.howMany : undefined
@@ -65,6 +54,40 @@ export namespace DirectionsQuestionnaire {
           reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
         } : undefined
     }
+  }
+
+
+  export function toHearingLocation(directionsQuestionnaire: DirectionsQuestionnaireDraft): HearingLocation {
+
+    if(directionsQuestionnaire.hearingLocation === undefined || (directionsQuestionnaire.hearingLocation.courtName === undefined &&
+    directionsQuestionnaire.hearingLocation.alternativeCourtName === undefined)){
+      return undefined
+    }
+    return {
+      courtName: directionsQuestionnaire.hearingLocation &&
+      directionsQuestionnaire.hearingLocation.courtAccepted &&
+      directionsQuestionnaire.hearingLocation.courtAccepted.option === YesNoOption.YES ?
+        directionsQuestionnaire.hearingLocation.courtName : directionsQuestionnaire.hearingLocation.alternativeCourtName,
+      hearingLocationSlug: (directionsQuestionnaire.hearingLocationSlug && directionsQuestionnaire.hearingLocationSlug.length) ? directionsQuestionnaire.hearingLocationSlug : undefined,
+      courtAddress: undefined,
+      locationOption: toLocationOption(directionsQuestionnaire.hearingLocation),
+      exceptionalCircumstancesReason: directionsQuestionnaire.exceptionalCircumstances ?
+        directionsQuestionnaire.exceptionalCircumstances.reason : undefined
+    }
+  }
+
+  export function toLocationOption(hearingLocation: DraftHearingLocation): CourtLocationType {
+    if(hearingLocation === undefined){
+      return undefined
+    }
+    if(hearingLocation.courtName === undefined && hearingLocation.alternativeCourtName === undefined){
+      return undefined
+    }
+
+     return (hearingLocation.courtName &&
+      hearingLocation.alternativeCourtName &&
+      hearingLocation.alternativeCourtName.length) ?
+      CourtLocationType.ALTERNATE_COURT : CourtLocationType.SUGGESTED_COURT
   }
 
   export function fromObject (directionsQuestionnaire: DirectionsQuestionnaire): DirectionsQuestionnaire {

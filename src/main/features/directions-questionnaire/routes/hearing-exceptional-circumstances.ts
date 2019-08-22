@@ -59,8 +59,7 @@ export default express.Router()
         } else {
           if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
             draft.document.hearingLocation = new HearingLocation()
-            // todo remove the below line once the backend validation of mandatory is removed for courtName
-            draft.document.hearingLocation.courtName = ''
+            draft.document.hearingLocation.courtName = undefined
             form.model.reason = undefined
           }
         }
