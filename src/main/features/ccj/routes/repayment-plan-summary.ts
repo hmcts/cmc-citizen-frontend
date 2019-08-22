@@ -6,10 +6,14 @@ import { Form } from 'forms/form'
 import { PaidAmount } from 'ccj/form/models/paidAmount'
 import { Claim } from 'claims/models/claim'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
+import { Moment } from 'moment'
+import * as CCJHelper from 'main/common/helpers/ccjHelper'
+import { PaymentOption } from 'claims/models/paymentOption'
 
 function renderView (form: Form<PaidAmount>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
   let paymentIntention: PaymentIntention
+  let payByDate: Moment
 
   if (claim.hasClaimantAcceptedDefendantResponseWithCCJ()) {
     const ccjRepaymentPlan = claim.countyCourtJudgment.repaymentPlan
@@ -18,12 +22,19 @@ function renderView (form: Form<PaidAmount>, req: express.Request, res: express.
     paymentIntention = claim.settlement.getLastOffer().paymentIntention
   }
 
+  if (paymentIntention.paymentOption === PaymentOption.IMMEDIATELY) {
+    payByDate = claim.countyCourtJudgmentRequestedAt ? claim.countyCourtJudgmentRequestedAt.add(5, 'days') : claim.settlementReachedAt.add(5, 'days')
+  } else if (paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {
+    payByDate = paymentIntention.paymentDate
+  }
+
   res.render(Paths.repaymentPlanSummaryPage.associatedView, {
     form: form,
     claim: claim,
     paymentIntention: paymentIntention,
-    remainingAmountToPay: claim.totalAmountTillDateOfIssue - claim.amountPaid(),
-    requestedBy: req.params.madeBy
+    remainingAmountToPay: CCJHelper.totalRemainingToPay(claim),
+    requestedBy: req.params.madeBy,
+    payByDate: payByDate
   })
 }
 
