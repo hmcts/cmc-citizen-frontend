@@ -1,9 +1,11 @@
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { PartyType } from 'integration-test/data/party-type'
+import { DirectionsQuestionnaireSteps } from '../../directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const mediationSteps: MediationSteps = new MediationSteps()
+const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 
 export class DefendantSteps {
 
@@ -61,6 +63,13 @@ export class DefendantSteps {
       mediationSteps.acceptMediationAsCompanyPhoneNumberProvided()
     } else {
       mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+    }
+  }
+
+  selectTaskHearingRequirements (defendantType: PartyType): void {
+    defendantTaskListPage.selectTaskHearingRequirements()
+    if (defendantType === PartyType.INDIVIDUAL) {
+      directionsQuestionnaireSteps.acceptDirectionsQuestionnaire()
     }
   }
 

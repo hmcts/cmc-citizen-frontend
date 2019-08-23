@@ -12,6 +12,7 @@ import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claiman
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
+import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 
 const I: I = actor()
 const defendantSteps: DefendantSteps = new DefendantSteps()
@@ -22,6 +23,7 @@ const howMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHow
 const youHavePaidLessPage: DefendantYouHavePaidLessPage = new DefendantYouHavePaidLessPage()
 const whyYouDisagreePage: DefendantWhyDoYouDisagreePage = new DefendantWhyDoYouDisagreePage()
 const mediationSteps: MediationSteps = new MediationSteps()
+const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const claimDetailsHeading: string = 'Claim details'
 
@@ -51,6 +53,8 @@ export class DefendantResponseSteps {
     )
     defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
+    defendantTaskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaire()
     defendantSteps.selectCheckAndSubmitYourDefence()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
     I.see('You’ve submitted your response')
@@ -91,6 +95,7 @@ export class DefendantResponseSteps {
     }
     defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaire()
     defendantSteps.selectCheckAndSubmitYourDefence()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
     I.see('You’ve submitted your response')

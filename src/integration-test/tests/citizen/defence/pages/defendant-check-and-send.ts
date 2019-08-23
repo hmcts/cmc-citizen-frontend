@@ -4,6 +4,7 @@ const I: I = actor()
 
 const fields = {
   checkboxFactsTrue: 'input#signedtrue',
+  checkboxHearingRequirementsTrue: 'input#directionsQuestionnaireSignedtrue',
   signerName: 'input[id=signerName]',
   signerRole: 'input[id=signerRole]'
 }
@@ -22,6 +23,9 @@ export class DefendantCheckAndSendPage {
 
   checkFactsTrueAndSubmit (): void {
     I.checkOption(fields.checkboxFactsTrue)
+    if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      I.checkOption(fields.checkboxHearingRequirementsTrue)
+    }
     I.click(buttons.submit)
   }
 

@@ -24,7 +24,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see(testData.claimRef)
       // check dashboard
       I.click('My account')
-      I.see('You’ve rejected the claim. You need to tell us more about the claim.')
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
