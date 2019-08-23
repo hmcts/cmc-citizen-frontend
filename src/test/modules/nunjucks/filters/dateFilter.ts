@@ -1,7 +1,13 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
+import {
+  addDaysFilter,
+  dateDayFilter,
+  dateFilter,
+  dateInputFilter,
+  monthIncrementFilter
+} from 'modules/nunjucks/filters/dateFilter'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 describe('dateFilter', () => {
@@ -56,6 +62,47 @@ describe('dateInputFilter', () => {
 
   it('formats date properly (object with time)', () => {
     expect(dateInputFilter(moment('2017-01-01 12:12:12'))).to.eq('1 1 2017')
+  })
+
+  describe('throws exception when', () => {
+    it('null given', () => {
+      expectInputDateFilterToThrowErrorWithMsg(null, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('undefined given', () => {
+      expectInputDateFilterToThrowErrorWithMsg(undefined, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('empty string given', () => {
+      expectInputDateFilterToThrowErrorWithMsg('', 'Input should be moment or string, cannot be empty')
+    })
+
+    it('number given', () => {
+      expectInputDateFilterToThrowErrorWithMsg(1.01 as any, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('string given, but it is not a valid date', () => {
+      expectInputDateFilterToThrowErrorWithMsg('this is invalid date', 'Invalid date')
+    })
+
+    it('moment given with invalid date', () => {
+      const invalidDateMoment = moment('2010-02-31')
+      expectInputDateFilterToThrowErrorWithMsg(invalidDateMoment, 'Invalid date')
+    })
+  })
+})
+
+describe('dateDayFilter', () => {
+  it('formats date (moment object) properly', () => {
+    expect(dateDayFilter(moment('2017-01-01'))).to.eq('Sunday 1 January 2017')
+  })
+
+  it('formats date (string) properly', () => {
+    expect(dateDayFilter('2017-01-01')).to.eq('Sunday 1 January 2017')
+  })
+
+  it('formats date properly (object with time)', () => {
+    expect(dateDayFilter(moment('2017-01-01 12:12:12'))).to.eq('Sunday 1 January 2017')
   })
 
   describe('throws exception when', () => {
