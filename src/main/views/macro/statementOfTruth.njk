@@ -52,7 +52,7 @@ macro statementOfTruth(
     legendHidden = true
   ) }}
 
-  {% if form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE %}
+  {% if form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE or form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED %}
     {{ checkboxSingle(
       label = 'The hearing requirement details on this page are true to the best of my knowledge.',
       name = 'directionsQuestionnaireSigned',
