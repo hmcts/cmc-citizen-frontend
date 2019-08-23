@@ -80,7 +80,7 @@
     <p>{{ t('{{ claimantName }} has rejected your defence.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-    <p>{{ internalLink('Find out how mediation works', DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+    <p>{{ internalLink( t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
   </div>
 {% endmacro %}
 
@@ -166,7 +166,7 @@
 
       <p>{{ t('You’ve rejected the defendant’s response.')}}</p>
       <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-      <p>{{ internalLink('Find out how mediation works', DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+      <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
     </div>
   {% else %}
     <div class="status-block">
