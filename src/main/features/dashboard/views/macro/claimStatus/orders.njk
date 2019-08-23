@@ -75,7 +75,7 @@
       <p>{{ t('You must make sure the court and the defendant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
     {% endif %}
 
-    <h2 class="heading-small">{{ t('Where to post the details') }}
+    <h2 class="heading-small">{{ t('Where to post the details') }}</h2>
     {{ addressFragment(claim.directionOrder.hearingCourtAddress, 'The court’s address is:') }}
     {% if party === MadeBy.DEFENDANT.value %}
       {{ addressFragment(claim.claimData.claimant.address, 'The claimant’s address is:') }}

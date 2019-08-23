@@ -99,7 +99,7 @@ export class Claim {
       return undefined
     }
 
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 12)
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
   get remainingDays (): number {
@@ -144,6 +144,8 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasOrderBeenDrawn()) {
+      return ClaimStatus.ORDER_DRAWN
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -190,6 +192,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    } else if (this.hasClaimantRejectedPartAdmissionDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantRejectedDefendantDefence()) {
@@ -430,7 +434,7 @@ export class Claim {
       return false
     }
 
-    if (this.hasClaimantRejectedDefendantDefence()) {
+    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
       return true
     }
 
@@ -554,7 +558,12 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && this.response.responseType === ResponseType.PART_ADMISSION
+  }
+
+  private hasClaimantRejectedPartAdmissionDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
@@ -622,5 +631,9 @@ export class Claim {
     return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire')
       && this.isResponseSubmitted()
       && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private hasOrderBeenDrawn (): boolean {
+    return !!this.directionOrder
   }
 }

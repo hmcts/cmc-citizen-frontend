@@ -147,10 +147,14 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+    {% else %}
+      {{ t('You’ve rejected the defendant’s admission.') }}
+    {% endif %}
   {% else %}
-    {{ t('You’ve rejected the defendant’s admission.') }}
+    {{ t('Wait for the court to review the case') }}
   {% endif %}
 {% endmacro %}
 
@@ -177,7 +181,6 @@
     </div>
   {% endif %}
 {% endmacro %}
-
 
 {% macro claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) %}
   <div class="status-block">

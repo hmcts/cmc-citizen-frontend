@@ -141,14 +141,10 @@
       {{ claimFullAdmissionForClaimantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-    {% if claim.directionOrder !== undefined %}
-      {{ directionsOrderIssuedClaimantDashboard() }}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+      {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
     {% else %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
-      {% else %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
-      {% endif %}
+      {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceClaimantDashboard() }}
@@ -163,7 +159,8 @@
     {{ offerSettlementReachedDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
     {{ partAdmitRejectedByClaimantDashboard(claim) }}
-  {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION %}
+  {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    or status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ %}
     {{ partAdmitRejectedByClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
     {{ statesPaidRejectedClaimantDashboard(claim) }}
@@ -179,6 +176,8 @@
     {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard() }}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.ORDER_DRAWN %}
+    {{ directionsOrderIssuedClaimantDashboard() }}
   {% endif %}
 {% endmacro %}
 
@@ -249,7 +248,8 @@
   {% elif status === ClaimStatus.OFFER_ACCEPTED %}
     {{ offerAcceptedForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
-    or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE %}
+    or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
+    or status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ %}
     {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
     {{ statesPaidRejectedDefendantDashboard(claim) }}
@@ -270,5 +270,7 @@
     {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard() }}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.ORDER_DRAWN %}
+    {{ directionsOrderIssuedDefendantDashboard() }}
   {% endif %}
 {% endmacro %}

@@ -3,10 +3,14 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, downloadTheirResponseLink %}
 
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you with a mediation appointment.') }}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      {{ t('We’ll contact you with a mediation appointment.') }}
+    {% else %}
+      {{ t('You’ve rejected the defendant’s admission.') }}
+    {% endif %}
   {% else %}
-    {{ t('You’ve rejected the defendant’s admission.') }}
+    {{ t('Wait for the court to review the case') }}
   {% endif %}
 {% endmacro %}
 
@@ -55,18 +59,22 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you with a mediation appointment') }}
-  {% else %}
-    {% if claim.response.responseType === 'PART_ADMISSION' %}
-      {% set amount = claim.response.amount %}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      {{ t('We’ll contact you with a mediation appointment') }}
     {% else %}
-      {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+      {% if claim.response.responseType === 'PART_ADMISSION' %}
+        {% set amount = claim.response.amount %}
+      {% else %}
+        {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+      {% endif %}
+      {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+        claimantName: claim.claimData.claimant.name,
+        amount: amount | numeral})
+      }}
     {% endif %}
-    {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
-      claimantName: claim.claimData.claimant.name,
-      amount: amount | numeral
-    }) }}
+  {% else %}
+    {{ t('Wait for the court to review the case') }}
   {% endif %}
 {% endmacro %}
 

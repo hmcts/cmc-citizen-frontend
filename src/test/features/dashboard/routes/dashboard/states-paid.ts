@@ -41,8 +41,8 @@ const testData = [
       },
       ...claimantRejectAlreadyPaid
     },
-    claimantAssertions: ['You’ve rejected the defendant’s admission.'],
-    defendantAssertions: [statesPaidClaim.claim.claimants[0].name + ' rejected your admission of £100']
+    claimantAssertions: ['Wait for the court to review the case'],
+    defendantAssertions: ['Wait for the court to review the case']
   },
   {
     status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects',
