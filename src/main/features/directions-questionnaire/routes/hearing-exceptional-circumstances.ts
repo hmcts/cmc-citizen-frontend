@@ -10,7 +10,7 @@ import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 import { HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
 
@@ -53,6 +53,7 @@ export default express.Router()
 
           if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
+            draft.document.hearingLocation.courtAccepted = YesNoOption.YES
             form.model.reason = undefined
           }
         } else {

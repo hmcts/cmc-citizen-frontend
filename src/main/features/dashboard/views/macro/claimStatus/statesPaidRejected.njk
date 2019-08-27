@@ -3,9 +3,13 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, downloadTheirResponseLink %}
 
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
-  {{ t('You’ve rejected the defendant’s admission.') }}
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('You’ve both agreed to try mediation.') }}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {{ t('You’ve rejected the defendant’s admission.') }}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      {{ t('You’ve both agreed to try mediation.') }}
+    {% endif %}
+  {% else %}
+    {{ t('Wait for the court to review the case') }}
   {% endif %}
 {% endmacro %}
 
@@ -28,7 +32,7 @@
 
   <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
   <p>{{ t('They said they owe {{ amount }}.', { amount: amount | numeral }) }}</p>
-  <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange an appointment.') }}</p>
+  <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
   {{ externalLink('Find out how mediation works', 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
 {% endmacro %}
 
@@ -40,15 +44,19 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
-  {% if claim.response.responseType === 'PART_ADMISSION' %}
-    {% set amount = claim.response.amount %}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {% if claim.response.responseType === 'PART_ADMISSION' %}
+      {% set amount = claim.response.amount %}
+    {% else %}
+      {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+    {% endif %}
+    {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+      claimantName: claim.claimData.claimant.name,
+      amount: amount | numeral
+    }) }}
   {% else %}
-    {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+    {{ t('Wait for the court to review the case') }}
   {% endif %}
-  {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
-    claimantName: claim.claimData.claimant.name,
-    amount: amount | numeral
-  }) }}
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantClaimDetails(claim) %}

@@ -12,6 +12,7 @@ import { PaymentOption } from 'claims/models/paymentOption'
 import { StatesPaidHelper } from 'claimant-response/helpers/statesPaidHelper'
 import { ResponseType } from 'claims/models/response/responseType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import { CalendarClient } from 'claims/calendarClient'
 
 function hasAcceptedDefendantsPaymentIntention (claim: Claim): boolean {
   const paymentIntentionFromResponse: PaymentIntention = (claim.response as FullAdmissionResponse | PartialAdmissionResponse).paymentIntention
@@ -38,6 +39,8 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
+      const acceptedPaymentPlanClaimantDeadline = await new CalendarClient().getNextWorkingDayAfterDays(claim.claimantRespondedAt, 7)
+
       let directionsQuestionnaireEnabled = false
       if (claim.claimantResponse.type === ClaimantResponseType.REJECTION && claim.claimantResponse.directionsQuestionnaire) {
         directionsQuestionnaireEnabled = true
@@ -48,6 +51,7 @@ export default express.Router()
           confirmationDate: MomentFactory.currentDate(),
           repaymentPlanOrigin: (alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE) ? undefined : claim.settlement && getRepaymentPlanOrigin(claim.settlement),
           paymentIntentionAccepted: (alreadyPaid || claim.response.responseType === ResponseType.FULL_DEFENCE) ? undefined : response.paymentIntention && hasAcceptedDefendantsPaymentIntention(claim),
-          directionsQuestionnaireEnabled: directionsQuestionnaireEnabled
+          directionsQuestionnaireEnabled: directionsQuestionnaireEnabled,
+          acceptedPaymentPlanClaimantDeadline
         })
     }))

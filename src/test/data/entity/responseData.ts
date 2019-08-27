@@ -20,6 +20,13 @@ export const baseResponseData = {
   mediationContactPerson: undefined
 }
 
+export const baseResponseDataWithMediation = {
+  defendant: individual,
+  moreTimeNeeded: 'no',
+  freeMediation: 'yes',
+  mediationPhoneNumber: '1234567'
+}
+
 const baseCompanyResponseData = {
   defendant: company,
   moreTimeNeeded: 'no'
@@ -82,6 +89,7 @@ export const basePayByInstalmentsData = {
     }
   }
 }
+
 export const basePayBySetDateData = {
   paymentIntention: {
     paymentOption: PaymentOption.BY_SPECIFIED_DATE,
@@ -89,10 +97,7 @@ export const basePayBySetDateData = {
   }
 }
 export const basePartialAdmissionData = {
-  responseType: 'PART_ADMISSION',
-  freeMediation: 'no',
-  mediationPhoneNumber: undefined,
-  mediationContactPerson: undefined
+  responseType: 'PART_ADMISSION'
 }
 
 const basePartialEvidencesAndTimeLines = {
@@ -123,6 +128,15 @@ export const fullAdmissionWithImmediatePaymentData = {
 }
 
 export const partialAdmissionWithImmediatePaymentData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayImmediatelyData,
+  amount: 3000
+}
+
+export const partialAdmissionWithImmediatePaymentDataV2 = {
   ...baseResponseData,
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
@@ -216,6 +230,33 @@ export const partialAdmissionWithPaymentBySetDateData = {
   amount: 3000
 }
 
+export const partialAdmissionWithPaymentBySetDateWithMediationData = {
+  ...baseResponseDataWithMediation,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayBySetDateData,
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentByInstalmentsData = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayByInstalmentsData,
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentByInstalmentsWithMediationData = {
+  ...baseResponseDataWithMediation,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayByInstalmentsData,
+  amount: 3000
+}
+
 export const fullAdmissionWithPaymentByInstalmentsData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
@@ -256,15 +297,6 @@ export const fullAdmissionWithPaymentByInstalmentsDataWithUnReasonablePaymentSch
       paymentLength: '1'
     }
   }
-}
-
-export const partialAdmissionWithPaymentByInstalmentsData = {
-  ...baseResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  ...basePayByInstalmentsData,
-  amount: 3000
 }
 
 export const statementOfMeansWithMandatoryFieldsOnlyData = {
@@ -435,6 +467,27 @@ export const fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome 
 
 export const partialAdmissionWithSoMPaymentBySetDateData = {
   ...partialAdmissionWithPaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentBySetDateWithMediationData = {
+  ...partialAdmissionWithPaymentBySetDateWithMediationData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentByInstalmentsDateData = {
+  ...partialAdmissionWithPaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentByInstalmentsWithMediationData = {
+  ...partialAdmissionWithPaymentBySetDateWithMediationData,
   statementOfMeans: {
     ...statementOfMeansWithAllFieldsData
   }

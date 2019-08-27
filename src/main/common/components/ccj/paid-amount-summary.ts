@@ -15,6 +15,7 @@ export abstract class AbstractPaidAmountSummaryPage<Draft> {
 
   abstract paidAmount (): AbstractModelAccessor<Draft, PaidAmount>
   abstract amountSettledFor (claim: Claim, draft: Draft): number
+  abstract claimFeeInPennies (claim: Claim): number
   abstract buildRedirectUri (req: express.Request, res: express.Response): string
 
   getView (): string {
@@ -36,7 +37,8 @@ export abstract class AbstractPaidAmountSummaryPage<Draft> {
               interestDetails: await getInterestDetails(claim),
               nextPageUrl: this.buildRedirectUri(req, res),
               defaultJudgmentDate: MomentFactory.currentDate(),
-              amountSettledFor: this.amountSettledFor(claim, res.locals.draft.document)
+              amountSettledFor: this.amountSettledFor(claim, res.locals.draft.document),
+              claimFee: this.claimFeeInPennies(claim)
             }
           )
         }))
