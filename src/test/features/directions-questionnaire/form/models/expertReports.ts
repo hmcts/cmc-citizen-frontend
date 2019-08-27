@@ -7,6 +7,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('Expert Reports', () => {
   context('constructor', () => {
@@ -23,10 +24,10 @@ describe('Expert Reports', () => {
 
     it('should use provided parameters', () => {
       const reports: ExpertReports = new ExpertReports(
-        true,
+        YesNoOption.YES,
         [new ReportRow('Mr Blobby', fiveDaysAgo)]
       )
-      expect(reports.declared).to.be.true
+      expect(reports.declared).to.equal(YesNoOption.YES)
 
       expect(reports.rows).to.have.length(1)
       expect(reports.rows[0].expertName).to.equal('Mr Blobby')
@@ -42,11 +43,11 @@ describe('Expert Reports', () => {
 
     it('returns expected values', () => {
       const reports: ExpertReports = ExpertReports.fromObject({
-        declared: true,
+        declared: YesNoOption.YES.option,
         rows: [{ expertName: 'Mr Blobby', reportDate: { year: 2018, month: 4, day: 13 } }]
       })
 
-      expect(reports.declared).to.be.true
+      expect(reports.declared).to.equal(YesNoOption.YES)
       expect(reports.rows).to.have.length(1)
       expect(reports.rows[0].expertName).to.equal('Mr Blobby')
       expect(reports.rows[0].reportDate).to.deep.equal({ year: 2018, month: 4, day: 13 })
@@ -62,20 +63,18 @@ describe('Expert Reports', () => {
 
     it('should deserialize false sensibly', () => {
       const reports: ExpertReports = new ExpertReports().deserialize({
-        declared: false
+        declared: YesNoOption.NO.option
       })
-      expect(reports.declared).to.be.false
-      expect(reports.rows).to.have.length(1)
-      expect(reports.rows[0].expertName).to.be.undefined
-      expect(reports.rows[0].reportDate).to.be.undefined
+      expect(reports.declared).to.equal(YesNoOption.NO.option)
+      expect(reports.rows).to.be.empty
     })
 
     it('should deserialize populated values sensibly', () => {
       const reports: ExpertReports = new ExpertReports().deserialize({
-        declared: true,
+        declared: YesNoOption.YES.option,
         rows: [{ expertName: 'Stephen Hawking', reportDate: { year: 2018, month: 3, day: 14 } }]
       })
-      expect(reports.declared).to.be.true
+      expect(reports.declared).to.equal(YesNoOption.YES.option)
       expect(reports.rows).to.have.length(1)
       expect(reports.rows[0].expertName).to.equal('Stephen Hawking')
       expect(reports.rows[0].reportDate).to.deep.equal({ year: 2018, month: 3, day: 14 })
@@ -100,14 +99,14 @@ describe('Expert Reports', () => {
     })
 
     it('should reject when reports declared but none provided', () => {
-      const errors = validator.validateSync(new ExpertReports(true))
+      const errors = validator.validateSync(new ExpertReports(YesNoOption.YES))
 
       expect(errors).to.not.be.empty
       expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE_ROW)
     })
 
     it('should reject a report with a future date', () => {
-      const errors = validator.validateSync(new ExpertReports(true, [
+      const errors = validator.validateSync(new ExpertReports(YesNoOption.YES, [
         new ReportRow('A', LocalDate.fromMoment(MomentFactory.currentDate().add(1, 'day')))
       ]))
 
@@ -116,7 +115,7 @@ describe('Expert Reports', () => {
     })
 
     it('should accept affirmed reports with valid data', () => {
-      const errors = validator.validateSync(new ExpertReports(true, [
+      const errors = validator.validateSync(new ExpertReports(YesNoOption.YES, [
         new ReportRow('B', LocalDate.fromMoment(MomentFactory.currentDate().subtract(1, 'day')))
       ]))
 
@@ -124,7 +123,7 @@ describe('Expert Reports', () => {
     })
 
     it('should accept declined reports', () => {
-      const errors = validator.validateSync(new ExpertReports(false, []))
+      const errors = validator.validateSync(new ExpertReports(YesNoOption.NO, []))
 
       expect(errors).to.be.empty
     })

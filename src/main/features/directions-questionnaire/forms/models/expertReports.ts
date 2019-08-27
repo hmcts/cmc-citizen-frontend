@@ -1,9 +1,9 @@
-import { IsDefined, ValidateIf } from '@hmcts/class-validator'
+import { IsDefined, IsIn, ValidateIf } from '@hmcts/class-validator'
 import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
 import { ReportRow } from 'directions-questionnaire/forms/models/reportRow'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowForm } from 'forms/models/multiRowForm'
-import * as toBoolean from 'to-boolean'
+import { YesNoOption } from 'models/yesNoOption'
 
 export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE_ROW = 'Enter at least one report'
@@ -11,13 +11,14 @@ export class ValidationErrors {
 
 export class ExpertReports extends MultiRowForm<ReportRow> {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  declared?: boolean
+  @IsIn(YesNoOption.all(), { message: GlobalValidationErrors.YES_NO_REQUIRED })
+  declared?: YesNoOption
 
-  @ValidateIf(o => o.declared)
+  @ValidateIf(o => o.declared === YesNoOption.YES)
   @AtLeastOnePopulatedRow({ message: ValidationErrors.ENTER_AT_LEAST_ONE_ROW })
   rows: ReportRow[]
 
-  constructor (declared?: boolean, rows?: ReportRow[]) {
+  constructor (declared?: YesNoOption, rows?: ReportRow[]) {
     super(rows)
     this.declared = declared
   }
@@ -27,11 +28,9 @@ export class ExpertReports extends MultiRowForm<ReportRow> {
       return value
     }
 
-    const declared: boolean = (value.declared !== undefined) ? toBoolean(value.declared) : undefined
-
     return new ExpertReports(
-      declared,
-      (declared && value.rows) ? value.rows.map(ReportRow.fromObject) : []
+      YesNoOption.fromObject(value.declared),
+      (value.declared === YesNoOption.YES.option && value.rows) ? value.rows.map(ReportRow.fromObject) : []
     )
   }
 
@@ -46,7 +45,7 @@ export class ExpertReports extends MultiRowForm<ReportRow> {
   deserialize (input?: any): ExpertReports {
     if (input) {
       this.declared = input.declared
-      this.rows = this.deserializeRows(input.rows)
+      this.rows = this.deserializeRows(input.rows).filter(item => !item.isEmpty())
     }
 
     return this

@@ -103,6 +103,7 @@ module "citizen-frontend" {
     GA_TRACKING_ID = "${var.ga_tracking_id}"
     POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.os_postcode_lookup_api_key.value}"
     COOKIE_ENCRYPTION_KEY = "${data.azurerm_key_vault_secret.cookie_encryption_key.value}"
+    HTTP_TIMEOUT = "${var.http_timeout}"
 
     // IDAM
     IDAM_API_URL = "${var.idam_api_url}"

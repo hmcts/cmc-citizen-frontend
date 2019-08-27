@@ -4,7 +4,7 @@
     "newFeaturesConsent": true,
     "admissions": true,
     "returnErrorToUser": true,
-    "mediation": false,
+    "mediation": true,
     "mediationPilot": false,
     "directionsQuestionnaire": false,
     "newDashboardStatus": false

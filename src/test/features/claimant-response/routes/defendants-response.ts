@@ -24,6 +24,7 @@ const fullAdmissionResponseWithPaymentBySetDate = claimStoreServiceMock.sampleFu
 const fullAdmissionResponseWithPaymentByInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
 const partialAdmissionWithPaymentBySetDate = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
 const fullDefenceWithStatesPaid = claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount
+const fullDefenceData = claimStoreServiceMock.sampleFullDefenceRejectEntirely
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
@@ -95,6 +96,35 @@ describe('Claimant response: view defendant response page', () => {
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(`£20,000`))
+      })
+
+      it('should render full defence with hearing requirements', async () => {
+        const fullDefenceWithDQsEnabledData = {
+          ...fullDefenceData,
+          features : ['admissions', 'directionsQuestionnaire']
+        }
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithDQsEnabledData)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(`has rejected the claim.`,
+            `Download their full response and hearing requirements`))
+      })
+
+      it('should render part admission with hearing requirements', async () => {
+        const partAdmissionWithDQsEnabledData = {
+          ...partialAdmissionWithPaymentBySetDate,
+          features : ['admissions', 'directionsQuestionnaire']
+        }
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(partAdmissionWithDQsEnabledData)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(`They don’t believe they owe the full amount claimed.`))
       })
     })
 

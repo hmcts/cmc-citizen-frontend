@@ -1,81 +1,72 @@
 {% from "table.njk" import tableStart, tableEnd, row %}
 
-{% macro freeMediationBlock(claim, mediationDraft, contactPerson) %}
+{% macro freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) %}
   {{ tableStart('freeMediation', 'Free telephone mediation') }}
-  {{
-  row(
-    label = 'Will you try free mediation?',
-    value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-    changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-    bold = true
-  )
-  }}
-  {% if mediationDraft.youCanOnlyUseMediation %}
-    {{
-    row(
+  {% if not mediationEnabled %}
+    {{ row(
+      label = 'Free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% elseif mediationPilot and mediationDraft.willYouTryMediation.option %}
+    {{ row(
+      label = 'Will you try free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% else %}
+    {{ row(
+      label = 'Will you try free mediation?',
+      value = t(mediationDraft.willYouTryMediation.option) | capitalize,
+      changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
+  {% endif %}
+  {% if mediationEnabled and mediationDraft.willYouTryMediation.option === YesNoOption.YES.option %}
+    {{ row(
       label = 'Agree to mediation conditions',
       value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
       changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
       bold = true
-    )
-    }}
+    ) }}
   {% endif %}
   {% if mediationDraft.canWeUseCompany %}
-    {% if mediationDraft.mediationPhoneNumberConfirmation %}
-      {{
-      row(
+    {% if mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation %}
+      {{ row(
         label = 'Contact number',
         value = t(mediationDraft.canWeUseCompany.mediationPhoneNumberConfirmation) | capitalize,
         changeLink = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }),
         bottomBorder = false,
         bold = true
-      )
-      }}
-      {{
-      row(
+      ) }}
+      {{ row(
         label = 'Contact name',
         value = contactPerson | capitalize,
         bold = true
-      )
-      }}
+      ) }}
     {% else %}
-      {{
-      row(
+      {{ row(
         label = 'Contact number',
         value = t(mediationDraft.canWeUseCompany.mediationPhoneNumber) | capitalize,
         changeLink = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }),
         bottomBorder = false,
         bold = true
-      )
-      }}
-      {{
-      row(
+      ) }}
+      {{ row(
         label = 'Contact name',
         value = t(mediationDraft.canWeUseCompany.mediationContactPerson) | capitalize,
         bold = true
-      )
-      }}
+      ) }}
     {% endif %}
-  {% else %}
-    {% if mediationDraft.youCanOnlyUseMediation and mediationDraft.canWeUse.mediationPhoneNumber %}
-      {{
-      row(
-        label = 'Contact number',
-        value = mediationDraft.canWeUse.mediationPhoneNumber,
-        changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      )
-      }}
-    {% elseif mediationDraft.youCanOnlyUseMediation %}
-      {{
-      row(
-        label = 'Contact number',
-        value = claim.claimData.claimant.mobilePhone,
-        changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
-        bold = true
-      )
-      }}
-    {% endif %}
+  {% elseif contactNumber %}
+    {{ row(
+      label = 'Contact number',
+      value = contactNumber,
+      changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
+      bold = true
+    ) }}
   {% endif %}
   {{ tableEnd() }}
 {% endmacro %}

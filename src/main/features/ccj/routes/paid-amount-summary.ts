@@ -1,6 +1,7 @@
 import * as express from 'express'
 
 import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/paid-amount-summary'
+import * as CCJHelper from 'main/common/helpers/ccjHelper'
 import { ccjPath, Paths } from 'features/ccj/paths'
 
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
@@ -37,8 +38,12 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
     }
   }
 
-  amountSettledFor (claim: Claim, draft: DraftCCJ): number {
-    return undefined
+  claimFeeInPennies (claim: Claim): number {
+    return CCJHelper.claimFeeInPennies(claim)
+  }
+
+  amountSettledFor (claim: Claim): number {
+    return CCJHelper.amountSettledFor(claim)
   }
 
   async saveDraft (locals: { user: User, draft: DraftWrapper<DraftCCJ> }): Promise<void> {

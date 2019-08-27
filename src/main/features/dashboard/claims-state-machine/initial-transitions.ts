@@ -30,7 +30,6 @@ export function initialTransitions (claim: Claim): StateMachine {
         from: [InitialStates.INIT, InitialStates.NO_RESPONSE, InitialStates.MORE_TIME_REQUESTED],
         to: InitialStates.NO_RESPONSE_PAST_DEADLINE
       },
-
       {
         name: 'checkIsFullDefence',
         from: [InitialStates.INIT],
