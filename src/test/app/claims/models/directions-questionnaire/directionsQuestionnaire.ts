@@ -90,12 +90,13 @@ describe('DirectionsQuestionnaire', () => {
 
     it('deserialize object should return hearing location undefined when courtName or alternateCourtName is undefined.', () => {
 
-      const sampleObj = {...sampleDirectionsQuestionnaireDraftObj, hearingLocation:{
-          courtName: undefined,
-          courtPostCode: undefined,
-          courtAccepted: undefined,
-          alternateCourtName: undefined}
+      const sampleObj = {...sampleDirectionsQuestionnaireDraftObj, hearingLocation: {
+        courtName: undefined,
+        courtPostCode: undefined,
+        courtAccepted: undefined,
+        alternateCourtName: undefined }
       }
+
       const directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft =
         new DirectionsQuestionnaireDraft().deserialize(sampleObj)
       const directionsQuestionnaireResponseData = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)
