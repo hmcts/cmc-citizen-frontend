@@ -19,7 +19,7 @@ rpe-feature-toggle-api:
     oneoff:
       command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
         /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '0.1' &&
+        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
         /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
       enabled: true
       permissions: cmc-new-features-consent-given

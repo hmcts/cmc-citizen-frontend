@@ -38,6 +38,7 @@ import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths
 import { Paths as SettlementAgreementPaths } from 'settlement-agreement/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionsQuestionnairePaths } from 'features/directions-questionnaire/paths'
+import { Paths as OrdersPaths } from 'features/orders/paths'
 import { Paths as TestingSupportPaths } from 'testing-support/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
@@ -56,7 +57,7 @@ import { PriorityDebtType } from 'response/form/models/statement-of-means/priori
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 import { DecisionType } from 'common/court-calculations/decisionType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { PartyType } from 'common/partyType'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
@@ -164,6 +165,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
     nunjucksEnv.addGlobal('DirectionsQuestionnairePaths', DirectionsQuestionnairePaths)
+    nunjucksEnv.addGlobal('OrdersPaths', OrdersPaths)
     nunjucksEnv.addGlobal('TestingSupportPaths', TestingSupportPaths)
 
     nunjucksEnv.addGlobal('SettlementAgreementPaths', SettlementAgreementPaths)
@@ -180,6 +182,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PartyType', PartyType)
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
     nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
+    nunjucksEnv.addGlobal('SignatureType', SignatureType)
     nunjucksEnv.addGlobal('domain', {
       ResponseType: DomainResponseType,
       PaymentOption: PaymentOption,

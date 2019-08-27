@@ -25,6 +25,10 @@ import { PartyType } from 'common/partyType'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
+import { CalendarClient } from 'claims/calendarClient'
+import { DirectionOrder } from 'claims/models/directionOrder'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 
 interface State {
   status: ClaimStatus
@@ -62,6 +66,8 @@ export class Claim {
   reDeterminationRequestedAt: Moment
   ccdCaseId: number
   template: ClaimTemplate
+  directionOrder: DirectionOrder
+  reviewOrder: ReviewOrder
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -80,11 +86,20 @@ export class Claim {
     return this.respondedAt.clone().add(daysForService + daysForResponse, 'days')
   }
 
-  get respondToMediationDeadline (): Moment {
+  async respondToMediationDeadline (): Promise<Moment> {
     if (!this.respondedAt) {
       return undefined
     }
-    return this.respondedAt.clone().add('5', 'days')
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
+  }
+
+  async respondToReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
   get remainingDays (): number {
@@ -129,6 +144,8 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasOrderBeenDrawn()) {
+      return ClaimStatus.ORDER_DRAWN
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -163,6 +180,10 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
+    } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
+    } else if (this.hasDefendantRejectedClaimWithDQs()) {
+      return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.isResponseSubmitted()) {
       return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
@@ -171,6 +192,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    } else if (this.hasClaimantRejectedPartAdmissionDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantRejectedDefendantDefence()) {
@@ -214,6 +237,10 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
+    if (this.directionOrder && this.reviewOrder) {
+      statuses.unshift({ status: ClaimStatus.REVIEW_ORDER_REQUESTED })
+    }
+
     return statuses
   }
 
@@ -303,6 +330,12 @@ export class Claim {
       }
       if (input.ccdCaseId) {
         this.ccdCaseId = input.ccdCaseId
+      }
+      if (input.directionOrder) {
+        this.directionOrder = DirectionOrder.deserialize(input.directionOrder)
+      }
+      if (input.reviewOrder) {
+        this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
     }
 
@@ -401,8 +434,20 @@ export class Claim {
       return false
     }
 
-    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !== PaymentOption.IMMEDIATELY && !this.isSettlementReachedThroughAdmission()
-      && this.isResponseSubmitted()) && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ())) || !this.response)
+    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
+      return true
+    }
+
+    if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
+      return true
+    }
+
+    return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
+      && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
+      PaymentOption.IMMEDIATELY
+      && !this.isSettlementReachedThroughAdmission() && this.isResponseSubmitted())
+      && !(this.countyCourtJudgmentRequestedAt && this.hasClaimantAcceptedAdmissionWithCCJ()))
+      || !this.response)
   }
 
   private isDefendantBusiness (): boolean {
@@ -513,7 +558,12 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && this.response.responseType === ResponseType.PART_ADMISSION
+  }
+
+  private hasClaimantRejectedPartAdmissionDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
@@ -552,7 +602,13 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
-    return this.claimantResponse
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
+      && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
+  }
+
+  private hasClaimantRejectedDefendantDefenceWithoutDQs (): boolean {
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
   }
@@ -569,5 +625,15 @@ export class Claim {
     return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.ACCEPTATION
       && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
+  }
+
+  private hasDefendantRejectedClaimWithDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire')
+      && this.isResponseSubmitted()
+      && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private hasOrderBeenDrawn (): boolean {
+    return !!this.directionOrder
   }
 }

@@ -1,5 +1,4 @@
 {% extends "layout.njk" %}
-{% from "./macro/caseHistory.njk" import caseHistoryForClaimantClaimDetails %}
 {% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 
 {% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
@@ -96,7 +95,7 @@
 
     {% if claim %}
       <div class="column-one-third">
-        {{ aboutClaimWidget(party, claim) }}
+        {{ aboutClaimWidget(otherParty, claim) }}
       </div>
     {% endif %}
   </div>

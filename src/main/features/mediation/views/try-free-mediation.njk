@@ -1,0 +1,53 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton %}
+
+{% set heading = 'Free mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      {% if amount %}
+        <p>{{ t('If {{ claimantFullName }} rejects your admission of {{ amount }} you can try to resolve this dispute using telephone mediation.',
+            { claimantFullName : claim.claimData.claimant.name, amount: amount | numeral }) }}</p>
+        <p>{{ t('If you succeed, you won’t have to go to a hearing.') }}</p>
+      {% else %}
+        <p>{{ t('Many people resolve their dispute without a hearing by taking part in telephone mediation.') }}</p>
+      {% endif %}
+
+      <p>{{ t('A mediator will:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('listen to each side separately - you won’t talk directly to the other side') }}</li>
+        <li>{{ t('ask you to consider what the other side says - they won’t force you to settle') }}</li>
+        <li>{{ t('help you reach an agreement, if possible') }}</li>
+      </ul>
+
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Response: Free mediation"
+            data-event-label-from="option" novalidate>
+
+        {{ csrfProtection(csrf) }}
+
+        {% set name = 'option' %}
+
+        {{
+        radioGroup(
+          label = 'Will you try telephone mediation?',
+          name = name,
+          options = [
+          { label: t('Yes'), value: YesNoOption.YES.option, checked: (form.valueFor(name) === YesNoOption.YES) },
+          { label: t('No'), value: YesNoOption.NO.option, checked: (form.valueFor(name) === YesNoOption.NO) }
+        ],
+          form = form,
+          labelForScreenReadersOnly = false,
+          isInline = true
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

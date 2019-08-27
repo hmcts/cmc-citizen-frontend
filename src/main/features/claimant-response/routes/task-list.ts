@@ -13,6 +13,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+      const directionsQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
       const claim: Claim = res.locals.claim
 
       const beforeYouStartSection = TaskListBuilder
@@ -22,7 +23,7 @@ export default express.Router()
       const submitSection = TaskListBuilder
         .buildSubmitSection(draft.document, claim.externalId)
       const directionsQuestionnaireSection = TaskListBuilder
-        .buildDirectionsQuestionnaireSection(draft.document, claim)
+        .buildDirectionsQuestionnaireSection(draft.document, claim, directionsQuestionnaireDraft.document)
 
       res.render(Paths.taskListPage.associatedView,
         {
