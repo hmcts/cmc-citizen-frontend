@@ -147,7 +147,7 @@
     form,
     isInline = isInline,
     labelForScreenReadersOnly = labelForScreenReadersOnly
-    )
+  )
   }}
 {% endmacro %}
 
@@ -218,7 +218,7 @@
       </legend>
       {% for option in options %}
         {% set selection = form.valueFor(name).indexOf(option.value) %}
-          {{ checkboxOption(
+        {{ checkboxOption(
           label = option.label,
           name = name,
           form = form,
@@ -226,8 +226,8 @@
           hint = option.hint,
           checked = (selection != -1),
           bold = bold
-          )
-          }}
+        )
+        }}
       {% endfor %}
     </fieldset>
   </div>
@@ -259,7 +259,7 @@
 {% endmacro %}
 
 {% macro radioGroup(
-    label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false, labelBold = true
+  label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false, labelBold = true
   ) %}
 
   {% set error = form.errorFor(name) %}
@@ -290,7 +290,7 @@
 {% endmacro %}
 
 {% macro radioGroupWithHintPanel(
-    label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false
+  label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false
   ) %}
 
   {% set error = form.errorFor(name) %}
