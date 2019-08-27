@@ -4,18 +4,16 @@
 
 {% macro partAdmitRejectedByClaimantDefendantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
-    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      {{ t('We’ll contact you with a mediation appointment') }}
-    {% else %}
-      {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
-    {% endif %}
+    {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
+  {%  elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {{ t('We’ll contact you with a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
 {% endmacro %}
 
 {% macro partAdmitRejectedByClaimantDefendantClaimDetails(claim) %}
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
       <p>{{ t('{{ claimantName }} has rejected your defence.',
@@ -24,15 +22,10 @@
       <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
     </div>
   {% else %}
-
     <div class="status-block">
       <h2 class="heading-small">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
           { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
-
-    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('They have agreed to try mediation. We’ll contact you with details of your appointment.') }}</p>
-    {% else %}
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% if claim.directionsQuestionnaireDeadline %}
       <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
@@ -40,8 +33,6 @@
       <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before {{ deadline }}.',
           { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
       {% endif %}
-    {% endif %}
-
       <p>{{ downloadResponseLink(claim) }}</p>
     </div>
   {% endif %}

@@ -148,11 +148,9 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
-    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      {{ t('We’ll contact you to try to arrange a mediation appointment') }}
-    {% else %}
-      {{ t('You’ve rejected the defendant’s admission.') }}
-    {% endif %}
+    {{ t('You’ve rejected the defendant’s admission.') }}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -160,7 +158,7 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
 
-  {% if featureToggles.mediation and  claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
 

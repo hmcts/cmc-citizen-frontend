@@ -4,11 +4,9 @@
 
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
-    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      {{ t('We’ll contact you with a mediation appointment.') }}
-    {% else %}
-      {{ t('You’ve rejected the defendant’s admission.') }}
-    {% endif %}
+    {{ t('You’ve rejected the defendant’s admission.') }}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {{ t('We’ll contact you with a mediation appointment.') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -60,19 +58,17 @@
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
-    {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      {{ t('We’ll contact you with a mediation appointment') }}
+    {% if claim.response.responseType === 'PART_ADMISSION' %}
+      {% set amount = claim.response.amount %}
     {% else %}
-      {% if claim.response.responseType === 'PART_ADMISSION' %}
-        {% set amount = claim.response.amount %}
-      {% else %}
-        {% set amount = claim.response.paymentDeclaration.paidAmount  %}
-      {% endif %}
-      {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
-        claimantName: claim.claimData.claimant.name,
-        amount: amount | numeral})
-      }}
+      {% set amount = claim.response.paymentDeclaration.paidAmount  %}
     {% endif %}
+    {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
+      claimantName: claim.claimData.claimant.name,
+      amount: amount | numeral})
+    }}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+    {{ t('We’ll contact you with a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
