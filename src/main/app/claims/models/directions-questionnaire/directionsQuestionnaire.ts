@@ -56,8 +56,8 @@ export namespace DirectionsQuestionnaire {
 
   function toHearingLocation (directionsQuestionnaire: DirectionsQuestionnaireDraft): HearingLocation {
 
-    if (directionsQuestionnaire.hearingLocation === undefined || (directionsQuestionnaire.hearingLocation.courtName === undefined &&
-      directionsQuestionnaire.hearingLocation.alternativeCourtName === undefined)) {
+    if (directionsQuestionnaire.hearingLocation.courtName === undefined &&
+      directionsQuestionnaire.hearingLocation.alternativeCourtName === undefined) {
       return undefined
     }
     return {

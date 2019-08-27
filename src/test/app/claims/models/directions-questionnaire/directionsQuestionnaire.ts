@@ -101,7 +101,30 @@ describe('DirectionsQuestionnaire', () => {
         new DirectionsQuestionnaireDraft().deserialize(sampleObj)
       const directionsQuestionnaireResponseData = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)
 
-      expect(DirectionsQuestionnaire.fromObject(directionsQuestionnaireResponseData)).to.deep.equal(directionsQuestionnaireResponseData)
+      expect(DirectionsQuestionnaire.fromObject(directionsQuestionnaireResponseData)).to.deep.equal({...expectedData,...{
+        hearingLocation: undefined}})
+    })
+
+    it('deserialize object should return hearing location when alternateCourtName is provided.', () => {
+
+      const sampleObj = {...sampleDirectionsQuestionnaireDraftObj, hearingLocation: {
+        alternativeCourtName: 'Little Whinging, Surrey',
+        hearingLocationSlug: undefined,
+        courtAddress: undefined,
+        exceptionalCircumstancesReason: 'Poorly pet owl'}}
+
+      const directionsQuestionnaireDraftSampleData: DirectionsQuestionnaireDraft =
+        new DirectionsQuestionnaireDraft().deserialize(sampleObj)
+      const directionsQuestionnaireResponseData = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)
+
+      expect(DirectionsQuestionnaire.fromObject(directionsQuestionnaireResponseData)).to.deep.equal({...expectedData,...{
+        hearingLocation: {
+          courtAddress: undefined,
+          courtName: 'Little Whinging, Surrey',
+          exceptionalCircumstancesReason: 'Poorly pet owl',
+          hearingLocationSlug: undefined,
+          locationOption: 'ALTERNATE_COURT'
+        }}})
     })
   })
 })
