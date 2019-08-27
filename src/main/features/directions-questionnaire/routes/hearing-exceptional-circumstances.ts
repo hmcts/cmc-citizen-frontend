@@ -73,16 +73,15 @@ export default express.Router()
             draft.document.hearingLocation.courtAccepted = YesNoOption.NO
             form.model.reason = undefined
           }
-        } else {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-            draft.document.hearingLocation = undefined
-            form.model.reason = undefined
-          }
+        } else if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+          draft.document.hearingLocation = undefined
+          form.model.reason = undefined
         }
+
         draft.document.exceptionalCircumstances = form.model
         await new DraftService().save(draft, user.bearerToken)
         if (party === MadeBy.CLAIMANT) {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+          if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
             res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
           } else {
             res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
