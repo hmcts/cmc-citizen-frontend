@@ -108,7 +108,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-rejection')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -134,7 +134,7 @@ describe('Defendant: full reject - why do you disagree?', () => {
         })
 
         it('when form is valid should redirect to timeline page', async () => {
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
