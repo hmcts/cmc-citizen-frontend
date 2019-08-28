@@ -2,15 +2,9 @@
 {% from "address.njk" import postcodeLookupAddressFragment, addressFragment, correspondenceAddressFragment %}
 {% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
 
-{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false, postcodeLabel = 'Enter a UK postcode') %}
+{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false, postcodeLabel = 'Enter a UK postcode', extraOptionalLine) %}
   {% for field in fields %}
-    {% if field.readOnly %}
-      {% if field.value %}
-        {{ readOnlyField(field.label, field.value) }}
-      {% endif %}
-    {% else %}
-      {{ textInput(form = form, label = t(field.label), name = field.name, autocomplete = field.autocomplete, hint = field.hint) }}
-    {% endif %}
+    {{ textInput(form = form, label = t(field.label), name = field.name, autocomplete = field.autocomplete, hint = field.hint, extraOptionalLine = extraOptionalLine) }}
   {% endfor %}
 
   {% if addressSection %}

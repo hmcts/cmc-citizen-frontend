@@ -12,7 +12,7 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>{{ t('The claimant provided these details. You can correct your address.') }}</p>
+      <p>{{ t('The claimant provided these details.') }}</p>
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
@@ -20,22 +20,22 @@
         {% if form.model.type == 'individual' %}
           {%
             set fields = [
-              { readOnly: true, label: 'Full name', value: claim.claimData.defendant.name }
+              { label: 'Full name', value: claim.claimData.defendant.name }
             ]
           %}
           {% set addressSectionHeading = 'Your address' %}
         {% elif form.model.type == 'soleTrader' %}
           {%
             set fields = [
-              { readOnly: true, label: 'Your full name', value: claim.claimData.defendant.name },
-              { readOnly: true, label: 'Business name', value: claim.claimData.defendant.businessName }
+              { label: 'Your full name', value: claim.claimData.defendant.name },
+              { label: 'Business name', value: claim.claimData.defendant.businessName }
             ]
           %}
           {% set addressSectionHeading = 'Your address' %}
         {% elif form.model.type == 'company' %}
           {%
             set fields = [
-              { readOnly: true, label: 'Company name', value: claim.claimData.defendant.name },
+              { label: 'Company name', value: claim.claimData.defendant.name },
               { label: 'Contact person (optional)', name: 'contactPerson' }
             ]
           %}
@@ -43,7 +43,7 @@
         {% elif form.model.type == 'organisation' %}
           {%
             set fields = [
-              { readOnly: true, label: 'Organisation name', value: claim.claimData.defendant.name },
+              { label: 'Organisation name', value: claim.claimData.defendant.name },
               { label: 'Contact person (optional)', name: 'contactPerson' }
             ]
           %}
@@ -53,7 +53,10 @@
         {{
           partyDetailsFragment(
             form,
-            fields = fields,
+            fields = [
+              { label: 'Full name (include title)', name: 'name' }
+            ],
+            extraOptionalLine = 'If you change your name here, we’ll tell the claimant. It’s up to them to decide whether they agree to change it for their claim.',
             addressSection = {
               heading: addressSectionHeading,
               name: 'address'
@@ -61,8 +64,9 @@
             showCorrespondenceAddressSection = true
           )
         }}
-
         {{ saveAndContinueButton() }}
+
+
       </form>
     </div>
   </div>
