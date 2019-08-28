@@ -7,6 +7,14 @@ const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
 
 export class UserSteps {
 
+  getClaimantEmail (): string {
+    return 'civilmoneyclaims+citizen-claimant@gmail.com'
+  }
+
+  getDefendantEmail (): string {
+    return 'civilmoneyclaims+citizen-defendant@gmail.com'
+  }
+
   login (username: string): void {
     loginPage.open()
     loginPage.login(username, DEFAULT_PASSWORD)
