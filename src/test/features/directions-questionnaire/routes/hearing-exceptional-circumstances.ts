@@ -286,17 +286,17 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             draftStoreServiceMock.resolveFind('response')
           })
           it('should return 500 and render error page when cannot save DQ draft', async () => {
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
             await shouldBeServerError(method, 'Error', validFormData)
           })
 
           it('should redirect to hearing location page when yes is selected', async () => {
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             await shouldRedirect(method, hearingLocationPage, validFormData)
           })
 
           it('should redirect to expert page when no is selected', async () => {
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             await shouldRedirect(method, expertPath, { exceptionalCircumstances: 'no' })
           })
         })
