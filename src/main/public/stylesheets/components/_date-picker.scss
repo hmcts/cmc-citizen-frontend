@@ -26,6 +26,11 @@
       .next {
         background-color: $grey-2;
         border-radius: 0;
+
+        &.disabled {
+          pointer-events: none;
+          visibility: visible;
+        }
       }
 
       .datepicker-switch {
