@@ -61,7 +61,7 @@ export class ExceptionalCircumstances {
   isClaimantCompleted (): boolean {
     if (this.exceptionalCircumstances === undefined) {
       return false
-    } else if (this.exceptionalCircumstances.option === YesNoOption.NO.option) {
+    } else if (this.exceptionalCircumstances.option === YesNoOption.YES.option) {
       return this.reason !== undefined
     } else {
       return true
