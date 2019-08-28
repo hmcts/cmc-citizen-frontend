@@ -54,7 +54,7 @@ export class DefendantResponseSteps {
     defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
     defendantTaskListPage.selectTaskHearingRequirements()
-    directionsQuestionnaireSteps.acceptDirectionsQuestionnaire()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
     I.see('You’ve submitted your response')
@@ -95,7 +95,8 @@ export class DefendantResponseSteps {
     }
     defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
-    directionsQuestionnaireSteps.acceptDirectionsQuestionnaire()
+    defendantTaskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
     defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
     I.see('You’ve submitted your response')

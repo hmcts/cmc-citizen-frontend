@@ -69,7 +69,7 @@ export class DefendantSteps {
   selectTaskHearingRequirements (defendantType: PartyType): void {
     defendantTaskListPage.selectTaskHearingRequirements()
     if (defendantType === PartyType.INDIVIDUAL) {
-      directionsQuestionnaireSteps.acceptDirectionsQuestionnaire()
+      directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     }
   }
 

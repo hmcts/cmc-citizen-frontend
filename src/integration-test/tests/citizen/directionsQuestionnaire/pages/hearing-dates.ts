@@ -3,18 +3,23 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  day: '.day'
+  next: '.next',
+  prev: '.prev',
+  day: '.day:not(.disabled)'
 }
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: 'input[id="saveAndContinue"]'
 }
 
 export class HearingDatesPage {
 
   chooseYes (): void {
     I.checkOption('Yes')
-    I.seeElement(fields.day)
+    I.waitForElement(fields.next)
+    I.click(fields.next)
+    I.waitForElement(fields.prev)
     I.click(fields.day)
+    I.waitForText('Remove')
     I.click(buttons.submit)
   }
 

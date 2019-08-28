@@ -42,14 +42,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)
-      I.see(`${testData.defendantName} has rejected your claim.`)
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
       if (process.env.FEATURE_MEDIATION === 'true') {
         I.see('Decide whether to proceed')
-        I.see('Mrs. Rose Smith has rejected your claim')
+        I.see('Mrs. Rose Smith has rejected your claim.')
       } else {
         I.see('The defendant has rejected your claim')
         I.see(`They said they dispute your claim.`)

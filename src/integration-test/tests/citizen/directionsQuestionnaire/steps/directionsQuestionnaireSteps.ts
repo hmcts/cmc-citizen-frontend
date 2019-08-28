@@ -5,9 +5,11 @@ import { UsingExpertPage } from 'integration-test/tests/citizen/directionsQuesti
 import { ExpertReportsPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/expert-reports'
 import { SelfWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/self-witness'
 import { OtherWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/other-wtiness'
+import { HearingExceptionalCircumstancesPage } from '../pages/hearing-exceptional-circumstances'
 
 const supportRequiredPage: SupportRequiredPage = new SupportRequiredPage()
 const hearingLocationPage: HearingLocationPage = new HearingLocationPage()
+const hearingExceptionalCircumstancesPage: HearingExceptionalCircumstancesPage = new HearingExceptionalCircumstancesPage()
 const usingExpertPage: UsingExpertPage = new UsingExpertPage()
 const expertReportsPage: ExpertReportsPage = new ExpertReportsPage()
 const selfWitnessPage: SelfWitnessPage = new SelfWitnessPage()
@@ -15,7 +17,7 @@ const otherWitnessPage: OtherWitnessPage = new OtherWitnessPage()
 const hearingDatesPage: HearingDatesPage = new HearingDatesPage()
 
 export class DirectionsQuestionnaireSteps {
-  acceptDirectionsQuestionnaire (): void {
+  acceptDirectionsQuestionnaireYesJourney (): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
       supportRequiredPage.selectAll('Some Text')
       hearingLocationPage.chooseYes()
@@ -24,6 +26,18 @@ export class DirectionsQuestionnaireSteps {
         '2019-01-01')
       selfWitnessPage.chooseYes()
       otherWitnessPage.chooseYes(1)
+      hearingDatesPage.chooseYes()
+    }
+  }
+
+  acceptDirectionsQuestionnaireNoJourney (): void {
+    if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      supportRequiredPage.selectAll('Some Text')
+      hearingExceptionalCircumstancesPage.chooseNo('Some reason')
+      hearingLocationPage.chooseYes()
+      usingExpertPage.chooseExpertNo()
+      selfWitnessPage.chooseNo()
+      otherWitnessPage.chooseNo()
       hearingDatesPage.chooseNo()
     }
   }
