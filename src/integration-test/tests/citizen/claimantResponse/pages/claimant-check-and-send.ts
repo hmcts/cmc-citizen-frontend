@@ -6,7 +6,7 @@ const fields = {
   checkboxFactsTrue: 'input#signedtrue',
   signerName: 'input[id=signerName]',
   signerRole: 'input[id=signerRole]',
-  checkboxHearingRequirementsTrue: 'input#directionsQuestionnaireSignedtrue',
+  checkboxHearingRequirementsTrue: 'input#directionsQuestionnaireSignedtrue'
 }
 
 const buttons = {

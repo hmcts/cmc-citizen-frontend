@@ -22,7 +22,7 @@ import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen
 import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
-import { DirectionsQuestionnaireSteps } from '../../directionsQuestionnaire/steps/directionsQuestionnaireSteps'
+import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()

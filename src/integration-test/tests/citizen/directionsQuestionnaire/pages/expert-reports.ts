@@ -1,5 +1,5 @@
 import I = CodeceptJS.I
-import { DateParser } from '../../../../utils/date-parser'
+import { DateParser } from 'integration-test/utils/date-parser'
 
 const I: I = actor()
 

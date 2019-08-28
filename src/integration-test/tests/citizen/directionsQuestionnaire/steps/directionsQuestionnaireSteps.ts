@@ -5,7 +5,7 @@ import { UsingExpertPage } from 'integration-test/tests/citizen/directionsQuesti
 import { ExpertReportsPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/expert-reports'
 import { SelfWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/self-witness'
 import { OtherWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/other-wtiness'
-import { HearingExceptionalCircumstancesPage } from '../pages/hearing-exceptional-circumstances'
+import { HearingExceptionalCircumstancesPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/hearing-exceptional-circumstances'
 
 const supportRequiredPage: SupportRequiredPage = new SupportRequiredPage()
 const hearingLocationPage: HearingLocationPage = new HearingLocationPage()
