@@ -805,9 +805,12 @@ export function resolveSaveOffer () {
 
 export function resolveSaveOrder () {
   const expectedData = {
-    reason: 'some reason',
-    requestedBy: MadeBy.CLAIMANT,
-    requestedAt: '2017-07-25T22:45:51.785'
+    ...this.sampleClaimIssueObj,
+    reviewOrder: {
+      reason: 'some reason',
+      requestedBy: MadeBy.CLAIMANT,
+      requestedAt: '2017-07-25T22:45:51.785'
+    }
   }
   mock(`${serviceBaseURL}/claims`)
     .put(new RegExp('/' + externalIdPattern + '/review-order'))
