@@ -97,7 +97,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name} is the nearest to your home address you gave us.`))
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name} is the nearest to the address you gave us.`))
           })
         })
 
