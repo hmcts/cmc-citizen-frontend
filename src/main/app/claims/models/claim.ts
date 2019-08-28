@@ -99,7 +99,7 @@ export class Claim {
       return undefined
     }
 
-    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 12)
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
   get remainingDays (): number {
@@ -144,6 +144,8 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasOrderBeenDrawn()) {
+      return ClaimStatus.ORDER_DRAWN
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -629,5 +631,9 @@ export class Claim {
     return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire')
       && this.isResponseSubmitted()
       && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private hasOrderBeenDrawn (): boolean {
+    return !!this.directionOrder
   }
 }
