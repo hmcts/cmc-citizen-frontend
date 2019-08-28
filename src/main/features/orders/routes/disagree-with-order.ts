@@ -49,7 +49,9 @@ export default express.Router()
         await new DraftService().save(draft, user.bearerToken)
 
         await new ClaimStoreClient().saveOrder(draft.document, claim, user)
-        await new DraftService().delete(draft.id, user.bearerToken)
+
+        const updated: Draft<OrdersDraft> = res.locals.ordersDraft
+        await new DraftService().delete(updated.id, user.bearerToken)
 
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
       }
