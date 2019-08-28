@@ -48,6 +48,6 @@ export namespace DirectionOrder {
       return false
     }
 
-    return MomentFactory.currentDateTime().isAfter(deadline.set({ h: 16, m: 0 }))
+    return MomentFactory.currentDateTime().isBefore(deadline.set({ h: 16, m: 0 }))
   }
 }
