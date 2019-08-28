@@ -26,9 +26,9 @@
               <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
             {% elseif party === MadeBy.DEFENDANT %}
               {{ commonContent() }}
-              <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}</p>
+              <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}</p>
             {% elseif party === MadeBy.CLAIMANT %}
-              <p>{{ t('You can request any location - {{ courtName }} is the nearest to your home address you gave us.', { courtName: courtName }) }}
+              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}
             {% endif %}
 
             <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
