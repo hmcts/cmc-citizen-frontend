@@ -45,6 +45,7 @@ async function renderPage (res: express.Response, form: Form<ExceptionalCircumst
     }
     defendantCourt = defendantDirectionsQuestionnaire.hearingLocation.courtName
   }
+
   res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, {
     form: form,
     party: party,
