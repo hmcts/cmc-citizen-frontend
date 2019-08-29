@@ -2,7 +2,7 @@ import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
 import * as uuid from 'uuid'
 
-export const DEFAULT_PASSWORD = 'Password12'
+export const DEFAULT_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
 export const SMOKE_TEST_CITIZEN_USERNAME = process.env.SMOKE_TEST_CITIZEN_USERNAME
 export const SMOKE_TEST_USER_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
