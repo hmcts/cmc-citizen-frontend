@@ -3,7 +3,7 @@ import * as moment from 'moment'
 
 import {
   addDaysFilter,
-  dateDayFilter,
+  dateWithDayAtFrontFilter,
   dateFilter,
   dateInputFilter,
   monthIncrementFilter
@@ -92,17 +92,17 @@ describe('dateInputFilter', () => {
   })
 })
 
-describe('dateDayFilter', () => {
+describe('dateWithDayAtFront', () => {
   it('formats date (moment object) properly', () => {
-    expect(dateDayFilter(moment('2017-01-01'))).to.eq('Sunday 1 January 2017')
+    expect(dateWithDayAtFrontFilter(moment('2017-01-01'))).to.eq('Sunday 1 January 2017')
   })
 
   it('formats date (string) properly', () => {
-    expect(dateDayFilter('2017-01-01')).to.eq('Sunday 1 January 2017')
+    expect(dateWithDayAtFrontFilter('2017-01-01')).to.eq('Sunday 1 January 2017')
   })
 
   it('formats date properly (object with time)', () => {
-    expect(dateDayFilter(moment('2017-01-01 12:12:12'))).to.eq('Sunday 1 January 2017')
+    expect(dateWithDayAtFrontFilter(moment('2017-01-01 12:12:12'))).to.eq('Sunday 1 January 2017')
   })
 
   describe('throws exception when', () => {

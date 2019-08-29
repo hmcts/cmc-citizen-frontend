@@ -6,7 +6,7 @@ import * as config from 'config'
 import * as nunjucks from 'nunjucks'
 import {
   addDaysFilter,
-  dateDayFilter,
+  dateWithDayAtFrontFilter,
   dateFilter,
   dateInputFilter,
   monthIncrementFilter
@@ -124,7 +124,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
-    nunjucksEnv.addFilter('dateDay', dateDayFilter)
+    nunjucksEnv.addFilter('dateWithDayAtFront', dateWithDayAtFrontFilter)
     nunjucksEnv.addFilter('addDays', addDaysFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('monthIncrement', monthIncrementFilter)

@@ -67,7 +67,7 @@ export function dateInputFilter (value: moment.Moment | string): string {
  * output:
  *  Thursday 6 April 2018
  * */
-export function dateDayFilter (value: moment.Moment | string): string {
+export function dateWithDayAtFrontFilter (value: moment.Moment | string): string {
   try {
     if (!value || !(typeof value === 'string' || value instanceof moment)) {
       throw new Error('Input should be moment or string, cannot be empty')
