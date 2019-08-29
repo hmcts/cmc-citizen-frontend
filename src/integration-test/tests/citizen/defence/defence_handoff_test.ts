@@ -8,7 +8,7 @@ const helperSteps: Helper = new Helper()
 
 Feature('Respond to claim: handoff journey').retry(3)
 
-Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', async (I: I) => {
+Scenario('I can see send your response by email page when I reject all of the claim with counter claim @nightly', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
@@ -22,7 +22,7 @@ Scenario('I can see send your response by email page when I reject all of the cl
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM)
 })
 
-Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @citizen', async (I: I) => {
+Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @nightly', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 

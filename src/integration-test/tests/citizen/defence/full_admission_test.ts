@@ -25,7 +25,7 @@ async function prepareClaim (I: I) {
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Fully admit all of the claim').retry(3)
 
-  Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @nightly @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name, false)
   })
@@ -35,7 +35,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
   })
 
-  Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I fully admit all of the claim with full payment by instalments @nightly @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false)
   })
