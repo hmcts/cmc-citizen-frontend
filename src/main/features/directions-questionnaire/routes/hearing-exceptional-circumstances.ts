@@ -70,7 +70,7 @@ export default express.Router()
 
           if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
-                draft.document.hearingLocation.courtAccepted = YesNoOption.YES
+            draft.document.hearingLocation.courtAccepted = YesNoOption.YES
             form.model.reason = undefined
           }
         } else if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
