@@ -22,7 +22,7 @@ export class IdamClient {
    * @param password the user's password, will use a default if undefined
    * @returns {Promise<void>}
    */
-  static createUser (email: string, userGroupCode: string, password: string = undefined): Promise<void> {
+  static createUser (email: string, userGroupCode: string, password: string = process.env.SMOKE_TEST_USER_PASSWORD): Promise<void> {
     const options = {
       method: 'POST',
       uri: `${baseURL}/testing-support/accounts`,
