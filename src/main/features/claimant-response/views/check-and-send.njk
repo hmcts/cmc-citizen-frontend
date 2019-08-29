@@ -256,21 +256,21 @@
           changeLink = ClaimantResponsePaths.acceptPaymentMethodPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
         {% if draft.acceptPaymentMethod.accept.option === 'no' %}
-          {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+          {% if claimantPaymentPlan.paymentOption === PaymentType.IMMEDIATELY.value %}
             {% set alternatePaymentMethodResponse = t('Immediately') %}
-          {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+          {% elseif claimantPaymentPlan.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
             {% set alternatePaymentMethodResponse = t('In full by {{ deadline }}', { deadline: alternatePaymentMethodDate | date }) %}
-          {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+          {% elseif claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
             {% set alternatePaymentMethodResponse = t('By instalments') %}
           {% endif %}
 
           {{ row(label = 'How would you like the defendant to pay?', bold = true, value = alternatePaymentMethodResponse,
             changeLink = ClaimantResponsePaths.alternateRepaymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
 
-          {% if paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-            {{ row(label = 'Regular payments of', bold = true, value = draft.alternatePaymentMethod.paymentPlan.instalmentAmount | numeral,
+          {% if claimantPaymentPlan.paymentOption === PaymentType.INSTALMENTS.value %}
+            {{ row(label = 'Regular payments of', bold = true, value = claimantPaymentPlan.repaymentPlan.instalmentAmount | numeral,
               changeLink = ClaimantResponsePaths.paymentPlanPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = false) }}
-            {{ row(label = 'Frequency of payments', bold = true, value = draft.alternatePaymentMethod.paymentPlan.paymentSchedule.value | renderPaymentSchedule,
+            {{ row(label = 'Frequency of payments', bold = true, value = claimantPaymentPlan.repaymentPlan.paymentSchedule | renderPaymentSchedule,
               bottomBorder = false) }}
             {{ row(label = 'Date for first instalment', bold = true, value = alternatePaymentMethodDate | date,
               bottomBorder = true) }}

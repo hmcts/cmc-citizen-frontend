@@ -27,6 +27,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { Moment } from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -36,9 +37,9 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
     return undefined
   }
 
-  // both parties agree the amount
   if (draft.acceptPaymentMethod) {
     if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+      // both parties agree the amount
       return response.paymentIntention
     }
 
@@ -78,7 +79,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     } else if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.BY_SET_DATE) {
       alternatePaymentMethodDate = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
     } else {
-      alternatePaymentMethodDate = undefined
+      alternatePaymentMethodDate = MomentFactory.currentDate().add(5, 'days')
     }
   }
 
@@ -91,6 +92,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     form: form,
     totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
     paymentIntention: paymentIntention,
+    claimantPaymentPlan: draft.document.alternatePaymentMethod ? draft.document.alternatePaymentMethod.toDomainInstance() : undefined,
     alreadyPaid: alreadyPaid,
     amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
