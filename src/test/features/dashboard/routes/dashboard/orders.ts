@@ -49,7 +49,7 @@ const ordersClaim = {
         id: '8e3a20c2-10a4-49fd-b1a7-da66b088f978',
         directionParty: 'BOTH',
         directionType: 'EYEWITNESS',
-        directionActionedDate: '2019-09-20'
+        directionActionedDate: '2019-08-20'
       }
     ],
     paperDetermination: 'no',

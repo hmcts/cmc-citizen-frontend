@@ -64,7 +64,7 @@ const ordersClaim = {
       postcode: 'EC1V 3RE'
     },
     estimatedHearingDuration: 'HALF_HOUR',
-    createdOn: '2019-08-09T09:27:42.04'
+    createdOn: MomentFactory.currentDate().subtract(1, 'day')
   }
 }
 
@@ -217,8 +217,8 @@ describe('Dashboard page', () => {
         context('as a claimant', () => {
           beforeEach(() => {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-08-16'))
-            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-08-16'))
+            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
+            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
           })
 
           testData.forEach(data => {
@@ -236,7 +236,7 @@ describe('Dashboard page', () => {
         context('as a defendant', () => {
           beforeEach(() => {
             idamServiceMock.resolveRetrieveUserFor('123', 'citizen')
-            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-08-16'))
+            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
           })
 
           testData.forEach(data => {
