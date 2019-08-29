@@ -29,6 +29,7 @@ import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
+import { TestingSupportSteps } from '../../testingSupport/steps/testingSupport'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -47,6 +48,7 @@ const claimantEvidencePage: ClaimantEvidencePage = new ClaimantEvidencePage()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const claimantClaimConfirmedPage: ClaimantClaimConfirmedPage = new ClaimantClaimConfirmedPage()
 const newFeaturesPage: NewFeaturesPage = new NewFeaturesPage()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
@@ -234,6 +236,7 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
+    testingSupport.deleteClaimDraft()
     this.completeEligibility()
     if (fillInNewFeaturesPage) {
       this.optIntoNewFeatures()
