@@ -159,7 +159,7 @@ describe('Claimant response: payment plan', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
           draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -194,7 +194,7 @@ describe('Claimant response: payment plan', () => {
 
         context('when form is valid', async () => {
           beforeEach(() => {
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
           })
 
           it('should redirect to counter offer accepted page when decision type is CLAIMANT', async () => {

@@ -32,11 +32,15 @@ export default express.Router()
         req.body.mediationYes ? FreeMediationOption.YES : FreeMediationOption.NO
       )
 
-      await new DraftService().save(draft, user.bearerToken)
-
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {
+        if (draft.document.willYouTryMediation .option === FreeMediationOption.YES) {
+          draft.document.mediationDisagreement = undefined
+        }
+        await new DraftService().save(draft, user.bearerToken)
+      }
       const { externalId } = req.params
 
-      if (draft.document.willYouTryMediation.option === FreeMediationOption.NO) {
+      if (req.body.mediationNo) {
         const claim: Claim = res.locals.claim
 
         if (ClaimFeatureToggles.isFeatureEnabledOnClaim(res.locals.claim, 'mediationPilot')) {

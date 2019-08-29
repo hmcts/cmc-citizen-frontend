@@ -15,6 +15,9 @@ import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { OrdersDraft } from 'orders/draft/ordersDraft'
+import { OrdersConverter } from 'claims/ordersConverter'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -91,6 +94,25 @@ export class ClaimStoreClient {
     return requestPromiseApi(options).then(function () {
       return Promise.resolve()
     })
+  }
+
+  saveOrder (ordersDraft: OrdersDraft, claim: Claim, user: User): Promise<Claim> {
+    const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
+    const externalId: string = ordersDraft.externalId
+
+    const options = {
+      method: 'PUT',
+      uri: `${claimStoreApiUrl}/${externalId}/review-order`,
+      body: reviewOrder,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options)
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
   }
 
   retrieveByClaimantId (user: User): Promise<Claim[]> {
