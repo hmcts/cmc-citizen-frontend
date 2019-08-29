@@ -121,7 +121,7 @@ describe('Defendant: payment page', () => {
             }
           })
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

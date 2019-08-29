@@ -435,7 +435,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('directionsQuestionnaire', { directionsQuestionnaire: undefined })
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionWithPaymentByInstalmentsDataCompany)
             claimStoreServiceMock.resolveSaveResponse()
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveDelete()
             draftStoreServiceMock.resolveDelete()
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
