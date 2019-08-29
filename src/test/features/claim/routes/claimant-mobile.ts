@@ -55,7 +55,7 @@ describe('Claim issue: claimant mobile page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantMobilePage.uri)
@@ -66,7 +66,7 @@ describe('Claim issue: claimant mobile page', () => {
 
       it('should redirect to task list when form is valid and nothing is submitted', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantMobilePage.uri)
@@ -77,7 +77,7 @@ describe('Claim issue: claimant mobile page', () => {
 
       it('should redirect to task list when form is valid and number is provided', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantMobilePage.uri)
