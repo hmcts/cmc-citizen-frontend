@@ -96,6 +96,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
             claimStoreServiceMock.resolveSaveOrder()
+            draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
@@ -111,6 +112,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
             claimStoreServiceMock.resolveSaveOrder()
+            draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveDelete()
 
             await request(app)

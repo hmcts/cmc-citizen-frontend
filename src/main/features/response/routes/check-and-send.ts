@@ -37,7 +37,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   if (dqsEnabled) {
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
   }
-  const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
+  const statementOfTruthType = SignatureType.RESPONSE
   if (dqsEnabled) {
     if (form.model.type === SignatureType.QUALIFIED) {
       form.model.type = SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED

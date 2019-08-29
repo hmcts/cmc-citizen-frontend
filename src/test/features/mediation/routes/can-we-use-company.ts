@@ -80,7 +80,7 @@ describe('Free mediation: can we use company page', () => {
         it('should redirect to defendant task list when defendant says yes', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
           await request(app)
@@ -107,7 +107,7 @@ describe('Free mediation: can we use company page', () => {
         it('should redirect to response task list when no was chosen and a phone number and a contact is given', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response:full-rejection', { defendantDetails: { partyDetails: { ...draftStoreServiceMock.sampleOrganisationDetails } } })
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
 
           await request(app)
