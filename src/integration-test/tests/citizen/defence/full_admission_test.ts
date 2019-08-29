@@ -23,7 +23,7 @@ async function prepareClaim (I: I) {
 }
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Fully admit all of the claim').retry(3)
+  Feature('Fully admit all of the claim').retry(1)
 
   Scenario('I can complete the journey when I fully admit all of the claim with immediate payment @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)

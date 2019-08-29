@@ -5,7 +5,7 @@ import { EndToEndTestData } from './data/EndToEndTestData'
 
 const helperSteps: Helper = new Helper()
 
-Feature('E2E tests for Claim and Defence response').retry(3)
+Feature('E2E tests for Claim and Defence response').retry(1)
 
 // Warning : Changing the text description of this scenario, could cause failure when running ZAP security test
 Scenario('I can as an Individual make a claim against an Individual Without a defendant email address and are able to pay on the Gov Pay page @citizen', async (I: I) => {

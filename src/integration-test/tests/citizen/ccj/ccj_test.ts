@@ -9,7 +9,7 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 const userSteps: UserSteps = new UserSteps()
 const ccjSteps: CountyCourtJudgementSteps = new CountyCourtJudgementSteps()
 
-Feature('CCJ').retry(3)
+Feature('CCJ').retry(1)
 
 Scenario('Request judgment as an individual with no defendant email and pay by instalments @citizen @quick', async (I: I) => {
   const email: string = await I.createCitizenUser()

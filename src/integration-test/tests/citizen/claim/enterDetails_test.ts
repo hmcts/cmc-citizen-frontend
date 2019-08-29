@@ -12,7 +12,7 @@ const interestSteps: InterestSteps = new InterestSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
-Feature('Claimant Enter details of claim').retry(3)
+Feature('Claimant Enter details of claim').retry(1)
 
 Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
   userSteps.login(userSteps.getClaimantEmail())
