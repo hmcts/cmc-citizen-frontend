@@ -277,11 +277,11 @@ export class DefenceSteps {
     I.see(impactOfDispute)
   }
 
-  checkAndSendAndSubmit (defendantType: PartyType): void {
+  checkAndSendAndSubmit (defendantType: PartyType, defenceType: DefenceType): void {
     if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
-      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director')
+      defendantCheckAndSendPage.signStatementOfTruthAndSubmit('Jonny', 'Director', defenceType)
     } else {
-      defendantCheckAndSendPage.checkFactsTrueAndSubmit()
+      defendantCheckAndSendPage.checkFactsTrueAndSubmit(defenceType)
     }
   }
 
@@ -353,7 +353,7 @@ export class DefenceSteps {
       default:
         throw new Error('Unknown DefenceType')
     }
-    this.checkAndSendAndSubmit(defendantType)
+    this.checkAndSendAndSubmit(defendantType, defenceType)
     I.see('You’ve submitted your response')
   }
 
@@ -397,7 +397,7 @@ export class DefenceSteps {
     }
 
     defendantSteps.selectCheckAndSubmitYourDefence()
-    this.checkAndSendAndSubmit(defendantType)
+    this.checkAndSendAndSubmit(defendantType, DefenceType.FULL_ADMISSION)
 
     I.see('You’ve submitted your response')
 
@@ -439,7 +439,7 @@ export class DefenceSteps {
     this.enterEvidence('description', 'They do not have evidence')
     this.askForMediation(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
-    this.checkAndSendAndSubmit(defendantType)
+    this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
     I.see('You’ve submitted your response')
   }
 
@@ -479,7 +479,7 @@ export class DefenceSteps {
     defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
-    this.checkAndSendAndSubmit(defendantType)
+    this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION_NONE_PAID)
     I.see('You’ve submitted your response')
   }
 

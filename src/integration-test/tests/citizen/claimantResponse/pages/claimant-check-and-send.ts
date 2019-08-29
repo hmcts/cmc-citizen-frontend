@@ -1,4 +1,5 @@
 import I = CodeceptJS.I
+import { DefenceType } from '../../../../data/defence-type'
 
 const I: I = actor()
 
@@ -15,14 +16,14 @@ const buttons = {
 
 export class ClaimantCheckAndSendPage {
 
-  signStatementOfTruthAndSubmit (signerName: string, signerRole: string): void {
+  signStatementOfTruthAndSubmit (signerName: string, signerRole: string, defenceType: DefenceType): void {
     I.fillField(fields.signerName, signerName)
     I.fillField(fields.signerRole, signerRole)
-    this.checkFactsTrueAndSubmit()
+    this.checkFactsTrueAndSubmit(defenceType)
   }
 
-  checkFactsTrueAndSubmit (): void {
-    if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+  checkFactsTrueAndSubmit (defenceType: DefenceType): void {
+    if (defenceType !== DefenceType.FULL_ADMISSION && process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
       I.checkOption(fields.checkboxHearingRequirementsTrue)
     }
     I.click(buttons.submit)

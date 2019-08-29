@@ -82,7 +82,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(false)
+    this.acceptCCJ(false, testData)
   }
 
   acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
@@ -91,7 +91,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(true)
+    this.acceptCCJ(true, testData)
   }
 
   acceptCcjFromDashboardWhenRejectPaymentMethod (
@@ -275,7 +275,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  acceptCCJ (shouldPaySome: boolean): void {
+  acceptCCJ (shouldPaySome: boolean, testData: EndToEndTestData): void {
     taskListPage.selectTaskViewDefendantResponse()
     I.click('Continue')
     I.see('COMPLETE')
@@ -292,7 +292,7 @@ export class ClaimantResponseSteps {
     ccjPaidAmountSummaryPage.continue()
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
   }
 
   acceptCCJWithClaimantPaymentOption (
@@ -343,6 +343,6 @@ export class ClaimantResponseSteps {
     ccjPaidAmountSummaryPage.continue()
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
   }
 }

@@ -56,7 +56,7 @@ export class DefendantResponseSteps {
     defendantTaskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
-    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
+    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType, testData.defenceType)
     I.see('You’ve submitted your response')
     I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your response, explaining why you reject the claim.`)
   }
@@ -98,7 +98,7 @@ export class DefendantResponseSteps {
     defendantTaskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
-    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
+    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType, testData.defenceType)
     I.see('You’ve submitted your response')
   }
 
