@@ -25,11 +25,17 @@ async function renderPage (res: express.Response, form: Form<ExceptionalCircumst
   if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
     const claim: Claim = res.locals.claim
     const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
-    const postcode: string = defendantDirectionsQuestionnaire.hearingLocation.locationOption === CourtLocationType.SUGGESTED_COURT ?
-      claim.response.defendant.address.postcode : defendantDirectionsQuestionnaire.hearingLocation.courtAddress.postcode
-    const court: Court = await Court.getNearestCourt(postcode)
-    if (court) {
-      courtDetails = await Court.getCourtDetails(court.slug)
+    const postcode: string = defendantDirectionsQuestionnaire.hearingLocation.locationOption === CourtLocationType.SUGGESTED_COURT
+      ? claim.response.defendant.address.postcode
+      : defendantDirectionsQuestionnaire.hearingLocation.courtAddress !== undefined
+        ? defendantDirectionsQuestionnaire.hearingLocation.courtAddress.postcode
+        : undefined
+
+    if (postcode) {
+      const court: Court = await Court.getNearestCourt(postcode)
+      if (court) {
+        courtDetails = await Court.getCourtDetails(court.slug)
+      }
     }
     defendantCourt = defendantDirectionsQuestionnaire.hearingLocation.courtName
   }
@@ -70,7 +76,7 @@ export default express.Router()
 
           if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
-            draft.document.hearingLocation.courtAccepted = YesNoOption.NO
+            draft.document.hearingLocation.courtAccepted = YesNoOption.YES
             form.model.reason = undefined
           }
         } else if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
