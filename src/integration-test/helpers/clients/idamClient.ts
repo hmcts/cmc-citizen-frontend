@@ -4,7 +4,7 @@ import * as urlencode from 'urlencode'
 
 const baseURL: string = process.env.IDAM_URL
 
-const defaultPassword = 'Password12'
+const defaultPassword = process.env.SMOKE_TEST_USER_PASSWORD
 
 const oauth2 = {
   client_id: 'cmc_citizen',
