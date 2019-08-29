@@ -11,9 +11,9 @@ const buttons = {
 
 export class OtherWitnessPage {
 
-  chooseYes (howMany: number): void {
+  chooseYes (): void {
     I.checkOption('Yes')
-    I.fillField(fields.howMany, howMany.toFixed())
+    I.fillField(fields.howMany, '1')
     I.click(buttons.submit)
   }
 

@@ -19,22 +19,22 @@ const hearingDatesPage: HearingDatesPage = new HearingDatesPage()
 export class DirectionsQuestionnaireSteps {
   acceptDirectionsQuestionnaireYesJourney (): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      supportRequiredPage.selectAll('Some Text')
+      supportRequiredPage.selectAll()
       hearingLocationPage.chooseYes()
       usingExpertPage.chooseExpertYes()
       expertReportsPage.chooseYes('I am an expert, trust me',
         '2019-01-01')
       selfWitnessPage.chooseYes()
-      otherWitnessPage.chooseYes(1)
+      otherWitnessPage.chooseYes()
       hearingDatesPage.chooseYes()
     }
   }
 
   acceptDirectionsQuestionnaireNoJourney (): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
-      supportRequiredPage.selectAll('Some Text')
-      hearingExceptionalCircumstancesPage.chooseNo('Some reason')
-      hearingLocationPage.chooseYes()
+      supportRequiredPage.selectAll()
+      hearingExceptionalCircumstancesPage.chooseNo()
+      hearingLocationPage.chooseNo()
       usingExpertPage.chooseExpertNo()
       selfWitnessPage.chooseNo()
       otherWitnessPage.chooseNo()

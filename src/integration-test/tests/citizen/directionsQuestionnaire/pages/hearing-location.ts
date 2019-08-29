@@ -3,9 +3,8 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  courtName: {
-    input: 'input[id="alternativeCourtName"]'
-  }
+  alternativeCourtName: 'input[id="alternativeCourtName"]',
+  enterACourtName: 'input[id="alternativeOptionname"]'
 }
 
 const buttons = {
@@ -18,8 +17,11 @@ export class HearingLocationPage {
     I.click(buttons.submit)
   }
 
-  chooseNo (courtName: string): void {
+  chooseNo (): void {
     I.checkOption('No')
-    I.fillField(fields.courtName.input, courtName)
+    I.waitForElement('#alternativeOptionname')
+    I.checkOption(fields.enterACourtName)
+    I.fillField(fields.alternativeCourtName, 'My own court where i am the judge')
+    I.click(buttons.submit)
   }
 }

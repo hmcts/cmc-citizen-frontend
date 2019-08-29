@@ -16,8 +16,9 @@ export class HearingExceptionalCircumstancesPage {
     I.click(buttons.submit)
   }
 
-  chooseNo (reason: string): void {
+  chooseNo (): void {
     I.checkOption('No')
-    I.fillField(fields.reason, reason)
+    I.fillField(fields.reason, 'Some Reason')
+    I.click(buttons.submit)
   }
 }
