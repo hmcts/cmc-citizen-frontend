@@ -32,7 +32,9 @@
             {% endif %}
 
             <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
-              <summary>{{ t('See this court’s facilities') }}</summary>
+              <summary>
+                <span class="link">{{ t('See this court’s facilities') }}</span>
+              </summary>
 
               <div class="panel">
                 {% for facility in courtFacilities %}
