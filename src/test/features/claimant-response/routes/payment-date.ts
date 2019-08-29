@@ -16,6 +16,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { MomentFactory } from 'shared/momentFactory'
+import { LocalDate } from 'forms/models/localDate'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -31,7 +33,7 @@ const claimantResponseDraftOverrideWithDisposableIncome: object = {
       }
     }
   },
-  courtDetermination: { disposableIncome: 100 }
+  courtDetermination: { disposableIncome: 1000 }
 }
 
 const claimantResponseDraftOverrideWithNoDisposableIncome: object = {
@@ -145,7 +147,7 @@ describe('Claimant response: payment date', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind('claimantResponse', claimantResponseDraftOverrideWithDisposableIncome)
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -157,17 +159,13 @@ describe('Claimant response: payment date', () => {
 
       context('when service is healthy', () => {
         const dataToSend = {
-          date: {
-            year: 2019,
-            month: 11,
-            day: 1
-          }
+          date: LocalDate.fromMoment(MomentFactory.currentDate().add(10, 'years'))
         }
 
         context('when form is valid', async () => {
           it('should redirect to repayment plan accepted page when court decision is CLAIMANT', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj)
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveFind('claimantResponse', claimantResponseDraftOverrideWithDisposableIncome)
 
             await request(app)
@@ -180,7 +178,7 @@ describe('Claimant response: payment date', () => {
 
           it('should redirect to court offered set date page when court decision is COURT', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj)
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveFind('claimantResponse', claimantResponseDraftOverrideWithNoDisposableIncome)
 
             await request(app)
@@ -193,7 +191,7 @@ describe('Claimant response: payment date', () => {
 
           it('should redirect to court offered instalments page when court decision is COURT', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveFind('claimantResponse', claimantResponseDraftOverrideWithNoDisposableIncome)
 
             await request(app)
@@ -206,7 +204,7 @@ describe('Claimant response: payment date', () => {
 
           it('should redirect to task list page when Defendant is business', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveFind('claimantResponse', claimantResponseDraftOverrideWithNoDisposableIncome)
 
             await request(app)

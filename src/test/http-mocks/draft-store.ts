@@ -585,6 +585,12 @@ export const sampleMediationDraftObj = {
   }
 }
 
+export const sampleLegacyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.NO
+  }
+}
+
 export const sampleCompanyMediationDraftObj = {
   willYouTryMediation: {
     option: FreeMediationOption.YES
@@ -614,11 +620,11 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   hearingLocation: {
     courtName: 'Little Whinging, Surrey',
     courtPostCode: undefined,
-    courtAccepted: { option : 'yes' },
+    courtAccepted: { option: 'yes' },
     alternateCourtName: 'some other court name'
   },
   exceptionalCircumstances: {
-    exceptionalCircumstances: { option : 'yes' },
+    exceptionalCircumstances: { option: 'yes' },
     reason: 'Poorly pet owl'
   },
   availability: {
@@ -672,6 +678,11 @@ export const sampleDirectionsQuestionnaireDraftObj = {
   }
 }
 
+export const sampleOrdersDraftObj = {
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+  disagreeReason: { reason: 'I want a judge to review it' }
+}
+
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
   let documentDocument: object
 
@@ -708,6 +719,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'directionsQuestionnaire':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
+      break
+    case 'orders':
+      documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
@@ -781,13 +795,25 @@ export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSave (id: number = 100): mock.Scope {
+export function resolveUpdate (id: number = 100): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
+export function resolveSave (id: number = 100): mock.Scope {
+  return mock(serviceBaseURL)
+    .post(`/drafts`)
+    .reply(HttpStatus.OK, sampleOrdersDraftObj)
+}
+
 export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
+  return mock(serviceBaseURL)
+    .post(`/drafts`)
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function rejectUpdate (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

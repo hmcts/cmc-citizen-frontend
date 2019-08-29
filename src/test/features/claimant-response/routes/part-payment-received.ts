@@ -111,7 +111,7 @@ describe('Claimant Response: part payment received page', () => {
         beforeEach(() => {
           draftStoreServiceMock.resolveFind('claimantResponse', {})
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(lessThanClaimAmountDefendantResponseClaim)
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
         })
 
         it('should redirect to the task list page when yes is selected', async () => {

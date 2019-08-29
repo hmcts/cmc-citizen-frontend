@@ -41,20 +41,26 @@
 {% endmacro %}
 
 {% macro paymentInformationFragment(paymentDeclaration) %}
-  <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
+  <h3 class="heading-small">{{ t('When they say they paid this amount') }}</h3>
   <p>{{ paymentDeclaration.paidDate | date }}</p>
 
   <h3 class="heading-small">{{ t('How they say they paid') }}</h3>
   <p>{{ paymentDeclaration.explanation }}</p>
 {% endmacro %}
 
-{% macro downloadDQs() %}
+
+{% macro fullResponseFragment() %}
   {% if dqsEnabled %}
-    <div class="form-group">
-      <h3 class="heading-small">{{ t('Full response') }}</h3>
-      {{ internalLink(t('Download their full response and hearing requirements'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
-    </div>
+    {% set label = 'Download their full response and hearing requirements' %}
+  {% else %}
+    {% set label = 'Download their full response' %}
   {% endif %}
+
+  <div class="form-group">
+    <h3 class="heading-small">{{ t('Full response') }}</h3>
+    <p>{{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+    {{ t('(PDF)') }}</p>
+  </div>
 {% endmacro %}
 
 {% block content %}
@@ -79,7 +85,7 @@
           {{ evidenceFragment(claim.response.evidence) }}
         {% endif %}
 
-        {{ downloadDQs() }}
+        {{ fullResponseFragment() }}
       {% elif alreadyPaid %}
         {% if partiallyPaid %}
           <p>{{ t('{{ defendantName }} said they paid you {{ amount }}. They said this is all they owe, not the amount you claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
@@ -94,7 +100,7 @@
             {{ timelineFragment(claim.response.timeline) }}
           {% endif %}
 
-          {% if claim.response.evidence %}
+          {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
             {{ evidenceFragment(claim.response.evidence) }}
           {% endif %}
         {% else %}
@@ -126,8 +132,8 @@
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-
         {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
+        {{ fullResponseFragment() }}
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if page === 0 %}
           <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
@@ -154,7 +160,7 @@
           {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
             {{ evidenceFragment(claim.response.evidence) }}
           {% endif %}
-          {{ downloadDQs() }}
+          {{ fullResponseFragment() }}
         {% elseif page === 1 %}
           {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
             <p>{{ t('The defendant suggested this repayment plan:') }}</p>
@@ -170,7 +176,6 @@
 
           {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
           {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
-
         {% endif %}
       {% endif %}
 

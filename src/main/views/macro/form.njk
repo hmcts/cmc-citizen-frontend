@@ -136,7 +136,7 @@
 {% endmacro %}
 
 {% macro linkButton(label, name, class) %}
-  <input type="submit" class="{{ class }}" name="{{ name }}" value="{{ t(label) }}">
+  <input type="submit" class="{{ class }}" name="{{ name }}" id="{{ name }}" value="{{ t(label) }}">
 {% endmacro %}
 
 {% macro yesNoRadio(label, name, form, isInline = false, labelForScreenReadersOnly = true) %}
@@ -221,7 +221,8 @@
       </legend>
       {% for option in options %}
         {% set selection = form.valueFor(name).indexOf(option.value) %}
-          {{ checkboxOption(
+        
+        {{ checkboxOption(
           label = option.label,
           name = name,
           form = form,
