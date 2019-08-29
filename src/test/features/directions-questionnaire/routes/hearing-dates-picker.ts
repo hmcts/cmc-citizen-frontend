@@ -70,7 +70,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             }
           })
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .get(deletePath)
@@ -100,7 +100,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(replacePath)

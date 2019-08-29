@@ -112,7 +112,7 @@ describe('Pay by set date: payment date', () => {
         it('should render error page when unable to save draft', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -135,7 +135,7 @@ describe('Pay by set date: payment date', () => {
         it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

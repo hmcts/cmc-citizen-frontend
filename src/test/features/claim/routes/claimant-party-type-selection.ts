@@ -55,7 +55,7 @@ describe('Claim issue: claimant party type selection page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim', { claimant: undefined })
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantPartyTypeSelectionPage.uri)
@@ -66,7 +66,7 @@ describe('Claim issue: claimant party type selection page', () => {
 
       it('should redirect to individual details page when Individual party type selected ', async () => {
         draftStoreServiceMock.resolveFind('claim', { claimant: undefined })
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantPartyTypeSelectionPage.uri)
@@ -77,7 +77,7 @@ describe('Claim issue: claimant party type selection page', () => {
 
       it('should redirect to sole trader details page when soleTrader party type selected ', async () => {
         draftStoreServiceMock.resolveFind('claim', { claimant: undefined })
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantPartyTypeSelectionPage.uri)
@@ -88,7 +88,7 @@ describe('Claim issue: claimant party type selection page', () => {
 
       it('should redirect to company details page when company party type selected ', async () => {
         draftStoreServiceMock.resolveFind('claim', { claimant: undefined })
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantPartyTypeSelectionPage.uri)
@@ -99,7 +99,7 @@ describe('Claim issue: claimant party type selection page', () => {
 
       it('should redirect to organization details page when organization party type selected ', async () => {
         draftStoreServiceMock.resolveFind('claim', { claimant: undefined })
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantPartyTypeSelectionPage.uri)
