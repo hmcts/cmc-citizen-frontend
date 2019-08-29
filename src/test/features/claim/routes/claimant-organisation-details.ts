@@ -106,7 +106,7 @@ describe('claimant as organisation details page', () => {
 
       it('should redirect to mobile phone page when everything is fine and including contact person', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
@@ -117,7 +117,7 @@ describe('claimant as organisation details page', () => {
       it('should redirect to mobile phone page when everything is fine and not including contact person', async () => {
         const noContactPersonInput = { ...input, ...{ contactPerson: undefined } }
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(ClaimPaths.claimantOrganisationDetailsPage.uri)

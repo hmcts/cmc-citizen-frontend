@@ -130,7 +130,7 @@ describe('Defendant response: full admission options', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -143,7 +143,7 @@ describe('Defendant response: full admission options', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -158,7 +158,7 @@ describe('Defendant response: full admission options', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', draftOverride)
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
