@@ -134,7 +134,9 @@ describe('Defendant response: check and send page', () => {
         context('for company and organisation', () => {
           it('should return statement of truth with a tick box', async () => {
 
-            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('response:company', {
+              timeline: { rows: [{ date: 'timeline date', description: 'something awesome happened' }] }
+            })
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             const claimStoreOverride = {
@@ -185,7 +187,7 @@ describe('Defendant response: check and send page', () => {
                 } as Interest,
                 reason: 'Because I can',
                 feeAmountInPennies: 2500,
-                timeline: { rows: [{ date: 'timeline date', description: 'something awesome happened' }] }
+                timeline: { rows: [{ date: 'a', description: 'b' }] }
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
@@ -198,15 +200,15 @@ describe('Defendant response: check and send page', () => {
                 '<input id="signerName" name="signerName"',
                 '<input id="signerRole" name="signerRole"',
                 'I believe that the facts stated in this response are true.',
-                '<input id="signedtrue" type="checkbox" name="signed" value="true"',
-                'timeline date',
-                'something awesome happened'
+                '<input id="signedtrue" type="checkbox" name="signed" value="true"'
               ))
           })
 
           it('should return hearing requirement tick box', async () => {
 
-            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('response:company', {
+              evidence: { rows: [{ type: 'PHOTO', description: 'photo of a cat' }], comment: 'their evidence is invalid' }
+            })
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             const claimStoreOverride = {
@@ -258,7 +260,7 @@ describe('Defendant response: check and send page', () => {
                 } as Interest,
                 reason: 'Because I can',
                 feeAmountInPennies: 2500,
-                evidence: { rows: [{ type: 'PHOTO', description: 'photo of a cat' }], comment: 'their evidence is invalid' }
+                timeline: { rows: [{ date: 'a', description: 'b' }] }
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
