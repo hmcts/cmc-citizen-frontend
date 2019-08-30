@@ -134,7 +134,7 @@
         )
       }}
 
-      {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+      {% if timeline is defined %}
         {{
           timelineCheckAndSend(
             header = 'Timeline of what happened (optional)',
@@ -144,6 +144,8 @@
           )
         }}
         {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
+      {% endif %}
+      {% if evidence is defined %}
         {{
           evidenceCheckAndSend(
             header = 'Your evidence (optional)',

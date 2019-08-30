@@ -185,7 +185,7 @@ describe('Defendant response: check and send page', () => {
                 } as Interest,
                 reason: 'Because I can',
                 feeAmountInPennies: 2500,
-                timeline: { rows: [{ date: 'a', description: 'b' }] }
+                timeline: { rows: [{ date: 'timeline date', description: 'something awesome happened' }] }
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
@@ -193,11 +193,15 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
-              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+              .expect(res => expect(res).to.be.successful.withText(
+                'Statement of truth',
+                '<input id="signerName" name="signerName"',
+                '<input id="signerRole" name="signerRole"',
+                'I believe that the facts stated in this response are true.',
+                '<input id="signedtrue" type="checkbox" name="signed" value="true"',
+                'timeline date',
+                'something awesome happened'
+              ))
           })
 
           it('should return hearing requirement tick box', async () => {
@@ -254,7 +258,7 @@ describe('Defendant response: check and send page', () => {
                 } as Interest,
                 reason: 'Because I can',
                 feeAmountInPennies: 2500,
-                timeline: { rows: [{ date: 'a', description: 'b' }] }
+                evidence: { rows: [{ type: 'PHOTO', description: 'photo of a cat' }], comment: 'their evidence is invalid' }
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
@@ -263,21 +267,29 @@ describe('Defendant response: check and send page', () => {
               await request(app)
                 .get(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
-                .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"'))
+                .expect(res => expect(res).to.be.successful.withText(
+                  'Statement of truth',
+                  '<input id="signerName" name="signerName"',
+                  '<input id="signerRole" name="signerRole"',
+                  'I believe that the facts stated in this response are true.',
+                  '<input id="signedtrue" type="checkbox" name="signed" value="true"',
+                  '<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"',
+                  'photo of a cat',
+                  'their evidence is invalid'
+                ))
             } else {
               await request(app)
                 .get(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
-                .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+                .expect(res => expect(res).to.be.successful.withText(
+                  'Statement of truth',
+                  '<input id="signerName" name="signerName"',
+                  '<input id="signerRole" name="signerRole"',
+                  'I believe that the facts stated in this response are true.',
+                  '<input id="signedtrue" type="checkbox" name="signed" value="true"',
+                  'photo of a cat',
+                  'their evidence is invalid'
+                ))
             }
           })
         })

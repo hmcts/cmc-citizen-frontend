@@ -24,6 +24,8 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { FeatureToggles } from 'utils/featureToggles'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -62,8 +64,24 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType,
     mediationPilot: mediationPilot,
-    mediationEnabled: FeatureToggles.isEnabled('mediation')
+    mediationEnabled: FeatureToggles.isEnabled('mediation'),
+    timeline: getTimeline(draft),
+    evidence: getEvidence(draft)
   })
+}
+
+function getTimeline (draft: Draft<ResponseDraft>): DefendantTimeline {
+  if (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION) {
+    return draft.document.timeline
+  }
+  return undefined
+}
+
+function getEvidence (draft: Draft<ResponseDraft>): DefendantEvidence {
+  if (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION) {
+    return draft.document.evidence
+  }
+  return undefined
 }
 
 function defendantIsCounterClaiming (draft: Draft<ResponseDraft>): boolean {
