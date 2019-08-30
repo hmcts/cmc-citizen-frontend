@@ -343,6 +343,8 @@ export class DefenceSteps {
         break
       case DefenceType.PART_ADMISSION:
         this.admitPartOfTheClaimAlreadyPaid(defence, isClaimAlreadyPaid)
+        this.askForMediation(defendantType)
+        this.askForHearingRequirements(defendantType)
         defendantSteps.selectCheckAndSubmitYourDefence()
         if (isClaimAlreadyPaid) {
           I.see('How much money have you paid?')

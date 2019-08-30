@@ -14,7 +14,7 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
   helperSteps.finishResponse(testData)
   I.click('My account')
   I.see(testData.claimRef)
-  I.see(`You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.`)
+  I.see(`Wait for the claimant to respond`)
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
@@ -33,6 +33,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     helperSteps.finishResponse(testData)
     I.click('My account')
     I.see(testData.claimRef)
+    I.click(testData.claimRef)
     I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim`)
   })
 }
