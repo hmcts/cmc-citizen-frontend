@@ -1,13 +1,12 @@
 /* tslint:disable:no-console */
 
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
-import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
-const userSteps: UserSteps = new UserSteps()
 
 module.exports = async function (done: () => void) {
   try {
-    await IdamClient.deleteUser(userSteps.getClaimantEmail())
-    await IdamClient.deleteUser(userSteps.getDefendantEmail())
+    await IdamClient.deleteUser('civilmoneyclaims+citizen-claimant@gmail.com')
+    await IdamClient.deleteUser('civilmoneyclaims+citizen-defendant@gmail.com')
+    console.log('Hello world')
   } catch (error) {
     handleError(error)
   }
