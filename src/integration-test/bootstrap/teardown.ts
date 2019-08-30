@@ -6,7 +6,6 @@ module.exports = async function (done: () => void) {
   try {
     await IdamClient.deleteUser('civilmoneyclaims+citizen-claimant@gmail.com')
     await IdamClient.deleteUser('civilmoneyclaims+citizen-defendant@gmail.com')
-    console.log('Hello world')
   } catch (error) {
     handleError(error)
   }
