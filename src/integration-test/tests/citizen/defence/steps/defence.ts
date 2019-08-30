@@ -438,6 +438,7 @@ export class DefenceSteps {
     this.addTimeLineOfEvents(defence.timeline)
     this.enterEvidence('description', 'They do not have evidence')
     this.askForMediation(defendantType)
+    this.askForHearingRequirements(defendantType)
     defendantSteps.selectCheckAndSubmitYourDefence()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION)
     I.see('You’ve submitted your response')

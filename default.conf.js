@@ -9,7 +9,7 @@ exports.config = {
   bootstrapAll: bootstrapFn,
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
-  timeout: 15000,
+  timeout: 10000,
   multiple: {
     parallel: {
       chunks: parseInt(process.env.CHUNKS || '5')
