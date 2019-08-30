@@ -19,7 +19,7 @@ const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response: Part Admit').retry(3)
 
-  Scenario('I can as a claimant reject the defendants part admission by immediately @citizen @admissions', async (I: I) => {
+  Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', async (I: I) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
@@ -43,7 +43,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('Wait for the court to review the case')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @citizen @admissions', async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', async (I: I) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
