@@ -10,7 +10,7 @@ const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Respond to claim: claim details').retry(3)
 
-Scenario('I can view the claim details from a link on the dashboard @citizen', async (I: I) => {
+Scenario('I can view the claim details from a link on the dashboard @nightly', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
