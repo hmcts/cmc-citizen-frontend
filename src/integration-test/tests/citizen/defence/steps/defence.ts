@@ -479,6 +479,7 @@ export class DefenceSteps {
     }
     defendantTaskListPage.selectTaskFreeMediation()
     mediationSteps.rejectMediation()
+    this.askForHearingRequirements(defendantType)
     defendantTaskListPage.selectTaskCheckAndSendYourResponse()
     this.checkAndSendAndSubmit(defendantType, DefenceType.PART_ADMISSION_NONE_PAID)
     I.see('You’ve submitted your response')
