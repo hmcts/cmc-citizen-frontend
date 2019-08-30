@@ -200,7 +200,9 @@ describe('Defendant response: check and send page', () => {
                 '<input id="signerName" name="signerName"',
                 '<input id="signerRole" name="signerRole"',
                 'I believe that the facts stated in this response are true.',
-                '<input id="signedtrue" type="checkbox" name="signed" value="true"'
+                '<input id="signedtrue" type="checkbox" name="signed" value="true"',
+                'timeline date',
+                'something awesome happened'
               ))
           })
 
