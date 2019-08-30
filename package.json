@@ -21,8 +21,8 @@
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
     "test:smoke": "./bin/run-smoke-tests.sh",
-    "test:integration": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --debug --config default.conf.js --reporter mocha-multi",
-    "test:integration-debug": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
+    "test:integration": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --config default.conf.js --reporter mocha-multi",
+    "test:integration-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
     "test:crossbrowser": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config saucelabs.conf.js --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
     "sonar-scan": "sonar-scanner -Dsonar.projectName='CMC :: Citizen Frontend' -Dsonar.sources=src/main -Dsonar.tests=src/test -Dsonar.exclusions=src/main/public/**,src/main/app/mocks/mockPayClient.ts,src/main/features/claim/routes/pay.ts -Dsonar.typescript.lcov.reportPaths=coverage-report/lcov.info"
