@@ -4,15 +4,17 @@ import { createClaimData, dailyInterestAmount } from 'integration-test/data/test
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
 import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const helperSteps: Helper = new Helper()
+const userSteps: UserSteps = new UserSteps()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Respond to claim: claim details').retry(1)
 
 Scenario('I can view the claim details from a link on the dashboard @citizen', async (I: I) => {
-  const claimantEmail: string = await I.createCitizenUser()
-  const defendantEmail: string = await I.createCitizenUser()
+  const claimantEmail: string = userSteps.getClaimantEmail()
+  const defendantEmail: string = userSteps.getDefendantEmail()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimRef: string = await I.createClaim(claimData, claimantEmail)
@@ -26,8 +28,8 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', a
 })
 
 Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', async (I: I) => {
-  const claimantEmail: string = await I.createCitizenUser()
-  const defendantEmail: string = await I.createCitizenUser()
+  const claimantEmail: string = userSteps.getClaimantEmail()
+  const defendantEmail: string = userSteps.getDefendantEmail()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, InterestType.BREAKDOWN)
   const claimRef: string = await I.createClaim(claimData, claimantEmail)

@@ -3,14 +3,16 @@ import { createClaimData } from 'integration-test/data/test-data'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import I = CodeceptJS.I
 import { DefenceType } from 'integration-test/data/defence-type'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const helperSteps: Helper = new Helper()
+const userSteps: UserSteps = new UserSteps()
 
 Feature('Respond to claim: handoff journey').retry(1)
 
 Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', async (I: I) => {
-  const claimantEmail: string = await I.createCitizenUser()
-  const defendantEmail: string = await I.createCitizenUser()
+  const claimantEmail: string = userSteps.getClaimantEmail()
+  const defendantEmail: string = userSteps.getDefendantEmail()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const defendant: Party = claimData.defendants[0]
@@ -23,8 +25,8 @@ Scenario('I can see send your response by email page when I reject all of the cl
 })
 
 Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @citizen', async (I: I) => {
-  const claimantEmail: string = await I.createCitizenUser()
-  const defendantEmail: string = await I.createCitizenUser()
+  const claimantEmail: string = userSteps.getClaimantEmail()
+  const defendantEmail: string = userSteps.getDefendantEmail()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const defendant: Party = claimData.defendants[0]

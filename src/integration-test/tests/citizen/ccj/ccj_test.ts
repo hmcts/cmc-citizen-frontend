@@ -12,7 +12,7 @@ const ccjSteps: CountyCourtJudgementSteps = new CountyCourtJudgementSteps()
 Feature('CCJ').retry(1)
 
 Scenario('Request judgment as an individual with no defendant email and pay by instalments @citizen @quick', async (I: I) => {
-  const email: string = await I.createCitizenUser()
+  const email: string = userSteps.getClaimantEmail()
   const claimantType: PartyType = PartyType.INDIVIDUAL
   const defendantType: PartyType = PartyType.INDIVIDUAL
   const hasDefendantEmail = false
@@ -27,7 +27,7 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
 })
 
 Scenario('Request judgment as a Company, pay by set date @citizen', async (I: I) => {
-  const email: string = await I.createCitizenUser()
+  const email: string = userSteps.getClaimantEmail()
   const claimantType: PartyType = PartyType.COMPANY
   const defendantType: PartyType = PartyType.COMPANY
 
@@ -42,7 +42,7 @@ Scenario('Request judgment as a Company, pay by set date @citizen', async (I: I)
 })
 
 Scenario('Request judgment as a sole trader, pay immediately @citizen', async (I: I) => {
-  const email: string = await I.createCitizenUser()
+  const email: string = userSteps.getClaimantEmail()
   const claimantType: PartyType = PartyType.SOLE_TRADER
   const defendantType: PartyType = PartyType.ORGANISATION
 
