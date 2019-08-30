@@ -33,7 +33,6 @@ class ClaimStoreHelper extends codecept_helper {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
     await this.waitForOpenClaim(referenceNumber)
-    await ClaimStoreClient.addRoleToUser(submitter.bearerToken, role)
     return referenceNumber
   }
 
