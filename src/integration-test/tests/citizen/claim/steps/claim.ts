@@ -196,7 +196,6 @@ export class ClaimSteps {
   makeAClaimAndSubmitStatementOfTruth (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.login(email)
     this.completeEligibility()
-    this.optIntoNewFeatures()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()

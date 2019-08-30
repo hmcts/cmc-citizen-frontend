@@ -3,10 +3,12 @@ require('tsconfig-paths/register')
 
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
 const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap')
+const tearDownFn = require('./src/integration-test/bootstrap/teardown')
 
 exports.config = {
   name: 'citizen-integration-tests',
   bootstrapAll: bootstrapFn,
+  teardownAll: tearDownFn,
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,

@@ -45,6 +45,22 @@ export class IdamClient {
   }
 
   /**
+   * Deletes user with the provided email
+   *
+   * @param {string} email
+   * @returns {Promise<void>}
+   */
+  static deleteUser (email: string): Promise<void> {
+    const options = {
+      method: 'DELETE',
+      uri: `${baseURL}/testing-support/accounts/${email}`
+    }
+    return request(options).then(function () {
+      return Promise.resolve()
+    })
+  }
+
+  /**
    * Authenticate user
    *
    * @param {string} username the username to authenticate
