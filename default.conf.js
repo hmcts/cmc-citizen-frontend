@@ -23,10 +23,7 @@ exports.config = {
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 15000,
       desiredCapabilities: {
-        proxy: new ProxySettings(),
-        chromeOptions: {
-          args: [ '--headless', '--disable-gpu', '--window-size=800,600' ]
-        }
+        proxy: new ProxySettings()
       }
     },
     IdamHelper: {
