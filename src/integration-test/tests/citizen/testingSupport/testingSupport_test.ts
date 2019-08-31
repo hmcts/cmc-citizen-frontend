@@ -12,7 +12,7 @@ const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndS
 
 Feature('Testing support').retry(3)
 
-Scenario('I create a claim draft using testing support and submit it @citizen', async (I: I) => {
+Scenario('I create a claim draft using testing support and submit it @nightly', async (I: I) => {
   const email: string = await I.createCitizenUser()
 
   userSteps.login(email)

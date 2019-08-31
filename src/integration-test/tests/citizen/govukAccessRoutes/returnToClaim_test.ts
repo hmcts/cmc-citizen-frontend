@@ -7,7 +7,7 @@ const accessRoutesSteps: AccessRoutesSteps = new AccessRoutesSteps()
 
 Feature('GovUK access routes - return to claim').retry(3)
 
-Scenario('I can enter a CCBC reference and get sent to MCOL @citizen', (I: I) => {
+Scenario('I can enter a CCBC reference and get sent to MCOL @nightly', (I: I) => {
   accessRoutesSteps.returnToClaimMcol()
 })
 
@@ -17,12 +17,12 @@ Scenario('I can enter a moneyclaims reference and login to see the dashboard @ci
   accessRoutesSteps.returnToClaimMoneyClaims(claimRef, claimantEmail)
 })
 
-Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @citizen', async (I: I) => {
+Scenario('I can select don’t have a claim number and choose to go to moneyclaims, login and see the dashboard @nightly', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   await I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
   accessRoutesSteps.dontHaveAReferenceMoneyClaims(claimantEmail)
 })
 
-Scenario('I can select don’t have a claim number and choose to go to MCOL @citizen', (I: I) => {
+Scenario('I can select don’t have a claim number and choose to go to MCOL @nightly', (I: I) => {
   accessRoutesSteps.dontHaveAReferenceMcol()
 })

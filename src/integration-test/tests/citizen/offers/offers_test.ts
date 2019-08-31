@@ -9,7 +9,7 @@ const offerSteps: OfferSteps = new OfferSteps()
 
 Feature('Offers').retry(3)
 
-Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @citizen', async (I: I) => {
+Scenario('I can as a defendant make an offer, accept offer and counter sign the agreement @nightly', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
