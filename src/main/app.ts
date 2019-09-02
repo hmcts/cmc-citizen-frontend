@@ -133,3 +133,6 @@ app.use((err, req, res, next) => {
   }
   next()
 })
+
+// Web Chat
+app.use('/webchat', express.static(path.join(__dirname, '/node_modules/@hmcts/ctsc-web-chat/assets')))

@@ -93,6 +93,9 @@
     {% block content %}{% endblock %}
 
     {% include "includes/report_problem_link.njk" %}
+    {% if featureToggles.testingSupport %}
+      <div id="ctsc-web-chat"></div>
+    {% endif %}
   </main>
 
   <footer class="group js-footer" id="footer" role="contentinfo">
@@ -126,5 +129,14 @@
   {% block body_end %}{% endblock %}
 
   <script>if (typeof window.GOVUK === 'undefined') document.body.className = document.body.className.replace('js-enabled', '');</script>
+  <script src="/webchat/javascript/hmcts-webchat.js"></script>
+  <script nonce="{{ nonce }}">
+      webchat_init({
+          uuid: 'script_12345678',
+          tenant: 'abc123',
+          channel: 'My service',
+          stylesheetURL: '/webchat/css/hmcts-webchat.css'
+      });
+  </script>
 </body>
 </html>
