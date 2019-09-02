@@ -70,16 +70,38 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   })
 }
 
+function rejectingFullAmount (draft: Draft<ResponseDraft>): boolean {
+  return draft.document.response.type === ResponseType.DEFENCE
+    || draft.document.response.type === ResponseType.PART_ADMISSION
+}
+
+function getDisagreementRoot (draft: Draft<ResponseDraft>):
+    { timeline?: DefendantTimeline, evidence?: DefendantEvidence } {
+  if (draft.document.isResponseRejected()) {
+    return draft.document
+  } else {
+    return draft.document.partialAdmission
+  }
+}
+
 function getTimeline (draft: Draft<ResponseDraft>): DefendantTimeline {
-  if (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION) {
-    return draft.document.timeline
+  if (rejectingFullAmount(draft)) {
+    const timeline = getDisagreementRoot(draft).timeline
+    timeline.removeExcessRows()
+    if (timeline.rows.length > 0 || timeline.comment) {
+      return timeline
+    }
   }
   return undefined
 }
 
 function getEvidence (draft: Draft<ResponseDraft>): DefendantEvidence {
-  if (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION) {
-    return draft.document.evidence
+  if (rejectingFullAmount(draft)) {
+    const evidence = getDisagreementRoot(draft).evidence
+    evidence.removeExcessRows()
+    if (evidence.rows.length > 0 || evidence.comment) {
+      return evidence
+    }
   }
   return undefined
 }
