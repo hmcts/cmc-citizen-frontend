@@ -37,10 +37,11 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 }
 
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
+// NOTE: they will not be overridden by terraform outputs - so use AAT settings
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
-env.FEATURE_MEDIATION = 'true'
+env.FEATURE_MEDIATION = 'false'
 env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
