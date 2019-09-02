@@ -41,7 +41,7 @@
 {% endmacro %}
 
 {% macro paymentInformationFragment(paymentDeclaration) %}
-  <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
+  <h3 class="heading-small">{{ t('When they say they paid this amount') }}</h3>
   <p>{{ paymentDeclaration.paidDate | date }}</p>
 
   <h3 class="heading-small">{{ t('How they say they paid') }}</h3>

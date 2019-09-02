@@ -97,7 +97,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name} is the nearest to your home address you gave us.`))
+              .expect(res => expect(res).to.be.successful.withText('Choose a hearing location', `${courtFinderMock.searchResponse[0].name} is the nearest to the address you gave us.`))
           })
         })
 
@@ -155,7 +155,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -169,7 +169,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
 
               await request(app)
                 .post(pagePath)
@@ -184,7 +184,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
 
               await request(app)
                 .post(pagePath)
@@ -199,7 +199,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
               draftStoreServiceMock.resolveFind('response')
               courtFinderMock.resolveFind()
               courtFinderMock.resolveCourtDetails()
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
 
               await request(app)
                 .post(pagePath)
@@ -230,7 +230,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
 
               await request(app)
                 .post(pagePath)

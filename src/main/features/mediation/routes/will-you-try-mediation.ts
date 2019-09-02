@@ -21,7 +21,8 @@ function renderView (form: Form<FreeMediation>, res: express.Response) {
 
   res.render(Paths.willYouTryMediation.associatedView, {
     form: form,
-    hint: hint
+    hint: hint,
+    inline: hint.length === 0
   })
 }
 

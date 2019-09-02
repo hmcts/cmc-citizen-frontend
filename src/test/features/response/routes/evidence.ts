@@ -119,7 +119,7 @@ describe('Defendant response: evidence', () => {
           it('impactOfDisputePage when it is not FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
             draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
@@ -133,7 +133,7 @@ describe('Defendant response: evidence', () => {
           it('taskListPage when it is FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
             draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
@@ -147,7 +147,7 @@ describe('Defendant response: evidence', () => {
           it('taskListPage when it is PART ADMISSION', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission', { response: { type: ResponseType.PART_ADMISSION } })
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
             draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
