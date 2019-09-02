@@ -86,7 +86,7 @@ const testData = [
       }
     },
     claimantAssertions: ['You’ve asked the court to review the order'],
-    defendantAssertions: ['Respond to the claimant’s request for a judge to review the order.']
+    defendantAssertions: ['Read the claimant’s request for a judge to review the order.']
   },
   {
     status: 'Orders - defendant fully defended - claimant rejected defence - orders drawn - review requested by defendant',
@@ -98,7 +98,7 @@ const testData = [
         requestedAt: MomentFactory.parse('2019-01-01')
       }
     },
-    claimantAssertions: ['Respond to the defendant’s request for a judge to review the order.'],
+    claimantAssertions: ['Read the defendant’s request for a judge to review the order.'],
     defendantAssertions: ['You’ve asked the court to review the order']
   }
 ]
