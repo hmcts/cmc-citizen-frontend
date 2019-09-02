@@ -8,7 +8,7 @@ const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 
-Feature('Claimant Enter details of claim').retry(3)
+Feature('Claimant Enter details of claim').retry(0)
 
 Scenario('I can prepare a claim with default interest @nightly', async (I: I) => {
   const email: string = await I.createCitizenUser()

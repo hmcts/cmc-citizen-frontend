@@ -10,7 +10,7 @@ const testingSupportSteps = new TestingSupportSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 
-Feature('Testing support').retry(3)
+Feature('Testing support').retry(0)
 
 Scenario('I create a claim draft using testing support and submit it @nightly', async (I: I) => {
   const email: string = await I.createCitizenUser()

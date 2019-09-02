@@ -11,7 +11,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Reject').retry(3)
+  Feature('Claimant Response: Reject').retry(0)
 
   Scenario('As a claimant I can reject the claim @nightly @admissions',
     async (I: I) => {

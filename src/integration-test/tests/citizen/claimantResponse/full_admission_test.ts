@@ -19,7 +19,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Fully Admit').retry(3)
+  Feature('Claimant Response: Fully Admit').retry(0)
 
   Scenario('I can as a claimant view the defendants full admission with immediate payment @nightly @admissions', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)

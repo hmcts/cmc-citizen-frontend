@@ -6,7 +6,7 @@ import { DefenceType } from 'integration-test/data/defence-type'
 
 const helperSteps: Helper = new Helper()
 
-Feature('Respond to claim: handoff journey').retry(3)
+Feature('Respond to claim: handoff journey').retry(0)
 
 Scenario('I can see send your response by email page when I reject all of the claim with counter claim @nightly', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()

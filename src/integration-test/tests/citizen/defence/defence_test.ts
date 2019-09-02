@@ -6,7 +6,7 @@ import { DefenceType } from 'integration-test/data/defence-type'
 
 const helperSteps: Helper = new Helper()
 
-Feature('Respond to claim: online journey').retry(3)
+Feature('Respond to claim: online journey').retry(0)
 
 Scenario('I can complete the journey when I fully reject the claim as I dispute the claim @nightly', async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
