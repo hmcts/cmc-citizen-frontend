@@ -6,6 +6,7 @@ import { ExpertReportsPage } from 'integration-test/tests/citizen/directionsQues
 import { SelfWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/self-witness'
 import { OtherWitnessPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/other-wtiness'
 import { HearingExceptionalCircumstancesPage } from 'integration-test/tests/citizen/directionsQuestionnaire/pages/hearing-exceptional-circumstances'
+import { PartyType } from 'integration-test/data/party-type'
 
 const supportRequiredPage: SupportRequiredPage = new SupportRequiredPage()
 const hearingLocationPage: HearingLocationPage = new HearingLocationPage()
@@ -17,9 +18,12 @@ const otherWitnessPage: OtherWitnessPage = new OtherWitnessPage()
 const hearingDatesPage: HearingDatesPage = new HearingDatesPage()
 
 export class DirectionsQuestionnaireSteps {
-  acceptDirectionsQuestionnaireYesJourney (): void {
+  acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
       supportRequiredPage.selectAll()
+      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+        hearingExceptionalCircumstancesPage.chooseYes()
+      }
       hearingLocationPage.chooseYes()
       usingExpertPage.chooseExpertYes()
       expertReportsPage.chooseYes('I am an expert, trust me',
@@ -30,10 +34,12 @@ export class DirectionsQuestionnaireSteps {
     }
   }
 
-  acceptDirectionsQuestionnaireNoJourney (): void {
+  acceptDirectionsQuestionnaireNoJourney (defendantType: PartyType): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
       supportRequiredPage.selectAll()
-      hearingExceptionalCircumstancesPage.chooseNo()
+      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+        hearingExceptionalCircumstancesPage.chooseNo()
+      }
       hearingLocationPage.chooseNo()
       usingExpertPage.chooseExpertNo()
       selfWitnessPage.chooseNo()

@@ -13,6 +13,7 @@ const buttons = {
 export class HearingExceptionalCircumstancesPage {
   chooseYes (): void {
     I.checkOption('Yes')
+    I.fillField(fields.reason, 'Some Reason')
     I.click(buttons.submit)
   }
 
