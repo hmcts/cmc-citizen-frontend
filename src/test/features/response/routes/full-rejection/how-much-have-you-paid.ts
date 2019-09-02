@@ -108,7 +108,7 @@ describe(`Defendant: reject all - ${header}`, () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-rejection')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -166,7 +166,7 @@ function testValidPost (paidDifference: number, admissionsEnabled: boolean, redi
     })
     draftStoreServiceMock.resolveFind('response:full-rejection')
     draftStoreServiceMock.resolveFind('mediation')
-    draftStoreServiceMock.resolveSave()
+    draftStoreServiceMock.resolveUpdate()
 
     await request(app)
       .post(pagePath)

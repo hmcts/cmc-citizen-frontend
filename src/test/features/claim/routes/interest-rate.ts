@@ -84,7 +84,7 @@ describe('Claim issue: interest rate page', () => {
 
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -95,7 +95,7 @@ describe('Claim issue: interest rate page', () => {
 
       it('should redirect to interest date page when form is valid, 8% is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)
@@ -106,7 +106,7 @@ describe('Claim issue: interest rate page', () => {
 
       it('should redirect to interest date page when form is valid, a different rate is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

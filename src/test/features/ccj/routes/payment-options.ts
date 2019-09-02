@@ -107,7 +107,7 @@ describe('CCJ - payment options', () => {
           it('should return 500 when cannot save CCJ draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('ccj')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -125,7 +125,7 @@ describe('CCJ - payment options', () => {
 
           context('when form is valid', async () => {
             beforeEach(() => {
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
             })
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
