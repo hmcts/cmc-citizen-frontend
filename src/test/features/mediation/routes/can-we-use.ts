@@ -91,7 +91,7 @@ describe('Free mediation: can we use phone number page', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
           await request(app)
@@ -104,7 +104,7 @@ describe('Free mediation: can we use phone number page', () => {
         it('should redirect to defendant task list when defendant says yes', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
           await request(app)
@@ -119,7 +119,7 @@ describe('Free mediation: can we use phone number page', () => {
         it('should redirect to response task list when No was chosen and a phone number is given', async () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId()
 
           await request(app)

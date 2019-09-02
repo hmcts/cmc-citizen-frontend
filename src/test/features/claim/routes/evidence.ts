@@ -47,7 +47,7 @@ describe('Claim issue: evidence', () => {
 
       it('should return 500 and render error page when cannot retrieve draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -57,7 +57,7 @@ describe('Claim issue: evidence', () => {
 
       it('valid form should redirect to task list', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave(100)
+        draftStoreServiceMock.resolveUpdate(100)
 
         await request(app)
           .post(pagePath)
@@ -68,7 +68,7 @@ describe('Claim issue: evidence', () => {
 
       it('should render page when missing description', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

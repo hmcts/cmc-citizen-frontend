@@ -50,7 +50,7 @@
         bold = true
       ) }}
     {% endif %}
-    {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === 'no' %}
+    {% if directionsQuestionnaireDraft.exceptionalCircumstances.exceptionalCircumstances.option === YesNoOption.YES.option %}
       {{ row(
         label = 'Briefly explain your reasons',
         value = directionsQuestionnaireDraft.exceptionalCircumstances.reason,
@@ -197,9 +197,11 @@
 
     {% elseif alreadyPaid %}
       {% if draft.partPaymentReceived %}
-        {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
-          value = draft.partPaymentReceived.received | yesNo,
-          changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        <div class="form-group">
+          {{ row(label = 'Do you agree the defendant has paid ' + amount | numeral + '?', bold = true,
+            value = draft.partPaymentReceived.received | yesNo,
+            changeLink = ClaimantResponsePaths.partPaymentReceivedPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
+        </div>
       {% endif %}
 
       {% if draft.accepted %}
@@ -217,7 +219,7 @@
           changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
-      {% if claim.response.freeMediation === YesNoOption.YES.option and draft.accepted.accepted.option === YesNoOption.NO.option %}
+      {% if claim.response.freeMediation === YesNoOption.YES.option and draft.accepted.accepted.option === YesNoOption.NO.option or draft.partPaymentReceived %}
         {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
       {% else %}
         {{ tableEnd() }}
