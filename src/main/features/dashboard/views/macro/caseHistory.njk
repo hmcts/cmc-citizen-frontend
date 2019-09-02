@@ -228,6 +228,7 @@
       {% else %}
         {{ reviewReceiver(claim, reconsiderationDeadline) }}
       {% endif %}
+      {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -336,6 +337,7 @@
       {% else %}
         {{ reviewReceiver(claim, reconsiderationDeadline) }}
       {% endif %}
+      {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
     {% endif %}
