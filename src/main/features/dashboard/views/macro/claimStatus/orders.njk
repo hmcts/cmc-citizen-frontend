@@ -63,7 +63,7 @@
   {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
     {{ t('You’ve asked the court to review the order') }}
   {% else %}
-    {{ t('Respond to the defendant’s request for a judge to review the order.') }}
+    {{ t('Read the defendant’s request for a judge to review the order.') }}
   {% endif %}
 {% endmacro %}
 
@@ -71,7 +71,7 @@
   {% if claim.reviewOrder.requestedBy === MadeBy.DEFENDANT.value %}
     {{ t('You’ve asked the court to review the order') }}
   {% else %}
-    {{ t('Respond to the claimant’s request for a judge to review the order.') }}
+    {{ t('Read the claimant’s request for a judge to review the order.') }}
   {% endif %}
 {% endmacro %}
 
