@@ -245,8 +245,6 @@ export class DefenceSteps {
       defendantPaymentPlanPage.saveAndContinue()
       defendantTaskListPage.selectShareYourFinancialDetailsTask()
       statementOfMeansSteps.fillStatementOfMeansWithFullDataSet()
-      this.askForMediation()
-      this.askForHearingRequirements()
     }
 
     I.see('Respond to a money claim')

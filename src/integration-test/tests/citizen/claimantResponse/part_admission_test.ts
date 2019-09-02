@@ -81,7 +81,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
-    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.click('input[type=submit]')
     I.see('You’ve signed a settlement agreement')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
