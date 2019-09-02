@@ -292,7 +292,7 @@ export class ClaimantResponseSteps {
     ccjPaidAmountSummaryPage.continue()
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
-    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.click('input[type=submit]')
   }
 
   acceptCCJWithClaimantPaymentOption (
@@ -343,6 +343,6 @@ export class ClaimantResponseSteps {
     ccjPaidAmountSummaryPage.continue()
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
-    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.click('input[type=submit]')
   }
 }
