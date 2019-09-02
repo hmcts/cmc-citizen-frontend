@@ -18,7 +18,7 @@ const otherWitnessPage: OtherWitnessPage = new OtherWitnessPage()
 const hearingDatesPage: HearingDatesPage = new HearingDatesPage()
 
 export class DirectionsQuestionnaireSteps {
-  acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType): void {
+  acceptDirectionsQuestionnaireYesJourney (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
@@ -34,7 +34,7 @@ export class DirectionsQuestionnaireSteps {
     }
   }
 
-  acceptDirectionsQuestionnaireNoJourney (defendantType: PartyType): void {
+  acceptDirectionsQuestionnaireNoJourney (defendantType: PartyType = PartyType.INDIVIDUAL): void {
     if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
       supportRequiredPage.selectAll()
       if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
