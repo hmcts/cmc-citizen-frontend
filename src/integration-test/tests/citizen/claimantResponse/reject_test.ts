@@ -127,7 +127,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)
-      I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+      I.see('Decide whether to proceed')
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
