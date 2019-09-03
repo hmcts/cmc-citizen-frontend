@@ -24,6 +24,8 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { FeatureToggles } from 'utils/featureToggles'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -37,7 +39,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   if (dqsEnabled) {
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
   }
-  const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
+  const statementOfTruthType = SignatureType.RESPONSE
   if (dqsEnabled) {
     if (form.model.type === SignatureType.QUALIFIED) {
       form.model.type = SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED
@@ -62,8 +64,46 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     datesUnavailable: datesUnavailable,
     statementOfTruthType: statementOfTruthType,
     mediationPilot: mediationPilot,
-    mediationEnabled: FeatureToggles.isEnabled('mediation')
+    mediationEnabled: FeatureToggles.isEnabled('mediation'),
+    timeline: getTimeline(draft),
+    evidence: getEvidence(draft)
   })
+}
+
+function rejectingFullAmount (draft: Draft<ResponseDraft>): boolean {
+  return draft.document.response.type === ResponseType.DEFENCE
+    || draft.document.response.type === ResponseType.PART_ADMISSION
+}
+
+function getDisagreementRoot (draft: Draft<ResponseDraft>):
+    { timeline?: DefendantTimeline, evidence?: DefendantEvidence } {
+  if (draft.document.isResponseRejected()) {
+    return draft.document
+  } else {
+    return draft.document.partialAdmission
+  }
+}
+
+function getTimeline (draft: Draft<ResponseDraft>): DefendantTimeline {
+  if (rejectingFullAmount(draft)) {
+    const timeline = getDisagreementRoot(draft).timeline
+    timeline.removeExcessRows()
+    if (timeline.rows.length > 0 || timeline.comment) {
+      return timeline
+    }
+  }
+  return undefined
+}
+
+function getEvidence (draft: Draft<ResponseDraft>): DefendantEvidence {
+  if (rejectingFullAmount(draft)) {
+    const evidence = getDisagreementRoot(draft).evidence
+    evidence.removeExcessRows()
+    if (evidence.rows.length > 0 || evidence.comment) {
+      return evidence
+    }
+  }
+  return undefined
 }
 
 function defendantIsCounterClaiming (draft: Draft<ResponseDraft>): boolean {
