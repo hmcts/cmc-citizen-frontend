@@ -21,6 +21,7 @@ import {
 } from 'test/data/entity/responseData'
 
 import { respondedAt } from 'test/data/entity/fullDefenceData'
+import { MadeBy } from 'claims/models/madeBy'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -73,6 +74,32 @@ const testData = [
     claimOverride: {},
     claimantAssertions: ['Send us more details before the hearing'],
     defendantAssertions: ['Send us more details before the hearing']
+  },
+  {
+    status: 'Orders - defendant fully defended - claimant rejected defence - orders drawn - review requested by claimant',
+    claim: ordersClaim,
+    claimOverride: {
+      reviewOrder: {
+        reason: 'some reason',
+        requestedBy: MadeBy.CLAIMANT.value,
+        requestedAt: MomentFactory.parse('2019-01-01')
+      }
+    },
+    claimantAssertions: ['You’ve asked the court to review the order'],
+    defendantAssertions: ['Read the claimant’s request for a judge to review the order.']
+  },
+  {
+    status: 'Orders - defendant fully defended - claimant rejected defence - orders drawn - review requested by defendant',
+    claim: ordersClaim,
+    claimOverride: {
+      reviewOrder: {
+        reason: 'some reason',
+        requestedBy: MadeBy.DEFENDANT.value,
+        requestedAt: MomentFactory.parse('2019-01-01')
+      }
+    },
+    claimantAssertions: ['Read the defendant’s request for a judge to review the order.'],
+    defendantAssertions: ['You’ve asked the court to review the order']
   }
 ]
 
