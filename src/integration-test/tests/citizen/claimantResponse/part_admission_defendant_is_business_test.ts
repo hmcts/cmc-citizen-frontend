@@ -15,7 +15,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response ::: Part admit when defendant is business').retry(1)
+  Feature('Claimant Response ::: Part admit when defendant is business').retry(0)
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @citizen @admissions @business', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)

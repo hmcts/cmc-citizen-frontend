@@ -8,7 +8,7 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 
-Feature('Respond to claim: handoff journey').retry(1)
+Feature('Respond to claim: handoff journey').retry(0)
 
 Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()

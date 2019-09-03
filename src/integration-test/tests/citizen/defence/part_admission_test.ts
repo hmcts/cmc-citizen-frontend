@@ -25,7 +25,7 @@ async function prepareClaim (I: I) {
 }
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Partially admit the claim').retry(1)
+  Feature('Partially admit the claim').retry(0)
 
   Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
