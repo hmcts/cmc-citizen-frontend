@@ -110,5 +110,12 @@
       "encryptionKey": "not-a-real-32-bit-encryption-key",
       "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
     }
+  },
+  "webChat": {
+    "chatId": "3077733355d19fd430f23c7.02555395",
+    "tenant": "c2FuZGJveGhtY3RzMDE",
+    "buttonNoAgents": "20599210435d19f59cdc3e95.94551214",
+    "buttonAgentsBusy": "8752254635d19f5bb21ff07.71234899",
+    "buttonServiceClosed": "4639879315d19f67c3c1055.15174024"
   }
 }

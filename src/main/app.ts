@@ -107,6 +107,8 @@ moment.prototype.toISOString = function () {
 }
 
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
+// Web Chat
+app.use('/webchat', express.static(path.join(__dirname, '/node_modules/@hmcts/ctsc-web-chat/assets')))
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {
@@ -133,6 +135,3 @@ app.use((err, req, res, next) => {
   }
   next()
 })
-
-// Web Chat
-app.use('/webchat', express.static(path.join(__dirname, '/node_modules/@hmcts/ctsc-web-chat/assets')))

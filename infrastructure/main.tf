@@ -67,6 +67,30 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "cmc_webchat_id" {
+  name = "cmc-webchat-id"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_webchat_tenant" {
+  name = "cmc-webchat-tenant"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_webchat_button_no_agents" {
+  name = "cmc-webchat-button-no-agents"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+data "azurerm_key_vault_secret" "cmc_webchat_button_busy" {
+  name = "cmc-webchat-button-busy"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_webchat_button_service_closed" {
+  name = "cmc-webchat-button-service-closed"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
 module "citizen-frontend" {
   source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
   product = "${var.product}-${var.microservice}"
@@ -147,6 +171,11 @@ module "citizen-frontend" {
     FEATURE_NEW_DASHBOARD_STATUS = "${var.feature_new_dashboard_status}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
+    WEBCHAT_CHAT_ID = "${data.azurerm_key_vault_secret.cmc_webchat_id.value}"
+    WEBCHAT_TENANT = "${data.azurerm_key_vault_secret.cmc_webchat_tenant.value}"
+    WEBCHAT_BUTTON_NO_AGENTS = "${data.azurerm_key_vault_secret.cmc_webchat_button_no_agents.value}"
+    WEBCHAT_BUTTON_AGENTS_BUSY = "${data.azurerm_key_vault_secret.cmc_webchat_button_busy.value}"
+    WEBCHAT_BUTTON_SERVICE_CLOSED = "${data.azurerm_key_vault_secret.cmc_webchat_button_service_closed.value}"
 
   }
 }
