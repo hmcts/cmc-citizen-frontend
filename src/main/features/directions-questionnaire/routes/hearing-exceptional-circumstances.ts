@@ -88,7 +88,6 @@ export default express.Router()
           }
         } else if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
           draft.document.hearingLocation = undefined
-          form.model.reason = undefined
         }
 
         draft.document.exceptionalCircumstances = form.model
