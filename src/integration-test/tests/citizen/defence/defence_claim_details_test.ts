@@ -10,7 +10,7 @@ const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Feature('Respond to claim: claim details').retry(0)
+Feature('Respond to claim: claim details').retry(1)
 
 Scenario('I can view the claim details from a link on the dashboard @citizen', async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()

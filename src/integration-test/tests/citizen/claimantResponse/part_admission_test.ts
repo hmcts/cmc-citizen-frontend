@@ -17,7 +17,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Part Admit').retry(0)
+  Feature('Claimant Response: Part Admit').retry(1)
 
   Scenario('I can as a claimant reject the defendants part admission by immediately @citizen @admissions', async (I: I) => {
 

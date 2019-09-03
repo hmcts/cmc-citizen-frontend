@@ -10,7 +10,7 @@ const claimSteps: ClaimSteps = new ClaimSteps()
 const userSteps: UserSteps = new UserSteps()
 const dashboardClaimDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Feature('Dashboard').retry(0)
+Feature('Dashboard').retry(1)
 
 Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', async (I: I) => {
   const email: string = userSteps.getClaimantEmail()
