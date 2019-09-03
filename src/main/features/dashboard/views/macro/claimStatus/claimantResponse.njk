@@ -1,3 +1,5 @@
+{% from "internalLink.njk" import internalLink %}
+
 {% macro claimantWithDefendantAsBusinessResponse() %}
 <p>
   {{ t('You need to send the defendant’s financial details to the court.') }}
@@ -8,26 +10,34 @@
 
 {% set claimNumber = claim.claimNumber %}
 
-<h2 class="heading-small">{{ t('You need to send the defendant’s financial details to the court') }}</h2>
+  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      <div class="status-block">
+      <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
+      <p>{{ t('You’ve rejected the defendant’s response.')}}</p>
+      <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
+      <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+      </div>
+  {%  else %}
 
-<p>{{ t('Make sure you include your claim number: {{ claimNumber }}.', { claimNumber: claimNumber }) }}</p>
-<p>{{ t('The court will review the details to see if the defendant can afford your repayment plan.') }}</p>
+      <h2 class="heading-small">{{ t('You need to send the defendant’s financial details to the court') }}</h2>
+      <p>{{ t('Make sure you include your claim number: {{ claimNumber }}.', { claimNumber: claimNumber }) }}</p>
+      <p>{{ t('The court will review the details to see if the defendant can afford your repayment plan.') }}</p>
+      <h3 class="heading-small">{{ t('Use this address') }}</h3>
+      <p>{{ t('The defendant should have sent you the details - send them to:') }}</p>
 
-<h3 class="heading-small">{{ t('Use this address') }}</h3>
-<p>{{ t('The defendant should have sent you the details - send them to:') }}</p>
+      <div class="keep-formatting panel">{{ t('Civil Money Claims') }}
+        {{ t('St. Katharine`s House') }}
+        {{ t('21-27 St. Katharine`s Street') }}
+        {{ t('Northampton') }}
+        {{ t('NN1 2LH') }}
+      </div>
 
-<div class="keep-formatting panel">{{ t('Civil Money Claims') }}
-  {{ t('St. Katharine`s House') }}
-  {{ t('21-27 St. Katharine`s Street') }}
-  {{ t('Northampton') }}
-  {{ t('NN1 2LH') }}
-</div>
-
-<p>{{ t('Or email them to {{ supportEmailAddress }}', { supportEmailAddress: supportEmailAddress }) }}</p>
-<h4 class="heading-small">{{ t('If the court believes the defendant can afford your plan') }}</h4>
-<p>{{ t('A County Court Judgment (CCJ) will be issued. This requires the defendant to pay according to the
-  terms of the plan.') }}
-<h4 class="heading-small">{{ t('If the court believes the defendant can not afford your plan') }}</h4>
-<p>{{ t('The court will set its own repayment terms and issue a CCJ.') }}</p>
+      <p>{{ t('Or email them to {{ supportEmailAddress }}', { supportEmailAddress: supportEmailAddress }) }}</p>
+      <h4 class="heading-small">{{ t('If the court believes the defendant can afford your plan') }}</h4>
+      <p>{{ t('A County Court Judgment (CCJ) will be issued. This requires the defendant to pay according to the
+        terms of the plan.') }}
+      <h4 class="heading-small">{{ t('If the court believes the defendant can not afford your plan') }}</h4>
+      <p>{{ t('The court will set its own repayment terms and issue a CCJ.') }}</p>
+  {% endif %}
 
 {% endmacro %}
