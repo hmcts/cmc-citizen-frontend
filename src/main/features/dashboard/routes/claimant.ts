@@ -25,6 +25,7 @@ export default express.Router()
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
+      const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
 
       if (claim && claim.claimantId !== res.locals.user.id) {
         throw new ForbiddenError()
@@ -33,7 +34,8 @@ export default express.Router()
         claim: claim,
         mediationDeadline: mediationDeadline,
         reconsiderationDeadline: reconsiderationDeadline,
-        isReviewOrderEligible: isReviewOrderEligible
+        isReviewOrderEligible: isReviewOrderEligible,
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline
       })
     }))
   .post(Paths.claimantPage.uri,
