@@ -94,6 +94,14 @@ export class Claim {
     return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
   }
 
+  async respondToReviewOrderDeadline (): Promise<Moment> {
+    if (!this.reviewOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.reviewOrder.requestedAt, 19)
+  }
+
   async respondToReconsiderationDeadline (): Promise<Moment> {
     if (!this.directionOrder) {
       return undefined

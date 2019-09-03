@@ -103,7 +103,10 @@ const testData = [
       'ask the court to review it',
       'A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.'
     ]
-  },
+  }
+]
+
+const testDatWithExtraWorkingDayCall = [
   {
     status: 'Orders - defendant fully defended - claimant rejected defence - orders drawn - claimant requests review',
     claim: ordersClaim,
@@ -218,12 +221,25 @@ describe('Dashboard page', () => {
           beforeEach(() => {
             idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
             claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
-            claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
           })
 
           testData.forEach(data => {
             it(`should render claim status: ${data.status}`, async () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+              claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
+
+              await request(app)
+                .get(claimPagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
+            })
+          })
+
+          testDatWithExtraWorkingDayCall.forEach(data => {
+            it(`should render claim status: ${data.status}`, async () => {
+              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+              claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
+              claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
 
               await request(app)
                 .get(claimPagePath)
@@ -242,6 +258,18 @@ describe('Dashboard page', () => {
           testData.forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
+              await request(app)
+                .get(defendantPagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
+            })
+          })
+
+          testDatWithExtraWorkingDayCall.forEach(data => {
+            it(`should render dashboard: ${data.status}`, async () => {
+              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+              claimStoreServiceMock.mockNextWorkingDay(MomentFactory.currentDate().add(11, 'days'))
 
               await request(app)
                 .get(defendantPagePath)
