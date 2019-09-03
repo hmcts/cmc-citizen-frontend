@@ -10,7 +10,7 @@ const interestSteps: InterestSteps = new InterestSteps()
 
 Feature('Claimant Enter details of claim').retry(0)
 
-Scenario('I can prepare a claim with default interest @nightly', async (I: I) => {
+Scenario('I can prepare a claim with default interest @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
   claimSteps.completeEligibility()
@@ -27,7 +27,7 @@ Scenario('I can prepare a claim with default interest @nightly', async (I: I) =>
   I.see('Prepare your claim')
 })
 
-Scenario('I can prepare a claim with no interest @nightly', async (I: I) => {
+Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
