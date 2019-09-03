@@ -374,18 +374,16 @@ const mediationDQEnabledClaimDetails = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
-      'You’ve rejected the defendant’s admission',
-      `They said they owe ${NumberFormatter.formatMoney(defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount)}.`,
-      'You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.',
-      'Find out how mediation works',
-      'Download their response'
+      'You’ve rejected the defendant’s response.',
+      'We’ll contact you to try to arrange a mediation appointment',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
     ],
     defendantAssertions: [
-      'We’ll contact you with a mediation appointment',
-      'They said you didn’t pay them £' + defenceWithAmountClaimedAlreadyPaidData.paymentDeclaration.paidAmount,
-      'They agreed to try mediation. We’ll contact you with details of your appointment.',
-      'Find out how mediation works',
-      'Download your response'
+      'John Smith has rejected your defence.',
+      'We’ll contact you to try to arrange a mediation appointment',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
     ]
   },
   {
