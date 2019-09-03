@@ -132,8 +132,8 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
-      I.see('The defendant’s response')
-      I.see(`${testData.defendantName} says they paid you £125 on 1 January 2018.`)
+      I.see('Decide whether to proceed')
+      I.see(`${testData.defendantName} has rejected your claim.`)
       I.click('Sign out')
     })
 }
