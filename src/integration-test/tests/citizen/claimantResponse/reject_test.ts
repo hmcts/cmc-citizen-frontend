@@ -114,7 +114,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see(`You told us you’ve paid £125. We’ve sent ${testData.claimantName} this response`)
       // check dashboard
       I.click('My account')
-      I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+      I.see('Wait for the claimant to respond')
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
