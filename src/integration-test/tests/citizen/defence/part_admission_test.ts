@@ -23,27 +23,27 @@ async function prepareClaim (I: I) {
 }
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Partially admit the claim').retry(3)
+  Feature('Partially admit the claim')
 
-  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with immediate payment @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with immediate payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with instalments payment @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with instalments payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
