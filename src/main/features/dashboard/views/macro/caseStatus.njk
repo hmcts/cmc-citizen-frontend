@@ -88,7 +88,6 @@
 {% from "./claimStatus/partAdmitRejectionDefendant.njk" import partAdmitRejectedByClaimantDefendantDashboard %}
 
 {% from "./claimStatus/breachOfPaymentDefendant.njk" import CCJAfterBreakingSettlementAgreementClaimDetails %}
-
 {% from "./claimStatus/orders.njk" import
   directionsOrderIssuedClaimantDashboard,
   directionsOrderIssuedDefendantDashboard,
@@ -235,10 +234,14 @@
       {{ claimFullAdmissionForDefendantDashboard(claim) }}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-    {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
-      {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
+    {% if claim.directionOrder !== undefined %}
+      {{ directionsOrderIssuedDefendantDashboard() }}
     {% else %}
-      {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+      {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+      {% else %}
+        {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
+      {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceDefendantDashboard() }}
@@ -250,7 +253,7 @@
     {{ offerAcceptedForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
     or status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
-    or status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ%}
+    or status === ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ %}
     {{ partAdmitRejectedByClaimantDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_STATES_PAID %}
     {{ statesPaidRejectedDefendantDashboard(claim) }}
