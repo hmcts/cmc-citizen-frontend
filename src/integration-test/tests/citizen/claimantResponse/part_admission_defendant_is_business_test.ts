@@ -38,8 +38,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You need to send the defendant’s financial details to the court.')
   })
 
-  // todo: skipped this test until DQ bug is fixed
-  Scenario('I can as a claimant accept and suggest an alternative payment intention with instalments @nightly @admissions @business', async (I: I) => {
+  Scenario('I can as a claimant accept and suggest an alternative payment intention with instalments @citizen @admissions @business', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.IMMEDIATELY
