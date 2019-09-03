@@ -53,8 +53,8 @@ const testData = [
       },
       ...claimantRejectAlreadyPaidWithMediation
     },
-    claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: ['Wait for the court to review the case']
+    claimantAssertions: ['We’ll contact you with a mediation appointment'],
+    defendantAssertions: ['We’ll contact you with a mediation appointment']
   }
 ]
 
