@@ -107,28 +107,28 @@ describe('dateWithDayAtFront', () => {
 
   describe('throws exception when', () => {
     it('null given', () => {
-      expectInputDateFilterToThrowErrorWithMsg(null, 'Input should be moment or string, cannot be empty')
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(null, 'Input should be moment or string, cannot be empty')
     })
 
     it('undefined given', () => {
-      expectInputDateFilterToThrowErrorWithMsg(undefined, 'Input should be moment or string, cannot be empty')
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(undefined, 'Input should be moment or string, cannot be empty')
     })
 
     it('empty string given', () => {
-      expectInputDateFilterToThrowErrorWithMsg('', 'Input should be moment or string, cannot be empty')
+      dateWithDayAtFrontFilterToThrowErrorWithMsg('', 'Input should be moment or string, cannot be empty')
     })
 
     it('number given', () => {
-      expectInputDateFilterToThrowErrorWithMsg(1.01 as any, 'Input should be moment or string, cannot be empty')
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(1.01 as any, 'Input should be moment or string, cannot be empty')
     })
 
     it('string given, but it is not a valid date', () => {
-      expectInputDateFilterToThrowErrorWithMsg('this is invalid date', 'Invalid date')
+      dateWithDayAtFrontFilterToThrowErrorWithMsg('this is invalid date', 'Invalid date')
     })
 
     it('moment given with invalid date', () => {
       const invalidDateMoment = moment('2010-02-31')
-      expectInputDateFilterToThrowErrorWithMsg(invalidDateMoment, 'Invalid date')
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(invalidDateMoment, 'Invalid date')
     })
   })
 })
@@ -252,5 +252,11 @@ function expectAddDaysFilterToThrowErrorWithMsg (input: any, msg: string): void 
 function expectMonthIncrementToThrowErrorWithMsg (input: any, msg: string): void {
   expect(() => {
     monthIncrementFilter(input)
+  }).to.throw(Error, msg)
+}
+
+function dateWithDayAtFrontFilterToThrowErrorWithMsg (input: any, msg: string): void {
+  expect(() => {
+    dateWithDayAtFrontFilter(input)
   }).to.throw(Error, msg)
 }
