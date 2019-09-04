@@ -8,9 +8,9 @@ const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 
-Feature('Claimant Enter details of claim').retry(0)
+Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with default interest @citizen', async (I: I) => {
+Scenario('I can prepare a claim with default interest @citizen', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
   claimSteps.completeEligibility()
@@ -27,7 +27,7 @@ Scenario('I can prepare a claim with default interest @citizen', async (I: I) =>
   I.see('Prepare your claim')
 })
 
-Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
+Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
@@ -45,7 +45,7 @@ Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
   I.see('Prepare your claim')
 })
 
-Scenario('I can prepare a claim with different interest rate and date @citizen', async (I: I) => {
+Scenario('I can prepare a claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
@@ -62,7 +62,7 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   I.see('Prepare your claim')
 })
 
-Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', async (I: I) => {
+Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
@@ -81,6 +81,6 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
-Scenario('I can enter a claim details and navigate up to payment page @smoke-test', (I: I) => {
+Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
   claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, false)
 })

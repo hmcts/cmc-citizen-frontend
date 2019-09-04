@@ -11,9 +11,9 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Reject').retry(0)
+  Feature('Claimant Response: Reject')
 
-  Scenario('As a claimant I can reject the claim @citizen @admissions',
+  Scenario('As a claimant I can reject the claim @citizen @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -57,7 +57,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     })
 
   Scenario(
-    'As a claimant I can reject the claim as I have paid less than the amount claimed @nightly @admissions',
+    'As a claimant I can reject the claim as I have paid less than the amount claimed @nightly @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -98,7 +98,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     })
 
   Scenario(
-    'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions',
+    'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)

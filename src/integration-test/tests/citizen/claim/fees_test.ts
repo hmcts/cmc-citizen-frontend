@@ -9,9 +9,9 @@ const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmountPage()
 
-Feature('Claimant enter details of claim: fees').retry(0)
+Feature('Claimant enter details of claim: fees')
 
-Scenario('I can see the Claim amount page calculates properly and shows the correct fees table @citizen', async (I: I) => {
+Scenario('I can see the Claim amount page calculates properly and shows the correct fees table @citizen', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
 

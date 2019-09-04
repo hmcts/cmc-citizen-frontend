@@ -6,9 +6,9 @@ import { DefenceType } from 'integration-test/data/defence-type'
 
 const helperSteps: Helper = new Helper()
 
-Feature('Respond to claim: online journey').retry(0)
+Feature('Respond to claim: online journey')
 
-Scenario('I can complete the journey when I fully reject the claim as I dispute the claim @citizen', async (I: I) => {
+Scenario('I can complete the journey when I fully reject the claim as I dispute the claim @citizen', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
   helperSteps.finishResponse(testData)
@@ -18,7 +18,7 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
 })
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Scenario('I can fill out forms for I admit part of the claim @nightly @admissions', async (I: I) => {
+  Scenario('I can fill out forms for I admit part of the claim @nightly @admissions', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION
     helperSteps.finishResponse(testData)
@@ -27,7 +27,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim`)
   })
 
-  Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions', async (I: I) => {
+  Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
     helperSteps.finishResponse(testData)
