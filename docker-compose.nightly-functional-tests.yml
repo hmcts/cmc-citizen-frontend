@@ -18,6 +18,7 @@ services:
         - HEALTHCHECK_CITIZEN=true
         - FEATURE_ADMISSIONS
         - FEATURE_MEDIATION
+        - FEATURE_DIRECTIONS_QUESTIONNAIRE
         - FEATURE_TESTING_SUPPORT
       volumes:
         - ./functional-output:/usr/src/app/output

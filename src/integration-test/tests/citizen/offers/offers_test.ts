@@ -33,7 +33,7 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
   I.see('You’ve both signed a legal agreement. The claim is now settled.')
 })
 
-Scenario('I can make an offer as a defendant to a claimant and have the claimant reject it @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can make an offer as a defendant to a claimant and have the claimant reject it @nightly', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 

@@ -37,13 +37,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with by set date payment @nightly @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with instalments payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with instalments payment @nightly @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)

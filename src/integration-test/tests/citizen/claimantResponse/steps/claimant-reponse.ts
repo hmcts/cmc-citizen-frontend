@@ -22,6 +22,7 @@ import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen
 import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -41,6 +42,7 @@ const defendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefend
 const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
 const settleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
 const mediationSteps: MediationSteps = new MediationSteps()
+const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 
 export class ClaimantResponseSteps {
 
@@ -80,7 +82,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(false)
+    this.acceptCCJ(false, testData)
   }
 
   acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
@@ -89,7 +91,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(true)
+    this.acceptCCJ(true, testData)
   }
 
   acceptCcjFromDashboardWhenRejectPaymentMethod (
@@ -128,6 +130,8 @@ export class ClaimantResponseSteps {
     }
     taskListPage.selectTaskFreeMediation()
     mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+    taskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourney()
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
@@ -271,7 +275,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  acceptCCJ (shouldPaySome: boolean): void {
+  acceptCCJ (shouldPaySome: boolean, testData: EndToEndTestData): void {
     taskListPage.selectTaskViewDefendantResponse()
     I.click('Continue')
     I.see('COMPLETE')
@@ -288,7 +292,7 @@ export class ClaimantResponseSteps {
     ccjPaidAmountSummaryPage.continue()
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.click('input[type=submit]')
   }
 
   acceptCCJWithClaimantPaymentOption (
@@ -339,6 +343,6 @@ export class ClaimantResponseSteps {
     ccjPaidAmountSummaryPage.continue()
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.click('input[type=submit]')
   }
 }

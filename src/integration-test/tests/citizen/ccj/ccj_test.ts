@@ -27,7 +27,7 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
     I.see('County Court Judgment requested', 'h1.bold-large')
   })
 
-Scenario('Request judgment as a Company, pay by set date @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Request judgment as a Company, pay by set date @nightly', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   const claimantType: PartyType = PartyType.COMPANY
   const defendantType: PartyType = PartyType.COMPANY
@@ -42,7 +42,7 @@ Scenario('Request judgment as a Company, pay by set date @citizen', { retries: 3
   I.see('County Court Judgment requested', 'h1.bold-large')
 })
 
-Scenario('Request judgment as a sole trader, pay immediately @citizen', { retries: 3 }, async (I: I) => {
+Scenario('Request judgment as a sole trader, pay immediately @nightly', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   const claimantType: PartyType = PartyType.SOLE_TRADER
   const defendantType: PartyType = PartyType.ORGANISATION
