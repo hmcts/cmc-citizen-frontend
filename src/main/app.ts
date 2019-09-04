@@ -61,7 +61,7 @@ app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   }
 }))
 
-app.use(express.static(path.join(__dirname, '/node_modules/@hmcts/ctsc-web-chat/assets')))
+// app.use(express.static(path.join(__dirname, '/node_modules/@hmcts/ctsc-web-chat/assets')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 if (env !== 'mocha') {
