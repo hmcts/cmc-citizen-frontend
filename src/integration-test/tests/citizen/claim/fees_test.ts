@@ -9,7 +9,7 @@ const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmountPage()
 
-Feature('Claimant enter details of claim: fees').retry(3)
+Feature('Claimant enter details of claim: fees')
 
 Scenario('I can see the Claim amount page calculates properly and shows the correct fees table @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -34,4 +34,4 @@ Scenario('I can see the Claim amount page calculates properly and shows the corr
   I.see('£1,500.01 to £3,000 £105 £170')
   I.see('£3,000.01 to £5,000 £185 £335')
   I.see('£5,000.01 to £10,000 £410 £335')
-})
+}).retry(3)

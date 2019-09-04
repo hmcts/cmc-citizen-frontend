@@ -15,7 +15,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response ::: Part admit when defendant is business').retry(3)
+  Feature('Claimant Response ::: Part admit when defendant is business')
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @citizen @admissions @business', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
@@ -36,7 +36,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('My account')
     I.see(testData.claimRef)
     I.see('You need to send the defendant’s financial details to the court.')
-  })
+  }).retry(3)
 
   Scenario('I can as a claimant accept and suggest an alternative payment intention with instalments @citizen @admissions @business', async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
@@ -58,5 +58,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('My account')
     I.see(testData.claimRef)
     I.see('You need to send the defendant’s financial details to the court.')
-  })
+  }).retry(3)
 }

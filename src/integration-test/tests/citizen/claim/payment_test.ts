@@ -6,7 +6,7 @@ import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment
 const claimSteps: ClaimSteps = new ClaimSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 
-Feature('Claim issue').retry(3)
+Feature('Claim issue')
 
 Scenario('I can cancel payment, attempt payment with declined card and finally issue claim using working card @citizen @quick', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -26,4 +26,4 @@ Scenario('I can cancel payment, attempt payment with declined card and finally i
   claimSteps.checkClaimFactsAreTrueAndSubmit(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   paymentSteps.payWithWorkingCard()
   I.waitForText('Claim submitted')
-})
+}).retry(3)

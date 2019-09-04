@@ -17,7 +17,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Part Admit').retry(3)
+  Feature('Claimant Response: Part Admit')
 
   Scenario('I can as a claimant reject the defendants part admission by immediately @citizen @admissions', async (I: I) => {
 
@@ -41,7 +41,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('Wait for the court to review the case')
-  })
+  }).retry(3)
 
   Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @citizen @admissions', async (I: I) => {
 
@@ -63,7 +63,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement.')
-  })
+  }).retry(3)
 
   Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of immediate payment @citizen @admissions', async (I: I) => {
 
@@ -86,7 +86,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement.')
-  })
+  }).retry(3)
 
   Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of set date @nightly @admissions', async (I: I) => {
 
@@ -110,7 +110,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement.')
-  })
+  }).retry(3)
 
   Scenario('I can as a claimant accept the defendants part admission by instalments with settlement agreement and rejecting defendants payment method in favour of instalments @nightly @admissions', async (I: I) => {
 
@@ -133,5 +133,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('You’ve signed a settlement agreement.')
-  })
+  }).retry(3)
 }

@@ -23,19 +23,19 @@ async function prepareClaim (I: I) {
 }
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Partially admit the claim').retry(3)
+  Feature('Partially admit the claim')
 
   Scenario('I can complete the journey when I partially admit the claim with payment already made @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentMade(PartyType.INDIVIDUAL)
-  })
+  }).retry(3)
 
   Scenario('I can complete the journey when I partially admit the claim with immediate payment @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
-  })
+  }).retry(3)
 
   Scenario('I can complete the journey when I partially admit the claim with by set date payment @citizen @admissions', async (I: I) => {
     const claimData = await prepareClaim(I)
@@ -47,5 +47,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
-  })
+  }).retry(3)
 }

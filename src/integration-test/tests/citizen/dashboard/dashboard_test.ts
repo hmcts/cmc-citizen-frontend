@@ -8,7 +8,7 @@ import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pa
 const claimSteps: ClaimSteps = new ClaimSteps()
 const dashboardClaimDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Feature('Dashboard').retry(3)
+Feature('Dashboard')
 
 Scenario('Check newly created claim is in my account dashboard with correct claim amount @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -24,4 +24,4 @@ Scenario('Check newly created claim is in my account dashboard with correct clai
   I.see('Claim status')
   dashboardClaimDetails.clickViewClaim()
   dashboardClaimDetails.checkClaimData(claimRef, claimData)
-})
+}).retry(3)

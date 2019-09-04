@@ -8,7 +8,7 @@ const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 
-Feature('Claimant Enter details of claim').retry(3)
+Feature('Claimant Enter details of claim')
 
 Scenario('I can prepare a claim with default interest @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -25,7 +25,7 @@ Scenario('I can prepare a claim with default interest @citizen', async (I: I) =>
   I.see('Total amount you’re claiming')
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
-})
+}).retry(3)
 
 Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -43,7 +43,7 @@ Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
   I.see('Total amount you’re claiming')
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
-})
+}).retry(3)
 
 Scenario('I can prepare a claim with different interest rate and date @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -60,7 +60,7 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   I.see('Total amount you’re claiming')
   interestSteps.skipClaimantInterestTotalPage()
   I.see('Prepare your claim')
-})
+}).retry(3)
 
 Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -83,4 +83,4 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 
 Scenario('I can enter a claim details and navigate up to payment page @smoke-test', (I: I) => {
   claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, false)
-})
+}).retry(3)

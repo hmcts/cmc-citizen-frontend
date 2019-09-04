@@ -8,7 +8,7 @@ import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pa
 const helperSteps: Helper = new Helper()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Feature('Respond to claim: claim details').retry(3)
+Feature('Respond to claim: claim details')
 
 Scenario('I can view the claim details from a link on the dashboard @citizen', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
@@ -23,7 +23,7 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', a
   I.click('Respond to claim')
   defendantDetails.clickViewClaim()
   defendantDetails.checkClaimData(claimRef, claimData)
-})
+}).retry(3)
 
 Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
@@ -39,4 +39,4 @@ Scenario('I can view the claim details from a link on the dashboard for interest
   defendantDetails.clickViewClaim()
   defendantDetails.checkClaimData(claimRef, claimData)
   I.see('Interest calculated with daily interest amount of £' + dailyInterestAmount + ' for 0 days')
-})
+}).retry(3)

@@ -11,7 +11,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Reject').retry(3)
+  Feature('Claimant Response: Reject')
 
   Scenario('As a claimant I can reject the claim @citizen @admissions',
     async (I: I) => {
@@ -56,7 +56,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
         I.see(`They said they dispute your claim.`)
       }
       I.click('Sign out')
-    })
+    }).retry(3)
 
   Scenario(
     'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @admissions',
@@ -97,7 +97,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
       // TODO: accept or reject the response - implemented yet?
       I.click('Sign out')
-    })
+    }).retry(3)
 
   Scenario(
     'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions',
@@ -137,5 +137,5 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see('The defendant’s response')
       I.see(`${testData.defendantName} says they paid you £125 on 1 January 2018.`)
       I.click('Sign out')
-    })
+    }).retry(3)
 }

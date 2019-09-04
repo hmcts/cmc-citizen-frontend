@@ -9,7 +9,7 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 const userSteps: UserSteps = new UserSteps()
 const ccjSteps: CountyCourtJudgementSteps = new CountyCourtJudgementSteps()
 
-Feature('CCJ').retry(3)
+Feature('CCJ')
 
 Scenario('Request judgment as an individual with no defendant email and pay by instalments @citizen @quick', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -24,7 +24,7 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
   ccjSteps.ccjDefendantToPayByInstalments()
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
-})
+}).retry(3)
 
 Scenario('Request judgment as a Company, pay by set date @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -39,7 +39,7 @@ Scenario('Request judgment as a Company, pay by set date @citizen', async (I: I)
   ccjSteps.ccjDefendantToPayBySetDate()
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
-})
+}).retry(3)
 
 Scenario('Request judgment as a sole trader, pay immediately @citizen', async (I: I) => {
   const email: string = await I.createCitizenUser()
@@ -54,4 +54,4 @@ Scenario('Request judgment as a sole trader, pay immediately @citizen', async (I
   ccjSteps.ccjDefendantToPayImmediately()
   ccjSteps.checkCCJFactsAreTrueAndSubmit(claimantType, claimData.defendants[0], defendantType)
   I.see('County Court Judgment requested', 'h1.bold-large')
-})
+}).retry(3)
