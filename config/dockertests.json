@@ -5,7 +5,7 @@
     "admissions": true,
     "paidInFull": true,
     "returnErrorToUser": true,
-    "mediation": true,
+    "mediation": false,
     "mediationPilot": false,
     "directionsQuestionnaire": false,
     "newDashboardStatus": false
