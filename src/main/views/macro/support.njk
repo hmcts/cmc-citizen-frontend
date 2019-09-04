@@ -29,3 +29,25 @@
   {{ externalLink(t('Citizens Advice'), 'https://www.citizensadvice.org.uk/about-us/contact-us/') }}.
 </p>
 {% endmacro %}
+
+
+{% macro contactUsForHelp(label = 'Contact us for help') %}
+<details style="margin-top: 35px">
+
+  <summary><span class="summary">{{ t(label) }}</span></summary>
+  <div class="panel">
+    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">Web chat</h2>
+    <div id="ctsc-web-chat"></div>
+
+    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">Email</h2>
+    <pre><a href="mailto:mailto:moneyclaims@justice.gov.uk" target="_blank">moneyclaims@justice.gov.uk</a></pre>
+    <pre>{{ t("We'll get back to you within 10 days.") }}</pre>
+
+    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">Telephone</h2>
+    <pre>{{ t('0300 123 7050') }}</pre>
+    <pre>{{ t("Monday to Friday, 9am to 5pm") }}</pre>
+    {{ _callCharges()}}
+
+  </div>
+</details>
+{% endmacro %}

@@ -39,12 +39,24 @@ gulp.task('copy-files', (done) => {
   done()
 })
 
+function copyWebChatTemplate () {
+  gulp.src([
+    './node_modules/@hmcts/ctsc-web-chat/assets/javascript/*.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
+
+  gulp.src([
+    './node_modules/@hmcts/ctsc-web-chat/assets/**/*.{css,scss}'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
+}
+
 function copyGovUkTemplate () {
   gulp.src([
     './node_modules/jquery/dist/jquery.min.js',
     './node_modules/govuk_frontend_toolkit/javascripts/**/*.js',
     './node_modules/govuk_template_jinja/assets/javascripts/**/*.js',
-    './node_modules/@hmcts/ctsc-web-chat/assets/javascripts/*.js'
+    './node_modules/@hmcts/ctsc-web-chat/assets/javascript/*.js'
 
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))

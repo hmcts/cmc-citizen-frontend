@@ -92,8 +92,9 @@
 
     {% block content %}{% endblock %}
 
-    {% include "includes/report_problem_link.njk" %}
-    <div id="ctsc-web-chat"></div>
+
+    {% include "includes/contact-us-for-help.njk" %}
+
   </main>
 
   <footer class="group js-footer" id="footer" role="contentinfo">
@@ -122,33 +123,13 @@
 
   <div id="global-app-error" class="app-error hidden"></div>
 
+  <script src="{{ asset_paths['js'] }}/lib/hmcts-webchat.js"></script>
+  <script src="{{ asset_paths['js'] }}/webchart-init.js" nonce="b8d681cc-bb2d-4d53-8692-beb4b7556465"></script>
+
   <script src="{{ asset_paths['js_vendor'] }}/govuk-template.js?{{ govuk_template_version }}"></script>
 
   {% block body_end %}{% endblock %}
 
   <script>if (typeof window.GOVUK === 'undefined') document.body.className = document.body.className.replace('js-enabled', '');</script>
-  <script src="/webchat/javascript/hmcts-webchat.js"></script>
-  <script nonce="b8d681cc-bb2d-4d53-8692-beb4b7556465">
-      webchat_init({
-          uuid: "script_17284281475d5519274e25a3.69472655",
-          tenant: "aG1jdHNzdGFnaW5nMDE",
-          channel: "CMC",
-          btnNoAgents: '/aG1jdHNzdGFnaW5nMDE/button_7732814745cac6f4603c4d1.53357933/img/logo',
-          btnAgentsBusy: '/aG1jdHNzdGFnaW5nMDE/button_2042157415cc19c95669039.65793052/img/logo',
-          btnServiceClosed: '/aG1jdHNzdGFnaW5nMDE/button_20199488815cc1a89e0861d5.73103009/img/logo',
-          chatDownAction: 'showMessage',
-          chatLinkFocusable: false,
-          textChatDown: 'The web chat service is temporarily unavailable, please try again later.',
-          textChatClosed: 'Web chat is now closed.\nOpening hours are Monday to Friday, 9:30am to 5pm.',
-          textChatWithAnAgent: 'Chat online with an agent',
-          textNoAgentsAvailable: 'No agents are available, please try again later.',
-          textAllAgentsBusy: 'All our web chat agents are busy helping other people. Please try again later or contact us using one of the ways above.',
-          textChatAlreadyOpen: 'A web chat window is already open.',
-          textAdditional: 'Monday to Friday, 9:30am to 5pm.',
-          stylesheetURL: '/webchat/css/hmcts-webchat-gds-v3.css',
-          busHandlerURL: '/webchat/javascript/hmcts-webchat-busHandler.js',
-          gdsMajorVersion: 3
-      })
-  </script>
 </body>
 </html>

@@ -61,6 +61,7 @@ app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   }
 }))
 
+app.use(express.static(path.join(__dirname, '/node_modules/@hmcts/ctsc-web-chat/assets')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 if (env !== 'mocha') {
@@ -107,8 +108,6 @@ moment.prototype.toISOString = function () {
 }
 
 app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
-// Web Chat
-app.use('/webchat', express.static(path.join(__dirname, '/node_modules/@hmcts/ctsc-web-chat/assets')))
 
 // Below will match all routes not covered by the router, which effectively translates to a 404 response
 app.use((req, res, next) => {
