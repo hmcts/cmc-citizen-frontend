@@ -41,7 +41,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
-env.FEATURE_MEDIATION = 'false'
+env.FEATURE_MEDIATION = 'true'
+env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
@@ -56,7 +57,7 @@ withNightlyPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
   enableCrossBrowserTest()
   enableSecurityScan()
-  enableFullFunctionalTest(180)
+  enableFullFunctionalTest(200)
 
   after('crossBrowserTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'
