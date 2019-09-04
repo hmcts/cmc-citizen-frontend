@@ -5,10 +5,10 @@
     "admissions": true,
     "paidInFull": true,
     "returnErrorToUser": true,
-    "mediation": false,
-    "mediationPilot": false,
-    "directionsQuestionnaire": false,
-    "newDashboardStatus": false
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
+    "newDashboardStatus": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"
