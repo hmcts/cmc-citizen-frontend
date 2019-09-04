@@ -8,9 +8,9 @@ import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pa
 const helperSteps: Helper = new Helper()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Feature('Respond to claim: claim details').retry(3)
+Feature('Respond to claim: claim details')
 
-Scenario('I can view the claim details from a link on the dashboard @citizen', async (I: I) => {
+Scenario('I can view the claim details from a link on the dashboard @citizen', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
@@ -25,7 +25,7 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', a
   defendantDetails.checkClaimData(claimRef, claimData)
 })
 
-Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', async (I: I) => {
+Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
