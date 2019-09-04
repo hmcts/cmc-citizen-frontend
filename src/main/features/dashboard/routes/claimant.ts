@@ -25,6 +25,7 @@ export default express.Router()
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
+      const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
       const isReconsiderationDeadlinePast: boolean = claim && claim.reviewOrder ? claim.reviewOrder.isReconsiderationDeadlinePassed(reconsiderationDeadline) : undefined
 
       if (claim && claim.claimantId !== res.locals.user.id) {
@@ -35,6 +36,7 @@ export default express.Router()
         mediationDeadline: mediationDeadline,
         reconsiderationDeadline: reconsiderationDeadline,
         isReviewOrderEligible: isReviewOrderEligible,
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline,
         isReconsiderationDeadlinePast: isReconsiderationDeadlinePast
       })
     }))

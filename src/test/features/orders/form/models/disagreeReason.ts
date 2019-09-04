@@ -53,13 +53,13 @@ describe('DisagreeReason', () => {
     })
 
     it('should reject claim reason with more than max allowed characters', () => {
-      const errors = validator.validateSync(new DisagreeReason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH + 1)))
+      const errors = validator.validateSync(new DisagreeReason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH_1000 + 1)))
       expect(errors).to.have.lengthOf(1)
       expectValidationError(errors, DefaultValidationErrors.TEXT_TOO_LONG)
     })
 
     it('should accept claim reason with max allowed characters', () => {
-      const errors = validator.validateSync(new DisagreeReason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH)))
+      const errors = validator.validateSync(new DisagreeReason(generateString(ValidationConstraints.FREE_TEXT_MAX_LENGTH_1000)))
       expect(errors).to.be.empty
     })
 

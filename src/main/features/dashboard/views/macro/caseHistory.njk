@@ -121,7 +121,7 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, isReconsiderationDeadlinePast) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, isReconsiderationDeadlinePast, respondToReviewOrderDeadline) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
@@ -224,7 +224,7 @@
       {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
     {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
       {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-        {{ reviewRequester(claim, reconsiderationDeadline) }}
+        {{ reviewRequester(claim, respondToReviewOrderDeadline) }}
       {% else %}
         {{ reviewReceiver(claim, reconsiderationDeadline, isReconsiderationDeadlinePast) }}
       {% endif %}
@@ -233,7 +233,7 @@
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, isReconsiderationDeadlinePast) %}
+{% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, isReconsiderationDeadlinePast, respondToReviewOrderDeadline) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForDefendantClaimDetails(claim) }}
@@ -333,9 +333,9 @@
       {% endif %}
     {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
       {% if claim.reviewOrder.requestedBy === MadeBy.DEFENDANT.value %}
-        {{ reviewRequester(claim, reconsiderationDeadline) }}
+        {{ reviewRequester(claim, respondToReviewOrderDeadline) }}
       {% else %}
-        {{ reviewReceiver(claim, reconsiderationDeadline, isReconsiderationDeadlinePast) }}
+        {{ reviewReceiver(claim, respondToReviewOrderDeadline, isReconsiderationDeadlinePast) }}
       {% endif %}
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}

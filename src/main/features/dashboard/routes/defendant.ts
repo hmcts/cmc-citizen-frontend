@@ -21,6 +21,7 @@ export default express.Router()
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
+      const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
       const isReconsiderationDeadlinePast: boolean = claim.reviewOrder ? claim.reviewOrder.isReconsiderationDeadlinePassed(reconsiderationDeadline) : undefined
 
       if (claim && claim.defendantId !== user.id) {
@@ -31,6 +32,7 @@ export default express.Router()
         claim: claim,
         reconsiderationDeadline: reconsiderationDeadline,
         isReviewOrderEligible: isReviewOrderEligible,
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline,
         isReconsiderationDeadlinePast: isReconsiderationDeadlinePast
       })
     }))
