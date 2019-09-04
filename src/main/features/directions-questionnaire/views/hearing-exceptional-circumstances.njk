@@ -15,17 +15,18 @@
     <div class="column-two-thirds">
       {% if party === MadeBy.CLAIMANT %}
         <p>{{ t('The defendant chose this location.') }}</p>
-
+       {% if facilities %}
         <details class="form-group-compound analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
           <summary>{{ t('See this court’s facilities') }}</summary>
 
           <div class="panel">
-            {% for facility in courtFacilities %}
+            {% for facility in facilities %}
               <h3 class="heading-small form-group-related">{{ facility.name }}</h3>
               {{ facility.description | safe }}
             {% endfor %}
           </div>
         </details>
+       {% endif %}
       {% else %}
         <p>{{ t('If not, the hearing will be held at the court the claimant chooses.') }}</p>
       {% endif %}
