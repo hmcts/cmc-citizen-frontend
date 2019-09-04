@@ -1,8 +1,4 @@
-interface Feature {
-  retry (numberOfRetries?: number)
-}
-
-declare const Feature: (string: string) => Feature;
+declare const Scenario: (string: string, { retries: number }, callback: ICodeceptCallback) => void;
 
 declare namespace CodeceptJS {
   export interface I {

@@ -1,22 +1,22 @@
 {% from "internalLink.njk" import internalLink %}
 {% from "addressFragment.njk" import addressFragment %}
 
-{% macro reviewRequester(claim, reconsiderationDeadline) %}
+{% macro reviewRequester(claim, respondToReviewOrderDeadline) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('You’ve asked the court to review the order') }} </h2>
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
       <p>{{ t('We’ll tell {{ defendantName }}. They can comment until {{ deadline }}.',
-          { defendantName: claim.claimData.defendant.name, deadline: reconsiderationDeadline | date }) }}</p>
+          { defendantName: claim.claimData.defendant.name, deadline: respondToReviewOrderDeadline | date }) }}</p>
     {% else %}
       <p>{{ t('We’ll tell {{ claimantName }}. They can comment until {{ deadline }}.',
-          { claimantName: claim.claimData.claimant.name, deadline: reconsiderationDeadline | date }) }}</p>
+          { claimantName: claim.claimData.claimant.name, deadline: respondToReviewOrderDeadline | date }) }}</p>
     {% endif %}
     <p>{{ t('A judge will then review the order and any comments. We’ll contact you by post to tell you what to do next.') }}</p>
     <p>{{ t('Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.') }}</p>
   </div>
 {% endmacro %}
 
-{% macro reviewReceiver(claim, reconsiderationDeadline) %}
+{% macro reviewReceiver(claim, respondToReviewOrderDeadline) %}
   <div class="status-block">
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
       <h2 class="heading-small">{{ t('Read {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
@@ -33,13 +33,13 @@
       {{ internalLink(t('Download {{ claimantName }}’s request to see what they asked ', { claimantName: claim.claimData.claimant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
       {{ t('(PDF).') }}
       <h2 class="heading-small">{{ t('Comment on {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
-      <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ claimantName }} before 4pm on {{ deadline }}.', { claimantName: claim.claimData.claimant.name, deadline: reconsiderationDeadline | date }) }}</p>
+      <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ claimantName }} before 4pm on {{ deadline }}.', { claimantName: claim.claimData.claimant.name, deadline: respondToReviewOrderDeadline | date }) }}</p>
     {% else %}
       {{ internalLink(t('Download {{ defendantName }}’s request to see what they asked ', { defendantName: claim.claimData.defendant.name }), OrdersPaths.reviewOrderReceiver.evaluateUri({ externalId: claim.externalId })) }}
       {{ t('(PDF).') }}
       <h2 class="heading-small">{{ t('Comment on {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h2>
       <p>{{ t('If you want to comment on the request, email your comments to the court and to {{ defendantName }} before 4pm on {{ deadline }}.',
-          { defendantName: claim.claimData.defendant.name, deadline: reconsiderationDeadline | date }) }}</p>
+          { defendantName: claim.claimData.defendant.name, deadline: respondToReviewOrderDeadline | date }) }}</p>
     {% endif %}
     <p>{{ t('Include the claim number ({{ claimNumber }}) in the emails.', { claimNumber: claim.claimNumber }) }}</p>
     <p>{{ t('The court’s email address is:') }} <a href="mailto:{{ supportEmailAddress }}">{{ supportEmailAddress }}</a></p>
@@ -63,7 +63,7 @@
   {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
     {{ t('You’ve asked the court to review the order') }}
   {% else %}
-    {{ t('Respond to the defendant’s request for a judge to review the order.') }}
+    {{ t('Read the defendant’s request for a judge to review the order.') }}
   {% endif %}
 {% endmacro %}
 
@@ -71,7 +71,7 @@
   {% if claim.reviewOrder.requestedBy === MadeBy.DEFENDANT.value %}
     {{ t('You’ve asked the court to review the order') }}
   {% else %}
-    {{ t('Respond to the claimant’s request for a judge to review the order.') }}
+    {{ t('Read the claimant’s request for a judge to review the order.') }}
   {% endif %}
 {% endmacro %}
 
