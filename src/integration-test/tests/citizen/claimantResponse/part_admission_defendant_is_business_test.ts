@@ -17,7 +17,7 @@ const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage(
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response ::: Part admit when defendant is business')
 
-  Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @citizen @admissions @business', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept and suggest an alternative payment intention with set date @nightly @admissions @business', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.BY_SET_DATE
@@ -30,7 +30,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('View and respond')
     claimantResponseSteps.acceptPartAdmitFromBusinessWithAlternativePaymentIntention()
     checkAndSendPage.verifyFactsForPartAdmitFromBusiness()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see(testData.claimRef)
     I.see('You’ve proposed a different repayment plan')
     I.click('My account')
@@ -52,7 +52,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('View and respond')
     claimantResponseSteps.acceptFullAdmitFromBusinessWithAlternativePaymentIntention(claimantResponseTestData)
     checkAndSendPage.verifyFactsForPartAdmitFromBusiness()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.click('input[type=submit]')
     I.see(testData.claimRef)
     I.see('You’ve proposed a different repayment plan')
     I.click('My account')

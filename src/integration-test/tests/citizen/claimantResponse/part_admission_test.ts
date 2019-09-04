@@ -19,7 +19,7 @@ const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response: Part Admit')
 
-  Scenario('I can as a claimant reject the defendants part admission by immediately @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant reject the defendants part admission by immediately @nightly @admissions', { retries: 3 }, async (I: I) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
@@ -36,14 +36,14 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantResponseSteps.respondToOffer('View and respond')
     claimantResponseSteps.reject(testData, claimantResponseTestData)
     checkAndSendPage.verifyFactsForPartAdmitRejection()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You agreed to try to resolve the claim using mediation')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
     I.see('Wait for the court to review the case')
   })
 
-  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I) => {
 
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
@@ -58,7 +58,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve signed a settlement agreement')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
@@ -81,7 +81,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    I.click('input[type=submit]')
     I.see('You’ve signed a settlement agreement')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
@@ -105,7 +105,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve signed a settlement agreement')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
@@ -128,7 +128,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     userSteps.login(testData.claimantEmail)
     claimantResponseSteps.acceptSettlementFromDashboardWhenRejectPaymentMethod(testData, claimantResponseTestData, 'View and respond')
     checkAndSendPage.verifyFactsForSettlement()
-    checkAndSendPage.checkFactsTrueAndSubmit()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve proposed a different repayment plan')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
