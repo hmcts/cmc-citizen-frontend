@@ -38,7 +38,8 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) %}
-  {{ t('You’ve reject the defendant’s response.') }}
+  {{ t('You’ve rejected {{ defendantName }}’s response.',
+    { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) %}
