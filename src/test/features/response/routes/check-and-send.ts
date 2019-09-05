@@ -129,7 +129,7 @@ describe('Defendant response: check and send page', () => {
                   'I believe that the facts stated in this response are true.' ,
                   'The hearing requirement details on this page are true to the best of my knowledge.',
                   '<input id="signedtrue" type="checkbox" name="signed" value="true"',
-                  'Timeline of what happened',
+                  'Your timeline of what happened',
                   'Your evidence'
                 ))
             })
