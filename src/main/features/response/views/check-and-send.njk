@@ -136,7 +136,7 @@
 
       {{
         timelineCheckAndSend(
-          header = 'Timeline of what happened (optional)',
+          header = 'Your timeline of what happened (optional)',
           timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
           url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
           bottomBorder = false
@@ -188,7 +188,7 @@
 
         {{
           timelineCheckAndSend(
-            header = 'Timeline of what happened (optional)',
+            header = 'Your timeline of what happened (optional)',
             timeline = draft.timeline.getPopulatedRowsOnly(),
             url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false
@@ -223,7 +223,7 @@
 
       {{
         timelineCheckAndSend(
-          header = 'Timeline of what happened (optional)',
+          header = 'Your timeline of what happened (optional)',
           timeline = draft.timeline.getPopulatedRowsOnly(),
           url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
         )
