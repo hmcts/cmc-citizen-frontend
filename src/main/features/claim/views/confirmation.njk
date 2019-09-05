@@ -1,6 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
-{% from "support.njk" import contactUsForHelp %}
+{% from "support.njk" import supportWidget %}
 {% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
@@ -42,7 +42,7 @@
 
       {{ internalLink(t('Continue'), DashboardPaths.dashboardPage.uri, 'button') }}
 
-<!--      {{ contactUsForHelp('Help and support') }}-->
+      {{ supportWidget('Help and support') }}
 
     </div>
 

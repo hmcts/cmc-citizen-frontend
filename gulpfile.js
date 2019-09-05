@@ -14,6 +14,7 @@ const govUkElementRoot = path.join(repoRoot, 'node_modules/govuk-elements-sass/p
 
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
+const webChatDirectory = `${assetsDirectory}/webchat`
 
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
@@ -32,6 +33,7 @@ gulp.task('sass', (done) => {
 
 gulp.task('copy-files', (done) => {
   copyGovUkTemplate()
+  copyWebChatTemplate()
   copyClientPolyfills()
   copyA11ySniffer()
   copyClientModules()
@@ -43,20 +45,24 @@ function copyWebChatTemplate () {
   gulp.src([
     './node_modules/@hmcts/ctsc-web-chat/assets/javascript/*.js'
   ])
-    .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
+    .pipe(gulp.dest(`${webChatDirectory}/javascript/`))
 
   gulp.src([
-    './node_modules/@hmcts/ctsc-web-chat/assets/**/*.{css,scss}'
+    './node_modules/@hmcts/ctsc-web-chat/assets/css/*.css'
   ])
-    .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
+    .pipe(gulp.dest(`${webChatDirectory}/css/`))
+
+  gulp.src([
+    './node_modules/@hmcts/ctsc-web-chat/assets/sass/*.scss'
+  ])
+    .pipe(gulp.dest(`${webChatDirectory}/sass/`))
 }
 
 function copyGovUkTemplate () {
   gulp.src([
     './node_modules/jquery/dist/jquery.min.js',
     './node_modules/govuk_frontend_toolkit/javascripts/**/*.js',
-    './node_modules/govuk_template_jinja/assets/javascripts/**/*.js',
-    './node_modules/@hmcts/ctsc-web-chat/assets/javascript/*.js'
+    './node_modules/govuk_template_jinja/assets/javascripts/**/*.js'
 
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))

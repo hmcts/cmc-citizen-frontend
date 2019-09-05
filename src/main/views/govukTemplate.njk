@@ -92,7 +92,6 @@
 
     {% block content %}{% endblock %}
 
-
     {% include "includes/contact-us-for-help.njk" %}
 
   </main>
@@ -123,8 +122,8 @@
 
   <div id="global-app-error" class="app-error hidden"></div>
 
-  <script src="{{ asset_paths['js'] }}/lib/hmcts-webchat.js"></script>
-  <script src="{{ asset_paths['js'] }}/webchart-init.js" nonce="b8d681cc-bb2d-4d53-8692-beb4b7556465"></script>
+  <script src="{{ asset_paths['webchat'] }}/javascript/hmcts-webchat.js"></script>
+  <script src="{{ asset_paths['webchat'] }}/javascript/webchart-init.js" nonce="b8d681cc-bb2d-4d53-8692-beb4b7556465"></script>
 
   <script src="{{ asset_paths['js_vendor'] }}/govuk-template.js?{{ govuk_template_version }}"></script>
 
