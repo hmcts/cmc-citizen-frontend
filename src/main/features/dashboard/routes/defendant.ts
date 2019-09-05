@@ -21,6 +21,7 @@ export default express.Router()
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
+      const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
 
       if (claim && claim.defendantId !== user.id) {
         throw new ForbiddenError()
@@ -29,6 +30,7 @@ export default express.Router()
       res.render(Paths.defendantPage.associatedView, {
         claim: claim,
         reconsiderationDeadline: reconsiderationDeadline,
-        isReviewOrderEligible: isReviewOrderEligible
+        isReviewOrderEligible: isReviewOrderEligible,
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline
       })
     }))

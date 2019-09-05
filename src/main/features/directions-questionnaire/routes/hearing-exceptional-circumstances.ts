@@ -17,6 +17,16 @@ import { CourtDetails } from 'court-finder-client/courtDetails'
 import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
 import { Claim } from 'claims/models/claim'
 
+function getPostcode (defendantDirectionsQuestionnaire: DirectionsQuestionnaire, claim: Claim) {
+  const postcodeFromDirectionQuestionnaire = defendantDirectionsQuestionnaire.hearingLocation.courtAddress !== undefined
+    ? defendantDirectionsQuestionnaire.hearingLocation.courtAddress.postcode
+    : undefined
+
+  return defendantDirectionsQuestionnaire.hearingLocation.locationOption === CourtLocationType.SUGGESTED_COURT
+    ? claim.response.defendant.address.postcode
+    : postcodeFromDirectionQuestionnaire
+}
+
 async function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
   const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
   let defendantCourt = ''
@@ -25,14 +35,17 @@ async function renderPage (res: express.Response, form: Form<ExceptionalCircumst
   if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
     const claim: Claim = res.locals.claim
     const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
-    const postcode: string = defendantDirectionsQuestionnaire.hearingLocation.locationOption === CourtLocationType.SUGGESTED_COURT ?
-      claim.response.defendant.address.postcode : defendantDirectionsQuestionnaire.hearingLocation.courtAddress.postcode
-    const court: Court = await Court.getNearestCourt(postcode)
-    if (court) {
-      courtDetails = await Court.getCourtDetails(court.slug)
+    const postcode: string = getPostcode(defendantDirectionsQuestionnaire, claim)
+
+    if (postcode) {
+      const court: Court = await Court.getNearestCourt(postcode)
+      if (court) {
+        courtDetails = await Court.getCourtDetails(court.slug)
+      }
     }
     defendantCourt = defendantDirectionsQuestionnaire.hearingLocation.courtName
   }
+
   res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, {
     form: form,
     party: party,
@@ -70,28 +83,21 @@ export default express.Router()
 
           if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
             draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
-            draft.document.hearingLocation.courtAccepted = YesNoOption.NO
+            draft.document.hearingLocation.courtAccepted = YesNoOption.YES
             form.model.reason = undefined
           }
         } else if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
           draft.document.hearingLocation = undefined
-          form.model.reason = undefined
         }
 
         draft.document.exceptionalCircumstances = form.model
         await new DraftService().save(draft, user.bearerToken)
-        if (party === MadeBy.CLAIMANT) {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
-            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          } else {
-            res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          }
+
+        if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
+          res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-            res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          } else {
-            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          }
+          res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
+
       }
     }))

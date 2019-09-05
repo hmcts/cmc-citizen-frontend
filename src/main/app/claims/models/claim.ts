@@ -94,6 +94,14 @@ export class Claim {
     return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
   }
 
+  async respondToReviewOrderDeadline (): Promise<Moment> {
+    if (!this.reviewOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.reviewOrder.requestedAt, 19)
+  }
+
   async respondToReconsiderationDeadline (): Promise<Moment> {
     if (!this.directionOrder) {
       return undefined
@@ -145,7 +153,11 @@ export class Claim {
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     } else if (this.hasOrderBeenDrawn()) {
-      return ClaimStatus.ORDER_DRAWN
+      if (this.reviewOrder) {
+        return ClaimStatus.REVIEW_ORDER_REQUESTED
+      } else {
+        return ClaimStatus.ORDER_DRAWN
+      }
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -236,9 +248,6 @@ export class Claim {
     }
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
-    }
-    if (this.directionOrder && this.reviewOrder) {
-      statuses.unshift({ status: ClaimStatus.REVIEW_ORDER_REQUESTED })
     }
 
     return statuses
