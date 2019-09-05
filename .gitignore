@@ -14,6 +14,7 @@ node_modules/
 
 src/main/public/img/lib/*
 src/main/public/js/lib/**/*.js
+src/main/public/webchat/sass/*.scss
 src/main/public/stylesheets/lib/*
 src/main/public/apple-touch-icon.png
 
