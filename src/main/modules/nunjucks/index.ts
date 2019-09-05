@@ -4,7 +4,13 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
+import {
+  addDaysFilter,
+  dateWithDayAtFrontFilter,
+  dateFilter,
+  dateInputFilter,
+  monthIncrementFilter
+} from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -118,6 +124,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
+    nunjucksEnv.addFilter('dateWithDayAtFront', dateWithDayAtFrontFilter)
     nunjucksEnv.addFilter('addDays', addDaysFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('monthIncrement', monthIncrementFilter)
