@@ -1,8 +1,8 @@
 {% from "externalLink.njk" import externalLink %}
 
 {% macro _webChatWidget(label = 'Web chat') %}
-    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t(label)}}</h2>
-    <div id="ctsc-web-chat"></div>
+      <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t(label)}}</h2>
+      <div id="ctsc-web-chat"></div>
 {% endmacro%}
 
 {% macro _emailWidget(label = 'Email') %}
@@ -20,7 +20,7 @@
 
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
-<!--    {{ _webChatWidget() }}-->
+    {{ _webChatWidget() }}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
 
