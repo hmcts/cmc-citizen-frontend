@@ -11,8 +11,6 @@ const datePickerUtils = {
     };
   },
 
-  formatDateForDisplay: (d) => moment(new Date(d)).format("dddd D MMMM YYYY"),
-
   formatDateForData: (d) => {
     let mDate = moment(d);
     return {
@@ -91,7 +89,7 @@ const datePicker = {
     $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
       _csrf: csrf,
       hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val(),
-      unavailableDates: dates,
+      unavailableDates: dates
     }, (result) => {
       $("#date-selection-wrapper").empty().append(result);
       $("#date-selection-wrapper .add-another-delete-link").click(function (e) {
