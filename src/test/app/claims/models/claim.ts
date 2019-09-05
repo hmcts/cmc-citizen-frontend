@@ -703,7 +703,7 @@ describe('Claim', () => {
           type: 'REJECTION'
         }
 
-        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
+        expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
       })
 
       it('when claimant accepts defendants defence', () => {
@@ -957,7 +957,7 @@ describe('Claim', () => {
       })
     }
 
-    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ status when claimant has reject defence and DQs is not enabled', () => {
+    it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is not enabled', () => {
       claim.respondedAt = moment()
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
@@ -967,7 +967,7 @@ describe('Claim', () => {
         type: ClaimantResponseType.REJECTION
       }
       expect(claim.stateHistory).to.have.lengthOf(2)
-      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ)
+      expect(claim.stateHistory[0].status).to.equal(ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE)
       expect(claim.stateHistory[1].status).to.equal(ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE)
     })
   })

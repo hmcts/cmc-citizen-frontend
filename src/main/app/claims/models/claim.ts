@@ -110,6 +110,7 @@ export class Claim {
     return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
+  // noinspection JSUnusedGlobalSymbols; used in nunjucks
   get remainingDays (): number {
     return this.responseDeadline.diff(MomentFactory.currentDate(), 'days')
   }
@@ -192,8 +193,6 @@ export class Claim {
       return ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT
     } else if (this.isSettlementReached()) {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
-    } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
-      return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.isResponseSubmitted()) {
@@ -447,10 +446,6 @@ export class Claim {
       return true
     }
 
-    if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
-      return true
-    }
-
     return (((this.response && (this.response as FullAdmissionResponse).paymentIntention
       && (this.response as FullAdmissionResponse).paymentIntention.paymentOption !==
       PaymentOption.IMMEDIATELY
@@ -611,15 +606,11 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantDefence (): boolean {
-    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
+    return this.claimantResponse
       && this.claimantResponse.type === ClaimantResponseType.REJECTION
-      && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
-  }
-
-  private hasClaimantRejectedDefendantDefenceWithoutDQs (): boolean {
-    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse
-      && this.claimantResponse.type === ClaimantResponseType.REJECTION
-      && (this.response.responseType === ResponseType.FULL_DEFENCE && this.response.defenceType === DefenceType.DISPUTE)
+      && this.response
+      && this.response.responseType === ResponseType.FULL_DEFENCE
+      && this.response.defenceType === DefenceType.DISPUTE
   }
 
   private isInterlocutoryJudgmentRequestedOnAdmissions (): boolean {
