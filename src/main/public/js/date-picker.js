@@ -98,7 +98,7 @@ const datePicker = {
         e.preventDefault();
         let dateIndex = /\d+$/.exec(e.currentTarget.id)[0];
         const d = dates
-          .map((localDate) => moment({ ...localDate, month: localDate.month - 1 }))
+          .map((localDate) => moment({ year: localDate.year, month: localDate.month - 1, day: localDate.day }))
           .map((mDate) => mDate.toDate())
           .sort((date1, date2) => date1.getTime() - date2.getTime())
           .filter((localDate, index) => index !== Number(dateIndex));
