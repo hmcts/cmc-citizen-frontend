@@ -59,6 +59,32 @@ export function dateInputFilter (value: moment.Moment | string): string {
 }
 
 /* *
+ * This filter should be used when you need a date in long format for content
+ *
+ * Usage (in njk):
+ * {{ myDateVar | date }}
+ *
+ * output:
+ *  Thursday 6 April 2018
+ * */
+export function dateWithDayAtFrontFilter (value: moment.Moment | string): string {
+  try {
+    if (!value || !(typeof value === 'string' || value instanceof moment)) {
+      throw new Error('Input should be moment or string, cannot be empty')
+    }
+
+    const date: moment.Moment = typeof value === 'string' ? moment(value) : value
+    if (!date.isValid()) {
+      throw new Error('Invalid date')
+    }
+    return MomentFormatter.formatDayDate(date)
+  } catch (err) {
+    logger.error(err)
+    throw err
+  }
+}
+
+/* *
  * This filter should be used when you need to dynamically modify a date. The keyword 'now' may be given as
  * input to generate dates relative to the current date.
  *
