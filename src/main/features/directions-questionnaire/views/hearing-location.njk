@@ -24,11 +24,11 @@
           {% if not fallbackPage %}
             {% if courtPostcode %}
               <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
-            {% elseif party === MadeBy.DEFENDANT %}
+            {% elseif party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
+              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}</p>
+            {% else %}
               {{ commonContent() }}
               <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}</p>
-            {% elseif party === MadeBy.CLAIMANT %}
-              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}
             {% endif %}
 
             <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
