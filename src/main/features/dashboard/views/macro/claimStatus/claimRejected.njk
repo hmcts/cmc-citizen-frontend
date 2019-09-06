@@ -38,7 +38,8 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) %}
-  {{ t('You’ve reject the defendant’s response.') }}
+  {{ t('You’ve rejected {{ defendantName }}’s defence.',
+    { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) %}
@@ -46,7 +47,7 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) %}
-  {{ t('We’ll contact you with a mediation appointment') }}
+  {{ t('We’ll contact you to try to arrange a mediation appointment') }}
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
