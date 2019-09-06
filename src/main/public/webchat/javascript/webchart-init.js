@@ -1,3 +1,11 @@
+function getUrl () {
+  if (window.location.port) {
+    return window.location.hostname + ":" + window.location.port
+  } else {
+    return window.location.hostname
+  }
+}
+
 webchat_init({
   uuid: 'script_17284281475d5519274e25a3.69472655',
   tenant: 'aG1jdHNzdGFnaW5nMDE',
@@ -14,7 +22,7 @@ webchat_init({
   textAllAgentsBusy: 'All our web chat agents are busy helping other people. Please try again later or contact us using one of the ways above.',
   textChatAlreadyOpen: 'A web chat window is already open.',
   textAdditional: 'Monday to Friday, 9:30am to 5pm.',
-  stylesheetURL: 'https://localhost:3000/webchat/css/hmcts-webchat-gds-v3.css',
-  busHandlerURL: 'https://localhost:3000/webchat/javascript/hmcts-webchat-busHandler.js',
+  stylesheetURL: 'https://' + getUrl() + '/webchat/css/hmcts-webchat-gds-v3.css',
+  busHandlerURL: 'https://' + getUrl() + '/webchat/javascript/hmcts-webchat-busHandler.js',
   gdsMajorVersion: 3
 })
