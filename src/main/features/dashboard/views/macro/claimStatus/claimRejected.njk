@@ -294,7 +294,7 @@
     <p>{{ t('You need to {{ completeDQ }} form to tell us your requirements in case there’s a hearing.',
         { completeDQ: internalLink(
           'complete a directions questionnaire',
-          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
         }
       ) | safe
       }}</p>
@@ -312,7 +312,7 @@
     <p>{{ t('You need to {{ completeDQ }} form to give us more information before the hearing.',
         { completeDQ: internalLink(
           'complete a directions questionnaire',
-          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
         }
       ) | safe
       }}</p>
