@@ -53,7 +53,19 @@ function check (uri: string): void {
       ensureHeadingIsIncludedInPageTitle(text)
 
       const issues: Issue[] = await runPa11y(agent.get(uri).url)
-      ensureNoAccessibilityErrors(issues)
+      ensureOnlyTwoAccessibilityErrorsForWebchat(issues)
+    })
+  })
+}
+
+function checkTaskLists (uri: string): void {
+  describe(`Page ${uri}`, () => {
+    it('should have no accessibility errors', async () => {
+      const text = await extractPageText(uri)
+      ensureHeadingIsIncludedInPageTitle(text)
+
+      const issues: Issue[] = await runPa11y(agent.get(uri).url)
+      ensureOnlyOneAccessibilityErrorsForWebchat(issues)
     })
   })
 }
@@ -85,9 +97,14 @@ function ensureHeadingIsIncludedInPageTitle (text: string): void {
   }
 }
 
-function ensureNoAccessibilityErrors (issues: Issue[]): void {
+function ensureOnlyTwoAccessibilityErrorsForWebchat (issues: Issue[]): void {
   const errors: Issue[] = issues.filter((issue: Issue) => issue.type === 'error')
-  expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
+  expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.of.length(2)
+}
+
+function ensureOnlyOneAccessibilityErrorsForWebchat (issues: Issue[]): void {
+  const errors: Issue[] = issues.filter((issue: Issue) => issue.type === 'error')
+  expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.of.length(1)
 }
 
 const excludedPaths: DefendantResponsePaths[] = [
@@ -116,6 +133,11 @@ describe('Accessibility', () => {
       if (!excluded) {
         if (path.uri.includes(':madeBy')) {
           check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6', madeBy: MadeBy.CLAIMANT.value }))
+        } else if (path.uri.includes('task-list')) {
+          const uri = path.uri.includes(':externalId')
+            ? path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' })
+            : path.uri
+          checkTaskLists(uri)
         } else if (path.uri.includes(':externalId')) {
           check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
         } else {

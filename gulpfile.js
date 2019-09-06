@@ -63,7 +63,6 @@ function copyGovUkTemplate () {
     './node_modules/jquery/dist/jquery.min.js',
     './node_modules/govuk_frontend_toolkit/javascripts/**/*.js',
     './node_modules/govuk_template_jinja/assets/javascripts/**/*.js'
-
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/`))
 
