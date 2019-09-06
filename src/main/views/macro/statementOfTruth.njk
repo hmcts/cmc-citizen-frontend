@@ -11,7 +11,7 @@ macro statementOfTruth(
 ) %}
   <p class="bold-medium">{{ t(title) }}</p>
 
-  {% if statementOfTruthType == SignatureType.CLAIM or statementOfTruthType == SignatureType.RESPONSE or statementOfTruthType == SignatureType.DIRECTION_QUESTIONNAIRE %}
+  {% if statementOfTruthType == SignatureType.CLAIM or statementOfTruthType == SignatureType.RESPONSE %}
     <p>{{ t('The information on this page forms your {{ type }}. You can see it on the {{ type }} form after you submit.', { type: statementOfTruthType }) }}</p>
     <p>{{ t('When you’re satisfied that your answers are accurate, you should tick to “sign” this statement of truth on the form.') }}</p>
   {% endif %}
@@ -52,7 +52,7 @@ macro statementOfTruth(
     legendHidden = true
   ) }}
 
-  {% if statementOfTruthType == SignatureType.DIRECTION_QUESTIONNAIRE or statementOfTruthType == SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED %}
+  {% if form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE or form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED %}
     {{ checkboxSingle(
       label = 'The hearing requirement details on this page are true to the best of my knowledge.',
       name = 'directionsQuestionnaireSigned',
