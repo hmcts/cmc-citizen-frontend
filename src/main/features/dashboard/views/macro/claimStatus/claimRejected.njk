@@ -307,8 +307,8 @@
 
 {% macro claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Tell us your hearing requirements') }}</h2>
-    <p>{{ t('The claimant rejected your response. You’ll have to go to a hearing.') }}</p>
+    <h2 class="heading-small">{{ t('The claimant rejected your response') }}</h2>
+    <p>{{ t('You’ll have to go to a hearing.') }}</p>
     <p>{{ t('You need to {{ completeDQ }} form to give us more information before the hearing.',
         { completeDQ: internalLink(
           'complete a directions questionnaire',
@@ -318,7 +318,7 @@
       }}</p>
     <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-    <p>{{ _downloadResponseLink(claim, 'Download your response') }}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } )}}</p>
   </div>
 {% endmacro %}
 
