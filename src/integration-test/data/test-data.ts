@@ -140,7 +140,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
       postcode: 'SW2 1AN'
     },
     mobilePhone: '07700000002',
-    email: hasEmailAddress ? 'civilmoneyclaims+automatedtest-defendant@gmail.com' : undefined
+    email: hasEmailAddress ? 'civilmoneyclaims+citizen-defendant@gmail.com' : undefined
   }
 
   switch (type) {
