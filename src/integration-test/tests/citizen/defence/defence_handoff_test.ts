@@ -8,9 +8,9 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 
-Feature('Respond to claim: handoff journey').retry(1)
+Feature('Respond to claim: handoff journey')
 
-Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', async (I: I) => {
+Scenario('I can see send your response by email page when I reject all of the claim with counter claim @citizen', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const defendantEmail: string = userSteps.getDefendantEmail()
 
@@ -24,7 +24,7 @@ Scenario('I can see send your response by email page when I reject all of the cl
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM)
 })
 
-Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @citizen', async (I: I) => {
+Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @citizen', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const defendantEmail: string = userSteps.getDefendantEmail()
 

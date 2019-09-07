@@ -12,9 +12,9 @@ const interestSteps: InterestSteps = new InterestSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
-Feature('Claimant Enter details of claim').retry(1)
+Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
+Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(userSteps.getClaimantEmail())
   testingSupport.deleteClaimDraft()
   claimSteps.completeEligibility()
@@ -52,7 +52,7 @@ Scenario('I can prepare a claim with no interest @citizen', async (I: I) => {
   I.waitForText('Claim submitted')
 })
 
-Scenario('I can prepare a claim with different interest rate and date @citizen', async (I: I) => {
+Scenario('I can prepare a claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(userSteps.getClaimantEmail())
   testingSupport.deleteClaimDraft()
   claimSteps.completeEligibility()
@@ -67,7 +67,7 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   testingSupport.deleteClaimDraft()
 })
 
-Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', async (I: I) => {
+Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(userSteps.getClaimantEmail())
   testingSupport.deleteClaimDraft()
   claimSteps.completeEligibility()
@@ -86,6 +86,6 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
-Scenario('I can enter a claim details and navigate up to payment page @smoke-test', (I: I) => {
+Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
   claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, false)
 })

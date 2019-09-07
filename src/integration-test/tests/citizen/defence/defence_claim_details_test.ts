@@ -10,9 +10,9 @@ const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
-Feature('Respond to claim: claim details').retry(1)
+Feature('Respond to claim: claim details')
 
-Scenario('I can view the claim details from a link on the dashboard @citizen', async (I: I) => {
+Scenario('I can view the claim details from a link on the dashboard @nightly', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const defendantEmail: string = userSteps.getDefendantEmail()
 
@@ -27,7 +27,7 @@ Scenario('I can view the claim details from a link on the dashboard @citizen', a
   defendantDetails.checkClaimData(claimRef, claimData)
 })
 
-Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', async (I: I) => {
+Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const defendantEmail: string = userSteps.getDefendantEmail()
 

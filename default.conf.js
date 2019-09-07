@@ -24,6 +24,7 @@ exports.config = {
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 15000,
+      restart: false,
       desiredCapabilities: {
         proxy: new ProxySettings()
       }
