@@ -24,4 +24,9 @@ export class HearingLocationPage {
     I.fillField(fields.alternativeCourtName, 'My own court where i am the judge')
     I.click(buttons.submit)
   }
+
+  chooseNoAsClaimant (): void {
+    I.checkOption('No')
+    I.click(buttons.submit)
+  }
 }
