@@ -53,7 +53,9 @@ export default express.Router()
           }
           delete draft.document.partialAdmission
           delete draft.document.freeMediation
-          await new DraftService().delete(mediationDraft.id, user.bearerToken)
+          if (mediationDraft && mediationDraft.id) {
+            await new DraftService().delete(mediationDraft.id, user.bearerToken)
+          }
         } else if (draft.document.response.type === ResponseType.PART_ADMISSION) {
           if (!draft.document.partialAdmission) {
             draft.document.partialAdmission = new PartialAdmission()
