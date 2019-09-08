@@ -12,6 +12,7 @@ import { FullAdmission, PartialAdmission, ResponseDraft } from 'response/draft/r
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 function renderView (form: Form<Response>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -41,6 +42,7 @@ export default express.Router()
       } else {
         const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
 
         draft.document.response = form.model
@@ -51,6 +53,7 @@ export default express.Router()
           }
           delete draft.document.partialAdmission
           delete draft.document.freeMediation
+          await new DraftService().delete(mediationDraft.id, user.bearerToken)
         } else if (draft.document.response.type === ResponseType.PART_ADMISSION) {
           if (!draft.document.partialAdmission) {
             draft.document.partialAdmission = new PartialAdmission()
