@@ -23,19 +23,19 @@
         {% if contactName %}
           {% set error = form.errorFor('option') %}
           <div class="form-group {% if error %} form-group-error {% endif %}">
-            <fieldset id="option[label]">
+            <fieldset id="option[label]" class="inline">
               <legend class="visually-hidden">{{ t(heading) }}</legend>
               {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
               <div class="multiple-choice" data-target="mediation-phone-number">
                 <input id="freeMediationOptionYES" type="radio" name="option" value="{{ FreeMediationOption.YES }}" {% if form.valueFor('option') == FreeMediationOption.YES %} checked {% endif %}>
                 <label for="freeMediationOptionYES">{{ t(FreeMediationOption.YES) | capitalize }}</label>
               </div>
-              <div class="panel panel-border-narrow js-hidden" id="mediation-phone-number" aria-hidden="false">
-                {{ textInput('Confirm telephone number', 'mediationPhoneNumberConfirmation', form) }}
-              </div>
               <div class="multiple-choice" data-target="mediation-contact-name">
                 <input id="freeMediationOptionNO" type="radio" name="option" value="{{ FreeMediationOption.NO }}" {% if form.valueFor('option') == FreeMediationOption.NO %} checked {% endif %}>
                 <label for="freeMediationOptionNO">{{ t(FreeMediationOption.NO) | capitalize }}</label>
+              </div>
+              <div class="panel panel-border-narrow js-hidden" id="mediation-phone-number" aria-hidden="false">
+                {{ textInput('Confirm telephone number', 'mediationPhoneNumberConfirmation', form) }}
               </div>
               <div class="panel panel-border-narrow js-hidden" id="mediation-contact-name" aria-hidden="false">
                 {{ canWeUseCompanyInputs(form) }}

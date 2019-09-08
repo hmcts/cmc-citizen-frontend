@@ -22,7 +22,7 @@
         {% if phoneNumber %}
           {% set error = form.errorFor('option') %}
           <div class="form-group {% if error %} form-group-error {% endif %}">
-            <fieldset id="option[label]">
+            <fieldset id="option[label]" class="inline">
               <legend class="visually-hidden">{{ t(heading) }}</legend>
               {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
               <div class="inline">
