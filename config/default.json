@@ -85,7 +85,7 @@
     "paidInFull": false,
     "returnErrorToUser": false,
     "mockPay": false,
-    "mediation": true,
+    "mediation": false,
     "mediationPilot": false,
     "directionsQuestionnaire": false,
     "newDashboardStatus": false

@@ -17,6 +17,7 @@ import { app } from 'main/app'
 import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const draftType = 'claimantResponse'
@@ -301,35 +302,37 @@ describe('Claimant response: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
 
-        it(`should render page with hearing requirements when Defendant's part admit pay immediately response is rejected`, async () => {
-          const dqPartAdmit = {
-            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
-            features: ['directionsQuestionnaire']
-          }
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
-          draftStoreServiceMock.resolveFind(draftType,
-            {
-              settleAdmitted: {
-                admitted: {
-                  option: 'no'
-                }
-              },
-              acceptPaymentMethod: undefined,
-              formaliseRepaymentPlan: undefined,
-              settlementAgreement: undefined,
-              freeMediation: undefined,
-              rejectionReason: undefined,
-              alternatePaymentMethod: undefined,
-              courtOfferedPaymentIntention: undefined
-            })
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          it(`should render page with hearing requirements when Defendant's part admit pay immediately response is rejected`, async () => {
+            const dqPartAdmit = {
+              ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+              features: ['directionsQuestionnaire']
+            }
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+            draftStoreServiceMock.resolveFind(draftType,
+              {
+                settleAdmitted: {
+                  admitted: {
+                    option: 'no'
+                  }
+                },
+                acceptPaymentMethod: undefined,
+                formaliseRepaymentPlan: undefined,
+                settlementAgreement: undefined,
+                freeMediation: undefined,
+                rejectionReason: undefined,
+                alternatePaymentMethod: undefined,
+                courtOfferedPaymentIntention: undefined
+              })
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
-        })
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+          })
+        }
 
         it(`should render page without hearing requirements when Defendant's part admit pay immediately response is accepted`, async () => {
           const dqPartAdmit = {
@@ -361,35 +364,37 @@ describe('Claimant response: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withoutText('Your hearing requirements'))
         })
 
-        it(`should render page with hearing requirements when Defendant's full defence response is rejected`, async () => {
-          const dqPartAdmit = {
-            ...claimStoreServiceMock.sampleFullDefenceRejectEntirely,
-            features: ['directionsQuestionnaire']
-          }
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
-          draftStoreServiceMock.resolveFind(draftType,
-            {
-              intentionToProceed: {
-                proceed: {
-                  option: 'yes'
-                }
-              },
-              acceptPaymentMethod: undefined,
-              formaliseRepaymentPlan: undefined,
-              settlementAgreement: undefined,
-              freeMediation: undefined,
-              rejectionReason: undefined,
-              alternatePaymentMethod: undefined,
-              courtOfferedPaymentIntention: undefined
-            })
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          it(`should render page with hearing requirements when Defendant's full defence response is rejected`, async () => {
+            const dqPartAdmit = {
+              ...claimStoreServiceMock.sampleFullDefenceRejectEntirely,
+              features: ['directionsQuestionnaire']
+            }
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+            draftStoreServiceMock.resolveFind(draftType,
+              {
+                intentionToProceed: {
+                  proceed: {
+                    option: 'yes'
+                  }
+                },
+                acceptPaymentMethod: undefined,
+                formaliseRepaymentPlan: undefined,
+                settlementAgreement: undefined,
+                freeMediation: undefined,
+                rejectionReason: undefined,
+                alternatePaymentMethod: undefined,
+                courtOfferedPaymentIntention: undefined
+              })
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
-        })
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+          })
+        }
 
         it(`should render page without hearing requirements when Defendant's full defence response is accepted`, async () => {
           const dqPartAdmit = {
@@ -421,34 +426,36 @@ describe('Claimant response: check and send page', () => {
             .expect(res => expect(res).to.be.successful.withoutText('Your hearing requirements'))
         })
 
-        it(`should render page with hearing requirements when Defendant's already paid response is rejected`, async () => {
-          const dqPartAdmit = {
-            ...claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount,
-            features: ['directionsQuestionnaire']
-          }
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
-          draftStoreServiceMock.resolveFind(draftType,
-            {
-              accepted: {
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          it(`should render page with hearing requirements when Defendant's already paid response is rejected`, async () => {
+            const dqPartAdmit = {
+              ...claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount,
+              features: ['directionsQuestionnaire']
+            }
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+            draftStoreServiceMock.resolveFind(draftType,
+              {
                 accepted: {
-                  option: 'no'
-                }
-              },
-              rejectionReason: new RejectionReason('already paid'),
-              formaliseRepaymentPlan: undefined,
-              settlementAgreement: undefined,
-              freeMediation: undefined,
-              alternatePaymentMethod: undefined,
-              courtOfferedPaymentIntention: undefined
-            })
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+                  accepted: {
+                    option: 'no'
+                  }
+                },
+                rejectionReason: new RejectionReason('already paid'),
+                formaliseRepaymentPlan: undefined,
+                settlementAgreement: undefined,
+                freeMediation: undefined,
+                alternatePaymentMethod: undefined,
+                courtOfferedPaymentIntention: undefined
+              })
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
-        })
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+          })
+        }
 
         it(`should render page without hearing requirements when Defendant's already paid response is accepted`, async () => {
           const dqPartAdmit = {

@@ -90,7 +90,7 @@ describe('Defendant user details: your phone page', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -102,7 +102,8 @@ describe('Defendant user details: your phone page', () => {
           it('should redirect to task list page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)

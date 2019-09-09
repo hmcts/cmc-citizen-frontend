@@ -117,8 +117,8 @@ describe('Defendant response: more time needed - confirmation page', () => {
         describe('should redirect to request more time page', () => {
           it('when no option is selected', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
               .post(pagePath)
@@ -130,8 +130,8 @@ describe('Defendant response: more time needed - confirmation page', () => {
 
           it('when answer is "no', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: MoreTimeNeededOption.NO } })
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('mediation')
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
             await request(app)
               .post(pagePath)

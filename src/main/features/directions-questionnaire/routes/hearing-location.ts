@@ -5,20 +5,17 @@ import { AlternativeCourtOption, HearingLocation } from 'directions-questionnair
 import { Draft } from '@hmcts/draft-store-client'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Court } from 'court-finder-client/court'
-import { CourtFinderClient } from 'court-finder-client/courtFinderClient'
 import { Claim } from 'claims/models/claim'
-import { CourtFinderResponse } from 'court-finder-client/courtFinderResponse'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DraftService } from 'services/draftService'
 import { ErrorHandling } from 'shared/errorHandling'
 import { YesNoOption } from 'models/yesNoOption'
 import { ResponseDraft } from 'response/draft/responseDraft'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { User } from 'idam/user'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { CourtDetails } from 'court-finder-client/courtDetails'
-import { CourtDetailsResponse } from 'court-finder-client/courtDetailsResponse'
 
 function renderPage (res: express.Response, form: Form<HearingLocation>, fallbackPage: boolean) {
   res.render(Paths.hearingLocationPage.associatedView, {
@@ -26,24 +23,6 @@ function renderPage (res: express.Response, form: Form<HearingLocation>, fallbac
     fallbackPage: fallbackPage,
     party: getUsersRole(res.locals.claim, res.locals.user)
   })
-}
-
-async function getNearestCourt (postcode: string): Promise<Court> {
-  const courtFinderClient: CourtFinderClient = new CourtFinderClient()
-  const response: CourtFinderResponse = await courtFinderClient.findMoneyClaimCourtsByPostcode(postcode)
-
-  if (response.statusCode !== 200 || response.courts.length === 0) {
-    return undefined
-  } else {
-    return response.courts[0]
-  }
-}
-
-async function getCourtDetails (slug: string): Promise<CourtDetails> {
-  const courtFinderClient: CourtFinderClient = new CourtFinderClient()
-  const courtDetailsResponse: CourtDetailsResponse = await courtFinderClient.getCourtDetails(slug)
-
-  return courtDetailsResponse.courtDetails
 }
 
 function getDefaultPostcode (res: express.Response): string {
@@ -82,9 +61,9 @@ export default express.Router()
             )), false)
       } else {
         const postcode: string = getDefaultPostcode(res)
-        const court: Court = await getNearestCourt(postcode)
+        const court: Court = await Court.getNearestCourt(postcode)
         if (court) {
-          const courtDetails: CourtDetails = await getCourtDetails(court.slug)
+          const courtDetails: CourtDetails = await Court.getCourtDetails(court.slug)
           renderPage(res,
             new Form<HearingLocation>(
               new HearingLocation(
@@ -111,9 +90,9 @@ export default express.Router()
           draft.document.hearingLocation = form.model
 
           if (form.model.courtAccepted === YesNoOption.NO && form.model.alternativeOption === AlternativeCourtOption.BY_POSTCODE) {
-            const court: Court = await getNearestCourt(form.model.alternativePostcode)
+            const court: Court = await Court.getNearestCourt(form.model.alternativePostcode)
             if (court !== undefined) {
-              const alternativeCourtDetails: CourtDetails = await getCourtDetails(court.slug)
+              const alternativeCourtDetails: CourtDetails = await Court.getCourtDetails(court.slug)
               draft.document.hearingLocation.alternativeCourtName = court.name
               draft.document.hearingLocation.alternativePostcode = form.model.alternativePostcode
               draft.document.hearingLocation.alternativeOption = form.model.alternativeOption
@@ -137,7 +116,7 @@ export default express.Router()
               draft.document.hearingLocation.alternativeOption = undefined
             } else if (draft.document.hearingLocationSlug && !draft.document.hearingLocationSlug.length) {
               const postcode: string = getDefaultPostcode(res)
-              const court: Court = await getNearestCourt(postcode)
+              const court: Court = await Court.getNearestCourt(postcode)
               if (court !== undefined) {
                 draft.document.hearingLocationSlug = court.slug
               } else {

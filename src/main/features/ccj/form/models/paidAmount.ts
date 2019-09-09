@@ -8,7 +8,7 @@ export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_NOT_VALID: string = 'Invalid amount'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
-  static readonly PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT: string = 'Paid amount cannot be greater than or equal to total amount'
+  static readonly PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT: string = 'Paid amount cannot be greater than or equal to admitted amount'
 }
 
 export class PaidAmount {

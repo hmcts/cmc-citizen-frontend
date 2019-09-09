@@ -38,17 +38,7 @@ describe('Defendant response: receipt', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
-        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-        await request(app)
-          .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
       it('should return 500 and render error page when cannot generate PDF', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
         claimStoreServiceMock.rejectRetrieveDocument('HTTP Error')
 
         await request(app)

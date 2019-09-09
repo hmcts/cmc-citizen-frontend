@@ -1,0 +1,415 @@
+{% macro input(label, name, form, hint, type='text', inputClass='', compound=false, autocomplete='on', labelClass='', maxLength='') %}
+  {% set error = form.errorFor(name) %}
+  {% set formGroupClass = 'form-group-compound' if compound else 'form-group' %}
+  <div class="{{ formGroupClass }} {% if error %}form-group-error{% endif %}">
+    <label for="{{ name }}" id="{{ name }}[label]" class="form-label {% if labelClass %}{{ labelClass }}{% endif %}">{{ t(label) }}
+      {% if hint %}
+        <span class="form-hint">{{ t(hint) }}</span>
+      {% endif %}
+    </label>
+    {% if error %}
+      <span class="error-message">{{ t(error) }}</span>
+    {% endif %}
+    <input id="{{ name }}" name="{{ name }}" type="{{ type }}" autocomplete="{{ autocomplete | default('on') }}"
+           class="form-control {{ inputClass }} {% if error %}form-control-error{% endif %}"
+           {% if maxLength %}maxlength="{{ maxLength }}"{% endif %}
+           value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
+  </div>
+{% endmacro %}
+
+{% macro textInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on', maxLength) %}
+  {{ input(label, name, form, hint, 'text', inputClass, compound, autocomplete, maxLength=maxLength) }}
+{% endmacro %}
+
+{% macro numericInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on') %}
+  {{ input(label, name, form, hint, 'number', inputClass, compound, autocomplete) }}
+{% endmacro %}
+
+{% macro poundInput(label, name, form, hint, bold = false) %}
+  {% set error = form.errorFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <label for="{{ name }}" id="{{ name }}[label]" class="form-label{% if bold %}-bold{% endif %}">
+      {{ t(label) }}
+
+      {% if hint %}
+        <span class="form-hint">{{ t(hint) }}</span>
+      {% endif %}
+    </label>
+    {% if error %}
+      <span class="error-message">{{ t(error) }}</span>
+    {% endif %}
+    <span class="input-symbol-pound">
+      <input id="{{ name }}"
+             name="{{ name }}" value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}"
+             type="number"
+             class="form-control {% if error %} form-control-error {% endif %}"
+             maxlength="10" size="7">
+    </span>
+  </div>
+{% endmacro %}
+
+{% macro searchInput(label, name, form, hint, bold = false) %}
+  {% set error = form.errorFor(name) %}
+  <div class="form-group{% if error %} form-group-error{% endif %}">
+    <label for="{{ name }}" id="{{ name }}[label]" class="form-label{% if bold %}-bold{% endif %}">
+      {{ t(label) }}
+
+      {% if hint %}
+        <span class="form-hint">{{ t(hint) }}</span>
+      {% endif %}
+    </label>
+    {% if error %}
+      <span class="error-message">{{ t(error) }}</span>
+    {% endif %}
+    <input id="{{ name }}"
+           name="{{ name }}" value="{{ form.valueFor(name) | default('') }}"
+           type="search"
+           class="search-input">
+    <button type="submit" class="search-submit icon icon-search" id="button" title="search" />
+  </div>
+{% endmacro %}
+
+{% macro textInputInline( name, form, inputClass='', prefixClass='', ariaLabelledBy='', ariaDescribedBy='') %}
+  {% set error = form.errorFor(name) %}
+  <label for="{{ name }}"></label>
+  <span class="{{ prefixClass }}">
+    <input
+      id="{{ name }}" name="{{ name }}"
+      class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}"
+      value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}"
+      {% if ariaLabelledBy %}
+        aria-labelledby="{{ ariaLabelledBy }}"
+      {% endif %}
+      {% if ariaDescribedBy %}
+        aria-describedby="{{ ariaDescribedBy }}"
+      {% endif %}
+    >
+  </span>
+{% endmacro %}
+
+{% macro poundInputInline(name, label, form, inputClass = 'column-2', ariaLabelledBy='', ariaDescribedBy='') %}
+
+  {% set error = form.errorFor(name) %}
+  {% set value = (form.rawDataFor(name) if error else form.valueFor(name)) %}
+
+  <label class="form-label-bold mobile-show" for="{{ name }}">{{ t(label) }}</label>
+  <span class="input-symbol-pound">
+    <input id="{{ name }}" name="{{ name }}"
+           class="form-control {{ inputClass }} {% if error %} form-control-error {% endif %}"
+           type="number"
+           value="{{ value | default('') }}"
+           {% if ariaLabelledBy %}aria-labelledby="{{ ariaLabelledBy }}"{% endif %}
+      {% if ariaDescribedBy %}aria-describedby="{{ ariaDescribedBy }}"{% endif %}>
+  </span>
+
+{% endmacro %}
+
+{% macro emailInput(label, name, form, hint='', labelClass='') %}
+  {{ input(label, name, form, hint, 'email', labelClass = labelClass) }}
+{% endmacro %}
+
+{% macro textArea(label, name, form, inputClass='form-control-3-4', rows=5, labelClass='', bold = false) %}
+  {% set error = form.errorFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <label for="{{ name }}" id="{{ name }}[label]" class="form-label{% if bold %}-bold{% endif %} {{ labelClass }}">
+      {{ t(label) }}
+    </label>
+    {% if error %}
+      <span class="error-message">{{ t(error) }}</span>
+    {% endif %}
+    <textarea id="{{ name }}" name="{{ name }}" rows="{{ rows }}" class="form-control {{ inputClass }} {% if error %}form-control-error{% endif %}">{{ form.valueFor(name) | default('') }}</textarea>
+
+  </div>
+{% endmacro %}
+
+{% macro submitButton(label = 'Continue', id = '') %}
+  <div class="form-group">
+    <input type="submit" class="button" value="{{ t(label) }}"{% if id %}name="{{ id }}"{% endif %} {% if id %}id="{{ id }}"{% endif %}>
+  </div>
+{% endmacro %}
+
+{% macro saveAndContinueButton() %}
+  {{ submitButton('Save and continue', id = 'saveAndContinue') }}
+{% endmacro %}
+
+{% macro linkButton(label, name, class) %}
+  <input type="submit" class="{{ class }}" name="{{ name }}" id="{{ name }}" value="{{ t(label) }}">
+{% endmacro %}
+
+{% macro yesNoRadio(label, name, form, isInline = false, labelForScreenReadersOnly = true) %}
+  {{ radioGroup(
+    label,
+    name,
+    [
+      { label: 'Yes', value: 'yes' },
+      { label: 'No', value: 'no' }
+    ],
+    form,
+    isInline = isInline,
+    labelForScreenReadersOnly = labelForScreenReadersOnly
+  )
+  }}
+{% endmacro %}
+
+{% macro radioOption(label, name, form, value, hint = '', checked = form.valueFor(name) == value, bold = false, greyHint = true, className = '') %}
+  {{ option(label = label, name = name, form = form, value = value, type = 'radio', hint = hint, checked = checked, bold = bold, greyHint = greyHint, className = className) }}
+{% endmacro %}
+
+{% macro checkboxOption(label, name, form, value, hint = '', checked = false, bold = false) %}
+  {{ option(label, name, form, value, 'checkbox', hint, checked, bold) }}
+{% endmacro %}
+
+{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true) %}
+  <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
+    {% set idValue = name + value | replace(' ', '') %}
+    <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}"
+           {% if checked %}checked{% endif %}>
+    <label for="{{ idValue }}">
+      {% if hint == '' %}
+        {{ t(label) }}
+      {% else %}
+        {% if bold %}
+          <strong class="bold-small">{{ t(label) }}</strong>
+        {% else %}
+          {{ t(label) }}
+        {% endif %}
+        <br>
+        <span {% if greyHint != false %}class="form-hint"{% endif %}>{{ t(hint) }}</span>
+      {% endif %}
+    </label>
+  </div>
+{% endmacro %}
+
+{% macro radioOptionWithHiddenControl(label, name, form, value, type, hint = '', checked = false, bold = false, withHiddenControl = '') %}
+  <div class="multiple-choice" data-target="{{ value }}Hidden">
+    {% set idValue = name + value | replace(' ', '') %}
+    <input id="{{ idValue }}" type="radio" name="{{ name }}" value="{{ value }}"
+           {% if checked %}checked{% endif %}>
+    <label for="{{ idValue }}">
+      {% if hint == '' %}
+        {{ t(label) }}
+      {% else %}
+        {% if bold %}
+          <strong class="bold-small">{{ t(label) }}</strong>
+        {% else %}
+          {{ t(label) }}
+        {% endif %}
+        <br>
+        <span class="form-hint">{{ t(hint) }}</span>
+      {% endif %}
+    </label>
+  </div>
+  {% if withHiddenControl %}
+    <div class="panel panel-border-none js-hidden" id="{{ value }}Hidden" aria-hidden="false">
+      {{ textInput(t(withHiddenControl), value, form, inputClass='form-control-2-3') }}
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro checkboxGroup(label, name, options, form, isInline = false, bold = false, legendHidden = false) %}
+  {% set error = form.errorFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <fieldset name="{{ name }}[label]" id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
+      <legend>
+        <span class="form-label-bold {% if legendHidden %}visually-hidden{% endif %}">
+          {{ t(label) }}
+        </span>
+        <span class="error-message">{{ t(error) }}</span>
+      </legend>
+      {% for option in options %}
+        {% set selection = form.valueFor(name).indexOf(option.value) %}
+        {{ checkboxOption(
+          label = option.label,
+          name = name,
+          form = form,
+          value = option.value,
+          hint = option.hint,
+          checked = (selection != -1),
+        bold = bold
+        )
+        }}
+      {% endfor %}
+    </fieldset>
+  </div>
+{% endmacro %}
+
+{% macro checkboxSingle(label, name, option, form, isInline = false, bold = false, legendHidden = false) %}
+  {% set error = form.errorFor(name) %}
+  {% set selection = form.valueFor(name) %}
+  <div class="form-group{% if error %} form-group-error{% endif %}">
+    <fieldset id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
+      <legend>
+        <span class="form-label-bold {% if legendHidden %}visually-hidden{% endif %}">
+          {{ t(label) }}
+        </span>
+        <span class="error-message">{{ t(error) }}</span>
+      </legend>
+      {{ checkboxOption(
+        label = option.label,
+        name = name,
+        form = form,
+        value = option.value,
+        hint = option.hint,
+        checked = (selection === option.value),
+      bold = bold
+      )
+      }}
+    </fieldset>
+  </div>
+{% endmacro %}
+
+{% macro radioGroup(
+  label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false, labelBold = true
+  ) %}
+
+  {% set error = form.errorFor(name) %}
+  {% set selection = form.valueFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <fieldset name="{{ name }}[label]" id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
+      <legend {% if legendHidden %}class="visuallyhidden"{% endif %}>
+        <span class="{% if labelForScreenReadersOnly %}visually-hidden{% elseif labelBold %} form-label-bold {% endif %}">
+          {{ t(label) }}
+        </span>
+        <span class="error-message">{{ t(error) }}</span>
+      </legend>
+      {% for option in options %}
+        {{ radioOption(
+          label = option.label,
+          name = name,
+          form = form,
+          value = option.value,
+          hint = option.hint,
+          greyHint = option.greyHint,
+          checked = option.checked or (selection === option.value),
+        bold = option.bold,
+        className = option.className
+        ) }}
+      {% endfor %}
+    </fieldset>
+  </div>
+{% endmacro %}
+
+{% macro radioGroupWithHintPanel(
+  label, name, options, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false
+  ) %}
+
+  {% set error = form.errorFor(name) %}
+  {% set selection = form.valueFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <fieldset name="{{ name }}[label]" id="{{ name }}[label]" {% if isInline %} class="inline" {% endif %}>
+      <legend {% if legendHidden %}class="visuallyhidden"{% endif %}>
+        <span class="{% if labelForScreenReadersOnly %}visually-hidden{% else %} form-label-bold {% endif %}">
+          {{ t(label) }}
+        </span>
+        <span class="error-message">{{ t(error) }}</span>
+      </legend>
+      {% for option in options %}
+        {{ radioOption(
+          label = option.label,
+          name = name,
+          form = form,
+          value = option.value,
+          checked = option.checked or (selection === option.value),
+        bold = option.bold
+        ) }}
+        {% if option.hint %}
+          <div class="panel panel-border-narrow js-hidden" id="{{ name }}-{{ option.value }}" aria-hidden="false">
+            <p>{{ t(option.hint) }}</p>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </fieldset>
+  </div>
+{% endmacro %}
+
+{% macro radioGroupWithMoreOptions(
+  label, name, options, moreOptions, form, isInline = false, legendHidden = false, labelForScreenReadersOnly = false, fieldName = ''
+  ) %}
+  {% set error = form.errorFor(name) %}
+  {% set selection = form.valueFor(name) %}
+  <div class="form-group {% if error %} form-group-error {% endif %}">
+    <fieldset name="{{ fieldName }}[label]" id="{{ fieldName }}[label]" {% if isInline %} class="inline" {% endif %}>
+      <legend {% if legendHidden %}class="visuallyhidden"{% endif %}>
+        <span class="form-group-compound {% if labelForScreenReadersOnly %}visually-hidden{% else %} form-label {% endif %}">
+          {{ t(label) }}
+        </span>
+        <span class="error-message">{{ t(error) }}</span>
+      </legend>
+      <div class="form-group-compound">
+        {% for option in options %}
+          {{ radioOptionWithHiddenControl(
+            label = option.label,
+            name = fieldName,
+            form = form,
+            value = option.value,
+            hint = option.hint,
+            checked = option.checked or (selection === option.value),
+          bold = option.bold,
+          withHiddenControl = option.withHiddenControl
+          ) }}
+        {% endfor %}
+      </div>
+
+      {% if moreOptions %}
+      {% set open = false %}
+      {% for option in moreOptions %}
+        {% if option.checked or (selection === option.value) %}
+          {% set open = true %}
+        {% endif %}
+      {% endfor %}
+      {% if open %}
+      <details open>
+        {% else %}
+        <details>
+          {% endif %}
+          <summary>
+            <span class="summary">{{ t('More options') }}</span>
+          </summary>
+
+          <div class="panel panel-border-narrow">
+            {% for option in moreOptions %}
+              {{ radioOptionWithHiddenControl(
+                label = option.label,
+                name = fieldName,
+                form = form,
+                value = option.value,
+                hint = option.hint,
+                checked = option.checked or (selection === option.value),
+              bold = option.bold,
+              withHiddenControl = option.withHiddenControl
+              ) }}
+            {% endfor %}
+          </div>
+        </details>
+        {% endif %}
+    </fieldset>
+  </div>
+{% endmacro %}
+
+{% macro errorSummary(form) %}
+  {% if form.hasErrors() %}
+    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
+      <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
+        {{ t('There was a problem') }}
+      </h1>
+      <ul class="error-summary-list">
+        {% for error in form.errors %}
+          <li><a href="#{{ error.fieldName }}[label]">{{ t(error.message) }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+{% endmacro %}
+
+{% macro csrfProtection(token) %}
+  <input type="hidden" name="_csrf" value="{{ token }}">
+{% endmacro %}
+
+{% macro nameInput(label = 'Your full name', form) %}
+  {{ textInput(label, 'name', form, autocomplete='name') }}
+{% endmacro %}
+
+{% macro readOnlyField(label, value) %}
+  <h2 class="heading-medium">{{ t(label) }}</h2>
+  <p>{{ value }}</p>
+{% endmacro %}

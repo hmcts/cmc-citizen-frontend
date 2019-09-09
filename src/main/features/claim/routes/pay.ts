@@ -73,7 +73,7 @@ async function successHandler (req, res, next) {
       features = 'admissions'
     }
 
-    if (draft.document.amount.totalAmount() <= 300) {
+    if (draft.document.amount.totalAmount() <= 300 && FeatureToggles.isEnabled('directionsQuestionnaire')) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
         features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
       }

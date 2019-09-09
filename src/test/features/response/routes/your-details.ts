@@ -95,7 +95,7 @@ describe('Defendant user details: your name page', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -104,10 +104,10 @@ describe('Defendant user details: your name page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to your address page when everything is fine', async () => {
+          it('should redirect to date of birth page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -118,6 +118,30 @@ describe('Defendant user details: your name page', () => {
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })
+      })
+    })
+
+    context('When it is company v company', () => {
+      it('should redirect to defendants phone number page when everything is fine', async () => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj.defendantId, 'citizen')
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj)
+        draftStoreServiceMock.resolveFind('response:company')
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveUpdate()
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: 'company',
+            name: 'John Smith',
+            address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' },
+            contactPerson: 'Joe Blogs'
+          })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ResponsePaths.defendantPhonePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
     })
   })

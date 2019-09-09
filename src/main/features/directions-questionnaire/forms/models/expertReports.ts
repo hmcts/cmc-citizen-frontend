@@ -45,7 +45,7 @@ export class ExpertReports extends MultiRowForm<ReportRow> {
   deserialize (input?: any): ExpertReports {
     if (input) {
       this.declared = input.declared
-      this.rows = this.deserializeRows(input.rows)
+      this.rows = this.deserializeRows(input.rows).filter(item => !item.isEmpty())
     }
 
     return this

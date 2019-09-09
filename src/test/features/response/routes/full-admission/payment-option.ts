@@ -114,7 +114,7 @@ describe('Defendant - when will you pay options', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -137,7 +137,7 @@ describe('Defendant - when will you pay options', () => {
 
           context('when form is valid', async () => {
             beforeEach(() => {
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
             })
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {

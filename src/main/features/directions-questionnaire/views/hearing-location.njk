@@ -1,7 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput, textInput, radioGroup %}
 
-{% set heading = 'Choose a hearing location' %}
+{% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
+  {% set heading = 'Request a hearing location' %}
+{% else %}
+  {% set heading = 'Choose a hearing location' %}
+{% endif %}
 
 {% macro commonContent()  %}
   <p>{{ t('Tell us your preferred location for a hearing, in case the claim goes to one.') }}</p>
@@ -24,15 +28,17 @@
           {% if not fallbackPage %}
             {% if courtPostcode %}
               <p>{{ t('The nearest court to {{ courtPostcode }} is {{ courtName }}', { courtPostcode: courtPostcode, courtName: courtName }) }}</p>
-            {% elseif party === MadeBy.DEFENDANT %}
+            {% elseif party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
+              <p>{{ t('You can request any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}</p>
+            {% else %}
               {{ commonContent() }}
-              <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the home address you gave us.', { courtName: courtName }) }}</p>
-            {% elseif party === MadeBy.CLAIMANT %}
-              <p>{{ t('You can request any location - {{ courtName }} is the nearest to your home address you gave us.', { courtName: courtName }) }}
+              <p>{{ t('You can choose any location - {{ courtName }} is the nearest to the address you gave us.', { courtName: courtName }) }}</p>
             {% endif %}
 
             <details class="form-group analytics-click-event-trigger" data-event-label="Court-Facilities: Facilities of the chosen court.">
-              <summary>{{ t('See this court’s facilities') }}</summary>
+              <summary>
+                <span class="link">{{ t('See this court’s facilities') }}</span>
+              </summary>
 
               <div class="panel">
                 {% for facility in courtFacilities %}
@@ -42,7 +48,11 @@
               </div>
             </details>
 
-            <h1 class="heading-medium">{{ t('Do you want to choose {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h1>
+            {% if party === MadeBy.DEFENDANT and (claim.claimData.defendant.type === PartyType.ORGANISATION.value or claim.claimData.defendant.type === PartyType.COMPANY.value) %}
+              <h1 class="heading-medium">{{ t('Do you want to request {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h1>
+            {% else %}
+              <h1 class="heading-medium">{{ t('Do you want to choose {{ courtName }}?', { courtName: form.valueFor('courtName') }) }}</h1>
+            {% endif %}
             {{ radioGroup(
               form = form,
               label = heading,
@@ -65,7 +75,7 @@
               <h1 class="heading-medium">{{ t('Choose another court') }}</h1>
               {{ radioOption(form = form, label = 'Enter a court name', name = 'alternativeOption', value = 'name', checked = form.valueFor('alternativeOption') === 'name', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-name" aria-hidden="false">
-                {{ textInput(label = 'Court name', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}Do you want to choose
+                {{ textInput(label = 'Court name', form = form, name = 'alternativeCourtName', inputClass = 'full-width') }}
               </div>
               {{ radioOption(form = form, label = 'Search by postcode', name = 'alternativeOption', value = 'postcode', checked = form.valueFor('alternativeOption') === 'postcode', bold = true) }}
               <div class="form-group panel panel-border-narrow js-hidden " id="alternativeOption-postcode" aria-hidden="false">

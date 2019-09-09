@@ -18,6 +18,8 @@ services:
         - HEALTHCHECK_CITIZEN=true
         - CHUNKS=1
         - FEATURE_ADMISSIONS
+        - FEATURE_MEDIATION
+        - FEATURE_DIRECTIONS_QUESTIONNAIRE
         - FEATURE_TESTING_SUPPORT
       volumes:
         - ./smoke-output:/usr/src/app/output

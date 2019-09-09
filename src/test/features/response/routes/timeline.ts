@@ -118,7 +118,7 @@ describe('Defendant response: timeline', () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
               draftStoreServiceMock.resolveFind(responseDraftType)
               draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveSave(100)
+              draftStoreServiceMock.resolveUpdate(100)
 
               await request(app)
                 .post(pagePath)

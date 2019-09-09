@@ -134,7 +134,7 @@ describe('defendant as soleTrader details page', () => {
 
       it('should redirect to data of birth page when trading as name provided', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -145,7 +145,7 @@ describe('defendant as soleTrader details page', () => {
       it('should redirect to data of birth page when no trading as provided', async () => {
         const invalidCorrespondenceAddressInput = { ...input, ...{ businessName: '' } }
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
