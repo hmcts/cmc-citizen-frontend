@@ -30,7 +30,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('View and respond')
     claimantResponseSteps.acceptPartAdmitFromBusinessWithAlternativePaymentIntention()
     checkAndSendPage.verifyFactsForPartAdmitFromBusiness()
-    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    checkAndSendPage.checkFactsTrueAndSubmitNoDq()
     I.see(testData.claimRef)
     I.see('You’ve proposed a different repayment plan')
     I.click('My account')
