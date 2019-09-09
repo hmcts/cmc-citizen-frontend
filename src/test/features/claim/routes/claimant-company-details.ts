@@ -106,7 +106,7 @@ describe('claimant as company details page', () => {
 
       it('should redirect to phone page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.claimantCompanyDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

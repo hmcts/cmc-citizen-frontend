@@ -148,7 +148,7 @@ describe('Defendant response: priority-debt', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

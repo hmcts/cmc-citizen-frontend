@@ -121,7 +121,7 @@ describe('defendant as organisation details page', () => {
 
       it('should redirect to phone page when including contact person ', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
@@ -132,7 +132,7 @@ describe('defendant as organisation details page', () => {
       it('should redirect to phone page when contact person is not included', async () => {
         const noContactPersonInput = { ...input, ...{ contactPerson: '' } }
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantOrganisationDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

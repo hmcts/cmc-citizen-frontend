@@ -7,6 +7,7 @@
 {% from "timelineCheckAndSend.njk" import timelineCheckAndSend %}
 {% from "evidenceCheckAndSend.njk" import evidenceCheckAndSend %}
 {% from "./macro/check-and-send/admission.njk" import notImmediatePayment, whenWillYouPayRow %}
+{% from "components/free-mediation/freeMediationCheckAndSendBlock.njk" import freeMediationBlock %}
 
 {% set heading = 'Check your answers' %}
 
@@ -55,7 +56,7 @@
       {% endif %}
 
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.DISPUTE %}
-        {% set rejectAllOption = 'I dispute the claim' %}
+        {% set rejectAllOption = 'I dispute all of the claim' %}
       {% endif %}
 
       {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.COUNTER_CLAIM %}
@@ -133,16 +134,18 @@
         )
       }}
 
-      {% if draft.isResponsePartiallyAdmittedAndAlreadyPaid() %}
+      {% if timeline is defined %}
         {{
           timelineCheckAndSend(
-            header = 'Timeline of what happened (optional)',
+            header = 'Your timeline of what happened (optional)',
             timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
             url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
             bottomBorder = false
           )
         }}
         {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
+      {% endif %}
+      {% if evidence is defined %}
         {{
           evidenceCheckAndSend(
             header = 'Your evidence (optional)',
@@ -187,27 +190,30 @@
       {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
         {{ row(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
-        {{
-          timelineCheckAndSend(
-            header = 'Timeline of what happened (optional)',
-            timeline = draft.timeline.getPopulatedRowsOnly(),
-            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false
-          )
-        }}
+        {% if timeline is defined %}
+          {{
+            timelineCheckAndSend(
+              header = 'Your timeline of what happened (optional)',
+              timeline = draft.timeline.getPopulatedRowsOnly(),
+              url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+              bottomBorder = false
+            )
+          }}
+        {% endif %}
 
         {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
 
-        {{
-          evidenceCheckAndSend(
-            header = 'Your evidence (optional)',
-            evidence = draft.evidence.getPopulatedRowsOnly(),
-            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false
-          )
-        }}
-
-        {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+        {% if evidence is defined %}
+          {{
+            evidenceCheckAndSend(
+              header = 'Your evidence (optional)',
+              evidence = draft.evidence.getPopulatedRowsOnly(),
+              url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+              bottomBorder = false
+            )
+          }}
+          {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+        {% endif %}
 
       {% endif %}
       {{ tableEnd() }}
@@ -224,23 +230,27 @@
           )
       }}
 
-      {{
-        timelineCheckAndSend(
-          header = 'Timeline of what happened (optional)',
-          timeline = draft.timeline.getPopulatedRowsOnly(),
-          url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
-        )
-      }}
-      {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+      {% if timeline is defined %}
+        {{
+          timelineCheckAndSend(
+            header = 'Your timeline of what happened (optional)',
+            timeline = draft.timeline.getPopulatedRowsOnly(),
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
+          )
+        }}
+        {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
+      {% endif %}
 
-      {{
-        evidenceCheckAndSend(
-          header = 'Your evidence (optional)',
-          evidence = draft.evidence.getPopulatedRowsOnly(),
-          url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId })
-        )
-      }}
-      {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+      {% if evidence is defined %}
+        {{
+          evidenceCheckAndSend(
+            header = 'Your evidence (optional)',
+            evidence = draft.evidence.getPopulatedRowsOnly(),
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId })
+          )
+        }}
+        {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
+      {% endif %}
       {{ tableEnd() }}
     {% endif %}
 
@@ -287,93 +297,10 @@
       }}
     {% endif %}
 
-    {% if ((admissionsApplicable
-        and (draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyBecausePaidWhatOwed()))
-      or draft.isResponseRejectedFullyWithDispute()) and mediationEnabled !== true %}
-      {{ tableStart('freeMediation', 'Free mediation') }}
-      {{
-          row(
-            label = 'Will you try mediation?',
-            value = t(draft.freeMediation.option) | capitalize,
-            changeLink = ResponsePaths.freeMediationPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-      }}
-      {{ tableEnd() }}
+    {% if mediationDraft %}
+      {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
     {% endif %}
 
-    {% if mediationEnabled and ((admissionsApplicable
-      and (draft.isResponsePartiallyAdmitted() or draft.isResponseRejectedFullyBecausePaidWhatOwed()))
-      or draft.isResponseRejectedFullyWithDispute()) %}
-      {{ tableStart('freeMediation', 'Free telephone mediation') }}
-      {{
-        row(
-          label = 'Will you try free mediation?',
-          value = t(mediationDraft.willYouTryMediation.option) | capitalize,
-          changeLink = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claim.externalId }),
-          bold = true
-        )
-      }}
-      {% if mediationDraft.youCanOnlyUseMediation
-        and mediationDraft.willYouTryMediation.option === 'yes'
-        and not ( mediationDraft.youCanOnlyUseMediation.option === 'yes' and mediationDraft.willYouTryMediation.option === 'yes' ) %}
-        {{
-          row(
-            label = 'Agree to mediation conditions',
-            value = t(mediationDraft.youCanOnlyUseMediation.option) | capitalize,
-            changeLink = MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId }),
-            bold = true
-          )
-        }}
-      {% endif %}
-      {% if mediationDraft.canWeUseCompany %}
-        {% if mediationDraft.mediationPhoneNumberConfirmation %}
-          {{
-            row(
-              label = 'Contact number',
-              value = t(draft.canWeUseCompany.mediationPhoneNumberConfirmation) | capitalize,
-              changeLink = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false,
-              bold = true
-            )
-          }}
-          {{
-          row(
-            label = 'Contact name',
-            value = t(draft.defendantDetails.partyDetails.contactPerson) | capitalize,
-            bold = true
-          )
-          }}
-        {% else %}
-          {{
-          row(
-            label = 'Contact number',
-            value = t(mediationDraft.canWeUseCompany.mediationPhoneNumber) | capitalize,
-            changeLink = MediationPaths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false,
-            bold = true
-          )
-          }}
-          {{
-          row(
-          label = 'Contact name',
-          value = t(mediationDraft.canWeUseCompany.mediationContactPerson) | capitalize,
-          bold = true
-          )
-          }}
-        {% endif %}
-      {% else %}
-        {{
-        row(
-          label = 'Contact number',
-          value = t(mediationDraft.canWeUse.mediationPhoneNumber),
-          changeLink = MediationPaths.canWeUsePage.evaluateUri({ externalId: claim.externalId }),
-          bold = true
-        )
-        }}
-      {% endif %}
-      {{ tableEnd() }}
-    {% endif %}
 
     {% if dqsEnabled %}
       {{ tableStart('hearingRequirements', 'Your hearing requirements') }}
@@ -452,7 +379,7 @@
       {% endif %}
       {% if directionsQuestionnaireDraft.permissionForExpert.option %}
         {{ row(
-          label = 'Do you want the court’s permission to hire an expert?',
+          label = 'Do you want the court’s permission to use an expert?',
           value = t(directionsQuestionnaireDraft.permissionForExpert.option.option) | capitalize,
           changeLink = DirectionsQuestionnairePaths.permissionForExpertPage.evaluateUri({ externalId: claim.externalId }),
           topBorder = true,

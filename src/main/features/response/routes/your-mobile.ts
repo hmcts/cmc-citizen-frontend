@@ -11,6 +11,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 function renderView (form: Form<Phone>, res: express.Response) {
   res.render(Paths.defendantPhonePage.associatedView, {
@@ -36,7 +37,15 @@ export default express.Router()
       } else {
         const claim: Claim = res.locals.claim
         const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
+
+        if (draft.document.defendantDetails.phone &&
+          draft.document.defendantDetails.phone.number !== form.model.number && mediationDraft) {
+          mediationDraft.document.canWeUseCompany = undefined
+          mediationDraft.document.canWeUse = undefined
+          await new DraftService().save(mediationDraft, user.bearerToken)
+        }
 
         draft.document.defendantDetails.phone = form.model
         await new DraftService().save(draft, user.bearerToken)

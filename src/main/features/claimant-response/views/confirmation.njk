@@ -27,6 +27,8 @@
             {{ t('You’ve signed a settlement agreement') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === YesNoOption.YES %}
             {{ t('You’ve agreed to mediation') }}
+          {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION and claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+            {{ t('You didn’t proceeded with the claim') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
             {{ t('You’ve accepted their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
@@ -41,7 +43,10 @@
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
         {% if directionsQuestionnaireEnabled %}
-        <p><a href="http://hmcts-cmc-prototype.herokuapp.com/prototypes/features-to-be-built/claimant/correspondence/dqs">Download your hearing requirements</a> (PDF, 123KB)</p>
+        <p class="receipt-download-container">
+          {{ internalLink(t('Download your hearing requirements'), ClaimantResponsePaths.claimantReceiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+          {{ t('(PDF)') }}
+        </p>
         {% endif %}
 
       </div>
@@ -79,11 +84,11 @@
               { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
           <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
         {% else %}
-          <p>{{ t('The claim is now settled. We’ll email the defendant {{ claim.claimData.defendant.name }} to tell them.') }}</p>
+          <p>{{ t('The claim is now ended. We’ve emailed {{ defendantName }} to tell them.', { defendantName: claim.claimData.defendant.name }) }}</p>
         {% endif %}
       {% elseif claim.claimantResponse.freeMediation === YesNoOption.YES.option %}
         <p>{{ t('You agreed to try to resolve the claim using mediation.') }}</p>
-        <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange an appointment.') }}</p>
+        <p>{{ t('A mediator will contact you and the defendant in the next 14 days to arrange a call.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and directionsQuestionnaireEnabled %}
         <p>{{ t('We’ll review the case. We’ll contact you to tell you what to do next.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.directionsQuestionnaireDeadline %}

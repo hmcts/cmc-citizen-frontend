@@ -16,7 +16,7 @@ import {
   statementOfMeansWithAllFieldsData
 } from 'test/data/entity/responseData'
 import { StatementType } from 'offer/form/models/statementType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { RepaymentPlan } from 'claims/models/repaymentPlan'
 import { LocalDate } from 'forms/models/localDate'
 import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'

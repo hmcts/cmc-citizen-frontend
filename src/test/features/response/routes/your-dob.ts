@@ -91,7 +91,7 @@ describe('Defendant user details: your date of birth page', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -103,7 +103,7 @@ describe('Defendant user details: your date of birth page', () => {
           it('should redirect to your phone page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)

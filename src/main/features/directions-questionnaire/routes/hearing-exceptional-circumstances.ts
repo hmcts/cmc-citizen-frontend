@@ -10,21 +10,47 @@ import { DraftService } from 'services/draftService'
 import { YesNoOption } from 'models/yesNoOption'
 import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
 import { ExceptionalCircumstancesGuard } from 'directions-questionnaire/guard/exceptionalCircumstancesGuard'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
-import { HearingLocation } from 'directions-questionnaire/forms/models/hearingLocation'
+import { Court } from 'court-finder-client/court'
+import { CourtDetails } from 'court-finder-client/courtDetails'
+import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
+import { Claim } from 'claims/models/claim'
 
-function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
+function getPostcode (defendantDirectionsQuestionnaire: DirectionsQuestionnaire, claim: Claim) {
+  const postcodeFromDirectionQuestionnaire = defendantDirectionsQuestionnaire.hearingLocation.courtAddress !== undefined
+    ? defendantDirectionsQuestionnaire.hearingLocation.courtAddress.postcode
+    : undefined
+
+  return defendantDirectionsQuestionnaire.hearingLocation.locationOption === CourtLocationType.SUGGESTED_COURT
+    ? claim.response.defendant.address.postcode
+    : postcodeFromDirectionQuestionnaire
+}
+
+async function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>) {
   const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
   let defendantCourt = ''
+  let courtDetails: CourtDetails = undefined
+
   if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
+    const claim: Claim = res.locals.claim
     const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
+    const postcode: string = getPostcode(defendantDirectionsQuestionnaire, claim)
+
+    if (postcode) {
+      const court: Court = await Court.getNearestCourt(postcode)
+      if (court) {
+        courtDetails = await Court.getCourtDetails(court.slug)
+      }
+    }
     defendantCourt = defendantDirectionsQuestionnaire.hearingLocation.courtName
   }
+
   res.render(Paths.hearingExceptionalCircumstancesPage.associatedView, {
     form: form,
     party: party,
-    courtName: defendantCourt
+    courtName: defendantCourt,
+    facilities: courtDetails ? courtDetails.facilities : undefined
   })
 }
 
@@ -32,9 +58,13 @@ function renderPage (res: express.Response, form: Form<ExceptionalCircumstances>
 export default express.Router()
   .get(Paths.hearingExceptionalCircumstancesPage.uri,
     ExceptionalCircumstancesGuard.requestHandler,
-    (req: express.Request, res: express.Response) => {
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
-      renderPage(res, new Form<ExceptionalCircumstances>(draft.document.exceptionalCircumstances))
+      try {
+        await renderPage(res, new Form<ExceptionalCircumstances>(draft.document.exceptionalCircumstances))
+      } catch (err) {
+        next(err)
+      }
     })
   .post(Paths.hearingExceptionalCircumstancesPage.uri,
     ExceptionalCircumstancesGuard.requestHandler,
@@ -44,39 +74,30 @@ export default express.Router()
       const party: MadeBy = getUsersRole(res.locals.claim, res.locals.user)
 
       if (form.hasErrors()) {
-        renderPage(res, form)
+        await renderPage(res, form)
       } else {
         const draft: Draft<DirectionsQuestionnaireDraft> = res.locals.draft
         const user: User = res.locals.user
         if (party === MadeBy.CLAIMANT && res.locals.claim.response.directionsQuestionnaire) {
           const defendantDirectionsQuestionnaire: DirectionsQuestionnaire = res.locals.claim.response.directionsQuestionnaire
 
-          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-            draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
-            form.model.reason = undefined
-          }
-        } else {
           if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
-            draft.document.hearingLocation = new HearingLocation()
-            // todo remove the below line once the backend validation of mandatory is removed for courtName
-            draft.document.hearingLocation.courtName = ''
+            draft.document.hearingLocation.courtName = defendantDirectionsQuestionnaire.hearingLocation.courtName
+            draft.document.hearingLocation.courtAccepted = YesNoOption.YES
             form.model.reason = undefined
           }
+        } else if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
+          draft.document.hearingLocation = undefined
         }
+
         draft.document.exceptionalCircumstances = form.model
         await new DraftService().save(draft, user.bearerToken)
-        if (party === MadeBy.CLAIMANT) {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          } else {
-            res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          }
+
+        if (form.model.exceptionalCircumstances.option === YesNoOption.NO.option) {
+          res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         } else {
-          if (form.model.exceptionalCircumstances.option === YesNoOption.YES.option) {
-            res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          } else {
-            res.redirect(Paths.expertPage.evaluateUri({ externalId: res.locals.claim.externalId }))
-          }
+          res.redirect(Paths.hearingLocationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
         }
+
       }
     }))

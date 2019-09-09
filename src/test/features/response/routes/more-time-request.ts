@@ -141,7 +141,7 @@ describe('Defendant response: more time needed page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -156,7 +156,7 @@ describe('Defendant response: more time needed page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRequestForMoreTime()
 
             await request(app)
@@ -172,7 +172,7 @@ describe('Defendant response: more time needed page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -194,7 +194,7 @@ describe('Defendant response: more time needed page', () => {
           it('should return 500 when "yes" is selected and cannot request more time', async () => {
             draftStoreServiceMock.resolveFind('response', { moreTimeNeeded: { option: undefined } })
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectRequestForMoreTime('internal server error when requesting more time')
 

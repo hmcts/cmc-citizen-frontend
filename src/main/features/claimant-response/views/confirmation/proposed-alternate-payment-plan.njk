@@ -2,7 +2,7 @@
     { defendantFullName: claim.claimData.defendant.name }
   ) }}</p>
 
-<p>{{ t('They must respond before 4pm on {{ responseDate }}. We’ll email you when they respond.', { responseDate: claim.claimantRespondedAt | addDays(7) | date }) }}</p>
+<p>{{ t('They must respond before 4pm on {{ responseDate }}. We’ll email you when they respond.', { responseDate: acceptedPaymentPlanClaimantDeadline | date }) }}</p>
 <p>{{ t('If they sign the agreement, this claim is put on hold.') }}</p>
 
 <p>{{ t('If they don’t sign the agreement or reject it, you can request a CCJ against them which orders them to pay in line with the terms of the repayment plan.') }}</p>

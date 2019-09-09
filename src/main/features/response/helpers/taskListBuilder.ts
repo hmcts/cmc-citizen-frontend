@@ -16,7 +16,7 @@ import { MoreTimeNeededTask } from 'response/tasks/moreTimeNeededTask'
 import { OweMoneyTask } from 'response/tasks/oweMoneyTask'
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { YourDetails } from 'response/tasks/yourDetails'
-import { FreeMediationTask } from 'response/tasks/freeMediationTask'
+import { FreeMediationTask } from 'shared/components/free-mediation/freeMediationTask'
 import { Claim } from 'claims/models/claim'
 import { DecideHowYouWillPayTask } from 'response/tasks/decideHowYouWillPayTask'
 import { isPastDeadline } from 'claims/isPastDeadline'
@@ -30,10 +30,10 @@ import { NumberFormatter } from 'utils/numberFormatter'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { ValidationUtils } from 'shared/ValidationUtils'
 import { ViewSendCompanyFinancialDetailsTask } from 'response/tasks/viewSendCompanyFinancialDetailsTask'
-import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FeatureToggles } from 'utils/featureToggles'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
@@ -250,23 +250,22 @@ export class TaskListBuilder {
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             )
           ]
         )
       } else {
-        path = Paths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
+        path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
         return new TaskList(
           'Resolving the claim', [
             new TaskListItem(
               'Free telephone mediation',
               path,
-              FreeMediationTask.isCompleted(draft, mediationDraft)
+              FreeMediationTask.isCompleted(mediationDraft, claim)
             )
           ]
         )
       }
-
     }
 
     return undefined
@@ -288,7 +287,7 @@ export class TaskListBuilder {
     return undefined
   }
 
-  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string, features: string[]): TaskList {
+  static buildSubmitSection (claim: Claim, draft: ResponseDraft, externalId: string): TaskList {
     const tasks: TaskListItem[] = []
     if (!draft.isResponsePopulated()
       || draft.isResponseRejectedFullyWithDispute()

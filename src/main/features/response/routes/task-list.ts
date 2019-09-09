@@ -32,7 +32,7 @@ export default express.Router()
         directionsQuestionnaireSection = TaskListBuilder.buildDirectionsQuestionnaireSection(draft.document, claim, directionQuestionnaireDraft.document)
       }
 
-      const submitSection = TaskListBuilder.buildSubmitSection(claim, draft.document, claim.externalId, claim.features)
+      const submitSection = TaskListBuilder.buildSubmitSection(claim, draft.document, claim.externalId)
 
       res.render(Paths.taskListPage.associatedView,
         {

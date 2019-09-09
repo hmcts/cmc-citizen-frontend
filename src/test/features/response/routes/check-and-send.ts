@@ -25,8 +25,8 @@ import { InterestDateType } from 'common/interestDateType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
-import { FeatureToggles } from 'utils/featureToggles'
 import { fullAdmissionWithPaymentByInstalmentsDataCompany } from 'test/data/entity/responseData'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -103,37 +103,46 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
           })
 
-          it('should load page with direction questionnaire information', async () => {
-            draftStoreServiceMock.resolveFind(draftType)
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+            it('should load page with direction questionnaire information', async () => {
+              draftStoreServiceMock.resolveFind(draftType, { timeline: undefined, evidence: undefined })
+              draftStoreServiceMock.resolveFind('mediation')
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
-            await request(app)
-              .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
-              .expect(res => expect(res).to.be.successful.withText('Support required for a hearing'))
-              .expect(res => expect(res).to.be.successful.withText('Preferred hearing centre'))
-              .expect(res => expect(res).to.be.successful.withText('Have you already got a report written by an expert?'))
-              .expect(res => expect(res).to.be.successful.withText('Does the claim involve something an expert can still examine?'))
-              .expect(res => expect(res).to.be.successful.withText('What is there to examine?'))
-              .expect(res => expect(res).to.be.successful.withText('Photographs'))
-              .expect(res => expect(res).to.be.successful.withText('Do you want to give evidence?'))
-              .expect(res => expect(res).to.be.successful.withText('Do you want the court’s permission to hire an expert?'))
-              .expect(res => expect(res).to.be.successful.withText('Other witnesses'))
-              .expect(res => expect(res).to.be.successful.withText('Dates unavailable'))
-              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-              .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge.'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
-          })
-
+              await request(app)
+                .get(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(
+                  'Your hearing requirements',
+                  'Support required for a hearing',
+                  'Preferred hearing centre',
+                  'Have you already got a report written by an expert?',
+                  'Does the claim involve something an expert can still examine?',
+                  'What is there to examine?',
+                  'Photographs',
+                  'Do you want to give evidence?',
+                  'Do you want the court’s permission to use an expert?',
+                  'Other witnesses',
+                  'Dates unavailable',
+                  'Statement of truth',
+                  'I believe that the facts stated in this response are true.' ,
+                  'The hearing requirement details on this page are true to the best of my knowledge.',
+                  '<input id="signedtrue" type="checkbox" name="signed" value="true"'
+                ))
+                .expect(res => expect(res).to.be.successful.withoutText(
+                  'Timeline of what happened',
+                  'Your evidence'
+                ))
+            })
+          }
         })
         context('for company and organisation', () => {
           it('should return statement of truth with a tick box', async () => {
 
-            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('response:company', {
+              timeline: { rows: [{ date: 'timeline date', description: 'something awesome happened' }] }
+            })
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             const claimStoreOverride = {
@@ -192,20 +201,26 @@ describe('Defendant response: check and send page', () => {
             await request(app)
               .get(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
-              .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-              .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+              .expect(res => expect(res).to.be.successful.withText(
+                'Statement of truth',
+                '<input id="signerName" name="signerName"',
+                '<input id="signerRole" name="signerRole"',
+                'I believe that the facts stated in this response are true.',
+                '<input id="signedtrue" type="checkbox" name="signed" value="true"',
+                'timeline date',
+                'something awesome happened'
+              ))
           })
 
           it('should return hearing requirement tick box', async () => {
 
-            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('response:company', {
+              evidence: { rows: [{ type: 'PHOTO', description: 'photo of a cat' }], comment: 'their evidence is invalid' }
+            })
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             const claimStoreOverride = {
-              features: ['admissions','directionsQuestionnaire'],
+              features: ['admissions', 'directionsQuestionnaire'],
               claim: {
                 claimants: [
                   {
@@ -262,21 +277,29 @@ describe('Defendant response: check and send page', () => {
               await request(app)
                 .get(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
-                .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"'))
+                .expect(res => expect(res).to.be.successful.withText(
+                  'Statement of truth',
+                  '<input id="signerName" name="signerName"',
+                  '<input id="signerRole" name="signerRole"',
+                  'I believe that the facts stated in this response are true.',
+                  '<input id="signedtrue" type="checkbox" name="signed" value="true"',
+                  '<input id="directionsQuestionnaireSignedtrue" type="checkbox" name="directionsQuestionnaireSigned" value="true"',
+                  'photo of a cat',
+                  'their evidence is invalid'
+                ))
             } else {
               await request(app)
                 .get(pagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('Statement of truth'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerName" name="signerName"'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signerRole" name="signerRole"'))
-                .expect(res => expect(res).to.be.successful.withText('I believe that the facts stated in this response are true.'))
-                .expect(res => expect(res).to.be.successful.withText('<input id="signedtrue" type="checkbox" name="signed" value="true"'))
+                .expect(res => expect(res).to.be.successful.withText(
+                  'Statement of truth',
+                  '<input id="signerName" name="signerName"',
+                  '<input id="signerRole" name="signerRole"',
+                  'I believe that the facts stated in this response are true.',
+                  '<input id="signedtrue" type="checkbox" name="signed" value="true"',
+                  'photo of a cat',
+                  'their evidence is invalid'
+                ))
             }
           })
         })
@@ -336,26 +359,28 @@ describe('Defendant response: check and send page', () => {
               .expect(res => expect(res).to.be.successful.withText('Check your answers', 'div class="error-summary"'))
           })
 
-          it('should stay in check and send page with error when hearing requirement details not checked', async () => {
-            draftStoreServiceMock.resolveFind(draftType)
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+            it('should stay in check and send page with error when hearing requirement details not checked', async () => {
+              draftStoreServiceMock.resolveFind(draftType)
+              draftStoreServiceMock.resolveFind('mediation')
+              draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
-            let sendData: any = { signed: 'true', type: SignatureType.BASIC }
-            if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
-              sendData = {
-                signed: 'true',
-                type: SignatureType.DIRECTION_QUESTIONNAIRE
+              let sendData: any = { signed: 'true', type: SignatureType.BASIC }
+              if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
+                sendData = {
+                  signed: 'true',
+                  type: SignatureType.DIRECTION_QUESTIONNAIRE
+                }
               }
-            }
 
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send(sendData)
-              .expect(res => expect(res).to.be.successful.withText('The hearing requirement details on this page are true to the best of my knowledge', 'div class="error-summary"'))
-          })
+              await request(app)
+                .post(pagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .send(sendData)
+                .expect(res => expect(res).to.be.successful.withText('Tell us if you believe the hearing requirement details on this page are true', 'div class="error-summary"'))
+            })
+          }
         })
 
         context('when form is valid', () => {
@@ -405,10 +430,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
-
-            if (FeatureToggles.isEnabled('mediation')) {
-              draftStoreServiceMock.resolveDelete()
-            }
+            draftStoreServiceMock.resolveDelete()
 
             let sendData: any = { signed: 'true', type: SignatureType.BASIC }
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
@@ -429,28 +451,26 @@ describe('Defendant response: check and send page', () => {
                 .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            it('should redirect to confirmation page when form is valid with SignatureType as qualified', async () => {
-              draftStoreServiceMock.resolveFind('response:company')
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('directionsQuestionnaire', { directionsQuestionnaire: undefined })
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionWithPaymentByInstalmentsDataCompany)
-              claimStoreServiceMock.resolveSaveResponse()
-              draftStoreServiceMock.resolveSave()
+          it('should redirect to confirmation page when form is valid with SignatureType as qualified', async () => {
+            draftStoreServiceMock.resolveFind('response:company')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire', { directionsQuestionnaire: undefined })
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionWithPaymentByInstalmentsDataCompany)
+            claimStoreServiceMock.resolveSaveResponse()
+            draftStoreServiceMock.resolveUpdate()
+            draftStoreServiceMock.resolveDelete()
+            draftStoreServiceMock.resolveDelete()
+            if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
               draftStoreServiceMock.resolveDelete()
-              draftStoreServiceMock.resolveDelete()
-              if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
-                draftStoreServiceMock.resolveDelete()
-              }
+            }
 
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: 'signer', signerRole: 'role' })
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-            })
-          }
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ signed: 'true', type: SignatureType.QUALIFIED, signerName: 'signer', signerRole: 'role' })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
 
           it('should redirect to counter-claim hand off page when defendant is counter claiming', async () => {
             draftStoreServiceMock.resolveFind(draftType, {
