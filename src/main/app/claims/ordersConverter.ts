@@ -11,7 +11,7 @@ export class OrdersConverter {
     }
 
     return new ReviewOrder(ordersDraft.disagreeReason.reason,
-      claim.claimantId === user.id ? MadeBy.CLAIMANT : MadeBy.DEFENDANT,
+      claim.claimantId === user.id ? MadeBy.CLAIMANT.value : MadeBy.DEFENDANT.value,
       MomentFactory.currentDateTime()
     )
   }

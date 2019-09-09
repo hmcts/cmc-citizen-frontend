@@ -142,7 +142,7 @@ describe('defendant as individual details page', () => {
 
       it('should redirect to defendant email page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.defendantIndividualDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

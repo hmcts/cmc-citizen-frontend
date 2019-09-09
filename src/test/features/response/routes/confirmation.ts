@@ -36,16 +36,27 @@ describe('Defendant response: confirmation page', () => {
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
-      it('should render page when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+      it('when part admit pay immediately should render page when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyDataV2)
 
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'We’ll contact you when John Smith responds, to tell you what to do next.',
-            'If John Smith accepts your response the claim will be ended.',
-            'If they reject your response and agree to try mediation we’ll contact you to arrange a call with the mediator'))
+            'You’ve said you owe £3,000 and offered to pay John Smith immediately.',
+            'We’ll contact you when they respond.',
+            'You need to pay John Smith £3,000 immediately.',
+            'Make sure that:',
+            'they get the money by',
+            ' - they can request a County Court Judgment against you if not',
+            'any cheques or bank transfers are clear in their account by the deadline',
+            'you get a receipt for any payments',
+            'if you need their payment details.',
+            'If John Smith accepts your offer of £3,000',
+            'The claim will be settled.',
+            'If John Smith rejects your offer',
+            'The court will review the case for the full amount of £200.'
+          ))
       })
 
       it('should render page when yes for mediation and DQ', async () => {
@@ -57,8 +68,8 @@ describe('Defendant response: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.',
-            'If they reject your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
-            'If they reject your response and don’t want to try mediation, the court will review the case. You might have to go to a hearing.'))
+            'If John Smith reject your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
+            'If they reject mediation the court will review the case. You might have to go to a hearing.'))
       })
 
       it('should render page when no for mediation and DQ', async () => {

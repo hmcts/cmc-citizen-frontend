@@ -1,7 +1,13 @@
 import { expect } from 'chai'
 import * as moment from 'moment'
 
-import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
+import {
+  addDaysFilter,
+  dateWithDayAtFrontFilter,
+  dateFilter,
+  dateInputFilter,
+  monthIncrementFilter
+} from 'modules/nunjucks/filters/dateFilter'
 import { calculateMonthIncrement } from 'common/calculate-month-increment/calculateMonthIncrement'
 
 describe('dateFilter', () => {
@@ -82,6 +88,47 @@ describe('dateInputFilter', () => {
     it('moment given with invalid date', () => {
       const invalidDateMoment = moment('2010-02-31')
       expectInputDateFilterToThrowErrorWithMsg(invalidDateMoment, 'Invalid date')
+    })
+  })
+})
+
+describe('dateWithDayAtFront', () => {
+  it('formats date (moment object) properly', () => {
+    expect(dateWithDayAtFrontFilter(moment('2017-01-01'))).to.eq('Sunday 1 January 2017')
+  })
+
+  it('formats date (string) properly', () => {
+    expect(dateWithDayAtFrontFilter('2017-01-01')).to.eq('Sunday 1 January 2017')
+  })
+
+  it('formats date properly (object with time)', () => {
+    expect(dateWithDayAtFrontFilter(moment('2017-01-01 12:12:12'))).to.eq('Sunday 1 January 2017')
+  })
+
+  describe('throws exception when', () => {
+    it('null given', () => {
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(null, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('undefined given', () => {
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(undefined, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('empty string given', () => {
+      dateWithDayAtFrontFilterToThrowErrorWithMsg('', 'Input should be moment or string, cannot be empty')
+    })
+
+    it('number given', () => {
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(1.01 as any, 'Input should be moment or string, cannot be empty')
+    })
+
+    it('string given, but it is not a valid date', () => {
+      dateWithDayAtFrontFilterToThrowErrorWithMsg('this is invalid date', 'Invalid date')
+    })
+
+    it('moment given with invalid date', () => {
+      const invalidDateMoment = moment('2010-02-31')
+      dateWithDayAtFrontFilterToThrowErrorWithMsg(invalidDateMoment, 'Invalid date')
     })
   })
 })
@@ -205,5 +252,11 @@ function expectAddDaysFilterToThrowErrorWithMsg (input: any, msg: string): void 
 function expectMonthIncrementToThrowErrorWithMsg (input: any, msg: string): void {
   expect(() => {
     monthIncrementFilter(input)
+  }).to.throw(Error, msg)
+}
+
+function dateWithDayAtFrontFilterToThrowErrorWithMsg (input: any, msg: string): void {
+  expect(() => {
+    dateWithDayAtFrontFilter(input)
   }).to.throw(Error, msg)
 }

@@ -332,8 +332,8 @@ const testData = [
       response: { ...partialAdmissionAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £3,000']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   },
   {
     status: 'full defence, states paid accepted',
@@ -352,8 +352,8 @@ const testData = [
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £100']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   }
 ]
 

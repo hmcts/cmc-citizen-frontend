@@ -4,7 +4,7 @@ import * as toBoolean from 'to-boolean'
 import { SignatureType } from 'common/signatureType'
 
 export class ValidationErrors {
-  static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Please select I believe that the facts stated in this response are true'
+  static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Tell us if you believe the facts stated in this response are true.'
   static readonly SIGNER_NAME_REQUIRED: string = 'Enter the name of the person signing the statement'
   static readonly SIGNER_NAME_TOO_LONG: string = 'You’ve entered too many characters'
   static readonly SIGNER_ROLE_REQUIRED: string = 'Enter the role of the person signing the statement'

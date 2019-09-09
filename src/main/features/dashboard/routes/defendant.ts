@@ -7,6 +7,8 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { Claim } from 'claims/models/claim'
 import { User } from 'idam/user'
 import { ForbiddenError } from 'errors'
+import { Moment } from 'moment'
+import { DirectionOrder } from 'claims/models/directionOrder'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -17,11 +19,18 @@ export default express.Router()
       const { externalId } = req.params
       const user: User = res.locals.user
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
+      const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
+      const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
+      const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
+
       if (claim && claim.defendantId !== user.id) {
         throw new ForbiddenError()
       }
 
       res.render(Paths.defendantPage.associatedView, {
-        claim: claim
+        claim: claim,
+        reconsiderationDeadline: reconsiderationDeadline,
+        isReviewOrderEligible: isReviewOrderEligible,
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline
       })
     }))

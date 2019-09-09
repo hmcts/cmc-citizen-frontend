@@ -396,6 +396,19 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION)
     })
 
+    it('should return CLAIMANT_REJECTED_PART_ADMISSION_DQ when the claimant rejects the part admission with DQs', () => {
+      claim.claimantResponse = rejectionClaimantResponseData
+      claim.claimantRespondedAt = MomentFactory.currentDate()
+      claim.claimData = {
+        defendant: new Individual().deserialize(individual)
+      }
+      claim.response = {
+        responseType: ResponseType.PART_ADMISSION
+      }
+      claim.features = ['admissions', 'directionsQuestionnaire']
+      expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ)
+    })
+
     it('should return CCJ_AFTER_SETTLEMENT_BREACHED when the claimant requests a CCJ after settlement terms broken', () => {
       const paymentIntention = {
         paymentOption: PaymentOption.BY_SPECIFIED_DATE,
@@ -579,6 +592,46 @@ describe('Claim', () => {
 
         expect(claim.stateHistory).to.have.lengthOf(2)
         expect(claim.stateHistory[0].status).to.equal(ClaimStatus.DEFENDANT_REJECTS_WITH_DQS)
+      })
+
+      it('should contain the claim status ORDER_DRAWN only when the legal advisor has drawn the order', () => {
+        claim.respondedAt = moment()
+        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.response = {
+          paymentIntention: null,
+          responseType: 'FULL_DEFENCE',
+          freeMediation: 'no'
+        }
+        claim.directionOrder = {
+          directions: [
+            {
+              id: 'd2832981-a23a-4a4c-8b6a-a013c2c8a637',
+              directionParty: 'BOTH',
+              directionType: 'DOCUMENTS',
+              directionActionedDate: '2019-09-20'
+            },
+            {
+              id: '8e3a20c2-10a4-49fd-b1a7-da66b088f978',
+              directionParty: 'BOTH',
+              directionType: 'EYEWITNESS',
+              directionActionedDate: '2019-09-20'
+            }
+          ],
+          paperDetermination: 'no',
+          preferredDQCourt: 'Central London County Court',
+          hearingCourt: 'CLERKENWELL',
+          hearingCourtAddress: {
+            line1: 'The Gee Street Courthouse',
+            line2: '29-41 Gee Street',
+            city: 'London',
+            postcode: 'EC1V 3RE'
+          },
+          estimatedHearingDuration: 'HALF_HOUR',
+          createdOn: MomentFactory.currentDate().subtract(1, 'day')
+        }
+
+        expect(claim.stateHistory).to.have.lengthOf(2)
+        expect(claim.stateHistory[0].status).to.equal(ClaimStatus.ORDER_DRAWN)
       })
     }
 

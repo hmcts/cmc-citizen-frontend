@@ -28,6 +28,6 @@ describe('OrdersConverter', () => {
     const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
 
     expect(reviewOrder.reason).to.equal('I want a judge to review it')
-    expect(reviewOrder.requestedBy).to.equal(MadeBy.CLAIMANT)
+    expect(reviewOrder.requestedBy).to.equal(MadeBy.CLAIMANT.value)
   })
 })
