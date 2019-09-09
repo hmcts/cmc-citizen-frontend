@@ -5,9 +5,9 @@
     "admissions": true,
     "paidInFull": true,
     "returnErrorToUser": true,
-    "mediation": false,
-    "mediationPilot": false,
-    "directionsQuestionnaire": false,
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
     "newDashboardStatus": false
   },
   "appInsights": {

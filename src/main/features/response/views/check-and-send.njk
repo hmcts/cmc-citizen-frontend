@@ -284,11 +284,7 @@
       }}
     {% endif %}
 
-    {% if ((admissionsApplicable
-           and (draft.isResponsePartiallyAdmitted()
-                or (draft.isResponseRejectedFullyBecausePaidWhatOwed()
-                    and draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday)))
-          or draft.isResponseRejectedFullyWithDispute()) %}
+    {% if mediationDraft %}
       {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
     {% endif %}
 
