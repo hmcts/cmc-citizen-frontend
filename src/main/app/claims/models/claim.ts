@@ -529,7 +529,8 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') &&
+      this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
   private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {
