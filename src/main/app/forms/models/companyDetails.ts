@@ -7,7 +7,7 @@ export class ValidationErrors {
 }
 
 export class ValidationConstraints {
-  static readonly CONTACT_PERSON_MAX_LENGTH: number = 35
+  static readonly CONTACT_PERSON_MAX_LENGTH: number = 30
 }
 
 export class CompanyDetails extends PartyDetails {
