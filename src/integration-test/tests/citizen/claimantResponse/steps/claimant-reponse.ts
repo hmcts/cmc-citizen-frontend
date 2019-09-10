@@ -131,7 +131,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskFreeMediation()
     mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
     taskListPage.selectTaskHearingRequirements()
-    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourney()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 

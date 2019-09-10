@@ -29,7 +29,7 @@ export class ClaimantCheckAndSendPage {
     I.click(buttons.submit)
   }
 
-  checkFactsTrueAndSubmitNoDq (): void {
+  submitNoDq (): void {
     I.click(buttons.submit)
   }
 
