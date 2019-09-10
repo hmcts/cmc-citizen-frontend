@@ -114,7 +114,7 @@ describe('Claimant response: intention to proceed page', () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -127,7 +127,7 @@ describe('Claimant response: intention to proceed page', () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)
@@ -141,7 +141,7 @@ describe('Claimant response: intention to proceed page', () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         draftStoreServiceMock.resolveFind('mediation')
         draftStoreServiceMock.resolveDelete()
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

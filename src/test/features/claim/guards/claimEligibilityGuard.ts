@@ -65,7 +65,7 @@ describe('Claim eligibility guard', () => {
         [eligibilityCookieName]: eligibleCookie
       }
       idamServiceMock.resolveRetrieveServiceToken()
-      draftStoreServiceMock.resolveSave()
+      draftStoreServiceMock.resolveUpdate()
     })
 
     it('should mark draft as eligible', async () => {

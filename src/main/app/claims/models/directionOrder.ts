@@ -1,11 +1,11 @@
-import { Moment } from 'moment'
+import * as moment from 'moment'
 import { Address } from 'claims/models/address'
 import { YesNoOption } from 'models/yesNoOption'
 import { Direction } from 'claims/models/Direction'
 import { MomentFactory } from 'shared/momentFactory'
 
 export interface DirectionOrder {
-  createdOn?: Moment
+  createdOn?: moment.Moment
   hearingCourtAddress?: Address
   directions?: Direction[]
   extraDocUploadList?: string[]
@@ -15,7 +15,7 @@ export interface DirectionOrder {
   preferredCourtObjectingReason?: string
   hearingCourt?: string
   estimatedHearingDuration?: string,
-  postDocumentsLastDay?: Moment
+  postDocumentsLastDay?: moment.Moment
 }
 
 export namespace DirectionOrder {
@@ -38,15 +38,12 @@ export namespace DirectionOrder {
     }
   }
 
-  export function getPostDocumentsLastDay (directions: Direction[]): Moment {
-    const direction = directions
-      .filter(o => o.directionType === 'DOCUMENTS')
-      .pop()
-
-    return direction.directionActionedDate
+  export function getPostDocumentsLastDay (directions: Direction[]): moment.Moment {
+    const directionActionedDates: moment.Moment[] = directions.map(direction => moment(direction.directionActionedDate))
+    return moment.max(directionActionedDates)
   }
 
-  export function isReviewOrderEligible (deadline: Moment): boolean {
+  export function isReviewOrderEligible (deadline: moment.Moment): boolean {
     if (!deadline) {
       return false
     }

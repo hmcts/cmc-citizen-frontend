@@ -163,7 +163,7 @@ describe('Claimant response: view defendant response page', () => {
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
             draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -187,7 +187,7 @@ describe('Claimant response: view defendant response page', () => {
         it('should redirect to task list page when pagination was not requested and everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
           draftStoreServiceMock.resolveFind('claimantResponse')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

@@ -96,7 +96,7 @@ export class ClaimStoreClient {
     })
   }
 
-  saveOrder (ordersDraft: OrdersDraft, claim: Claim, user: User): Promise<ReviewOrder> {
+  saveOrder (ordersDraft: OrdersDraft, claim: Claim, user: User): Promise<Claim> {
     const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
     const externalId: string = ordersDraft.externalId
 
@@ -110,7 +110,9 @@ export class ClaimStoreClient {
     }
 
     return requestPromiseApi(options)
-      .then(reviewOrder => new ReviewOrder().deserialize(reviewOrder))
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
   }
 
   retrieveByClaimantId (user: User): Promise<Claim[]> {

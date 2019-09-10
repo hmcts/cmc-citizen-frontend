@@ -84,7 +84,7 @@ describe('Defendant company response', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -97,7 +97,7 @@ describe('Defendant company response', () => {
         it('should redirect to task list when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)

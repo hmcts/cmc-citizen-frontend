@@ -138,9 +138,9 @@ describe('ClaimStoreClient', () => {
 
       it('should retrieve an order that was successfully saved', async () => {
         resolveSaveOrder()
-        const reviewOrder: ReviewOrder = await claimStoreClient.saveOrder(ordersDraft, new Claim().deserialize(sampleClaimIssueObj), claimant)
+        const claim: Claim = await claimStoreClient.saveOrder(ordersDraft, new Claim().deserialize(sampleClaimIssueObj), claimant)
 
-        expect(reviewOrder).to.deep.equal(new ReviewOrder().deserialize(expectedData))
+        expect(claim.reviewOrder).to.deep.equal(new ReviewOrder().deserialize(expectedData))
       })
 
       function mockInternalServerErrorOnAllAttempts () {

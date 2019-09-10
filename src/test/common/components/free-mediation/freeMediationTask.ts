@@ -76,7 +76,7 @@ describe('Free mediation task', () => {
     expect(FreeMediationTask.isCanWeUseCompleted(mediationDraft)).to.be.true
   })
 
-  it('isMediationDisagreementCompleted should be completed when willYouTryMediation and mediationDisagreement are set to no', () => {
+  it('isMediationDisagreementCompleted should be completed when willYouTryMediation is no and mediationDisagreement is no', () => {
     const mediationDraft = new MediationDraft()
     mediationDraft.willYouTryMediation = new FreeMediation(FreeMediationOption.NO)
     mediationDraft.mediationDisagreement = new FreeMediation(FreeMediationOption.NO)

@@ -5,8 +5,8 @@
     "admissions": true,
     "returnErrorToUser": true,
     "mediation": true,
-    "mediationPilot": false,
-    "directionsQuestionnaire": false,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
     "newDashboardStatus": false
   },
   "appInsights": {
