@@ -103,6 +103,7 @@ describe('Defendant response: response type page', () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveUpdate()
+            draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .post(pagePath)

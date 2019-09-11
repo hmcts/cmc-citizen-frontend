@@ -100,11 +100,6 @@
     google-libphonenumber "^3.1.6"
     validator "10.4.0"
 
-"@hmcts/cmc-common-frontend@^1.56.0":
-  version "1.56.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-common-frontend/-/cmc-common-frontend-1.56.0.tgz#f46048462f344ac529af99d8042a4e48881d35b3"
-  integrity sha512-ukf5oU20vVyLUE9aELX29hOjX99vllWtwPqdl6r2swUabZXDcXoj6X0ahysA6u+H9VqhM1+Cp0OzWthOB/LCrQ==
-
 "@hmcts/cmc-draft-store-middleware@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-draft-store-middleware/-/cmc-draft-store-middleware-2.0.0.tgz#6900c3ed23ac1173ef4b68b88623704fc92be377"
