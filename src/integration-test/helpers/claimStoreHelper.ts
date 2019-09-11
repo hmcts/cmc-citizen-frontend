@@ -17,19 +17,19 @@ class ClaimStoreHelper extends codecept_helper {
 
   async createClaim (claimData: ClaimData, submitterEmail: string): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
-    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, ['admissions'])
+    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, ['admissions','directionsQuestionnaire'])
     await this.waitForOpenClaim(referenceNumber)
     return referenceNumber
   }
 
-  async createClaimWithFeatures (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions']): Promise<string> {
+  async createClaimWithFeatures (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions','directionsQuestionnaire']): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
     await this.waitForOpenClaim(referenceNumber)
     return referenceNumber
   }
 
-  async createClaimWithFeaturesAndRole (claimData: ClaimData, submitterEmail: string, role: string, features: string[] = ['admissions']): Promise<string> {
+  async createClaimWithFeaturesAndRole (claimData: ClaimData, submitterEmail: string, role: string, features: string[] = ['admissions','directionsQuestionnaire']): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
     await this.waitForOpenClaim(referenceNumber)
