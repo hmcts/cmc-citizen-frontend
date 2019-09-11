@@ -85,7 +85,6 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     }
   }
 
-  const statementOfTruthType = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : SignatureType.RESPONSE
   form.model.type = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : form.model.type
 
   res.render(Paths.checkAndSendPage.associatedView, {
@@ -104,9 +103,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document),
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
-    statementOfTruthType: statementOfTruthType,
-    mediationPilot: mediationPilot,
     dispute: dispute,
+    mediationPilot: mediationPilot,
     alternatePaymentMethodDate: alternatePaymentMethodDate
   })
 }

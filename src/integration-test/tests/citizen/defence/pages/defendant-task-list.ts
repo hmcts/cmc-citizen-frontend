@@ -68,4 +68,8 @@ export class DefendantTaskListPage {
     I.click('Free telephone mediation')
   }
 
+  selectTaskHearingRequirements (): void {
+    I.click('Give us details in case there’s a hearing')
+  }
+
 }

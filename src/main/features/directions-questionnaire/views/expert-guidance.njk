@@ -8,16 +8,17 @@
     <p>{{ t('It’s rare for judges to allow you to use an expert in a small claim.') }}</p>
     <p>{{ t('You must ask for permission to use an expert - a judge will then decide whether the expert is necessary.') }}
     <p>{{ t('The judge will also decide whether the cost of the expert is reasonable compared to the value of the claim.') }}</p>
-    <p>{{ t('Even though you and the defendant share the cost of hiring the expert, judges are still responsible for keeping costs in proportion to value.') }}</p>
+    <p>{{ t('Even though you and the {{ otherParty }} share the cost of hiring the expert, judges are still responsible for keeping costs in proportion to value.',
+        { otherParty: otherParty }) }}</p>
 
     <h2 class="heading-medium">{{ t('When an expert is allowed') }}</h2>
     <p>{{ t('A judge will only allow you to use an expert if they believe they need the expert’s specialist knowledge.') }}</p>
     <p>{{ t('For example, they might allow a structural engineer to be used in a claim about building works or a mechanic in a claim about car repairs.') }}</p>
-    <p>{{ t('If a judge allows you to use an expert, you’ll usually have to share one expert with the defendant.') }}</p>
+    <p>{{ t('If a judge allows you to use an expert, you’ll usually have to share one expert with the {{ otherParty }}.', { otherParty: otherParty }) }}</p>
     <p>{{ t('The expert will provide a written report - they won’t usually come to court in person.') }}</p>
 
     <h2 class="heading-medium">{{ t('Paying for the expert') }}</h2>
-    <p>{{ t('The cost of hiring an expert depends on which expert you and the defendant choose.') }}</p>
+    <p>{{ t('The cost of hiring an expert depends on which expert you and the {{ otherParty }} choose.', { otherParty: otherParty }) }}</p>
     <p>{{ t('Usually you both share this cost.') }}</p>
     <p>{{ t('If you win the case you may be able to recover a maximum of £750 of the cost you paid. A judge will rule on this at the end of the hearing.') }}</p>
 
@@ -29,6 +30,7 @@
       <li>{{ t('Provide questions for the expert to answer in a report.') }}</li>
       <li>{{ t('Provide any extra information the expert asks for.') }}</li>
       <li>{{ t('Pay the expert - you usually both share this cost.') }}</li>
+      <li>{{ t('Send the expert’s report to the court (only one of you will have to do this).') }}</li>
     </ul>
     <form method="post">
       {{ csrfProtection(csrf) }}

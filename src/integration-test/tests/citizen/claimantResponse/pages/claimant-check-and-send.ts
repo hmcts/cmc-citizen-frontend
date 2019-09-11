@@ -1,11 +1,13 @@
 import I = CodeceptJS.I
+import { DefenceType } from 'integration-test/data/defence-type'
 
 const I: I = actor()
 
 const fields = {
   checkboxFactsTrue: 'input#signedtrue',
   signerName: 'input[id=signerName]',
-  signerRole: 'input[id=signerRole]'
+  signerRole: 'input[id=signerRole]',
+  checkboxHearingRequirementsTrue: 'input#directionsQuestionnaireSignedtrue'
 }
 
 const buttons = {
@@ -14,13 +16,20 @@ const buttons = {
 
 export class ClaimantCheckAndSendPage {
 
-  signStatementOfTruthAndSubmit (signerName: string, signerRole: string): void {
+  signStatementOfTruthAndSubmit (signerName: string, signerRole: string, defenceType: DefenceType): void {
     I.fillField(fields.signerName, signerName)
     I.fillField(fields.signerRole, signerRole)
-    this.checkFactsTrueAndSubmit()
+    this.checkFactsTrueAndSubmit(defenceType)
   }
 
-  checkFactsTrueAndSubmit (): void {
+  checkFactsTrueAndSubmit (defenceType: DefenceType): void {
+    if (defenceType !== DefenceType.FULL_ADMISSION && process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      I.checkOption(fields.checkboxHearingRequirementsTrue)
+    }
+    I.click(buttons.submit)
+  }
+
+  checkFactsTrueAndSubmitNoDq (): void {
     I.click(buttons.submit)
   }
 
