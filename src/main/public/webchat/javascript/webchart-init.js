@@ -21,7 +21,7 @@ webchat_init({
   textNoAgentsAvailable: 'No agents are available, please try again later.',
   textAllAgentsBusy: 'All our web chat agents are busy helping other people. Please try again later or contact us using one of the ways above.',
   textChatAlreadyOpen: 'A web chat window is already open.',
-  textAdditional: 'Monday to Friday, 9:30am to 5pm.',
+  textAdditional: 'Monday to Friday, 9am to 5pm.',
   stylesheetURL: 'https://' + getUrl() + '/webchat/css/hmcts-webchat-gds-v3.css',
   busHandlerURL: 'https://' + getUrl() + '/webchat/javascript/hmcts-webchat-busHandler.js',
   gdsMajorVersion: 3
