@@ -34,7 +34,8 @@ export default express.Router()
         draft.document.youCanOnlyUseMediation = new FreeMediation(FreeMediationOption.YES)
 
         await new DraftService().save(draft, user.bearerToken)
-        if (claim.claimData.defendant.isBusiness()) {
+        if ((user.id === claim.defendantId && claim.claimData.defendant.isBusiness()) ||
+            (user.id === claim.claimantId && claim.claimData.claimant.isBusiness())) {
           res.redirect(Paths.canWeUseCompanyPage.evaluateUri({ externalId: claim.externalId }))
         } else {
           res.redirect(Paths.canWeUsePage.evaluateUri({ externalId: claim.externalId }))

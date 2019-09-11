@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "@hmcts/class-validator": "^0.9.1-e",
-    "@hmcts/cmc-common-frontend": "^1.56.0",
     "@hmcts/cmc-draft-store-middleware": "^2.0.0",
     "@hmcts/cmc-validators": "^0.2.3",
     "@hmcts/draft-store-client": "^1.1.1",
