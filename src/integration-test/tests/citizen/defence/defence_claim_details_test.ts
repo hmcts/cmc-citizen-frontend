@@ -10,21 +10,6 @@ const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 
 Feature('Respond to claim: claim details')
 
-Scenario('I can view the claim details from a link on the dashboard @nightly', { retries: 3 }, async (I: I) => {
-  const claimantEmail: string = await I.createCitizenUser()
-  const defendantEmail: string = await I.createCitizenUser()
-
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  const claimRef: string = await I.createClaim(claimData, claimantEmail)
-
-  await helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.defendantViewCaseTaskList(defendantEmail)
-  I.click(claimRef)
-  I.click('Respond to claim')
-  defendantDetails.clickViewClaim()
-  defendantDetails.checkClaimData(claimRef, claimData)
-})
-
 Scenario('I can view the claim details from a link on the dashboard for interest breakdown @citizen', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()

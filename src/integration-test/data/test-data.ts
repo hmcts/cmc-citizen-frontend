@@ -27,8 +27,8 @@ export const claimAmount: Amount = {
 }
 
 export const postcodeLookupQuery: PostcodeLookupQuery = {
-  postcode: 'M13 9PL',
-  address: 'UNIVERSITY OF MANCHESTER, OXFORD ROAD, MANCHESTER, M13 9PL'
+  postcode: 'SW2 1AN',
+  address: '10, DALBERG ROAD, LONDON, SW2 1AN'
 }
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
@@ -95,10 +95,9 @@ export function createClaimant (type: PartyType): Party {
     type: type,
     name: undefined,
     address: {
-      line1: '23 Acacia Road',
-      line2: 'some area',
-      city: 'London',
-      postcode: 'SW1A 1AA'
+      line1: '10, DALBERG ROAD',
+      city: 'LONDON',
+      postcode: 'SW2 1AN'
     },
     correspondenceAddress: {
       line1: '234 Acacia Road',
@@ -135,10 +134,10 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
     type: type,
     name: undefined,
     address: {
-      line1: 'Oxford Road',
+      line1: '11 Dalberg road',
       line2: '',
-      city: 'Manchester',
-      postcode: 'M13 9PL'
+      city: 'London',
+      postcode: 'SW2 1AN'
     },
     mobilePhone: '07700000002',
     email: hasEmailAddress ? 'civilmoneyclaims+automatedtest-defendant@gmail.com' : undefined
