@@ -5,6 +5,7 @@ import { MediationAgreementPage } from 'integration-test/tests/citizen/mediation
 import { CanWeUsePage } from 'integration-test/tests/citizen/mediation/pages/can-we-use'
 import { CanWeUseCompanyPage } from 'integration-test/tests/citizen/mediation/pages/can-we-use-company'
 import { TryFreeMediationPage } from 'integration-test/tests/citizen/mediation/pages/try-free-mediation'
+import { ContinueWithoutMediationPage } from 'integration-test/tests/citizen/mediation/pages/continue-without-mediation'
 
 const freeMediationPage: FreeMediationPage = new FreeMediationPage()
 const howMediationWorksPage: HowMediationWorksPage = new HowMediationWorksPage()
@@ -13,6 +14,7 @@ const mediationAgreementPage: MediationAgreementPage = new MediationAgreementPag
 const canWeUsePage: CanWeUsePage = new CanWeUsePage()
 const canWeUseCompanyPage: CanWeUseCompanyPage = new CanWeUseCompanyPage()
 const tryFreeMediationPage: TryFreeMediationPage = new TryFreeMediationPage()
+const continueWithoutMediationPage: ContinueWithoutMediationPage = new ContinueWithoutMediationPage()
 
 export class MediationSteps {
 
@@ -45,6 +47,18 @@ export class MediationSteps {
       freeMediationPage.clickHowFreeMediationWorks()
       howMediationWorksPage.chooseContinue()
       willYouTryMediationPage.chooseNo()
+    } else {
+      this.legacyFreeMediationReject()
+    }
+  }
+
+  rejectMediationByDisagreeing (): void {
+    if (process.env.FEATURE_MEDIATION === 'true') {
+      freeMediationPage.clickHowFreeMediationWorks()
+      howMediationWorksPage.chooseContinue()
+      willYouTryMediationPage.chooseYes()
+      mediationAgreementPage.chooseDoNotAgree()
+      continueWithoutMediationPage.chooseContinue()
     } else {
       this.legacyFreeMediationReject()
     }

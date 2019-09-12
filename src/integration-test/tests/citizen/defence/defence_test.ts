@@ -17,14 +17,12 @@ Scenario('I can complete the journey when I fully reject the claim as I dispute 
   I.see(`Wait for the claimant to respond`)
 })
 
-if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen @admissions', { retries: 3 }, async (I: I) => {
-    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-    testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
-    helperSteps.finishResponse(testData)
-    I.click('My account')
-    I.see(testData.claimRef)
-    I.click(testData.claimRef)
-    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim`)
-  })
-}
+Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen', { retries: 3 }, async (I: I) => {
+  const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID
+  helperSteps.finishResponse(testData)
+  I.click('My account')
+  I.see(testData.claimRef)
+  I.click(testData.claimRef)
+  I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim`)
+})
