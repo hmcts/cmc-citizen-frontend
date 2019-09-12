@@ -529,7 +529,8 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') &&
+      this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
   private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {
@@ -644,5 +645,9 @@ export class Claim {
 
   private hasOrderBeenDrawn (): boolean {
     return !!this.directionOrder
+  }
+
+  public isIntentionToProceedEligible (): boolean {
+    return this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isAfter(MomentFactory.parse('2019-09-29'))
   }
 }

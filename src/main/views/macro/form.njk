@@ -99,7 +99,7 @@
            type="number"
            value="{{ value | default('') }}"
            {% if ariaLabelledBy %}aria-labelledby="{{ ariaLabelledBy }}"{% endif %}
-      {% if ariaDescribedBy %}aria-describedby="{{ ariaDescribedBy }}"{% endif %}>
+           {% if ariaDescribedBy %}aria-describedby="{{ ariaDescribedBy }}"{% endif %}>
   </span>
 
 {% endmacro %}
@@ -225,7 +225,7 @@
           value = option.value,
           hint = option.hint,
           checked = (selection != -1),
-        bold = bold
+          bold = bold
         )
         }}
       {% endfor %}
@@ -251,7 +251,7 @@
         value = option.value,
         hint = option.hint,
         checked = (selection === option.value),
-      bold = bold
+        bold = bold
       )
       }}
     </fieldset>
@@ -281,8 +281,8 @@
           hint = option.hint,
           greyHint = option.greyHint,
           checked = option.checked or (selection === option.value),
-        bold = option.bold,
-        className = option.className
+          bold = option.bold,
+          className = option.className
         ) }}
       {% endfor %}
     </fieldset>
@@ -310,7 +310,7 @@
           form = form,
           value = option.value,
           checked = option.checked or (selection === option.value),
-        bold = option.bold
+          bold = option.bold
         ) }}
         {% if option.hint %}
           <div class="panel panel-border-narrow js-hidden" id="{{ name }}-{{ option.value }}" aria-hidden="false">
@@ -344,8 +344,8 @@
             value = option.value,
             hint = option.hint,
             checked = option.checked or (selection === option.value),
-          bold = option.bold,
-          withHiddenControl = option.withHiddenControl
+            bold = option.bold,
+            withHiddenControl = option.withHiddenControl
           ) }}
         {% endfor %}
       </div>
@@ -375,8 +375,8 @@
                 value = option.value,
                 hint = option.hint,
                 checked = option.checked or (selection === option.value),
-              bold = option.bold,
-              withHiddenControl = option.withHiddenControl
+                bold = option.bold,
+                withHiddenControl = option.withHiddenControl
               ) }}
             {% endfor %}
           </div>

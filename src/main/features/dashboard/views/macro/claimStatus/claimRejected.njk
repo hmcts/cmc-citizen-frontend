@@ -38,7 +38,7 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) %}
-  {{ t('You’ve reject the defendant’s response.') }}
+  {{ t('Wait for the court to review the case.') }}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) %}
@@ -46,7 +46,7 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) %}
-  {{ t('We’ll contact you with a mediation appointment') }}
+  {{ t('We’ll contact you to try to arrange a mediation appointment') }}
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
@@ -93,11 +93,11 @@
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForDefendantDashboard() %}
-  {{ t('You’ve rejected the claim. You need to tell us more about the claim.') }}
+  {{ t('You’ve rejected the claim.') }}
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForDefendantClaimDetails(claim) %}
-  {% if featureToggles.mediation %}
+  {% if featureToggles.directionsQuestionnaire and claim.isIntentionToProceedEligible() %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('Wait for the claimant to respond') }}</h2>
       <p>{{ t('You’ve rejected the claim.') }}</p>
@@ -147,37 +147,22 @@
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
-  {% if claim.directionsQuestionnaireDeadline %}
-    {{ t('You’ve rejected the defendant’s admission.') }}
-  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+      <p>{{ t('We’ll contact you with a mediation appointment') }}
   {% else %}
-    {{ t('Wait for the court to review the case') }}
+      {{ t('Wait for the court to review the case') }}
   {% endif %}
 {% endmacro %}
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('You’ve rejected {{ defendantName }} response.', { defendantName: claim.claimData.defendant.name }) }}</h2>
 
-  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <div class="status-block">
-      <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-
-      <p>{{ t('You’ve rejected the defendant’s response.')}}</p>
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-      <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
-    </div>
-  {% else %}
-    <div class="status-block">
-      <h2 class="heading-small">{{ t('You’ve rejected the defendant’s response.') }}</h2>
-
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        <p>{{ t('You’ve both agreed to try mediation. The Small Claims Mediation Service will contact you to arrange a call with the mediator.') }}</p>
-        {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
-      {% endif %}
-
-      <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
-    </div>
-  {% endif %}
+      {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+    {% endif %}
+  </div>
 {% endmacro %}
 
 {% macro claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) %}
@@ -214,10 +199,6 @@
   {{ t('Wait for the claimant to respond') }}
 {% endmacro %}
 
-{% macro claimRejectedFreeMediationYESForDefendantDashboard() %}
-  {{ t('You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.') }}
-{% endmacro %}
-
 {% macro claimRejectedFreeMediationYESForDefendantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
@@ -249,7 +230,7 @@
 {% endmacro %}
 
 {% macro claimRejectedForClaimantClaimDetails(claim, mediationDeadline) %}
-  {% if featureToggles.mediation %}
+  {% if featureToggles.mediation and claim.isIntentionToProceedEligible() %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('Decide whether to proceed') }}</h2>
       <p>{{ t('{{ defendantName }} has rejected your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
@@ -293,30 +274,43 @@
 
 {% macro claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('The defendant has rejected your claim') }}</h2>
-    <p>{{ t('They said they dispute your claim.') }}</p>
-    {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
-    <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before 4pm on {{ deadline }}.',
+    <h2 class="heading-small">{{ t('You rejected {{ defendantName }}’s response',
+          { defendantName: claim.claimData.defendant.name }) }}</h2>
+    <p>{{ t('You need to {{ completeDQ }} form to tell us your requirements in case there’s a hearing.',
+        { completeDQ: internalLink(
+          'complete a directions questionnaire',
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
+        }
+      ) | safe
+      }}</p>
+    <p>{{ t('The claim won’t proceed if you don’t complete and return the form to us before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ defendantName }}', { defendantName: claim.claimData.defendant.name }) }}</p>
     <p>{{ _downloadResponseLink(claim, 'Download their response') }}</p>
   </div>
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
-    <p>{{ t('You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.') }}</p>
-    {{ _linkToDirectionsQuestionnairePage(claim.externalId) }}
+    <h2 class="heading-small">{{ t('The claimant rejected your response') }}</h2>
+    <p>{{ t('You’ll have to go to a hearing.') }}</p>
+    <p>{{ t('You need to {{ completeDQ }} form to give us more information before the hearing.',
+        { completeDQ: internalLink(
+          'complete a directions questionnaire',
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
+        }
+      ) | safe
+      }}</p>
     <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-    <p>{{ _downloadResponseLink(claim, 'Download your response') }}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } )}}</p>
   </div>
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard() %}
-  {{ t('You’ve rejected their defence. You need to tell us more about the claim.') }}
+  {{ t('Tell us your hearing requirements') }}
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard() %}
-  {{ t('You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.') }}
+  {{ t('Tell us your hearing requirements') }}
 {% endmacro %}

@@ -29,6 +29,10 @@ export class ClaimantCheckAndSendPage {
     I.click(buttons.submit)
   }
 
+  submitNoDq (): void {
+    I.click(buttons.submit)
+  }
+
   verifyFactsForPartAdmitRejection (): void {
     I.see('Your response')
     I.see('Do you accept or reject the defendant’s admission?')

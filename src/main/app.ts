@@ -77,11 +77,7 @@ new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
 new MediationFeature().enableFor(app)
-
-if (FeatureToggles.isEnabled('paidInFull')) {
-  logger.info('FeatureToggles.paidInFull enabled')
-  new PaidInFullFeature().enableFor(app)
-}
+new PaidInFullFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')

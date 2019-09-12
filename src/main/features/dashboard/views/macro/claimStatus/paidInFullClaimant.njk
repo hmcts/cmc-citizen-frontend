@@ -1,7 +1,6 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% macro paidInFullClaimantClaimDetails(externalId) %}
-  {% if featureToggles.paidInFull %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('Tell us you’ve ended the claim') }}</h2>
       <p>{{ t('If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.') }}</p>
@@ -9,19 +8,12 @@
                          DashboardPaths.datePaidPage.evaluateUri({ externalId: externalId }),
                          'button button-secondary') | safe }}</p>
     </div>
-  {% endif %}
 {% endmacro %}
 
 {% macro paidInFullClaimantButtonClaimDetails(claim, text='Tell us you’ve settled') %}
-  {% if featureToggles.paidInFull %}
     <div class="form-group">
       <p>{{ internalLink(text, DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }), "button button-secondary") | safe }}</p>
     </div>
-    {% else %}
-      <div class="form-group">
-        <p>{{ internalLink(text, AppPaths.contactUsPage.uri, "button button-secondary") | safe }}</p>
-      </div>
-  {% endif %}
 {% endmacro %}
 
 {% macro claimIsSettledClaimantDashboard() %}
