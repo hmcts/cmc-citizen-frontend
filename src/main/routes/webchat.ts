@@ -9,6 +9,6 @@ class Paths {
 export default express.Router()
   .get(Paths.main, (req, res) => {
     res.setHeader('Content-Type', 'application/json')
-    const site = config.get('webChat')
+    const site = config.get('secrets')
     res.send(JSON.stringify(site))
   })

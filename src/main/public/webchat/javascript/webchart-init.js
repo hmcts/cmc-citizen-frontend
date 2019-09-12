@@ -2,18 +2,18 @@ var _paq = _paq || []
 /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
 
 var xhttp
-xhttp=new XMLHttpRequest
-xhttp.onreadystatechange = function() {
+xhttp = new XMLHttpRequest
+xhttp.onreadystatechange = function () {
   if (this.readyState == 4 && this.status == 200) {
-    var json = JSON.parse(this.response);
+    var json = JSON.parse(this.response)
 
     webchat_init({
-      uuid: 'script_' + json.chatId,
-      tenant: json.tenant,
+      uuid: 'script_' + json.cmc['webchat-chat-id'],
+      tenant: json.cmc['webchat-tenant'],
       channel: 'CMC',
-      btnNoAgents: '/aG1jdHNzdGFnaW5nMDE/button_'+json.buttonNoAgents+'/img/logo',
-      btnAgentsBusy: '/aG1jdHNzdGFnaW5nMDE/button_'+json.buttonAgentsBusy+'/img/logo',
-      btnServiceClosed: '/aG1jdHNzdGFnaW5nMDE/button_'+json.buttonServiceClosed+'/img/logo',
+      btnNoAgents: '/' + json.cmc['webchat-tenant'] + '/button_' + json.cmc['webchat-button-no-agents'] + '/img/logo',
+      btnAgentsBusy: '/' + json.cmc['webchat-tenant'] + '/button_' + json.cmc['webchat-button-agents-busy'] + '/img/logo',
+      btnServiceClosed: '/' + json.cmc['webchat-tenant'] + '/button_' + json.cmc['webchat-button-service-closed'] + '/img/logo',
       chatDownAction: 'showMessage',
       chatLinkFocusable: false,
       textChatDown: 'The web chat service is temporarily unavailable, please try again later.',
@@ -28,7 +28,7 @@ xhttp.onreadystatechange = function() {
       gdsMajorVersion: 3
     })
   }
-};
+}
 xhttp.open("GET", '/webchat', true)
 xhttp.send()
 
