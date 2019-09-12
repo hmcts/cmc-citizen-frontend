@@ -64,6 +64,20 @@ export class MediationSteps {
     }
   }
 
+  acceptMediationAfterDisagreeing (): void {
+    if (process.env.FEATURE_MEDIATION === 'true') {
+      freeMediationPage.clickHowFreeMediationWorks()
+      howMediationWorksPage.chooseContinue()
+      willYouTryMediationPage.chooseYes()
+      mediationAgreementPage.chooseDoNotAgree()
+      continueWithoutMediationPage.chooseGoBack()
+      mediationAgreementPage.chooseAgree()
+      canWeUsePage.chooseYes()
+    } else {
+      this.legacyFreeMediationReject()
+    }
+  }
+
   legacyFreeMediationAccept (): void {
     tryFreeMediationPage.chooseYes()
   }
