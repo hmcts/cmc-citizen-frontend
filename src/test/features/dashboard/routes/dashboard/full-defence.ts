@@ -90,7 +90,7 @@ const testData = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
@@ -119,7 +119,7 @@ const testData = [
       ...settlementOffer
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
@@ -148,7 +148,7 @@ const testData = [
       ...settlementOfferAccept
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
@@ -177,7 +177,7 @@ const testData = [
       ...settlementOfferReject
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
