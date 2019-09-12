@@ -47,4 +47,18 @@ export class DirectionsQuestionnaireSteps {
       hearingDatesPage.chooseNo()
     }
   }
+
+  acceptDirectionsQuestionnaireNoJourneyAsClaimant (defendantType: PartyType = PartyType.INDIVIDUAL): void {
+    if (process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE === 'true') {
+      supportRequiredPage.selectAll()
+      if (defendantType === PartyType.COMPANY || defendantType === PartyType.ORGANISATION) {
+        hearingExceptionalCircumstancesPage.chooseNo()
+      }
+      hearingLocationPage.chooseNoAsClaimant()
+      usingExpertPage.chooseExpertNo()
+      selfWitnessPage.chooseNo()
+      otherWitnessPage.chooseNo()
+      hearingDatesPage.chooseNo()
+    }
+  }
 }
