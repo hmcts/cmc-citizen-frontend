@@ -88,7 +88,8 @@
     "mediation": false,
     "mediationPilot": false,
     "directionsQuestionnaire": false,
-    "newDashboardStatus": false
+    "newDashboardStatus": false,
+    "webChat": false
   },
   "oauth": {
     "clientId": "cmc_citizen"

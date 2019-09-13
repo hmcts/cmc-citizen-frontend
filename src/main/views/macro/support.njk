@@ -20,7 +20,9 @@
 
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
-    {{ _webChatWidget() }}
+    {% if featureToggles.webChat %}
+       {{ _webChatWidget() }}
+    {% endif %}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
 
@@ -28,7 +30,10 @@
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
-  {{ _webChatWidget() }}
+  {% if featureToggles.webChat %}
+    {{ _webChatWidget() }}
+  {% endif %}
+
   {{ _emailWidget('ccbc@hmcts.gsi.gov.uk') }}
   {{ _phoneWidget('0300 123 1057') }}
 {% endmacro %}
@@ -52,7 +57,9 @@
 
   <summary><span class="summary">{{ t('Contact Us for help') }}</span></summary>
   <div class="panel">
-    {{ _webChatWidget() }}
+    {% if featureToggles.webChat %}
+       {{ _webChatWidget() }}
+    {% endif %}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
   </div>

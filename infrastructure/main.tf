@@ -169,6 +169,7 @@ module "citizen-frontend" {
     FEATURE_MEDIATION_PILOT = "${var.feature_mediation_pilot}"
     FEATURE_DIRECTIONS_QUESTIONNAIRE = "${var.feature_directions_questionnaire}"
     FEATURE_NEW_DASHBOARD_STATUS = "${var.feature_new_dashboard_status}"
+    FEATURE_WEBCHAT = "${var.feature_web_chat}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
     WEBCHAT_CHAT_ID = "${data.azurerm_key_vault_secret.cmc_webchat_id.value}"

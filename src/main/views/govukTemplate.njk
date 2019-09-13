@@ -92,9 +92,7 @@
 
     {% block content %}{% endblock %}
     {% block contactForHelp %}
-       {% if featureToggles.testingSupport %}
-          {% include "includes/contact-us-for-help.njk" %}
-        {% endif %}
+       {% include "includes/contact-us-for-help.njk" %}
     {% endblock %}
 
   </main>
