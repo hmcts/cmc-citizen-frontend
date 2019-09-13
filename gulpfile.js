@@ -51,11 +51,6 @@ function copyWebChatTemplate () {
     './node_modules/@hmcts/ctsc-web-chat/assets/css/*.css'
   ])
     .pipe(gulp.dest(`${webChatDirectory}/css/`))
-
-  gulp.src([
-    './node_modules/@hmcts/ctsc-web-chat/assets/sass/*.scss'
-  ])
-    .pipe(gulp.dest(`${webChatDirectory}/sass/`))
 }
 
 function copyGovUkTemplate () {

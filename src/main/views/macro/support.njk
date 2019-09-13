@@ -5,7 +5,7 @@
       <div id="ctsc-web-chat"></div>
 {% endmacro%}
 
-{% macro _emailWidget(email = 'moneyclaims@justice.gov.uk') %}
+{% macro _emailWidget(email = supportEmailAddress) %}
     <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t('Email') }}</h2>
     <pre><a href="mailto:mailto:{{t(email)}}" target="_blank">{{ t(email)}}</a></pre>
     <pre>{{ t("We'll get back to you within 10 days.") }}</pre>
