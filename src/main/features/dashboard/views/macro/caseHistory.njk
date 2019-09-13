@@ -177,7 +177,7 @@
         {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO or claim.mediationResult === false %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
@@ -269,7 +269,7 @@
     {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO or claim.mediationResult === false %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
