@@ -646,4 +646,9 @@ export class Claim {
   private hasOrderBeenDrawn (): boolean {
     return !!this.directionOrder
   }
+
+  public isIntentionToProceedEligible (): boolean {
+    return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isAfter(MomentFactory.parse('2019-09-29')) ||
+      this.directionsQuestionnaireDeadline === undefined)
+  }
 }

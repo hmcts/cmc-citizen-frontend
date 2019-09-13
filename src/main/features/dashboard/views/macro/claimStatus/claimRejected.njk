@@ -2,8 +2,7 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% macro claimRejectedAlreadyPaidForClaimantDashboard(claim) %}
-  {{ t('{{ defendantName }} believes that they’ve paid the claim in full.',
-    { defendantName: claim.claimData.defendant.name }) }}
+  {{ t('{{ defendantName }} believes that they’ve paid the claim in full.', { defendantName: claim.claimData.defendant.name }) }}
 {% endmacro %}
 
 {% macro claimRejectedAlreadyPaidForClaimantClaimDetails(claim) %}
@@ -93,11 +92,11 @@
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForDefendantDashboard() %}
-  {{ t('You’ve rejected the claim. You need to tell us more about the claim.') }}
+  {{ t('You’ve rejected the claim.') }}
 {% endmacro %}
 
 {% macro claimRejectedFreeMediationNOForDefendantClaimDetails(claim) %}
-  {% if featureToggles.directionsQuestionnaire %}
+  {% if featureToggles.directionsQuestionnaire and claim.isIntentionToProceedEligible() %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('Wait for the claimant to respond') }}</h2>
       <p>{{ t('You’ve rejected the claim.') }}</p>
@@ -230,7 +229,7 @@
 {% endmacro %}
 
 {% macro claimRejectedForClaimantClaimDetails(claim, mediationDeadline) %}
-  {% if featureToggles.mediation %}
+  {% if featureToggles.mediation and claim.isIntentionToProceedEligible() %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('Decide whether to proceed') }}</h2>
       <p>{{ t('{{ defendantName }} has rejected your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
