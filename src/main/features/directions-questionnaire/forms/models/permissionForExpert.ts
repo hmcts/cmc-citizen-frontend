@@ -7,10 +7,10 @@ import { CompletableTask } from 'models/task'
 export class PermissionForExpert implements CompletableTask {
   @IsDefined({ message: ValidationErrors.YES_NO_REQUIRED })
   @IsIn(YesNoOption.all(), { message: ValidationErrors.YES_NO_REQUIRED })
-  requestPermissionForExpert?: YesNoOption
+  option?: YesNoOption
 
   constructor (requestPermissionForExpert?: YesNoOption) {
-    this.requestPermissionForExpert = requestPermissionForExpert
+    this.option = requestPermissionForExpert
   }
 
   public static fromObject (input?: any): PermissionForExpert {
@@ -18,18 +18,18 @@ export class PermissionForExpert implements CompletableTask {
       return input
     }
 
-    return new PermissionForExpert(YesNoOption.fromObject(input.requestPermissionForExpert))
+    return new PermissionForExpert(YesNoOption.fromObject(input.option))
   }
 
   deserialize (input?: any): PermissionForExpert {
-    if (input && input.requestPermissionForExpert) {
-      this.requestPermissionForExpert = YesNoOption.fromObject(input.requestPermissionForExpert)
+    if (input && input.option) {
+      this.option = YesNoOption.fromObject(input.option.option)
     }
 
     return this
   }
 
   isCompleted (): boolean {
-    return this.requestPermissionForExpert !== undefined
+    return this.option !== undefined
   }
 }

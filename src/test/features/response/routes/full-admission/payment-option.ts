@@ -68,6 +68,8 @@ describe('Defendant - when will you pay options', () => {
               type: ResponseType.FULL_ADMISSION
             }
           })
+          draftStoreServiceMock.resolveFind('mediation')
+
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -111,7 +113,8 @@ describe('Defendant - when will you pay options', () => {
           it('should return 500 and render error page when cannot save response draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -129,11 +132,12 @@ describe('Defendant - when will you pay options', () => {
                 type: ResponseType.FULL_ADMISSION
               }
             })
+            draftStoreServiceMock.resolveFind('mediation')
           })
 
           context('when form is valid', async () => {
             beforeEach(() => {
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
             })
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {

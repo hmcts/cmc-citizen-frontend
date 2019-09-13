@@ -13,10 +13,12 @@ export default express.Router()
     const claim: Claim = res.locals.claim
     const draft: Draft<ResponseDraft> = res.locals.responseDraft
     const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+    const directionQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
+
     res.render(Paths.incompleteSubmissionPage.associatedView,
       {
         taskListUri: Paths.taskListPage.evaluateUri({ externalId: claim.externalId }),
-        tasks: TaskListBuilder.buildRemainingTasks(draft.document, claim, mediationDraft.document)
+        tasks: TaskListBuilder.buildRemainingTasks(draft.document, claim, mediationDraft.document, directionQuestionnaireDraft.document)
       }
     )
   })

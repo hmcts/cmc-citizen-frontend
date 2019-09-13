@@ -20,7 +20,7 @@
     <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and claim.claimantResponse.courtDetermination %}
       <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.',
-          { partAdmitAmount: claim.response.amount }) }}</p>
+          { partAdmitAmount: claim.response.amount | numeral }) }}</p>
     {% elseif claim.response.responseType === domain.ResponseType.FULL_ADMISSION and claim.claimantResponse.courtDetermination %}
       <p>{{ t('They rejected your repayment plan.') }}</p>
     {% endif %}
@@ -39,10 +39,10 @@
   <div class="status-block">
     <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-      <p>{{ t('You agreed to pay the full {{ amount }} immediately.', { amount: claim.response.amount }) }}</p>
+      <p>{{ t('You agreed to pay the full {{ amount }} immediately.', { amount: claim.response.amount | numeral }) }}</p>
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
-          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
+          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount | numeral }) }}</p>
     {% endif %}
     <p>{{ t('Because you didn’t pay within 5 days, they requested a CCJ against you.') }}</p>
 

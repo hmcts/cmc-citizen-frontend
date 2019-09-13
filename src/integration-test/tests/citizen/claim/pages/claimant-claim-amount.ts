@@ -28,10 +28,6 @@ export class ClaimantClaimAmountPage {
     I.fillField(fields.amount3, amount3.toString())
   }
 
-  calculateTotal (): void {
-    I.click(fields.calculate)
-  }
-
   getClaimTotal (): void {
     I.grabTextFrom(fields.totalSum)
   }

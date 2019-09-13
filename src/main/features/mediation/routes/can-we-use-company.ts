@@ -11,7 +11,6 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
-import { CanWeUse } from 'mediation/form/models/CanWeUse'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { Claim } from 'claims/models/claim'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -19,7 +18,7 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import { CanWeUseCompany } from 'mediation/form/models/CanWeUseCompany'
 import { CompanyDetails } from 'forms/models/companyDetails'
 
-function renderView (form: Form<CanWeUse>, res: express.Response): void {
+function renderView (form: Form<CanWeUseCompany>, res: express.Response): void {
   res.render(Paths.canWeUseCompanyPage.associatedView, {
     form: form,
     contactName: getContactName(res)

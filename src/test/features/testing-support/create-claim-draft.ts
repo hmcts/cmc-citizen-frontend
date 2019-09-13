@@ -59,7 +59,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
       it('should return 500 and render error page when cannot save claim draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -69,7 +69,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
       it('should return 500 and render error page when cannot save user roles', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveRetrieveUserRoles()
         claimStoreServiceMock.rejectAddRolesToUser('error adding user role')
 
@@ -81,7 +81,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
       it('should redirect to check and send page and new user role is added when everything else is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveRetrieveUserRoles()
         claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
 
@@ -94,7 +94,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
       it('should redirect to check and send page when user role is already added and everything else is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
 
         await request(app)
@@ -106,7 +106,7 @@ describe('Testing Support: Create Claim Draft', () => {
 
       it('should redirect to check and send page and add new user role when required role is missing from list and everything else is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
         claimStoreServiceMock.resolveAddRolesToUser('cmc-new-features-consent-given')
         await request(app)

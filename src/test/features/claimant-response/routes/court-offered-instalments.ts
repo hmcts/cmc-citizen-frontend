@@ -106,7 +106,7 @@ describe('Claimant Response - Court offer', () => {
       it('should redirect to task list page when court offer is accepted', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse', draftOverrideForClaimantReponse)
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)
@@ -118,7 +118,7 @@ describe('Claimant Response - Court offer', () => {
       it('should redirect to rejection reason page when court offer is rejected', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantFullAdmissionResponse)
         draftStoreServiceMock.resolveFind('claimantResponse', draftOverrideForClaimantReponse)
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

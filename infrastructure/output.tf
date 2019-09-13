@@ -10,6 +10,14 @@ output "feature_admissions" {
   value = "${var.feature_admissions}"
 }
 
+output "feature_mediation" {
+  value = "${var.feature_mediation}"
+}
+
+output "feature_directions_questionnaire" {
+  value = "${var.feature_directions_questionnaire}"
+}
+
 output "feature_paid_in_full" {
   value = "${var.feature_paid_in_full}"
 }

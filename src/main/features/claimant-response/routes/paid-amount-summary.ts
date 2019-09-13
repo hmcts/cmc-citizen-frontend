@@ -23,6 +23,10 @@ class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftClaimantR
   amountSettledFor (claim: Claim, draft: DraftClaimantResponse): number {
     return AmountHelper.calculateAmountSettledFor(claim, draft)
   }
+
+  claimFeeInPennies (claim: Claim): number {
+    return claim.claimData.feeAmountInPennies
+  }
 }
 
 /* tslint:disable:no-default-export */

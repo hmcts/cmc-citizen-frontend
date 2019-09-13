@@ -17,21 +17,15 @@
         <p>{{ t('This could include photographs or videos.') }}</p>
         {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
-        {{
-        radioOption(label = 'Yes', name = 'expertEvidence', value = YesNoOption.YES.option, checked = form.valueFor('expertEvidence').option === YesNoOption.YES.option)
-        }}
+        {{ radioOption(label = 'Yes', name = 'expertEvidence', value = YesNoOption.YES.option, checked = form.valueFor('expertEvidence').option === YesNoOption.YES.option) }}
 
-        <div class="form-group panel panel-border-narrow js-hidden"
-             id="expertEvidence-yes" aria-hidden="false">
+        <div class="form-group panel panel-border-narrow js-hidden" id="expertEvidence-yes" aria-hidden="false">
           {{ textArea(label = 'What is there to examine?', name = 'whatToExamine', form = form) }}
         </div>
 
-        {{
-        radioOption(label = 'No', name = 'expertEvidence', value = YesNoOption.NO.option, checked = form.valueFor('expertEvidence').option === YesNoOption.NO.option)
-        }}
+        {{ radioOption(label = 'No', name = 'expertEvidence', value = YesNoOption.NO.option, checked = form.valueFor('expertEvidence').option === YesNoOption.NO.option) }}
 
-        <div class="panel panel-border-narrow js-hidden"
-             id="expertEvidence-no" aria-hidden="false">
+        <div class="panel panel-border-narrow js-hidden" id="expertEvidence-no" aria-hidden="false">
           {{ t('You can’t use an expert in this case.') }}
         </div>
 

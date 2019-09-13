@@ -82,10 +82,9 @@
     "testingSupport": false,
     "newFeaturesConsent": false,
     "admissions": false,
-    "paidInFull": false,
     "returnErrorToUser": false,
     "mockPay": false,
-    "mediation": true,
+    "mediation": false,
     "mediationPilot": false,
     "directionsQuestionnaire": false,
     "newDashboardStatus": false

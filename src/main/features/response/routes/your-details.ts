@@ -20,6 +20,7 @@ import { DraftService } from 'services/draftService'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -72,7 +73,8 @@ export default express.Router()
         renderView(form, res)
       } else {
         const claim: Claim = res.locals.claim
-        let draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const draft: Draft<ResponseDraft> = res.locals.responseDraft
+        const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
         const oldPartyDetails: PartyDetails = draft.document.defendantDetails.partyDetails
         draft.document.defendantDetails.partyDetails = form.model
@@ -88,6 +90,11 @@ export default express.Router()
         if (claim.claimData.defendant.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
           (draft.document.defendantDetails.partyDetails as SoleTraderDetails).businessName =
             (claim.claimData.defendant as SoleTrader).businessName
+        }
+
+        if ((oldPartyDetails as CompanyDetails).contactPerson !== (draft.document.defendantDetails.partyDetails as CompanyDetails).contactPerson) {
+          mediationDraft.document.canWeUseCompany = undefined
+          await new DraftService().save(mediationDraft, user.bearerToken)
         }
 
         await new DraftService().save(draft, user.bearerToken)

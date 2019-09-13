@@ -30,6 +30,7 @@ import { ClaimantResponseFeature } from 'claimant-response/index'
 import { PaidInFullFeature } from 'paid-in-full/index'
 import { MediationFeature } from 'mediation/index'
 import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
+import { OrdersFeature } from 'orders/index'
 
 export const app: express.Express = express()
 
@@ -75,16 +76,8 @@ new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
-
-if (FeatureToggles.isEnabled('mediation')) {
-  logger.info('FeatureToggles.mediation enabled')
-  new MediationFeature().enableFor(app)
-}
-
-if (FeatureToggles.isEnabled('paidInFull')) {
-  logger.info('FeatureToggles.paidInFull enabled')
-  new PaidInFullFeature().enableFor(app)
-}
+new MediationFeature().enableFor(app)
+new PaidInFullFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')
@@ -99,7 +92,10 @@ if (FeatureToggles.isEnabled('admissions')) {
 if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
   logger.info('FeatureToggles.directionsQuestionnaire enabled')
   new DirectionsQuestionnaireFeature().enableFor(app)
+  new OrdersFeature().enableFor(app)
+
 }
+
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
 // to convert moment object to String
 moment.prototype.toISOString = function () {

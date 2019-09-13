@@ -1,20 +1,28 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary, yesNoRadio %}
+{% from "form.njk" import csrfProtection, radioGroup, saveAndContinueButton, errorSummary %}
 
-{% set heading = 'Do you want to ask for the court’s permission to hire an expert?' %}
+{% set heading = 'Do you want to ask for the court’s permission to use an expert?' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {% set name = 'requestPermissionForExpert' %}
+      {% set name = 'option' %}
 
-      <form method="post"
-        class="analytics-submit-event-trigger"
-        data-event-action="DQ: Permission For Expert"
-        data-event-label-from="{{ name }}" novalidate>
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Permission For Expert" data-event-label-from="{{ name }}" novalidate>
 
         {{ csrfProtection(csrf) }}
-        {{ yesNoRadio(t('Do you want to ask for the court’s permission to hire an expert?'), name, form) }}
+
+        {{ radioGroup(
+          label = heading,
+          name = name,
+          options = [
+            { label: t('Yes'), value: YesNoOption.YES.option, checked: (form.valueFor('option').option === YesNoOption.YES.option) },
+            { label: t('No'), value: YesNoOption.NO.option, checked: (form.valueFor('option').option === YesNoOption.NO.option) }
+          ],
+          form = form,
+          labelForScreenReadersOnly = true,
+          isInline = false
+        ) }}
         {{ saveAndContinueButton() }}
       </form>
     </div>

@@ -30,8 +30,11 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 
 function renderView (form: Form<RejectAllOfClaim>, res: express.Response) {
+  const claim: Claim = res.locals.claim
+
   res.render(Paths.defenceRejectAllOfClaimPage.associatedView, {
-    form: form
+    form: form,
+    claimantName: claim.claimData.claimant.name
   })
 }
 

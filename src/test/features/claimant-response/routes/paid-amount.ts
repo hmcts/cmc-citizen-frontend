@@ -110,7 +110,7 @@ describe('Claimant Response - paid amount page', () => {
           it('should redirect to claim amount summary page', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(sampleFullAdmissionWithPaymentBySetDateResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -122,7 +122,7 @@ describe('Claimant Response - paid amount page', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(sampleFullAdmissionWithPaymentBySetDateResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)

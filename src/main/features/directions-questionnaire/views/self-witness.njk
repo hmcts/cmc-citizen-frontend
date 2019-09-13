@@ -3,7 +3,7 @@
 {% from "date.njk" import dateInput %}
 {% from "form.njk" import yesNoRadio %}
 
-{% set heading = 'Do you want to give evidence as a witness?' %}
+{% set heading = 'Do you want to give evidence?' %}
 
 {% block content %}
   <div class="grid-row">
@@ -15,11 +15,11 @@
         <fieldset id="selfWitness[label]" class="form-group {% if error %} form-group-error {% endif %}">
           <legend>
             <span class="visuallyhidden">
-              {{ t('Do you want to give evidence as a witness?') }}
+              {{ t('Do you want to give evidence?') }}
             </span>
           </legend>
 
-          <p>{{ t('This could be providing written evidence or going to a hearing at the court.') }}</p>
+          <p>{{ t('This could be providing written evidence or speaking at a hearing at the court.') }}</p>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {% set name = 'option' %}
