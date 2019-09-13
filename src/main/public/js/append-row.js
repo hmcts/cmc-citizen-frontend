@@ -14,6 +14,9 @@ $(document).ready(function () {
   function incrementDomNodesIds (newRow) {
     newRow.html(function (index, oldHtml) {
       return oldHtml.replace(/rows\[(\d+)\]/g, function (match, capturedRowIndex) {
+        if(parseInt(capturedRowIndex) === 99) {
+          removeEventButton()
+        }
         return 'rows[' + (parseInt(capturedRowIndex) + 1) + ']'
       })
     })
@@ -25,5 +28,9 @@ $(document).ready(function () {
     newRow.removeClass('form-group-error')
     newRow.find('*').removeClass('form-control-error')
     newRow.find('.error-message').remove()
+  }
+
+  function removeEventButton () {
+    $('input[name="action[addRow]"]').remove()
   }
 })
