@@ -159,7 +159,7 @@
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
       <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-      {{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}
+      <p>{{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}</p>
     {% endif %}
   </div>
 {% endmacro %}
@@ -310,6 +310,14 @@
   {{ t('Tell us your hearing requirements') }}
 {% endmacro %}
 
+{% macro claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard() %}
+  {{ t('We will contact you with a meditation appointment') }}
+{% endmacro %}
+
 {% macro claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard() %}
   {{ t('Tell us your hearing requirements') }}
+{% endmacro %}
+
+{% macro claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard() %}
+  {{ t('We will contact you with a meditation appointment') }}
 {% endmacro %}
