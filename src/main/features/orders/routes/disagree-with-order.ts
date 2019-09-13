@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { Paths } from 'orders/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { DisagreeReason } from 'orders/form/models/disagreeReason'
@@ -12,6 +11,7 @@ import { Claim } from 'claims/models/claim'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftService } from 'services/draftService'
 import { OrdersDraft } from 'orders/draft/ordersDraft'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
 
 function renderView (form: Form<DisagreeReason>, res: express.Response): void {
   const user: User = res.locals.user
@@ -42,12 +42,21 @@ export default express.Router()
 
         const draft: Draft<OrdersDraft> = res.locals.draft
         const user: User = res.locals.user
+        const claim: Claim = res.locals.claim
 
         draft.document.disagreeReason = form.model
 
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(DashboardPaths.dashboardPage.uri)
+        await new ClaimStoreClient().saveOrder(draft.document, claim, user)
+
+        const updatedDraft: Draft<OrdersDraft>[] = await new DraftService().find('orders', '100', user.bearerToken, (value: any): OrdersDraft => {
+          return new OrdersDraft().deserialize(value)
+        })
+
+        await new DraftService().delete(updatedDraft[0].id, user.bearerToken)
+
+        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: res.locals.claim.externalId }))
       }
     })
   )

@@ -112,7 +112,7 @@ describe('Defendant: partial admission - already paid?', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission')
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -134,7 +134,7 @@ describe('Defendant: partial admission - already paid?', () => {
 
           it('when form is valid should render page', async () => {
             draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)

@@ -3,8 +3,8 @@ import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import { SignatureType } from 'common/signatureType'
 
 export class ValidationErrors {
-  static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Please select I believe that the facts stated in this response are true'
-  static readonly DIRECTION_QUESTIONNAIRE_REQUIRED_MESSAGE: string = 'The hearing requirement details on this page are true to the best of my knowledge.'
+  static readonly STATEMENT_OF_TRUTH_REQUIRED_MESSAGE: string = 'Tell us if you believe the facts stated in this response are true.'
+  static readonly DIRECTION_QUESTIONNAIRE_REQUIRED_MESSAGE: string = 'Tell us if you believe the hearing requirement details on this page are true'
 }
 
 export class StatementOfTruth {

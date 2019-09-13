@@ -125,7 +125,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           it('should return 500 and render error page when cannot save DQ draft', async () => {
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
 
             await request(app)
@@ -139,7 +139,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -152,7 +152,7 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)

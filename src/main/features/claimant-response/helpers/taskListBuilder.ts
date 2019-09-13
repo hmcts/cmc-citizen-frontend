@@ -150,10 +150,7 @@ export class TaskListBuilder {
             ))
         }
       }
-    }
-
-    if (claim.response.responseType === ResponseType.PART_ADMISSION
-      && claim.response.paymentIntention !== undefined) {
+    } else if (claim.response.responseType === ResponseType.PART_ADMISSION && claim.response.paymentIntention !== undefined) {
       tasks.push(
         new TaskListItem(
           'Accept or reject the ' + NumberFormatter.formatMoney(claim.response.amount),
@@ -221,25 +218,6 @@ export class TaskListBuilder {
 
       this.buildSignSettlementAgreement(draft, tasks, externalId)
       this.buildRequestCountyCourtJudgment(draft, tasks, externalId)
-    } else if (claim.response.responseType === ResponseType.FULL_DEFENCE && claim.response.freeMediation === YesNoOption.YES
-      && (draft.intentionToProceed && draft.intentionToProceed.proceed.option === YesNoOption.YES)) {
-      if (FeatureToggles.isEnabled('mediation')) {
-        const path = MediationPaths.freeMediationPage.evaluateUri({ externalId: claim.externalId })
-        tasks.push(
-          new TaskListItem(
-            'Free telephone mediation',
-            path,
-            FreeMediationTask.isCompleted(mediationDraft, claim)
-          ))
-      } else {
-        const path = MediationPaths.tryFreeMediationPage.evaluateUri({ externalId: claim.externalId })
-        tasks.push(
-          new TaskListItem(
-            'Free telephone mediation',
-            path,
-            FreeMediationTask.isCompleted(mediationDraft, claim)
-          ))
-      }
     }
 
     return new TaskList('Choose what to do next', tasks)

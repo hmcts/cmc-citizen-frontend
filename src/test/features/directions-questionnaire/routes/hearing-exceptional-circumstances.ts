@@ -23,6 +23,7 @@ import * as RouteHelper from './helper/dqRouteHelper'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
 import { FeatureToggles } from 'utils/featureToggles'
+import * as courtFinderMock from '../../../http-mocks/court-finder-client'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -49,6 +50,7 @@ function setupMocks (claimant: PartyType, defendant: PartyType, currentParty: Ma
       },
       hearingLocation: {
         courtName: 'Little Whinging, Surrey',
+        courtAccepted: YesNoOption.YES,
         locationOption: CourtLocationType.SUGGESTED_COURT,
         exceptionalCircumstancesReason: 'Poorly pet owl',
         hearingLocationSlug: undefined,
@@ -122,6 +124,8 @@ function checkAccessGuards (app: any, method: string) {
         describe('when the claim has a defendant response', () => {
           it('Individual vs Individual should access page', async () => {
             setupMocks(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT)
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
             await shouldRenderPageWithText('The defendant chose this location', method)
           })
 
@@ -132,6 +136,8 @@ function checkAccessGuards (app: any, method: string) {
 
           it('Business vs Individual should access page', async () => {
             setupMocks(PartyType.ORGANISATION, PartyType.INDIVIDUAL, MadeBy.CLAIMANT)
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
             await shouldRenderPageWithText('The defendant chose this location', method)
           })
 
@@ -197,7 +203,7 @@ function checkAccessGuards (app: any, method: string) {
 
         it('Individual vs Business should access page', async () => {
           setupMocks(PartyType.INDIVIDUAL, PartyType.ORGANISATION, MadeBy.DEFENDANT)
-          await shouldRenderPageWithText('Do your accessibility needs mean you want to ask for the hearing to be held at a specific court?', method)
+          await shouldRenderPageWithText('Do you want to ask for the hearing to be held at a specific court?', method)
         })
 
         it('Business vs Individual should redirect to dashboard', async () => {
@@ -207,7 +213,7 @@ function checkAccessGuards (app: any, method: string) {
 
         it('Business vs Business should access page', async () => {
           setupMocks(PartyType.ORGANISATION, PartyType.ORGANISATION, MadeBy.DEFENDANT)
-          await shouldRenderPageWithText('Do your accessibility needs mean you want to ask for the hearing to be held at a specific court?', method)
+          await shouldRenderPageWithText('Do you want to ask for the hearing to be held at a specific court?', method)
         })
       })
     })
@@ -243,6 +249,8 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(RouteHelper.createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           draftStoreServiceMock.resolveFind('response')
+          courtFinderMock.resolveFind()
+          courtFinderMock.resolveCourtDetails()
           await shouldRenderPageWithText('The defendant chose this location', method)
 
         })
@@ -257,8 +265,8 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
         })
-        const validFormData = { exceptionalCircumstances: 'no', reason: 'reason' }
-        const invalidFormData = { exceptionalCircumstances: 'no' }
+        const validFormData = { exceptionalCircumstances: 'yes', reason: 'reason' }
+        const invalidFormData = { exceptionalCircumstances: 'yes' }
 
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -278,18 +286,18 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             draftStoreServiceMock.resolveFind('response')
           })
           it('should return 500 and render error page when cannot save DQ draft', async () => {
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
             await shouldBeServerError(method, 'Error', validFormData)
           })
 
-          it('should redirect to hearing location page when no is selected', async () => {
-            draftStoreServiceMock.resolveSave()
+          it('should redirect to hearing location page when yes is selected', async () => {
+            draftStoreServiceMock.resolveUpdate()
             await shouldRedirect(method, hearingLocationPage, validFormData)
           })
 
-          it('should redirect to expert page when yes is selected', async () => {
-            draftStoreServiceMock.resolveSave()
-            await shouldRedirect(method, expertPath, { exceptionalCircumstances: 'yes' })
+          it('should redirect to expert page when no is selected', async () => {
+            draftStoreServiceMock.resolveUpdate()
+            await shouldRedirect(method, expertPath, { exceptionalCircumstances: 'no' })
           })
         })
 
@@ -298,6 +306,8 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(RouteHelper.createClaim(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, MadeBy.CLAIMANT))
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             draftStoreServiceMock.resolveFind('response')
+            courtFinderMock.resolveFind()
+            courtFinderMock.resolveCourtDetails()
             await shouldRenderPageWithText('div class="error-summary', method, invalidFormData)
           })
         })

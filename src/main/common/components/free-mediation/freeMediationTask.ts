@@ -12,8 +12,12 @@ export class FreeMediationTask {
   }
 
   static isYouCanOnlyUseMediationCompleted (mediationDraft: MediationDraft): boolean {
-    return mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.YES &&
-      !!mediationDraft.youCanOnlyUseMediation
+    return (mediationDraft.willYouTryMediation && mediationDraft.willYouTryMediation.option === FreeMediationOption.YES &&
+      !!mediationDraft.youCanOnlyUseMediation)
+  }
+
+  static isMediationDisagreementCompleted (mediationDraft: MediationDraft): boolean {
+    return !!mediationDraft.mediationDisagreement
   }
 
   static isCanWeUseCompleted (mediationDraft: MediationDraft): boolean {
@@ -26,7 +30,9 @@ export class FreeMediationTask {
     if (!FeatureToggles.isEnabled('mediation')) {
       return (!!mediationDraft.willYouTryMediation)
     } else if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')) {
-      return (this.isCanWeUseCompleted(mediationDraft) && this.isYouCanOnlyUseMediationCompleted(mediationDraft))
+      return (this.isCanWeUseCompleted(mediationDraft) && this.isYouCanOnlyUseMediationCompleted(mediationDraft)) ||
+        (this.isWillYouTryMediationCompleted(mediationDraft) && (this.isMediationDisagreementCompleted(mediationDraft)
+        || this.isYouCanOnlyUseMediationCompleted(mediationDraft)))
     } else {
       return (this.isYouCanOnlyUseMediationCompleted(mediationDraft)) || this.isWillYouTryMediationCompleted(mediationDraft)
     }

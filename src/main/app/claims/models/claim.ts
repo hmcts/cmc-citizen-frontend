@@ -27,6 +27,8 @@ import { User } from 'idam/user'
 import { ClaimTemplate } from 'claims/models/claimTemplate'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
+import { DirectionOrder } from 'claims/models/directionOrder'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 
 interface State {
   status: ClaimStatus
@@ -64,6 +66,8 @@ export class Claim {
   reDeterminationRequestedAt: Moment
   ccdCaseId: number
   template: ClaimTemplate
+  directionOrder: DirectionOrder
+  reviewOrder: ReviewOrder
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -88,6 +92,22 @@ export class Claim {
     }
 
     return new CalendarClient().getNextWorkingDayAfterDays(this.respondedAt, 5)
+  }
+
+  async respondToReviewOrderDeadline (): Promise<Moment> {
+    if (!this.reviewOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.reviewOrder.requestedAt, 19)
+  }
+
+  async respondToReconsiderationDeadline (): Promise<Moment> {
+    if (!this.directionOrder) {
+      return undefined
+    }
+
+    return new CalendarClient().getNextWorkingDayAfterDays(this.directionOrder.createdOn, 19)
   }
 
   get remainingDays (): number {
@@ -132,6 +152,12 @@ export class Claim {
       return ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED
     } else if (this.moneyReceivedOn && this.countyCourtJudgmentRequestedAt) {
       return ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
+    } else if (this.hasOrderBeenDrawn()) {
+      if (this.reviewOrder) {
+        return ClaimStatus.REVIEW_ORDER_REQUESTED
+      } else {
+        return ClaimStatus.ORDER_DRAWN
+      }
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -178,6 +204,8 @@ export class Claim {
       return ClaimStatus.CLAIMANT_REJECTED_STATES_PAID
     } else if (this.hasClaimantRejectedPartAdmission()) {
       return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION
+    } else if (this.hasClaimantRejectedPartAdmissionDQs()) {
+      return ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ
     } else if (this.hasClaimantRejectedDefendantResponse() && this.isDefendantBusiness()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_AS_BUSINESS_RESPONSE
     } else if (this.hasClaimantRejectedDefendantDefence()) {
@@ -221,6 +249,7 @@ export class Claim {
     if (this.isPaidInFullLinkEligible()) {
       statuses.push({ status: ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE })
     }
+
     return statuses
   }
 
@@ -310,6 +339,12 @@ export class Claim {
       }
       if (input.ccdCaseId) {
         this.ccdCaseId = input.ccdCaseId
+      }
+      if (input.directionOrder) {
+        this.directionOrder = DirectionOrder.deserialize(input.directionOrder)
+      }
+      if (input.reviewOrder) {
+        this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
     }
 
@@ -408,7 +443,7 @@ export class Claim {
       return false
     }
 
-    if (this.hasClaimantRejectedDefendantDefence()) {
+    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
       return true
     }
 
@@ -494,7 +529,8 @@ export class Claim {
   }
 
   private hasClaimantRejectedDefendantResponse (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') &&
+      this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
   }
 
   private hasClaimantAcceptedDefendantPartAdmissionResponseWithAlternativePaymentIntention (): boolean {
@@ -532,7 +568,12 @@ export class Claim {
   }
 
   private hasClaimantRejectedPartAdmission (): boolean {
-    return this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+    return !ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
+      && this.response.responseType === ResponseType.PART_ADMISSION
+  }
+
+  private hasClaimantRejectedPartAdmissionDQs (): boolean {
+    return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire') && this.claimantResponse && this.claimantResponse.type === ClaimantResponseType.REJECTION
       && this.response.responseType === ResponseType.PART_ADMISSION
   }
 
@@ -600,5 +641,14 @@ export class Claim {
     return ClaimFeatureToggles.isFeatureEnabledOnClaim(this, 'directionsQuestionnaire')
       && this.isResponseSubmitted()
       && this.response.responseType === ResponseType.FULL_DEFENCE
+  }
+
+  private hasOrderBeenDrawn (): boolean {
+    return !!this.directionOrder
+  }
+
+  public isIntentionToProceedEligible (): boolean {
+    return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isAfter(MomentFactory.parse('2019-09-29')) ||
+      this.directionsQuestionnaireDeadline === undefined)
   }
 }

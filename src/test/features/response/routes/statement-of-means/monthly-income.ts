@@ -196,7 +196,7 @@ describe('Defendant response: Statement of means: monthly-income', () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
           draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

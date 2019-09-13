@@ -3,6 +3,7 @@ import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption
 
 import { monthlyInstalmentPaymentIntentionData } from 'test/data/entity/paymentIntentionData'
 import { courtDeterminationData } from 'test/data/entity/courtDeterminationData'
+import { sampleDirectionsQuestionnaireDraftObj } from 'test/http-mocks/draft-store'
 
 export const baseDeterminationAcceptationClaimantResponseData = {
   type: ClaimantResponseType.ACCEPTATION,
@@ -43,6 +44,13 @@ export const partAdmissionStatesPaidClaimantResponseData = {
 
 export const rejectionClaimantResponseData = {
   ...baseRejectionClaimantResponseData,
+  freeMediation: 'yes',
+  reason: 'reason'
+}
+
+export const rejectionClaimantResponseWithDQ = {
+  ...baseRejectionClaimantResponseData,
+  directionsQuestionnaire: sampleDirectionsQuestionnaireDraftObj,
   freeMediation: 'yes',
   reason: 'reason'
 }

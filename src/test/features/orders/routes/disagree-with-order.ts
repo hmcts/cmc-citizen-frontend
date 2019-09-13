@@ -7,7 +7,6 @@ import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as OrdersPaths } from 'orders/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
 
 import { app } from 'main/app'
 
@@ -19,6 +18,7 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const externalId = '400f4c57-9684-49c0-adb4-4cf46579d6dc'
 const pagePath = OrdersPaths.disagreeReasonPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 const pageTitle = 'How and why do you want the order changed?'
 
@@ -95,26 +95,32 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
             draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.resolveSaveOrder()
+            draftStoreServiceMock.resolveFind('orders')
+            draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ reason: '' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(DashboardPaths.dashboardPage.uri))
+                .toLocation(OrdersPaths.confirmationPage.evaluateUri({ externalId: externalId })))
           })
 
           it('should redirect to the dashboard when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('orders')
             draftStoreServiceMock.resolveSave()
             claimStoreServiceMock.resolveRetrieveClaimIssueByExternalId({ features: 'admissions,directionsQuestionnaire' })
+            claimStoreServiceMock.resolveSaveOrder()
+            draftStoreServiceMock.resolveFind('orders')
+            draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ reason: 'I want a judge to review' })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(DashboardPaths.dashboardPage.uri))
+                .toLocation(OrdersPaths.confirmationPage.evaluateUri({ externalId: externalId })))
           })
         })
       })

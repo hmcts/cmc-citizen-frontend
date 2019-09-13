@@ -144,7 +144,7 @@ describe('Mediation: how mediation works page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -160,7 +160,7 @@ describe('Mediation: how mediation works page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -176,7 +176,7 @@ describe('Mediation: how mediation works page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -192,7 +192,7 @@ describe('Mediation: how mediation works page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(mediationPilotOverride)
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)

@@ -742,11 +742,8 @@ describe('Claimant response task list builder', () => {
         draft, claim, new MediationDraft()
       )
 
-      if (FeatureToggles.isEnabled('mediation')) {
-        expect(taskList.tasks.find(task => task.name === 'Free telephone mediation')).not.to.be.undefined
-      } else {
-        expect(taskList).to.be.eq(undefined)
-      }
+      expect(taskList.tasks.find(task => task.name === 'Free telephone mediation')).not.to.be.undefined
+
     })
 
   })
