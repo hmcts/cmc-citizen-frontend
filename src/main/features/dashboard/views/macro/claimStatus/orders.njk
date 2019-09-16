@@ -77,7 +77,7 @@
 
 {% macro directionsOrderIssued(claim, party, reconsiderationDeadline, isReviewOrderEligible) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Send us more details before the hearing') }}</h2>
+    <h2 class="heading-medium">{{ t('Send us more details before the hearing') }}</h2>
     <p>{{ t('The court has ordered you to send us more details.') }}</p>
     <p>{{ internalLink(t('Download the court’s order '), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
       {{ t('(PDF) to find out the details you need to send.') }}</p>
