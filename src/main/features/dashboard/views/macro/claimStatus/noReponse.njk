@@ -2,14 +2,15 @@
 {% from "internalLink.njk" import internalLink %}
 
 {% macro noResponseForClaimantDashboard() %}
-  {{ t('Your claim has been sent.') }}
+  {{ t('Wait for the defendant to respond') }}
 {% endmacro %}
 
 {% macro noResponseForClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Your claim has been sent') }}</h2>
+    <h2 class="heading-small">{{ t('Wait for the defendant to respond') }}</h2>
     <p>{{ t('{{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
         { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) }}</p>
+    <p>{{ t('You can request a County Court Judgment against them if they don’t respond by the deadline.') }}</p>
   </div>
 {% endmacro %}
 
