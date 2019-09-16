@@ -37,8 +37,8 @@ nodejs:
       - citizen-draft-store-secondary
       - citizen-cookie-encryption-key
       - staff-email
-      - webchat-chat-id
-      - webchat-tenant
-      - webchat-button-no-agents
-      - webchat-button-agents-busy
-      - webchat-button-service-closed
+      - cmc_webchat_id
+      - cmc_webchat_tenant
+      - cmc_webchat_button_no_agents
+      - cmc_webchat_button_busy
+      - cmc_webchat_button_service_closed
