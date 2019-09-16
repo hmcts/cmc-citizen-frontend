@@ -399,15 +399,6 @@ describe('Dashboard page', () => {
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
           })
 
-          it('should render page with claim number and status', async () => {
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByClaimantId(claimStoreServiceMock.sampleClaimIssueObj)
-            await request(app)
-              .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('000MC050', 'Wait for the defendant to respond'))
-          })
-
           testData.forEach(data => {
             it(`should render dashboard: ${data.status}`, async () => {
               draftStoreServiceMock.resolveFindNoDraftFound()
