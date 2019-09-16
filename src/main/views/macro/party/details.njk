@@ -4,7 +4,13 @@
 
 {% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false, postcodeLabel = 'Enter a UK postcode', extraOptionalLine) %}
   {% for field in fields %}
-    {{ textInput(form = form, label = t(field.label), name = field.name, autocomplete = field.autocomplete, hint = field.hint, extraOptionalLine = extraOptionalLine) }}
+    {% if field.readOnly %}
+      {% if field.value %}
+        {{ readOnlyField(field.label, field.value) }}
+      {% endif %}
+    {% else %}
+      {{ textInput(form = form, label = t(field.label), name = field.name, autocomplete = field.autocomplete, hint = field.hint, extraOptionalLine = extraOptionalLine) }}
+    {% endif %}
   {% endfor %}
 
   {% if addressSection %}

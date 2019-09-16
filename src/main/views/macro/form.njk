@@ -221,7 +221,6 @@
       </legend>
       {% for option in options %}
         {% set selection = form.valueFor(name).indexOf(option.value) %}
-        
         {{ checkboxOption(
           label = option.label,
           name = name,
@@ -230,8 +229,7 @@
           hint = option.hint,
           checked = (selection != -1),
           bold = bold
-          )
-          }}
+        ) }}
       {% endfor %}
     </fieldset>
   </div>
