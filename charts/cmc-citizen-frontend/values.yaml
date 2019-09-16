@@ -40,5 +40,5 @@ nodejs:
       - cmc-webchat-id
       - cmc-webchat-tenant
       - cmc-webchat-button-no-agents
-      - cmc-webchat-button-busy
+      - cmc-webchat-button-agents-busy
       - cmc-webchat-button-service-closed
