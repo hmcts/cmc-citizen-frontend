@@ -25,7 +25,6 @@ import {
   respondedAt,
   directionsQuestionnaireDeadline
 } from 'test/data/entity/fullDefenceData'
-import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -40,68 +39,6 @@ const partAdmissionClaim = {
   ...respondedAt
 }
 
-const legacyClaimDetails = [
-  {
-    status: 'Part admission - defendant part admits and rejects mediation DQs not enabled - claimant rejects part admission',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      response: {
-        ...baseResponseData,
-        ...basePartialAdmissionData,
-        freeMediation: FreeMediationOption.NO
-      },
-      claimantResponse: {
-        settleForAmount: 'no',
-        type: 'REJECTION'
-      },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
-    },
-    claimantAssertions: [
-      'Tell us your hearing requirements',
-      'You rejected the defendant’s admission of',
-      'Your claim won’t proceed if you don’t complete and return the form before'
-    ],
-    defendantAssertions: [
-      partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of ',
-      'They believe you owe them the full',
-      'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
-      'You need to ',
-      'Your defence won’t proceed if you don’t complete and return the form before'
-    ]
-  },
-  {
-    status: 'Part admission - defendant part admits and accepts mediation DQs not enabled - claimant rejects part admission with mediation',
-    claim: partAdmissionClaim,
-    claimOverride: {
-      features: ['admissions'],
-      response: {
-        ...baseResponseData,
-        ...basePartialAdmissionData,
-        freeMediation: FreeMediationOption.YES
-      },
-      claimantResponse: {
-        settleForAmount: 'no',
-        freeMediation: FreeMediationOption.YES,
-        type: 'REJECTION'
-      },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
-    },
-    claimantAssertions: [
-      'We’ll contact you with a mediation appointment',
-      'You rejected the defendant’s admission of ',
-      'You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.',
-      'Find out how mediation works'
-    ],
-    defendantAssertions: [
-      partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
-      'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you with details of your appointment.'
-    ]
-  }
-]
-
 const mediationDQEnabledClaimDetails = [
   {
     status: 'Part admission - defendant part admits and rejects mediation DQs enabled - claimant rejects part admission',
@@ -115,13 +52,13 @@ const mediationDQEnabledClaimDetails = [
       },
       claimantResponse: {
         settleForAmount: 'no',
-        type: 'REJECTION'
+        type: 'REJECTION',
+        freeMediation: FreeMediationOption.NO
       },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
+      claimantRespondedAt: MomentFactory.currentDate()
     },
     claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: [partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of']
+    defendantAssertions: ['Wait for the court to review the case']
   },
   {
     status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation',
@@ -138,11 +75,53 @@ const mediationDQEnabledClaimDetails = [
         freeMediation: FreeMediationOption.YES,
         type: 'REJECTION'
       },
+      claimantRespondedAt: MomentFactory.currentDate()
+    },
+    claimantAssertions: ['We’ll contact you with a mediation appointment'],
+    defendantAssertions: ['We’ll contact you with a mediation appointment']
+  }
+]
+
+const legacyClaimDetails = [
+  {
+    status: 'Part admission - defendant part admits and rejects mediation DQs not enabled - claimant rejects part admission',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.NO
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        type: 'REJECTION',
+        freeMediation: FreeMediationOption.NO
+      },
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: [partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of']
+    claimantAssertions: ['You’ve rejected the defendant’s admission.'],
+    defendantAssertions: [partAdmissionClaim.claim.claimants[0].name + ' rejected your admission of ']
+  },
+  {
+    status: 'Part admission - defendant part admits and accepts mediation DQs not enabled - claimant rejects part admission with mediation',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      features: ['admissions'],
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate()
+    },
+    claimantAssertions: ['We’ll contact you with a mediation appointment'],
+    defendantAssertions: ['We’ll contact you with a mediation appointment']
   }
 ]
 
@@ -163,59 +142,55 @@ describe('Dashboard page', () => {
             claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
           })
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            mediationDQEnabledClaimDetails.forEach(data => {
-              it(`should render dashboard: ${data.status}`, async () => {
-                draftStoreServiceMock.resolveFindNoDraftFound()
-                claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
-                await request(app)
-                  .get(Paths.dashboardPage.uri)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-              })
+          mediationDQEnabledClaimDetails.forEach(data => {
+            it(`should render dashboard: ${data.status}`, async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
-          } else {
-            legacyClaimDetails.forEach(data => {
-              it(`should render dashboard: ${data.status}`, async () => {
-                draftStoreServiceMock.resolveFindNoDraftFound()
-                claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
-                await request(app)
-                  .get(Paths.dashboardPage.uri)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-              })
+          })
+
+          legacyClaimDetails.forEach(data => {
+            it(`should render dashboard: ${data.status}`, async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
-          }
+          })
         })
 
         context('as a defendant', () => {
           beforeEach(() => {
-            claimStoreServiceMock.resolveRetrieveByDefendantIdToEmptyList()
+            claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
           })
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            mediationDQEnabledClaimDetails.forEach(data => {
-              it(`should render dashboard: ${data.status}`, async () => {
-                draftStoreServiceMock.resolveFindNoDraftFound()
-                claimStoreServiceMock.resolveRetrieveByClaimantId(data.claim, data.claimOverride)
-                await request(app)
-                  .get(Paths.dashboardPage.uri)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-              })
+          mediationDQEnabledClaimDetails.forEach(data => {
+            it(`should render dashboard: ${data.status}`, async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
-          } else {
-            legacyClaimDetails.forEach(data => {
-              it(`should render dashboard: ${data.status}`, async () => {
-                draftStoreServiceMock.resolveFindNoDraftFound()
-                claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
-                await request(app)
-                  .get(Paths.dashboardPage.uri)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
-              })
+          })
+
+          legacyClaimDetails.forEach(data => {
+            it(`should render dashboard: ${data.status}`, async () => {
+              draftStoreServiceMock.resolveFindNoDraftFound()
+              claimStoreServiceMock.resolveRetrieveByDefendantId(data.claim.referenceNumber, '1', data.claim, data.claimOverride)
+              await request(app)
+                .get(Paths.dashboardPage.uri)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
-          }
+          })
         })
       })
     })
