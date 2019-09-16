@@ -17,7 +17,7 @@ xhttp.onreadystatechange = function () {
       chatDownAction: 'showMessage',
       chatLinkFocusable: false,
       textChatDown: 'The web chat service is temporarily unavailable, please try again later.',
-      textChatClosed: 'Web chat is now closed. Come back Monday to Friday, 9am to 5pm.\nOr Contact us using one of the ways below',
+      textChatClosed: 'Web chat is now closed. Come back Monday to Friday, 9am to 5pm.\nOr contact us using one of the ways below.',
       textChatWithAnAgent: 'Chat online with an agent',
       textNoAgentsAvailable: 'No agents are available, please try again later.',
       textAllAgentsBusy: 'All our web chat agents are busy helping other people. Please try again later or contact us using one of the ways below.',
