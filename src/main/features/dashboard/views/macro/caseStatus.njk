@@ -28,7 +28,9 @@
   claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard,
   claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard,
   claimRejectedWithDQsForDefendantDashboard,
-  claimRejectedWithDQsForClaimantDashboard %}
+  claimRejectedWithDQsForClaimantDashboard,
+  claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard,
+  claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
@@ -175,7 +177,11 @@
   {% elif status === ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY %}
     {{ partAdmittedClaimantAcceptsClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
-    {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard() }}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+      {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
+    {% else %}
+      {{ claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard(claim) }}
+    {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.ORDER_DRAWN %}
@@ -271,7 +277,11 @@
   {% elif status === ClaimStatus.SETTLEMENT_AGREEMENT_REJECTED %}
     {{ settlementAgreementRejectedForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
-    {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard() }}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
+      {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
+    {% else %}
+      {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
+    {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.ORDER_DRAWN %}
