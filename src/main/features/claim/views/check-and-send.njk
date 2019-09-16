@@ -42,6 +42,7 @@
     }}
 
     {{ row('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri, bold = true) }}
+    {{ row('Contact number (optional)', draftClaim.defendant.mobilePhone.number, paths.defendantPhonePage.uri, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('claimAmount', 'Claim amount') }}

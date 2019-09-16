@@ -19,10 +19,10 @@
 {% macro reviewReceiver(claim, respondToReviewOrderDeadline) %}
   <div class="status-block">
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-      <h2 class="heading-small">{{ t('Read {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
+      <h3 class="heading-small">{{ t('Read {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h3>
       <p>{{ t('{{ claimantName }} has asked the court to change the order.', { claimantName: claim.claimData.claimant.name }) }}</p>
     {% else %}
-      <h2 class="heading-small">{{ t('Read {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h2>
+      <h3 class="heading-small">{{ t('Read {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h3>
       <p>{{ t('{{ defendantName }} has asked the court to change the order.', { defendantName: claim.claimData.defendant.name }) }}</p>
     {% endif %}
 
