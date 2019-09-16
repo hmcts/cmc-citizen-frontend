@@ -146,7 +146,11 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
     {% else %}
-      {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
+      {% if(claim.mediationResult === false) %}
+        {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
+      {% else %}
+        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
+      {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceClaimantDashboard() }}
@@ -238,7 +242,11 @@
       {{ directionsOrderIssuedDefendantDashboard() }}
     {% else %}
       {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+        {% if(claim.mediationResult === false) %}
+            {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
+          {% else %}
+            {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+          {% endif %}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
       {% endif %}
