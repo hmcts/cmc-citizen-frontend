@@ -1,7 +1,7 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 
-{% macro partAdmitRejectedByClaimantDashboard() %}
+{% macro partAdmitRejectedByClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s admission.') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
