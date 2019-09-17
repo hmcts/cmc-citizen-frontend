@@ -31,6 +31,7 @@ import {
   settlementOfferReject,
   settledWithAgreement
 } from 'test/data/entity/fullDefenceData'
+import { DefenceType } from 'claims/models/response/defenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -192,6 +193,27 @@ const testData = [
     },
     claimantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.'],
     defendantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.']
+  },
+  {
+    status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - no online DQ',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES,
+        defenceType: DefenceType.DISPUTE
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: ['We will contact you with a meditation appointment'],
+    defendantAssertions: ['We will contact you with a meditation appointment']
   }
 ]
 
