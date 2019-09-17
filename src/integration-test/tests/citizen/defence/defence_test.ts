@@ -8,15 +8,6 @@ const helperSteps: Helper = new Helper()
 
 Feature('Respond to claim: online journey')
 
-Scenario('I can complete the journey when I fully reject the claim as I dispute the claim @citizen', { retries: 3 }, async (I: I) => {
-  const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-  testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
-  helperSteps.finishResponse(testData)
-  I.click('My account')
-  I.see(testData.claimRef)
-  I.see(`Wait for the claimant to respond`)
-})
-
 Scenario('I can complete the journey when I fully reject the claim as I have already paid @citizen', { retries: 3 }, async (I: I) => {
   const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   testData.defenceType = DefenceType.FULL_REJECTION_BECAUSE_FULL_AMOUNT_IS_PAID

@@ -13,51 +13,7 @@ const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseStep
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response: Reject')
 
-  Scenario('As a claimant I can reject the claim @citizen @admissions', { retries: 3 },
-    async (I: I) => {
-
-      const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
-      const claimantResponseTestData = new ClaimantResponseTestData()
-
-      // as defendant
-      defendantResponseSteps.disputeAllClaim(testData, claimantResponseTestData)
-      I.see(testData.claimRef)
-      // check dashboard
-      I.click('My account')
-      // check status
-      I.click(testData.claimRef)
-      I.see(testData.claimRef)
-      I.see('Claim status')
-      if (process.env.FEATURE_MEDIATION === 'true') {
-        I.see('Wait for the claimant to respond')
-        I.see('You’ve rejected the claim')
-      } else {
-        I.see('You’ve rejected the claim and said you don’t want to use mediation to solve it.')
-      }
-      I.click('Sign out')
-
-      // as claimant
-      userSteps.login(testData.claimantEmail)
-      claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
-      // check dashboard
-      I.click('My account')
-      I.see(testData.claimRef)
-      // check status
-      I.click(testData.claimRef)
-      I.see(testData.claimRef)
-      I.see('Claim status')
-      if (process.env.FEATURE_MEDIATION === 'true') {
-        I.see('Decide whether to proceed')
-        I.see('Mrs. Rose Smith has rejected your claim.')
-      } else {
-        I.see('The defendant has rejected your claim')
-        I.see(`They said they dispute your claim.`)
-      }
-      I.click('Sign out')
-    })
-
-  Scenario(
-    'As a claimant I can reject the claim as I have paid less than the amount claimed @nightly @admissions', { retries: 3 },
+  Scenario('As a claimant I can reject the claim as I have paid less than the amount claimed @nightly @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -97,8 +53,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.click('Sign out')
     })
 
-  Scenario(
-    'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions', { retries: 3 },
+  Scenario('As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)

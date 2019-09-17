@@ -23,6 +23,7 @@ import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claim
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
+import { ClaimantIntentionToProceedPage } from '../pages/claimant-intention-to-proceed'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -43,6 +44,7 @@ const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmitte
 const settleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
 const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
+const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantIntentionToProceedPage()
 
 export class ClaimantResponseSteps {
 
@@ -129,7 +131,25 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+    mediationSteps.acceptMediationAfterDisagreeing()
+    taskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
+  decideToProceed (): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    defendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Decide whether to proceed')
+    I.see('Do you want to proceed with the claim?')
+    intentionToProceedSteps.chooseYes()
+    this.finishClaimantResponse()
+  }
+
+  finishClaimantResponse (): void {
+    taskListPage.selectTaskFreeMediation()
+    mediationSteps.acceptMediationAfterDisagreeing()
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
