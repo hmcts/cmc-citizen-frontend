@@ -184,7 +184,11 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
     {% else %}
-      {{ claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard(claim) }}
+      {% if claim.mediationResult === false %}
+        {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
+      {% else %}
+        {{ claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard(claim) }}
+      {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
@@ -288,7 +292,11 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
     {% else %}
-      {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
+      {% if claim.mediationResult === false %}
+        {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
+        {% else %}
+          {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
+        {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
