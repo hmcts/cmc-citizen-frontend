@@ -4,7 +4,7 @@
 {% macro partAdmitRejectedByClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s admission.') }}
-  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and (claim.mediationResult === true or claim.mediationResult === undefined) %}
     {{ t('We’ll contact you with a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}

@@ -214,7 +214,11 @@
       {{ statesPaidRejectedClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+        {% if claim.mediationResult === false %}
+          {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
+        {% else %}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
+        {% endif %}
       {% else %}
         {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
       {% endif %}
@@ -327,7 +331,11 @@
       {{ CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+        {% if claim.mediationResult === false %}
+          {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
+        {% else %}
+          {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
+        {% endif %}
       {% else %}
         {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
       {% endif %}
