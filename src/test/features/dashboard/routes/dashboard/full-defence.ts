@@ -31,6 +31,7 @@ import {
   settlementOfferReject,
   settledWithAgreement
 } from 'test/data/entity/fullDefenceData'
+import { DefenceType } from 'claims/models/response/defenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -90,7 +91,7 @@ const testData = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
@@ -119,7 +120,7 @@ const testData = [
       ...settlementOffer
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant accepted offer',
@@ -148,7 +149,7 @@ const testData = [
       ...settlementOfferAccept
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court - claimant rejected offer',
@@ -177,7 +178,7 @@ const testData = [
       ...settlementOfferReject
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
-    defendantAssertions: ['You’ve rejected the claim. You need to tell us more about the claim.']
+    defendantAssertions: ['You’ve rejected the claim.']
   },
   {
     status: 'Full defence - defendant dispute all of the claim - defendant offers settlement to settle out of court - claim settled with agreement',
@@ -192,6 +193,27 @@ const testData = [
     },
     claimantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.'],
     defendantAssertions: ['You’ve both signed a legal agreement. The claim is now settled.']
+  },
+  {
+    status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - no online DQ',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES,
+        defenceType: DefenceType.DISPUTE
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: ['We will contact you with a meditation appointment'],
+    defendantAssertions: ['We will contact you with a meditation appointment']
   }
 ]
 
