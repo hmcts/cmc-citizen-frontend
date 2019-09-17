@@ -1,7 +1,7 @@
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 1.0.3
+version: 1.0.8
 # be aware when bumping version that it is used elsewhere, e.g.:
 # chart-cmc - demo: https://github.com/hmcts/chart-cmc/tree/master/cmc
 # flux - AAT AKS: https://github.com/hmcts/cnp-flux-config/blob/365e8ee13e20d4f66c925f5a0648db26dcad8872/k8s/aat/money-claims/citizen-frontend/citizen-frontend.yaml#L15

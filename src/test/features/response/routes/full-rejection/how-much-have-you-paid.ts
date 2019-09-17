@@ -61,6 +61,8 @@ describe(`Defendant: reject all - ${header}`, () => {
         it(`should render page asking '${header}' when full rejection was selected`, async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-rejection')
+          draftStoreServiceMock.resolveFind('mediation')
+
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
@@ -105,7 +107,8 @@ describe(`Defendant: reject all - ${header}`, () => {
         it('should return 500 and render error page when cannot save response draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-rejection')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -119,6 +122,7 @@ describe(`Defendant: reject all - ${header}`, () => {
         it('when form is invalid should render page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId({ totalAmountTillToday: validFormData.amount + 1 })
           draftStoreServiceMock.resolveFind('response:full-rejection')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -161,7 +165,8 @@ function testValidPost (paidDifference: number, admissionsEnabled: boolean, redi
       totalAmountTillToday: validFormData.amount - paidDifference
     })
     draftStoreServiceMock.resolveFind('response:full-rejection')
-    draftStoreServiceMock.resolveSave()
+    draftStoreServiceMock.resolveFind('mediation')
+    draftStoreServiceMock.resolveUpdate()
 
     await request(app)
       .post(pagePath)

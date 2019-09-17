@@ -2,20 +2,39 @@
 
 {% set claimantName = claim.claimData.claimant.name %}
 
-{% if claim.response.freeMediation === FreeMediationOption.YES %}
-  <p>{{ t('We’ll ask {{ claimantName }} if they want to try mediation. If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.', { claimantName: claimantName }) | safe }}</p>
+{% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+  {% if claim.response.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('If {{ claimant }} accepts your response the claim will be ended. We’ll contact you when they respond.', { claimant: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('If {{ claimant }} rejects your response we’ll ask them to try mediation. If they agree, we’ll contact you to arrange a call with the mediator.', { claimant: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('If they reject mediation the court will review the case. You might have to go to a hearing.') }}</p>
+    <p>{{ t('We’ll contact you to tell you what to do next.') }}</p>
+  {% else %}
+    <p>{{ t('If {{ claimant }} accepts your response the claim will be ended. We’ll contact you when they respond.',
+        { claimant: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('If they reject your response the court will review the case. You might have to go to a hearing.') }}</p>
+    <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+  {% endif %}
+{% elif claim.response.directionsQuestionnaire %}
+  <p>{{ t('We’ll contact you when {{ claimantName }} responds, to tell you what to do next.', { claimantName: claimantName }) }}</p>
+  <p>{{ t('If {{ claimantName }} accepts your response the claim will be ended.', { claimantName: claimantName }) }}</p>
+
+  {% if claim.response.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('If {{ claimantName }} reject your response and agree to try mediation we’ll contact you to arrange a call with the mediator.', { claimantName: claimantName }) }}</p>
+    <p>{{ t('If they reject mediation the court will review the case. You might have to go to a hearing.') }}</p>
+  {% else %}
+    <p>{{ t('If they reject your response the court will review the case. You might have to go to a hearing.') }}</p>
+  {% endif %}
+{% elif claim.response.freeMediation === FreeMediationOption.YES %}
+  <p>{{ t('We’ll ask {{ claimantName }} if they want to try mediation. If they agree, we’ll contact you to arrange a call with the mediator. If not, we’ll tell you what to do.', { claimantName: claimantName }) | safe }}</p>
 {% else %}
-  <p>{{ t('You’ll have to go to a hearing.') }}</p>
-  <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
-      DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
-  <p>{{ t('Your defence will be cancelled if you don’t complete and return the form by 4pm on {{ deadline }}.',
-      { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-  <p>{{ t('We’ll contact you when we set a hearing date to tell you how to prepare.') }}</p>
+  <p>{{ t('We’ll contact you when {{ claimantName }} responds, to tell you what to do next.', { claimantName: claimantName }) | safe }}</p>
+  <p>{{ t('If {{ claimantName }} accepts your response the claim will be settled.', { claimantName: claimantName }) | safe }}</p>
+  <p>{{ t('If they reject your response the court will review the case. You might have to go to a hearing.') }}</p>
 {% endif %}
 
 {% if claim.response.defenceType !== DefenceType.ALREADY_PAID %}
   <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-  <p>{{ t('You can still {{ settleOutOfCourt }}. For example you could offer to repair goods you sold the claimant or suggest a payment.',
+  <p>{{ t('You can still {{ settleOutOfCourt }}. For example, you could offer to repair goods you sold the claimant or suggest a payment.',
       { settleOutOfCourt: internalLink(t('settle the claim out of court'), OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId })) }) | safe }}</p>
-  <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
+  <p>{{ t('If the claimant accepts your offer you can avoid getting a County Court Judgment and the claim can be settled.') }}</p>
 {% endif %}

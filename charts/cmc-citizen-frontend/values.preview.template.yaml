@@ -19,7 +19,7 @@ rpe-feature-toggle-api:
     oneoff:
       command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
         /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '0.1' &&
+        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
         /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
       enabled: true
       permissions: cmc-new-features-consent-given
@@ -29,6 +29,7 @@ nodejs:
   ingressHost: ${SERVICE_FQDN}
   environment:
     LOG_LEVEL: DEBUG
+    HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
     IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
@@ -39,6 +40,6 @@ nodejs:
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
 
 idam-pr:
-  service:
-    name: Money Claims - Citizen
-    redirect_uri: https://${SERVICE_FQDN}/receiver
+  redirect_uris:
+    Money Claims - Citizen:
+      - https://${SERVICE_FQDN}/receiver

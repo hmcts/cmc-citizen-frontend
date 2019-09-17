@@ -71,6 +71,7 @@ describe('Defendant response: Statement of means: employers', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -123,7 +124,8 @@ describe('Defendant response: Statement of means: employers', () => {
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
@@ -142,6 +144,7 @@ describe('Defendant response: Statement of means: employers', () => {
         it('should update draft store and redirect', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission', draftOverride)
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

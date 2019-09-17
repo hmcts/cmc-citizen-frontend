@@ -10,13 +10,21 @@ import { PaymentIntention as DomainPaymentIntention } from 'claims/models/respon
 import { PaymentOption } from 'claims/models/paymentOption'
 import { MomentFactory } from 'shared/momentFactory'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { Claim } from 'claims/models/claim'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
+import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 
 export class ClaimantResponseConverter {
 
   public static convertToClaimantResponse (
+    claim: Claim,
     draftClaimantResponse: DraftClaimantResponse,
-    isDefendantBusiness: boolean
+    mediationDraft: MediationDraft,
+    isDefendantBusiness: boolean,
+    directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft
   ): ClaimantResponse {
     if (!this.isResponseAcceptance(draftClaimantResponse)) {
       let reject: ResponseRejection = new ResponseRejection()
@@ -25,13 +33,19 @@ export class ClaimantResponseConverter {
         reject.amountPaid = draftClaimantResponse.paidAmount.amount
       }
 
-      reject.freeMediation = FreeMediationUtil.convertFreeMediation(draftClaimantResponse.freeMediation)
+      reject.freeMediation = FreeMediationUtil.getFreeMediation(mediationDraft)
+      reject.mediationPhoneNumber = FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft)
+      reject.mediationContactPerson = FreeMediationUtil.getMediationContactPerson(claim, mediationDraft)
 
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
       }
 
       this.addStatesPaidOptions(draftClaimantResponse, reject)
+
+      if (DirectionsQuestionnaireHelper.isDirectionsQuestionnaireEligible(draftClaimantResponse, claim)) {
+        this.addDirectionsQuestionnaire(directionsQuestionnaireDraft, reject)
+      }
 
       return reject
     } else return this.createResponseAcceptance(draftClaimantResponse, isDefendantBusiness)
@@ -43,6 +57,8 @@ export class ClaimantResponseConverter {
     } else if (draftClaimantResponse.accepted && draftClaimantResponse.accepted.accepted.option === YesNoOption.NO) {
       return false
     } else if (draftClaimantResponse.partPaymentReceived && draftClaimantResponse.partPaymentReceived.received.option === YesNoOption.NO) {
+      return false
+    } else if (draftClaimantResponse.intentionToProceed && draftClaimantResponse.intentionToProceed.proceed.option === YesNoOption.YES) {
       return false
     }
 
@@ -72,6 +88,7 @@ export class ClaimantResponseConverter {
     }
 
     this.addStatesPaidOptions(draftClaimantResponse, respAcceptance)
+
     return respAcceptance
   }
 
@@ -122,6 +139,12 @@ export class ClaimantResponseConverter {
     if (draftClaimantResponse.accepted) {
       claimantResponse.settleForAmount = draftClaimantResponse.accepted.accepted.option as YesNoOption
     }
+
+  }
+
+  private static addDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft,
+                                             respRejection: ResponseRejection) {
+    respRejection.directionsQuestionnaire = DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
 
   }
 }

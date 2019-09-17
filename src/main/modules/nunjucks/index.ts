@@ -4,7 +4,13 @@ import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
 import * as nunjucks from 'nunjucks'
-import { addDaysFilter, dateFilter, dateInputFilter, monthIncrementFilter } from 'modules/nunjucks/filters/dateFilter'
+import {
+  addDaysFilter,
+  dateWithDayAtFrontFilter,
+  dateFilter,
+  dateInputFilter,
+  monthIncrementFilter
+} from 'modules/nunjucks/filters/dateFilter'
 import { convertToPoundsFilter } from 'modules/nunjucks/filters/convertToPounds'
 import * as numeralFilter from 'nunjucks-numeral-filter'
 import * as numeral from 'numeral'
@@ -38,6 +44,7 @@ import { Paths as ClaimantResponsePaths } from 'features/claimant-response/paths
 import { Paths as SettlementAgreementPaths } from 'settlement-agreement/paths'
 import { Paths as MediationPaths } from 'mediation/paths'
 import { Paths as DirectionsQuestionnairePaths } from 'features/directions-questionnaire/paths'
+import { Paths as OrdersPaths } from 'features/orders/paths'
 import { Paths as TestingSupportPaths } from 'testing-support/paths'
 import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from 'features/response/paths'
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
@@ -56,10 +63,12 @@ import { PriorityDebtType } from 'response/form/models/statement-of-means/priori
 import { Disability } from 'response/form/models/statement-of-means/disability'
 import { yesNoFilter } from 'modules/nunjucks/filters/yesNoFilter'
 import { DecisionType } from 'common/court-calculations/decisionType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { PartyType } from 'common/partyType'
 import { IncomeExpenseSchedule } from 'common/calculate-monthly-income-expense/incomeExpenseSchedule'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { ResponseType as DomainResponseType } from 'claims/models/response/responseType'
 
 const packageDotJson = require('../../../../package.json')
 
@@ -115,6 +124,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
+    nunjucksEnv.addFilter('dateWithDayAtFront', dateWithDayAtFrontFilter)
     nunjucksEnv.addFilter('addDays', addDaysFilter)
     nunjucksEnv.addFilter('pennies2pounds', convertToPoundsFilter)
     nunjucksEnv.addFilter('monthIncrement', monthIncrementFilter)
@@ -162,6 +172,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PartAdmissionPaths', PartAdmissionPaths)
     nunjucksEnv.addGlobal('FullRejectionPaths', FullRejectionPaths)
     nunjucksEnv.addGlobal('DirectionsQuestionnairePaths', DirectionsQuestionnairePaths)
+    nunjucksEnv.addGlobal('OrdersPaths', OrdersPaths)
     nunjucksEnv.addGlobal('TestingSupportPaths', TestingSupportPaths)
 
     nunjucksEnv.addGlobal('SettlementAgreementPaths', SettlementAgreementPaths)
@@ -178,6 +189,14 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('PartyType', PartyType)
     nunjucksEnv.addGlobal('IncomeExpenseSchedule', IncomeExpenseSchedule)
     nunjucksEnv.addGlobal('FreeMediationOption', FreeMediationOption)
+    nunjucksEnv.addGlobal('SignatureType', SignatureType)
+    nunjucksEnv.addGlobal('domain', {
+      ResponseType: DomainResponseType,
+      PaymentOption: PaymentOption,
+      PaymentSchedule: PaymentSchedule
+    })
+    nunjucksEnv.addGlobal('PaymentOption', PaymentOption)
+    nunjucksEnv.addGlobal('SignatureType', SignatureType)
   }
 
   private convertPropertiesToBoolean (featureToggles: { [key: string]: any }): { [key: string]: boolean } {

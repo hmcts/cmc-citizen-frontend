@@ -10,11 +10,12 @@
 
     <form method="post" novalidate>
       {{ csrfProtection(csrf) }}
+      <p>{{ t('If you don’t know the exact date, tell us the month and year.') }}</p>
       <h2 class="heading-small">{{ t('Example timeline') }}</h2>
       <ul class="list list-bullet">
         <li>{{ t('{{ earliest }} - John Smith gave me a quote to replace the roof.', { earliest: 'now' | addDays(-180) | date }) }}</li>
         <li>{{ t('{{ later }} - We agreed and signed a contract for the work.', { later: 'now' | addDays(-178) | date }) }}</li>
-        <li>{{ t('{{ latest }} - I noticed a leak on the landing and told Mr Smith about this.', { latest: 'now' | addDays(-176) | date }) }}</li>
+        <li>{{ t('{{ latest }} - I noticed a leak on the landing and told Mr Smith about this.', { latest: 'now' | addDays(-114) | date }) }}</li>
       </ul>
 
       {{ timelineFragment(form) }}

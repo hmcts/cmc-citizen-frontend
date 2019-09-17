@@ -17,7 +17,7 @@
             </span>
           </legend>
 
-          <p>{{ t('This could be anyone who can confirm facts about the claim, for example someone who saw work being done.') }}</p>
+          <p>{{ t('This could be anyone who can confirm your version of events.') }}</p>
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
           {{
           radioOption(form = form, label = 'Yes', name = 'otherWitnesses', value = YesNoOption.YES.option, checked = form.valueFor('otherWitnesses').option === YesNoOption.YES.option)

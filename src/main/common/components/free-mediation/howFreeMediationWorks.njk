@@ -1,0 +1,23 @@
+{% macro howMediationWorks(mediationPilot) %}
+  {% if mediationPilot === true %}
+    <h2 class="heading-medium">{{ t('We’ll contact you with an appointment') }}</h2>
+    <p>{{ t('We’ll send you details of the date and time a mediator will phone you.') }}</p>
+  {% else %}
+    <h2 class="heading-medium">{{ t('We’ll try to contact you') }}</h2>
+    <p>{{ t('If we get through, we’ll try to arrange a phone call with a mediator from the Small Claims Mediation Service.') }}</p>
+  {% endif %}
+  <h2 class="heading-medium">{{ t('A mediator phones you') }}</h2>
+
+  <p>{{ t('The mediator will:') }}</p>
+  <ul class="list list-bullet">
+    <li>{{ t('listen to each side separately - you won’t talk directly to the other side') }}</li>
+    <li>{{ t('ask you to consider what the other side says') }}</li>
+    <li>{{ t('help you reach an agreement, if possible') }}</li>
+  </ul>
+  <p>{{ t('The call won’t take longer than an hour.') }}</p>
+
+  <h2 class="heading-medium">{{ t('After the phone call') }}</h2>
+  <p>{{ t('If mediation is successful you’ll make a verbal agreement over the phone. We’ll email the agreement to you. You won’t have to sign anything but the agreement is binding.') }}</p>
+  <p>{{ t('If either party breaks the terms, the other party can go back to the court to ask for a judgment or hearing.') }}</p>
+  <p>{{ t('If mediation fails and a hearing is needed, any mediation discussions can’t be mentioned in court.') }}</p>
+{% endmacro %}

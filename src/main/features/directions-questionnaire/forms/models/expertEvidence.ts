@@ -1,7 +1,11 @@
 import { CompletableTask } from 'models/task'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { IsDefined, IsIn, IsNotEmpty, ValidateIf } from '@hmcts/class-validator'
+import {
+  ValidationErrors as DefaultValidationErrors,
+  ValidationErrors as GlobalValidationErrors
+} from 'forms/validation/validationErrors'
+import { IsDefined, IsIn, IsNotEmpty, MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { YesNoOption } from 'models/yesNoOption'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Explain what there is to examine'
@@ -16,6 +20,7 @@ export class ExpertEvidence implements CompletableTask {
   @ValidateIf(o => o.expertEvidence && o.expertEvidence.option === YesNoOption.YES.option)
   @IsNotEmpty({ message: ValidationErrors.REASON_REQUIRED })
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   whatToExamine?: string
 
   constructor (expertEvidence?: YesNoOption, whatToExamine?: string) {
@@ -32,8 +37,8 @@ export class ExpertEvidence implements CompletableTask {
   }
 
   deserialize (input: any): ExpertEvidence {
-    if (input) {
-      this.expertEvidence = YesNoOption.fromObject(input.expertEvidence)
+    if (input && input.expertEvidence) {
+      this.expertEvidence = YesNoOption.fromObject(input.expertEvidence.option)
       this.whatToExamine = input.whatToExamine
     }
 

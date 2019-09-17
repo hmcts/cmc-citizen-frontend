@@ -12,53 +12,50 @@
     <li>{{ t('pay {{ claimantName }} by {{ paymentDate }}', { claimantName: claimantName, paymentDate: paymentDate }) }}</li>
     <li>{{ t('make sure any cheques or bank transfers are clear in their account by the deadline') }}</li>
     <li>
-        {{ internalLink('contact them', claimantDetailsPageURI) }}
-        {{ t('if you need their payment details') }}
+      {{ internalLink('contact them', claimantDetailsPageURI) }}
+      {{ t('if you need their payment details') }}
     </li>
     <li>{{ t('make sure you get a receipt for your payment') }}</li>
   </ul>
   <p>{{t('Because you’ve said you won’t pay immediately, {{ claimantName }} can either:', { claimantName:claimantName }) }}</p>
   <ul class="list list-bullet">
     <li>{{ t('ask you to sign a settlement agreement to formalise the repayment plan') }}</li>
-    <li>{{ t('request a County Court Judgment against you for {{ amount }}', { amount:amount }) }}</li>
+    <li>{{ t('request a County Court Judgment against you for {{ amount }}', { amount: amount | numeral }) }}</li>
   </ul>
-  <h3 class="heading-small">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }},', {claimantName:claimantName, amount: amount}) }}</h3>
-
-  <p>{{ t('The court will review the case for the full amount of {{fullAmount}}.', { fullAmount:fullAmount }) }}</p>
+  <h3 class="heading-small">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }},', { claimantName:claimantName, amount: amount | numeral }) }}</h3>
+  {% if claim.response.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('If they don’t want to try mediation the court will review the case for the full amount of {{ amount }}', { amount: claim.totalAmountTillToday | numeral }) }}</p>
+  {% else %}
+    <p>{{ t('The court will review the case for the full amount of {{ fullAmount }}.', { fullAmount: fullAmount }) }}</p>
+  {% endif %}
 
   <h3 class="heading-small">{{t('If {{ claimantName }} rejects your offer to pay by {{ paymentDate }}', { claimantName: claimantName, paymentDate: paymentDate }) }}</h3>
   <p>{{ t('The court will decide how you must pay.') }}</p>
-
-{% endif %}
-
-{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-  {% set paymentDate = claim.response.paymentIntention.paymentDate | date %}
+  {% elif claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
   <p>{{ t('You need to pay {{ claimantName }} {{amount}} immediately.', { claimantName: claimantName, amount: amount }) }}</p>
 
   <p>{{ t('Make sure that:') }}</p>
-
   <ul class="list list-bullet">
-    <li>{{ t('they get the money by {{ paymentDate }} - they can request a County Court Judgment against you if not', { paymentDate: paymentDate }) }}</li>
+    <li>{{ t('they get the money by {{ paymentDate }} - they can request a County Court Judgment against you if not',
+        { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</li>
     <li>{{ t('any cheques or bank transfers are clear in their account by the deadline') }}</li>
     <li>{{ t('you get a receipt for any payments') }} </li>
   </ul>
 
-  <p>
-    {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI ) }}
-    {{ t('if you need their payment details.') }}
-  </p>
+  <p>{{ internalLink('Contact ' + claimantName, claimantDetailsPageURI ) }}{{ t('if you need their payment details.') }}</p>
 
   <h3 class="heading-small">{{ t('If {{ claimantName }} accepts your offer of {{amount}}', { claimantName: claimantName, amount: amount }) }}</h3>
   <p>{{ t('The claim will be settled.') }}</p>
 
   <h3 class="heading-small">{{ t('If {{ claimantName }} rejects your offer', { claimantName: claimantName } ) }}</h3>
-
-  <p>{{ t('The court will review the case for the full amount of {{fullAmount}}.', { fullAmount: fullAmount }) }}</p>
-
-{% endif %}
-
-{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-
+  {% if claim.response.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('If they don’t want to try mediation the court will review the case for the full amount of {{ amount }}', { amount: claim.totalAmountTillToday | numeral }) }}</p>
+  {% else %}
+    <p>{{ t('The court will review the case for the full amount of {{ fullAmount }}.', { fullAmount: fullAmount | numeral }) }}</p>
+  {% endif %}
+  {% elif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
   <h3 class="bold">{{ t('If {{ claimantName }} accepts your offer', { claimantName: claimantName }) }}</h3>
   <p>{{ t('You should:') }}</p>
 
@@ -68,24 +65,39 @@
       {{ internalLink('contact ' + claimantName, claimantDetailsPageURI) }}
       {{ t('if you need their payment details.') }}
     </li>
-    <li>{{ t('make sure you get a receipt for any payments') }}</li>
+    <li>{{ t('make sure you get a receipt for each payment') }}</li>
   </ul>
 
   <p>{{ t('Because you’ve said you won’t pay immediately, {{ claimantName }} can either:', { claimantName: claimantName }) }}</p>
 
   <ul class="list list-bullet">
     <li>{{ t('ask you to sign a settlement agreement to formalise the repayment plan') }}</li>
-    <li>{{ t('request a County Court Judgment against you for {{ amount }}', { amount: amount }) }}</li>
+    <li>{{ t('request a County Court Judgment against you for {{ amount }}', { amount: amount | numeral }) }}</li>
   </ul>
 
-  <h3 class="bold">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }}', { claimantName: claimantName, amount: amount }) }}</h3>
-
-  <p>{{ t('The court will review the case for the full amount of {{ fullAmount }}.', { fullAmount: fullAmount }) }}</p>
+  <h3 class="bold">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }}', { claimantName: claimantName, amount: amount | numeral }) }}</h3>
+  {% if claim.response.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('If they don’t want to try mediation the court will review the case for the full amount of {{ amount }}', { amount: fullAmount | numeral }) }}</p>
+  {% else %}
+    <p>{{ t('The court will review the case for the full amount of {{ fullAmount }}.', { fullAmount: fullAmount | numeral }) }}</p>
+  {% endif %}
 
   <h3 class="bold">{{ t('If {{ claimantName }} rejects your offer to pay in instalments', { claimantName: claimantName }) }}</h3>
 
   <p>{{ t('The court will decide how you must pay.') }}</p>
 
+  {% elif claim.response.paymentIntention === undefined %}
+  <!-- States Paid -->
+  <h3 class="bold">{{ t('If {{ claimantName }} accepts your response', { claimantName: claimantName }) }}</h3>
+  <p>The claim will be settled.</p>
+  <h3 class="bold">{{ t('If {{ claimantName }} rejects your response', { claimantName: claimantName }) }}</h3>
+  {% if claim.response.freeMediation === FreeMediationOption.YES %}
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('If they don’t want to try mediation the court will review the case. You might have to go to a hearing.') }}</p>
+    <p>{{ t('We’ll contact you to tell you what to do next.') }}</p>
+  {% else %}
+    <p>{{ t('The court will review the case. You might have to go to a hearing.') }}</p>
+    <p>{{ t('We’ll contact you to tell you what to do next.') }}</p>
+  {% endif %}
 {% endif %}
-
-

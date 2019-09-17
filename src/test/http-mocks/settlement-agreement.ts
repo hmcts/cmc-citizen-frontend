@@ -1,7 +1,7 @@
 import * as HttpStatus from 'http-status-codes'
 import * as config from 'config'
 import * as mock from 'nock'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { StatementType } from 'offer/form/models/statementType'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')

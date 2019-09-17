@@ -1,9 +1,13 @@
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 import { LocalDate } from 'forms/models/localDate'
-import { IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { IsDefined, MaxLength, ValidateIf, ValidateNested } from '@hmcts/class-validator'
+import {
+  ValidationErrors as DefaultValidationErrors,
+  ValidationErrors as GlobalValidationErrors
+} from 'forms/validation/validationErrors'
 import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
+import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
   static readonly NAME_REQUIRED = 'Enter the expert’s name'
@@ -17,12 +21,14 @@ export class ReportRow extends MultiRowFormItem {
   @ValidateIf(o => o.reportDate && o.reportDate !== new LocalDate())
   @IsDefined({ message: ValidationErrors.NAME_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED })
+  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   expertName?: string
 
   @ValidateIf(o => !!o.expertName)
   @IsDefined({ message: ValidationErrors.DATE_REQUIRED })
   @IsValidLocalDate({ message: ValidationErrors.VALID_DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.PAST_DATE_REQUIRED })
+
   @ValidateNested()
   reportDate?: LocalDate
 

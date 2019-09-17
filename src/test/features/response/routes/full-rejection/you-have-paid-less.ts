@@ -48,6 +48,7 @@ describe('You have paid less page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('response:full-rejection')
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -73,6 +74,7 @@ describe('You have paid less page', () => {
       it('should redirect to task list', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFind('response:full-rejection')
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .post(pagePath)
