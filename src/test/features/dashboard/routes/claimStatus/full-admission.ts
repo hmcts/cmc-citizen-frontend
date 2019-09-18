@@ -109,7 +109,7 @@ const testData = [
       `The defendant has offered to pay by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}.`,
       'View and respond to the offer',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -128,9 +128,7 @@ const testData = [
       'Awaiting judge’s review',
       `You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.`,
       'A County Court Judgment has been issued against the defendant.',
-      `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`,
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`
     ],
     defendantAssertions: [
       fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
@@ -153,7 +151,7 @@ const testData = [
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
       `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
@@ -176,7 +174,7 @@ const testData = [
       `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
       'Request a County Court Judgment',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
@@ -198,9 +196,7 @@ const testData = [
       'You’ve both signed a settlement agreement',
       `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntention.paymentDate).format('LL')}.`,
       'Download the settlement agreement',
-      'Tell us you’ve settled',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -224,9 +220,7 @@ const testData = [
       'Download the settlement agreement',
       'Tell us you’ve settled',
       'Request County Court Judgment',
-      'request a County Court Judgment',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'request a County Court Judgment'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -246,9 +240,7 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      'Request a County Court Judgment (CCJ)',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Request a County Court Judgment (CCJ)'
     ],
     defendantAssertions: [
       'You rejected the settlement agreement',
@@ -268,9 +260,7 @@ const testData = [
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
-      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan.`,
@@ -291,9 +281,7 @@ const testData = [
     claimantAssertions: [
       'The defendant has not signed your settlement agreement',
       `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
-      'Request a County Court Judgment',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Request a County Court Judgment'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
@@ -315,9 +303,7 @@ const testData = [
       'You’ve both signed a settlement agreement',
       `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntention.paymentDate).format('LL')}.`,
       'Download the settlement agreement',
-      'Tell us you’ve settled',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -341,9 +327,7 @@ const testData = [
       'Download the settlement agreement',
       'Tell us you’ve settled',
       'Request County Court Judgment',
-      'request a County Court Judgment',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'request a County Court Judgment'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -363,9 +347,7 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      'Request a County Court Judgment (CCJ)',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Request a County Court Judgment (CCJ)'
     ],
     defendantAssertions: [
       'You rejected the settlement agreement',
@@ -385,7 +367,7 @@ const testData = [
       'The defendant has offered to pay in instalments',
       'View and respond to the offer',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
@@ -405,9 +387,7 @@ const testData = [
       'Awaiting judge’s review',
       `You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.`,
       'A County Court Judgment has been issued against the defendant.',
-      `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`,
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      `A judge will decide what ${fullAdmissionClaim.claim.defendants[0].name} can afford to pay, based on their financial details.`
     ],
     defendantAssertions: [
       fullAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
@@ -430,7 +410,7 @@ const testData = [
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
       `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
@@ -453,7 +433,7 @@ const testData = [
       `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
       'Request a County Court Judgment',
       'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
@@ -476,9 +456,7 @@ const testData = [
       `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
       `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
       'Download the settlement agreement',
-      'Tell us you’ve settled',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -504,9 +482,7 @@ const testData = [
       'Download the settlement agreement',
       'Tell us you’ve settled',
       'Request County Court Judgment',
-      'request a County Court Judgment',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'request a County Court Judgment'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -526,9 +502,7 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      'Request a County Court Judgment (CCJ)',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Request a County Court Judgment (CCJ)'
     ],
     defendantAssertions: [
       'You rejected the settlement agreement',
@@ -548,9 +522,7 @@ const testData = [
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
-      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan.`,
@@ -571,9 +543,7 @@ const testData = [
     claimantAssertions: [
       'The defendant has not signed your settlement agreement',
       `${fullAdmissionClaim.claim.defendants[0].name} can still sign the settlement agreement until you request a CCJ.`,
-      'Request a County Court Judgment',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Request a County Court Judgment'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} asked you to sign a settlement agreement`,
@@ -596,9 +566,7 @@ const testData = [
       `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
       `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
       'Download the settlement agreement',
-      'Tell us you’ve settled',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -624,9 +592,7 @@ const testData = [
       'Download the settlement agreement',
       'Tell us you’ve settled',
       'Request County Court Judgment',
-      'request a County Court Judgment',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'request a County Court Judgment'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
@@ -646,9 +612,7 @@ const testData = [
     },
     claimantAssertions: [
       `The defendant has rejected your settlement agreement`,
-      'Request a County Court Judgment (CCJ)',
-      'If you’ve been paid',
-      'Tell us if you want to end the claim'
+      'Request a County Court Judgment (CCJ)'
     ],
     defendantAssertions: [
       'You rejected the settlement agreement',
