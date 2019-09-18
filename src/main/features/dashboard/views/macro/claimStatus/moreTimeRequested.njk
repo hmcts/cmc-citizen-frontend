@@ -9,8 +9,9 @@
 {% macro moreTimeRequestedForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
-    <p>{{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
+    <p>{{ t('{{ defendantName }} has requested an extra 14 days to respond. They now have until 4pm on {{ responseDeadline }} to respond.',
         { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) | safe }}</p>
+    <p>{{ t('You can request a County Court Judgment against them if they don’t respond by the deadline.') }}</p>
   </div>
 {% endmacro %}
 
