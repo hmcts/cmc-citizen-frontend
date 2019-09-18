@@ -24,8 +24,7 @@ const testData = [
       responseDeadline: MomentFactory.currentDate().add(1, 'days')
     },
     claimantAssertions: ['000MC050', 'Wait for the defendant to respond',
-      'to respond. They can request an extra 14 days if they need it.',
-      'You can request a County Court Judgment against them if they don’t respond by the deadline.'
+      'They can request an extra 14 days if they need it.'
     ],
     defendantAssertions: ['000MC050', 'You haven’t responded to this claim',
       'You need to respond before 4pm on ',
