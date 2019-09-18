@@ -5,7 +5,7 @@
 {% macro partAdmitRejectedByClaimantDefendantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
-  {%  elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you with a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
@@ -15,7 +15,7 @@
 {% macro partAdmitRejectedByClaimantDefendantClaimDetails(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
-      <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
+      <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
       <p>{{ t('{{ claimantName }} has rejected your defence.',
           { claimantName: claim.claimData.claimant.name }) }}</p>
       <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
@@ -23,7 +23,7 @@
     </div>
   {% else %}
     <div class="status-block">
-      <h2 class="heading-small">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
+      <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
           { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
@@ -40,7 +40,7 @@
 
 {% macro partAdmitRejectedByClaimantDefendantDQClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
+    <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',
         { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
 
