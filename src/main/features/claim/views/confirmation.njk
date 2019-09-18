@@ -25,15 +25,14 @@
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      <p>{{ t('{{ defendantName }} has until 4pm on {{ responseDeadline }} to respond to your claim. They can ask for an extra 14 days if they need it.
-              We’ll email you when they respond.',
+      <p>{{ t('{{ defendantName }} has until 4pm on {{ responseDeadline }} to respond to your claim. They can request an extra 14 days if they need it.',
           {
             defendantName : defendantName,
             responseDeadline: claim.responseDeadline | date
           }
         ) | safe }}
       </p>
-      <p>{{ t('You can request a default County Court Judgment (CCJ) against them if they don’t respond.') }}</p>
+      <p>{{ t('You can request a County Court Judgment against them if they don’t respond by the deadline.') }}</p>
 
       <h2 class="heading-medium">{{ t('If the defendant pays you') }}</h2>
       <p>{{ t('You need to sign in to your account to tell us you’ve been paid.') }}</p>
