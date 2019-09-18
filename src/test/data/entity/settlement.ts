@@ -7,7 +7,7 @@ export const responses = {
   fullRejection: {
     response: claimStoreServiceMock.sampleFullDefenceRejectEntirely.response,
     respondedAt: MomentFactory.currentDateTime().subtract(10, 'days'),
-    directionsQuestionnaireDeadline: MomentFactory.currentDate().add(10, 'days')
+    directionsQuestionnaireDeadline: MomentFactory.currentDate().add(19, 'days')
   },
   partialAdmission: {
     response: claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj.response,

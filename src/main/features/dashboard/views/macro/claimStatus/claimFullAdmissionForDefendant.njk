@@ -16,7 +16,7 @@
 
 {% macro claimFullAdmissionForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
+    <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
     {% set claimant = claim.claimData.claimant %}
     {% set amount = claim.totalAmountTillToday | numeral %}
     {% set paymentIntention = claim.response.paymentIntention %}
