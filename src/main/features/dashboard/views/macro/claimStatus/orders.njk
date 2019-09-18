@@ -19,10 +19,10 @@
 {% macro reviewReceiver(claim, respondToReviewOrderDeadline) %}
   <div class="status-block">
     {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
-      <h2 class="heading-small">{{ t('Read {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
+      <h2 class="heading-medium">{{ t('Read {{ claimantName }}’s request', { claimantName: claim.claimData.claimant.name }) }}</h2>
       <p>{{ t('{{ claimantName }} has asked the court to change the order.', { claimantName: claim.claimData.claimant.name }) }}</p>
     {% else %}
-      <h2 class="heading-small">{{ t('Read {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h2>
+      <h2 class="heading-medium">{{ t('Read {{ defendantName }}’s request', { defendantName: claim.claimData.defendant.name }) }}</h2>
       <p>{{ t('{{ defendantName }} has asked the court to change the order.', { defendantName: claim.claimData.defendant.name }) }}</p>
     {% endif %}
 
@@ -77,7 +77,7 @@
 
 {% macro directionsOrderIssued(claim, party, reconsiderationDeadline, isReviewOrderEligible) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Send us more details before the hearing') }}</h2>
+    <h2 class="heading-medium">{{ t('Send us more details before the hearing') }}</h2>
     <p>{{ t('The court has ordered you to send us more details.') }}</p>
     <p>{{ internalLink(t('Download the court’s order '), OrdersPaths.directionsOrderDocument.evaluateUri({ externalId: claim.externalId })) }}
       {{ t('(PDF) to find out the details you need to send.') }}</p>
