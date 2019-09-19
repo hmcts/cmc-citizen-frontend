@@ -2,6 +2,11 @@
 
 {% macro _webChatWidget(label = 'Web chat') %}
       <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t(label)}}</h2>
+      <style>
+        #ctsc-web-chat p {
+          margin-bottom:0px;
+        }
+      </style>
       <div id="ctsc-web-chat"></div>
 {% endmacro%}
 
