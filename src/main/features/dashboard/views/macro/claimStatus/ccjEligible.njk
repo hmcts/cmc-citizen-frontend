@@ -8,7 +8,7 @@
 {% macro ccjEligibleForClaimantClaimDetails(claim, csrf) %}
   <div class="status-block">
     {% set defendantName = claim.claimData.defendant.name %}
-    <h2 class="heading-small">{{ t('You can request a County Court Judgment') }}</h2>
+    <h2 class="heading-medium">{{ t('You can request a County Court Judgment') }}</h2>
     <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. '
         + 'You can request a County Court Judgment (CCJ) against them.',
         { defendantName : defendantName }) }}</p>
@@ -31,7 +31,7 @@
 
 {% macro ccjEligibleForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You haven’t responded to this claim') }}</h2>
+    <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
     <p>{{ t('You haven’t responded to the claim. {{ claimantName }} can now ask for a County Court Judgment against you.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('A County Court Judgment can mean you find it difficult to get credit, like a mortgage or mobile phone contract. Bailiffs could also be sent to your home.') }}</p>
