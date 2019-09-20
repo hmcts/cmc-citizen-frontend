@@ -52,7 +52,8 @@ app.enable('trust proxy')
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
+  limit: '10mb'
 }))
 app.use(cookieParser())
 app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {

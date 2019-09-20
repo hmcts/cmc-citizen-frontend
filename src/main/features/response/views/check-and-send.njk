@@ -134,28 +134,24 @@
         )
       }}
 
-      {% if timeline is defined %}
-        {{
-          timelineCheckAndSend(
-            header = 'Your timeline of what happened (optional)',
-            timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
-            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false
-          )
-        }}
-        {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
-      {% endif %}
-      {% if evidence is defined %}
-        {{
-          evidenceCheckAndSend(
-            header = 'Your evidence (optional)',
-            evidence = draft.partialAdmission.evidence.getPopulatedRowsOnly(),
-            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-            bottomBorder = false
-          )
-        }}
-        {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
-      {% endif %}
+      {{
+        timelineCheckAndSend(
+          header = 'Your timeline of what happened (optional)',
+          timeline = draft.partialAdmission.timeline.getPopulatedRowsOnly(),
+          url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false
+        )
+      }}
+      {{ row(label = 'Comments about their timeline (optional)', value = draft.partialAdmission.timeline.comment | default(''), bold = true) }}
+      {{
+        evidenceCheckAndSend(
+          header = 'Your evidence (optional)',
+          evidence = draft.partialAdmission.evidence.getPopulatedRowsOnly(),
+          url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+          bottomBorder = false
+        )
+      }}
+      {{ row(label = 'Comments about their evidence (optional)', value = draft.partialAdmission.evidence.comment | default(''), bold = true) }}
     {% endif %}
 
     {% if draft.rejectAllOfClaim.option === RejectAllOfClaimOption.ALREADY_PAID %}
@@ -190,30 +186,25 @@
       {% if draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday %}
         {{ row(label = 'Why do you disagree with the amount claimed?', value = draft.rejectAllOfClaim.whyDoYouDisagree.text, changeLink = FullRejectionPaths.whyDoYouDisagreePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
 
-        {% if timeline is defined %}
-          {{
-            timelineCheckAndSend(
-              header = 'Your timeline of what happened (optional)',
-              timeline = draft.timeline.getPopulatedRowsOnly(),
-              url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false
-            )
-          }}
-        {% endif %}
-
+        {{
+          timelineCheckAndSend(
+            header = 'Your timeline of what happened (optional)',
+            timeline = draft.timeline.getPopulatedRowsOnly(),
+            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
         {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
 
-        {% if evidence is defined %}
-          {{
-            evidenceCheckAndSend(
-              header = 'Your evidence (optional)',
-              evidence = draft.evidence.getPopulatedRowsOnly(),
-              url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
-              bottomBorder = false
-            )
-          }}
-          {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
-        {% endif %}
+        {{
+          evidenceCheckAndSend(
+            header = 'Your evidence (optional)',
+            evidence = draft.evidence.getPopulatedRowsOnly(),
+            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId }),
+            bottomBorder = false
+          )
+        }}
+        {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
 
       {% endif %}
       {{ tableEnd() }}
@@ -230,27 +221,23 @@
           )
       }}
 
-      {% if timeline is defined %}
-        {{
-          timelineCheckAndSend(
-            header = 'Your timeline of what happened (optional)',
-            timeline = draft.timeline.getPopulatedRowsOnly(),
-            url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
-          )
-        }}
-        {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
-      {% endif %}
+      {{
+        timelineCheckAndSend(
+          header = 'Your timeline of what happened (optional)',
+          timeline = draft.timeline.getPopulatedRowsOnly(),
+          url = ResponsePaths.timelinePage.evaluateUri({ externalId: claim.externalId })
+        )
+      }}
+      {{ row(label = 'Comments about their timeline (optional)', value = draft.timeline.comment | default(''), bold = true) }}
 
-      {% if evidence is defined %}
-        {{
-          evidenceCheckAndSend(
-            header = 'Your evidence (optional)',
-            evidence = draft.evidence.getPopulatedRowsOnly(),
-            url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId })
-          )
-        }}
-        {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
-      {% endif %}
+      {{
+        evidenceCheckAndSend(
+          header = 'Your evidence (optional)',
+          evidence = draft.evidence.getPopulatedRowsOnly(),
+          url = ResponsePaths.evidencePage.evaluateUri({ externalId: claim.externalId })
+        )
+      }}
+      {{ row(label = 'Comments about their evidence (optional)', value = draft.evidence.comment | default(''), bold = true) }}
       {{ tableEnd() }}
     {% endif %}
 
