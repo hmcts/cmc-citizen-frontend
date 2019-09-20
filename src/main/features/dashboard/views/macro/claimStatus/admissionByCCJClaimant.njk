@@ -8,7 +8,7 @@
 
 {% macro admissionByCCJClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You requested a County Court Judgment against {{ defendantName }}',
+    <h2 class="heading-medium">{{ t('You requested a County Court Judgment against {{ defendantName }}',
         { defendantName: claim.claimData.defendant.name }) }}</h2>
     <p>{{ t('When we’ve processed your request, we’ll post a copy of the judgment to you and to {{ defendantName }}',
         { defendantName: claim.claimData.defendant.name }) }}</p>
