@@ -8,7 +8,7 @@
 
 {% macro offerSettlementReachedClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
+    <h2 class="heading-medium">{{ t('Agreement signed') }}</h2>
     <p>{{ t('You’ve both signed a legal agreement. The claim is now settled.') }}</p>
     <p>{{ downloadAgreementLink(claim) }}</p>
   </div>
@@ -22,7 +22,7 @@
       {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
       {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({externalId:claim.externalId}) %}
 
-      <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+      <h2 class="heading-medium">{{ t('You’ve both signed a settlement agreement') }}</h2>
 
       {% set amountToPay = 'the full amount' %}
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
@@ -71,7 +71,7 @@
       {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
       {% set ccjRequest = CCJPaths.paidAmountPage.evaluateUri({ externalId:claim.externalId }) %}
 
-      <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+      <h2 class="heading-medium">{{ t('You’ve both signed a settlement agreement') }}</h2>
 
       {% set amountToPay = 'the full amount' %}
       {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
@@ -108,7 +108,7 @@
         {{ paidInFullClaimantButtonClaimDetails(claim) }}
       {% endif %}
     {% else %}
-      <h2 class="heading-small">{{ t('Agreement signed') }}</h2>
+      <h2 class="heading-medium">{{ t('Agreement signed') }}</h2>
       <p>{{ t('You’ve both signed a legal agreement. The claim is now settled.') }}</p>
       <p>{{ downloadAgreementLink(claim) }}</p>
     {% endif %}
