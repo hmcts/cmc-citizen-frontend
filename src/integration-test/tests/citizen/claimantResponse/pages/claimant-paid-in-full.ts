@@ -13,7 +13,7 @@ const buttons = {
   submit: 'input[type=submit]'
 }
 
-export class ClaimantSettleClaimPage {
+export class PaidInFullPage {
 
   enterDate (date: string): void {
     const [ year, month, day ] = DateParser.parse(date)

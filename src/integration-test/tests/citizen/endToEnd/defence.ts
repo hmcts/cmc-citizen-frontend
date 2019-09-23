@@ -7,11 +7,14 @@ import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
 import { createClaimData } from 'integration-test/data/test-data'
 import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
+import { ClaimantResponseTestData } from '../claimantResponse/data/ClaimantResponseTestData'
+import { DefendantResponseSteps } from '../claimantResponse/steps/defendant'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
+const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
 Feature('E2E tests for defence journeys')
 
@@ -68,3 +71,43 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   claimantResponseSteps.decideToProceed()
   I.see('You’ve rejected their response')
 })
+
+Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence @nightly @admissions', { retries: 3 },
+  async (I: I) => {
+    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    claimantResponseTestData.pageSpecificValues.howMuchHaveYouPaidPageEnterAmountPaidWithDateAndExplanation = {
+      paidAmount: 50,
+      date: '2018-01-01',
+      explanation: 'My explanation...'
+    }
+    // as defendant
+    defendantResponseSteps.disputeClaimAsAlreadyPaid(testData, claimantResponseTestData, false)
+    I.see(testData.claimRef)
+    I.see(`You told us you’ve paid the £${Number(50).toLocaleString()} you believe you owe. We’ve sent ${testData.claimantName} this response.`)
+    // check dashboard
+    I.click('My account')
+    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+    // check status
+    I.click(testData.claimRef)
+    I.see(testData.claimRef)
+    I.see('Claim status')
+    I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
+    // check dashboard
+    I.click('My account')
+    I.see(testData.claimRef)
+    I.see(`Respond to the defendant.`) // TODO IS THIS WRONG? should be defendants name
+    // check status
+    I.click(testData.claimRef)
+    I.see(testData.claimRef)
+    I.see('Claim status')
+    I.see('Respond to the defendant')
+    I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
+    I.click('Respond')
+
+    I.click('Sign out')
+  })
