@@ -129,7 +129,7 @@ module "citizen-frontend" {
     FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
-    FEEDBACK_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPFB/"
+    FEEDBACK_SURVEY_URL = "https://www.smartsurvey.co.uk/s/CMC_Feedback/"
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
