@@ -72,7 +72,7 @@ const testData = [
       response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
       responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
-    claimantAssertions: ['The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
+    claimantAssertions: ['The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
     defendantAssertions: [
       'You haven’t responded to the claim.',
       fullAdmissionClaim.claim.claimants[0].name + ' can now ask for a County Court Judgment (CCJ) against you.',
