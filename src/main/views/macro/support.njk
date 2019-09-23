@@ -2,16 +2,7 @@
 
 {% macro _webChatWidget(label = 'Web chat') %}
       <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t(label)}}</h2>
-      <style>
-        #ctsc-web-chat p {
-          margin-bottom:0px;
-        }
-        #ctsc-web-chat>p:first-child::after{
-          content: ' (opens in new window)';
-          font-size:16px;
-        }
-      </style>
-      <div id="ctsc-web-chat"></div>
+      <div id="ctsc-web-chat" class="web-chat"></div>
 {% endmacro%}
 
 {% macro _emailWidget(email = supportEmailAddress) %}
