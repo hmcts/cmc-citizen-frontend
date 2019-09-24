@@ -17,15 +17,9 @@
 
           <table class="table-form form-group">
             <caption class="visuallyhidden"></caption>
-            <thead>
-            <tr>
-              <th scope="col"></th>
-              <th class="numeric last" scope="col">{{ t('Amount') }}</th>
-            </tr>
-            </thead>
             <tfoot>
             <tr>
-              <th scope="col"></th>
+              <th scope="col"><span class="bold-small">{{ t('Total claim amount') }}</span></th>
               <td class="numeric last"><span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span></td>
             </tr>
             </tfoot>
