@@ -16,7 +16,7 @@
         {{ t('{{ claimantName }} can accept or reject. We’ll email you when they respond.', { claimantName: claim.claimData.claimant.name }) }}
       </p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-defendant.njk" %}
 
       <p>
         {{ internalLink(t('Finished'), DashboardPaths.dashboardPage.uri, 'button') }}
