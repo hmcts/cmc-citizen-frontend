@@ -59,7 +59,7 @@ describe('Defendant response: confirmation page', () => {
           ))
       })
 
-      it('should render page when everything is fine', async () => {
+      it('should render page when yes for mediation and no DQs', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
 
         await request(app)

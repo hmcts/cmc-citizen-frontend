@@ -15,7 +15,7 @@
     <p>{{ t('If they reject your response the court will review the case. You might have to go to a hearing.') }}</p>
     <p>{{ t('We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
   {% endif %}
-{% elif claim.response.directionsQuestionnaire %}
+{% elif claim.response.directionsQuestionnaire and claim.response.directionsQuestionnaire.witness.selfWitness %}
   <p>{{ t('We’ll contact you when {{ claimantName }} responds, to tell you what to do next.', { claimantName: claimantName }) }}</p>
   <p>{{ t('If {{ claimantName }} accepts your response the claim will be ended.', { claimantName: claimantName }) }}</p>
 
