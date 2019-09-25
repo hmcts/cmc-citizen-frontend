@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, errorSummary, radioGroup, submitButton %}
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
 
 {% set heading = 'Does the person or organisation you’re claiming against have a postal address in England or Wales?' %}
 
@@ -29,7 +29,7 @@
           )
         }}
 
-        {{ submitButton() }}
+        {{ saveAndContinueButton() }}
 
       </form>
     </div>
