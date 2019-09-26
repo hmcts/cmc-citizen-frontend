@@ -1,12 +1,12 @@
 .web-chat {
   p {
     margin-bottom: 0;
-  }
 
-  a {
-    &::after {
-      content: ' (opens in new window)';
-      font-size: 14px;
+    a {
+      &::after {
+        content: ' (opens in new window)';
+        font-size: 14px;
+      }
     }
   }
 }
