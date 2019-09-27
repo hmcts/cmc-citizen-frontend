@@ -41,10 +41,10 @@
         {{ t('Make sure you get receipts for any payments.') }}
       </p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-defendant.njk" %}
 
       <p>
-        {{ internalLink(t('Continue'), DashboardPaths.dashboardPage.uri, 'button') }}
+        {{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}
       </p>
 
       {{ supportWidget() }}
