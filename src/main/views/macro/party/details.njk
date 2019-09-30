@@ -2,7 +2,8 @@
 {% from "address.njk" import postcodeLookupAddressFragment, addressFragment, correspondenceAddressFragment %}
 {% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
 
-{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false, postcodeLabel = 'Enter a UK postcode') %}
+{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false,
+  postcodeLabel = 'Enter a UK postcode', phone ) %}
   {% for field in fields %}
     {% if field.readOnly %}
       {% if field.value %}
@@ -31,6 +32,11 @@
   {% if showCorrespondenceAddressSection == true %}
     {{ correspondenceAddressFragment(form) }}
   {% endif %}
+
+  {% if phone is defined %}
+    {{ textInput(form = form, label = t(phone.label), name = phone.name, autocomplete = phone.autocomplete, hint = phone  .hint) }}
+  {% endif %}
+
 {% endmacro %}
 
 {% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}) %}
