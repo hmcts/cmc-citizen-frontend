@@ -48,9 +48,10 @@ export namespace DirectionsQuestionnaire {
         })),
       expertRequest: (directionsQuestionnaire.expertEvidence.expertEvidence &&
         directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
+          expertRequired: directionsQuestionnaire.expertRequired ? YesNoOption.YES : YesNoOption.NO,
           expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
           reasonForExpertAdvice: directionsQuestionnaire.whyExpertIsNeeded.explanation
-        } : undefined
+        } : { expertRequired: directionsQuestionnaire.expertRequired ? YesNoOption.YES : YesNoOption.NO }
     }
   }
 
