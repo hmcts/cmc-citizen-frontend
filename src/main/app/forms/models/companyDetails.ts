@@ -7,14 +7,14 @@ export class ValidationErrors {
 }
 
 export class ValidationConstraints {
-  static readonly CONTACT_PERSON_MAX_LENGTH: number = 35
+  static readonly CONTACT_PERSON_MAX_LENGTH: number = 30
 }
 
 export class CompanyDetails extends PartyDetails {
 
   @MaxLength(ValidationConstraints.CONTACT_PERSON_MAX_LENGTH, {
     message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG,
-    groups: ['claimant', 'response']
+    groups: ['claimant', 'defendant', 'response']
   })
   contactPerson?: string
 
