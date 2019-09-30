@@ -1,5 +1,11 @@
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+import { request } from './clients/base/request'
+import { UserEmails } from 'integration-test/data/test-data'
+
+const baseURL: string = process.env.CLAIM_STORE_URL
+
+const userEmails: UserEmails = new UserEmails()
 
 class ClaimStoreHelper extends codecept_helper {
 
@@ -15,25 +21,21 @@ class ClaimStoreHelper extends codecept_helper {
     return isClaimOpen
   }
 
-  async createClaim (claimData: ClaimData, submitterEmail: string): Promise<string> {
-    const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
-    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, ['admissions','directionsQuestionnaire'])
-    await this.waitForOpenClaim(referenceNumber)
-    return referenceNumber
-  }
-
-  async createClaimWithFeatures (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions','directionsQuestionnaire']): Promise<string> {
+  async createClaim (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions','directionsQuestionnaire'], role: string): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
     await this.waitForOpenClaim(referenceNumber)
+    await this.linkDefendant(referenceNumber)
+
     return referenceNumber
   }
 
-  async createClaimWithFeaturesAndRole (claimData: ClaimData, submitterEmail: string, role: string, features: string[] = ['admissions','directionsQuestionnaire']): Promise<string> {
-    const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
-    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
-    await this.waitForOpenClaim(referenceNumber)
-    return referenceNumber
+  private async linkDefendant (referenceNumber) {
+    let password = process.env.SMOKE_TEST_USER_PASSWORD
+    let defendant = userEmails.getDefendant()
+    let uri = `${baseURL}/testing-support/claims/${referenceNumber}/defendant/${defendant}/${password}`
+
+    request.put(uri, {})
   }
 
   async linkDefendantToClaim (claimRef: string, claimantEmail: string, defendantEmail: string): Promise<void> {

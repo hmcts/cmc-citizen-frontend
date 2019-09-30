@@ -5,8 +5,11 @@ import { request } from 'integration-test/helpers/clients/base/request'
 import { RequestResponse } from 'request'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { ClaimStoreClient } from 'integration-test/helpers/clients/claimStoreClient'
+import { UserEmails } from 'integration-test/data/test-data'
 
 const citizenAppURL = process.env.CITIZEN_APP_URL
+
+const userEmails: UserEmails = new UserEmails()
 
 class Client {
   static checkHealth (appURL: string): Promise<RequestResponse> {
@@ -101,8 +104,8 @@ module.exports = async function (done: () => void) {
     if (process.env.IDAM_URL) {
       if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
         await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
-        await createSmokeTestsUserIfDoesntExist('civilmoneyclaims+citizen-claimant@gmail.com', 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
-        await createSmokeTestsUserIfDoesntExist('civilmoneyclaims+citizen-defendant@gmail.com', 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
+        await createSmokeTestsUserIfDoesntExist(userEmails.getDefendant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
+        await createSmokeTestsUserIfDoesntExist(userEmails.getClaimant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
       }
     }
   } catch (error) {

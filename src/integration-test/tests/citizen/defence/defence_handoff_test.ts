@@ -18,7 +18,7 @@ Scenario('I can see send your response by email page when I reject all of the cl
   const defendant: Party = claimData.defendants[0]
   const claimant: Party = claimData.claimants[0]
 
-  const claimRef: string = await I.createClaimWithFeatures(claimData, claimantEmail, [])
+  const claimRef: string = await I.createClaim(claimData, claimantEmail, [])
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM)
@@ -32,7 +32,7 @@ Scenario('I can see send your response by email page when I reject all of the cl
   const defendant: Party = claimData.defendants[0]
   const claimant: Party = claimData.claimants[0]
 
-  const claimRef: string = await I.createClaimWithFeatures(claimData, claimantEmail, [])
+  const claimRef: string = await I.createClaim(claimData, claimantEmail, [])
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant,

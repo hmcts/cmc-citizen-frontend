@@ -140,7 +140,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
       postcode: 'SW2 1AN'
     },
     mobilePhone: '07700000002',
-    email: hasEmailAddress ? 'civilmoneyclaims+citizen-defendant@gmail.com' : undefined
+    email: hasEmailAddress ? new UserEmails().getDefendant() : undefined
   }
 
   switch (type) {
@@ -208,4 +208,26 @@ export const defence: PartialDefence = {
 export const offer: Offer = {
   offerText: 'My Offer is that I can only afford, x, y, z and so will only pay £X amount',
   completionDate: '2020-01-01'
+}
+
+export class UserEmails {
+
+  getUser (type: string): string {
+    let subdomain = process.env.CITIZEN_APP_URL
+      .replace('https://', '')
+      .replace('http://', '')
+      .split('/')[0]
+      .split('.')[0]
+
+    return `civilmoneyclaims+${type}-${subdomain}@gmail.com`
+  }
+
+  getClaimant (): string {
+    return this.getUser('claimant')
+  }
+
+  getDefendant (): string {
+    return this.getUser('defendant')
+  }
+
 }
