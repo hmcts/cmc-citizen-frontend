@@ -98,18 +98,19 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
   }
 }
 
-module.exports = async function (done: () => void) {
-  try {
-    await waitTillHealthy(citizenAppURL)
-    if (process.env.IDAM_URL) {
-      if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-        await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
-        await createSmokeTestsUserIfDoesntExist(userEmails.getDefendant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
-        await createSmokeTestsUserIfDoesntExist(userEmails.getClaimant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
+module.exports = {
+  bootstrapAll: function (done) {
+    try {
+      waitTillHealthy(citizenAppURL)
+      if (process.env.IDAM_URL) {
+        if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
+          createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
+          createSmokeTestsUserIfDoesntExist(userEmails.getDefendant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
+          createSmokeTestsUserIfDoesntExist(userEmails.getClaimant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
+        }
       }
+    } catch (error) {
+      handleError(error)
     }
-  } catch (error) {
-    handleError(error)
   }
-  done()
 }
