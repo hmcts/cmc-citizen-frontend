@@ -45,6 +45,24 @@ export class IdamClient {
   }
 
   /**
+   * Deletes user with the supplied username
+   *
+   * @returns {Promise<void>}
+   */
+  static deleteUser (username: string): Promise<void> {
+    const options = {
+      method: 'DELETE',
+      uri: `${baseURL}/testing-support/test-data/`,
+      body: {
+        userNames: username
+      }
+    }
+    return request(options).then(function () {
+      return Promise.resolve()
+    })
+  }
+
+  /**
    * Deletes users with that begin with this regex: '/(civilmoneyclaims.citizen)+/g'
    *
    * @returns {Promise<void>}
