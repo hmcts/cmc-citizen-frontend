@@ -31,6 +31,11 @@ export class PartyDetails {
   @ValidateNested({ groups: ['claimant', 'defendant', 'response'] })
   correspondenceAddress?: CorrespondenceAddress
 
+  firstName?: string
+
+  lastName?: string
+
+  title?: string
   constructor (name?: string,
                address: Address = new Address(),
                hasCorrespondenceAddress: boolean = false,
