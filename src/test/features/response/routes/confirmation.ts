@@ -66,8 +66,8 @@ describe('Defendant response: confirmation page', () => {
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'We’ve emailed John Smith your response, explaining why you reject the claim.',
-            'We’ll ask John Smith if they want to try mediation. If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.'))
+            'If John Smith rejects your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
+            'If they reject mediation the court will review the case. You might have to go to a hearing.'))
       })
 
       it('should render page when yes for mediation and DQs enabled', async () => {
@@ -79,7 +79,7 @@ describe('Defendant response: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.',
-            'If John Smith reject your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
+            'If John Smith rejects your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
             'If they reject mediation the court will review the case. You might have to go to a hearing.'))
       })
 
@@ -102,7 +102,10 @@ describe('Defendant response: confirmation page', () => {
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'We’ll ask John Smith if they want to try mediation. If they agree, we’ll contact you with a date for an appointment. If not, we’ll tell you what to do.'))
+            'We’ll contact you when John Smith responds, to tell you what to do next.',
+            'If John Smith accepts your response the claim will be ended.',
+            'If John Smith rejects your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
+            'If they reject mediation the court will review the case. You might have to go to a hearing.'))
       })
 
       it('should render page when no for mediation and DQs disabled', async () => {
@@ -112,10 +115,8 @@ describe('Defendant response: confirmation page', () => {
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
-            'You’ll have to go to a hearing.',
-            'to tell us more about the claim.',
-            'Your defence will be cancelled if you don’t complete and return the form by 4pm on',
-            'We’ll contact you when we set a hearing date to tell you how to prepare.'))
+            'We’ll contact you when John Smith responds, to tell you what to do next.',
+            'If John Smith accepts your response the claim will be ended.'))
       })
 
       it('when full defence already paid with mediation should render page when everything is fine', async () => {
