@@ -1,7 +1,7 @@
 
 language: node_js
 node_js:
-- "10.15.20"
+- "10.15.2"
 cache: yarn
 
 stages:
