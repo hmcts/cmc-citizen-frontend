@@ -217,7 +217,8 @@ const legacyClaimDetails = [
         ...baseResponseData,
         ...baseDefenceData,
         freeMediation: FreeMediationOption.YES
-      }
+      },
+      ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
       'The defendant’s response',
@@ -505,7 +506,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
     claim: fullDefenceClaim,
     claimOverride: {
-      directionsQuestionnaireDeadline: MomentFactory.currentDate().add(1, 'days'),
+      ...directionsQuestionnaireDeadline,
       features: ['admissions', 'directionsQuestionnaire'],
       response: {
         ...baseResponseData,
@@ -531,6 +532,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant dispute all of the claim and accepts mediation',
     claim: fullDefenceClaim,
     claimOverride: {
+      ...directionsQuestionnaireDeadline,
       response: {
         ...baseResponseData,
         ...baseDefenceData,

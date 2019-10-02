@@ -68,7 +68,7 @@ data "azurerm_key_vault_secret" "staff_email" {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
@@ -129,7 +129,7 @@ module "citizen-frontend" {
     FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
-    FEEDBACK_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPFB/"
+    FEEDBACK_SURVEY_URL = "https://www.smartsurvey.co.uk/s/CMC_Feedback/"
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
@@ -137,7 +137,6 @@ module "citizen-frontend" {
     // Enabled everywhere except prod
     FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
-    FEATURE_PAID_IN_FULL = "${var.feature_paid_in_full}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"

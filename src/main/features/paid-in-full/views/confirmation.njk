@@ -12,9 +12,9 @@
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t('The claim is now settled') }}</h1>
       </div>
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
-      <p>{{ internalLink(t('Continue'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
+      <p>{{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
 
       {{ supportWidget() }}
     </div>
