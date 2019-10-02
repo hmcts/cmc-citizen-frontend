@@ -2,8 +2,8 @@ require('ts-node/register')
 require('tsconfig-paths/register')
 
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
-const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap')
-const tearDownFn = require('./src/integration-test/bootstrap/teardown')
+const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap').bootstrapAll
+const tearDownFn = require('./src/integration-test/bootstrap/teardown').teardownAll
 
 exports.config = {
   name: 'citizen-integration-tests',
