@@ -52,7 +52,7 @@ describe('Defendant response task list builder', () => {
       const taskListItemText: string = 'Decide if you need more time to respond'
 
       it('should be available when defendant tries to respond before due day', async () => {
-        claimStoreServiceMock.resolvePostponedDeadline('2020-01-01')
+        claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
         claim.responseDeadline = MomentFactory.currentDate().add(1, 'days')
         const taskList: TaskList = await TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
@@ -60,7 +60,7 @@ describe('Defendant response task list builder', () => {
       })
 
       it('should be available when defendant tries to respond on due day before 4 PM', async () => {
-        claimStoreServiceMock.resolvePostponedDeadline('2020-01-01')
+        claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
         claim.responseDeadline = MomentFactory.currentDate()
         const now: moment.Moment = MomentFactory.currentDateTime().hour(15)
@@ -78,7 +78,7 @@ describe('Defendant response task list builder', () => {
       })
 
       it('should not be available when defendant tries to respond after due day', async () => {
-        claimStoreServiceMock.resolvePostponedDeadline('2019-01-01')
+        claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().subtract(14, 'days').toString())
 
         claim.responseDeadline = MomentFactory.currentDate().subtract(40, 'days')
         const taskList: TaskList = await TaskListBuilder.buildBeforeYouStartSection(responseDraft, claim, MomentFactory.currentDateTime())
@@ -859,7 +859,7 @@ describe('Defendant response task list builder', () => {
     })
 
     it('Should return "Free telephone mediation" when not completed for fully reject', async () => {
-      claimStoreServiceMock.resolvePostponedDeadline('2020-01-01')
+      claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
       isResponseRejectedFullyWithDisputeStub.returns(true)
 
       const tasks: TaskListItem[] = await TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
@@ -867,7 +867,7 @@ describe('Defendant response task list builder', () => {
     })
 
     it('Should not return "Free telephone mediation" when not fully reject', async () => {
-      claimStoreServiceMock.resolvePostponedDeadline('2020-01-01')
+      claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
       isResponseRejectedFullyWithDisputeStub.returns(false)
 
       const tasks: TaskListItem[] = await TaskListBuilder.buildRemainingTasks(new ResponseDraft(), claim, new MediationDraft(), new DirectionsQuestionnaireDraft())
