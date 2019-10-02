@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, radioGroup, errorSummary, submitButton %}
+{% from "form.njk" import csrfProtection, radioGroup, errorSummary, saveAndContinueButton %}
 
 {% set heading = 'Do you need help paying your court fees?' %}
 {% set additionalInformation = t('If you’re on a low income or get certain benefits you could get financial help with court fees.') %}
@@ -31,7 +31,7 @@
           )
         }}
 
-        {{ submitButton() }}
+        {{ saveAndContinueButton() }}
 
       </form>
     </div>

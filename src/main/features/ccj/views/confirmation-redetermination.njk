@@ -35,9 +35,14 @@
 
       <p>{{ t('We’ll contact both you and {{ otherName }} to tell you what to do next.', { otherName: otherName }) }}</p>
 
-      {% include "includes/service_survey_link.njk" %}
 
-      <p>{{ internalLink('Continue', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
+      {% if reDeterminationByClaimant %}
+        {% include "includes/service-survey-link-claimant.njk" %}
+      {% else %}
+        {% include "includes/service-survey-link-defendant.njk" %}
+      {% endif %}
+
+      <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
 
       {{ supportWidget() }}
     </div>

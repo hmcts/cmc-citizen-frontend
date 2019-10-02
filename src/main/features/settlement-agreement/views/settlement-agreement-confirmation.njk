@@ -49,8 +49,8 @@
         ' if you need their payment details.') | safe }}</p>
       <p>{{ t('Make sure you get receipts for any payments.') }}</p>
     {% endif %}
-    {% include "includes/service_survey_link.njk" %}
-    {{ internalLink('Continue', DashboardPaths.dashboardPage.uri, 'button') }}
+    {% include "includes/service-survey-link-defendant.njk" %}
+    {{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') }}
     {{ supportWidget() }}
 </div>
 {% endblock %}
