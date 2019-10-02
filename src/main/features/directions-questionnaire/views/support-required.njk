@@ -9,27 +9,29 @@
       <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Support Required" novalidate>
         {{ csrfProtection(csrf) }}
         {% set error = form.hasErrors() %}
-        <fieldset id="supportRequired" class="{% if error %} form-group-error {% endif %}">
+        <fieldset id="supportRequired">
           <legend>
             <span class="visuallyhidden">
               {{ t('Select any support you’d require for a court hearing (optional)') }}
             </span>
           </legend>
-          {% call expandableCheckboxOption(form = form, name = 'languageSelected', value = 'true', label = "Language Interpreter", checked = form.valueFor('languageSelected'), headerEnabled = false) %}
-            {{ textInput(label = 'What language needs to be interpreted?', hint = 'You’ll have to arrange and pay for interpreters except for Welsh.', form = form, name = 'languageInterpreted', inputClass = '') }}
-          {% endcall %}
-          {% call expandableCheckboxOption(form = form, name = 'signLanguageSelected', value = 'true', label = t('Sign Language Interpreter'), checked = form.valueFor('signLanguageSelected'), headerEnabled = false) %}
-            {{ textInput(label = 'Enter the sign language you need', form = form, name = 'signLanguageInterpreted', inputClass = '') }}
-          {% endcall %}
-          {{ option(form = form, name = 'hearingLoopSelected', value = 'true', type = 'checkbox', checked = form.valueFor('hearingLoopSelected'), label = t('Hearing Loop')) }}
-          {{ option(form = form, name = 'disabledAccessSelected', value = 'true', type = 'checkbox', checked = form.valueFor('disabledAccessSelected'), label = t('Disabled Access')) }}
-          {% call expandableCheckboxOption(form = form, name = 'otherSupportSelected', value = 'true', label = 'Other support', checked = form.valueFor('otherSupportSelected'), headerEnabled = false) %}
-            {{ textArea(label = 'Explain the other support you need at your hearing', form = form, name = 'otherSupport') }}
-          {% endcall %}
+          <div class="form-group">
+            {{ option(form = form, name = 'disabledAccessSelected', value = 'true', type = 'checkbox', checked = form.valueFor('disabledAccessSelected'), label = t('Disabled access')) }}
+            {{ option(form = form, name = 'hearingLoopSelected', value = 'true', type = 'checkbox', checked = form.valueFor('hearingLoopSelected'), label = t('Hearing loop')) }}
+
+              {% call expandableCheckboxOption(form = form, name = 'signLanguageSelected', value = 'true', label = t('Sign language interpreter'), checked = form.valueFor('signLanguageSelected'), headerEnabled = false) %}
+                {{ textInput(label = 'Enter the sign language you need', form = form, name = 'signLanguageInterpreted', inputClass = 'form-group-related') }}
+              {% endcall %}
+            {% call expandableCheckboxOption(form = form, name = 'languageSelected', value = 'true', label = "Language interpreter", checked = form.valueFor('languageSelected'), headerEnabled = false) %}
+              {{ textInput(label = 'What language needs to be interpreted?', hint = 'You’ll have to arrange and pay for interpreters except for Welsh.', form = form, name = 'languageInterpreted', inputClass = '') }}
+            {% endcall %}
+            {% call expandableCheckboxOption(form = form, name = 'otherSupportSelected', value = 'true', label = 'Other support', checked = form.valueFor('otherSupportSelected'), headerEnabled = false) %}
+              {{ textArea(label = 'The court can’t guarantee extra support, but it will consider other needs relating to physical or mental health impairments', form = form, name = 'otherSupport') }}
+            {% endcall %}
+          </div>
         </fieldset>
         {{ saveAndContinueButton() }}
       </form>
     </div>
   </div>
 {% endblock %}
-

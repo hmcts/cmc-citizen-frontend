@@ -16,7 +16,7 @@
           <p>{{ t('Include specific details about the case which you think a judge couldn’t resolve without the expert’s knowledge.') }}</p>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
-          {{ textArea(name = 'explanation', form = form) }}
+          {{ textArea(name = 'explanation', form = form, rows = 10, inputClass = 'full-width') }}
           {{ saveAndContinueButton() }}
 
         </fieldset>

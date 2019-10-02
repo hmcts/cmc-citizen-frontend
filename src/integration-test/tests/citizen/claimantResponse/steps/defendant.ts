@@ -5,22 +5,26 @@ import { DefendantSteps } from 'integration-test/tests/citizen/home/steps/defend
 import { createClaimant, createDefendant } from 'integration-test/data/test-data'
 import { DefendantTimelineEventsPage } from 'integration-test/tests/citizen/defence/pages/defendant-timeline-events'
 import { DefendantEvidencePage } from 'integration-test/tests/citizen/defence/pages/defendant-evidence'
-import { DefendantFreeMediationPage } from 'integration-test/tests/citizen/defence/pages/defendant-free-mediation'
 import { DefendantHowMuchHaveYouPaidPage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-have-you-paid'
 import { DefendantYouHavePaidLessPage } from 'integration-test/tests/citizen/defence/pages/defendant-you-have-paid-less'
 import { DefendantWhyDoYouDisagreePage } from 'integration-test/tests/citizen/defence/pages/defendant-why-do-you-disagree'
 import { ClaimantResponseTestData } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
+import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
+import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 
 const I: I = actor()
 const defendantSteps: DefendantSteps = new DefendantSteps()
 const defenceSteps: DefenceSteps = new DefenceSteps()
 const timelineEventsPage: DefendantTimelineEventsPage = new DefendantTimelineEventsPage()
 const evidencePage: DefendantEvidencePage = new DefendantEvidencePage()
-const freeMediationPage: DefendantFreeMediationPage = new DefendantFreeMediationPage()
 const howMuchHaveYouPaidPage: DefendantHowMuchHaveYouPaidPage = new DefendantHowMuchHaveYouPaidPage()
 const youHavePaidLessPage: DefendantYouHavePaidLessPage = new DefendantYouHavePaidLessPage()
 const whyYouDisagreePage: DefendantWhyDoYouDisagreePage = new DefendantWhyDoYouDisagreePage()
+const mediationSteps: MediationSteps = new MediationSteps()
+const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
+const defendantTaskListPage: DefendantTaskListPage = new DefendantTaskListPage()
 const claimDetailsHeading: string = 'Claim details'
 
 export class DefendantResponseSteps {
@@ -47,10 +51,12 @@ export class DefendantResponseSteps {
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
       claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
     )
-    defendantSteps.selectTaskFreeMediation()
-    freeMediationPage.chooseNo()
+    defendantTaskListPage.selectTaskFreeMediation()
+    mediationSteps.rejectMediation()
+    defendantTaskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
-    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
+    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType, testData.defenceType)
     I.see('You’ve submitted your response')
     I.see(`We’ve emailed ${createClaimant(PartyType.INDIVIDUAL).name} your response, explaining why you reject the claim.`)
   }
@@ -86,11 +92,13 @@ export class DefendantResponseSteps {
         claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.description,
         claimantResponseTestData.pageSpecificValues.evidencePageEnterEvidenceRow.comment
       )
-      defendantSteps.selectTaskFreeMediation()
-      freeMediationPage.chooseNo()
     }
+    defendantTaskListPage.selectTaskFreeMediation()
+    mediationSteps.rejectMediation()
+    defendantTaskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
-    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType)
+    defenceSteps.checkAndSendAndSubmit(testData.defendantPartyType, testData.defenceType)
     I.see('You’ve submitted your response')
   }
 

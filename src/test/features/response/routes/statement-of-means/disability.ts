@@ -53,6 +53,7 @@ describe('Statement of means', () => {
         it('should return successful response when claim is retrieved', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(disabilityPage)
@@ -98,7 +99,8 @@ describe('Statement of means', () => {
         it('should return error page when unable to save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(disabilityPage)
@@ -111,7 +113,8 @@ describe('Statement of means', () => {
           it('should redirect to severe disability page when Yes is selected and defendant is severely disabled', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(disabilityPage)
@@ -125,7 +128,8 @@ describe('Statement of means', () => {
           it('should redirect to residence page with No', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:full-admission')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(disabilityPage)
@@ -140,6 +144,7 @@ describe('Statement of means', () => {
         it('should trigger validation when all is fine and form is invalid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(disabilityPage)

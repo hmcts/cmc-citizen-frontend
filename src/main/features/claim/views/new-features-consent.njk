@@ -1,13 +1,16 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioGroup, submitButton %}
 
-{% set heading = 'Try new features' %}
+{% set heading = 'Volunteer to try new features' %}
 
 {% block content %}
 <div class="grid-row">
   <div class="column-two-thirds">
-    <p>{{ t('We’re continuously improving this service to reduce the need for paper forms.') }}</p>
-    <p>{{ t('You can choose to try new online features as we launch them. We’ll tell you when new features apply to your claim.') }}</p>
+    <p>{{ t('We‘re continuously improving this service and trialling new features to reduce the need for paper forms.') }}</p>
+    <h3 class="heading-small form-group-related">{{ t('If you volunteer') }}</h3>
+    <p>{{ t('We‘ll tell you if we select your claim - we won‘t select all claims.') }}</p>
+    <h3 class="heading-small form-group-related">{{ t('If your claim is selected') }}</h3>
+    <p>{{ t('You‘ll be able to try new features we‘ve already launched. We may also select your claim to trial new features we launch in future.') }}</p>
     <form method="POST" novalidate class="analytics-submit-event-trigger" data-event-label-from="consentResponse" data-event-action="New features consent">
       {{ csrfProtection(csrf) }}
 
@@ -20,13 +23,13 @@
           options = [
             {
               bold: false,
-              label: 'I’ll try new online features',
+              label: 'I’ll volunteer to try new features',
               value: YesNoOption.YES.option,
               checked: (form.valueFor('consentResponse') === YesNoOption.YES)
             },
             {
               bold: false,
-              label: 'I’ll use older paper forms',
+              label: 'I don’t want to volunteer to try new features',
               value: YesNoOption.NO.option,
               checked: (form.valueFor('consentResponse').value === YesNoOption.NO)
             }

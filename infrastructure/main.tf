@@ -68,7 +68,7 @@ data "azurerm_key_vault_secret" "staff_email" {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
@@ -103,6 +103,7 @@ module "citizen-frontend" {
     GA_TRACKING_ID = "${var.ga_tracking_id}"
     POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.os_postcode_lookup_api_key.value}"
     COOKIE_ENCRYPTION_KEY = "${data.azurerm_key_vault_secret.cookie_encryption_key.value}"
+    HTTP_TIMEOUT = "${var.http_timeout}"
 
     // IDAM
     IDAM_API_URL = "${var.idam_api_url}"
@@ -128,7 +129,7 @@ module "citizen-frontend" {
     FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
-    FEEDBACK_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPFB/"
+    FEEDBACK_SURVEY_URL = "https://www.smartsurvey.co.uk/s/CMC_Feedback/"
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
@@ -136,11 +137,11 @@ module "citizen-frontend" {
     // Enabled everywhere except prod
     FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
-    FEATURE_PAID_IN_FULL = "${var.feature_paid_in_full}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
     FEATURE_MEDIATION = "${var.feature_mediation}"
+    FEATURE_MEDIATION_PILOT = "${var.feature_mediation_pilot}"
     FEATURE_DIRECTIONS_QUESTIONNAIRE = "${var.feature_directions_questionnaire}"
     FEATURE_NEW_DASHBOARD_STATUS = "${var.feature_new_dashboard_status}"
 

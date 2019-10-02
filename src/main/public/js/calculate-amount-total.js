@@ -1,7 +1,7 @@
 $(document).ready(function () {
   numeral.locale('en-gb')
 
-  $('input.calculate').click(function () {
+  const updateTotal = function () {
     var total = $('input.claim-amount-column-2')
       .map(toNumber)
       .get()
@@ -9,8 +9,10 @@ $(document).ready(function () {
 
     $('#totalSum').text(numeral(total).format('$0,0.00'))
 
-    return false
-  })
+    return true
+  }
+
+  $('input.claim-amount-column-2').keyup(updateTotal)
 
   function toNumber (index, inputElement) {
     var parsed = parseFloat($(inputElement).val())
@@ -24,4 +26,6 @@ $(document).ready(function () {
   function sum (accumulator, currentValue) {
     return accumulator + currentValue
   }
+
+  updateTotal();
 })

@@ -3,12 +3,17 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: '#mediationYes',
+  disagree: '#mediationNo'
 }
 
 export class HowMediationWorksPage {
 
   chooseContinue (): void {
-    I.click(buttons.submit)
+    I.click('Continue')
+  }
+
+  chooseDisagree (): void {
+    I.click(buttons.disagree)
   }
 }

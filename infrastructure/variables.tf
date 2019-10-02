@@ -22,6 +22,11 @@ variable "ga_tracking_id" {
   default = "UA-97111056-1"
 }
 
+variable "http_timeout" {
+  description = "Downstream request timeout in ms"
+  default = "10000"
+}
+
 variable "payments_api_url" {
   default = "http://payment-api-saat.service.core-compute-saat.internal"
 }
@@ -78,6 +83,10 @@ variable "feature_testing_support" {
 }
 
 variable "feature_new_dashboard_status" {
+  default = "false"
+}
+
+variable "feature_mediation_pilot" {
   default = "false"
 }
 

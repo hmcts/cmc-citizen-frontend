@@ -20,8 +20,12 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { StatementOfMeansFeature } from 'response/helpers/statementOfMeansFeature'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
-import { FeatureToggles } from 'utils/featureToggles'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { FeatureToggles } from 'utils/featureToggles'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -29,6 +33,21 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   const claim: Claim = res.locals.claim
   const draft: Draft<ResponseDraft> = res.locals.responseDraft
   const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+  const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
+  const dqsEnabled: boolean = (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)
+  let datesUnavailable: string[]
+  if (dqsEnabled) {
+    datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
+  }
+  const statementOfTruthType = SignatureType.RESPONSE
+  if (dqsEnabled) {
+    if (form.model.type === SignatureType.QUALIFIED) {
+      form.model.type = SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED
+    } else {
+      form.model.type = SignatureType.DIRECTION_QUESTIONNAIRE
+    }
+  }
+  const mediationPilot: boolean = ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'mediationPilot')
 
   res.render(Paths.checkAndSendPage.associatedView, {
     claim: claim,
@@ -37,9 +56,54 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     signatureType: signatureTypeFor(claim, draft),
     statementOfMeansIsApplicable: StatementOfMeansFeature.isApplicableFor(claim, draft.document),
     admissionsApplicable: ClaimFeatureToggles.isFeatureEnabledOnClaim(claim),
+    dqsEnabled: dqsEnabled,
+    mediationDraft: mediationDraft.document,
+    contactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft.document, draft.document),
+    contactNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft.document, draft.document),
+    directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
+    datesUnavailable: datesUnavailable,
+    statementOfTruthType: statementOfTruthType,
+    mediationPilot: mediationPilot,
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
-    mediationDraft: mediationDraft.document
+    timeline: getTimeline(draft),
+    evidence: getEvidence(draft)
   })
+}
+
+function rejectingFullAmount (draft: Draft<ResponseDraft>): boolean {
+  return draft.document.response.type === ResponseType.DEFENCE
+    || draft.document.response.type === ResponseType.PART_ADMISSION
+}
+
+function getDisagreementRoot (draft: Draft<ResponseDraft>):
+    { timeline?: DefendantTimeline, evidence?: DefendantEvidence } {
+  if (draft.document.isResponseRejected()) {
+    return draft.document
+  } else {
+    return draft.document.partialAdmission
+  }
+}
+
+function getTimeline (draft: Draft<ResponseDraft>): DefendantTimeline {
+  if (rejectingFullAmount(draft)) {
+    const timeline = getDisagreementRoot(draft).timeline
+    timeline.removeExcessRows()
+    if (timeline.rows.length > 0 || timeline.comment) {
+      return timeline
+    }
+  }
+  return undefined
+}
+
+function getEvidence (draft: Draft<ResponseDraft>): DefendantEvidence {
+  if (rejectingFullAmount(draft)) {
+    const evidence = getDisagreementRoot(draft).evidence
+    evidence.removeExcessRows()
+    if (evidence.rows.length > 0 || evidence.comment) {
+      return evidence
+    }
+  }
+  return undefined
 }
 
 function defendantIsCounterClaiming (draft: Draft<ResponseDraft>): boolean {
@@ -66,8 +130,10 @@ function signatureTypeFor (claim: Claim, draft: Draft<ResponseDraft>): string {
 function deserializerFunction (value: any): StatementOfTruth | QualifiedStatementOfTruth {
   switch (value.type) {
     case SignatureType.BASIC:
+    case SignatureType.DIRECTION_QUESTIONNAIRE:
       return StatementOfTruth.fromObject(value)
     case SignatureType.QUALIFIED:
+    case SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED:
       return QualifiedStatementOfTruth.fromObject(value)
     default:
       throw new Error(`Unknown statement of truth type: ${value.type}`)
@@ -101,8 +167,10 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+      const directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft> = res.locals.directionsQuestionnaireDraft
       const user: User = res.locals.user
       const form: Form<StatementOfTruth | QualifiedStatementOfTruth> = req.body
+
       if (isStatementOfTruthRequired(draft) && form.hasErrors()) {
         renderView(form, res)
       } else {
@@ -122,15 +190,19 @@ export default express.Router()
         }
 
         const draftService = new DraftService()
-        if (form.model.type === SignatureType.QUALIFIED) {
+        if (form.model.type === SignatureType.QUALIFIED || form.model.type === SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED) {
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await draftService.save(draft, user.bearerToken)
         }
-        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, user)
+        await claimStoreClient.saveResponseForUser(claim, draft, mediationDraft, directionsQuestionnaireDraft, user)
         await draftService.delete(draft.id, user.bearerToken)
 
-        if (FeatureToggles.isEnabled('mediation')) {
+        if (draft.document.response.type !== ResponseType.FULL_ADMISSION && mediationDraft.id) {
           await draftService.delete(mediationDraft.id, user.bearerToken)
+        }
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire') && directionsQuestionnaireDraft.id && (draft.document.response.type === ResponseType.DEFENCE || draft.document.response.type === ResponseType.PART_ADMISSION)) {
+          await draftService.delete(directionsQuestionnaireDraft.id, user.bearerToken)
         }
 
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: claim.externalId }))

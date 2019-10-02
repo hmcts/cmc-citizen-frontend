@@ -11,9 +11,9 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
-  Feature('Claimant Response: Reject').retry(3)
+  Feature('Claimant Response: Reject')
 
-  Scenario('As a claimant I can reject the claim @citizen @admissions',
+  Scenario('As a claimant I can reject the claim @citizen @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -24,12 +24,16 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       I.see(testData.claimRef)
       // check dashboard
       I.click('My account')
-      I.see('You’ve rejected the claim. You need to tell us more about the claim.')
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
-      I.see('You’ve rejected the claim and said you don’t want to use mediation to solve it.')
+      if (process.env.FEATURE_MEDIATION === 'true') {
+        I.see('Wait for the claimant to respond')
+        I.see('You’ve rejected the claim')
+      } else {
+        I.see('You’ve rejected the claim and said you don’t want to use mediation to solve it.')
+      }
       I.click('Sign out')
 
       // as claimant
@@ -38,18 +42,22 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)
-      I.see(`${testData.defendantName} has rejected your claim.`)
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
-      I.see('The defendant has rejected your claim')
-      I.see(`They said they dispute your claim.`)
+      if (process.env.FEATURE_MEDIATION === 'true') {
+        I.see('Decide whether to proceed')
+        I.see('Mrs. Rose Smith has rejected your claim.')
+      } else {
+        I.see('The defendant has rejected your claim')
+        I.see(`They said they dispute your claim.`)
+      }
       I.click('Sign out')
     })
 
   Scenario(
-    'As a claimant I can reject the claim as I have paid less than the amount claimed @citizen @admissions',
+    'As a claimant I can reject the claim as I have paid less than the amount claimed @nightly @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -90,7 +98,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     })
 
   Scenario(
-    'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions',
+    'As a claimant I can reject the claim as I have paid the amount claimed in full including any fees @citizen @admissions', { retries: 3 },
     async (I: I) => {
 
       const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
@@ -103,10 +111,10 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       // as defendant
       defendantResponseSteps.disputeClaimAsAlreadyPaid(testData, claimantResponseTestData, true)
       I.see(testData.claimRef)
-      I.see(`We’ve emailed ${testData.claimantName} your response, explaining why you reject the claim.`)
+      I.see(`You told us you’ve paid £125. We’ve sent ${testData.claimantName} this response`)
       // check dashboard
       I.click('My account')
-      I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
+      I.see('Wait for the claimant to respond')
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
@@ -119,13 +127,13 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
       // check dashboard
       I.click('My account')
       I.see(testData.claimRef)
-      I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+      I.see('Decide whether to proceed')
       // check status
       I.click(testData.claimRef)
       I.see(testData.claimRef)
       I.see('Claim status')
-      I.see('The defendant’s response')
-      I.see(`${testData.defendantName} believes that they’ve paid the claim in full.`)
+      I.see('Decide whether to proceed')
+      I.see(`${testData.defendantName} has rejected your claim.`)
       I.click('Sign out')
     })
 }

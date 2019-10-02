@@ -25,6 +25,7 @@ import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToC
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -76,7 +77,7 @@ export class Feature {
       ResponseGuard.checkResponseDoesNotExist()
     )
     app.all('/case/*/response/summary', OnlyClaimantLinkedToClaimCanDoIt.check(), ResponseGuard.checkResponseExists())
-    app.all(/^\/case\/.*\/response\/(?!claim-details).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
+    app.all(/^\/case\/.*\/response\/(?!claim-details|receipt).*$/, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(/^\/case\/.*\/response\/statement-of-means\/.*/, OptInFeatureToggleGuard.featureEnabledGuard('admissions'))
     app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
@@ -88,9 +89,13 @@ export class Feature {
       },
       initiatePartyFromClaimHandler
     )
-    app.all(/^\/case\/.+\/response\/task-list|check-and-send|incomplete-submission.*$/,
+    app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
         return new MediationDraft().deserialize(value)
+      }))
+    app.all(/^\/case\/.+\/response\/task-list|check-and-send|incomplete-submission.*$/,
+      DraftMiddleware.requestHandler(new DraftService(), 'directionsQuestionnaire', 100, (value: any): DirectionsQuestionnaireDraft => {
+        return new DirectionsQuestionnaireDraft().deserialize(value)
       }))
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

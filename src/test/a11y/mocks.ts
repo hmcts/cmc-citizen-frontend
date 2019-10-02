@@ -15,6 +15,8 @@ import {
 } from 'test/data/entity/responseData'
 import { CountyCourtJudgmentType } from 'claims/models/countyCourtJudgmentType'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
+import * as courtFinderMock from '../http-mocks/court-finder-client'
+import { MomentFactory } from 'shared/momentFactory'
 
 idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder').persist()
 idamServiceMock.resolveRetrieveServiceToken().persist()
@@ -25,6 +27,7 @@ claimStoreMock.resolvePostponedDeadline('2020-01-01').persist()
 claimStoreMock.resolveRetrieveByLetterHolderId('000MC000').persist()
 claimStoreMock.resolveRetrieveClaimByExternalId({
   respondedAt: '2017-08-07T15:27:34.654',
+  claimantRespondedAt: MomentFactory.parse('2017-09-09'),
   response: {
     ...defenceWithDisputeData,
     ...fullAdmissionWithPaymentByInstalmentsData,
@@ -57,10 +60,13 @@ claimStoreMock.resolveRetrieveClaimByExternalId({
 
 claimStoreMock.mockCalculateInterestRate(0).persist()
 claimStoreMock.resolveRetrieveUserRoles('cmc-new-features-consent-given').persist()
+claimStoreMock.mockNextWorkingDay(MomentFactory.parse('2019-01-01')).persist()
 feesMock.resolveCalculateIssueFee().persist()
 feesMock.resolveCalculateHearingFee().persist()
 feesMock.resolveGetIssueFeeRangeGroup().persist()
 feesMock.resolveGetHearingFeeRangeGroup().persist()
+courtFinderMock.resolveFind().persist()
+courtFinderMock.resolveCourtDetails().persist()
 
 const justForwardRequestHandler = {
   requestHandler: (req: express.Request, res: express.Response, next: express.NextFunction): void => {

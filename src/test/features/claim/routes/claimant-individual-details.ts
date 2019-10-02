@@ -114,7 +114,7 @@ describe('claimant as individual details page', () => {
 
       it('should redirect to data of birth page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.claimantIndividualDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

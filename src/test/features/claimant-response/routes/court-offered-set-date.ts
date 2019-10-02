@@ -166,7 +166,7 @@ describe('Claimant response: court offered set date page', () => {
         it('should redirect to task list page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
@@ -178,7 +178,7 @@ describe('Claimant response: court offered set date page', () => {
         it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)

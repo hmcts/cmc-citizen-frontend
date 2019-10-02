@@ -3,25 +3,37 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 
 class ClaimStoreHelper extends codecept_helper {
 
+  async waitForOpenClaim (referenceNumber: string): Promise<boolean> {
+    const maxAttempts: number = 120 // 60 seconds
+    let isClaimOpen: boolean = false
+    let attempts: number = 0
+    do {
+      attempts++
+      isClaimOpen = await ClaimStoreClient.isOpen(referenceNumber)
+      await this.sleep(500)
+    } while (!isClaimOpen && attempts < maxAttempts)
+    return isClaimOpen
+  }
+
   async createClaim (claimData: ClaimData, submitterEmail: string): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
-    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, ['admissions'])
-
+    const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, ['admissions','directionsQuestionnaire'])
+    await this.waitForOpenClaim(referenceNumber)
     return referenceNumber
   }
 
-  async createClaimWithFeatures (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions']): Promise<string> {
+  async createClaimWithFeatures (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions','directionsQuestionnaire']): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
-
+    await this.waitForOpenClaim(referenceNumber)
     return referenceNumber
   }
 
-  async createClaimWithFeaturesAndRole (claimData: ClaimData, submitterEmail: string, role: string, features: string[] = ['admissions']): Promise<string> {
+  async createClaimWithFeaturesAndRole (claimData: ClaimData, submitterEmail: string, role: string, features: string[] = ['admissions','directionsQuestionnaire']): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
+    await this.waitForOpenClaim(referenceNumber)
     await ClaimStoreClient.addRoleToUser(submitter.bearerToken, role)
-
     return referenceNumber
   }
 
@@ -38,7 +50,6 @@ class ClaimStoreHelper extends codecept_helper {
   async respondToClaim (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string): Promise<void> {
     const owner: User = await this.prepareAuthenticatedUser(ownerEmail)
     const claim: Claim = await ClaimStoreClient.retrieveByReferenceNumber(referenceNumber, owner)
-
     const defendant: User = await this.prepareAuthenticatedUser(defendantEmail)
     await ClaimStoreClient.respond(claim.externalId, responseData, defendant)
   }
@@ -46,8 +57,11 @@ class ClaimStoreHelper extends codecept_helper {
   private async prepareAuthenticatedUser (userEmail: string): Promise<User> {
     const jwt: string = await IdamClient.authenticateUser(userEmail)
     const user: User = await IdamClient.retrieveUser(jwt)
-
     return { ...user, bearerToken: jwt }
+  }
+
+  private sleep (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 }
 

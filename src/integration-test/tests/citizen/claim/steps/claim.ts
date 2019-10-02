@@ -57,7 +57,6 @@ export class ClaimSteps {
 
   enterTestDataClaimAmount (): void {
     claimantClaimAmountPage.enterAmount(claimAmount.rows[0].amount, claimAmount.rows[1].amount, claimAmount.rows[2].amount)
-    claimantClaimAmountPage.calculateTotal()
   }
 
   resolveDispute (): void {
@@ -164,7 +163,6 @@ export class ClaimSteps {
 
   enterClaimAmount (amount1: number, amount2: number, amount3): void {
     claimantClaimAmountPage.enterAmount(amount1, amount2, amount3)
-    claimantClaimAmountPage.calculateTotal()
   }
 
   claimantTotalAmountPageRead (): void {

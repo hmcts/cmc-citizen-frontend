@@ -2,6 +2,7 @@
 import * as express from 'express'
 import { Paths } from 'directions-questionnaire/paths'
 import { FormValidator } from 'forms/validation/formValidator'
+import { Paths as ResponsePaths } from 'response/paths'
 import { Form } from 'forms/form'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { Draft } from '@hmcts/draft-store-client'
@@ -9,6 +10,10 @@ import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { Availability, ValidationErrors } from 'directions-questionnaire/forms/models/availability'
 import { LocalDate } from 'forms/models/localDate'
+import { Claim } from 'claims/models/claim'
+import { getUsersRole } from 'directions-questionnaire/helpers/directionsQuestionnaireHelper'
+import { MadeBy } from 'claims/models/madeBy'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
 function renderPage (res: express.Response, form: Form<Availability>) {
   const dates = (form.model && form.model.unavailableDates ? form.model.unavailableDates : [])
@@ -83,7 +88,12 @@ export default express.Router()
         if (req.body.rawData.addDate) {
           renderPage(res, form)
         } else {
-          res.redirect(Paths.supportPage.evaluateUri({ externalId: res.locals.claim.externalId }))
+          const claim: Claim = res.locals.claim
+          if (getUsersRole(claim, user) === MadeBy.DEFENDANT) {
+            res.redirect(ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+          } else {
+            res.redirect(ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+          }
         }
       }
     }))

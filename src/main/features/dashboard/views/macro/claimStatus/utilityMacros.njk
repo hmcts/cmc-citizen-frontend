@@ -6,6 +6,11 @@
   {{ t('(PDF)') }}
 {% endmacro %}
 
+{% macro downloadTheirResponseLink(claim) %}
+  {{ internalLink(t('Download their response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+  {{ t('(PDF)') }}
+{% endmacro %}
+
 {% macro viewAndRespondOffer(claim, text = 'View and respond to the offer') %}
   <p>{{ internalLink(t(text), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-secondary') }}</p>
 {% endmacro %}
