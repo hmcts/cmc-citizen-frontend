@@ -86,7 +86,7 @@ describe('CompanyDetails', () => {
       companyDetails.name = 'companyName'
       companyDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(companyDetails)
-      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1','35'))
+      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1','30'))
     })
 
     describe('when "has correspondence address" flag is set to true', () => {
