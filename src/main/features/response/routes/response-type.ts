@@ -52,6 +52,7 @@ export default express.Router()
             draft.document.fullAdmission = new FullAdmission()
           }
           delete draft.document.partialAdmission
+          delete draft.document.freeMediation
           if (mediationDraft && mediationDraft.id) {
             await new DraftService().delete(mediationDraft.id, user.bearerToken)
           }
@@ -61,6 +62,7 @@ export default express.Router()
           }
           delete draft.document.fullAdmission
           delete draft.document.rejectAllOfClaim
+          delete draft.document.freeMediation
         } else {
           delete draft.document.fullAdmission
           delete draft.document.partialAdmission
