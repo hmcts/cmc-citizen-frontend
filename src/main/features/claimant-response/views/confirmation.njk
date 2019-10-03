@@ -104,9 +104,9 @@
         <p>{{ t('The court will contact you and the defendant within 14 days to arrange a mediation appointment.') }}</p>
       {% endif %}
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
-      <p>{{ internalLink(t('Continue'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
+      <p>{{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
 
       {{ supportWidget() }}
     </div>
