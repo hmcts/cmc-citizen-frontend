@@ -21,6 +21,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { MobilePhone } from 'forms/models/mobilePhone'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -65,7 +66,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<PartyDetails> = req.body
 
-      if (form.hasErrors()) {
+      if (form. hasErrors()) {
         renderView(form, res)
       } else {
         const claim: Claim = res.locals.claim
@@ -75,6 +76,10 @@ export default express.Router()
         const oldPartyDetails: PartyDetails = draft.document.defendantDetails.partyDetails
         draft.document.defendantDetails.partyDetails = form.model
 
+        if (draft.document.defendantDetails.partyDetails.phone !== undefined) {
+          draft.document.defendantDetails.mobilePhone =
+            new MobilePhone(draft.document.defendantDetails.partyDetails.phone)
+        }
         // Cache date of birth so we don't overwrite it
         if (oldPartyDetails && oldPartyDetails.type === PartyType.INDIVIDUAL.value && oldPartyDetails['dateOfBirth']) {
           (draft.document.defendantDetails.partyDetails as IndividualDetails).dateOfBirth =
@@ -102,7 +107,11 @@ export default express.Router()
           case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
-            res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
+            if (claim.claimData.defendant.phone === undefined) {
+              res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
+            } else {
+              res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+            }
             break
           default:
             throw new Error(`Unknown party type: ${draft.document.defendantDetails.partyDetails.type}`)

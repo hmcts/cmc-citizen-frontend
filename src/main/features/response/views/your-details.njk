@@ -52,11 +52,9 @@
 
         {% if claim.claimData.defendant.phone %}
           {%   set defendantPhone =
-            { readOnly: false, name: 'phone', label: 'Phone number', value: claim.claimData.defendant.phone, hint: 'phone' }
+            { readOnly: false, name: 'phone', label: 'Phone number' }
           %}
         {% endif %}
-
-        {{ defendantPhone.value }}
 
         {{
           partyDetailsFragment(
