@@ -46,7 +46,7 @@ describe('Defendant response task list builder', () => {
     claim = new Claim().deserialize(claimStoreServiceMock.sampleClaimObj)
   })
 
-  describe('"Before you start" section', () => {
+  describe('"Consider other options" section', () => {
     describe('"Do you need more time to respond?" task', () => {
       const responseDraft: ResponseDraft = new ResponseDraft().deserialize(defenceWithDisputeDraft)
       const taskListItemText: string = 'Decide if you need more time to respond'
