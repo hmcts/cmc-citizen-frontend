@@ -15,8 +15,12 @@
 <script src="{{ asset_paths['js'] }}/expandable-checkbox-option.js"></script>
 
 {% if development %}
-  <script src="https://localhost:35729/livereload.js"></script>
+<script src="https://localhost:35729/livereload.js"></script>
+<script src="{{ asset_paths['js'] }}/lib/htmlcs/HTMLCS.js"></script>
+<script src="{{ asset_paths['js'] }}/a11y.js"></script>
+{% endif %}
 
-  <script src="{{ asset_paths['js'] }}/lib/htmlcs/HTMLCS.js"></script>
-  <script src="{{ asset_paths['js'] }}/a11y.js"></script>
+{% if featureToggles.webChat %}
+<script src="{{ asset_paths['webchat'] }}/javascript/hmcts-webchat.js"></script>
+<script src="{{ asset_paths['webchat'] }}/javascript/webchart-init.js"></script>
 {% endif %}
