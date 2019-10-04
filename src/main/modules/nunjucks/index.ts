@@ -75,7 +75,6 @@ const packageDotJson = require('../../../../package.json')
 const appAssetPaths = {
   js: '/js',
   js_vendor: '/js/lib',
-  webchat: '/webchat',
   style: '/stylesheets',
   style_vendor: '/stylesheets/lib',
   images: '/img',

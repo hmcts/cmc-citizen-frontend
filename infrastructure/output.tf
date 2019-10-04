@@ -30,10 +30,6 @@ output "feature_fine_print" {
   value = "${var.feature_fine_print}"
 }
 
-output "feature_web_chat" {
-  value = "${var.feature_web_chat}"
-}
-
 output "feature_return_error_to_user" {
   value = "${var.feature_return_error_to_user}"
 }
