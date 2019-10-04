@@ -13,6 +13,7 @@ module.exports = {
           IdamClient.deleteUser(process.env.SMOKE_TEST_CITIZEN_USERNAME)
           IdamClient.deleteUser(userEmails.getDefendant())
           IdamClient.deleteUser(userEmails.getClaimant())
+          IdamClient.deleteUsers()
         }
       }
     } catch (error) {

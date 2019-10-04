@@ -6,7 +6,6 @@ declare namespace CodeceptJS {
     createSolicitorUser: () => Promise[string]
     createClaim: (claimData: ClaimData, submitterEmail: string, features?: string[], role?: string) => Promise[string]
     waitForOpenClaim: (referenceNumber: string) => Promise[boolean]
-    linkDefendantToClaim: (claimRef: string, claimantEmail: string, defendantEmail: string) => void
     respondToClaim: (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string) => void
     retrievePin (letterHolderId: string): () => string
     amOnCitizenAppPage: (path: string) => void

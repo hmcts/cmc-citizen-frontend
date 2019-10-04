@@ -59,6 +59,9 @@ export class IdamClient {
     }
     return request(options).then(function () {
       return Promise.resolve()
+    }).catch(function (err) {
+      // tslint:disable-next-line:no-console
+      console.log('error deleting user: ' + err)
     })
   }
 
@@ -77,6 +80,9 @@ export class IdamClient {
     }
     return request(options).then(function () {
       return Promise.resolve()
+    }).catch(function (err) {
+      // tslint:disable-next-line:no-console
+      console.log('error deleting users: ' + err)
     })
   }
 
@@ -117,41 +123,6 @@ export class IdamClient {
     }
     return request(options).then(function (response) {
       return response.body
-    })
-  }
-
-  /**
-   * Uplift's a users account
-   *
-   * @param {string} email
-   * @param upliftToken the pin user's authorization header
-   * @returns {Promise<string>}
-   */
-  static async upliftUser (email: string, upliftToken: string): Promise<void> {
-    const upliftParams = IdamClient.toUrlParams({
-      userName: email,
-      password: defaultPassword,
-      jwt: upliftToken,
-      clientId: oauth2.client_id,
-      redirectUri: oauth2.redirect_uri
-    })
-    const options = {
-      uri: `${baseURL}/login/uplift?${upliftParams}`,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      simple: false,
-      followRedirect: false,
-      json: false,
-      resolveWithFullResponse: true
-    }
-    return require('request-promise-native').post(options).then(function (response) {
-      return response
-    }).then(function (response) {
-      const code: any = url.parse(response.headers.location, true).query.code
-      return IdamClient.exchangeCode(code).then(function (response) {
-        return response
-      })
     })
   }
 

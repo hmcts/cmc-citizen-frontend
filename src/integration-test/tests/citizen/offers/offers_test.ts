@@ -15,7 +15,6 @@ Scenario('I can as a defendant make an offer, accept offer and counter sign the 
 
   const claimRef: string = await I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
-  I.linkDefendantToClaim(claimRef, claimantEmail, defendantEmail)
   I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
 
   userSteps.login(defendantEmail)
@@ -39,7 +38,6 @@ Scenario('I can make an offer as a defendant to a claimant and have the claimant
 
   const claimRef: string = await I.createClaim(createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL), claimantEmail)
 
-  I.linkDefendantToClaim(claimRef, claimantEmail, defendantEmail)
   I.respondToClaim(claimRef, claimantEmail, createResponseData(PartyType.INDIVIDUAL), defendantEmail)
 
   userSteps.login(defendantEmail)
