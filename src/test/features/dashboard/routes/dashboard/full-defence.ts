@@ -212,8 +212,8 @@ const testData = [
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['We will contact you with a meditation appointment'],
-    defendantAssertions: ['We will contact you with a meditation appointment']
+    claimantAssertions: ['We will contact you to try to arrange a meditation appointment'],
+    defendantAssertions: ['We will contact you to try to arrange a meditation appointment']
   }
 ]
 
