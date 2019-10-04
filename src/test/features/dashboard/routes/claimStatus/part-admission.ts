@@ -88,7 +88,7 @@ const legacyClaimDetails = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
-      'We’ll contact you with a mediation appointment',
+      'We’ll contact you to try to arrange a mediation appointment',
       'You rejected the defendant’s admission of ',
       'You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.',
       'Find out how mediation works'
@@ -96,7 +96,7 @@ const legacyClaimDetails = [
     defendantAssertions: [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you with details of your appointment.'
+      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
     ]
   }
 ]
@@ -149,7 +149,7 @@ const mediationDQEnabledClaimDetails = [
       ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
-      'We’ll contact you with a mediation appointment',
+      'We’ll contact you to try to arrange a mediation appointment',
       'You rejected the defendant’s admission of ',
       'You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.',
       'Find out how mediation works'
@@ -157,7 +157,7 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you with details of your appointment.'
+      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
     ]
   }
 ]
