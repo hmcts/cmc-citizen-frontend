@@ -5,7 +5,7 @@
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s admission.') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you with a mediation appointment') }}
+    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -37,7 +37,7 @@
 {% macro partAdmitRejectedByClaimantDQClaimDetails(claim) %}
   <div class="status-block">
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <h2 class="heading-medium">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+      <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
 
       <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
       <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>
