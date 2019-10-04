@@ -91,10 +91,8 @@
     {% endif %}
 
     {% block content %}{% endblock %}
-    {% block contactForHelp %}
-       {% include "includes/contact-us-for-help.njk" %}
-    {% endblock %}
 
+    {% include "includes/report_problem_link.njk" %}
   </main>
 
   <footer class="group js-footer" id="footer" role="contentinfo">

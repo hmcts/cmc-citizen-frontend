@@ -14,9 +14,6 @@ node_modules/
 
 src/main/public/img/lib/*
 src/main/public/js/lib/**/*.js
-src/main/public/webchat/sass/*.scss
-src/main/public/webchat/javascript/hmcts-*.js
-src/main/public/webchat/css/*.css
 src/main/public/stylesheets/lib/*
 src/main/public/apple-touch-icon.png
 
@@ -32,4 +29,3 @@ coverage-report
 smoke-output/
 functional-output/
 acb.yaml
-/src/main/public/webchat/sass/
