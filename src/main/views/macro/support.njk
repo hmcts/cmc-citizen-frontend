@@ -1,41 +1,20 @@
 {% from "externalLink.njk" import externalLink %}
 
-{% macro _webChatWidget(label = 'Web chat') %}
-      <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t(label)}}</h2>
-      <div id="ctsc-web-chat" class="web-chat"></div>
-{% endmacro%}
-
-{% macro _emailWidget(email = supportEmailAddress) %}
-    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t('Email') }}</h2>
-    <pre><a href="mailto:mailto:{{t(email)}}" target="_blank">{{ t(email)}}</a></pre>
-    <pre>{{ t("We'll get back to you within 10 days.") }}</pre>
-{% endmacro%}
-
-{% macro _phoneWidget(phoneNumber = '0300 123 7050') %}
-    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t('Telephone') }}</h2>
-    <pre>{{ t(phoneNumber) }}</pre>
-    <pre>{{ t("Monday to Friday, 9am to 5pm") }}</pre>
-    {{ _callCharges()}}
-{% endmacro%}
-
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
-    {% if featureToggles.webChat %}
-       {{ _webChatWidget() }}
-    {% endif %}
-    {{ _emailWidget() }}
-    {{ _phoneWidget() }}
-
+    <pre>{{ t("Email: " + supportEmailAddress) }}</pre>
+    <pre>{{ t('Telephone: 0300 123 7050') }}</pre>
+    <pre>{{ t("Hours: 9am to 5pm, Monday to Friday") }}</pre>
+    {{ _callCharges() }}
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
-  {% if featureToggles.webChat %}
-    {{ _webChatWidget() }}
-  {% endif %}
-
-  {{ _emailWidget('ccbc@hmcts.gsi.gov.uk') }}
-  {{ _phoneWidget('0300 123 1057') }}
+  <pre>{{ t('Money Claim Online helpdesk') }}</pre>
+  <pre>{{ t('Email: ccbc@hmcts.gsi.gov.uk') }}</pre>
+  <pre>{{ t('Telephone: 0300 123 1057') }}</pre>
+  <pre>{{ t('Monday to Friday, 8:30am to 5pm') }}</pre>
+  {{ _callCharges() }}
 {% endmacro %}
 
 {% macro _callCharges() %}
@@ -49,19 +28,4 @@
   {{ t('You might be able to get advice about the claim from') }}
   {{ externalLink(t('Citizens Advice'), 'https://www.citizensadvice.org.uk/about-us/contact-us/') }}.
 </p>
-{% endmacro %}
-
-
-{% macro contactUsForHelp() %}
-<details style="margin-top: 35px">
-
-  <summary><span class="summary">{{ t('Contact us for help') }}</span></summary>
-  <div class="panel">
-    {% if featureToggles.webChat %}
-       {{ _webChatWidget() }}
-    {% endif %}
-    {{ _emailWidget() }}
-    {{ _phoneWidget() }}
-  </div>
-</details>
 {% endmacro %}
