@@ -24,7 +24,7 @@
   </ul>
   <h3 class="heading-small">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }},', { claimantName:claimantName, amount: amount | numeral }) }}</h3>
   {% if claim.response.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you to try to arrange an appointment.') }}</p>
     <p>{{ t('If they don’t want to try mediation the court will review the case for the full amount of {{ amount }}', { amount: claim.totalAmountTillToday | numeral }) }}</p>
   {% else %}
     <p>{{ t('The court will review the case for the full amount of {{ fullAmount }}.', { fullAmount: fullAmount }) }}</p>
@@ -50,7 +50,7 @@
 
   <h3 class="heading-small">{{ t('If {{ claimantName }} rejects your offer', { claimantName: claimantName } ) }}</h3>
   {% if claim.response.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you to try to arrange an appointment.') }}</p>
     <p>{{ t('If they don’t want to try mediation the court will review the case for the full amount of {{ amount }}', { amount: claim.totalAmountTillToday | numeral }) }}</p>
   {% else %}
     <p>{{ t('The court will review the case for the full amount of {{ fullAmount }}.', { fullAmount: fullAmount | numeral }) }}</p>
@@ -77,7 +77,7 @@
 
   <h3 class="bold">{{ t('If {{ claimantName }} rejects that you only owe {{ amount }}', { claimantName: claimantName, amount: amount | numeral }) }}</h3>
   {% if claim.response.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you to try to arrange an appointment.') }}</p>
     <p>{{ t('If they don’t want to try mediation the court will review the case for the full amount of {{ amount }}', { amount: fullAmount | numeral }) }}</p>
   {% else %}
     <p>{{ t('The court will review the case for the full amount of {{ fullAmount }}.', { fullAmount: fullAmount | numeral }) }}</p>
@@ -93,7 +93,7 @@
   <p>The claim will be settled.</p>
   <h3 class="bold">{{ t('If {{ claimantName }} rejects your response', { claimantName: claimantName }) }}</h3>
   {% if claim.response.freeMediation === FreeMediationOption.YES %}
-    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.') }}</p>
+    <p>{{ t('We’ll ask if they want to try mediation. If they agree, we’ll contact you to try to arrange an appointment.') }}</p>
     <p>{{ t('If they don’t want to try mediation the court will review the case. You might have to go to a hearing.') }}</p>
     <p>{{ t('We’ll contact you to tell you what to do next.') }}</p>
   {% else %}
