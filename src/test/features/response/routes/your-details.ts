@@ -97,7 +97,7 @@ describe('Defendant user details: your name page', () => {
             .expect(res => expect(res).to.be.successful.withoutText('Last Name'))
         })
 
-        it('should render page without firstName when claim doesn\'t have title', async () => {
+        it('should render page without firstName when claim does not have title', async () => {
           draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 

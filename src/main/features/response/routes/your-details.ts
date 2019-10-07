@@ -72,8 +72,6 @@ export default express.Router()
         }
         renderView(form, res)
       } else {
-        const claim: Claim = res.locals.claim
-        const draft: Draft<ResponseDraft> = res.locals.responseDraft
         const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
         const user: User = res.locals.user
         const oldPartyDetails: PartyDetails = draft.document.defendantDetails.partyDetails
