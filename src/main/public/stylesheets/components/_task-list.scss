@@ -52,6 +52,7 @@ main {
   }
 
   margin-left: 70px;
+  text-decoration: underline;
 
   &.task-finished {
     @include media (mobile) {
