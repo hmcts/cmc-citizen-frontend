@@ -96,6 +96,10 @@
   directionsOrderReviewRequestedClaimantDashboard,
   directionsOrderReviewRequestedDefendantDashboard %}
 
+{% from "./claimStatus/paperResponse.njk" import
+  paperResponseForClaimantDashboard,
+  paperResponseForDefendantDashboard %}
+
 {% macro caseStatusForClaimant(status, claim) %}
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
@@ -110,6 +114,8 @@
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
     {{ redeterminationClaimantDashboard() }}
+  {% elif status === ClaimStatus.PAPER_RESPONSE %}
+    {{ paperResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
     status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or
@@ -206,6 +212,8 @@
     {{ redeterminationDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.PAPER_RESPONSE %}
+    {{ paperResponseForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
     status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or

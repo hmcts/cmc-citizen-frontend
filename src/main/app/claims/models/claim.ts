@@ -158,6 +158,8 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
+    } else if (this.response && this.response.paperResponse) {
+      return ClaimStatus.PAPER_RESPONSE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {

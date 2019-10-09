@@ -121,6 +121,11 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
+{% from "./claimStatus/paperResponse.njk" import
+  paperResponseForClaimantClaimDetails,
+  paperResponseForDefendantClaimDetails
+%}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
@@ -139,6 +144,8 @@
       {% if not claim.isFullAdmissionPastPaymentDate %}
         {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
       {% endif %}
+    {% elif state.status === ClaimStatus.PAPER_RESPONSE %}
+      {{ paperResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_PART_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
@@ -247,6 +254,8 @@
       {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
       {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
+    {% elif state.status === ClaimStatus.PAPER_RESPONSE %}
+      {{ paperResponseForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CCJ_AFTER_SETTLEMENT_BREACHED or
