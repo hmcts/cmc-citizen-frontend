@@ -41,9 +41,9 @@ describe('DirectionsQuestionnaire', () => {
     unavailableDates: [
       { unavailableDate: '2020-01-04' },
       { unavailableDate: '2020-02-08' }],
+    expertRequired: 'yes',
     expertRequest:
     {
-      expertRequired: 'yes',
       expertEvidenceToExamine: 'Photographs',
       reasonForExpertAdvice: 'for expert opinion'
     }
@@ -69,7 +69,7 @@ describe('DirectionsQuestionnaire', () => {
 
       expect(DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)).to.deep.equal({...expectedData, ...{
         expertReports: undefined,
-        expertRequest: { expertRequired: 'yes' }
+        expertRequest: undefined
       }})
     })
 
