@@ -155,12 +155,12 @@ export class ClaimSteps {
         throw new Error('non-matching defendant Type type for claim')
     }
     if (enterDefendantEmail) {
-      citizenMobilePage.enterMobile(defendant.mobilePhone)
       citizenEmailPage.enterEmail(defendant.email)
     } else {
-      citizenMobilePage.enterMobile(defendant.mobilePhone)
       citizenEmailPage.submitForm()
     }
+
+    citizenMobilePage.enterMobile(defendant.mobilePhone)
   }
 
   enterClaimAmount (amount1: number, amount2: number, amount3): void {
