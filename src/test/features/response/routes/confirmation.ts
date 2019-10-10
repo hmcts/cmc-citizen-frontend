@@ -59,7 +59,18 @@ describe('Defendant response: confirmation page', () => {
           ))
       })
 
-      it('should render page when yes for mediation and DQ', async () => {
+      it('should render page when yes for mediation and no DQs', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'If John Smith rejects your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
+            'If they reject mediation the court will review the case. You might have to go to a hearing.'))
+      })
+
+      it('should render page when yes for mediation and DQs enabled', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimStoreServiceMock.sampleDefendantResponseWithDQAndMediationObj)
 
         await request(app)
@@ -68,11 +79,11 @@ describe('Defendant response: confirmation page', () => {
           .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.',
-            'If John Smith reject your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
+            'If John Smith rejects your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
             'If they reject mediation the court will review the case. You might have to go to a hearing.'))
       })
 
-      it('should render page when no for mediation and DQ', async () => {
+      it('should render page when no for mediation and DQs enabled', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimStoreServiceMock.sampleDefendantResponseWithDQAndNoMediationObj)
 
         await request(app)
@@ -82,6 +93,30 @@ describe('Defendant response: confirmation page', () => {
             'We’ll contact you when John Smith responds, to tell you what to do next.',
             'If John Smith accepts your response the claim will be ended.',
             'If they reject your response the court will review the case. You might have to go to a hearing.'))
+      })
+
+      it('should render page when yes for mediation and DQs disabled', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimStoreServiceMock.sampleDefendantResponseWithoutDQAndWithMediationObj)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'We’ll contact you when John Smith responds, to tell you what to do next.',
+            'If John Smith accepts your response the claim will be ended.',
+            'If John Smith rejects your response and agree to try mediation we’ll contact you to arrange a call with the mediator.',
+            'If they reject mediation the court will review the case. You might have to go to a hearing.'))
+      })
+
+      it('should render page when no for mediation and DQs disabled', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimStoreServiceMock.sampleDefendantResponseWithoutDQAndWithoutMediationObj)
+
+        await request(app)
+          .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText('You’ve submitted your response',
+            'We’ll contact you when John Smith responds, to tell you what to do next.',
+            'If John Smith accepts your response the claim will be ended.'))
       })
 
       it('when full defence already paid with mediation should render page when everything is fine', async () => {
@@ -135,7 +170,7 @@ describe('Defendant response: confirmation page', () => {
         await request(app)
           .get(ResponsePaths.confirmationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId }))
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('We’ll ask if they want to try mediation. If they agree, we’ll contact you with an appointment.'))
+          .expect(res => expect(res).to.be.successful.withText('We’ll ask if they want to try mediation. If they agree, we’ll contact you to try to arrange an appointment.'))
       })
     })
   })
