@@ -125,12 +125,12 @@ describe('claimant response converter', () => {
         const draftClaimantResponse = createDraftClaimantResponseForFullRejection()
         draftClaimantResponse.courtDetermination.rejectionReason = new RejectionReason('rejected')
         expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'amountPaid': 10,
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'reason': 'rejected'
+          type: 'REJECTION',
+          amountPaid: 10,
+          freeMediation: 'yes',
+          mediationContactPerson: undefined,
+          mediationPhoneNumber: '07777777788',
+          reason: 'rejected'
         })
       })
 
@@ -146,12 +146,12 @@ describe('claimant response converter', () => {
           1000,
           DecisionType.COURT)
         expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'amountPaid': 0,
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'reason': 'Rejection reason is..'
+          type: 'REJECTION',
+          amountPaid: 0,
+          freeMediation: 'yes',
+          mediationContactPerson: undefined,
+          mediationPhoneNumber: '07777777788',
+          reason: 'Rejection reason is..'
         })
       })
 
@@ -160,14 +160,16 @@ describe('claimant response converter', () => {
         draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
         draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
         draftClaimantResponse.freeMediation = new FreeMediation('yes')
+        draftClaimantResponse.rejectionReason = new RejectionReason('OBJECTION!')
 
         expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
-          'type': 'REJECTION',
-          'freeMediation': 'yes',
-          'mediationContactPerson': undefined,
-          'mediationPhoneNumber': '07777777788',
-          'paymentReceived': 'yes',
-          'settleForAmount': 'no'
+          type: 'REJECTION',
+          freeMediation: 'yes',
+          mediationContactPerson: undefined,
+          mediationPhoneNumber: '07777777788',
+          paymentReceived: 'yes',
+          settleForAmount: 'no',
+          reason: 'OBJECTION!'
         })
       })
 
