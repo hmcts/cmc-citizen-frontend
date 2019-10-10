@@ -15,7 +15,7 @@
 
 {% macro settlementAgreementSignedByClaimantDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}</h2>
     <p>{{ t('They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.') }}</p>
     <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ t('If you don’t sign or respond by {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.claimantRespondedAt | addDays(7) | date) }}</p>
@@ -26,7 +26,7 @@
 
 {% macro settlementAgreementSignedByBothDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+    <h2 class="heading-medium">{{ t('You’ve both signed a settlement agreement') }}</h2>
     {% if claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
           { amount: amountToPay,
@@ -50,7 +50,7 @@
 
 {% macro settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} rejected your repayment plan.', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your repayment plan.', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
           { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount | numeral }) }}</p>
@@ -71,7 +71,7 @@
 
 {% macro settlementAgreementRejectedDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You rejected the settlement agreement') }}</h2>
+    <h2 class="heading-medium">{{ t('You rejected the settlement agreement') }}</h2>
     <p>{{ t('{{ claimantName }} can request a County Court Judgment (CCJ) against you.', { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('A CCJ would order you to repay the money in line with the terms of the agreement.') }}</p>
     <p>{{ t('The court has reviewed the repayment plan and believes you can afford it.') }}</p>

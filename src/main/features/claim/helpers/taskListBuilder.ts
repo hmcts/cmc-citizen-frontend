@@ -11,7 +11,7 @@ import { TheirDetails } from 'drafts/tasks/theirDetails'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
-    return new TaskList('Before you start', [
+    return new TaskList('Consider other options', [
       new TaskListItem('Resolving this dispute', Paths.resolvingThisDisputerPage.uri, ResolveDispute.isCompleted(draft))
     ])
   }

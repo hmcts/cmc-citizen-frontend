@@ -32,7 +32,7 @@ describe('New features consent: opt-in to new features', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText('Volunteer to try new features'))
+          .expect(res => expect(res).to.be.successful.withText('Try new features'))
       })
 
       it('should not render page when new feature consent role present', async () => {
@@ -69,7 +69,7 @@ describe('New features consent: opt-in to new features', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ consentResponse: undefined })
-          .expect(res => expect(res).to.be.successful.withText('Volunteer to try new features', 'div class="error-summary"'))
+          .expect(res => expect(res).to.be.successful.withText('Try new features', 'div class="error-summary"'))
       })
 
       it('should redirect to task list page when selection is made', async () => {

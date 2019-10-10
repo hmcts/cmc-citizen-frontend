@@ -88,7 +88,7 @@ describe('Claim issue: total page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(pageContent))
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'Total claim amount'))
       })
 
       it('should throw error when claim value is above £10000 including interest', async () => {

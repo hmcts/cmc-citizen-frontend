@@ -243,7 +243,8 @@ const commonIndividualDefendant = {
       },
       hasCorrespondenceAddress: false
     } as IndividualDetails,
-    email: { address: 'example@example.com' }
+    email: { address: 'example@example.com' },
+    mobilePhone: { number: '07799889988' }
   } as Defendant
 }
 
