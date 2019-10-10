@@ -42,6 +42,7 @@ describe('DirectionsQuestionnaire', () => {
       { unavailableDate: '2020-01-04' },
       { unavailableDate: '2020-02-08' }],
     expertRequired: 'yes',
+    permissionForExpert: 'yes',
     expertRequest:
     {
       expertEvidenceToExamine: 'Photographs',

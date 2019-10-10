@@ -15,6 +15,7 @@ export interface DirectionsQuestionnaire {
   expertReports?: ExpertReport[],
   unavailableDates?: UnavailableDate[],
   expertRequired?: YesNoOption,
+  permissionForExpert?: YesNoOption,
   expertRequest?: ExpertRequest
 }
 
@@ -48,6 +49,7 @@ export namespace DirectionsQuestionnaire {
           unavailableDate: unavailableDate ? LocalDate.fromObject(unavailableDate).asString() : undefined
         })),
       expertRequired: directionsQuestionnaire.expertRequired ? YesNoOption.YES : YesNoOption.NO,
+      permissionForExpert: directionsQuestionnaire.permissionForExpert ? YesNoOption.YES : YesNoOption.NO,
       expertRequest: (directionsQuestionnaire.expertEvidence.expertEvidence &&
         directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
           expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,

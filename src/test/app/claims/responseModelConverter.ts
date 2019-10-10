@@ -119,6 +119,7 @@ describe('ResponseModelConverter', () => {
         }
       ],
       expertRequired: 'yes',
+      permissionForExpert: 'yes',
       expertRequest: {
         expertEvidenceToExamine: 'Photographs',
         reasonForExpertAdvice: 'for expert opinion'
