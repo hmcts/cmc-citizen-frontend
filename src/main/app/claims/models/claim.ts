@@ -68,6 +68,7 @@ export class Claim {
   template: ClaimTemplate
   directionOrder: DirectionOrder
   reviewOrder: ReviewOrder
+  intentionToProceedDeadline?: Moment
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -197,7 +198,11 @@ export class Claim {
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.isResponseSubmitted()) {
-      return ClaimStatus.RESPONSE_SUBMITTED
+      if (this.hasIntentionToProceedDeadlinePassed()) {
+        return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
+      } else {
+        return ClaimStatus.RESPONSE_SUBMITTED
+      }
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
@@ -346,6 +351,8 @@ export class Claim {
       if (input.reviewOrder) {
         this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
+      this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
+
     }
 
     return this
@@ -650,5 +657,10 @@ export class Claim {
   public isIntentionToProceedEligible (): boolean {
     return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isAfter(MomentFactory.parse('2019-09-29')) ||
       this.directionsQuestionnaireDeadline === undefined)
+  }
+
+  private hasIntentionToProceedDeadlinePassed (): boolean {
+    return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16))
+    && this.response.defenceType === DefenceType.DISPUTE
   }
 }

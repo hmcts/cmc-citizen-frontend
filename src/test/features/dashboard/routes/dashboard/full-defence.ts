@@ -19,7 +19,7 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   baseDefenceData,
   baseResponseData,
-  defenceWithAmountClaimedAlreadyPaidData
+  defenceWithAmountClaimedAlreadyPaidData, defenceWithDisputeData
 } from 'test/data/entity/responseData'
 
 import {
@@ -29,7 +29,7 @@ import {
   settlementOffer,
   settlementOfferAccept,
   settlementOfferReject,
-  settledWithAgreement
+  settledWithAgreement, intentionToProceedDeadline
 } from 'test/data/entity/fullDefenceData'
 import { DefenceType } from 'claims/models/response/defenceType'
 
@@ -81,7 +81,7 @@ const testData = [
     defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
-    status: 'Full defence - defendant dispute all of the claim and reject mediation',
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation',
     claim: fullDefenceClaim,
     claimOverride: {
       response: {
@@ -92,6 +92,19 @@ const testData = [
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
     defendantAssertions: ['You’ve rejected the claim.']
+  },
+  {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation - claimant does not do intention to proceed',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData
+      },
+      ...directionsQuestionnaireDeadline,
+      ...intentionToProceedDeadline
+    },
+    claimantAssertions: ['This claim has ended'],
+    defendantAssertions: ['This claim has ended']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
