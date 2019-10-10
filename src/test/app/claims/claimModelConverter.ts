@@ -39,7 +39,7 @@ function prepareClaimData (claimantParty: object, defendantParty: object): Claim
   return new ClaimData().deserialize({
     ...entityTemplate,
     claimants: [{ ...claimantParty, email: undefined, mobilePhone: '07000000000' }],
-    defendants: [{ ...defendantParty, email: 'defendant@example.com', dateOfBirth: undefined }]
+    defendants: [{ ...defendantParty, email: 'defendant@example.com', dateOfBirth: undefined, phone: '07284798778' }]
   })
 }
 

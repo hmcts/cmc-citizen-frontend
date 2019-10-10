@@ -9,8 +9,8 @@ export class SoleTrader extends TheirDetails {
   firstName?: string
   lastName?: string
 
-  constructor (title?: string, firstName?: string, lastName?: string, address?: Address, email?: string, businessName?: string) {
-    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value, NameFormatter.fullName(firstName, lastName, title), address, email)
+  constructor (title?: string, firstName?: string, lastName?: string, address?: Address, email?: string, businessName?: string, phone?: string) {
+    super(PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value, NameFormatter.fullName(firstName, lastName, title), address, email, phone)
     this.businessName = businessName
     this.title = title
     this.firstName = firstName
