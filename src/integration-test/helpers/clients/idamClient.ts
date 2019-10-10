@@ -2,11 +2,6 @@ import { request } from 'integration-test/helpers/clients/base/request'
 import * as url from 'url'
 import * as urlencode from 'urlencode'
 
-declare type User = {
-  id?: string
-  bearerToken: string
-}
-
 const baseURL: string = process.env.IDAM_URL
 
 const defaultPassword = 'Password12'
