@@ -17,7 +17,8 @@ export class Party {
     name?: string,
     address?: Address,
     correspondenceAddress?: Address,
-    mobilePhone?: string, email?: string) {
+    mobilePhone?: string,
+    email?: string) {
     this.type = type
     this.name = name
     this.address = address
