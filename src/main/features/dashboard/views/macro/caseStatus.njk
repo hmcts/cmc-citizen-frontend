@@ -97,6 +97,7 @@
   directionsOrderReviewRequestedDefendantDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
+
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
