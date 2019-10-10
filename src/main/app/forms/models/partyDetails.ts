@@ -30,7 +30,7 @@ export class PartyDetails {
 
   @ValidateIf(o => (o.phone !== undefined), { groups: ['defendant', 'response'] })
   @IsNotEmpty({ message: ValidationErrors.PHONE_REQUIRED, groups: ['defendant','response'] })
-  @MaxLength(30, { message: CommonValidationErrors.TEXT_TOO_LONG })
+  @MaxLength(30, { message: CommonValidationErrors.TEXT_TOO_LONG, groups: ['defendant','response'] })
   phone?: string
 
   @ValidateIf(partyDetails => partyDetails.hasCorrespondenceAddress === true, { groups: ['claimant', 'defendant', 'response'] })
