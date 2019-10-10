@@ -14,47 +14,28 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/authorization-check'
 import { MomentFactory } from 'shared/momentFactory'
-import {
-  partialAdmissionFromStatesPaidDefence, partialAdmissionFromStatesPaidWithMediationDefence
-} from 'test/data/entity/responseData'
-import {
-  claimantRejectAlreadyPaid,
-  claimantRejectAlreadyPaidWithMediation,
-  respondedAt
-} from 'test/data/entity/fullDefenceData'
-
-const statesPaidClaim = {
-  ...claimStoreServiceMock.sampleClaimObj,
-  responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-  ...respondedAt
-}
 
 const cookieName: string = config.get<string>('session.cookieName')
 
 const testData = [
   {
-    status: 'States paid defence - defendant paid what he believed he owed - claimant rejects',
-    claim: statesPaidClaim,
+    status: 'Claim issued',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidDefence
-      },
-      ...claimantRejectAlreadyPaid
+      responseDeadline: MomentFactory.currentDate().add(1, 'days')
     },
-    claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: ['Wait for the court to review the case']
+    claimantAssertions: ['000MC050', 'Wait for the defendant to respond'],
+    defendantAssertions: ['000MC050', 'Respond to claim.']
   },
   {
-    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects',
-    claim: statesPaidClaim,
+    status: 'Requested more time',
+    claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      response: {
-        ...partialAdmissionFromStatesPaidWithMediationDefence
-      },
-      ...claimantRejectAlreadyPaidWithMediation
+      moreTimeRequested: true,
+      responseDeadline: '2099-08-08'
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
-    defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
+    claimantAssertions: ['000MC050', 'John Doe has requested more time to respond.'],
+    defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
   }
 ]
 

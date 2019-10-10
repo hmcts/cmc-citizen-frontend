@@ -420,6 +420,47 @@ export const sampleDefendantResponseWithDQAndMediationObj = {
   }
 }
 
+export const sampleDefendantResponseWithoutDQAndWithMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  }
+}
+
+export const sampleDefendantResponseWithoutDQAndWithoutMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'no',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  },
+  directionsQuestionnaireDeadline: MomentFactory.currentDate().add(12, 'days')
+}
+
 export const sampleDefendantResponseWithDQAndNoMediationObj = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: {

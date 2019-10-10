@@ -17,7 +17,7 @@
 {% macro claimFullAdmissionForClaimantClaimDetails(claim) %}
   <div class="status-block">
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    <h2 class="heading-small">{{ t('The defendant said they’ll pay you immediately') }}</h2>
+    <h2 class="heading-medium">{{ t('The defendant said they’ll pay you immediately') }}</h2>
     <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your
       account.',
       { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
@@ -52,7 +52,7 @@
 
 {% macro claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) %}
 <div class="status-block">
-  <h2 class="heading-small">{{ t('The defendant said they’ll pay you immediately') }}</h2>
+  <h2 class="heading-medium">{{ t('The defendant said they’ll pay you immediately') }}</h2>
   <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your
     account.',
     { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
