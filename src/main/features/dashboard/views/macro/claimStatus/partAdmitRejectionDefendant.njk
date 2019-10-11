@@ -6,7 +6,7 @@
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {{ t('We’ll contact you with a mediation appointment') }}
+    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}
@@ -45,7 +45,7 @@
     <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('They have agreed to try mediation. We’ll contact you with details of your appointment.') }}</p>
+      <p>{{ t('They have agreed to try mediation. We’ll contact you to try to arrange an appointment.') }}</p>
     {% else %}
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% if claim.directionsQuestionnaireDeadline %}
