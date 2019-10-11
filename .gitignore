@@ -29,3 +29,4 @@ coverage-report
 smoke-output/
 functional-output/
 acb.yaml
+output/*
