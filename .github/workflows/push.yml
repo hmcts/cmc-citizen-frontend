@@ -14,3 +14,4 @@ jobs:
       - run: yarn lint
       - run: yarn test
       - run: yarn test:routes
+      - run: yarn test:a11y
