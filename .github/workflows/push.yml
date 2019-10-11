@@ -1,0 +1,16 @@
+on: push
+name: yarn build, lint, and test
+jobs:
+  build-and-test:
+    name: build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: npm install
+        uses: actions/setup-node@v1
+          with:
+            node-version: '10.x'
+      - run: yarn install
+      - run: yarn lint
+      - run: yarn test
+      - run: yarn test:routes
