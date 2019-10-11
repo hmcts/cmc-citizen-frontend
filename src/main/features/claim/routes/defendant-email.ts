@@ -44,6 +44,6 @@ export default express.Router()
         draft.document.defendant.email = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.defendantPhonePage.uri)
+        res.redirect(Paths.taskListPage.uri)
       }
     }))
