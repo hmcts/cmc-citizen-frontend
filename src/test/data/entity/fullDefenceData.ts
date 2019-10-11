@@ -31,7 +31,7 @@ export const directionsQuestionnaireDeadline = {
 }
 
 export const intentionToProceedDeadline = {
-  intentionToProceedDeadline: MomentFactory.currentDateTime().subtract(40, 'days')
+  intentionToProceedDeadline: MomentFactory.currentDateTime().subtract(1, 'days')
 }
 
 export const defendantOffersSettlement = [{
