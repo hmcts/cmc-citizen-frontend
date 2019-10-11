@@ -6,14 +6,12 @@ export class TheirDetails {
   name: string
   address: Address
   email?: string
-  phone?: string
 
-  constructor (type?: string, name?: string, address?: Address, email?: string, phone?: string) {
+  constructor (type?: string, name?: string, address?: Address, email?: string) {
     this.type = type
     this.name = name
     this.address = address
     this.email = email
-    this.phone = phone
   }
 
   isBusiness (): boolean {
@@ -28,7 +26,6 @@ export class TheirDetails {
         this.address = new Address().deserialize(input.address)
       }
       this.email = input.email
-      this.phone = input.phone
     }
     return this
   }
