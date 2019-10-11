@@ -11,12 +11,11 @@ export class TheirDetails {
   firstName?: string
   lastName?: string
 
-  constructor (type?: string, name?: string, address?: Address, email?: string, phone?: string) {
+  constructor (type?: string, name?: string, address?: Address, email?: string) {
     this.type = type
     this.name = name
     this.address = address
     this.email = email
-    this.phone = phone
   }
 
   isBusiness (): boolean {
@@ -40,7 +39,6 @@ export class TheirDetails {
         this.lastName = input.lastName
       }
       this.email = input.email
-      this.phone = input.phone
     }
     return this
   }
