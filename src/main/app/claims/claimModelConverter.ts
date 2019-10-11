@@ -126,8 +126,7 @@ export class ClaimModelConverter {
           individualDetails.firstName,
           individualDetails.lastName,
           this.convertAddress(individualDetails.address),
-          StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          StringUtils.trimToUndefined(draftClaim.defendant.mobilePhone.number)
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address)
         )
 
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
@@ -139,8 +138,7 @@ export class ClaimModelConverter {
           soleTraderDetails.lastName,
           this.convertAddress(soleTraderDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          soleTraderDetails.businessName,
-          StringUtils.trimToUndefined(draftClaim.defendant.mobilePhone.number)
+          soleTraderDetails.businessName
         )
 
       case PartyType.COMPANY.value:
@@ -150,8 +148,7 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          companyDetails.contactPerson,
-          StringUtils.trimToUndefined(draftClaim.defendant.mobilePhone.number)
+          companyDetails.contactPerson
         )
       case PartyType.ORGANISATION.value:
         const organisationDetails = defendantDetails as OrganisationDetails
@@ -160,8 +157,7 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          organisationDetails.contactPerson,
-          StringUtils.trimToUndefined(draftClaim.defendant.mobilePhone.number)
+          organisationDetails.contactPerson
         )
       default:
         throw Error('Something went wrong, No defendant type is set')

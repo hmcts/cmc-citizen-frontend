@@ -9,8 +9,8 @@ export class Individual extends TheirDetails {
   firstName?: string
   lastName?: string
 
-  constructor (title?: string, firstName?: string, lastName?: string, address?: Address, email?: string, phone?: string) {
-    super(PartyType.INDIVIDUAL.value, NameFormatter.fullName(firstName, lastName, title), address, email, phone)
+  constructor (title?: string, firstName?: string, lastName?: string, address?: Address, email?: string) {
+    super(PartyType.INDIVIDUAL.value, NameFormatter.fullName(firstName, lastName, title), address, email)
     this.title = title
     this.firstName = firstName
     this.lastName = lastName
