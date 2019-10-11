@@ -660,6 +660,5 @@ export class Claim {
 
   private hasIntentionToProceedDeadlinePassed (): boolean {
     return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16))
-      && this.response.defenceType === DefenceType.DISPUTE
   }
 }

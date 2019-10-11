@@ -68,6 +68,25 @@ const testData = [
     ]
   },
   {
+    status: 'Full defence - defendant paid what he believe - claimant does not proceed in time',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: { ...defenceWithAmountClaimedAlreadyPaidData },
+      ...intentionToProceedDeadline
+    },
+    claimantAssertions: [
+      'The court ended the claim',
+      'This is because you didn’t proceed before the deadline of 4pm on',
+      'You can contact us to apply for the claim to be restarted.',
+      'Download the defendant’s full response'
+    ],
+    defendantAssertions: [
+      'The court ended the claim',
+      'This is because John Smith didn’t proceed with it before the deadline of 4pm on',
+      'If they want to restart the claim, they need to ask for permission from the court. We’ll contact you by post if they do this.'
+    ]
+  },
+  {
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response without mediation',
     claim: fullDefenceClaim,
     claimOverride: {

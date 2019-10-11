@@ -59,6 +59,16 @@ const testData = [
     defendantAssertions: ['We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
   },
   {
+    status: 'Full defence - defendant paid what he believe - claimant does not proceed in time',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: { ...defenceWithAmountClaimedAlreadyPaidData },
+      ...intentionToProceedDeadline
+    },
+    claimantAssertions: ['This claim has ended'],
+    defendantAssertions: ['This claim has ended']
+  },
+  {
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
     claim: fullDefenceClaim,
     claimOverride: {
