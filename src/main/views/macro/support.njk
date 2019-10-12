@@ -6,15 +6,15 @@
 {% endmacro%}
 
 {% macro _emailWidget(email = supportEmailAddress) %}
-    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t('Email') }}</h2>
-    <pre><a href="mailto:mailto:{{t(email)}}" target="_blank">{{ t(email)}}</a></pre>
-    <pre>{{ t("We'll get back to you within 10 days.") }}</pre>
+    <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 1.05263em;">{{ t('Email') }}</h2>
+    <pre style="margin-top: 0.26316em"><a href="mailto:{{t(email)}}" target="_blank">{{ t(email)}}</a></pre>
+    <pre style="margin-bottom: 1.05263em">{{ t("We'll get back to you within 10 days.") }}</pre>
 {% endmacro%}
 
 {% macro _phoneWidget(phoneNumber = '0300 123 7050') %}
     <h2 class="heading-medium" style="margin-bottom:5px; margin-top: 10px;">{{ t('Telephone') }}</h2>
-    <pre>{{ t(phoneNumber) }}</pre>
-    <pre>{{ t("Monday to Friday, 9am to 5pm") }}</pre>
+    <pre style="margin-top: 0.26316em">{{ t(phoneNumber) }}</pre>
+    <pre>{{ t("Monday to Friday, 9am to 5pm.") }}</pre>
     {{ _callCharges()}}
 {% endmacro%}
 
