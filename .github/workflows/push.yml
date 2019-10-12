@@ -13,4 +13,5 @@ jobs:
       - run: gulp copy-files
       - run: yarn lint
       - run: yarn test:action-a11y
+      - run: yarn test
       - run: yarn test:action-coverage
