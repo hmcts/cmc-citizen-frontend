@@ -12,7 +12,5 @@ jobs:
       - run: yarn install
       - run: gulp copy-files
       - run: yarn lint
-      - run: yarn test
-      - run: yarn test:routes
       - run: yarn test:action-a11y
       - run: yarn test:action-coverage
