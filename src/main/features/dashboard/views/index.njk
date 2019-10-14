@@ -1,7 +1,6 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import submitButton, errorSummary %}
 {% from "./macro/caseStatus.njk" import caseStatusForDefendant, caseStatusForClaimant %}
-{% from "support.njk" import supportWidget %}
 {% from "internalLink.njk" import internalLink %}
 
 {% set heading = 'Your money claims account' %}
@@ -13,7 +12,7 @@
       {% if not claimDraftSaved %}
         {{ internalLink(t('Make a new money claim'), EligibilityPaths.startPage.uri, 'newclaim', 'start-now') }}
       {% endif %}
-      
+
       {% if claimsAsClaimant | length or claimDraftSaved %}
 
       <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>

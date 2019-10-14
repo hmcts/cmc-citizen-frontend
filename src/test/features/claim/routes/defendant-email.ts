@@ -64,7 +64,7 @@ describe('Claim issue: defendant email page', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to defendant phone page when form is valid and everything is fine', async () => {
+      it('should redirect to task list when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
@@ -72,10 +72,10 @@ describe('Claim issue: defendant email page', () => {
           .post(ClaimPaths.defendantEmailPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ address: 'defendant@example.com' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantPhonePage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
 
-      it('should redirect to defendant phone page when no email address is given', async () => {
+      it('should redirect to task list when no email address is given', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
@@ -83,7 +83,7 @@ describe('Claim issue: defendant email page', () => {
           .post(ClaimPaths.defendantEmailPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ address: '' })
-          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantPhonePage.uri))
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
       })
     })
   })

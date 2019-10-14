@@ -42,9 +42,6 @@
     }}
 
     {{ row('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri, bold = true) }}
-    {% if draftClaim.defendant.mobilePhone %}
-      {{ row('Contact number (optional)', draftClaim.defendant.mobilePhone.number, paths.defendantPhonePage.uri, bold = true) }}
-    {% endif %}
     {{ tableEnd() }}
 
     {{ tableStart('claimAmount', 'Claim amount') }}
