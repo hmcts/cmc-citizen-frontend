@@ -67,13 +67,6 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       if (form.hasErrors()) {
-        if (claim.claimData.defendant.firstName) {
-          if (draft.document.defendantDetails.partyDetails.type === PartyType.INDIVIDUAL.value) {
-            (draft.document.defendantDetails.partyDetails as IndividualDetails).firstName = claim.claimData.defendant.firstName
-          } else if (draft.document.defendantDetails.partyDetails.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value) {
-            (draft.document.defendantDetails.partyDetails as SoleTrader).firstName = claim.claimData.defendant.firstName
-          }
-        }
         renderView(form, res)
       } else {
         const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
