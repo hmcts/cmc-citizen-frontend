@@ -10,7 +10,7 @@ jobs:
         with:
           node-version: '8.x'
       - run: yarn install
-      - run: yarn install --global gulp-cli
+      - run: yarn global add gulp-cli
       - run: gulp copy-files
       - run: yarn lint
       - run: yarn test:action-a11y
