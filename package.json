@@ -9,7 +9,7 @@
     "setup": "gulp sass copy-files",
     "start": "node server.js",
     "lint": "tsc --noEmit && tslint --project tsconfig.json && sass-lint -v -q",
-    "test": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) ! -path '*a11y*' ! -path '*/routes/*') --reporter-options reportFilename=unit,inlineAssets=true,reportTitle=citizen-frontend-unit",
+    "test": "echo 'a11y tests are ran through GitHub actions as a mandatory step in order to save time on the main pipeline'",
     "test:routes": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 10000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
     "test:routes-parallel": "TS_NODE_TRANSPILE_ONLY=true NODE_ENV=mocha LOG_LEVEL=OFF mocha-parallel-tests --opts mocha.opts $(find src/test \\( -name '*.ts' \\) -path '*/routes/*') --timeout 10000 --reporter-options reportFilename=routes,inlineAssets=true,reportTitle=citizen-frontend-routes",
     "test:a11y": "echo 'a11y tests are ran through GitHub actions as a mandatory step in order to save time on the main pipeline'",
