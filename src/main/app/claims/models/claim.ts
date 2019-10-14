@@ -195,14 +195,12 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
+    } else if (this.hasIntentionToProceedDeadlinePassed()) {
+      return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
     } else if (this.isResponseSubmitted()) {
-      if (this.hasIntentionToProceedDeadlinePassed()) {
-        return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
-      } else {
-        return ClaimStatus.RESPONSE_SUBMITTED
-      }
+      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
