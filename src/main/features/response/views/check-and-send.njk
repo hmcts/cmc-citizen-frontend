@@ -284,8 +284,8 @@
       }}
     {% endif %}
 
-    {% if mediationDraft %}
-      {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+    {% if mediationDraft.id !== 0 %}
+      {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
     {% endif %}
 
 

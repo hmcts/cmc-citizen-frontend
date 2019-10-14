@@ -48,6 +48,9 @@ export function prepareClaimDraft (userEmailAddress: string) {
       },
       email: {
         address: userEmailAddress
+      },
+      mobilePhone: {
+        number: ''
       }
     },
     amount: {

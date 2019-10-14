@@ -14,6 +14,7 @@ const govUkElementRoot = path.join(repoRoot, 'node_modules/govuk-elements-sass/p
 
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
+const webChatDirectory = `${assetsDirectory}/webchat`
 
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
@@ -32,12 +33,25 @@ gulp.task('sass', (done) => {
 
 gulp.task('copy-files', (done) => {
   copyGovUkTemplate()
+  copyWebChatTemplate()
   copyClientPolyfills()
   copyA11ySniffer()
   copyClientModules()
   copyDatePickerDependencies()
   done()
 })
+
+function copyWebChatTemplate () {
+  gulp.src([
+    './node_modules/@hmcts/ctsc-web-chat/assets/javascript/*.js'
+  ])
+    .pipe(gulp.dest(`${webChatDirectory}/javascript/`))
+
+  gulp.src([
+    './node_modules/@hmcts/ctsc-web-chat/assets/css/*.css'
+  ])
+    .pipe(gulp.dest(`${webChatDirectory}/css/`))
+}
 
 function copyGovUkTemplate () {
   gulp.src([
