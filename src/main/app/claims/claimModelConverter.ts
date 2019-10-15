@@ -36,7 +36,7 @@ import { getStandardInterestRate } from 'shared/interestUtils'
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
-import { MobilePhone } from 'forms/models/mobilePhone';
+import { MobilePhone } from 'forms/models/mobilePhone'
 
 export class ClaimModelConverter {
 
@@ -252,10 +252,7 @@ export class ClaimModelConverter {
     }
   }
 
-  private static convertPhoneNumber(phone: MobilePhone): string {
-    if (phone === undefined) {
-      return undefined;
-    }
-    return StringUtils.trimToUndefined(phone.number)
+  private static convertPhoneNumber (phone: MobilePhone): string {
+    return phone ? StringUtils.trimToUndefined(phone.number) : undefined
   }
 }
