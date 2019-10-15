@@ -652,7 +652,7 @@ export class Claim {
   }
 
   public isIntentionToProceedEligible (): boolean {
-    return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isBefore(MomentFactory.parse('2019-09-29')) ||
+    return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isAfter(MomentFactory.parse('2019-09-29')) ||
       (this.directionsQuestionnaireDeadline === undefined && this.issuedOn.isAfter(MomentFactory.parse('2019-09-09').hour(15).minute(12))))
   }
 
