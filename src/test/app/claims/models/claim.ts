@@ -143,6 +143,7 @@ describe('Claim', () => {
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -827,6 +828,7 @@ describe('Claim', () => {
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     })
 
     it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_LINK_ELIGIBLE if an offer has been submitted.', () => {
