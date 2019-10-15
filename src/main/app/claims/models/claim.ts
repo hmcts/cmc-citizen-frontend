@@ -195,7 +195,7 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
-    } else if (this.hasIntentionToProceedDeadlinePassed() && this.isIntentionToProceedEligible()) {
+    } else if (this.hasIntentionToProceedDeadlinePassed()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
@@ -652,11 +652,12 @@ export class Claim {
   }
 
   public isIntentionToProceedEligible (): boolean {
-    return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isAfter(MomentFactory.parse('2019-09-29')) ||
-      this.directionsQuestionnaireDeadline === undefined)
+    return (this.directionsQuestionnaireDeadline && this.directionsQuestionnaireDeadline.isBefore(MomentFactory.parse('2019-09-29')) ||
+      (this.directionsQuestionnaireDeadline === undefined && this.issuedOn.isAfter(MomentFactory.parse('2019-09-09').hour(15).minute(12))))
   }
 
   private hasIntentionToProceedDeadlinePassed (): boolean {
-    return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16))
+    return !this.claimantResponse && this.response && this.response.responseType === ResponseType.FULL_DEFENCE && MomentFactory.currentDateTime().isAfter(this.intentionToProceedDeadline.clone().hour(16)) &&
+      this.isIntentionToProceedEligible()
   }
 }
