@@ -153,6 +153,7 @@ export const sampleClaimIssueObj = {
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
 }
 
@@ -233,6 +234,7 @@ export const sampleClaimObj = {
       }
     ]
   },
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
 }
 
