@@ -69,6 +69,7 @@ describe('DirectionsQuestionnaire', () => {
         }})
 
       expect(DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraftSampleData)).to.deep.equal({...expectedData, ...{
+        expertRequired: 'yes',
         expertReports: undefined,
         expertRequest: undefined
       }})
