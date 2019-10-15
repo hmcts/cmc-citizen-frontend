@@ -195,7 +195,7 @@ export class Claim {
       return ClaimStatus.OFFER_SETTLEMENT_REACHED
     } else if (this.hasClaimantRejectedDefendantDefenceWithoutDQs()) {
       return ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ
-    } else if (this.hasIntentionToProceedDeadlinePassed()) {
+    } else if (this.hasIntentionToProceedDeadlinePassed() && this.isIntentionToProceedEligible()) {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
