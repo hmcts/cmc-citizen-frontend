@@ -3,9 +3,9 @@ import { PartyType } from 'common/partyType'
 
 export class Party {
   type: string
-  title: string
-  firstName: string
-  lastName: string
+  title?: string
+  firstName?: string
+  lastName?: string
   name: string
   address: Address
   correspondenceAddress?: Address
