@@ -48,9 +48,6 @@ export const claimDraft = {
     partyDetails: defendantIndividualDetails,
     email: {
       address: 'defendant@example.com'
-    },
-    mobilePhone: {
-      number: '07284798778'
     }
   },
   amount: {

@@ -153,6 +153,7 @@ export const sampleClaimIssueObj = {
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
 }
 
@@ -233,6 +234,7 @@ export const sampleClaimObj = {
       }
     ]
   },
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
 }
 
@@ -804,10 +806,10 @@ export function resolveSaveClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
+export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+    .reply(status, reason)
 }
 
 export function resolveSaveCcjForExternalId () {
