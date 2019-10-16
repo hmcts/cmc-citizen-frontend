@@ -64,7 +64,12 @@ export class Feature {
     app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'response', 100, (value: any): ResponseDraft => {
         return new ResponseDraft().deserialize(value)
-      }))
+      }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.responseDraft
+        next()
+      }
+    )
     app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
         return new MediationDraft().deserialize(value)
