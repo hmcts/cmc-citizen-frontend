@@ -39,11 +39,11 @@
 {% endmacro %}
 
 {% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}) %}
-  {{ row('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name, bold = true) }}
+  {{ row('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name or changeLinks.contactPerson, bold = true, bottomBorder = not partyDetails.contactPerson ) }}
 
   {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
     {% if partyDetails.contactPerson %}
-      {{ row('Contact person', partyDetails.contactPerson, changeLinks.partyDetails or changeLinks.contactPerson, bold = true) }}
+      {{ row('Contact person', partyDetails.contactPerson, bold = true) }}
     {% endif %}
   {% endif %}
 
