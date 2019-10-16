@@ -1,0 +1,28 @@
+{% from "./utilityMacros.njk" import downloadResponseLink %}
+
+{% macro intentionToProceedPastDeadlineForClaimantDashboard() %}
+  {{ t('This claim has ended') }}
+{% endmacro %}
+
+{% macro intentionToProceedPastDeadlineForDefendantDashboard() %}
+  {{ t('This claim has ended') }}
+{% endmacro %}
+
+{% macro intentionToProceedPastDeadlineForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('The court ended the claim') }}</h2>
+    <p>{{ t('This is because you didn’t proceed before the deadline of 4pm on {{ deadline }}.',
+        { deadline: claim.intentionToProceedDeadline | date }) }}</p>
+    <p>{{ t('You can contact us to apply for the claim to be restarted.') }}</p>
+    <p>{{ downloadResponseLink(claim, 'Download the defendant’s full response') }}.</p>
+  </div>
+{% endmacro %}
+
+{% macro intentionToProceedPastDeadlineForDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('The court ended the claim') }}</h2>
+    <p>{{ t('This is because {{ claimantName }} didn’t proceed with it before the deadline of 4pm on {{ deadline }}.',
+        { claimantName: claim.claimData.claimant.name, deadline: claim.intentionToProceedDeadline | date }) }}</p>
+    <p>{{ t('If they want to restart the claim, they need to ask for permission from the court. We’ll contact you by post if they do this.') }}</p>
+  </div>
+{% endmacro %}

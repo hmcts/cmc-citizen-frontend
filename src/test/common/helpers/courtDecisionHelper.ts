@@ -45,7 +45,7 @@ describe('CourtDecisionHelper', () => {
           totalAmount: 3326.59,
           instalmentAmount: 1000,
           firstPaymentDate: {
-            year: 2020,
+            year: 2050,
             month: 1,
             day: 1
           },
