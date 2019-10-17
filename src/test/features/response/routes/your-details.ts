@@ -79,6 +79,7 @@ describe('Defendant user details: your name page', () => {
 
         it('should render page without firstName when claim doesn\'t have firstName', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -89,6 +90,7 @@ describe('Defendant user details: your name page', () => {
 
         it('should render page without lastName when claim doesn\'t have lastName', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -99,6 +101,7 @@ describe('Defendant user details: your name page', () => {
 
         it('should render page without firstName when claim does not have title', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -109,6 +112,7 @@ describe('Defendant user details: your name page', () => {
 
         it('should render page with firstName when claim has firstName', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(splitNameDetails)
 
           await request(app)
@@ -119,6 +123,7 @@ describe('Defendant user details: your name page', () => {
 
         it('should render page with lastName when claim has lastName', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(splitNameDetails)
 
           await request(app)
@@ -129,6 +134,7 @@ describe('Defendant user details: your name page', () => {
 
         it('should render page with title when claim has title', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(splitNameDetails)
 
           await request(app)
@@ -171,6 +177,7 @@ describe('Defendant user details: your name page', () => {
           })
 
           it('should render page with error when firstName is available in the claim', async () => {
+            draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('response', splitNameDetails)
 
             await request(app)
@@ -181,6 +188,7 @@ describe('Defendant user details: your name page', () => {
           })
 
           it('should render page with error when lastName is available in the claim', async () => {
+            draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('response', splitNameDetails)
 
             await request(app)
