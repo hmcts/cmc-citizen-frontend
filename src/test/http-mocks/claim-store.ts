@@ -652,7 +652,7 @@ export function mockNextWorkingDay (expected: Moment): mock.Scope {
 export function rejectNextWorkingDay (expected: Moment): mock.Scope {
   return mock(serviceBaseURL)
     .get('/calendar/next-working-day')
-    .query({ date: expected })
+    .query({ date: expected.format() })
     .reply(400)
 }
 
@@ -806,10 +806,10 @@ export function resolveSaveClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
+export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+    .reply(status, reason)
 }
 
 export function resolveSaveCcjForExternalId () {

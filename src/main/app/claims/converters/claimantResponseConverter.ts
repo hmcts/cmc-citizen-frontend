@@ -39,6 +39,8 @@ export class ClaimantResponseConverter {
 
       if (draftClaimantResponse.courtDetermination && draftClaimantResponse.courtDetermination.rejectionReason) {
         reject.reason = draftClaimantResponse.courtDetermination.rejectionReason.text
+      } else if (draftClaimantResponse.rejectionReason) {
+        reject.reason = draftClaimantResponse.rejectionReason.text
       }
 
       this.addStatesPaidOptions(draftClaimantResponse, reject)
