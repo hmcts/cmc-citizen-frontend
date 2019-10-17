@@ -652,7 +652,7 @@ export function mockNextWorkingDay (expected: Moment): mock.Scope {
 export function rejectNextWorkingDay (expected: Moment): mock.Scope {
   return mock(serviceBaseURL)
     .get('/calendar/next-working-day')
-    .query({ date: expected })
+    .query({ date: expected.format() })
     .reply(400)
 }
 
