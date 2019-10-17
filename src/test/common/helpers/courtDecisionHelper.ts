@@ -6,6 +6,7 @@ import { expect } from 'chai'
 import { DecisionType } from 'common/court-calculations/decisionType'
 import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { sampleClaimantResponseDraftObj } from 'test/http-mocks/draft-store'
+import { MomentFactory } from 'shared/momentFactory'
 
 describe('CourtDecisionHelper', () => {
   let claim: Claim
@@ -45,9 +46,9 @@ describe('CourtDecisionHelper', () => {
           totalAmount: 3326.59,
           instalmentAmount: 1000,
           firstPaymentDate: {
-            year: 2050,
-            month: 1,
-            day: 1
+            year: MomentFactory.currentDate().add(82,'days').format('YYYY'),
+            month: MomentFactory.currentDate().add(82,'days').format('M'),
+            day: MomentFactory.currentDate().add(82,'days').format('D')
           },
           paymentSchedule: {
             value: 'EACH_WEEK',

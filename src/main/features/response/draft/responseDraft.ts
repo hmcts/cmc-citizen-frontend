@@ -5,7 +5,6 @@ import { RejectAllOfClaim, RejectAllOfClaimOption } from 'response/form/models/r
 import { Defence } from 'response/form/models/defence'
 import { MoreTimeNeeded, MoreTimeNeededOption } from 'response/form/models/moreTimeNeeded'
 import { ResponseType } from 'response/form/models/responseType'
-import { isNullOrUndefined } from 'util'
 import { Defendant } from 'drafts/models/defendant'
 import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTruth'
@@ -139,7 +138,7 @@ export class ResponseDraft extends DraftDocument {
   }
 
   public isMoreTimeRequested (): boolean {
-    return !isNullOrUndefined(this.moreTimeNeeded) && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
+    return this.moreTimeNeeded !== undefined && this.moreTimeNeeded.option === MoreTimeNeededOption.YES
   }
 
   public isResponseFullyAdmitted (): boolean {
