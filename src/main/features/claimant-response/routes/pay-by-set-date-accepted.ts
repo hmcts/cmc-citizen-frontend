@@ -15,7 +15,7 @@ export default express.Router()
   .post(
     Paths.payBySetDateAcceptedPage.uri,
     async (req: express.Request, res: express.Response): Promise<void> => {
-      const { externalId } = await req.params
+      const { externalId } = req.params
 
       const draft: Draft<DraftClaimantResponse> = res.locals.claimantResponseDraft
       const user: User = res.locals.user
