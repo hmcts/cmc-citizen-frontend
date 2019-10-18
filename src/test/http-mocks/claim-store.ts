@@ -165,8 +165,8 @@ export const sampleClaimObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC000',
-  createdAt: '2017-07-25T22:45:51.785',
-  issuedOn: '2017-07-25',
+  createdAt: '2019-09-25T22:45:51.785',
+  issuedOn: '2019-09-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
@@ -652,7 +652,7 @@ export function mockNextWorkingDay (expected: Moment): mock.Scope {
 export function rejectNextWorkingDay (expected: Moment): mock.Scope {
   return mock(serviceBaseURL)
     .get('/calendar/next-working-day')
-    .query({ date: expected })
+    .query({ date: expected.format() })
     .reply(400)
 }
 
