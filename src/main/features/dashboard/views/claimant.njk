@@ -1,6 +1,9 @@
 {% extends "layout.njk" %}
+
 {% from "./macro/caseHistory.njk" import caseHistoryForClaimantClaimDetails %}
 {% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
+{% from "internalLink.njk" import internalLink %}
+
 {% set headingVisible = false %}
 {% set heading = 'Claim status' %}
 
@@ -14,14 +17,14 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
         {% if claim %}
-          {{ caseHistoryForClaimantClaimDetails(claim, csrf) }}
+          {{ caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) }}
         {% else %}
           <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
           <p>
             {{ t('Your claim is saved as a draft.') }}
           </p>
           <p>
-            <a href="{{ ClaimPaths.taskListPage.uri }}">{{ t('Continue with claim') }}</a>
+            {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
           </p>
         {% endif %}
       </div>
@@ -29,7 +32,7 @@
 
     {% if claim %}
       <div class="column-one-third">
-        {{ aboutClaimWidget(claim = claim, party = 'defendant') }}
+        {{ aboutClaimWidget(claim = claim, otherParty = 'defendant') }}
       </div>
     {% endif %}
   </div>

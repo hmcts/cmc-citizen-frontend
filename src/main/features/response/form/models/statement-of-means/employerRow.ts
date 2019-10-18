@@ -1,4 +1,4 @@
-import { IsDefined, ValidateIf } from 'class-validator'
+import { IsDefined, ValidateIf } from '@hmcts/class-validator'
 
 import { IsNotBlank, MaxLength } from '@hmcts/cmc-validators'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'

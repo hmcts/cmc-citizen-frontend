@@ -17,19 +17,19 @@
 {% macro claimFullAdmissionForClaimantClaimDetails(claim) %}
   <div class="status-block">
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
-    <h2 class="heading-small">{{ t('The defendant said they’ll pay you immediately') }}</h2>
+    <h2 class="heading-medium">{{ t('The defendant said they’ll pay you immediately') }}</h2>
     <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your
       account.',
-      { paymentDate: paymentDate }) }}</p>
+      { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
     <p>{{ t('You can settle for less than the full claim amount.') }}</p>
     {{ paidInFullClaimantButtonClaimDetails(claim) }}
     <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
     <p>{{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', {
-      paymentDate: paymentDate }) }}</p>
+      paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <h2 class="heading-small">{{ t('The defendant has offered to pay by {{ paymentDate }}.',
-          { paymentDate: paymentDate }) }}</h2>
+          { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</h2>
 
       {% if claim.claimData.defendant.isBusiness() %}
         <p>{{ t('They’ll send you their financial details. You can use these to decide whether to to accept or reject their offer') }}</p>
@@ -52,13 +52,13 @@
 
 {% macro claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) %}
 <div class="status-block">
-  <h2 class="heading-small">{{ t('The defendant said they’ll pay you immediately') }}</h2>
+  <h2 class="heading-medium">{{ t('The defendant said they’ll pay you immediately') }}</h2>
   <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your
     account.',
     { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
   <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
   <p>{{ t('You can settle for less than the full claim amount.') }}</p>
-  {{ internalLink('Tell us you’ve settled', AppPaths.contactUsPage.uri, 'button button-secondary form-group') }}
+  {{ internalLink('Tell us if you want to end the claim', DashboardPaths.datePaidPage.evaluateUri({ externalId: claim.externalId }), 'button button-secondary form-group') }}
 
   <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
   <p>{{ t('If the defendant has not paid you, you can '

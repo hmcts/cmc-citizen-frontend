@@ -7,7 +7,7 @@ import { DraftDocument } from '@hmcts/cmc-draft-store-middleware'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
 
 export class DraftCCJ extends DraftDocument {
-  defendantDateOfBirth: DateOfBirth
+  defendantDateOfBirth?: DateOfBirth
   paymentOption: CCJPaymentOption = new CCJPaymentOption()
   paidAmount?: PaidAmount
   payBySetDate?: PaymentDate
@@ -30,7 +30,9 @@ export class DraftCCJ extends DraftDocument {
   deserialize (input: any): DraftCCJ {
     if (input) {
       this.externalId = input.externalId
-      this.defendantDateOfBirth = new DateOfBirth().deserialize(input.defendantDateOfBirth)
+      if (input.defendantDateOfBirth) {
+        this.defendantDateOfBirth = new DateOfBirth().deserialize(input.defendantDateOfBirth)
+      }
       this.paymentOption = new CCJPaymentOption().deserialize(input.paymentOption)
       this.paidAmount = new PaidAmount().deserialize(input.paidAmount)
       this.payBySetDate = new PaymentDate().deserialize(input.payBySetDate)

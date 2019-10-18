@@ -1,12 +1,17 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 
-{% macro downloadResponseLink(claim) %}
-  <a href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response') }}</a>{{ t(' (PDF)') }}
+{% macro downloadResponseLink(claim, title='Download your response') %}
+  {{ internalLink(t(title), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+  {{ t('(PDF)') }}{% endmacro %}
+
+{% macro downloadTheirResponseLink(claim) %}
+  {{ internalLink(t('Download their response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+  {{ t('(PDF)') }}
 {% endmacro %}
 
 {% macro viewAndRespondOffer(claim, text = 'View and respond to the offer') %}
-  <p><a href='{{ ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}' class="button button-secondary">{{ t(text) }}</a></p>
+  <p>{{ internalLink(t(text), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-secondary') }}</p>
 {% endmacro %}
 
 {% macro signAgreementLink(claim, text = 'Sign the settlement agreement') %}
@@ -18,8 +23,8 @@
 {% endmacro %}
 
 {% macro downloadAgreementLink(claim) %}
-  <a href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">
-    {{ t('Download the settlement agreement') }}</a> {{ t(' (PDF)') }}
+  {{ internalLink(t('Download the settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}
+  {{ t('(PDF)') }}
 {% endmacro %}
 
 {% macro admissionByCCJCommonInfoClaimDetails(claim) %}

@@ -14,6 +14,7 @@ const govUkElementRoot = path.join(repoRoot, 'node_modules/govuk-elements-sass/p
 
 const assetsDirectory = './src/main/public'
 const stylesheetsDirectory = `${assetsDirectory}/stylesheets`
+const webChatDirectory = `${assetsDirectory}/webchat`
 
 gulp.task('sass', (done) => {
   gulp.src(stylesheetsDirectory + '/*.scss')
@@ -32,11 +33,25 @@ gulp.task('sass', (done) => {
 
 gulp.task('copy-files', (done) => {
   copyGovUkTemplate()
+  copyWebChatTemplate()
   copyClientPolyfills()
   copyA11ySniffer()
   copyClientModules()
+  copyDatePickerDependencies()
   done()
 })
+
+function copyWebChatTemplate () {
+  gulp.src([
+    './node_modules/@hmcts/ctsc-web-chat/assets/javascript/*.js'
+  ])
+    .pipe(gulp.dest(`${webChatDirectory}/javascript/`))
+
+  gulp.src([
+    './node_modules/@hmcts/ctsc-web-chat/assets/css/*.css'
+  ])
+    .pipe(gulp.dest(`${webChatDirectory}/css/`))
+}
 
 function copyGovUkTemplate () {
   gulp.src([
@@ -80,22 +95,12 @@ function copyClientPolyfills () {
 
 function copyA11ySniffer () {
   gulp.src([
-    './node_modules/HTML_CodeSniffer/HTMLCS.js'
+    './node_modules/html_codesniffer/build/HTMLCS.js'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/htmlcs`))
 
   gulp.src([
-    './node_modules/HTML_CodeSniffer/Standards/**'
-  ])
-    .pipe(gulp.dest(`${assetsDirectory}/js/lib/htmlcs/Standards`))
-
-  gulp.src([
-    './node_modules/HTML_CodeSniffer/Auditor/HTMLCSAuditor.js'
-  ])
-    .pipe(gulp.dest(`${assetsDirectory}/js/lib/htmlcs/Auditor`))
-
-  gulp.src([
-    './node_modules/HTML_CodeSniffer/Auditor/**/*.{css,gif,png}'
+    './node_modules/html_codesniffer/build/**/*.{css,gif,png}'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib/`))
 }
@@ -109,6 +114,25 @@ function copyClientModules () {
     './node_modules/numeral/min/locales.min.js'
   ])
     .pipe(gulp.dest(`${assetsDirectory}/js/lib/numeral`))
+}
+
+function copyDatePickerDependencies () {
+  gulp.src([
+    './node_modules/lodash/lodash.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib`))
+  gulp.src([
+    './node_modules/moment/min/moment.min.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib`))
+  gulp.src([
+    './node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/js/lib`))
+  gulp.src([
+    './node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.css'
+  ])
+    .pipe(gulp.dest(`${assetsDirectory}/stylesheets/lib`))
 }
 
 gulp.task('watch', (done) => {

@@ -16,7 +16,7 @@
 
 {% macro claimFullAdmissionForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Your response to the claim') }}</h2>
+    <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
     {% set claimant = claim.claimData.claimant %}
     {% set amount = claim.totalAmountTillToday | numeral %}
     {% set paymentIntention = claim.response.paymentIntention %}
@@ -34,14 +34,14 @@
       <p>{{ internalLink( t('Contact {{ claimantName }}' , { claimantName: claimant.name } ), claimantDetailsPageURI) }}
         {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
-      <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} by {{ paymentDate }}.',
+      <p>{{ t('You’ve offered to pay {{ claimantName }} by {{ paymentDate }}.',
       { claimantName: claimant.name, amount: amount, paymentDate: paymentDate }) }}
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
       {% set repaymentPlan = paymentIntention.repaymentPlan %}
       {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
       {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
       {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
-      <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ installmentAmount }}
+      <p>{{ t('You’ve offered to pay {{ claimantName }} {{ installmentAmount }}
             {{ paymentSchedule }} starting {{ paymentDate }}.',
           { amount: amount, claimantName: claimant.name, installmentAmount: installmentAmount,
             paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}

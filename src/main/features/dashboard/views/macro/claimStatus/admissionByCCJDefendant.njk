@@ -4,7 +4,7 @@
 {% from "./utilityMacros.njk" import downloadResponseLink, admissionByCCJCommonInfoClaimDetails %}
 
 {% macro admissionByCCJDefendantDashboard(claim) %}
-  {{ t('{{ claimantName }} requested a County Court Judgment against you', { claimantName: claim.claimData.claimant.name }) }}
+  {{ t('{{ claimantName }} requested a County Court Judgment against you.', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
 {% macro admissionByCCJDefendantClaimDetails(claim) %}
@@ -21,10 +21,10 @@
   <div class="status-block">
     <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-      <p>{{ t('You agreed to pay the full {{ amount }} immediately.', { amount: claim.response.amount }) }}</p>
+      <p>{{ t('You agreed to pay the full {{ amount }} immediately.', { amount: claim.response.amount | numeral }) }}</p>
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
       <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} immediately.',
-          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount }) }}</p>
+          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount | numeral }) }}</p>
     {% endif %}
     <p>{{ t('Because you didn’t pay within 5 days, they requested a CCJ against you.') }}</p>
 
@@ -44,12 +44,27 @@
 
 {% macro CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
+    <h2 class="heading-medium">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
-      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+      {% if claim.claimantResponse.courtDetermination %}
+        <p>{{ t('They rejected your repayment plan.') }}</p>
+      {% else %}
+        <p>{{ t('They accepted your repayment plan.') }}</p>
+      {% endif %}
+    {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+      {% if claim.claimantResponse.courtDetermination %}
+        <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount | numeral }) }}</p>
+      {% else %}
+        <p>{{ t('They accepted your repayment plan.') }}</p>
+      {% endif %}
     {% endif %}
 
-    <p>{{ t('{{ claimantName }} accepted your repayment plan.', { claimantName: claim.claimData.claimant.name }) }}</p>
+    {% if claim.claimantResponse.courtDetermination.decisionType === DecisionType.CLAIMANT %}
+      <p>{{ t('They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.') }}</p>
+    {% elif claim.claimantResponse.courtDetermination.decisionType === DecisionType.COURT %}
+      <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>
+    {% endif %}
+
     <p>{{ t('They asked you to sign a settlement agreement. Because you didn’t sign it, they requested a CCJ against you.') }}</p>
     <p>{{ internalLink('View the repayment plan', CCJPaths.repaymentPlanSummaryPage.evaluateUri({ externalId: claim.externalId, madeBy: MadeBy.DEFENDANT.value }), 'button button-secondary') }}</p>
 
@@ -60,11 +75,11 @@
 
 {% macro CCJByDeterminationDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       <p>{{ t('They rejected your repayment plan.') }}</p>
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount }) }}</p>
+      <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount | numeral }) }}</p>
     {% endif %}
 
     {% if claim.claimantResponse.courtDetermination.decisionType === DecisionType.CLAIMANT %}

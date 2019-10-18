@@ -4,22 +4,23 @@
   {{ t('{{ claimantName }} requested a County Court Judgment against you', { claimantName: claim.claimData.claimant.name }) }}
 {% endmacro %}
 
-{% macro redeterminationDefendnatClaimDetails(claim) %}
+{% macro redeterminationDefendantClaimDetails(claim) %}
   <div class="status-block">
-    {% if claim.reDetermination.partyType === MadeBy.CLAIMANT %}
-      <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you',
+    {% if claim.reDetermination.partyType === MadeBy.CLAIMANT
+      or claim.isInterlocutoryJudgmentRequestedOnAdmissions() %}
+      <h2 class="heading-medium">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you',
           { claimantName: claim.claimData.claimant.name }) }}</h2>
       {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
         <p>{{ t('They rejected your repayment plan.') }}</p>
       {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
-        <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount }) }}</p>
+          <p>{{ t('They accepted your offer to pay {{ partAdmitAmount }}. They rejected your repayment plan.', { partAdmitAmount: claim.response.amount | numeral }) }}</p>
       {% endif %}
       <p>{{ t('They also rejected a repayment plan determined by the court, based on the financial details you provided.') }}</p>
       <p>{{ t('When we’ve processed the request we’ll post a copy of the judgment to you and to {{ claimantName }}.',
           { claimantName: claim.claimData.claimant.name }) }}</p>
       <p>{{ t('A judge will make a repayment plan. We’ll contact you to tell you what to do next.') }}</p>
     {% elif claim.reDetermination.partyType === MadeBy.DEFENDANT %}
-      <h2 class="heading-small">{{ t('You’ve rejected the claimant’s repayment plan') }}</h2>
+      <h2 class="heading-medium">{{ t('You’ve rejected the claimant’s repayment plan') }}</h2>
       <p>{{ t('A judge will review the case. We’ll contact you to tell you what to do next.') }}</p>
     {% endif %}
     <p>{{ downloadResponseLink(claim) }}</p>

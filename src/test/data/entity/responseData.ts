@@ -6,7 +6,7 @@ import { ResidenceType } from 'claims/models/response/statement-of-means/residen
 import { BankAccountType } from 'claims/models/response/statement-of-means/bankAccount'
 
 import { MomentFactory } from 'shared/momentFactory'
-import { individual, company } from 'test/data/entity/party'
+import { company, individual } from 'test/data/entity/party'
 import { Income, IncomeType } from 'claims/models/response/statement-of-means/income'
 import { Expense, ExpenseType } from 'claims/models/response/statement-of-means/expense'
 import { PaymentFrequency } from 'claims/models/response/core/paymentFrequency'
@@ -15,7 +15,16 @@ import { DisabilityStatus } from 'claims/models/response/statement-of-means/disa
 export const baseResponseData = {
   defendant: individual,
   moreTimeNeeded: 'no',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
+}
+
+export const baseResponseDataWithMediation = {
+  defendant: individual,
+  moreTimeNeeded: 'no',
+  freeMediation: 'yes',
+  mediationPhoneNumber: '1234567'
 }
 
 const baseCompanyResponseData = {
@@ -23,10 +32,12 @@ const baseCompanyResponseData = {
   moreTimeNeeded: 'no'
 }
 
-const baseDefenceData = {
+export const baseDefenceData = {
   responseType: 'FULL_DEFENCE',
   defence: 'My defence',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
 export const defenceWithDisputeData = {
@@ -41,18 +52,52 @@ export const defenceWithAmountClaimedAlreadyPaidData = {
   defenceType: 'ALREADY_PAID',
   paymentDeclaration: {
     paidDate: '2017-12-31',
+    paidAmount: 100,
     explanation: 'I paid in cash'
   }
 }
 
 export const baseFullAdmissionData = {
   responseType: 'FULL_ADMISSION',
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
 }
 
-const basePartialAdmissionData = {
-  responseType: 'PART_ADMISSION',
-  freeMediation: 'no'
+export const basePayImmediatelyData = {
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().add(5, 'days')
+  }
+}
+export const basePayImmediatelyDatePastData = {
+  paymentIntention: {
+    paymentOption: PaymentOption.IMMEDIATELY,
+    paymentDate: MomentFactory.currentDate().subtract(5, 'days')
+  }
+}
+
+export const basePayByInstalmentsData = {
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: '2050-12-31',
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: '2051-12-31',
+      paymentLength: '1'
+    }
+  }
+}
+
+export const basePayBySetDateData = {
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: '2050-12-31'
+  }
+}
+export const basePartialAdmissionData = {
+  responseType: 'PART_ADMISSION'
 }
 
 const basePartialEvidencesAndTimeLines = {
@@ -79,10 +124,7 @@ const basePartialEvidencesAndTimeLines = {
 export const fullAdmissionWithImmediatePaymentData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
-  paymentIntention: {
-    paymentOption: PaymentOption.IMMEDIATELY,
-    paymentDate: MomentFactory.currentDate().add(5, 'days')
-  }
+  ...basePayImmediatelyData
 }
 
 export const partialAdmissionWithImmediatePaymentData = {
@@ -90,10 +132,16 @@ export const partialAdmissionWithImmediatePaymentData = {
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
   defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.IMMEDIATELY,
-    paymentDate: MomentFactory.currentDate().add(5, 'days')
-  },
+  ...basePayImmediatelyData,
+  amount: 3000
+}
+
+export const partialAdmissionWithImmediatePaymentDataV2 = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayImmediatelyData,
   amount: 3000
 }
 
@@ -113,7 +161,28 @@ export const partialAdmissionFromStatesPaidDefence = {
   evidence: {
     rows: []
   },
-  freeMediation: 'no'
+  freeMediation: 'no',
+  mediationPhoneNumber: undefined,
+  mediationContactPerson: undefined
+}
+
+export const partialAdmissionFromStatesPaidWithMediationDefence = {
+  ...baseResponseData,
+  ...basePartialAdmissionData,
+  amount: 100,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    explanation: 'I paid in cash'
+  },
+  defence: 'bla bla bla',
+  timeline: {
+    rows: [],
+    comment: 'I do not agree'
+  },
+  evidence: {
+    rows: []
+  },
+  freeMediation: 'yes'
 }
 
 export const partialAdmissionAlreadyPaidData = {
@@ -131,9 +200,24 @@ export const partialAdmissionAlreadyPaidData = {
 export const fullAdmissionWithPaymentBySetDateData = {
   ...baseResponseData,
   ...baseFullAdmissionData,
+  ...basePayBySetDateData
+}
+
+export const fullAdmissionWithPaymentBySetDateDataInNext2days = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
   paymentIntention: {
     paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: '2050-12-31'
+    paymentDate: MomentFactory.currentDate().add(2, 'days').toISOString()
+  }
+}
+
+export const fullAdmissionWithReasonablePaymentBySetDateData = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
+    paymentDate: MomentFactory.currentDate().add(65, 'days').toISOString()
   }
 }
 
@@ -142,41 +226,17 @@ export const partialAdmissionWithPaymentBySetDateData = {
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
   defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: '2050-12-31'
-  },
+  ...basePayBySetDateData,
   amount: 3000
 }
 
-export const fullAdmissionWithPaymentByInstalmentsData = {
-  ...baseResponseData,
-  ...baseFullAdmissionData,
-  paymentIntention: {
-    paymentOption: PaymentOption.INSTALMENTS,
-    repaymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK,
-      completionDate: '2051-12-31',
-      paymentLength: '1'
-    }
-  }
-}
-
-export const fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule = {
-  ...baseResponseData,
-  ...baseFullAdmissionData,
-  paymentIntention: {
-    paymentOption: PaymentOption.INSTALMENTS,
-    repaymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: '2018-10-01',
-      paymentSchedule: PaymentSchedule.EACH_WEEK,
-      completionDate: '2019-02-01',
-      paymentLength: '1'
-    }
-  }
+export const partialAdmissionWithPaymentBySetDateWithMediationData = {
+  ...baseResponseDataWithMediation,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayBySetDateData,
+  amount: 3000
 }
 
 export const partialAdmissionWithPaymentByInstalmentsData = {
@@ -184,17 +244,59 @@ export const partialAdmissionWithPaymentByInstalmentsData = {
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
   defence: 'i have paid more than enough',
+  ...basePayByInstalmentsData,
+  amount: 3000
+}
+
+export const partialAdmissionWithPaymentByInstalmentsWithMediationData = {
+  ...baseResponseDataWithMediation,
+  ...basePartialAdmissionData,
+  ...basePartialEvidencesAndTimeLines,
+  defence: 'i have paid more than enough',
+  ...basePayByInstalmentsData,
+  amount: 3000
+}
+
+export const fullAdmissionWithPaymentByInstalmentsData = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  ...basePayByInstalmentsData
+}
+
+export const fullAdmissionWithPaymentByInstalmentsDataCompany = {
+  ...baseCompanyResponseData,
+  ...baseFullAdmissionData,
+  ...basePayByInstalmentsData
+}
+
+export const fullAdmissionWithPaymentByInstalmentsDataWithReasonablePaymentSchedule = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
   paymentIntention: {
     paymentOption: PaymentOption.INSTALMENTS,
     repaymentPlan: {
       instalmentAmount: 100,
-      firstPaymentDate: '2050-12-31',
+      firstPaymentDate: MomentFactory.currentDate().add(80, 'days').toISOString(),
       paymentSchedule: PaymentSchedule.EACH_WEEK,
-      completionDate: '2051-12-31',
+      completionDate: MomentFactory.currentDate().add(100, 'days').toISOString(),
       paymentLength: '1'
     }
-  },
-  amount: 3000
+  }
+}
+
+export const fullAdmissionWithPaymentByInstalmentsDataWithUnReasonablePaymentSchedule = {
+  ...baseResponseData,
+  ...baseFullAdmissionData,
+  paymentIntention: {
+    paymentOption: PaymentOption.INSTALMENTS,
+    repaymentPlan: {
+      instalmentAmount: 100,
+      firstPaymentDate: MomentFactory.maxDate().toISOString(),
+      paymentSchedule: PaymentSchedule.EACH_WEEK,
+      completionDate: MomentFactory.maxDate().toISOString(),
+      paymentLength: '1'
+    }
+  }
 }
 
 export const statementOfMeansWithMandatoryFieldsOnlyData = {
@@ -247,7 +349,7 @@ export const statementOfMeansWithMandatoryFieldsAndNoDisposableIncome = {
     }
   },
   incomes: [{
-    amount: 0,
+    amount: 10,
     frequency: PaymentFrequency.WEEK,
     type: IncomeType.CHILD_BENEFIT
   }] as Income[],
@@ -314,6 +416,20 @@ export const fullAdmissionWithSoMPaymentBySetDate = {
   }
 }
 
+export const fullAdmissionWithSoMPaymentBySetDateInNext2Days = {
+  ...fullAdmissionWithPaymentBySetDateDataInNext2days,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome = {
+  ...fullAdmissionWithReasonablePaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsAndNoDisposableIncome
+  }
+}
+
 export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   ...fullAdmissionWithPaymentByInstalmentsData,
   statementOfMeans: {
@@ -321,15 +437,29 @@ export const fullAdmissionWithSoMPaymentByInstalmentsData = {
   }
 }
 
+export const fullAdmissionWithSoMPaymentByInstalmentsDataCompany = {
+  ...fullAdmissionWithPaymentByInstalmentsDataCompany,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
 export const fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule = {
-  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  ...fullAdmissionWithPaymentByInstalmentsDataWithReasonablePaymentSchedule,
+  statementOfMeans: {
+    ...statementOfMeansWithMandatoryFieldsOnlyData
+  }
+}
+
+export const fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule = {
+  ...fullAdmissionWithPaymentByInstalmentsDataWithUnReasonablePaymentSchedule,
   statementOfMeans: {
     ...statementOfMeansWithMandatoryFieldsOnlyData
   }
 }
 
 export const fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome = {
-  ...fullAdmissionWithPaymentByInstalmentsDataWithResonablePaymentSchedule,
+  ...fullAdmissionWithPaymentByInstalmentsDataWithReasonablePaymentSchedule,
   statementOfMeans: {
     ...statementOfMeansWithMandatoryFieldsAndNoDisposableIncome
   }
@@ -342,16 +472,25 @@ export const partialAdmissionWithSoMPaymentBySetDateData = {
   }
 }
 
-export const partialAdmissionWithImmediatePaymentCompanyData = {
-  ...baseCompanyResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.IMMEDIATELY,
-    paymentDate: MomentFactory.currentDate().add(5, 'days')
-  },
-  amount: 3000
+export const partialAdmissionWithSoMPaymentBySetDateWithMediationData = {
+  ...partialAdmissionWithPaymentBySetDateWithMediationData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentByInstalmentsDateData = {
+  ...partialAdmissionWithPaymentBySetDateData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
+}
+
+export const partialAdmissionWithSoMPaymentByInstalmentsWithMediationData = {
+  ...partialAdmissionWithPaymentBySetDateWithMediationData,
+  statementOfMeans: {
+    ...statementOfMeansWithAllFieldsData
+  }
 }
 
 export const partialAdmissionWithPaymentBySetDateCompanyData = {
@@ -359,28 +498,7 @@ export const partialAdmissionWithPaymentBySetDateCompanyData = {
   ...basePartialAdmissionData,
   ...basePartialEvidencesAndTimeLines,
   defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: '2050-12-31'
-  },
-  amount: 3000
-}
-
-export const partialAdmissionWithPaymentByInstalmentsCompanyData = {
-  ...baseCompanyResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.INSTALMENTS,
-    repaymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: '2050-12-31',
-      paymentSchedule: PaymentSchedule.EACH_WEEK,
-      completionDate: '2051-12-31',
-      paymentLength: '1'
-    }
-  },
+  ...basePayBySetDateData,
   amount: 3000
 }
 
@@ -397,35 +515,6 @@ export const fullAdmissionWithPaymentByInstalmentsDataPaymentDateBeforeMonth = {
   }
 }
 
-export const fullAdmissionWithPaymentByInstalmentsDataPaymentDateAfterMonth = {
-  ...baseResponseData,
-  ...baseFullAdmissionData,
-  paymentIntention: {
-    paymentOption: PaymentOption.INSTALMENTS,
-    repaymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: MomentFactory.currentDate().add(50, 'days'),
-      paymentSchedule: PaymentSchedule.EACH_WEEK
-    }
-  }
-}
-
-export const partialAdmissionWithPaymentByInstalmentsDataPaymentDateBeforeMonth = {
-  ...baseResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.INSTALMENTS,
-    repaymentPlan: {
-      instalmentAmount: 100,
-      firstPaymentDate: MomentFactory.currentDate().add(10, 'days'),
-      paymentSchedule: PaymentSchedule.EACH_WEEK
-    }
-  },
-  amount: 3000
-}
-
 export const partialAdmissionWithPaymentByInstalmentsDataPaymentDateAfterMonth = {
   ...baseResponseData,
   ...basePartialAdmissionData,
@@ -440,15 +529,6 @@ export const partialAdmissionWithPaymentByInstalmentsDataPaymentDateAfterMonth =
     }
   },
   amount: 3000
-}
-
-export const fullAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth = {
-  ...baseResponseData,
-  ...baseFullAdmissionData,
-  paymentIntention: {
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: MomentFactory.currentDate().add(10, 'days')
-  }
 }
 
 export const fullAdmissionWithPaymentBySetDateDataPaymentDateAfterMonth = {
@@ -471,14 +551,36 @@ export const partialAdmissionWithPaymentBySetDateDataPaymentDateBeforeMonth = {
   amount: 3000
 }
 
-export const partialAdmissionWithPaymentBySetDateDataPaymentDateAfterMonth = {
-  ...baseResponseData,
-  ...basePartialAdmissionData,
-  ...basePartialEvidencesAndTimeLines,
-  defence: 'i have paid more than enough',
-  paymentIntention: {
-    paymentOption: PaymentOption.BY_SPECIFIED_DATE,
-    paymentDate: MomentFactory.currentDate().add(50, 'days')
+export const fullDefenceWithStatesPaidGreaterThanClaimAmount = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '20000',
+    explanation: 'I paid in cash'
+  }
+}
+
+export const fullDefenceData = {
+  ...baseDefenceData
+}
+
+export const fullDefenceWithStatesLessThanClaimAmount = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
   },
-  amount: 3000
+  responseType: 'PART_ADMISSION'
+}
+
+export const fullDefenceWithStatesLessThanClaimAmountWithMediation = {
+  ...defenceWithAmountClaimedAlreadyPaidData,
+  paymentDeclaration: {
+    paidDate: '2017-12-31',
+    paidAmount: '80',
+    explanation: 'I paid in cash'
+  },
+  responseType: 'PART_ADMISSION',
+  freeMediation: 'yes'
 }

@@ -1,7 +1,7 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { Fractions, IsLessThan, IsValidLocalDate } from '@hmcts/cmc-validators'
-import { IsDefined, IsIn, Min, ValidateNested } from 'class-validator'
+import { IsDefined, IsIn, Min, ValidateNested } from '@hmcts/class-validator'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import {
   ValidationErrors as GlobalValidationErrors,

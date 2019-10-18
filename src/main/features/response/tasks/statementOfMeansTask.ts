@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { StatementOfMeans } from 'response/draft/statementOfMeans'

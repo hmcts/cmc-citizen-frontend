@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Debts, ValidationErrors, INIT_ROW_COUNT } from 'response/form/models/statement-of-means/debts'
 import { DebtRow } from 'response/form/models/statement-of-means/debtRow'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 describe('Debts', () => {

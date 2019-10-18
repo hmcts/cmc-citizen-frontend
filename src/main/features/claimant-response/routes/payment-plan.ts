@@ -18,7 +18,7 @@ import { claimantResponsePath, Paths } from 'claimant-response/paths'
 
 import { FormValidationError } from 'forms/form'
 import { getEarliestPaymentDateForPaymentPlan } from 'claimant-response/helpers/paydateHelper'
-import { ValidationError } from 'class-validator'
+import { ValidationError } from '@hmcts/class-validator'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
@@ -41,7 +41,6 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
     const admittedClaimAmount: number = AdmissionHelper.getAdmittedAmount(claim)
     const paymentPlanFromDefendantFinancialStatement: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDefendantFinancialStatement(claim, draft)
     const claimantEnteredPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromDraft(draft)
-    const defendantPaymentPlan: PaymentPlan = PaymentPlanHelper.createPaymentPlanFromClaim(claim, draft)
 
     if (decisionType === DecisionType.CLAIMANT || decisionType === DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT) {
 
@@ -102,21 +101,7 @@ export class PaymentPlanPage extends AbstractPaymentPlanPage<DraftClaimantRespon
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.INSTALMENTS) {
         courtOfferedPaymentIntention.paymentOption = PaymentOption.INSTALMENTS
-
-        if (paymentPlanFromDefendantFinancialStatement.instalmentAmount === 0) {
-          const defendantPaymentPlanWithClaimantStartDate: PaymentPlan = defendantPaymentPlan.convertTo(
-            defendantPaymentPlan.frequency,
-            claimantEnteredPaymentPlan.startDate)
-          courtOfferedPaymentIntention.repaymentPlan = {
-            firstPaymentDate: defendantPaymentPlanWithClaimantStartDate.startDate,
-            instalmentAmount: _.round(defendantPaymentPlanWithClaimantStartDate.instalmentAmount, 2),
-            paymentSchedule: Frequency.toPaymentSchedule(defendantPaymentPlanWithClaimantStartDate.frequency),
-            completionDate: defendantPaymentPlanWithClaimantStartDate.calculateLastPaymentDate(),
-            paymentLength: defendantPaymentPlanWithClaimantStartDate.calculatePaymentLength()
-          }
-        } else {
-          courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
-        }
+        courtOfferedPaymentIntention.repaymentPlan = claimResponse.paymentIntention.repaymentPlan
       }
 
       if (claimResponse.paymentIntention.paymentOption === PaymentOption.BY_SPECIFIED_DATE) {

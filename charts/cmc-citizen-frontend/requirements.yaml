@@ -1,0 +1,14 @@
+dependencies:
+  - name: nodejs
+    version: ~1.3.0
+    repository: '@hmctspublic'
+  - name: idam-pr
+    version: ~2.1.0
+    repository: '@hmctspublic'
+    tags:
+      - idam-pr
+  - name: rpe-feature-toggle-api
+    version: ~3.0.2
+    repository: '@hmctspublic'
+    tags:
+      - rpe-feature-toggle-api-pod

@@ -13,14 +13,14 @@ import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 const pagePath: string = Paths.defendantAgePage.uri
-const pageRedirect: string = Paths.claimTypePage.uri
+const pageRedirect: string = Paths.over18Page.uri
 const expectedTextOnPage: string = 'Do you believe the person you’re claiming against is 18 or over?'
 const notEligibleReason: string = NotEligibleReason.UNDER_18_DEFENDANT
 
 describe('Claim eligibility: over 18 defendant page', () => {
   attachDefaultHooks(app)
 
-  describe('on GET', () => {
+  context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
@@ -31,7 +31,7 @@ describe('Claim eligibility: over 18 defendant page', () => {
     })
   })
 
-  describe('on POST', () => {
+  context('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
     it('should render page when form is invalid and everything is fine', async () => {

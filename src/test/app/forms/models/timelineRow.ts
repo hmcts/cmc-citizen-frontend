@@ -2,7 +2,7 @@ import { expect } from 'chai'
 
 import { TimelineRow, ValidationErrors, ValidationConstraints } from 'forms/models/timelineRow'
 import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 

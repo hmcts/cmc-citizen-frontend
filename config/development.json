@@ -3,9 +3,11 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "admissions": true,
-    "paidInFull": true,
     "returnErrorToUser": true,
-    "mediation": true
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
+    "newDashboardStatus": true
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

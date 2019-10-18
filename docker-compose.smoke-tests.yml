@@ -2,8 +2,8 @@ version: '2.1'
 
 services:
     citizen-integration-tests:
-      image: hmcts/cmc-citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
-      command: test:integration --grep @citizen-smoke-test
+      image: hmctspublic.azurecr.io/cmc/citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
+      command: test:integration --grep @smoke-test
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=${TEST_URL}
@@ -18,6 +18,9 @@ services:
         - HEALTHCHECK_CITIZEN=true
         - CHUNKS=1
         - FEATURE_ADMISSIONS
+        - FEATURE_MEDIATION
+        - FEATURE_DIRECTIONS_QUESTIONNAIRE
+        - FEATURE_TESTING_SUPPORT
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:

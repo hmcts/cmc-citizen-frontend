@@ -23,6 +23,8 @@ const taskListPagePath = ClaimantResponsePaths.taskListPage.evaluateUri({ extern
 const fullAdmissionResponseWithPaymentBySetDate = claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateResponseObj
 const fullAdmissionResponseWithPaymentByInstalments = claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj
 const partialAdmissionWithPaymentBySetDate = claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj
+const fullDefenceWithStatesPaid = claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount
+const fullDefenceData = claimStoreServiceMock.sampleFullDefenceRejectEntirely
 
 describe('Claimant response: view defendant response page', () => {
   attachDefaultHooks(app)
@@ -85,6 +87,45 @@ describe('Claimant response: view defendant response page', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText('The defendant’s response'))
       })
+
+      it('should render paid in full with stated amount when everything is fine', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithStatesPaid)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(`£20,000`))
+      })
+
+      it('should render full defence with hearing requirements', async () => {
+        const fullDefenceWithDQsEnabledData = {
+          ...fullDefenceData,
+          features : ['admissions', 'directionsQuestionnaire']
+        }
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullDefenceWithDQsEnabledData)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(`has rejected the claim.`,
+            `Download their full response and hearing requirements`))
+      })
+
+      it('should render part admission with hearing requirements', async () => {
+        const partAdmissionWithDQsEnabledData = {
+          ...partialAdmissionWithPaymentBySetDate,
+          features : ['admissions', 'directionsQuestionnaire']
+        }
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(partAdmissionWithDQsEnabledData)
+        draftStoreServiceMock.resolveFind('claimantResponse')
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(`They don’t believe they owe the full amount claimed.`))
+      })
     })
 
     describe('on POST', () => {
@@ -122,7 +163,7 @@ describe('Claimant response: view defendant response page', () => {
           it('should return 500 and render error page when cannot save claimantResponse draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
             draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -146,7 +187,7 @@ describe('Claimant response: view defendant response page', () => {
         it('should redirect to task list page when pagination was not requested and everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(fullAdmissionResponseWithPaymentByInstalments)
           draftStoreServiceMock.resolveFind('claimantResponse')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

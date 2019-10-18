@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, ValidateNested, Validator } from '@hmcts/class-validator'
 import { IsNotBlank } from '@hmcts/cmc-validators'
 import { Address } from 'forms/models/address'
 import { CorrespondenceAddress } from 'forms/models/correspondenceAddress'
@@ -14,6 +14,7 @@ export class ValidationErrors {
 export class PartyDetails {
   type?: string
 
+  @ValidateIf(o => (o.lastName === undefined && o.firstName === undefined), { groups: ['claimant', 'defendant', 'response'] })
   @IsDefined({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })
   @IsNotBlank({ message: ValidationErrors.NAME_REQUIRED, groups: ['claimant', 'defendant'] })
   @MaxLength(255, { message: ValidationErrors.NAME_TOO_LONG, groups: ['claimant', 'defendant'] })
@@ -75,13 +76,5 @@ export class PartyDetails {
 
   isBusiness (): boolean {
     return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
-  }
-
-  isSoleTrader (): boolean {
-    return this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
-  }
-
-  isBusinessOrSoleTrader (): boolean {
-    return this.isBusiness() || this.isSoleTrader()
   }
 }

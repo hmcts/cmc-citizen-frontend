@@ -1,4 +1,4 @@
-import { IsDefined, IsIn, ValidateIf, ValidateNested } from 'class-validator'
+import { IsDefined, IsIn, ValidateIf, ValidateNested } from '@hmcts/class-validator'
 
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
 import { UnemploymentDetails } from 'response/form/models/statement-of-means/unemploymentDetails'

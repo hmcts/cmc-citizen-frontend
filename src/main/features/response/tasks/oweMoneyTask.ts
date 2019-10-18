@@ -1,6 +1,6 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 const validator = new Validator()
 

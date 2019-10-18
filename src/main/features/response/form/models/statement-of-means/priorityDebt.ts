@@ -1,5 +1,5 @@
 import { ExpenseSource } from './expenseSource'
-import { ValidateIf, ValidateNested } from 'class-validator'
+import { ValidateIf, ValidateNested } from '@hmcts/class-validator'
 import { PriorityDebtType } from 'response/form/models/statement-of-means/priorityDebtType'
 
 export class PriorityDebt {

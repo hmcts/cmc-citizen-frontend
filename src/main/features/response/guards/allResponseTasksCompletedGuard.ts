@@ -6,6 +6,7 @@ import { TaskListBuilder } from 'response/helpers/taskListBuilder'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Logger } from '@hmcts/nodejs-logging'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
 
 const logger = Logger.getLogger('router/response/check-and-send')
 
@@ -15,9 +16,11 @@ export class AllResponseTasksCompletedGuard {
     try {
       const claim: Claim = res.locals.claim
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
+      const mediationDraft: Draft<MediationDraft> = res.locals.mediationDraft
+      const directionQuestionnaireDraft = res.locals.directionsQuestionnaireDraft
 
       const allTasksCompleted: boolean = TaskListBuilder
-        .buildRemainingTasks(draft.document, claim).length === 0
+        .buildRemainingTasks(draft.document, claim, mediationDraft.document, directionQuestionnaireDraft.document).length === 0
 
       if (allTasksCompleted) {
         return next()

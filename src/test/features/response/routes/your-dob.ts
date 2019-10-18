@@ -3,8 +3,8 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -14,8 +14,10 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import * as moment from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -44,6 +46,7 @@ describe('Defendant user details: your date of birth page', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -75,6 +78,7 @@ describe('Defendant user details: your date of birth page', () => {
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -86,7 +90,8 @@ describe('Defendant user details: your date of birth page', () => {
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -97,7 +102,8 @@ describe('Defendant user details: your date of birth page', () => {
 
           it('should redirect to your mobile page when everything is fine', async () => {
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
@@ -105,6 +111,26 @@ describe('Defendant user details: your date of birth page', () => {
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.defendantMobilePage
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to the under-18 hand-off page when the date is too recent', async () => {
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
+            const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().subtract(15, 'years')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({
+                known: 'true', date: {
+                  year: fifteenYearsAgo.year(),
+                  month: fifteenYearsAgo.month() + 1,
+                  day: fifteenYearsAgo.date()
+                }
+              })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.under18Page
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

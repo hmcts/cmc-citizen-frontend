@@ -1,22 +1,27 @@
+{% from "internalLink.njk" import internalLink %}
+
 <ul>
     <li>
-      <a href="{{ AppPaths.cookiesPage.uri }}">{{ t('Cookies') }}</a>
+      {{ internalLink(t('Cookies'), AppPaths.cookiesPage.uri) }}
     </li>
     <li>
-      <a href="{{ AppPaths.privacyPolicyPage.uri }}">{{ t('Privacy Policy') }}</a>
+      {{ internalLink(t('Privacy Policy'), AppPaths.privacyPolicyPage.uri) }}
     </li>
     <li>
-      <a href="{{ AppPaths.termsAndConditionsPage.uri }}">{{ t('Terms and conditions') }}</a>
+      {{ internalLink(t('Terms and conditions'), AppPaths.termsAndConditionsPage.uri) }}
     </li>
     <li>
-      <a href="https://www.gov.uk/help">{{ t('Help using GOV.UK') }}</a>
+      {{ internalLink(t('Help using GOV.UK'), 'https://www.gov.uk/help') }}
     </li>
     <li>
-      <a href="{{ AppPaths.contactUsPage.uri }}">{{ t('Contact us') }}</a>
+      {{ internalLink(t('Contact us'), AppPaths.contactUsPage.uri) }}
+    </li>
+    <li>
+      {{ internalLink(t('Accessibility statement'), AppPaths.accessibilityPage.uri) }}
     </li>
   {% if featureToggles.testingSupport %}
     <li>
-      <a href="/testing-support">Testing support</a>
+      {{ internalLink(t('Testing support'), TestingSupportPaths.indexPage.uri) }}
     </li>
   {% endif %}
 </ul>

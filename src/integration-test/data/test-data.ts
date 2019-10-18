@@ -28,7 +28,7 @@ export const claimAmount: Amount = {
 
 export const postcodeLookupQuery: PostcodeLookupQuery = {
   postcode: 'M13 9PL',
-  address: 'University of Manchester, Oxford Road, Manchester, M13 9PL'
+  address: 'UNIVERSITY OF MANCHESTER, OXFORD ROAD, MANCHESTER, M13 9PL'
 }
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
@@ -146,11 +146,16 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
 
   switch (type) {
     case PartyType.INDIVIDUAL:
-      defendant.name = 'Rose Smith'
+      defendant.name = 'Mrs. Rose Smith'
+      defendant.title = 'Mrs.'
+      defendant.firstName = 'Rose'
+      defendant.lastName = 'Smith'
       defendant.dateOfBirth = '1982-07-26'
       break
     case PartyType.SOLE_TRADER:
       defendant.name = 'Sole fish trader'
+      defendant.firstName = 'Sole fish'
+      defendant.lastName = 'trader'
       break
     case PartyType.COMPANY:
       defendant.name = 'Defendant company Inc'

@@ -1,5 +1,3 @@
-{% set email = claim.claimantEmail %}
-
 <h2 class="heading-medium">{{ t('Send financial details') }}</h2>
 
 <p>{{ t('You need to send the defendant’s financial details to the court.') }}</p>
@@ -19,7 +17,7 @@
   {{ t('NN1 2LH') }}
 </div>
 
-<span class="block">{{ t('Or email them to: <a href="mailto:{{ email }}">{{ email }}</a>', { email: email }) | safe }}</span>
+<span class="block">{{ t('Or email them to: <a href="mailto:{{ email }}">{{ email }}</a>', { email: supportEmailAddress }) | safe }}</span>
 
 <h2 class="heading-medium">{{ t('If the court believes the defendant can afford your plan') }}</h2>
 

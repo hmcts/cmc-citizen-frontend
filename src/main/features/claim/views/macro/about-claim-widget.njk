@@ -1,15 +1,15 @@
 {% from "internalLink.njk" import internalLink %}
 
-{% macro aboutClaimWidget(party, claim, showResponse = true) %}
+{% macro aboutClaimWidget(otherParty, claim, showResponse = true) %}
 
-{% if party === 'defendant' %}
+{% if otherParty === 'defendant' %}
   {% set otherPartyLabel = 'Defendant name:' %}
   {% set otherPartyName = claim.claimData.defendant.name %}
-  {% set responseLabel = 'Your response:' %}
-{% elseif party === 'claimant' %}
+  {% set responseLabel = 'Defendant response:' %}
+{% elseif otherParty === 'claimant' %}
   {% set otherPartyLabel = 'Claimant name:' %}
   {% set otherPartyName = claim.claimData.claimant.name %}
-  {% set responseLabel = 'Defendant response:' %}
+  {% set responseLabel = 'Your response:' %}
 {% endif %}
 
 <div class="about-claim-widget">
@@ -25,12 +25,12 @@
     </li>
     <li>
       <strong class="bold">{{ t('Claim details:') }}</strong>
-      <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
+      {{ internalLink(t('View claim'), ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }), 'block') }}
     </li>
     {% if showResponse and claim.response %}
       <li>
         <strong class="bold">{{ t(responseLabel) }}</strong>
-        <a class="block" href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
+        {{ internalLink(t('Download response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
       </li>
     {% endif %}
   </ul>

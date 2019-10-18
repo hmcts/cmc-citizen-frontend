@@ -13,6 +13,11 @@ import { Logger } from '@hmcts/nodejs-logging'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'
 import { DraftPaidInFull } from 'paid-in-full/draft/draftPaidInFull'
 import { ClaimantResponseConverter } from 'claims/converters/claimantResponseConverter'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { OrdersDraft } from 'orders/draft/ordersDraft'
+import { OrdersConverter } from 'claims/ordersConverter'
+import { ReviewOrder } from 'claims/models/reviewOrder'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -35,16 +40,6 @@ function buildCaseSubmissionHeaders (claimant: User, features: string[]): object
 export class ClaimStoreClient {
   constructor (private request: RequestPromiseAPI = requestPromiseApi) {
     // Nothing to do
-  }
-
-  savePrePayment (externalId: string, submitter: User): Promise<string> {
-    return this.request.post(`${claimStoreApiUrl}/${externalId}/pre-payment`, {
-      headers: {
-        Authorization: `Bearer ${submitter.bearerToken}`
-      }
-    }).then(caseReference => {
-      return caseReference.case_reference
-    })
   }
 
   savePaidInFull (externalId: string, submitter: User, draft: DraftPaidInFull): Promise<Claim> {
@@ -83,16 +78,40 @@ export class ClaimStoreClient {
       })
   }
 
-  saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, user: User): Promise<void> {
-    const response = ResponseModelConverter.convert(draft.document, claim)
+  saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, mediationDraft: Draft<MediationDraft>, directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft>, user: User): Promise<void> {
+    const response = ResponseModelConverter.convert(draft.document, mediationDraft.document, directionsQuestionnaireDraft.document, claim)
     const externalId: string = claim.externalId
 
-    return this.request
-      .post(`${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`, {
-        body: response,
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreResponsesApiUrl}/${externalId}/defendant/${user.id}`,
+      body: response,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options).then(function () {
+      return Promise.resolve()
+    })
+  }
+
+  saveOrder (ordersDraft: OrdersDraft, claim: Claim, user: User): Promise<Claim> {
+    const reviewOrder: ReviewOrder = OrdersConverter.convert(ordersDraft, claim, user)
+    const externalId: string = ordersDraft.externalId
+
+    const options = {
+      method: 'PUT',
+      uri: `${claimStoreApiUrl}/${externalId}/review-order`,
+      body: reviewOrder,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options)
+      .then(claim => {
+        return new Claim().deserialize(claim)
       })
   }
 
@@ -167,12 +186,17 @@ export class ClaimStoreClient {
   }
 
   linkDefendant (user: User): Promise<void> {
-    return this.request
-      .put(`${claimStoreApiUrl}/defendant/link`, {
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
+    const options = {
+      method: 'PUT',
+      uri: `${claimStoreApiUrl}/defendant/link`,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options).then(function () {
+      return Promise.resolve()
+    })
   }
 
   requestForMoreTime (externalId: string, user: User): Promise<Claim> {
@@ -184,12 +208,17 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('Authorisation token required'))
     }
 
-    return this.request
-      .post(`${claimStoreApiUrl}/${externalId}/request-more-time`, {
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
+    const options = {
+      method: 'POST',
+      uri: `${claimStoreApiUrl}/${externalId}/request-more-time`,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options).then(function (response) {
+      return response
+    })
   }
 
   isClaimLinked (reference: string): Promise<boolean> {
@@ -225,25 +254,36 @@ export class ClaimStoreClient {
       return Promise.reject(new Error('role is required'))
     }
 
-    return this.request
-      .post(`${claimApiBaseUrl}/user/roles`, {
-        body: { role: role },
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
+    const options = {
+      method: 'POST',
+      uri: `${claimApiBaseUrl}/user/roles`,
+      body: { role: role },
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options).then(function () {
+      return Promise.resolve()
+    })
   }
 
-  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, user: User): Promise<void> {
+  saveClaimantResponse (claim: Claim, draft: Draft<DraftClaimantResponse>, mediationDraft: Draft<MediationDraft>, user: User, directionsQuestionnaireDraft?: DirectionsQuestionnaireDraft): Promise<void> {
     const isDefendantBusiness = claim.claimData.defendant.isBusiness()
-    const response = ClaimantResponseConverter.convertToClaimantResponse(draft.document, isDefendantBusiness)
+    const response = ClaimantResponseConverter.convertToClaimantResponse(claim, draft.document, mediationDraft.document, isDefendantBusiness, directionsQuestionnaireDraft)
     const externalId: string = claim.externalId
-    return this.request
-      .post(`${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`, {
-        body: response,
-        headers: {
-          Authorization: `Bearer ${user.bearerToken}`
-        }
-      })
+
+    const options = {
+      method: 'POST',
+      uri: `${claimApiBaseUrl}/responses/${externalId}/claimant/${user.id}`,
+      body: response,
+      headers: {
+        Authorization: `Bearer ${user.bearerToken}`
+      }
+    }
+
+    return requestPromiseApi(options).then(function () {
+      return Promise.resolve()
+    })
   }
 }

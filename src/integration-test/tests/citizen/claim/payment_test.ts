@@ -6,9 +6,9 @@ import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment
 const claimSteps: ClaimSteps = new ClaimSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 
-Feature('Claim issue').retry(3)
+Feature('Claim issue')
 
-Scenario('I can cancel payment, attempt payment with declined card and finally issue claim using working card @citizen @quick', async (I: I) => {
+Scenario('I can cancel payment, attempt payment with declined card and finally issue claim using working card @citizen @quick', { retries: 3 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
 
   claimSteps.makeAClaimAndSubmitStatementOfTruth(email, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
@@ -25,7 +25,5 @@ Scenario('I can cancel payment, attempt payment with declined card and finally i
 
   claimSteps.checkClaimFactsAreTrueAndSubmit(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   paymentSteps.payWithWorkingCard()
-  claimSteps.reloadPage() // reload gets over the ESOCKETTIMEDOUT Error
-  claimSteps.reloadPage() // reload gets over the 409 Duplicate Key value violates unique constraint Error
   I.waitForText('Claim submitted')
 })

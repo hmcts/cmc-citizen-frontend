@@ -1,0 +1,45 @@
+tags:
+  - rpe-feature-toggle-api-pod
+  - idam-pr
+
+postgresql:
+  enabled: true # for rpe-feature-toggle-api
+
+rpe-feature-toggle-api:
+  java:
+    releaseNameOverride: ${SERVICE_NAME}-java
+    postgresql:
+      image:
+        tag: '11.3.0'
+  importer:
+    apiUrl: http://${SERVICE_NAME}-java/api/ff4j/store/features/
+    kvSecretRef: kvcreds
+    cron:
+      enabled: false
+    oneoff:
+      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
+        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
+      enabled: true
+      permissions: cmc-new-features-consent-given
+
+nodejs:
+  image: ${IMAGE_NAME}
+  ingressHost: ${SERVICE_FQDN}
+  environment:
+    LOG_LEVEL: DEBUG
+    HTTP_TIMEOUT: 60000
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
+    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
+    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
+    IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
+    FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
+    CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
+    DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
+
+idam-pr:
+  redirect_uris:
+    Money Claims - Citizen:
+      - https://${SERVICE_FQDN}/receiver

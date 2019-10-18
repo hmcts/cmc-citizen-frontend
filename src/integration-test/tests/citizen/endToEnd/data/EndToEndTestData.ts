@@ -52,12 +52,14 @@ export class EndToEndTestData {
     const claimantEmail: string = await I.createCitizenUser()
     const defendantEmail: string = await I.createCitizenUser()
 
-    const claimRef: string = await I.createClaimWithFeaturesAndRole(claimData, claimantEmail,'cmc-new-features-consent-given', ['admissions'])
+    const claimRef: string = await I.createClaimWithFeaturesAndRole(claimData, claimantEmail,'cmc-new-features-consent-given', ['admissions','directionsQuestionnaire'])
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
     const testData = new EndToEndTestData()
     testData.defendantClaimsToHavePaidInFull = true
-    testData.defendantName = claimData.defendants[0].name
+    testData.defendantName = (defendantPartyType === PartyType.INDIVIDUAL || PartyType.SOLE_TRADER) ?
+      `${claimData.defendants[0].title} ${claimData.defendants[0].firstName} ${claimData.defendants[0].lastName}` :
+      claimData.defendants[0].name
     testData.defendant = claimData.defendants[0]
     testData.claimantName = claimData.claimants[0].name
     testData.claimant = claimData.claimants[0]

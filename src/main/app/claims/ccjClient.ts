@@ -4,7 +4,7 @@ import { claimStoreApiUrl } from 'claims/claimStoreClient'
 import { CountyCourtJudgment } from 'claims/models/countyCourtJudgment'
 import { Claim } from 'claims/models/claim'
 import { ReDetermination } from 'ccj/form/models/reDetermination'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 export class CCJClient {
 

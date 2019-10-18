@@ -44,7 +44,7 @@ export default express.Router()
       const claim: Claim = res.locals.claim
       let evidence
 
-      if (ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()) {
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && draft.document.isResponsePartiallyAdmitted()) {
         evidence = draft.document.partialAdmission.evidence
       } else {
         evidence = draft.document.evidence
@@ -68,7 +68,7 @@ export default express.Router()
 
         form.model.removeExcessRows()
 
-        if (ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()) {
+        if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && draft.document.isResponsePartiallyAdmitted()) {
           draft.document.partialAdmission.evidence = form.model
           await new DraftService().save(draft, user.bearerToken)
           res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))

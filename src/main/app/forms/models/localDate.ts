@@ -1,4 +1,4 @@
-import { Max, Min } from 'class-validator'
+import { Max, Min } from '@hmcts/class-validator'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 

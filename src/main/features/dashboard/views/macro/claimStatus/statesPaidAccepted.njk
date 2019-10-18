@@ -1,0 +1,34 @@
+{% from "internalLink.njk" import internalLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink %}
+
+{% macro statesPaidClaimSettledClaimantDetails(claim) %}
+
+  <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+  {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+    <p>{{ t('You’ve accepted the defendant’s part admission.') }}</p>
+    <p>{{ t('You agreed they owed {{ amount }} and that they’ve paid it already.',
+        {amount: claim.response.amount | numeral}) }}</p>
+  {% else %}
+    <p>{{ t('{{ claimantName }} paid you {{ amount }} on {{ moneyReceivedOn }}.',
+        { claimantName: claim.claimData.claimant.name,
+          amount: claim.response.paymentDeclaration.paidAmount | numeral,
+          moneyReceivedOn: claim.response.paymentDeclaration.paidDate | date }) }}</p>
+  {% endif %}
+
+{% endmacro %}
+
+{% macro statesPaidClaimSettledDefendantsDetails(claim) %}
+
+  <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+
+  <p>
+    {{ t('{{ claimantName }} confirmed you paid {{ amount }} on {{ moneyReceivedOn }}.',
+      { claimantName: claim.claimData.claimant.name,
+        amount: claim.response.amount | numeral,
+        moneyReceivedOn: claim.response.paymentDeclaration.paidDate | date }) }}
+  </p>
+  <p>{{ downloadResponseLink(claim) }}</p>
+
+{% endmacro %}
+
+

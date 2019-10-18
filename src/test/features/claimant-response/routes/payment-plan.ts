@@ -16,6 +16,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { MomentFactory } from 'shared/momentFactory'
+import { Moment } from 'moment'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -157,7 +159,7 @@ describe('Claimant response: payment plan', () => {
         it('should return 500 and render error page when cannot save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
           draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -168,31 +170,132 @@ describe('Claimant response: payment plan', () => {
       })
 
       context('when service is healthy', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
-          draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
-        })
+
+        function setFirstPaymentDate (firstPaymentDate: Moment): object {
+          return {
+            day: firstPaymentDate.date(),
+            month: firstPaymentDate.month() + 1,
+            year: firstPaymentDate.year()
+          }
+        }
+
+        function dataToSend (firstPaymentDate: Moment): object {
+          return {
+            totalAmount: 100,
+            instalmentAmount: 50,
+            firstPaymentDate: {
+              day: firstPaymentDate.date(),
+              month: firstPaymentDate.month() + 1,
+              year: firstPaymentDate.year()
+            },
+            paymentSchedule: 'EVERY_MONTH'
+          }
+        }
 
         context('when form is valid', async () => {
           beforeEach(() => {
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
           })
 
-          it('should redirect to counter offer accepted page', async () => {
+          it('should redirect to counter offer accepted page when decision type is CLAIMANT', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
+            draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send(validFormData)
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })))
           })
-        })
 
-        context('when form is invalid', async () => {
-          it(`should render page with heading '${heading}'`, async () => {
+          it('should redirect to counter offer accepted page when decision type is CLAIMANT_IN_FAVOUR_OF_DEFENDANT', async () => {
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(100, 'years')
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
+            draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
-              .send({})
+              .send({
+                totalAmount: 160,
+                instalmentAmount: 1,
+                firstPaymentDate: setFirstPaymentDate(firstPaymentDate),
+                paymentSchedule: 'EVERY_MONTH'
+              })
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.counterOfferAcceptedPage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to court offered set date page when decision type is DEFENDANT', async () => {
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(32, 'days')
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithReasonablePaymentBySetDateResponseObjAndNoDisposableIncome)
+            draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(dataToSend(firstPaymentDate))
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to court offered instalments page when decision type is DEFENDANT', async () => {
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(35, 'days')
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome)
+            draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(dataToSend(firstPaymentDate))
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to court offered instalments page when decision type is COURT', async () => {
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(32, 'days')
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule)
+            draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(dataToSend(firstPaymentDate))
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to tasks list page when defendant is business', async () => {
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(70, 'days')
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjCompanyData)
+            draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(dataToSend(firstPaymentDate))
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
+          })
+        })
+
+        context('when form is invalid', async () => {
+
+          it(`should render page with heading '${heading}'`, async () => {
+            const firstPaymentDate: Moment = MomentFactory.currentDate().add(32, 'days')
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasonablePaymentSchedule)
+            draftStoreServiceMock.resolveFind('claimantResponse', draftOverride)
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({
+                totalAmount: 100,
+                instalmentAmount: undefined,
+                firstPaymentDate: setFirstPaymentDate(firstPaymentDate),
+                paymentSchedule: 'EVERY_MONTH'
+              })
               .expect(res => expect(res).to.be.successful.withText(heading, 'div class="error-summary"'))
           })
         })

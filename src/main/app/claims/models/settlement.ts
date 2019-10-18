@@ -1,7 +1,7 @@
 import { PartyStatement } from 'claims/models/partyStatement'
 import { Offer } from 'claims/models/offer'
 import { StatementType } from 'offer/form/models/statementType'
-import { MadeBy } from 'offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 
 export class Settlement {
   partyStatements: PartyStatement[]
@@ -77,6 +77,14 @@ export class Settlement {
 
   isSettled (): boolean {
     return this.partyStatements && this.partyStatements.some(statement => statement.type === 'COUNTERSIGNATURE')
+  }
+
+  isOfferRejectedByDefendant (): boolean {
+    const statement: PartyStatement = this.partyStatements
+      .filter(o => o.type === StatementType.REJECTION.value && o.madeBy === MadeBy.DEFENDANT.value)
+      .pop()
+
+    return !!statement
   }
 
   private isOfferMadeByDefendant (partyStatement: PartyStatement): boolean {

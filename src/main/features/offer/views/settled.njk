@@ -17,13 +17,13 @@
           <span class="bold">{{ claim.settlementReachedAt | date }}</span>
         </div>
         <div class="receipt-download-container">
-          <a
-            href="{{ OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download settlement agreement') }}</a>{{ t(' (PDF)') }}
+          {{ internalLink(t('Download settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }}
+          {{ t('(PDF)') }}
         </div>
       </div>
 
       <p>
-        {{ t('We’ll email {{ claimantName }} telling them that you have signed the settlement agreement.',{claimantName: claim.claimData.claimant.name}) }}
+        {{ t('We’ll email {{ claimantName }} telling them that you have signed the settlement agreement.', { claimantName: claim.claimData.claimant.name }) }}
       </p>
 
       <p>
@@ -41,10 +41,10 @@
         {{ t('Make sure you get receipts for any payments.') }}
       </p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-defendant.njk" %}
 
       <p>
-        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Go to your account') }}</a>
+        {{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}
       </p>
 
       {{ supportWidget() }}
@@ -52,3 +52,4 @@
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

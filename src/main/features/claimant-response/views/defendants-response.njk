@@ -1,12 +1,13 @@
 {% extends "layout.njk" %}
 
-{% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page === 1 %}
+{% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page === 1 %}
   {% set heading = 'How they want to pay' %}
 {% else %}
   {% set heading = 'The defendant’s response' %}
 {% endif %}
 
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "internalLink.njk" import internalLink %}
 {% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
 {% from "./macro/evidenceTable.njk" import evidenceFragment %}
 {% from "./macro/timelineTable.njk" import timelineFragment %}
@@ -40,17 +41,52 @@
 {% endmacro %}
 
 {% macro paymentInformationFragment(paymentDeclaration) %}
-  <h3 class="heading-small">{{ t('When they paid this amount') }}</h3>
+  <h3 class="heading-small">{{ t('When they say they paid this amount') }}</h3>
   <p>{{ paymentDeclaration.paidDate | date }}</p>
 
   <h3 class="heading-small">{{ t('How they say they paid') }}</h3>
   <p>{{ paymentDeclaration.explanation }}</p>
 {% endmacro %}
 
+
+{% macro fullResponseFragment() %}
+  {% if dqsEnabled %}
+    {% set label = 'Download their full response and hearing requirements' %}
+  {% else %}
+    {% set label = 'Download their full response' %}
+  {% endif %}
+
+  <div class="form-group">
+    <h3 class="heading-small">{{ t('Full response') }}</h3>
+    <p>{{ internalLink(t(label), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+    {{ t('(PDF)') }}</p>
+  </div>
+{% endmacro %}
+
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      {% if alreadyPaid %}
+      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE and not alreadyPaid %}
+        <p>{{ t('{{ defendantName }} has rejected the claim.', { defendantName: defendantName }) }}</p>
+
+        <h2 class="heading-medium">{{ t('Their defence') }}</h2>
+
+        <h3 class="heading-small form-group-related">{{ t('Why they disagree with the claim') }}</h3>
+        <p>{{ claim.response.defence }}</p>
+
+        {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
+          <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+          <div class="form-group">
+            {{ timelineFragment(claim.response.timeline) }}
+          </div>
+        {% endif %}
+
+        {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
+          {{ evidenceFragment(claim.response.evidence) }}
+        {% endif %}
+
+        {{ fullResponseFragment() }}
+      {% elif alreadyPaid %}
         {% if partiallyPaid %}
           <p>{{ t('{{ defendantName }} said they paid you {{ amount }}. They said this is all they owe, not the amount you claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
 
@@ -64,67 +100,67 @@
             {{ timelineFragment(claim.response.timeline) }}
           {% endif %}
 
-          {% if claim.response.evidence %}
+          {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
             {{ evidenceFragment(claim.response.evidence) }}
           {% endif %}
         {% else %}
-          {{ t('{{ defendantName }} states they paid you {{ amount }}.', { defendantName: defendantName, amount: claim.totalAmountTillToday | numeral }) }}
+          {{ t('{{ defendantName }} states they paid you {{ amount }}.',
+            {
+              defendantName: defendantName,
+              amount: (claim.response.paymentDeclaration.paidAmount if claim.response.paymentDeclaration.paidAmount else claim.totalAmountTillToday) | numeral
+            }
+          ) }}
 
           {{ paymentInformationFragment(paymentDeclaration = claim.response.paymentDeclaration) }}
-
         {% endif %}
-
-      {% else %}
-        {% if claim.response.responseType === ResponseType.FULL_ADMISSION.value %}
-          <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}</p>
-          <p>
-            {{ paymentIntentionFragment(
-              amount = undefined,
-              paymentIntention = claim.response.paymentIntention
-            ) }}
-          </p>
+      {% elif claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+        <p>{{ t('{{ defendantName }} admits they owe all the money you’ve claimed.', { defendantName: defendantName }) }}</p>
+        <p>
+          {{ paymentIntentionFragment(
+            amount = undefined,
+            paymentIntention = claim.response.paymentIntention
+          ) }}
+        </p>
 
         {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
           {{
-            repaymentPlanBlock(
-              heading = 'How they want to pay',
-              repaymentPlan = claim.response.paymentIntention.repaymentPlan
-            )
+          repaymentPlanBlock(
+            heading = 'How they want to pay',
+            repaymentPlan = claim.response.paymentIntention.repaymentPlan
+          )
           }}
         {% endif %}
 
         {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-
         {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
-
-      {% endif %}
-
-      {% if claim.response.responseType === ResponseType.PART_ADMISSION.value %}
+        {{ fullResponseFragment() }}
+      {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
         {% if page === 0 %}
           <p>{{ t('{{ defendantName }} admits they owe you {{ amount }}. They don’t believe they owe the full amount claimed.', { defendantName: defendantName, amount: claim.response.amount | numeral }) }}</p>
           <p>
             {{
-              paymentIntentionFragment(
-                amount = claim.response.amount,
-                paymentIntention = claim.response.paymentIntention
-              ) }}
-            </p>
+            paymentIntentionFragment(
+              amount = claim.response.amount,
+              paymentIntention = claim.response.paymentIntention
+            ) }}
+          </p>
 
-            <h2 class="heading-medium">{{ t('Their defence') }}</h2>
+          <h2 class="heading-medium">{{ t('Their defence') }}</h2>
 
-            <h3 class="heading-small form-group-related">{{ t('Why they don’t owe the amount claimed') }}</h3>
-            <p>{{ t('"{{ defence }}"', { defence: claim.response.defence }) }}</p>
+          <h3 class="heading-small form-group-related">{{ t('Why they don’t owe the amount claimed') }}</h3>
+          <p>{{ t('"{{ defence }}"', { defence: claim.response.defence }) }}</p>
 
-            {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
-              <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
-              <div class="form-group">
+          {% if claim.response.timeline and claim.response.timeline.rows.length > 0 %}
+            <h3 class="heading-small form-group-related">{{ t('Their timeline of events') }}</h3>
+            <div class="form-group">
               {{ timelineFragment(claim.response.timeline) }}
             </div>
-            {% endif %}
+          {% endif %}
 
           {% if claim.response.evidence and claim.response.evidence.rows.length > 0 %}
             {{ evidenceFragment(claim.response.evidence) }}
           {% endif %}
+          {{ fullResponseFragment() }}
         {% elseif page === 1 %}
           {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
             <p>{{ t('The defendant suggested this repayment plan:') }}</p>
@@ -132,23 +168,21 @@
 
           {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
 
-              {{paymentIntentionFragment(
-                amount = claim.response.amount,
-                paymentIntention = claim.response.paymentIntention
-              ) }}
-            {% endif %}
-
-            {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
-          {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
-
+            {{paymentIntentionFragment(
+              amount = claim.response.amount,
+              paymentIntention = claim.response.paymentIntention
+            ) }}
           {% endif %}
+
+          {{ paymentDateExplanationBlock(claim.response.statementOfMeans.reason) }}
+          {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
         {% endif %}
       {% endif %}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        {% if claim.response.responseType === ResponseType.PART_ADMISSION.value and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
+        {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION and page !== 1 and claim.response.paymentIntention.paymentOption !== domain.PaymentOption.IMMEDIATELY %}
           <input type="hidden" name="action[showPage]" value="{{ page + 1 }}">
         {% endif %}
 

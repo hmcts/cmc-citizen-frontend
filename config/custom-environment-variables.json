@@ -14,8 +14,7 @@
       "url": "IDAM_API_URL"
     },
     "service-2-service-auth": {
-      "url": "IDAM_S2S_AUTH",
-      "totpSecret": "IDAM_S2S_TOTP_SECRET"
+      "url": "IDAM_S2S_AUTH"
     }
   },
   "claim-store": {
@@ -26,18 +25,13 @@
   },
   "draft-store": {
     "url": "DRAFT_STORE_URL",
-    "apiVersion": "DRAFT_STORE_API_VERSION",
-    "secrets": {
-      "primary": "DRAFT_STORE_SECRET_PRIMARY",
-      "secondary": "DRAFT_STORE_SECRET_SECONDARY"
-    }
+    "apiVersion": "DRAFT_STORE_API_VERSION"
   },
   "analytics": {
     "gaTrackingId": "GA_TRACKING_ID"
   },
   "session": {
-    "cookieName": "JWT_COOKIE_NAME",
-    "encryptionKey": "COOKIE_ENCRYPTION_KEY"
+    "cookieName": "JWT_COOKIE_NAME"
   },
   "fees": {
     "url": "FEES_URL",
@@ -55,9 +49,6 @@
     "cookie": {
       "timeToLiveInMinutes": "ELIGIBILITY_COOKIE_TIME_TO_LIVE_IN_MINUTES"
     }
-  },
-  "support": {
-    "contact-email": "CONTACT_EMAIL"
   },
   "feedback": {
     "serviceSurvey": {
@@ -81,20 +72,38 @@
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "newFeaturesConsent": "FEATURE_NEW_FEATURES_CONSENT",
     "admissions": "FEATURE_ADMISSIONS",
-    "paidInFull": "FEATURE_PAID_IN_FULL",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY",
-    "mediation": "FEATURE_MEDIATION"
+    "mediation": "FEATURE_MEDIATION",
+    "mediationPilot": "FEATURE_MEDIATION_PILOT",
+    "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE",
+    "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS",
+    "webChat": "FEATURE_WEB_CHAT"
   },
+
   "oauth": {
-    "clientId": "OAUTH_CLIENT_ID",
-    "clientSecret": "OAUTH_CLIENT_SECRET"
+    "clientId": "OAUTH_CLIENT_ID"
   },
-  "postcodeLookup": {
-    "apiKey": "POSTCODE_LOOKUP_API_KEY"
-  },
+
   "appInsights": {
-    "instrumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY",
     "roleName": "APPINSIGHTS_ROLE_NAME"
+  },
+
+  "secrets":{
+    "cmc":{
+      "cmc-s2s-secret": "IDAM_S2S_TOTP_SECRET",
+      "citizen-draft-store-primary": "DRAFT_STORE_SECRET_PRIMARY",
+      "citizen-draft-store-secondary": "DRAFT_STORE_SECRET_SECONDARY",
+      "staff-email": "CONTACT_EMAIL",
+      "citizen-oauth-client-secret": "OAUTH_CLIENT_SECRET",
+      "os-postcode-lookup-api-key": "POSTCODE_LOOKUP_API_KEY",
+      "encryptionKey": "COOKIE_ENCRYPTION_KEY",
+      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
+      "webchat-chat-id": "WEBCHAT_CHAT_ID",
+      "webchat-tenant": "WEBCHAT_TENANT",
+      "webchat-button-no-agents": "WEBCHAT_BUTTON_NO_AGENTS",
+      "webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
+      "webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED"
+    }
   }
 }

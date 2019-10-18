@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 import { SelfEmployment, ValidationErrors } from 'response/form/models/statement-of-means/selfEmployment'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints as GlobalValidationConstants } from 'forms/validation/validationConstraints'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'

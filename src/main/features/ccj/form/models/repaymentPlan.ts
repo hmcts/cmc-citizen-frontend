@@ -1,6 +1,6 @@
 import { LocalDate } from 'forms/models/localDate'
 import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
-import { IsDefined, IsIn, IsPositive, ValidateNested } from 'class-validator'
+import { IsDefined, IsIn, IsPositive, ValidateNested } from '@hmcts/class-validator'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { Fractions, IsLessThan, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'

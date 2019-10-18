@@ -17,9 +17,9 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 const heading: string = 'Enter company details'
 const input = {
-  name: 'Anirudha Inc.',
+  name: 'ABC Ltd',
   type: 'company',
-  contactPerson: '',
+  contactPerson: 'Jan Clark',
   address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false
 } as CompanyDetails
@@ -106,7 +106,7 @@ describe('claimant as company details page', () => {
 
       it('should redirect to mobile phone page when everything is fine ', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.claimantCompanyDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)

@@ -17,6 +17,12 @@
   .button-secondary {
     margin-top: 15px;
   }
+
+  .panel-border-narrow {
+    &:last-child {
+      margin-bottom: 15px;
+    }
+  }
 }
 
 .calculation-outcome-container {

@@ -1,2 +1,5 @@
-{% macro internalLink(text, href, class='') %}
-  <a href="{{ href }}" class="{{ class }}">{{ text }}</a>{% endmacro %}
+{% macro internalLink(text, href, class='', id='', dataEventLabel='') %}
+  <a href="{{ href }}" {{ _attribute('class', class) if class }} {{ _attribute('id', id) if id }} {{ _attribute('data-event-label', dataEventLabel) if dataEventLabel }}>{{ text }}</a>
+{% endmacro %}
+
+{% macro _attribute(name, value) %}{{ name }}="{{ value }}"{% endmacro %}

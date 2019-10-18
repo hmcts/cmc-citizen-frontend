@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
 import { TimelineRow } from 'forms/models/timelineRow'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'

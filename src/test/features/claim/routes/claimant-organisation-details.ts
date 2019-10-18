@@ -17,9 +17,9 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 const heading: string = 'Enter organisation details'
 const input = {
-  name: 'Anirudha Inc.',
+  name: 'ABC Ltd',
   type: 'organisation',
-  contactPerson: '',
+  contactPerson: 'Jan Clark',
   address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'SE28 0JE' } as Address,
   hasCorrespondenceAddress: false
 } as OrganisationDetails
@@ -104,13 +104,25 @@ describe('claimant as organisation details page', () => {
         })
       })
 
-      it('should redirect to mobile phone page when everything is fine ', async () => {
+      it('should redirect to mobile phone page when everything is fine and including contact person', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
+
         await request(app)
           .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(input)
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantMobilePage.uri))
+      })
+      it('should redirect to mobile phone page when everything is fine and not including contact person', async () => {
+        const noContactPersonInput = { ...input, ...{ contactPerson: undefined } }
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(ClaimPaths.claimantOrganisationDetailsPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(noContactPersonInput)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantMobilePage.uri))
       })
     })

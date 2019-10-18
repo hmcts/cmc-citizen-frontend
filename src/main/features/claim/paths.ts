@@ -15,6 +15,7 @@ export class Paths {
   static readonly claimantDateOfBirthPage = new RoutablePath('/claim/claimant-dob')
   static readonly claimantMobilePage = new RoutablePath('/claim/claimant-mobile')
   static readonly defendantEmailPage = new RoutablePath('/claim/defendant-email')
+  static readonly defendantPhonePage = new RoutablePath('/claim/defendant-mobile')
   static readonly amountPage = new RoutablePath('/claim/amount')
   static readonly interestPage = new RoutablePath('/claim/interest')
   static readonly interestTypePage = new RoutablePath('/claim/interest-type')
@@ -43,5 +44,5 @@ export class Paths {
 }
 
 export class ErrorPaths {
-  static readonly amountExceededPage = new RoutablePath('/claim/amount-exceeded')
+  static readonly amountExceededPage = new RoutablePath('/eligibility/not-eligible?reason=claim-value-over-10000')
 }

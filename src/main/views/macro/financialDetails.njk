@@ -132,8 +132,20 @@
   {% endif %}
 {% endmacro %}
 
+{% macro priorityDebtsSection(debts) %}
+   {{ row(label = 'Do they have any debts they are behind on?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
+  {% for debt in debts %}
+    {% if debts.length === 1 %}
+      {{ row(label = 'Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
+    {% else %}
+      {{ row(label = loop.index + '. Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
+    {% endif %}
+    {{ row(label = 'Payments', value = (debt.amount | numeral) + ' ' + (debt.frequency | renderPaymentFrequencyView | lower) , bottomBorder = loop.index === debts.length ) }}
+  {% endfor %}
+{% endmacro %}
+
 {% macro debtsSection(debts) %}
-  {{ row(label = 'Do they have any debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
+  {{ row(label = 'Do they have loan or credit card debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
   {% for debt in debts %}
     {% if debts.length === 1 %}
       {{ row(label = 'Debt' , value = debt.description) }}
@@ -186,11 +198,13 @@
       {{ heading('Monthly expenses') }}
       {{ monthlyExpensesSection(statementOfMeans.expenses) }}
 
-      {{ heading('Debts') }}
-      {{ debtsSection(statementOfMeans.debts) }}
-
       {{ heading('Court orders') }}
       {{ courtOrdersSection(statementOfMeans.courtOrders) }}
+
+      {{ heading('Debts' ) }}
+      {{ priorityDebtsSection(statementOfMeans.priorityDebts) }}
+      {{ debtsSection(statementOfMeans.debts) }}
+
     </div>
   </details>
 {% endmacro %}

@@ -1,8 +1,8 @@
 {% extends "layout.njk" %}
-{% from "subheading.njk" import subheading %}
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
 {% from "summaryTable.njk" import timelineSummary, evidenceSummary %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set heading = 'Claim details' %}
 
@@ -43,12 +43,13 @@
         <summary>{{ t('How we use and store your personal information') }}</summary>
         <div class="panel panel-border">
           <p>{{ t('This claim contains personal information about you that {{ claimant }} has provided, for example your name and address.', { claimant: claim.claimData.claimant.name  }) }}</p>
-          <p>{{ t('Find out about how we use and store your <a href="{{ link }}" target="_self">personal information</a>.', { link: AppPaths.privacyPolicyPage.uri }) | safe }}</p>
+          <p>{{ t('Find out about how we use and store your {{ personalInfo }}.', { personalInfo: internalLink(t('personal information'), AppPaths.privacyPolicyPage.uri) }) | safe }}</p>
         </div>
       </details>
 
       <p class="bold-small">{{ t('Download the claim') }}</p>
-      <p><a href="{{ FirstContactPaths.receiptReceiver.uri }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
+      <p>{{ internalLink(t('Download claim'), FirstContactPaths.receiptReceiver.uri) }}
+        {{ t('(PDF)') }}.</p>
     </div>
   </div>
 {% endblock %}

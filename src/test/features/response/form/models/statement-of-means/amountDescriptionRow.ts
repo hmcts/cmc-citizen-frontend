@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

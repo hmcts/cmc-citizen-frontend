@@ -1,4 +1,4 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 
 export class PaymentTypeLabels {
   static readonly INSTALMENTS: string = 'By instalments'

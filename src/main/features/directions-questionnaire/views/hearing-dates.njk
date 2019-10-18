@@ -1,0 +1,50 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, radioGroup, linkButton %}
+{% from "date.njk" import dateInput %}
+
+{% set heading = 'Are there dates in the next 9 months when you or your witnesses can’t go to a hearing?' %}
+
+{% block additional_scripts %}
+  <script src="{{ asset_paths['js_vendor'] }}/moment.min.js"></script>
+  <script src="{{ asset_paths['js_vendor'] }}/lodash.js"></script>
+  <script src="{{ asset_paths['js_vendor'] }}/bootstrap-datepicker.js"></script>
+  <script src="{{ asset_paths['js'] }}/date-picker.js"></script>
+  <link rel="stylesheet" href="{{ asset_paths['style_vendor'] }}/bootstrap-datepicker3.standalone.css"/>
+{% endblock %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Hearing Unavailability Dates"
+            data-event-label-from="availability" novalidate>
+        {{ csrfProtection(csrf) }}
+        {{ radioGroup(
+          name = 'hasUnavailableDates',
+          options = [
+            { label: 'Yes', value: true },
+            { label: 'No', value: false }
+          ],
+          isInline = false,
+          form = form,
+          labelBold = false
+        ) }}
+        <div class="js-hidden" id="hasUnavailableDates-true" aria-hidden="false">
+          <h2 class="heading-medium">{{ t('Select the dates you can’t go to a hearing') }}</h2>
+          <p>{{ t('These should only be the dates of important events like medical appointments, other court hearings or holidays you’ve already booked.') }}</p>
+          <div id="date-picker" class="datepicker datepicker-wrapper">
+            <noscript>
+              <input type="hidden" name="noJS" value="true" />
+              {{ dateInput('newDate', form, hint = '') }}
+              {{ linkButton('Add', 'addDate', 'button button-secondary') }}
+            </noscript>
+          </div>
+          <div id="date-selection-wrapper">
+            {% include '../views/components/date-list.njk' %}
+          </div>
+        </div>
+        {{ saveAndContinueButton() }}
+      </form>
+      <div hidden id="externalId">{{ externalId }}</div>
+    </div>
+  </div>
+{% endblock %}

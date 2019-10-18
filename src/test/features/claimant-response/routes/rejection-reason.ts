@@ -12,8 +12,8 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -94,7 +94,7 @@ describe('Claimant Response - Rejection Reason', () => {
         it('should redirect to task list page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind('claimantResponse')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

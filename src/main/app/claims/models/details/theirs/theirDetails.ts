@@ -6,24 +6,18 @@ export class TheirDetails {
   name: string
   address: Address
   email?: string
+  phone?: string
 
-  constructor (type?: string, name?: string, address?: Address, email?: string) {
+  constructor (type?: string, name?: string, address?: Address, email?: string, phone?: string) {
     this.type = type
     this.name = name
     this.address = address
     this.email = email
+    this.phone = phone
   }
 
   isBusiness (): boolean {
     return this.type === PartyType.COMPANY.value || this.type === PartyType.ORGANISATION.value
-  }
-
-  isSoleTrader (): boolean {
-    return this.type === PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
-  }
-
-  isBusinessOrSoleTrader (): boolean {
-    return this.isBusiness() || this.isSoleTrader()
   }
 
   deserialize (input: any): TheirDetails {
@@ -34,6 +28,7 @@ export class TheirDetails {
         this.address = new Address().deserialize(input.address)
       }
       this.email = input.email
+      this.phone = input.phone
     }
     return this
   }

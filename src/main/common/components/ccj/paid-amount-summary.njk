@@ -2,15 +2,17 @@
 {% set heading = 'Judgment amount' %}
 {% from "form.njk" import submitButton %}
 {% from "interestSnippet.njk" import interestSnippet %}
+{% from "internalLink.njk" import internalLink %}
 
 {% block content %}
 <div class="grid-row">
   <div class="column-two-thirds">
 
     <div class="form-group">
-      {% set total = claim.totalAmountTillToday if not amountSettledFor else amountSettledFor + (claim.claimData.feeAmountInPennies | pennies2pounds) %}
+      {% set total = claim.totalAmountTillToday if amountSettledFor === undefined else amountSettledFor + (claimFee | pennies2pounds) %}
 
-      <p>{{ t('Judgement will be entered against the defendant for this amount.') }}</p>
+      <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee and any interest.', { totalAmount: total | numeral }) }}</p>
+      <p>{{ t('This means you´ll recover the {{ totalAmount }} as follows:', { totalAmount: total | numeral }) }}</p>
 
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
@@ -21,9 +23,9 @@
         </tr>
         </thead>
         <tbody>
-        {% if not amountSettledFor %}
+        {% if amountSettledFor === undefined %}
           <tr>
-            <th scope="row">{{ t('Claim amount') }}</th>
+            <th scope="row">{{ t('Amount of claim included') }}</th>
             <td class="numeric last">
               <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
             </td>
@@ -36,7 +38,7 @@
             </td>
           </tr>
         {% endif %}
-        {% if not amountSettledFor and interestDetails %}
+        {% if amountSettledFor === undefined and interestDetails %}
         <tr>
           <th scope="row">
             {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
@@ -48,9 +50,9 @@
         </tr>
         {% endif %}
         <tr>
-          <th scope="row">{{ t('Claim fee') }}</th>
+          <th scope="row">{{ t('Amount of claim fee included') }}</th>
           <td class="numeric last">
-            <span class="font-small">{{ claim.claimData.feeAmountInPennies | pennies2pounds | numeral }}</span>
+            <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
           </td>
         </tr>
         {% if alreadyPaid %}
@@ -75,11 +77,8 @@
     </div>
 
     <div class="form-group">
-      <a class="button" href="{{ nextPageUrl }}">{{ t('Continue') }}</a>
+      {{ internalLink(t('Continue'), nextPageUrl, 'button') }}
     </div>
   </div>
 </div>
 {% endblock %}
-
-
-

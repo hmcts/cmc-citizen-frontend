@@ -1,4 +1,4 @@
-import { IsDefined, Min, ValidateIf } from 'class-validator'
+import { IsDefined, Min, ValidateIf } from '@hmcts/class-validator'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

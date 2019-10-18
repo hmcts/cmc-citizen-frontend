@@ -14,7 +14,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 
 ### Prerequisites
 
-* [Node.js](https://nodejs.org/) >= v8.0.0
+* [Node.js](https://nodejs.org/) >= v10.15.2
 * [yarn](https://yarnpkg.com/)
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
@@ -122,32 +122,7 @@ warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_
 ## Preview Environment
 
 We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
-info see: [K8S README](/src/kubernetes/README.md). This environment points to AAT dependencies 
-(see [AAT config](/src/kubernetes/config.aat.yaml)), so any changes to AAT deployments (IDAM, claim-store, etc) 
-will take immediate effect.
-
-Example URL using PR number from GitHub: `https://cmc-citizen-frontend-pr-XXX.service.core-compute-preview.internal/dashboard`
-
-*Notes:* 
-- will only work through Proxy: proxyout.reform.hmcts.net:8080 (tip: use FoxyProxy browser plugin)
-- each preview environment will include a local `feature-toggle-importer` service (initialised as per docker-compose)
-- any emails will include wrong domain because AAT claim-store is used as backend
-
-#### Kubernetes Namespace Format
-
-`cmc-citizen-frontend-pr-XXX` or `kubectl get ns`
-
-#### View Kubernetes Resources
-
-Get pods, service, ingress resources: `kubectl get po,svc,ing -n [namespace]`
-
-#### View Logs
-
-Get pod name: `kubectl get po -n [namespace]`
-
-View logs for pod: `kubectl logs [podname] -n [namespace]`
-
-*Note:* you can follow logs with `-f`, i.e.: `kubectl logs -f [podname] -n [namespace]`
+info see: https://tools.hmcts.net/confluence/display/ROC/AKS+-+Azure+Managed+Kubernetes
 
 ## License
 

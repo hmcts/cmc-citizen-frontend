@@ -1,5 +1,5 @@
 import { YesNoOption } from 'models/yesNoOption'
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 
 export class AcceptCourtOffer {

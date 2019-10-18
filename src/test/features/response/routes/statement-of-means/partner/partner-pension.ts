@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
@@ -53,6 +53,7 @@ describe('Statement of means', () => {
         it('should return successful response when claim is retrieved', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(partnerPensionPage)
@@ -96,7 +97,8 @@ describe('Statement of means', () => {
         it('should return error page when unable to save draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(partnerPensionPage)
@@ -108,7 +110,8 @@ describe('Statement of means', () => {
         it('should redirect to dependants page when all is fine and form is valid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(partnerPensionPage)
@@ -122,6 +125,7 @@ describe('Statement of means', () => {
         it('should trigger validation when all is fine and form is invalid', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(partnerPensionPage)

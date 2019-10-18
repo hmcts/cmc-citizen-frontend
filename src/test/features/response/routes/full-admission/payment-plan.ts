@@ -5,8 +5,8 @@ import * as config from 'config'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 import { FullAdmissionPaths, Paths } from 'response/paths'
 
@@ -58,6 +58,7 @@ describe('Defendant: payment page', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -119,7 +120,8 @@ describe('Defendant: payment page', () => {
               type: ResponseType.FULL_ADMISSION
             }
           })
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
@@ -133,6 +135,7 @@ describe('Defendant: payment page', () => {
         it('should render page with error messages', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

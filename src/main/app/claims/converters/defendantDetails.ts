@@ -16,16 +16,15 @@ export function convertDefendantDetails (defendant: PartyDetails, email: string)
   switch (defendant.type) {
     case PartyType.INDIVIDUAL.value:
       const individualDetails = defendant as IndividualDetails
-      const result = new DefendantAsIndividual(individualDetails.name, convertAddress(individualDetails.address), email)
+      const result = new DefendantAsIndividual(individualDetails.title, individualDetails.firstName, individualDetails.lastName, convertAddress(individualDetails.address), email)
       result.dateOfBirth = individualDetails.dateOfBirth.known ? individualDetails.dateOfBirth.date.asString() : undefined
-
       return result
 
     case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
       const soleTraderDetails: SoleTraderDetails = defendant as SoleTraderDetails
 
       return new DefendantAsSoleTrader(
-        soleTraderDetails.name, convertAddress(soleTraderDetails.address), email, soleTraderDetails.businessName
+        soleTraderDetails.title, soleTraderDetails.firstName, soleTraderDetails.lastName, convertAddress(soleTraderDetails.address), email, soleTraderDetails.businessName
       )
 
     case PartyType.COMPANY.value:

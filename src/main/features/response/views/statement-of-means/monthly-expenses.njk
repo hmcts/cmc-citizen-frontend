@@ -1,11 +1,11 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, option, saveAndContinueButton %}
 {% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
+{% from "expandableCheckboxOption.njk" import expandableCheckboxOption %}
 
 {% set heading = 'What are your regular expenses?' %}
 
 {% block additional_scripts %}
-  {% include "expandable-checkbox-option-scripts.njk" %}
   {% include "income-expense-scripts.njk" %}
 {% endblock %}
 
@@ -103,13 +103,3 @@
   {% endcall %}
 {% endmacro %}
 
-{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined) %}
-  {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
-  <div class="expandable-checkbox-option">
-    <h3 class="heading-medium expandable">{{ t(label) }}</h3>
-    {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = 'expandable visually-hidden', dataTarget = expandablePanelId) }}
-    <div class="panel panel-border-narrow expandable{{ ' ' + additionalClasses if additionalClasses }}" id="{{ expandablePanelId }}">
-      {{ caller() }}
-    </div>
-  </div>
-{% endmacro %}

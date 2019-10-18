@@ -2,7 +2,7 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { SettlementAgreement } from 'claimant-response/form/models/settlementAgreement'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'

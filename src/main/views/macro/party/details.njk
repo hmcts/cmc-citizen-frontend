@@ -1,0 +1,87 @@
+{% from "form.njk" import readOnlyField, csrfProtection, textInput, radioGroup, saveAndContinueButton %}
+{% from "address.njk" import postcodeLookupAddressFragment, addressFragment, correspondenceAddressFragment %}
+{% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
+
+{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false, postcodeLabel = 'Enter a UK postcode') %}
+  {% for field in fields %}
+    {% if field.readOnly %}
+      {% if field.value %}
+        {{ readOnlyField(field.label, field.value) }}
+      {% endif %}
+    {% else %}
+      {{ textInput(form = form, label = t(field.label), name = field.name, autocomplete = field.autocomplete, hint = field.hint) }}
+    {% endif %}
+  {% endfor %}
+
+  {% if addressSection %}
+    <h2 class="heading-medium">{{ t(addressSection.heading) }}</h2>
+    {% if addressSection.hint %}
+      <p>{{ t(addressSection.hint) }}</p>
+    {% endif %}
+    {% if addressSection.secondHint %}
+      <p>{{ t(addressSection.secondHint) }}</p>
+    {% endif %}
+    {% if addressSection.postcodeLookup %}
+      {{ postcodeLookupAddressFragment(form = form, name = addressSection.name, postcodeLabel = postcodeLabel ) }}
+    {% else %}
+      {{ addressFragment(form = form, name = addressSection.name) }}
+    {% endif %}
+  {% endif %}
+
+  {% if showCorrespondenceAddressSection == true %}
+    {{ correspondenceAddressFragment(form) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}) %}
+  {{ row('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name or changeLinks.contactPerson, bold = true, bottomBorder = not partyDetails.contactPerson ) }}
+
+  {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
+    {% if partyDetails.contactPerson %}
+      {{ row('Contact person', partyDetails.contactPerson, bold = true) }}
+    {% endif %}
+  {% endif %}
+
+  {% if (partyDetails.type === 'soleTrader') %}
+    {% if partyDetails.businessName %}
+      {{ row('Business name', 'Trading as ' + partyDetails.businessName, changeLinks.partyDetails or changeLinks.businessName, bold = true) }}
+    {% endif %}
+  {% endif %}
+
+  {{ rowWithMultipleValue(
+  label = 'Address',
+  values = [
+  partyDetails.address.line1,
+  partyDetails.address.line2 | default(''),
+  partyDetails.address.line3 | default(''),
+  partyDetails.address.city,
+  partyDetails.address.postcode
+  ],
+  bottomBorder = not showCorrespondenceAddressSection,
+  changeLink = changeLinks.partyDetails or changeLinks.address,
+  bold = true
+  ) }}
+
+  {% if showCorrespondenceAddressSection %}
+    {% if partyDetails.hasCorrespondenceAddress %}
+      {% set correspondenceAddressLines = [
+      partyDetails.correspondenceAddress.line1,
+      partyDetails.correspondenceAddress.line2 | default(''),
+      partyDetails.correspondenceAddress.line3 | default(''),
+      partyDetails.correspondenceAddress.city,
+      partyDetails.correspondenceAddress.postcode
+      ] %}
+    {% else %}
+      {% set correspondenceAddressLines = [t('Same as address')] %}
+    {% endif %}
+    {{ rowWithMultipleValue(
+    label = 'Correspondence address',
+    values = correspondenceAddressLines,
+    bold = true
+    ) }}
+  {% endif %}
+
+  {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth and partyDetails.dateOfBirth.date) %}
+    {{ row('Date of birth', partyDetails.dateOfBirth.date.toMoment() | date, changeLinks.dateOfBirth, bold = true) }}
+  {% endif %}
+{% endmacro %}

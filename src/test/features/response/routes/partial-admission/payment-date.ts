@@ -5,8 +5,8 @@ import * as config from 'config'
 import * as _ from 'lodash'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
 
 import { Paths, PartAdmissionPaths } from 'response/paths'
 
@@ -16,10 +16,10 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import * as moment from 'moment'
 import { ValidationErrors } from 'shared/components/payment-intention/model/paymentDate'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = PartAdmissionPaths.paymentDatePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -70,12 +70,12 @@ describe('Pay by set date: payment date', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response:partial-admission', draft)
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('What date will you pay on?'))
-            .expect(res => expect(res).to.be.successful.withoutText('<div class="panel">'))
         })
       })
     })
@@ -110,7 +110,8 @@ describe('Pay by set date: payment date', () => {
 
         it('should render error page when unable to save draft', async () => {
           draftStoreServiceMock.resolveFind('response:partial-admission', draft)
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -121,6 +122,7 @@ describe('Pay by set date: payment date', () => {
 
         it('should trigger validation when invalid data is given', async () => {
           draftStoreServiceMock.resolveFind('response:partial-admission', draft)
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -131,7 +133,8 @@ describe('Pay by set date: payment date', () => {
 
         it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
           draftStoreServiceMock.resolveFind('response:partial-admission', draft)
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
 {% set heading = 'Make an offer to settle out of court' %}
 {% block content %}
   <div class="grid-row">
@@ -13,7 +14,7 @@
         {{ t('If they reject your offer the details can’t be mentioned in court.') }}
       </p>
 
-      {{ t('<a href="{{ url }}" class="button">Continue</a>', { url: OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}
+      {{ internalLink(t('Continue'), OfferPaths.offerPage.evaluateUri({ externalId: claim.externalId }), 'button') }}
     </div>
   </div>
 {% endblock %}

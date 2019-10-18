@@ -52,6 +52,7 @@ main {
   }
 
   margin-left: 70px;
+  text-decoration: underline;
 
   &.task-finished {
     @include media (mobile) {
@@ -63,14 +64,16 @@ main {
 
 div {
   &.task-finished {
+    background-color: $link-colour;
     float: right;
+    text-align: center;
+    width: 120px;
 
     strong {
       @include media (mobile) {
         font-size: 14px;
       }
 
-      background-color: $link-colour;
       color: $white;
       display: inline-block;
       font-size: 16px;
@@ -81,14 +84,24 @@ div {
     }
   }
 
+  .unfinished {
+    background-color: $grey-1;
+  }
+
   .due-or-overdue {
     color: $error-colour;
     font-weight: bold;
   }
 }
 
+
 // Stop collapsing divs when empty
 .if-empty {
   min-height: 1rem;
+}
+
+.check-submit-response {
+  margin-left: 50px;
+  margin-top: 10px;
 }
 

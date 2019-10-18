@@ -20,6 +20,7 @@
           changeLinks = {
             name: claimantPartyDetailsPageUri,
             address: claimantPartyDetailsPageUri,
+            contactPerson: claimantPartyDetailsPageUri,
             dateOfBirth: paths.claimantDateOfBirthPage.uri
           }
         )
@@ -34,12 +35,21 @@
             showCorrespondenceAddressSection = false,
               changeLinks = {
               name: defendantPartyDetailsPageUri,
+              contactPerson: defendantPartyDetailsPageUri,
               address: defendantPartyDetailsPageUri
            }
         )
     }}
 
     {{ row('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri, bold = true) }}
+
+    {% if draftClaim.defendant.mobilePhone %}
+      {% set defendantPhone = draftClaim.defendant.mobilePhone.number %}
+    {% else %}
+      {% set defendantPhone = '' %}
+    {% endif %}
+
+    {{ row('Contact number (optional)', defendantPhone, paths.defendantPhonePage.uri, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('claimAmount', 'Claim amount') }}
@@ -128,9 +138,9 @@
       <div class="form-group">
         {{ statementOfTruth(
             form,
-            statementOfTruthType = 'claim',
+            statementOfTruthType = SignatureType.CLAIM,
             label = 'I believe that the facts stated in this claim are true.',
-            isQualified = partyAsBusinessOrSoleTrader
+            isQualified = partyAsCompanyOrOrganisation
           )
         }}
 

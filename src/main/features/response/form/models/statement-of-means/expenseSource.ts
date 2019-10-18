@@ -1,6 +1,6 @@
 import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { Fractions, IsNotBlank, Min } from '@hmcts/cmc-validators'
 import { MonthlyExpenseType } from './monthlyExpenseType'
 

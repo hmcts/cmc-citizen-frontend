@@ -4,7 +4,7 @@ import { DateFutureConstraint } from 'forms/validation/validators/dateFutureCons
 
 import { LocalDate } from 'forms/models/localDate'
 import { MomentFactory } from 'shared/momentFactory'
-import { ValidationArguments } from 'class-validator'
+import { ValidationArguments } from '@hmcts/class-validator'
 
 const validationArgs: ValidationArguments = {
   value: undefined,

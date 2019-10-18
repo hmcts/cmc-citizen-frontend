@@ -1,0 +1,12 @@
+{% extends "layout.njk" %}
+{% from "components/free-mediation/howFreeMediationWorks.njk" import howMediationWorks %}
+
+{% set heading = 'How free mediation works' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {{ howMediationWorks() }}
+    </div>
+  </div>
+{% endblock %}

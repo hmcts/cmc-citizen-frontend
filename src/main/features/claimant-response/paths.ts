@@ -1,6 +1,5 @@
 import { RoutablePath } from 'shared/router/routablePath'
 
-import { Paths as FreeMediationPaths } from 'shared/components/free-mediation/paths'
 import { Paths as PaymentIntentionPaths } from 'shared/components/payment-intention/paths'
 import { Paths as CountyCourtJudgementPaths } from 'shared/components/ccj/Paths'
 
@@ -16,7 +15,6 @@ export class Paths {
   static readonly notImplementedYetPage = new RoutablePath(`${claimantResponsePath}/not-implemented-yet`)
   static readonly chooseHowToProceedPage = new RoutablePath(`${claimantResponsePath}/choose-how-to-proceed`)
   static readonly signSettlementAgreementPage = new RoutablePath(`${claimantResponsePath}/sign-settlement-agreement`)
-  static readonly freeMediationPage = new RoutablePath(claimantResponsePath + FreeMediationPaths.freeMediationPage.uri)
   static readonly alternateRepaymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentOptionPage.uri)
   static readonly paymentDatePage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentDatePage.uri)
   static readonly paymentPlanPage = new RoutablePath(claimantResponsePath + PaymentIntentionPaths.paymentPlanPage.uri)
@@ -29,6 +27,8 @@ export class Paths {
   static readonly settleClaimPage = new RoutablePath(`${claimantResponsePath}/settle-claim`)
   static readonly payBySetDateAcceptedPage = new RoutablePath(`${claimantResponsePath}/pay-by-set-date-accepted`)
   static readonly courtOfferedSetDatePage = new RoutablePath(`${claimantResponsePath}/court-offered-set-date`)
+  static readonly intentionToProceedPage = new RoutablePath(`${claimantResponsePath}/intention-to-proceed`)
+  static readonly claimantReceiptReceiver = new RoutablePath(`${claimantResponsePath}/claimant-receipt`)
 }
 
 export const claimantResponseCCJPath = '/case/:externalId/claimant-response/county-court-judgment'

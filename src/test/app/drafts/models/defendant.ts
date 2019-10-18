@@ -35,7 +35,8 @@ describe('Defendant', () => {
     const defendant: object = {
       partyDetails: {
         type: 'individual',
-        name: 'John Smith',
+        firstName: 'John',
+        lastName: 'Smith',
         address: {
           line1: 'Flat 101',
           line2: '',

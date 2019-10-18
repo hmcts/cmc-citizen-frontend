@@ -8,8 +8,6 @@ import { FullAdmission, ResponseDraft } from 'response/draft/responseDraft'
 import { PaymentOption, PaymentType } from 'shared/components/payment-intention/model/paymentOption'
 import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
 import { MomentFactory } from 'shared/momentFactory'
-import { PaymentPlan } from 'shared/components/payment-intention/model/paymentPlan'
-import { PaymentSchedule } from 'ccj/form/models/paymentSchedule'
 import { localDateFrom } from 'test/localDateUtils'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { Defendant } from 'drafts/models/defendant'
@@ -26,14 +24,6 @@ function validResponseDraftWith (paymentType: PaymentType): ResponseDraft {
   switch (paymentType) {
     case PaymentType.BY_SET_DATE:
       responseDraft.fullAdmission.paymentIntention.paymentDate = new PaymentDate(localDateFrom(MomentFactory.currentDate()))
-      break
-    case PaymentType.INSTALMENTS:
-      responseDraft.fullAdmission.paymentIntention.paymentPlan = new PaymentPlan(
-        1000,
-        100,
-        localDateFrom(MomentFactory.currentDate().add(1, 'day')),
-        PaymentSchedule.EACH_WEEK
-      )
       break
   }
   responseDraft.defendantDetails = new Defendant(new IndividualDetails())
@@ -82,6 +72,11 @@ describe('DecideHowYouWillPayTask', () => {
 
     it('should not be completed when payment date is not valid', () => {
       responseDraft.fullAdmission.paymentIntention.paymentDate.date = new LocalDate()
+      expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
+    })
+
+    it('should not be completed when payment date is not valid - date in the past', () => {
+      responseDraft.fullAdmission.paymentIntention.paymentDate.date = localDateFrom(MomentFactory.currentDate().add(-10, 'day'))
       expect(DecideHowYouWillPayTask.isCompleted(responseDraft)).to.be.false
     })
 

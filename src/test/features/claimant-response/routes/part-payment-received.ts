@@ -11,7 +11,7 @@ import { checkAuthorizationGuards } from './checks/authorization-check'
 import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
-import { FreeMediationOption } from 'response/form/models/freeMediation'
+import { FreeMediationOption } from 'forms/models/freeMediation'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -111,7 +111,7 @@ describe('Claimant Response: part payment received page', () => {
         beforeEach(() => {
           draftStoreServiceMock.resolveFind('claimantResponse', {})
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(lessThanClaimAmountDefendantResponseClaim)
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
         })
 
         it('should redirect to the task list page when yes is selected', async () => {

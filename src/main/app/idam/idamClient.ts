@@ -9,7 +9,7 @@ import { trackCustomEvent } from 'logging/customEventTracker'
 
 const s2sUrl = config.get<string>('idam.service-2-service-auth.url')
 const idamApiUrl = config.get<string>('idam.api.url')
-const totpSecret = config.get<string>('idam.service-2-service-auth.totpSecret')
+const totpSecret = config.get<string>('secrets.cmc.cmc-s2s-secret')
 const microserviceName = config.get<string>('idam.service-2-service-auth.microservice')
 
 class ServiceAuthRequest {
@@ -53,7 +53,7 @@ export class IdamClient {
 
   static exchangeCode (code: string, redirectUri: string): Promise<AuthToken> {
     const clientId = config.get<string>('oauth.clientId')
-    const clientSecret = config.get<string>('oauth.clientSecret')
+    const clientSecret = config.get<string>('secrets.cmc.citizen-oauth-client-secret')
     const url = `${config.get('idam.api.url')}/oauth2/token`
 
     return request.post({
@@ -73,9 +73,12 @@ export class IdamClient {
       })
       .catch((error: any) => {
         trackCustomEvent('failed to exchange code',{
-          errorValue: error
+          errorValue: {
+            message: error.name,
+            code: error.statusCode
+          }
         })
-        return undefined
+        throw error
       })
   }
 
@@ -84,7 +87,11 @@ export class IdamClient {
       return Promise.reject(new Error('JWT is required'))
     }
 
-    const url = `${config.get('idam.api.url')}/session/${jwt}`
-    return request.delete(url)
+    const options = {
+      method: 'DELETE',
+      uri: `${config.get('idam.api.url')}/session/${jwt}`
+    }
+
+    request(options)
   }
 }

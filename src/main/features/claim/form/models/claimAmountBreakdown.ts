@@ -1,4 +1,4 @@
-import { ValidateNested } from 'class-validator'
+import { ValidateNested } from '@hmcts/class-validator'
 
 import { ClaimAmountRow } from 'features/claim/form/models/claimAmountRow'
 import { MinTotal } from '@hmcts/cmc-validators'

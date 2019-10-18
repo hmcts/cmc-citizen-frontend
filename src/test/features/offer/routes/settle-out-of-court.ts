@@ -14,7 +14,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const settleOutOfCourtPage = OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: externalId })
 
-describe('Settle ot of court page', () => {
+describe('Settle out of court page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {

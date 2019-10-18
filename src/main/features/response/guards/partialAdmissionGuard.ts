@@ -19,7 +19,7 @@ export class PartialAdmissionGuard {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       const claim: Claim = res.locals.claim
 
-      return ClaimFeatureToggles.areAdmissionsEnabled(claim) && draft.document.isResponsePartiallyAdmitted()
+      return ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && draft.document.isResponsePartiallyAdmitted()
     }
 
     function accessDeniedCallback (req: express.Request, res: express.Response): void {

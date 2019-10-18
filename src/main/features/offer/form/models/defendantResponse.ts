@@ -1,4 +1,4 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { StatementType } from './statementType'
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option: yes or no or make an offer'

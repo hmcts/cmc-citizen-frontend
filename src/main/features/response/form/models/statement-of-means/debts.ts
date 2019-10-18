@@ -1,5 +1,5 @@
 import { MultiRowForm } from 'forms/models/multiRowForm'
-import { IsDefined, ValidateIf } from 'class-validator'
+import { IsDefined, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import * as toBoolean from 'to-boolean'
 import { DebtRow } from 'response/form/models/statement-of-means/debtRow'

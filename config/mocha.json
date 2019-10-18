@@ -1,10 +1,10 @@
 {
   "idam": {
     "authentication-web": {
-      "url": "http://localhost:18000"
+      "url": "http://localhost:19002"
     },
     "api": {
-      "url": "http://localhost:18080"
+      "url": "http://localhost:15000"
     },
     "service-2-service-auth": {
       "url": "http://localhost:14552"
@@ -29,9 +29,11 @@
     "testingSupport": true,
     "newFeaturesConsent": true,
     "admissions": true,
-    "paidInFull": true,
     "returnErrorToUser": true,
-    "mediation": true
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
+    "newDashboardStatus": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

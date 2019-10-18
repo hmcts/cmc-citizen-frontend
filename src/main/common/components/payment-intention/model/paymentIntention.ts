@@ -1,4 +1,4 @@
-import { IsDefined, ValidateIf, ValidateNested } from 'class-validator'
+import { IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
 import {
   PaymentOption,
   PaymentType

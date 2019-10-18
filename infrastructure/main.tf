@@ -1,7 +1,3 @@
-provider "azurerm" {
-  version = "1.19.0"
-}
-
 provider "vault" {
   //  # It is strongly recommended to configure this provider through the
   //  # environment variables described above, so that each user can have
@@ -13,7 +9,7 @@ provider "vault" {
 }
 
 locals {
-  aseName = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
+  aseName = "core-compute-${var.env}"
 
   local_env = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
   local_ase = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.aseName}"
@@ -56,8 +52,8 @@ data "azurerm_key_vault_secret" "draft_store_secondary" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "postcode_lookup_api_key" {
-  name = "postcode-lookup-api-key"
+data "azurerm_key_vault_secret" "os_postcode_lookup_api_key" {
+  name = "os-postcode-lookup-api-key"
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
@@ -71,8 +67,32 @@ data "azurerm_key_vault_secret" "staff_email" {
   vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
+data "azurerm_key_vault_secret" "cmc_webchat_id" {
+  name = "cmc-webchat-id"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_webchat_tenant" {
+  name = "cmc-webchat-tenant"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_webchat_button_no_agents" {
+  name = "cmc-webchat-button-no-agents"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+data "azurerm_key_vault_secret" "cmc_webchat_button_busy" {
+  name = "cmc-webchat-button-busy"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_webchat_button_service_closed" {
+  name = "cmc-webchat-button-service-closed"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
 module "citizen-frontend" {
-  source = "git@github.com:hmcts/moj-module-webapp.git?ref=master"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
@@ -105,8 +125,9 @@ module "citizen-frontend" {
 
     // Application vars
     GA_TRACKING_ID = "${var.ga_tracking_id}"
-    POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.postcode_lookup_api_key.value}"
+    POSTCODE_LOOKUP_API_KEY = "${data.azurerm_key_vault_secret.os_postcode_lookup_api_key.value}"
     COOKIE_ENCRYPTION_KEY = "${data.azurerm_key_vault_secret.cookie_encryption_key.value}"
+    HTTP_TIMEOUT = "${var.http_timeout}"
 
     // IDAM
     IDAM_API_URL = "${var.idam_api_url}"
@@ -132,21 +153,29 @@ module "citizen-frontend" {
     FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
     SERVICE_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPT1/"
-    FEEDBACK_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPFB/"
+    FEEDBACK_SURVEY_URL = "https://www.smartsurvey.co.uk/s/CMC_Feedback/"
     REPORT_PROBLEM_SURVEY_URL = "http://www.smartsurvey.co.uk/s/CMCMVPPB/"
 
     // Feature toggles
-    FEATURE_TESTING_SUPPORT = "${var.env == "prod" ? "false" : "true"}"
+    FEATURE_TESTING_SUPPORT = "${var.feature_testing_support}"
     // Enabled everywhere except prod
     FEATURE_NEW_FEATURES_CONSENT = "${var.feature_new_features_consent}"
     FEATURE_ADMISSIONS = "${var.feature_admissions}"
-    FEATURE_PAID_IN_FULL = "${var.feature_paid_in_full}"
     FEATURE_FINE_PRINT = "${var.feature_fine_print}"
     FEATURE_RETURN_ERROR_TO_USER = "${var.feature_return_error_to_user}"
     FEATURE_MOCK_PAY = "${var.feature_mock_pay}"
     FEATURE_MEDIATION = "${var.feature_mediation}"
+    FEATURE_MEDIATION_PILOT = "${var.feature_mediation_pilot}"
+    FEATURE_DIRECTIONS_QUESTIONNAIRE = "${var.feature_directions_questionnaire}"
+    FEATURE_NEW_DASHBOARD_STATUS = "${var.feature_new_dashboard_status}"
+    FEATURE_WEB_CHAT = "${var.feature_web_chat}"
 
     CONTACT_EMAIL = "${data.azurerm_key_vault_secret.staff_email.value}"
+    WEBCHAT_CHAT_ID = "${data.azurerm_key_vault_secret.cmc_webchat_id.value}"
+    WEBCHAT_TENANT = "${data.azurerm_key_vault_secret.cmc_webchat_tenant.value}"
+    WEBCHAT_BUTTON_NO_AGENTS = "${data.azurerm_key_vault_secret.cmc_webchat_button_no_agents.value}"
+    WEBCHAT_BUTTON_AGENTS_BUSY = "${data.azurerm_key_vault_secret.cmc_webchat_button_busy.value}"
+    WEBCHAT_BUTTON_SERVICE_CLOSED = "${data.azurerm_key_vault_secret.cmc_webchat_button_service_closed.value}"
 
   }
 }

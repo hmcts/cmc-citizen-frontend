@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import mcolSupportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set heading = 'Check you can use Money Claim Online (MCOL)' %}
 
@@ -32,8 +33,9 @@
 
       {{ mcolSupportWidget() }}
 
-      <a href="{{ mcolUrl }}" class="button">{{ t('Continue to MCOL') }}</a>
+      {{ internalLink(t('Continue to MCOL'), mcolUrl, 'button') }}
     </div>
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

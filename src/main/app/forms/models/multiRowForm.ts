@@ -1,5 +1,5 @@
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
-import { ValidateNested } from 'class-validator'
+import { ValidateNested } from '@hmcts/class-validator'
 
 export const MAX_NUMBER_OF_ROWS: number = 1000
 export const INIT_ROW_COUNT: number = 1

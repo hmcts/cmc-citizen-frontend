@@ -1,6 +1,6 @@
 import { MonthlyIncomeType } from './monthlyIncomeType'
 import { IncomeSource } from './incomeSource'
-import { ValidateIf, ValidateNested } from 'class-validator'
+import { ValidateIf, ValidateNested } from '@hmcts/class-validator'
 
 export class MonthlyIncome {
 

@@ -9,13 +9,13 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { generateString } from 'test/app/forms/models/validationUtils'
 import { EvidenceType } from 'forms/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { ResponseType } from 'response/form/models/responseType'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -64,6 +64,7 @@ describe('Defendant response: evidence', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -118,7 +119,8 @@ describe('Defendant response: evidence', () => {
           it('impactOfDisputePage when it is not FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response', { response: { type: ResponseType.PART_ADMISSION } })
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -131,7 +133,8 @@ describe('Defendant response: evidence', () => {
           it('taskListPage when it is FULL DEFENCE', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -144,7 +147,8 @@ describe('Defendant response: evidence', () => {
           it('taskListPage when it is PART ADMISSION', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response:partial-admission', { response: { type: ResponseType.PART_ADMISSION } })
-            draftStoreServiceMock.resolveSave(100)
+            draftStoreServiceMock.resolveUpdate(100)
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -160,6 +164,7 @@ describe('Defendant response: evidence', () => {
           it('should render page when description too long', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -180,6 +185,7 @@ describe('Defendant response: evidence', () => {
         it('should render page when valid input', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

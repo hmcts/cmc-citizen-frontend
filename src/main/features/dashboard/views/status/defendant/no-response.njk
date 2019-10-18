@@ -1,0 +1,6 @@
+{% from "timeRemaining.njk" import timeRemaining %}
+
+{{ t('Respond to claim.') }}
+<div class="mobile-inline font-xsmall">
+  {{ timeRemaining(claim.remainingDays, isAfter4pm()) }}
+</div>

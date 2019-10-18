@@ -3,10 +3,10 @@ import { Claim } from 'claims/models/claim'
 import { Paths } from 'dashboard/paths'
 import { Logger } from '@hmcts/nodejs-logging'
 import { Settlement } from 'claims/models/settlement'
-import { ClaimantResponse } from 'claims/models/response/core/claimantResponse'
 import { ClaimantResponseType } from 'claims/models/claimant-response/claimantResponseType'
 import { AcceptationClaimantResponse } from 'claims/models/claimant-response/acceptationClaimantResponse'
 import { FormaliseOption } from 'claims/models/claimant-response/formaliseOption'
+import { ClaimantResponse } from 'claims/models/claimantResponse'
 
 const logger = Logger.getLogger('settlement-agreement/guards/settlementAgreementGuard')
 

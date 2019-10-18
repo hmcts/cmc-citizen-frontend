@@ -109,7 +109,7 @@ describe('Claimant response: payment options', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -127,7 +127,7 @@ describe('Claimant response: payment options', () => {
 
           context('when form is valid', async () => {
             beforeEach(() => {
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
             })
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
@@ -168,18 +168,68 @@ describe('Claimant response: payment options', () => {
           })
         })
 
-        context('when service is healthy with different test date for pay by set date scenario', () => {
+        context('When service is healthy - check all redirects are correct from payment option page', () => {
+          const dataToSend = { option: PaymentType.IMMEDIATELY.value }
 
-          it('should redirect to court offered instalments page for "IMMEDIATELY" option selected', async () => {
+          it('should redirect to tasks list page when defendant is business', async () => {
+
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjCompanyData)
+            draftStoreServiceMock.resolveFind('claimantResponse')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send(dataToSend)
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.taskListPage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to court offered instalments page when court decision is COURT', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
             draftStoreServiceMock.resolveFind('claimantResponse', { courtDetermination: { disposableIncome: 100 } })
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
               .set('Cookie', `${cookieName}=ABC`)
               .send({ option: PaymentType.IMMEDIATELY.value })
               .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to court offered set date page when court decision is DEFENDANT', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithReasonablePaymentBySetDateResponseObjAndNoDisposableIncome)
+            draftStoreServiceMock.resolveFind('claimantResponse', { courtDetermination: { disposableIncome: 100 } })
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: PaymentType.IMMEDIATELY.value })
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedSetDatePage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to court offered instalments page when court decision is DEFENDANT', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithNoDisposableIncome)
+            draftStoreServiceMock.resolveFind('claimantResponse', { courtDetermination: { disposableIncome: 100 } })
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: PaymentType.IMMEDIATELY.value })
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.courtOfferedInstalmentsPage.evaluateUri({ externalId: externalId })))
+          })
+
+          it('should redirect to pay by set date accepted page when court decision is CLAIMANT', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentBySetDateInNext2daysResponseObj)
+            draftStoreServiceMock.resolveFind('claimantResponse')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: PaymentType.IMMEDIATELY.value })
+              .expect(res => expect(res).to.be.redirect.toLocation(Paths.payBySetDateAcceptedPage.evaluateUri({ externalId: externalId })))
           })
         })
       })

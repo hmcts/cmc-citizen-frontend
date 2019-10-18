@@ -36,6 +36,7 @@ import { getStandardInterestRate } from 'shared/interestUtils'
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { MobilePhone } from 'forms/models/mobilePhone'
 
 export class ClaimModelConverter {
 
@@ -122,19 +123,25 @@ export class ClaimModelConverter {
         const individualDetails = defendantDetails as IndividualDetails
 
         return new DefendantAsIndividual(
-          individualDetails.name,
+          StringUtils.trimToUndefined(individualDetails.title),
+          individualDetails.firstName,
+          individualDetails.lastName,
           this.convertAddress(individualDetails.address),
-          StringUtils.trimToUndefined(draftClaim.defendant.email.address)
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address),
+          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
         )
 
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
         const soleTraderDetails: SoleTraderDetails = defendantDetails as SoleTraderDetails
 
         return new DefendantAsSoleTrader(
-          soleTraderDetails.name,
+          StringUtils.trimToUndefined(soleTraderDetails.title),
+          soleTraderDetails.firstName,
+          soleTraderDetails.lastName,
           this.convertAddress(soleTraderDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          soleTraderDetails.businessName
+          soleTraderDetails.businessName,
+          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
         )
 
       case PartyType.COMPANY.value:
@@ -144,7 +151,8 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          companyDetails.contactPerson
+          companyDetails.contactPerson,
+          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
         )
       case PartyType.ORGANISATION.value:
         const organisationDetails = defendantDetails as OrganisationDetails
@@ -153,7 +161,8 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          organisationDetails.contactPerson
+          organisationDetails.contactPerson,
+          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
         )
       default:
         throw Error('Something went wrong, No defendant type is set')
@@ -241,5 +250,9 @@ export class ClaimModelConverter {
       status: payment.status,
       date_created: payment.date_created
     }
+  }
+
+  private static convertPhoneNumber (phone: MobilePhone): string {
+    return phone ? StringUtils.trimToUndefined(phone.number) : undefined
   }
 }

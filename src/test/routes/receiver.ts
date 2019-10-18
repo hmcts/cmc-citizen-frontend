@@ -103,7 +103,7 @@ describe('Login receiver', async () => {
         it('should redirect to task list', async () => {
           claimStoreServiceMock.resolveLinkDefendant()
 
-          const encryptedEligibilityCookie = cookieEncrypter.encryptCookie('j:' + JSON.stringify(eligibleCookie), { key: config.get('session.encryptionKey') })
+          const encryptedEligibilityCookie = cookieEncrypter.encryptCookie('j:' + JSON.stringify(eligibleCookie), { key: config.get('secrets.cmc.encryptionKey') })
 
           await request(app)
             .get(AppPaths.receiver.uri)
@@ -231,6 +231,18 @@ describe('Login receiver', async () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
         })
+      })
+    })
+
+    describe('for expired user credentials', () => {
+      it('should redirect to login', async () => {
+        const token = 'I am dummy access token'
+        idamServiceMock.rejectExchangeCode(token)
+
+        await request(app)
+          .get(`${AppPaths.receiver.uri}?code=ABC&state=123`)
+          .set('Cookie', 'state=123')
+          .expect(res => expect(res).to.be.redirect.toLocation(/.*\/login.*/))
       })
     })
   })

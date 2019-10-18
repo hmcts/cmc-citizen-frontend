@@ -2,7 +2,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { PartyType } from 'common/partyType'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { Defendant } from 'drafts/models/defendant'
 
 const validator = new Validator()

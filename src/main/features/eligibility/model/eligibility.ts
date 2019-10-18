@@ -1,5 +1,5 @@
 import { YesNoOption } from 'models/yesNoOption'
-import { IsIn } from 'class-validator'
+import { IsIn } from '@hmcts/class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ClaimValue } from 'eligibility/model/claimValue'
 import { ClaimType } from 'eligibility/model/claimType'

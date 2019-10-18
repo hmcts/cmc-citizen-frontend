@@ -1,4 +1,4 @@
-import { IsDefined, MaxLength, ValidateIf, Validator } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, Validator } from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
 
 import { Address as ClaimAddress } from 'claims/models/address'
@@ -28,7 +28,7 @@ export class ValidationErrors {
 }
 
 export class ValidationConstants {
-  static readonly ADDRESS_MAX_LENGTH: number = 20
+  static readonly ADDRESS_MAX_LENGTH: number = 35
 }
 
 export class Address implements CompletableTask {

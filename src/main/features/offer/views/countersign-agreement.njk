@@ -1,5 +1,7 @@
 {% extends "layout.njk" %}
 
+{% from "internalLink.njk" import internalLink %}
+
 {% set heading = 'You can now make a legal agreement' %}
 
 {% block content %}
@@ -18,9 +20,7 @@
         {{ t('You both need to sign the agreement for it to become a legal contract.') }}
       <p>
 
-      <a href="{{ OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }) }}" role="button" class="button">
-        {{ t('Make an agreement') }}
-      </a>
+      {{ internalLink(t('Make an agreement'), OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }), 'button') }}
     </div>
   </div>
 {% endblock %}

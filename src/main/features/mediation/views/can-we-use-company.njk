@@ -1,0 +1,63 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, textInput, saveAndContinueButton %}
+
+
+{% if contactName %}
+  {% set heading = 'Is ' + contactName + ' the right person for the mediation service to call?' %}
+{% else %}
+  {% set heading = 'Enter a contact name and phone number' %}
+{% endif %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form
+        method="POST"
+        class="analytics-submit-event-trigger"
+        data-event-action="Mediation: Can the mediation service use"
+        data-event-label-from="type"
+        novalidate>
+
+        {{ csrfProtection(csrf) }}
+
+        {% if contactName %}
+          {% set error = form.errorFor('option') %}
+          <div class="form-group {% if error %} form-group-error {% endif %}">
+            <fieldset id="option[label]">
+              <legend class="visually-hidden">{{ t(heading) }}</legend>
+              {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+              <div class="multiple-choice" data-target="mediation-phone-number">
+                <input id="freeMediationOptionYES" type="radio" name="option" value="{{ FreeMediationOption.YES }}" {% if form.valueFor('option') == FreeMediationOption.YES %} checked {% endif %}>
+                <label for="freeMediationOptionYES">{{ t(FreeMediationOption.YES) | capitalize }}</label>
+              </div>
+              <div class="panel panel-border-narrow js-hidden" id="mediation-phone-number" aria-hidden="false">
+                {{ textInput('Confirm telephone number', 'mediationPhoneNumberConfirmation', form) }}
+              </div>
+              <div class="multiple-choice" data-target="mediation-contact-name">
+                <input id="freeMediationOptionNO" type="radio" name="option" value="{{ FreeMediationOption.NO }}" {% if form.valueFor('option') == FreeMediationOption.NO %} checked {% endif %}>
+                <label for="freeMediationOptionNO">{{ t(FreeMediationOption.NO) | capitalize }}</label>
+              </div>
+              <div class="panel panel-border-narrow js-hidden" id="mediation-contact-name" aria-hidden="false">
+                {{ canWeUseCompanyInputs(form) }}
+              </div>
+            </fieldset>
+          </div>
+        {% else %}
+          <div class="visually-hidden" aria-hidden="true">
+            <input id="freeMediationOptionNO" type="radio" name="option" value="{{ FreeMediationOption.NO }}" checked>
+            <label for="freeMediationOptionNO">{{ t(FreeMediationOption.NO) | capitalize }}</label>
+          </div>
+          {{ canWeUseCompanyInputs(form) }}
+        {% endif %}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% macro canWeUseCompanyInputs(form) %}
+  {{ textInput('Who should the mediation service call?', 'mediationContactPerson', form) }}
+  {{ textInput('Enter this person’s phone number, including extension if required', 'mediationPhoneNumber', form, 'For example, 02012346788 ext. 153') }}
+{% endmacro %}
+

@@ -31,10 +31,7 @@ function logStartupProblem (response) {
 }
 
 function handleError (error) {
-  const errorBody = () => {
-    return error && error.response ? error.response.body : error
-  }
-  console.log('Error during bootstrap, exiting', errorBody())
+  console.log('Error during bootstrap, exiting', error)
   process.exit(1)
 }
 
@@ -59,6 +56,8 @@ async function waitTillHealthy (appURL: string) {
     if (response.statusCode === 200) {
       console.log(`Service ${appURL} became ready after ${sleepInterval * i} seconds`)
       console.log(`FEATURE_ADMISSIONS=${process.env.FEATURE_ADMISSIONS}`)
+      console.log(`FEATURE_MEDIATION=${process.env.FEATURE_MEDIATION}`)
+      console.log(`FEATURE_DIRECTIONS_QUESTIONNAIRE=${process.env.FEATURE_DIRECTIONS_QUESTIONNAIRE}`)
       return Promise.resolve()
     } else {
       logStartupProblem(response)

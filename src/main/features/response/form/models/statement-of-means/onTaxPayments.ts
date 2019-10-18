@@ -1,4 +1,4 @@
-import { IsDefined, Max, Min, ValidateIf } from 'class-validator'
+import { IsDefined, Max, Min, ValidateIf } from '@hmcts/class-validator'
 import { IsNotBlank, Fractions, MaxLength } from '@hmcts/cmc-validators'
 import * as toBoolean from 'to-boolean'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'

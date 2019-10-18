@@ -4,6 +4,8 @@
 
 {% from "form.njk" import csrfProtection, linkButton %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
+{% from "externalLink.njk" import externalLink %}
 
 {% block content %}
 
@@ -15,8 +17,8 @@
 
       <h2 class="heading-medium">{{ t('If you don’t respond') }}</h2>
 
-      <p>{{ t('The claimant can apply for a <a target="_blank" href="{{ link }}">County Court Judgment (CCJ)</a> against you if you don’t respond before the deadline.'
-        , { link: ['https://www.gov.uk/county-court-judgments-ccj-for-debt'] }) | safe }}</p>
+      <p>{{ t('The claimant can apply for a {{ ccj }} against you if you don’t respond before the deadline.',
+          { ccj: externalLink('County Court Judgment (CCJ)', 'https://www.gov.uk/county-court-judgments-ccj-for-debt') }) | safe }}</p>
 
       <p>{{ t('They can use a CCJ to get the money from you, for example by applying to the court to send bailiffs to your home or business.') }}</p>
 
@@ -36,11 +38,8 @@
         <h2 class="heading-medium" id="subsection-title">{{ t('Support') }}</h2>
         <nav role="navigation" aria-labelledby="subsection-title">
           <ul class="font-xsmall">
-            <li><a href="https://www.gov.uk/make-court-claim-for-money/court-fees">{{ t('Money claim fees') }}</a></li>
-            <li><a href="/other-options">{{ t('Other options') }}</a></li>
-            <li><a class="external" rel="external"
-                   href="https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc"
-                   target="_blank">{{ t('Contact us') }}</a></li>
+            <li>{{ externalLink(t('Money claim fees'), 'https://www.gov.uk/make-court-claim-for-money/court-fees') }}</li>
+            <li>{{ externalLink(t('Contact us'), 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc') }}</li>
           </ul>
         </nav>
       </aside>
@@ -48,3 +47,4 @@
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

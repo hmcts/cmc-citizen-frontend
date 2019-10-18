@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { Eligibility } from 'eligibility/model/eligibility'
 import { ValidationErrors } from 'forms/validation/validationErrors'
@@ -8,9 +8,10 @@ import { ClaimValue } from 'features/eligibility/model/claimValue'
 import { ClaimType } from 'features/eligibility/model/claimType'
 import { DefendantAgeOption } from 'features/eligibility/model/defendantAgeOption'
 
+/* tslint:disable:no-unused-expression */
 describe('Eligibility', () => {
 
-  describe('validation', () => {
+  context('validation', () => {
 
     const validator: Validator = new Validator()
 
@@ -29,7 +30,7 @@ describe('Eligibility', () => {
           YesNoOption.NO
         )
       )
-      expect(errors.length).to.equal(1)
+      expect(errors).to.have.length(1)
       expectValidationError(errors, ValidationErrors.YES_NO_REQUIRED)
     })
 
@@ -49,11 +50,11 @@ describe('Eligibility', () => {
         )
       )
 
-      expect(errors.length).to.equal(0)
+      expect(errors).to.be.empty
     })
   })
 
-  describe('eligible', () => {
+  context('eligible', () => {
 
     it('should be valid if all eligibility answers are eligible', () => {
 
@@ -70,7 +71,7 @@ describe('Eligibility', () => {
         YesNoOption.NO
       )
 
-      expect(eligibility.eligible).to.equal(true)
+      expect(eligibility.eligible).to.be.true
 
     })
 
@@ -89,7 +90,7 @@ describe('Eligibility', () => {
         YesNoOption.NO
       )
 
-      expect(eligibility.eligible).to.equal(false)
+      expect(eligibility.eligible).to.be.false
 
     })
   })

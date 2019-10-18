@@ -21,6 +21,9 @@
             <legend
               class="visually-hidden">{{ t('Do you want to settle the claim for the {{ settleAmount }} the defendant admitted?', { settleAmount: claim.response.amount | numeral }) }}</legend>
             {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+            {% if hasPaymentIntention %}
+              {% set hintText = 'You can agree to their repayment plan or suggest your own.' %}
+            {% endif %}
 
             {{ radioOption(
               form = form,
@@ -28,7 +31,7 @@
               value = YesNoOption.YES.option,
               label = 'Yes',
               bold = true,
-              hint = 'You can agree to their repayment plan or suggest your own.',
+              hint = hintText,
               checked = (form.valueFor('admitted') === YesNoOption.YES)
             ) }}
 

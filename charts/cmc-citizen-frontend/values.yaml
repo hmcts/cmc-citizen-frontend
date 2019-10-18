@@ -1,0 +1,44 @@
+nodejs:
+  image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
+  applicationPort: 3000
+  memoryRequests: 512Mi
+  memoryLimits: 1024Mi
+  cpuLimits: 1
+  environment:
+    NODE_ENV: production
+    REFORM_TEAM: cmc
+    REFORM_SERVICE_NAME: citizen-frontend
+    REFORM_ENVIRONMENT: preview
+    UV_THREADPOOL_SIZE: 64
+    GA_TRACKING_ID: UA-00000000-0
+    SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    FEATURE_TESTING_SUPPORT: true
+    FEATURE_NEW_FEATURES_CONSENT: true
+    FEATURE_ADMISSIONS: true
+    FEATURE_FINE_PRINT: true
+    FEATURE_RETURN_ERROR_TO_USER: true
+    FEATURE_MOCK_PAY: false
+    FEATURE_MEDIATION: true
+    FEATURE_MEDIATION_PILOT: true
+    FEATURE_DIRECTIONS_QUESTIONNAIRE: true
+    FEATURE_NEW_DASHBOARD_STATUS: false
+    FEATURE_WEB_CHAT: true
+  keyVaults:
+    cmc:
+      resourceGroup: cmc
+      secrets:
+      - os-postcode-lookup-api-key
+      - AppInsightsInstrumentationKey
+      - citizen-oauth-client-secret
+      - cmc-s2s-secret
+      - citizen-draft-store-primary
+      - citizen-draft-store-secondary
+      - citizen-cookie-encryption-key
+      - staff-email
+      - cmc-webchat-id
+      - cmc-webchat-tenant
+      - cmc-webchat-button-no-agents
+      - cmc-webchat-button-agents-busy
+      - cmc-webchat-button-service-closed

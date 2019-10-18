@@ -14,7 +14,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { IncomeExpenseSources } from 'common/calculate-monthly-income-expense/incomeExpenseSources'
 import { CalculateMonthlyIncomeExpense } from 'common/calculate-monthly-income-expense/calculateMonthlyIncomeExpense'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
 
 const page: RoutablePath = StatementOfMeansPaths.monthlyExpensesPage

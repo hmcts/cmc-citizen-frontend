@@ -1,6 +1,8 @@
 {% extends "layout.njk" %}
 {% from "task-list.njk" import task, taskListHeading, disabledTask %}
+{% from "internalLink.njk" import internalLink %}
 {% set heading = 'Make a money claim' %}
+{% set headingSize = 'xlarge' %}
 
 {% block content %}
   <div class="grid-row">
@@ -23,11 +25,11 @@
 
       <div class="task-group">
         {{ taskListHeading(submit.name) }}
-
-        {% for item in submit.tasks %}
-          {{ task(item.startPageUrl, t(item.name), item.completed) }}
-        {% endfor %}
+        <div class="check-submit-response">
+          {{ internalLink(t('Check and submit your claim'), ClaimPaths.checkAndSendPage.uri, 'button button-primary') }}
+        </div>
       </div>
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

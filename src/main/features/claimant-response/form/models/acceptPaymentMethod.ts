@@ -1,4 +1,4 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { YesNoOption } from 'models/yesNoOption'
 
 import { ValidationErrors } from 'forms/validation/validationErrors'

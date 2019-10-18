@@ -9,10 +9,10 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
-import { checkAlreadySubmittedGuard } from 'test/features/response/routes/checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from 'test/features/response/routes/checks/ccj-requested-check'
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
@@ -61,6 +61,7 @@ describe('Defendant response: timeline', () => {
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -116,7 +117,8 @@ describe('Defendant response: timeline', () => {
             it('should redirect to evidence page when and everything is fine', async () => {
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
               draftStoreServiceMock.resolveFind(responseDraftType)
-              draftStoreServiceMock.resolveSave(100)
+              draftStoreServiceMock.resolveFind('mediation')
+              draftStoreServiceMock.resolveUpdate(100)
 
               await request(app)
                 .post(pagePath)
@@ -133,6 +135,7 @@ describe('Defendant response: timeline', () => {
           it('should render page when date undefined', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -144,6 +147,7 @@ describe('Defendant response: timeline', () => {
           it('should render page when description undefined', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
@@ -159,6 +163,7 @@ describe('Defendant response: timeline', () => {
         it('should render page when valid input', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

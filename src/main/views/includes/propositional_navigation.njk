@@ -1,12 +1,16 @@
+{% from "internalLink.njk" import internalLink %}
+
 <div class="header-proposition">
   <div class="content">
-    <a href="#proposition-links" class="js-header-toggle menu">Menu</a>
+    {{ internalLink(t('Menu'), '#proposition-links', 'js-header-toggle menu') }}
     <nav id="proposition-menu">
-      <a href="/" id="proposition-name">{% if serviceName %}{{ t(serviceName) }}{% endif %}</a>
+      {% if serviceName %}
+        {{ internalLink(t(serviceName), AppPaths.homePage.uri, id='proposition-name') }}
+      {% endif %}
       <ul id="proposition-links" class="pull-right">
         {% if isLoggedIn %}
-          <li><a href="/dashboard" >{{ t('My account') }}</a></li>
-          <li><a href="/logout">{{ t('Sign out') }}</a></li>
+          <li>{{ internalLink(t('My account'), DashboardPaths.dashboardPage.uri) }}</li>
+          <li>{{ internalLink(t('Sign out'), AppPaths.logoutReceiver.uri) }}</li>
         {% endif %}
       </ul>
     </nav>

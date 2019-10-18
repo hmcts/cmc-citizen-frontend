@@ -13,12 +13,13 @@ export class ValidationErrors {
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter a valid amount, maximum two decimal places'
   static readonly NON_NEGATIVE_NUMBER_REQUIRED: string = 'Don’t enter a negative number'
   static readonly POSITIVE_NUMBER_REQUIRED: string = 'Enter a number higher than 0'
+  static readonly BELOW_OR_EQUAL_TO_100_REQUIRED: string = 'Enter a number lesser than or equal to 100'
   static readonly INTEGER_REQUIRED: string = 'Enter a numeric, for example 3'
   static readonly DEFENDANT_AGE_REQUIRED: string = 'Select yes, no, or company/organisation'
 
   static readonly DATE_REQUIRED: string = 'Enter a date'
   static readonly DATE_NOT_VALID: string = 'Enter a valid date'
-  static readonly DATE_IN_FUTURE: string = 'Correct the date. You can’t use a future date'
+  static readonly DATE_IN_FUTURE: string = 'Correct the date. You can’t use a future date.'
 
   static readonly REASON_TOO_LONG: string = 'Enter reason no longer than $constraint1 characters'
   static readonly AMOUNT_NOT_VALID: string = 'Enter a valid amount'

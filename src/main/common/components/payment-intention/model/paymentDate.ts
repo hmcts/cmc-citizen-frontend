@@ -1,4 +1,4 @@
-import { IsDefined, ValidateNested } from 'class-validator'
+import { IsDefined, ValidateNested } from '@hmcts/class-validator'
 
 import { IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsTodayOrInFuture } from 'forms/validation/validators/isTodayOrInFuture'

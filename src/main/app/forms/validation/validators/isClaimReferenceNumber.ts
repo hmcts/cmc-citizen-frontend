@@ -4,7 +4,7 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface
-} from 'class-validator'
+} from '@hmcts/class-validator'
 import { isCMCReference } from 'shared/utils/isCMCReference'
 import { isCCBCCaseReference } from 'shared/utils/isCCBCCaseReference'
 

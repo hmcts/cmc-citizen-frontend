@@ -25,6 +25,8 @@ describe('Claimant response: task list page', () => {
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claimantResponse')
+      draftStoreServiceMock.resolveFind('mediation')
+      draftStoreServiceMock.resolveFind('directionsQuestionnaire')
       claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
 
       await request(app)

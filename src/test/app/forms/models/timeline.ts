@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { INIT_ROW_COUNT, Timeline } from 'forms/models/timeline'
 import { TimelineRow } from 'forms/models/timelineRow'
 import { expectValidationError } from 'test/app/forms/models/validationUtils'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { MAX_NUMBER_OF_ROWS } from 'forms/models/multiRowForm'
 
@@ -117,16 +117,16 @@ describe('Timeline', () => {
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT + 1)
     })
 
-    it(`adds only up to ${MAX_NUMBER_OF_ROWS} elements`, () => {
+    it(`adds only up to the maximum row count elements`, () => {
       const actual: Timeline = new Timeline()
 
       expect(actual.rows.length).to.be.eq(INIT_ROW_COUNT)
 
-      for (let i = 0; i < MAX_NUMBER_OF_ROWS + 1; i++) {
+      for (let i = 0; i < actual.getMaxNumberOfRows() + 1; i++) {
         actual.appendRow()
       }
 
-      expect(actual.rows.length).to.be.eq(MAX_NUMBER_OF_ROWS)
+      expect(actual.rows.length).to.be.eq(actual.getMaxNumberOfRows())
     })
   })
 

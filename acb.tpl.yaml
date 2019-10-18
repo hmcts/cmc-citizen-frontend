@@ -1,0 +1,67 @@
+version: 1.0-preview-1
+steps:
+  - id: pull-base
+    cmd: docker pull {{.Run.Registry}}/cmc/citizen-frontend/base:latest || true
+    when: ["-"]
+    keep: true
+
+  - id: pull-build
+    cmd: docker pull {{.Run.Registry}}/cmc/citizen-frontend/build:latest || true
+    when: ["-"]
+    keep: true
+
+  - id: base
+    build: >
+      -t {{.Run.Registry}}/cmc/citizen-frontend/base
+      --cache-from {{.Run.Registry}}/cmc/citizen-frontend/base:latest
+      --target base
+      .
+    when:
+      - pull-base
+    keep: true
+
+  - id: build
+    build: >
+      -t {{.Run.Registry}}/cmc/citizen-frontend/build
+      --cache-from {{.Run.Registry}}/cmc/citizen-frontend/base:latest
+      --cache-from {{.Run.Registry}}/cmc/citizen-frontend/build:latest
+      --target build
+      .
+    when:
+      - pull-base
+      - pull-build
+    keep: true
+
+  - id: runtime
+    build: >
+      -t {{.Run.Registry}}/{{CI_IMAGE_TAG}}
+      --cache-from {{.Run.Registry}}/cmc/citizen-frontend/base:latest
+      --cache-from {{.Run.Registry}}/cmc/citizen-frontend/build:latest
+      --target runtime
+      .
+    when:
+      - base
+      - build
+    keep: true
+
+  - id: push-images
+    push:
+      - "{{.Run.Registry}}/cmc/citizen-frontend/base:latest"
+      - "{{.Run.Registry}}/cmc/citizen-frontend/build:latest"
+      - "{{.Run.Registry}}/{{CI_IMAGE_TAG}}"
+    when:
+      - runtime
+
+  - id: build-integration-tests
+    build: >
+      -f integration-tests.Dockerfile
+      -t {{.Run.Registry}}/cmc/citizen-integration-tests:latest
+      .
+    when:
+      - push-images
+
+  - id: push-integration-tests
+    push:
+      - "{{.Run.Registry}}/cmc/citizen-integration-tests:latest"
+    when:
+      - build-integration-tests

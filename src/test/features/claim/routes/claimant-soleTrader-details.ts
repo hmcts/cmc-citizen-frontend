@@ -104,13 +104,24 @@ describe('claimant as soleTrader details page', () => {
         })
       })
 
-      it('should redirect to mobile number page when everything is fine ', async () => {
+      it('should redirect to mobile number page when everything is fine with trading as name', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
         await request(app)
           .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send(input)
+          .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantMobilePage.uri))
+      })
+
+      it('should redirect to mobile number page when everything is fine with no trading as name', async () => {
+        const noTradingAsNameInput = { ...input, ...{ businessName: '' } }
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveUpdate()
+        await request(app)
+          .post(ClaimPaths.claimantSoleTraderOrSelfEmployedDetailsPage.uri)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send(noTradingAsNameInput)
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.claimantMobilePage.uri))
       })
     })

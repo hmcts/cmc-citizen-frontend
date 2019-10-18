@@ -1,3 +1,4 @@
+import { Logger } from '@hmcts/nodejs-logging'
 import * as express from 'express'
 import * as config from 'config'
 import * as path from 'path'
@@ -28,6 +29,8 @@ import { FeatureToggles } from 'utils/featureToggles'
 import { ClaimantResponseFeature } from 'claimant-response/index'
 import { PaidInFullFeature } from 'paid-in-full/index'
 import { MediationFeature } from 'mediation/index'
+import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
+import { OrdersFeature } from 'orders/index'
 
 export const app: express.Express = express()
 
@@ -35,6 +38,8 @@ const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
 const developmentMode = env === 'development'
+
+const logger = Logger.getLogger('applicationRunner')
 
 const i18next = I18Next.enableFor(app)
 
@@ -47,15 +52,18 @@ app.enable('trust proxy')
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
+  limit: '10mb'
 }))
 app.use(cookieParser())
-app.use(cookieEncrypter(config.get('session.encryptionKey'), {
+app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   options: {
     algorithm: 'aes128'
   }
 }))
 
+// Web Chat
+app.use('/webchat', express.static(path.join(__dirname, '/public/webchat')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 if (env !== 'mocha') {
@@ -71,22 +79,26 @@ new DefendantResponseFeature().enableFor(app)
 new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
-
-if (FeatureToggles.isEnabled('mediation')) {
-  new MediationFeature().enableFor(app)
-}
-
-if (FeatureToggles.isEnabled('paidInFull')) {
-  new PaidInFullFeature().enableFor(app)
-}
+new MediationFeature().enableFor(app)
+new PaidInFullFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('testingSupport')) {
+  logger.info('FeatureToggles.testingSupport enabled')
   new TestingSupportFeature().enableFor(app)
 }
 
 if (FeatureToggles.isEnabled('admissions')) {
+  logger.info('FeatureToggles.admissions enabled')
   new ClaimantResponseFeature().enableFor(app)
 }
+
+if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+  logger.info('FeatureToggles.directionsQuestionnaire enabled')
+  new DirectionsQuestionnaireFeature().enableFor(app)
+  new OrdersFeature().enableFor(app)
+
+}
+
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
 // to convert moment object to String
 moment.prototype.toISOString = function () {

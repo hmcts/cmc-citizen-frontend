@@ -1,4 +1,4 @@
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 import { YesNoOption } from 'models/yesNoOption'
 import { DraftClaimantResponse } from 'claimant-response/draft/draftClaimantResponse'

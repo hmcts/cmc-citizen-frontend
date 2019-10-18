@@ -64,28 +64,33 @@ import { CarerOption } from 'response/form/models/statement-of-means/carer'
 import { CohabitingOption } from 'response/form/models/statement-of-means/cohabiting'
 import { DisabilityOption } from 'response/form/models/statement-of-means/disability'
 import { SevereDisabilityOption } from 'response/form/models/statement-of-means/severeDisability'
+import { MediationDraft } from 'mediation/draft/mediationDraft'
+import { FeatureToggles } from 'utils/featureToggles'
+import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 
 export class ResponseModelConverter {
 
-  static convert (draft: ResponseDraft, claim: Claim): Response {
+  static convert (draft: ResponseDraft, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft, claim: Claim): Response {
     switch (draft.response.type) {
       case FormResponseType.DEFENCE:
         if (draft.isResponseRejectedFullyBecausePaidWhatOwed()
           && draft.rejectAllOfClaim.howMuchHaveYouPaid.amount < claim.totalAmountTillToday) {
-          return this.convertFullDefenceAsPartialAdmission(draft)
+          return this.convertFullDefenceAsPartialAdmission(draft, claim, mediationDraft, directionsQuestionnaireDraft)
         }
-        return this.convertFullDefence(draft)
+        return this.convertFullDefence(draft, claim, mediationDraft, directionsQuestionnaireDraft)
       case FormResponseType.FULL_ADMISSION:
-        return this.convertFullAdmission(draft)
+        return this.convertFullAdmission(draft, claim, mediationDraft)
       case FormResponseType.PART_ADMISSION:
-        return this.convertPartAdmission(draft)
+        return this.convertPartAdmission(draft, claim, mediationDraft, directionsQuestionnaireDraft)
       default:
         throw new Error(`Unsupported response type: ${draft.response.type.value}`)
     }
   }
 
-  private static convertFullDefence (draft: ResponseDraft): FullDefenceResponse {
+  private static convertFullDefence (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): FullDefenceResponse {
     return {
       responseType: ResponseType.FULL_DEFENCE,
       defendant: this.convertPartyDetails(draft.defendantDetails),
@@ -99,15 +104,21 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       paymentDeclaration: draft.isResponseRejectedFullyBecausePaidWhatOwed() ? new PaymentDeclaration(
-        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(), draft.rejectAllOfClaim.howMuchHaveYouPaid.text
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.date.asString(),
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
+        draft.rejectAllOfClaim.howMuchHaveYouPaid.text
       ) : undefined,
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
-  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+  private static convertFullDefenceAsPartialAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     return {
       responseType: ResponseType.PART_ADMISSION,
       amount: draft.rejectAllOfClaim.howMuchHaveYouPaid.amount,
@@ -124,16 +135,22 @@ export class ResponseModelConverter {
         rows: convertEvidence(draft.evidence) as any,
         comment: draft.evidence.comment
       } as DefendantEvidence,
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
-  private static convertFullAdmission (draft: ResponseDraft): FullAdmissionResponse {
+  private static convertFullAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft): FullAdmissionResponse {
     return {
       responseType: ResponseType.FULL_ADMISSION,
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: this.convertPaymentIntention(draft.fullAdmission.paymentIntention),
       statementOfMeans: this.convertStatementOfMeans(draft),
@@ -141,7 +158,7 @@ export class ResponseModelConverter {
     }
   }
 
-  private static convertPartAdmission (draft: ResponseDraft): PartialAdmissionResponse {
+  private static convertPartAdmission (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): PartialAdmissionResponse {
     let amount
     if (draft.partialAdmission.alreadyPaid.option === DraftYesNoOption.YES) {
       amount = draft.partialAdmission.howMuchHaveYouPaid.amount
@@ -169,9 +186,13 @@ export class ResponseModelConverter {
       } as DefendantEvidence,
       defendant: this.convertPartyDetails(draft.defendantDetails),
       paymentIntention: draft.partialAdmission.paymentIntention && this.convertPaymentIntention(draft.partialAdmission.paymentIntention),
-      freeMediation: FreeMediationUtil.convertFreeMediation(draft.freeMediation),
+      freeMediation: FreeMediationUtil.getFreeMediation(mediationDraft),
+      mediationPhoneNumber: FreeMediationUtil.getMediationPhoneNumber(claim, mediationDraft, draft),
+      mediationContactPerson: FreeMediationUtil.getMediationContactPerson(claim, mediationDraft, draft),
       statementOfMeans: this.convertStatementOfMeans(draft),
-      statementOfTruth: this.convertStatementOfTruth(draft)
+      statementOfTruth: this.convertStatementOfTruth(draft),
+      directionsQuestionnaire: (FeatureToggles.isEnabled('directionsQuestionnaire') &&
+        ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) ? this.convertDirectionsQuestionnaire(directionsQuestionnaireDraft) : undefined
     }
   }
 
@@ -314,7 +335,9 @@ export class ResponseModelConverter {
     if (defendant.partyDetails.hasCorrespondenceAddress) {
       party.correspondenceAddress = new Address().deserialize(defendant.partyDetails.correspondenceAddress)
     }
-    party.name = defendant.partyDetails.name
+    if (defendant.partyDetails.name) {
+      party.name = defendant.partyDetails.name
+    }
     if (defendant.email) {
       party.email = defendant.email.address
     }
@@ -648,5 +671,9 @@ export class ResponseModelConverter {
     }
 
     return expenses
+  }
+
+  private static convertDirectionsQuestionnaire (directionsQuestionnaireDraft: DirectionsQuestionnaireDraft): DirectionsQuestionnaire {
+    return DirectionsQuestionnaire.deserialize(directionsQuestionnaireDraft)
   }
 }

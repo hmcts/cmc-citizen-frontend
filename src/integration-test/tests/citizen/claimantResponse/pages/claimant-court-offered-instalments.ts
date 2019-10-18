@@ -21,6 +21,15 @@ export class ClaimantCourtOfferedInstalmentsPage {
     I.click(buttons.submit)
   }
 
+  checkingCourtOfferedPlanAndAccept (): void {
+    I.see('The defendant can’t afford your plan')
+    I.see('The court’s proposed repayment plan')
+    I.see('Frequency of payments')
+    I.see('Weekly')
+    I.checkOption(fields.accept.yes)
+    I.click(buttons.submit)
+  }
+
   reject (): void {
     I.see('The defendant can’t afford your plan')
     I.checkOption(fields.accept.no)

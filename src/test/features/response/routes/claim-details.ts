@@ -3,7 +3,7 @@ import * as request from 'supertest'
 import * as config from 'config'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
-import { checkAuthorizationGuards } from 'test/features/response/routes/checks/authorization-check'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
@@ -12,7 +12,7 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { checkNotDefendantInCaseGuard } from 'test/features/response/routes/checks/not-defendant-in-case-check'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { EvidenceType } from 'forms/models/evidenceType'
 
@@ -35,6 +35,7 @@ describe('Defendant response: claim details page', () => {
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -59,6 +60,7 @@ describe('Defendant response: claim details page', () => {
           }
         })
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)
@@ -70,6 +72,7 @@ describe('Defendant response: claim details page', () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(
           { claim: { ...claimStoreServiceMock.sampleClaimObj.claim, evidence: null } })
         draftStoreServiceMock.resolveFindNoDraftFound()
+        draftStoreServiceMock.resolveFind('mediation')
 
         await request(app)
           .get(pagePath)

@@ -1,4 +1,4 @@
+{% from "externalLink.njk" import externalLink %}
 <div class="report-error">
- <a target="_blank" href="{{ reportProblemSurveyUrl }}?pageurl={{ pagePath }}">{{ t('Report a problem with this page ') }}</a>
-  <span>{{ t('(opens in a new window)') }}</span>
+  {{ externalLink(t('Report a problem with this page'), reportProblemSurveyUrl + '?pageurl=' + pagePath) }}
 </div>

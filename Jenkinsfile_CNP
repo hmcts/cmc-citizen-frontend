@@ -1,21 +1,19 @@
 #!groovy
 
-@Library("Infrastructure@cmc-increase-functional-timeout-to-80")
+@Library("Infrastructure@increase-functional-temporarily")
 
 String product = "cmc"
 String component = "citizen-frontend"
 
-List<LinkedHashMap<String, Object>> secrets = [
-  secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
-  secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
-  secret('postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
-  secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
-  secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
-  secret('cmc-s2s-secret', 'IDAM_S2S_TOTP_SECRET'),
-  secret('citizen-draft-store-primary', 'DRAFT_STORE_SECRET_PRIMARY'),
-  secret('citizen-draft-store-secondary', 'DRAFT_STORE_SECRET_SECONDARY'),
-  secret('citizen-cookie-encryption-key', 'COOKIE_ENCRYPTION_KEY'),
-  secret('staff-email', 'CONTACT_EMAIL')
+def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
+
+def secrets = [
+  'cmc-${env}':
+    [
+      secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
+      secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
+      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -30,34 +28,38 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
-env.IDAM_URL = 'https://preprod-idamapi.reform.hmcts.net:3511'
+env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
+env.FEATURE_MEDIATION = 'true'
+env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
+env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
-  afterCheckout {
+  after('checkout') {
     onMaster {
-      try {
-        sh """
-          git fetch origin demo:demo
-          git push --force origin HEAD:demo
-        """
-      } catch (err) {
-        notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+      withCredentials([usernamePassword(credentialsId: 'jenkins-github-hmcts-api-token', passwordVariable: 'BEARER_TOKEN', usernameVariable: 'USERNAME')]) {
+        try {
+          def url = sh(returnStdout: true, script: 'git config remote.origin.url').replace('github.com', '${BEARER_TOKEN}@github.com')
+          sh('git remote set-url origin ' + url)
+          sh('git fetch origin demo:demo')
+          sh('git push --force origin HEAD:demo')
+        } catch (err) {
+          notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+        }
       }
     }
   }
 
   after('build') {
-    sh 'yarn setup'
+    yarnBuilder.yarn('setup')
   }
 
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   enableDockerBuild()
-  enableDeployToAKS()
-  setVaultName('cmc')
+  installCharts()
 }

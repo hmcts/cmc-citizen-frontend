@@ -1,4 +1,4 @@
-import { IsDefined } from 'class-validator'
+import { IsDefined } from '@hmcts/class-validator'
 
 export class ValidationErrors {
   static readonly REASON_REQUIRED: string = 'Enter a valid reason'

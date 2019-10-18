@@ -4,7 +4,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 export class StatementOfMeansFeature {
   static isApplicableFor (claim: Claim, draft: ResponseDraft): boolean {
-    if (!ClaimFeatureToggles.areAdmissionsEnabled(claim)) {
+    if (!ClaimFeatureToggles.isFeatureEnabledOnClaim(claim)) {
       return false
     }
     if (!draft) {

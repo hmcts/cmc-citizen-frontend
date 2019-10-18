@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
@@ -20,13 +21,14 @@
         }}
       </p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
       <p>
-        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Finished') }}</a>
+        {{ internalLink(t('Finished'), DashboardPaths.dashboardPage.uri, 'button') }}
       </p>
 
       {{ supportWidget() }}
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

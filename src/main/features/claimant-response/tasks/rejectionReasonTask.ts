@@ -1,5 +1,5 @@
 import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
 const validator = new Validator()
 

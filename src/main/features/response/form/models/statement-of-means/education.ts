@@ -1,4 +1,4 @@
-import { IsDefined, IsInt, Min } from 'class-validator'
+import { IsDefined, IsInt, Min } from '@hmcts/class-validator'
 
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'

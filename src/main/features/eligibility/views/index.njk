@@ -1,5 +1,5 @@
 {% extends "layout.njk" %}
-{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
 
 {% if registeredUser %}
   {% set heading = 'Find out if you can make a claim using this service' %}
@@ -15,7 +15,6 @@
           {{ t('We’ll ask you some questions to check you can use this service. We can’t say if your claim will be successful or not.') }}
         </p>
 
-        <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue') }}</a>
       {% else %}
 
         <p>{{ t('We’re building a new service which is currently in beta. This means we’re testing different designs '
@@ -23,12 +22,12 @@
 
         <p>{{ t('We’ll ask you some questions to check you can use the new service.') }}</p>
 
-        <p>{{ t('You can still <a href="{{ uri }}">use Money Claim Online (MCOL)</a> '
-          + 'if you prefer while we’re testing the new service.',
-            { uri: EligibilityPaths.mcolEligibilityPage.uri }) | safe }}</p>
+        <p>{{ t('You can still {{ useMCOL }} if you prefer while we’re testing the new service.',
+            { useMCOL: internalLink('use Money Claim Online (MCOL)', EligibilityPaths.mcolEligibilityPage.uri) }) | safe }}</p>
 
-        <a href="{{ EligibilityPaths.claimValuePage.uri }}" class="button">{{ t('Continue') }}</a>
       {% endif %}
+
+      {{ internalLink(t('Continue'), EligibilityPaths.claimValuePage.uri, 'button') }}
     </div>
   </div>
 {% endblock %}

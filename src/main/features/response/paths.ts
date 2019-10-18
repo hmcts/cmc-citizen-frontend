@@ -12,7 +12,6 @@ export class Paths {
   static readonly moreTimeConfirmationPage = new RoutablePath(`${responsePath}/more-time-confirmation`)
   static readonly responseTypePage = new RoutablePath(`${responsePath}/response-type`)
   static readonly defencePage = new RoutablePath(`${responsePath}/your-defence`)
-  static readonly freeMediationPage = new RoutablePath(`${responsePath}/free-mediation`)
   static readonly checkAndSendPage = new RoutablePath(`${responsePath}/check-and-send`)
   static readonly confirmationPage = new RoutablePath(`${responsePath}/confirmation`)
   static readonly counterClaimPage = new RoutablePath(`${responsePath}/counter-claim`)
@@ -21,6 +20,7 @@ export class Paths {
   static readonly evidencePage = new RoutablePath(`${responsePath}/evidence`)
   static readonly receiptReceiver = new RoutablePath(`${responsePath}/receipt`)
   static readonly sendYourResponseByEmailPage = new RoutablePath(`${responsePath}/eligibility/send-your-response-by-email`)
+  static readonly under18Page = new RoutablePath(`${responsePath}/eligibility/under-18`)
   static readonly whenDidYouPay = new RoutablePath(`${responsePath}/when-did-you-pay`)
   // Added in case anyone has a printed copy of a PDF with the old URL
   static readonly legacyDashboardRedirect = new RoutablePath('/response/dashboard')

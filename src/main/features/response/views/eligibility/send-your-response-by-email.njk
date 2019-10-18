@@ -10,7 +10,7 @@
     <div class="column-two-thirds">
       <div class="panel-indent">
         <div class="panel panel-border-wide">
-          <p>{{ t('We need to receive your response before <span class="bold">4pm on {{ responseDeadline }}</span>',
+          <p>{{ t('We need to receive your response before <span class="bold">4pm on {{ responseDeadline }}</span>. You could get a County Court Judgment against you if you miss the deadline.',
             { responseDeadline: claim.responseDeadline | date }) | safe }}</p>
         </div>
       </div>
@@ -133,3 +133,4 @@
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

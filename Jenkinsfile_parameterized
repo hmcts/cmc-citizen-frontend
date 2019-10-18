@@ -9,17 +9,20 @@ properties([
 		])
 ])
 
-List<LinkedHashMap<String, Object>> secrets = [
-  secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
-  secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD'),
-  secret('postcode-lookup-api-key', 'POSTCODE_LOOKUP_API_KEY'),
-  secret('AppInsightsInstrumentationKey', 'APPINSIGHTS_INSTRUMENTATIONKEY'),
-  secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
-  secret('cmc-s2s-secret', 'IDAM_S2S_TOTP_SECRET'),
-  secret('citizen-draft-store-primary', 'DRAFT_STORE_SECRET_PRIMARY'),
-  secret('citizen-draft-store-secondary', 'DRAFT_STORE_SECRET_SECONDARY'),
-  secret('citizen-cookie-encryption-key', 'COOKIE_ENCRYPTION_KEY'),
-  secret('staff-email', 'CONTACT_EMAIL')
+def secrets = [
+  'cmc-${env}':
+    [
+      secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
+      secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
+      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
+    ],
+  'rpe-ft-api-${env}' :
+    [
+      secret('admin-username-test', 'ADMIN_USERNAME_TEST'),
+      secret('admin-password-test', 'ADMIN_PASSWORD_TEST'),
+      secret('editor-username-test', 'EDITOR_USERNAME_TEST'),
+      secret('editor-password-test', 'EDITOR_PASSWORD_TEST')
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {

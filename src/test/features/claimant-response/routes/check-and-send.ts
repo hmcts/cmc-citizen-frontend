@@ -14,6 +14,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { app } from 'main/app'
+import { MomentFactory } from 'shared/momentFactory'
+import { LocalDate } from 'forms/models/localDate'
+import { RejectionReason } from 'claimant-response/form/models/rejectionReason'
+import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const draftType = 'claimantResponse'
@@ -70,6 +74,8 @@ describe('Claimant response: check and send page', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
           draftStoreServiceMock.resolveFind(draftType, { acceptPaymentMethod: undefined })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -81,6 +87,8 @@ describe('Claimant response: check and send page', () => {
         it('should render page when everything is fine along with court decision', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -92,11 +100,126 @@ describe('Claimant response: check and send page', () => {
         it('should render page when everything is fine but without court decision', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
           draftStoreServiceMock.resolveFind(draftType, { courtDetermination: undefined })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
+        })
+
+        it('should render page when everything fine when Comp/Org as Defendant admission is accepted ' +
+          'but payment plan is rejected to be paid IMMEDIATELY', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
+          draftStoreServiceMock.resolveFind(draftType, {
+            courtDetermination: undefined,
+            alternatePaymentMethod: {
+              paymentOption: {
+                option: {
+                  value: 'IMMEDIATELY',
+                  displayValue: 'Immediately'
+                }
+              }
+            },
+            acceptPaymentMethod: {
+              accept: {
+                option: 'no'
+              }
+            },
+            settlementAgreement: {
+              signed: false
+            },
+            formaliseRepaymentPlan: {
+              option: {
+                value: 'referToJudge',
+                displayValue: 'Refer to judge'
+              }
+            }
+          })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withText('How would you like the defendant to pay', 'Immediately'))
+            .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
+        })
+
+        it('should render page when everything fine when Comp/Org as Defendant admission is accepted ' +
+          'but payment plan is rejected to be paid BY SET DATE', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
+          draftStoreServiceMock.resolveFind(draftType, {
+            courtDetermination: undefined,
+            acceptPaymentMethod: {
+              accept: {
+                option: 'no'
+              }
+            },
+            settlementAgreement: {
+              signed: false
+            },
+            alternatePaymentMethod: {
+              paymentOption: {
+                option: {
+                  value: 'BY_SPECIFIED_DATE',
+                  displayValue: 'By a set date'
+                }
+              },
+              paymentDate: {
+                date: LocalDate.fromMoment(MomentFactory.currentDate().add(50, 'days'))
+              }
+            },
+            formaliseRepaymentPlan: {
+              option: {
+                value: 'referToJudge',
+                displayValue: 'Refer to judge'
+              }
+            }
+          })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withText('How would you like the defendant to pay', 'In full by'))
+            .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
+        })
+
+        it('should render page when everything fine when Comp/Org as Defendant admission is accepted ' +
+          'but payment plan is rejected to be paid BY INSTALMENTS', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateCompanyData)
+          draftStoreServiceMock.resolveFind(draftType, {
+            courtDetermination: undefined,
+            acceptPaymentMethod: {
+              accept: {
+                option: 'no'
+              }
+            },
+            settlementAgreement: {
+              signed: false
+            },
+            formaliseRepaymentPlan: {
+              option: {
+                value: 'referToJudge',
+                displayValue: 'Refer to judge'
+              }
+            }
+          })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+            .expect(res => expect(res).to.be.successful.withText('How would you like the defendant to pay', 'By instalments'))
+            .expect(res => expect(res).to.be.successful.withText('Regular payments of', 'Frequency of payments', 'Date for first instalment'))
             .expect(res => expect(res).to.be.successful.withoutText('Court decision'))
         })
 
@@ -117,6 +240,8 @@ describe('Claimant response: check and send page', () => {
               alternatePaymentMethod: undefined,
               courtOfferedPaymentIntention: undefined
             })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
@@ -142,12 +267,225 @@ describe('Claimant response: check and send page', () => {
               alternatePaymentMethod: undefined,
               courtOfferedPaymentIntention: undefined
             })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
         })
+
+        it(`should render page successfully when Defendant's part admit pay immediately response is accepted`, async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData)
+          draftStoreServiceMock.resolveFind(draftType,
+            {
+              settleAdmitted: {
+                admitted: {
+                  option: 'yes'
+                }
+              },
+              acceptPaymentMethod: undefined,
+              formaliseRepaymentPlan: undefined,
+              settlementAgreement: undefined,
+              freeMediation: undefined,
+              rejectionReason: undefined,
+              alternatePaymentMethod: undefined,
+              courtOfferedPaymentIntention: undefined
+            })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+        })
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          it(`should render page with hearing requirements when Defendant's part admit pay immediately response is rejected`, async () => {
+            const dqPartAdmit = {
+              ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+              features: ['directionsQuestionnaire']
+            }
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+            draftStoreServiceMock.resolveFind(draftType,
+              {
+                settleAdmitted: {
+                  admitted: {
+                    option: 'no'
+                  }
+                },
+                acceptPaymentMethod: undefined,
+                formaliseRepaymentPlan: undefined,
+                settlementAgreement: undefined,
+                freeMediation: undefined,
+                rejectionReason: undefined,
+                alternatePaymentMethod: undefined,
+                courtOfferedPaymentIntention: undefined
+              })
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+          })
+        }
+
+        it(`should render page without hearing requirements when Defendant's part admit pay immediately response is accepted`, async () => {
+          const dqPartAdmit = {
+            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+            features: ['directionsQuestionnaire']
+          }
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+          draftStoreServiceMock.resolveFind(draftType,
+            {
+              settleAdmitted: {
+                admitted: {
+                  option: 'yes'
+                }
+              },
+              acceptPaymentMethod: undefined,
+              formaliseRepaymentPlan: undefined,
+              settlementAgreement: undefined,
+              freeMediation: undefined,
+              rejectionReason: undefined,
+              alternatePaymentMethod: undefined,
+              courtOfferedPaymentIntention: undefined
+            })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('Your hearing requirements'))
+        })
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          it(`should render page with hearing requirements when Defendant's full defence response is rejected`, async () => {
+            const dqPartAdmit = {
+              ...claimStoreServiceMock.sampleFullDefenceRejectEntirely,
+              features: ['directionsQuestionnaire']
+            }
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+            draftStoreServiceMock.resolveFind(draftType,
+              {
+                intentionToProceed: {
+                  proceed: {
+                    option: 'yes'
+                  }
+                },
+                acceptPaymentMethod: undefined,
+                formaliseRepaymentPlan: undefined,
+                settlementAgreement: undefined,
+                freeMediation: undefined,
+                rejectionReason: undefined,
+                alternatePaymentMethod: undefined,
+                courtOfferedPaymentIntention: undefined
+              })
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+          })
+        }
+
+        it(`should render page without hearing requirements when Defendant's full defence response is accepted`, async () => {
+          const dqPartAdmit = {
+            ...claimStoreServiceMock.sampleFullDefenceRejectEntirely,
+            features: ['directionsQuestionnaire']
+          }
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+          draftStoreServiceMock.resolveFind(draftType,
+            {
+              intentionToProceed: {
+                proceed: {
+                  option: 'no'
+                }
+              },
+              acceptPaymentMethod: undefined,
+              formaliseRepaymentPlan: undefined,
+              settlementAgreement: undefined,
+              freeMediation: undefined,
+              rejectionReason: undefined,
+              alternatePaymentMethod: undefined,
+              courtOfferedPaymentIntention: undefined
+            })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('Your hearing requirements'))
+        })
+
+        if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+          it(`should render page with hearing requirements when Defendant's already paid response is rejected`, async () => {
+            const dqPartAdmit = {
+              ...claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount,
+              features: ['directionsQuestionnaire']
+            }
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+            draftStoreServiceMock.resolveFind(draftType,
+              {
+                accepted: {
+                  accepted: {
+                    option: 'no'
+                  }
+                },
+                rejectionReason: new RejectionReason('already paid'),
+                formaliseRepaymentPlan: undefined,
+                settlementAgreement: undefined,
+                freeMediation: undefined,
+                alternatePaymentMethod: undefined,
+                courtOfferedPaymentIntention: undefined
+              })
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+            await request(app)
+              .get(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Your hearing requirements'))
+          })
+        }
+
+        it(`should render page without hearing requirements when Defendant's already paid response is accepted`, async () => {
+          const dqPartAdmit = {
+            ...claimStoreServiceMock.sampleFullDefenceWithStatesPaidGreaterThanClaimAmount,
+            features: ['directionsQuestionnaire']
+          }
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(dqPartAdmit)
+          draftStoreServiceMock.resolveFind(draftType,
+            {
+              accepted: {
+                accepted: {
+                  option: 'yes'
+                }
+              },
+              rejectionReason: undefined,
+              formaliseRepaymentPlan: undefined,
+              settlementAgreement: undefined,
+              freeMediation: undefined,
+              alternatePaymentMethod: undefined,
+              courtOfferedPaymentIntention: undefined
+            })
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('Your hearing requirements'))
+        })
+
       })
     })
   })
@@ -177,6 +515,8 @@ describe('Claimant response: check and send page', () => {
         it('should return 500 and render error page when cannot save claimant response', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           draftStoreServiceMock.resolveFind(draftType)
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.rejectSaveClaimantResponse('HTTP error')
 
           await request(app)
@@ -188,6 +528,8 @@ describe('Claimant response: check and send page', () => {
 
         it('should return 500 and render error page when form is valid and cannot delete draft response', async () => {
           draftStoreServiceMock.resolveFind(draftType)
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
           claimStoreServiceMock.resolveClaimantResponse()
           draftStoreServiceMock.rejectDelete()
@@ -202,7 +544,10 @@ describe('Claimant response: check and send page', () => {
 
       it('should redirect to confirmation page when saved claimant response', async () => {
         draftStoreServiceMock.resolveFind(draftType)
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('directionsQuestionnaire')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj)
+        draftStoreServiceMock.resolveDelete()
         draftStoreServiceMock.resolveDelete()
         claimStoreServiceMock.resolveClaimantResponse()
 
