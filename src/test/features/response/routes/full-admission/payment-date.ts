@@ -70,12 +70,12 @@ describe('Pay by set date: payment date', () => {
 
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('What date will you pay on?'))
-            .expect(res => expect(res).to.be.successful.withoutText('<div class="panel">'))
         })
       })
     })
@@ -110,7 +110,8 @@ describe('Pay by set date: payment date', () => {
 
         it('should render error page when unable to save draft', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -121,6 +122,7 @@ describe('Pay by set date: payment date', () => {
 
         it('should trigger validation when invalid data is given', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
@@ -131,7 +133,8 @@ describe('Pay by set date: payment date', () => {
 
         it('should redirect to task list when data is valid and user provides a date within 28 days from today', async () => {
           draftStoreServiceMock.resolveFind('response:full-admission', draft)
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

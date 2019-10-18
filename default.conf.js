@@ -16,12 +16,13 @@ exports.config = {
     }
   },
   helpers: {
-    WebDriverIO: {
+    WebDriver: {
       host: process.env.WEB_DRIVER_HOST || 'localhost',
-      port: process.env.WEB_DRIVER_PORT || '4444',
+      port: process.env.WEB_DRIVER_PORT || 4444,
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 15000,
+      restart: false,
       desiredCapabilities: {
         proxy: new ProxySettings()
       }

@@ -35,27 +35,29 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
     envVariable: envVar
   ]
 }
+
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
+// NOTE: they will not be overridden by terraform outputs - so use AAT settings
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
+env.FEATURE_MEDIATION = 'true'
+env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
 // SAUCELABS config - configured on Jenkins (also IDAM_URL above used)
 env.SAUCELABS_BROWSER = 'chrome_win_latest'
 env.SAUCELABS_TUNNEL_IDENTIFIER = 'reformtunnel'
-env.SAUCELABS_USERNAME = 'username'
-env.SAUCELABS_ACCESS_KEY = 'privatekey'
+env.TEST_URL = params.URL_TO_TEST //required
+env.CITIZEN_APP_URL = params.URL_TO_TEST //required
+env.CHUNKS = 3
 
 withNightlyPipeline("nodejs", product, component) {
-  env.TEST_URL = params.URL_TO_TEST
-  env.CITIZEN_APP_URL = params.URL_TO_TEST
-
   loadVaultSecrets(secrets)
   enableCrossBrowserTest()
   enableSecurityScan()
-  enableFullFunctionalTest(180)
+  enableFullFunctionalTest(200)
 
   after('crossBrowserTest') {
     steps.archiveArtifacts allowEmptyArchive: true, artifacts: 'functional-output/**/*'

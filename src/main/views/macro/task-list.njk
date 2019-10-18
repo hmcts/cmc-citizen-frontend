@@ -1,0 +1,31 @@
+{% macro task(link, taskName, completedSection) %}
+  <div class="task">
+    <a href="{{ link }}">
+      <span class="task-name {%- if completedSection %} task-finished{% endif %}">
+        {{ taskName }}
+      </span>
+    </a>
+    {% if completedSection === true %}
+      <div class="task-finished">
+        <strong>{{ t("COMPLETE") }}</strong>
+      </div>
+    {% else %}
+      <div class="task-finished unfinished">
+        <strong>{{ t("INCOMPLETE") }}</strong>
+      </div>
+    {% endif %}
+
+  </div>
+{% endmacro %}
+
+{% macro disabledTask(taskName) %}
+  <div class="task">
+    <span class="task-name">
+      {{ taskName }}
+    </span>
+  </div>
+{% endmacro %}
+
+{% macro taskListHeading(heading) %}
+  <h2 class="task-list-heading">{{ t(heading) }}</h2>
+{% endmacro %}

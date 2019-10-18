@@ -74,7 +74,7 @@ describe('OtherWitnesses', () => {
     it('should return an instance from given object', () => {
       const actual: OtherWitnesses = new OtherWitnesses().deserialize({ otherWitnesses: 'yes', howMany: 1 })
 
-      expect(actual).to.be.eql(new OtherWitnesses(YesNoOption.YES, 1))
+      expect(actual).to.be.eql(new OtherWitnesses(YesNoOption.fromObject(YesNoOption.YES), 1))
     })
 
   })

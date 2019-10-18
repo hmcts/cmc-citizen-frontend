@@ -18,142 +18,139 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { FreeMediationOption } from 'forms/models/freeMediation'
-import { FeatureToggles } from 'utils/featureToggles'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.willYouTryMediation.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
-if (FeatureToggles.isEnabled('mediation')) {
-  describe('Free mediation: will you try free mediation page', () => {
-    attachDefaultHooks(app)
+describe('Free mediation: will you try free mediation page', () => {
+  attachDefaultHooks(app)
 
-    describe('on GET', () => {
-      const method = 'get'
-      checkAuthorizationGuards(app, method, pagePath)
+  describe('on GET', () => {
+    const method = 'get'
+    checkAuthorizationGuards(app, method, pagePath)
 
-      context('when user authorised', () => {
-        beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-        })
-
-        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-
-        context('when response not submitted', () => {
-          it('should return 500 and render error page when cannot retrieve claim', async () => {
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-            await request(app)
-              .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.serverError.withText('Error'))
-          })
-
-          it('should render page when everything is fine', async () => {
-            draftStoreServiceMock.resolveFind('mediation')
-            draftStoreServiceMock.resolveFind('response')
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-
-            await request(app)
-              .get(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('Will you try free mediation?'))
-          })
-        })
-      })
-    })
-
-    describe('on POST', () => {
-      const method = 'post'
-      checkAuthorizationGuards(app, method, pagePath)
-
-      context('when defendant authorised', () => {
-        beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-        })
-
-        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-
-        context('when response not submitted', () => {
-          context('when form is invalid', () => {
-            it('should return 500 and render error page when cannot retrieve claim', async () => {
-              claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.serverError.withText('Error'))
-            })
-          })
-
-          context('when form is valid', () => {
-            it('should return 500 and render error page when cannot save draft', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.rejectSave()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ option: FreeMediationOption.YES })
-                .expect(res => expect(res).to.be.serverError.withText('Error'))
-            })
-
-            it('should redirect to can we use page when everything is fine', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveSave()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ option: FreeMediationOption.YES })
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(MediationPaths.mediationAgreementPage
-                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-            })
-
-            it('should redirect to response task list when No was chosen and no response is available', async () => {
-              claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-              draftStoreServiceMock.resolveFind('mediation')
-              draftStoreServiceMock.resolveFind('response')
-              draftStoreServiceMock.resolveSave()
-
-              await request(app)
-                .post(pagePath)
-                .set('Cookie', `${cookieName}=ABC`)
-                .send({ option: FreeMediationOption.NO })
-                .expect(res => expect(res).to.be.redirect
-                  .toLocation(ResponsePaths.taskListPage
-                    .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
-            })
-          })
-        })
+    context('when user authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      context('when claimant authorised', () => {
-        beforeEach(() => {
-          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
-        })
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
-        checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-
-        it('should redirect to claimant response task list when No was chosen and there is a response', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+      context('when response not submitted', () => {
+        it('should return 500 and render error page when cannot retrieve claim', async () => {
+          claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
           await request(app)
-            .post(pagePath)
+            .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ option: FreeMediationOption.NO })
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(ClaimantResponsePaths.taskListPage
-                .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+            .expect(res => expect(res).to.be.serverError.withText('Error'))
+        })
+
+        it('should render page when everything is fine', async () => {
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('response')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Will you try free mediation?'))
         })
       })
     })
   })
-}
+
+  describe('on POST', () => {
+    const method = 'post'
+    checkAuthorizationGuards(app, method, pagePath)
+
+    context('when defendant authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+      })
+
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+
+      context('when response not submitted', () => {
+        context('when form is invalid', () => {
+          it('should return 500 and render error page when cannot retrieve claim', async () => {
+            claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+        })
+
+        context('when form is valid', () => {
+          it('should return 500 and render error page when cannot save draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.rejectUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.YES })
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('should redirect to mediation agreement page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.YES })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.mediationAgreementPage
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to response task list when No was chosen and no response is available', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ option: FreeMediationOption.NO })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.taskListPage
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+        })
+      })
+    })
+
+    context('when claimant authorised', () => {
+      beforeEach(() => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+      })
+
+      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+
+      it('should redirect to claimant response task list when No was chosen and there is a response', async () => {
+        claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleDefendantResponseObj)
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveFind('claimant-response')
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({ option: FreeMediationOption.NO })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ClaimantResponsePaths.taskListPage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+      })
+    })
+  })
+})

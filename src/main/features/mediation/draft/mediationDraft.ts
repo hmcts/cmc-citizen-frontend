@@ -8,6 +8,7 @@ export class MediationDraft extends DraftDocument {
   canWeUseCompany: CanWeUseCompany
   willYouTryMediation: FreeMediation
   youCanOnlyUseMediation: FreeMediation
+  mediationDisagreement: FreeMediation
 
   constructor () {
     super()
@@ -28,6 +29,9 @@ export class MediationDraft extends DraftDocument {
       }
       if (input.canWeUseCompany) {
         this.canWeUseCompany = new CanWeUseCompany().deserialize(input.canWeUseCompany)
+      }
+      if (input.mediationDisagreement) {
+        this.mediationDisagreement = new FreeMediation(input.mediationDisagreement.option)
       }
     }
     return this

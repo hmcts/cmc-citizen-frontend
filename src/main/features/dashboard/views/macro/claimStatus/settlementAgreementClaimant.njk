@@ -23,7 +23,7 @@
 {% macro settlementAgreementSignedByClaimantClaimDetails(claim) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You’ve signed a settlement agreement') }}</h2>
+    <h2 class="heading-medium">{{ t('You’ve signed a settlement agreement') }}</h2>
     <p>{{ t('We’ve emailed {{ defendantName }} the repayment plan and the settlement agreement for them to sign.',
       { defendantName: defendantName }) }}</p>
     <p>{{ t('They must respond by {{ respondDate }}. We’ll email you when they respond.',
@@ -35,7 +35,7 @@
 {% macro settlementAgreementSignedByClaimantDeadlinePassedClaimDetails(claim, csrf) %}
   {% set defendantName = claim.claimData.defendant.name %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('The defendant has not signed your settlement agreement') }}</h2>
+    <h2 class="heading-medium">{{ t('The defendant has not signed your settlement agreement') }}</h2>
     <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the
       agreement.') }}</p>
     <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay it.')
@@ -51,7 +51,7 @@
 
 {% macro settlementAgreementSignedByBothClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You’ve both signed a settlement agreement') }}</h2>
+    <h2 class="heading-medium">{{ t('You’ve both signed a settlement agreement') }}</h2>
     {% if claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
     <p>{{ t('The agreement says the defendant will pay you in full by {{ paymentDate }}.',
       { paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date }) }}</p>
@@ -74,20 +74,20 @@
 
 {% macro settlementAgreementRejectedClaimantClaimDetails(claim, csrf) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('The defendant has rejected your settlement agreement') }}</h2>
-    <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.') }}</p>
-    <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay it.') }}</p>
-    <p>{{ t('{{ defendantName }} can still sign the settlement agreement until you request a CCJ.', { defendantName: claim.claimData.defendant.name }) }}</p>
+    <h2 class="heading-medium">{{ t('The defendant has rejected your settlement agreement') }}</h2>
+    <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan they offered.') }}</p>
+    <p>{{ t('The court will order them to pay the money. It doesn’t guarantee that they’ll pay you.') }}</p>
     <form class="form-group" novalidate method="post">
       {{ csrfProtection(csrf) }}
-      {{ linkButton('Request a County Court Judgment (CCJ)', '', 'button button-secondary') }}
+      {{ linkButton('Request a County Court Judgment (CCJ)', CCJPaths.paidAmountPage.evaluateUri({
+        externalId:claim.externalId }), 'button button-primary') }}
     </form>
   </div>
 {% endmacro %}
 
 {% macro requestCCJ(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Request County Court Judgment') }}</h2>
+    <h2 class="heading-medium">{{ t('Request County Court Judgment') }}</h2>
     <p>{{ t('If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can '
       + internalLink('request a County Court Judgment. ', CCJPaths.paidAmountPage.evaluateUri({
       externalId:claim.externalId }) )) | safe }}

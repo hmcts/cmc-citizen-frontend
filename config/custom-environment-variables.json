@@ -72,12 +72,13 @@
     "testingSupport": "FEATURE_TESTING_SUPPORT",
     "newFeaturesConsent": "FEATURE_NEW_FEATURES_CONSENT",
     "admissions": "FEATURE_ADMISSIONS",
-    "paidInFull": "FEATURE_PAID_IN_FULL",
     "returnErrorToUser": "FEATURE_RETURN_ERROR_TO_USER",
     "mockPay": "FEATURE_MOCK_PAY",
     "mediation": "FEATURE_MEDIATION",
     "mediationPilot": "FEATURE_MEDIATION_PILOT",
-    "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE"
+    "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE",
+    "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS",
+    "webChat": "FEATURE_WEB_CHAT"
   },
 
   "oauth": {
@@ -97,7 +98,12 @@
       "citizen-oauth-client-secret": "OAUTH_CLIENT_SECRET",
       "os-postcode-lookup-api-key": "POSTCODE_LOOKUP_API_KEY",
       "encryptionKey": "COOKIE_ENCRYPTION_KEY",
-      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
+      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY",
+      "webchat-chat-id": "WEBCHAT_CHAT_ID",
+      "webchat-tenant": "WEBCHAT_TENANT",
+      "webchat-button-no-agents": "WEBCHAT_BUTTON_NO_AGENTS",
+      "webchat-button-agents-busy": "WEBCHAT_BUTTON_AGENTS_BUSY",
+      "webchat-button-service-closed": "WEBCHAT_BUTTON_SERVICE_CLOSED"
     }
   }
 }

@@ -47,6 +47,7 @@ describe('Defendant response: counter claim page', () => {
 
       it('should render page when everything is fine', async () => {
         draftStoreServiceMock.resolveFind('response')
+        draftStoreServiceMock.resolveFind('mediation')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()
         feesServiceMock.resolveGetIssueFeeRangeGroup()
         feesServiceMock.resolveGetHearingFeeRangeGroup()

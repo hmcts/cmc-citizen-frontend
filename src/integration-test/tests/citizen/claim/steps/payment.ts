@@ -1,3 +1,4 @@
+import I = CodeceptJS.I
 import { PaymentConfirmationPage } from 'integration-test/tests/citizen/claim/pages/govpay/payment-confirmation'
 import { PaymentDetailsPage } from 'integration-test/tests/citizen/claim/pages/govpay/payment-details'
 
@@ -13,6 +14,7 @@ class CardDetailsFactory {
   }
 }
 
+const I: I = actor()
 const govPaymentDetailsPage: PaymentDetailsPage = new PaymentDetailsPage()
 const govPaymentConfirmationPage: PaymentConfirmationPage = new PaymentConfirmationPage()
 

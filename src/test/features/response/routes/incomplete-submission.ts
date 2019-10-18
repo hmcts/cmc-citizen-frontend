@@ -38,6 +38,7 @@ describe('Defendant response: incomplete submission page', () => {
       idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       draftStoreServiceMock.resolveFind('response')
       draftStoreServiceMock.resolveFind('mediation')
+      draftStoreServiceMock.resolveFind('directionsQuestionnaire')
       claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
       await request(app)

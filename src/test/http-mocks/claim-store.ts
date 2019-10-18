@@ -2,7 +2,7 @@ import * as config from 'config'
 import * as mock from 'nock'
 import * as HttpStatus from 'http-status-codes'
 import { StatementType } from 'features/offer/form/models/statementType'
-import { MadeBy } from 'features/offer/form/models/madeBy'
+import { MadeBy } from 'claims/models/madeBy'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { InterestDateType } from 'common/interestDateType'
 import { Interest } from 'claims/models/interest'
@@ -19,13 +19,22 @@ import {
   fullAdmissionWithSoMPaymentBySetDate,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
   fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  fullDefenceWithStatesLessThanClaimAmount,
+  fullDefenceWithStatesLessThanClaimAmountWithMediation,
   fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   partialAdmissionWithPaymentBySetDateCompanyData,
-  partialAdmissionWithSoMPaymentBySetDateData, partialAdmissionWithImmediatePaymentData
+  partialAdmissionWithSoMPaymentBySetDateData,
+  partialAdmissionWithImmediatePaymentData,
+  defenceWithDisputeData,
+  partialAdmissionWithSoMPaymentBySetDateWithMediationData,
+  partialAdmissionWithPaymentByInstalmentsWithMediationData,
+  partialAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithImmediatePaymentDataV2
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import { organisation } from 'test/data/entity/party'
+import { Moment } from 'moment'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
 const externalIdPattern: string = '[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}'
@@ -144,18 +153,20 @@ export const sampleClaimIssueObj = {
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
 }
 
 export const sampleClaimObj = {
   id: 1,
+  ccdCaseId: 1,
   submitterId: '1',
   submitterEmail: 'claimant@example.com',
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC000',
-  createdAt: '2017-07-25T22:45:51.785',
-  issuedOn: '2017-07-25',
+  createdAt: '2019-09-25T22:45:51.785',
+  issuedOn: '2019-09-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
@@ -177,6 +188,7 @@ export const sampleClaimObj = {
       {
         type: 'individual',
         name: 'John Doe',
+        email: 'johndoe@example.com',
         address: {
           line1: 'line1',
           line2: 'line2',
@@ -222,6 +234,7 @@ export const sampleClaimObj = {
       }
     ]
   },
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
 }
 
@@ -270,6 +283,10 @@ export const settlementWithSetDateAndAcceptation = {
         }
       },
       {
+        type: 'ACCEPTATION',
+        madeBy: MadeBy.CLAIMANT.value
+      },
+      {
         madeBy: MadeBy.DEFENDANT.value,
         type: 'COUNTERSIGNATURE'
       }
@@ -280,8 +297,8 @@ export const partySettlementWithInstalmentsAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
-      paymentIntention: { 'paymentDate': MomentFactory.currentDate().year(2), 'paymentOption': 'BY_SPECIFIED_DATE' }
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
+      paymentIntention: { 'paymentDate': MomentFactory.currentDate().add(2, 'years'), 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
   }, {
@@ -293,9 +310,9 @@ export const partySettlementWithInstalmentsAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: {
-        paymentDate: MomentFactory.currentDate().year(2),
+        paymentDate: MomentFactory.currentDate().add(2, 'years'),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
@@ -310,7 +327,7 @@ export const partySettlementWithSetDateAndRejection = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: { 'paymentDate': '2023-01-01', 'paymentOption': 'BY_SPECIFIED_DATE' }
     },
     madeBy: 'DEFENDANT'
@@ -323,9 +340,9 @@ export const partySettlementWithSetDateAndAcceptation = {
   partyStatements: [{
     type: 'OFFER',
     offer: {
-      completionDate: MomentFactory.currentDate().year(2),
+      completionDate: MomentFactory.currentDate().add(2, 'years'),
       paymentIntention: {
-        paymentDate: MomentFactory.currentDate().year(2),
+        paymentDate: MomentFactory.currentDate().add(2, 'years'),
         paymentOption: 'BY_SPECIFIED_DATE'
       }
     },
@@ -362,10 +379,165 @@ export const sampleDefendantResponseObj = {
   }
 }
 
+export const sampleDefendantResponseWithDQAndMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    },
+    directionsQuestionnaire: {
+      hearingLoop: 'NO',
+      selfWitness: 'NO',
+      disabledAccess: 'NO',
+      hearingLocation: 'Central London County Court',
+      hearingLocationOption: 'SUGGESTED_COURT'
+    }
+  }
+}
+
+export const sampleDefendantResponseWithoutDQAndWithMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  }
+}
+
+export const sampleDefendantResponseWithoutDQAndWithoutMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'no',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  },
+  directionsQuestionnaireDeadline: MomentFactory.currentDate().add(12, 'days')
+}
+
+export const sampleDefendantResponseWithDQAndNoMediationObj = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'DISPUTE',
+    defence: 'I reject this money claim',
+    freeMediation: 'no',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    },
+    directionsQuestionnaire: {
+      hearingLoop: 'NO',
+      selfWitness: 'NO',
+      disabledAccess: 'NO',
+      hearingLocation: 'Central London County Court',
+      hearingLocationOption: 'SUGGESTED_COURT'
+    }
+  }
+}
+
+export const sampleDefendantResponseAlreadyPaidWithMediationObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'ALREADY_PAID',
+    paymentDeclaration: {
+      paidDate: '1999-01-01',
+      paidAmount: 100,
+      explanation: 'I paid you'
+    },
+    defence: 'I reject this money claim',
+    freeMediation: 'yes',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  }
+}
+
+export const sampleDefendantResponseAlreadyPaidWithNoMediationObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: {
+    responseType: 'FULL_DEFENCE',
+    defenceType: 'ALREADY_PAID',
+    paymentDeclaration: {
+      paidDate: '1999-01-01',
+      paidAmount: 100,
+      explanation: 'I paid you'
+    },
+    defence: 'I reject this money claim',
+    freeMediation: 'no',
+    defendant: {
+      type: 'individual',
+      name: 'full name',
+      address: {
+        line1: 'line1',
+        line2: 'line2',
+        city: 'city',
+        postcode: 'bb127nq'
+      }
+    }
+  }
+}
+
 export const samplePartialAdmissionWithPaymentBySetDateResponseObj = {
+  ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithSoMPaymentBySetDateData
+}
+
+export const samplePartialAdmissionWithPaymentBySetDateWithMediationResponseObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithSoMPaymentBySetDateWithMediationData
 }
 
 export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
@@ -374,10 +546,32 @@ export const samplePartialAdmissionWithPaymentBySetDateCompanyData = {
   response: partialAdmissionWithPaymentBySetDateCompanyData
 }
 
+export const samplePartialAdmissionWithPaymentByInstalmentDateResponseObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithPaymentByInstalmentsData
+}
+
+export const samplePartialAdmissionWithPaymentByInstalmentWithMediationResponseObj = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithPaymentByInstalmentsWithMediationData
+}
+
 export const samplePartialAdmissionWithPayImmediatelyData = {
+  ...this.sampleClaimIssueObj,
   respondedAt: '2017-07-25T22:45:51.785',
   claimantRespondedAt: '2017-07-25T22:45:51.785',
   response: partialAdmissionWithImmediatePaymentData
+}
+
+export const samplePartialAdmissionWithPayImmediatelyDataV2 = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  claimantRespondedAt: '2017-07-25T22:45:51.785',
+  response: partialAdmissionWithImmediatePaymentDataV2
 }
 
 export const sampleFullAdmissionWithPaymentBySetDateResponseObj = {
@@ -420,9 +614,25 @@ export const sampleFullAdmissionWithPaymentByInstalmentsResponseObjWithUnReasona
   response: fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule
 }
 
+export const sampleFullDefenceRejectEntirely = {
+  ...this.sampleClaimIssueObj,
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: defenceWithDisputeData
+}
+
 export const sampleFullDefenceWithStatesPaidGreaterThanClaimAmount = {
   respondedAt: '2017-07-25T22:45:51.785',
   response: fullDefenceWithStatesPaidGreaterThanClaimAmount
+}
+
+export const sampleFullDefenceWithStatesPaidLessThanClaimAmount = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesLessThanClaimAmount
+}
+
+export const sampleFullDefenceWithStatesPaidLessThanClaimAmountWithMediation = {
+  respondedAt: '2017-07-25T22:45:51.785',
+  response: fullDefenceWithStatesLessThanClaimAmountWithMediation
 }
 
 export function mockCalculateInterestRate (expected: number): mock.Scope {
@@ -430,6 +640,20 @@ export function mockCalculateInterestRate (expected: number): mock.Scope {
     .get('/interest/calculate')
     .query(true)
     .reply(HttpStatus.OK, { amount: expected })
+}
+
+export function mockNextWorkingDay (expected: Moment): mock.Scope {
+  return mock(serviceBaseURL)
+    .get('/calendar/next-working-day')
+    .query(true)
+    .reply(HttpStatus.OK, { nextWorkingDay: expected })
+}
+
+export function rejectNextWorkingDay (expected: Moment): mock.Scope {
+  return mock(serviceBaseURL)
+    .get('/calendar/next-working-day')
+    .query({ date: expected.format() })
+    .reply(400)
 }
 
 export function resolveRetrieveClaimIssueByExternalId (claimOverride?: object): mock.Scope {
@@ -582,10 +806,10 @@ export function resolveSaveClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
+export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+    .reply(status, reason)
 }
 
 export function resolveSaveCcjForExternalId () {
@@ -619,6 +843,20 @@ export function resolveSaveOffer () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/offers/defendant'))
     .reply(HttpStatus.CREATED)
+}
+
+export function resolveSaveOrder () {
+  const expectedData = {
+    ...this.sampleClaimIssueObj,
+    reviewOrder: {
+      reason: 'some reason',
+      requestedBy: MadeBy.CLAIMANT,
+      requestedAt: '2017-07-25T22:45:51.785'
+    }
+  }
+  mock(`${serviceBaseURL}/claims`)
+    .put(new RegExp('/' + externalIdPattern + '/review-order'))
+    .reply(HttpStatus.OK, expectedData)
 }
 
 export function resolveAcceptOffer (by: string = 'claimant') {

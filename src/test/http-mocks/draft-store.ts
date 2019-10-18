@@ -165,11 +165,13 @@ const commonCompanyClaimant = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails,
     mobilePhone: {
@@ -241,7 +243,8 @@ const commonIndividualDefendant = {
       },
       hasCorrespondenceAddress: false
     } as IndividualDetails,
-    email: { address: 'example@example.com' }
+    email: { address: 'example@example.com' },
+    mobilePhone: { number: '07799889988' }
   } as Defendant
 }
 
@@ -290,11 +293,13 @@ const commonCompanyResponsePartial = {
       type: 'company',
       name: 'Monsters Inc.',
       contactPerson: 'Sully',
-      address: { line1: 'Apartment 99',
+      address: {
+        line1: 'Apartment 99',
         line2: '',
         line3: '',
         city: 'London',
-        postcode: 'SE28 0JE' } as Address,
+        postcode: 'SE28 0JE'
+      } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails
   } as Defendant,
@@ -581,10 +586,102 @@ export const sampleMediationDraftObj = {
   }
 }
 
+export const sampleLegacyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.NO
+  }
+}
+
+export const sampleCompanyMediationDraftObj = {
+  willYouTryMediation: {
+    option: FreeMediationOption.YES
+  },
+  youCanOnlyUseMediation: {
+    option: FreeMediationOption.YES
+  },
+  canWeUseCompany: {
+    option: FreeMediationOption.NO,
+    mediationPhoneNumber: '07777777777',
+    mediationContactPerson: 'Mary Richards'
+  }
+}
+
 export const sampleDirectionsQuestionnaireDraftObj = {
-  selfWitness: { option: YesNoOption.NO },
-  otherWitnesses: { otherWitnesses: YesNoOption.NO },
-  availability: { hasUnavailableDates: false }
+  selfWitness: {
+    option: {
+      option: 'yes'
+    }
+  },
+  otherWitnesses: {
+    otherWitnesses: {
+      option: 'yes'
+    },
+    howMany: 1
+  },
+  hearingLocation: {
+    courtName: 'Little Whinging, Surrey',
+    courtPostCode: undefined,
+    courtAccepted: { option: 'yes' },
+    alternateCourtName: 'some other court name'
+  },
+  exceptionalCircumstances: {
+    exceptionalCircumstances: { option: 'yes' },
+    reason: 'Poorly pet owl'
+  },
+  availability: {
+    hasUnavailableDates: true,
+    unavailableDates: [
+      { year: 2020, month: 1, day: 4 },
+      { year: 2020, month: 2, day: 8 }
+    ]
+  },
+  supportRequired: {
+    languageSelected: true,
+    languageInterpreted: 'Klingon',
+    signLanguageSelected: true,
+    signLanguageInterpreted: 'Makaton',
+    hearingLoopSelected: true,
+    disabledAccessSelected: true,
+    otherSupportSelected: true,
+    otherSupport: 'Life advice'
+  },
+  expertRequired: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertReports: {
+    declared: true,
+    rows: [
+      {
+        expertName: 'Prof. McGonagall',
+        reportDate: { year: 2018, month: 1, day: 10 }
+      },
+      {
+        expertName: 'Mr Rubeus Hagrid',
+        reportDate: { year: 2019, month: 2, day: 27 }
+      }
+    ]
+  },
+  permissionForExpert: {
+    option: {
+      option: 'yes'
+    }
+  },
+  expertEvidence: {
+    expertEvidence: {
+      option: 'yes'
+    },
+    whatToExamine: 'Photographs'
+  },
+  whyExpertIsNeeded: {
+    explanation: 'for expert opinion'
+  }
+}
+
+export const sampleOrdersDraftObj = {
+  externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+  disagreeReason: { reason: 'I want a judge to review it' }
 }
 
 export function resolveFind (draftType: string, draftOverride?: object): mock.Scope {
@@ -623,6 +720,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
       break
     case 'directionsQuestionnaire':
       documentDocument = { ...sampleDirectionsQuestionnaireDraftObj, ...draftOverride }
+      break
+    case 'orders':
+      documentDocument = { ...sampleOrdersDraftObj, ...draftOverride }
       break
     default:
       documentDocument = { ...draftOverride }
@@ -696,13 +796,25 @@ export function rejectFind (reason: string = 'HTTP error'): mock.Scope {
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
 }
 
-export function resolveSave (id: number = 100): mock.Scope {
+export function resolveUpdate (id: number = 100): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.OK)
 }
 
+export function resolveSave (id: number = 100): mock.Scope {
+  return mock(serviceBaseURL)
+    .post(`/drafts`)
+    .reply(HttpStatus.OK, sampleOrdersDraftObj)
+}
+
 export function rejectSave (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
+  return mock(serviceBaseURL)
+    .post(`/drafts`)
+    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+}
+
+export function rejectUpdate (id: number = 100, reason: string = 'HTTP error'): mock.Scope {
   return mock(serviceBaseURL)
     .put(`/drafts/${id}`)
     .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)

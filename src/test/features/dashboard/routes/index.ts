@@ -60,25 +60,6 @@ const fullDefenceClaim = {
 
 const testData = [
   {
-    status: 'claim issued',
-    claim: claimStoreServiceMock.sampleClaimIssueObj,
-    claimOverride: {
-      responseDeadline: MomentFactory.currentDate().add(1, 'days')
-    },
-    claimantAssertions: ['000MC050', 'Your claim has been sent.'],
-    defendantAssertions: ['000MC050', 'Respond to claim.', '(1 day remaining)']
-  },
-  {
-    status: 'requested more time',
-    claim: claimStoreServiceMock.sampleClaimIssueObj,
-    claimOverride: {
-      moreTimeRequested: true,
-      responseDeadline: '2099-08-08'
-    },
-    claimantAssertions: ['000MC050', 'John Doe has requested more time to respond.'],
-    defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
-  },
-  {
     status: 'full admission, pay immediately',
     claim: fullAdmissionClaim,
     claimOverride: {
@@ -94,8 +75,8 @@ const testData = [
       response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
       responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
-    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC000', 'You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.']
+    claimantAssertions: ['000MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
   {
     status: 'full admission, pay by set date',
@@ -107,26 +88,26 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.']
   },
   {
-    status: 'full admission, pay by set date , claimant accept the repayment plan, defendant past deadline, Request CCJ',
+    status: 'full admission, pay by set date, claimant accept the repayment plan, defendant past deadline, Request CCJ',
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
       responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
-    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC000', 'John Smith can now ask for a County Court Judgment (CCJ) against you']
+    claimantAssertions: ['000MC000', 'The defendant has offered to pay by a set date. You can accept or reject their offer.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by']
   },
   {
-    status: 'full admission, pay by set date , claimant and defendant both accept the repayment plan and sign',
+    status: 'full admission, pay by set date, claimant and defendant both accept the repayment plan and sign settlement agreement',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
-      claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
+      ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
+      claimantResponse: { type: 'ACCEPTATION', formaliseOption: 'SETTLEMENT' },
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You’ve both signed a legal agreement'],
-    defendantAssertions: ['000MC050', 'You’ve both signed a legal agreement']
+    claimantAssertions: ['000MC050', 'You’ve both signed a settlement agreement'],
+    defendantAssertions: ['000MC050', 'You’ve both signed a settlement agreement']
   },
   {
     status: 'full admission, pay by set date , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
@@ -143,7 +124,6 @@ const testData = [
     status: 'full admission, pay by set date, claimant accept the repayment plan and request a CCJ',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
       countyCourtJudgment: { 'ccjType': 'DETERMINATION', 'paidAmount': 10, 'payBySetDate': '2022-01-01', 'paymentOption': 'BY_SPECIFIED_DATE', 'defendantDateOfBirth': '2000-01-01' },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
@@ -189,16 +169,6 @@ const testData = [
     defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
   },
   {
-    status: 'full admission, pay by instalments , claimant accept the repayment plan, defendant miss the past deadline, Request CCJ',
-    claim: fullAdmissionClaim,
-    claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
-      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
-    },
-    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC000', 'John Smith can now ask for a County Court Judgment (CCJ) against you']
-  },
-  {
     status: 'full admission, pay by repayment plan',
     claim: fullAdmissionClaim,
     claimOverride: {
@@ -209,16 +179,16 @@ const testData = [
     defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
   },
   {
-    status: 'full admission, pay by repayment plan, claimant and defendant both accept the repayment plan and sign',
+    status: 'full admission, pay by repayment plan, claimant and defendant both accept the repayment plan and sign settlement agreement',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
+      ...claimStoreServiceMock.settlementWithSetDateAndAcceptation,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You’ve both signed a legal agreement'],
-    defendantAssertions: ['000MC050', 'You’ve both signed a legal agreement']
+    claimantAssertions: ['000MC050', 'You’ve both signed a settlement agreement'],
+    defendantAssertions: ['000MC050', 'You’ve both signed a settlement agreement']
   },
   {
     status: 'full admission, pay by repayment plan , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
@@ -235,7 +205,6 @@ const testData = [
     status: 'full admission, pay by repayment plan, claimant accept the repayment plan and request a CCJ',
     claim: claimStoreServiceMock.sampleClaimIssueObj,
     claimOverride: {
-      settlement: claimStoreServiceMock.settlementWithSetDateAndAcceptation,
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'CCJ' },
       countyCourtJudgment: { 'ccjType': 'DETERMINATION', 'paidAmount': 10, 'payBySetDate': '2022-01-01', 'paymentOption': 'BY_SPECIFIED_DATE', 'defendantDateOfBirth': '2000-01-01' },
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
@@ -304,11 +273,10 @@ const testData = [
     claim: partAdmissionClaim,
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
-      claimantResponse: baseAcceptationClaimantResponseData,
-      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+      claimantResponse: baseAcceptationClaimantResponseData
     },
-    claimantAssertions: ['000MC000', 'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC000', 'You haven’t responded to the claim.', 'John Smith can now ask for a County Court Judgment (CCJ) against you.', 'You can still respond to this claim before they ask for a CCJ.']
+    claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
+    defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
   },
   {
     status: 'partial admission, pay by set date',
@@ -345,8 +313,8 @@ const testData = [
       response: { ...partialAdmissionAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £3,000']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   },
   {
     status: 'full defence, states paid accepted',
@@ -365,8 +333,8 @@ const testData = [
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['000MC000', 'You’ve rejected the defendant’s admission'],
-    defendantAssertions: ['000MC000', 'John Smith rejected your admission of £100']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   }
 ]
 
@@ -429,15 +397,6 @@ describe('Dashboard page', () => {
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Your money claims account', 'Make a new money claim'))
-          })
-
-          it('should render page with claim number and status', async () => {
-            draftStoreServiceMock.resolveFindNoDraftFound()
-            claimStoreServiceMock.resolveRetrieveByClaimantId(claimStoreServiceMock.sampleClaimIssueObj)
-            await request(app)
-              .get(Paths.dashboardPage.uri)
-              .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('000MC050', 'Your claim has been sent'))
           })
 
           testData.forEach(data => {

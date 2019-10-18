@@ -1,5 +1,5 @@
 # ---- Base image ----
-FROM hmcts.azurecr.io/hmcts/base/node/stretch-slim-lts-8 as base
+FROM hmctspublic.azurecr.io/base/node/stretch-slim-lts-10:10-stretch-slim as base
 RUN yarn config set proxy "$http_proxy" && yarn config set https-proxy "$https_proxy"
 COPY package.json yarn.lock ./
 RUN yarn install --production \

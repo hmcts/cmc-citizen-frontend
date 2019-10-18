@@ -196,7 +196,7 @@ describe('Claim issue: initiate payment receiver', () => {
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
-      draftStoreServiceMock.rejectSave()
+      draftStoreServiceMock.rejectUpdate()
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -214,7 +214,7 @@ describe('Claim issue: initiate payment receiver', () => {
       payServiceMock.resolveRetrieveToNotFound()
       feesServiceMock.resolveCalculateFee(event, channel)
       payServiceMock.resolveCreate()
-      draftStoreServiceMock.resolveSave()
+      draftStoreServiceMock.resolveUpdate()
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -228,7 +228,7 @@ describe('Claim issue: initiate payment receiver', () => {
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
-      draftStoreServiceMock.resolveSave()
+      draftStoreServiceMock.resolveUpdate()
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -355,7 +355,7 @@ describe('Claim issue: post payment callback receiver', () => {
       draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveRetrieve('Success')
-      draftStoreServiceMock.rejectSave()
+      draftStoreServiceMock.rejectUpdate()
 
       await request(app)
         .get(Paths.finishPaymentReceiver.uri)
@@ -371,7 +371,7 @@ describe('Claim issue: post payment callback receiver', () => {
           draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('Failed')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)
@@ -386,7 +386,7 @@ describe('Claim issue: post payment callback receiver', () => {
           draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('Cancelled')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)
@@ -401,9 +401,12 @@ describe('Claim issue: post payment callback receiver', () => {
 
           it('should return 500 and render error page when cannot delete draft', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            payServiceMock.resolveUpdate()
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.rejectDelete()
 
             await request(app)
@@ -416,7 +419,12 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed()
+            claimStoreServiceMock.rejectSaveClaimForUser('reason', 409)
+            claimStoreServiceMock.resolveRetrieveByExternalId()
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
@@ -441,7 +449,7 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.rejectSaveClaimForUser()
@@ -456,10 +464,11 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.resolveSaveClaimForUser()
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.rejectDelete()
 
             await request(app)
@@ -468,25 +477,25 @@ describe('Claim issue: post payment callback receiver', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 404 and render error page when feature toggle api fails', async () => {
+          it('should return 500 and render error page when feature toggle api fails', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.rejectIsAdmissionsAllowed()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.notFound)
+              .expect(res => expect(res).to.be.serverError)
           })
 
           it('should return 500 and render error page when retrieve user roles fails', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.rejectRetrieveUserRoles()
 
             await request(app)
@@ -499,11 +508,12 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
+            payServiceMock.resolveUpdate()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
@@ -515,11 +525,12 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-not-given')
             featureToggleApiMock.resolveIsAdmissionsAllowed(false)
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
+            payServiceMock.resolveUpdate()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
@@ -535,7 +546,7 @@ describe('Claim issue: post payment callback receiver', () => {
           draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('unknown')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)

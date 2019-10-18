@@ -50,6 +50,7 @@ describe('Defendant response: task list page', () => {
         it('should render page when everything is fine', async () => {
           draftStoreServiceMock.resolveFind('response')
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)
@@ -61,6 +62,7 @@ describe('Defendant response: task list page', () => {
         it('should render page and show a tag marking incomplete tasks', async () => {
           draftStoreServiceMock.resolveFind('response', { response: {} })
           draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
 
           await request(app)

@@ -10,6 +10,14 @@ output "feature_admissions" {
   value = "${var.feature_admissions}"
 }
 
+output "feature_mediation" {
+  value = "${var.feature_mediation}"
+}
+
+output "feature_directions_questionnaire" {
+  value = "${var.feature_directions_questionnaire}"
+}
+
 output "feature_paid_in_full" {
   value = "${var.feature_paid_in_full}"
 }
@@ -20,6 +28,10 @@ output "feature_new_features_consent" {
 
 output "feature_fine_print" {
   value = "${var.feature_fine_print}"
+}
+
+output "feature_web_chat" {
+  value = "${var.feature_web_chat}"
 }
 
 output "feature_return_error_to_user" {

@@ -1,9 +1,11 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@increase-functional-temporarily")
 
 String product = "cmc"
 String component = "citizen-frontend"
+
+def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
 
 def secrets = [
   'cmc-${env}':
@@ -29,6 +31,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
 env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
+env.FEATURE_MEDIATION = 'true'
+env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
 // add any others needed to selective testing...
 
@@ -51,7 +55,7 @@ withPipeline("nodejs", product, component) {
   }
 
   after('build') {
-    sh 'yarn setup'
+    yarnBuilder.yarn('setup')
   }
 
   loadVaultSecrets(secrets)

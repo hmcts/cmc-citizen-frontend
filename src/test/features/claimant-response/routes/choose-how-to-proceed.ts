@@ -113,7 +113,7 @@ describe('Claimant response: choose how to proceed page', () => {
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -125,7 +125,7 @@ describe('Claimant response: choose how to proceed page', () => {
       it('should redirect to task list page when `signSettlementAgreement` is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)
@@ -137,7 +137,7 @@ describe('Claimant response: choose how to proceed page', () => {
       it('should redirect to task list page when `requestCCJ` is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claimantResponse')
         claimStoreServiceMock.resolveRetrieveClaimByExternalId(defendantPartialAdmissionResponse)
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

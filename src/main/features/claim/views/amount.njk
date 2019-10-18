@@ -83,7 +83,10 @@
               {% if canAddMoreRows %}
                 {{ linkButton('Add another row', 'action[addRow]', 'button button-secondary') }}
               {% endif %}
-              {{ linkButton('Calculate total', 'action[calculate]', 'link-button calculate') }}
+              <noscript>
+                {{ linkButton('Calculate total', 'action[calculate]', 'link-button calculate') }}
+              </noscript>
+
             </div>
             <div class="bold-medium total">
               <span class="claim-amount-column-1"></span>

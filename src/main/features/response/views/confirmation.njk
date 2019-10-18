@@ -18,10 +18,17 @@
         <p>
           <span class="bold">{{ claim.respondedAt | date }}</span>
         </p>
-        <p class="receipt-download-container">
-          {{ internalLink(t('Download your response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-          {{ t('(PDF)') }}
-        </p>
+        {% if claim.response.directionsQuestionnaire %}
+          <p class="receipt-download-container">
+            {{ internalLink(t('Download your response and hearing requirements'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+            {{ t('(PDF)') }}
+          </p>
+        {% else %}
+          <p class="receipt-download-container">
+            {{ internalLink(t('Download your response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+            {{ t('(PDF)') }}
+          </p>
+        {% endif %}
       </div>
 
 
@@ -48,7 +55,7 @@
         {% include "./confirmation/part-admission-steps.njk" %}
       {% endif %}
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-defendant.njk" %}
 
       <p>{{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
 
@@ -56,3 +63,4 @@
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}
