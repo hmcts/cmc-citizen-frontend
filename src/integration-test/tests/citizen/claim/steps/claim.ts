@@ -159,6 +159,8 @@ export class ClaimSteps {
     } else {
       citizenEmailPage.submitForm()
     }
+
+    citizenPhonePage.enterPhone(defendant.phone)
   }
 
   enterClaimAmount (amount1: number, amount2: number, amount3): void {
