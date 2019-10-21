@@ -233,8 +233,8 @@
     <div class="status-block">
       <h2 class="heading-medium">{{ t('Decide whether to proceed') }}</h2>
       <p>{{ t('{{ defendantName }} has rejected your claim.', { defendantName: claim.claimData.defendant.name }) }}</p>
-      <p>{{ t('You need to decide whether to proceed with the claim. You need to respond before 4pm on {{ respondToMediationDeadline }}. Your claim won’t continue if you don’t respond by then.',
-          { respondToMediationDeadline: mediationDeadline | date }) }}</p>
+      <p>{{ t('You need to decide whether to proceed with the claim. You need to respond before 4pm on {{ intentionToProceedDeadline }}. Your claim won’t continue if you don’t respond by then.',
+          { intentionToProceedDeadline: claiim.intentionToProceedDeadline | date }) }}</p>
       <p>{{ internalLink(t('View and respond'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}</p>
     </div>
   {% elif claim.response.freeMediation === YesNoOption.YES.option %}
