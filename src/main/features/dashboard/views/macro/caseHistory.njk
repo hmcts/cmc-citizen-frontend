@@ -218,7 +218,7 @@
       {{ statesPaidRejectedClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {% if claim.mediationOutcode === MediationOutcome.FAILED %}
+        {% if claim.mediationOutcome === MediationOutcome.FAILED %}
           {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
         {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
           {{ mediationSuccessForClaimantClaimDetails(claim) }}

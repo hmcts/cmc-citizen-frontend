@@ -10,10 +10,10 @@
 {% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
-  {% if claim.directionsQuestionnaireDeadline %}
-    {{ t('You’ve rejected the defendant’s admission.') }}
-  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+  {% if  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
+  {% elseif claim.directionsQuestionnaireDeadline %}
+    {{ t('You’ve rejected the defendant’s admission.') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you with a mediation appointment.') }}
   {% else %}
@@ -34,8 +34,7 @@
 {% macro statesPaidRejectedMediationYESClaimantClaimDetails(claim) %}
   {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ mediationSuccessForClaimantClaimDetails(claim) }}
-    <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
-    {{ paidInFullClaimantButtonClaimDetails(claim) }}
+
   {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
@@ -69,7 +68,9 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
-  {% if claim.directionsQuestionnaireDeadline %}
+  {% if  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+    {{ t('You both agreed a settlement through mediation') }}
+  {% elseif claim.directionsQuestionnaireDeadline %}
     {% if claim.response.responseType === 'PART_ADMISSION' %}
       {% set amount = claim.response.amount %}
     {% else %}
@@ -79,8 +80,6 @@
       claimantName: claim.claimData.claimant.name,
       amount: amount | numeral})
     }}
-  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
-    {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you with a mediation appointment') }}
   {% else %}
