@@ -50,21 +50,13 @@
             <td>{{ claim.claimData.defendant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-            {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
-            {% else %}
               {{ caseStatusForClaimant(claim.status, claim) }}
-            {% endif %}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
-              {% else %}
-                {{ caseStatusForClaimant(claim.status, claim) }}
-              {% endif %}
+              {{ caseStatusForClaimant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}
@@ -104,21 +96,13 @@
             <td>{{ claim.claimData.claimant.name }}</td>
             <td>{{ claim.totalAmountTillToday | numeral }}</td>
             <td class="mobile-hide">
-              {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
-              {% else %}
-                {{ caseStatusForDefendant(claim.status, claim) }}
-              {% endif %}
+              {{ caseStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
           <tr>
             <td colspan="3" class="mobile-table-status">
               {{ t('Status:') }}
-              {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
-              {% else %}
-                {{ caseStatusForDefendant(claim.status, claim) }}
-              {% endif %}
+              {{ caseStatusForDefendant(claim.status, claim) }}
             </td>
           </tr>
         {% endfor %}
