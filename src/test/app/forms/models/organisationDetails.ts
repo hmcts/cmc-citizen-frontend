@@ -91,7 +91,7 @@ describe('OrganisationDetails', () => {
       organisationDetails.name = 'claimantPerson'
       organisationDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
-      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1', '35'))
+      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1', '30'))
     })
 
     describe('when "has correspondence address" flag is set to true', () => {

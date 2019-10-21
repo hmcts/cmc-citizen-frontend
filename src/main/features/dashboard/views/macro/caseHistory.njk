@@ -123,6 +123,10 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
+{% from "./claimStatus/intentionToProceed.njk" import
+  intentionToProceedPastDeadlineForClaimantClaimDetails,
+  intentionToProceedPastDeadlineForDefendantClaimDetails %}
+
 {% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
@@ -239,6 +243,8 @@
         {{ reviewReceiver(claim, respondToReviewOrderDeadline) }}
       {% endif %}
       {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+    {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+      {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -358,6 +364,8 @@
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+    {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+      {{ intentionToProceedPastDeadlineForDefendantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}

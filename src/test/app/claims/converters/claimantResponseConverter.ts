@@ -160,6 +160,7 @@ describe('claimant response converter', () => {
         draftClaimantResponse.accepted = new ClaimSettled(YesNoOption.NO)
         draftClaimantResponse.partPaymentReceived = new PartPaymentReceived(YesNoOption.YES)
         draftClaimantResponse.freeMediation = new FreeMediation('yes')
+        draftClaimantResponse.rejectionReason = new RejectionReason('OBJECTION!')
 
         expect(converter.convertToClaimantResponse(claim, draftClaimantResponse, mediationDraft, false)).to.deep.eq({
           'type': 'REJECTION',
@@ -167,7 +168,8 @@ describe('claimant response converter', () => {
           'mediationContactPerson': undefined,
           'mediationPhoneNumber': '07777777788',
           'paymentReceived': 'yes',
-          'settleForAmount': 'no'
+          'settleForAmount': 'no',
+          'reason': 'OBJECTION!'
         })
       })
 
