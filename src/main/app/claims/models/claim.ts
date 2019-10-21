@@ -29,7 +29,6 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
-import moment = require('moment')
 
 interface State {
   status: ClaimStatus
@@ -351,8 +350,6 @@ export class Claim {
       if (input.mediationOutcome) {
         this.mediationOutcome = input.mediationResult
       }
-
-      this.directionsQuestionnaireDeadline = moment()
     }
 
     return this

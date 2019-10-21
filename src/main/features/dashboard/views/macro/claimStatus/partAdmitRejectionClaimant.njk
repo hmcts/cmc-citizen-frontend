@@ -1,6 +1,10 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 
+{% from "./claimRejected.njk" import
+  mediationSuccessForClaimantClaimDetails
+%}
+
 {% macro partAdmitRejectedByClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s admission.') }}
@@ -15,12 +19,16 @@
 
 {% macro partAdmitRejectedByClaimantClaimDetails(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    <div class="status-block">
-      <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-      <p>{{ t('You’ve rejected the defendant’s response.')}}</p>
-      <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-      <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
-    </div>
+    {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+      {{ mediationSuccessForClaimantClaimDetails(claim) }}
+    {% else %}
+      <div class="status-block">
+        <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
+        <p>{{ t('You’ve rejected the defendant’s response.')}}</p>
+        <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
+        <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+      </div>
+     {% endif %}
   {% else %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
@@ -39,11 +47,15 @@
 {% macro partAdmitRejectedByClaimantDQClaimDetails(claim) %}
   <div class="status-block">
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+      {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {{ mediationSuccessForClaimantClaimDetails(claim) }}
+      {% else %}
+        <h2 class="heading-small">{{ t('We’ll contact you with a mediation appointment') }}</h2>
 
-      <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
-      <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>
-      <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+        <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
+        <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>
+        <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+      {% endif %}
     {% else %}
       <h2 class="heading-small">{{ t('Wait for the court to review the case') }}</h2>
 
