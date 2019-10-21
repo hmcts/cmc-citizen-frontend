@@ -49,7 +49,9 @@ export namespace DirectionsQuestionnaire {
           unavailableDate: unavailableDate ? LocalDate.fromObject(unavailableDate).asString() : undefined
         })),
       expertRequired: directionsQuestionnaire.expertRequired.option.option as YesNoOption,
-      permissionForExpert: directionsQuestionnaire.permissionForExpert.option ? YesNoOption.YES : YesNoOption.NO,
+      permissionForExpert: directionsQuestionnaire.permissionForExpert &&
+        directionsQuestionnaire.permissionForExpert.option ?
+        directionsQuestionnaire.permissionForExpert.option.option as YesNoOption : undefined,
       expertRequest: (directionsQuestionnaire.expertEvidence.expertEvidence &&
         directionsQuestionnaire.expertEvidence.expertEvidence.option === YesNoOption.YES) ? {
           expertEvidenceToExamine: directionsQuestionnaire.expertEvidence.whatToExamine,
