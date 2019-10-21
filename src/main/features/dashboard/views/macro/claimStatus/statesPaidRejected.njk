@@ -5,7 +5,9 @@
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s admission.') }}
-  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and (claim.mediationResult === true or claim.mediationResult === undefined) %}
+  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+    {{ t('You both agreed a settlement through mediation') }}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you with a mediation appointment.') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
@@ -67,7 +69,9 @@
       claimantName: claim.claimData.claimant.name,
       amount: amount | numeral})
     }}
-  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and (claim.mediationResult === true or claim.mediationResult === undefined) %}
+  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+    {{ t('You both agreed a settlement through mediation') }}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you with a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}

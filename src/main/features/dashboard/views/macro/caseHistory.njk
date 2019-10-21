@@ -31,7 +31,9 @@
   claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails,
   claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails,
   claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails,
-  claimRejectedWithDQsForClaimantClaimDetails %}
+  claimRejectedWithDQsForClaimantClaimDetails,
+  mediationSuccessForClaimantClaimDetails,
+  mediationSuccessForDefendantClaimDetails %}
 
 {% from "./claimStatus/orders.njk" import
   directionsOrderIssued,
@@ -177,8 +179,10 @@
         {{ claimFullAdmissionForClaimantClaimDetails(claim) }}
       {% endif %}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO or claim.mediationResult === false %}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO or claim.mediationOutcome === MediationOutcome.FAILED %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
+      {% elif(claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {{ mediationSuccessForClaimantClaimDetails(claim) }}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
       {% endif %}
@@ -214,8 +218,10 @@
       {{ statesPaidRejectedClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {% if claim.mediationResult === false %}
+        {% if claim.mediationOutcode === MediationOutcome.FAILED %}
           {{ claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) }}
+        {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+          {{ mediationSuccessForClaimantClaimDetails(claim) }}
         {% else %}
           {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
         {% endif %}
@@ -273,8 +279,10 @@
     {% elif state.status === ClaimStatus.ADMISSION_SETTLEMENT_AGREEMENT_REACHED %}
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
-      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO or claim.mediationResult === false %}
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO or claim.mediationOutcome === MediationOutcome.FAILED %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDetails(claim) }}
+      {% elif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+        {{ mediationSuccessForDefendantClaimDetails(claim) }}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
       {% endif %}
@@ -331,8 +339,10 @@
       {{ CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {% if claim.mediationResult === false %}
+        {% if claim.mediationOutcome === MediationOutcome.FAILED %}
           {{ claimRejectedFreeMediationNOWithoutDQsForDefendantClaimDetails(claim) }}
+          {% elif claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+          {{ mediationSuccessForDefendantClaimDetails(claim) }}
         {% else %}
           {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDetails(claim) }}
         {% endif %}

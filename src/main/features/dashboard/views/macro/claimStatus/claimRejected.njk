@@ -40,6 +40,14 @@
   {{ t('Wait for the court to review the case.') }}
 {% endmacro %}
 
+{% macro mediationSuccessForClaimantDashboard(claim) %}
+  {{ t('You both agreed a settlement through mediation') }}
+{% endmacro %}
+
+{% macro mediationSuccessForDefendantDashboard(claim) %}
+  {{ t('You both agreed a settlement through mediation') }}
+{% endmacro %}
+
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) %}
   {{ t('Wait for the court to review the case') }}
 {% endmacro %}
@@ -303,6 +311,21 @@
     <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } )}}</p>
+  </div>
+{% endmacro %}
+
+{% macro mediationSuccessForDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('You both agreed a settlement through mediation') }}</h2>
+    <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms') }}</p>
+    <p>{{ internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}
+      {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
+  </div>
+{% endmacro %}
+
+{% macro mediationSuccessForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('You both agreed a settlement through mediation') }}</h2>
   </div>
 {% endmacro %}
 

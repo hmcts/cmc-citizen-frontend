@@ -30,7 +30,9 @@
   claimRejectedWithDQsForDefendantDashboard,
   claimRejectedWithDQsForClaimantDashboard,
   claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard,
-  claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard %}
+  claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard,
+  mediationSuccessForClaimantDashboard,
+  mediationSuccessForDefendantDashboard %}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
@@ -148,8 +150,10 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
     {% else %}
-      {% if(claim.mediationResult === false) %}
+      {% if(claim.mediationOutcome === MediationOutcome.FAILED) %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
+      {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+         {{ mediationSuccessForClaimantDashboard(claim) }}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
       {% endif %}
@@ -184,8 +188,10 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
     {% else %}
-      {% if claim.mediationResult === false %}
+      {% if claim.mediationOutcome === MediationOutcome.FAILED %}
         {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
+      {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {{ mediationSuccessForClaimantDashboard(claim) }}
       {% else %}
         {{ claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard(claim) }}
       {% endif %}
@@ -252,11 +258,13 @@
       {{ directionsOrderIssuedDefendantDashboard() }}
     {% else %}
       {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {% if(claim.mediationResult === false) %}
+        {% if claim.mediationOutcome === MediationOutcome.FAILED %}
             {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
-          {% else %}
+        {% elif claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+          {{ mediationSuccessForDefendantDashboard(claim) }}
+        {% else %}
             {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
-          {% endif %}
+        {% endif %}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
       {% endif %}
@@ -292,11 +300,13 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
     {% else %}
-      {% if claim.mediationResult === false %}
+      {% if claim.mediationOutcome === MediationOutcome.FAILED %}
         {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
-        {% else %}
+      {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {{ mediationSuccessForDefendantDashboard(claim) }}
+      {% else %}
           {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
-        {% endif %}
+      {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}

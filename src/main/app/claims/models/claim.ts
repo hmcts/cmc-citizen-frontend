@@ -69,7 +69,7 @@ export class Claim {
   template: ClaimTemplate
   directionOrder: DirectionOrder
   reviewOrder: ReviewOrder
-  mediationResult: Boolean
+  mediationOutcome: string
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -348,11 +348,10 @@ export class Claim {
       if (input.reviewOrder) {
         this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
-      if (input.mediationResult) {
-        this.mediationResult = input.mediationResult
-      } else {
-        this.mediationResult = false
+      if (input.mediationOutcome) {
+        this.mediationOutcome = input.mediationResult
       }
+
       this.directionsQuestionnaireDeadline = moment()
     }
 
