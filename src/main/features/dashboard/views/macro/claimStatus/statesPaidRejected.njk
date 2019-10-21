@@ -2,6 +2,13 @@
 {% from "internalLink.njk" import internalLink %}
 {% from "./utilityMacros.njk" import downloadResponseLink, downloadTheirResponseLink %}
 
+{% from "./claimRejected.njk" import
+  mediationSuccessForDefendantClaimDetails,
+  mediationSuccessForClaimantClaimDetails
+%}
+
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
+
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s admission.') }}
@@ -25,8 +32,11 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedMediationYESClaimantClaimDetails(claim) %}
-
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+    {{ mediationSuccessForClaimantClaimDetails(claim) }}
+    <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
+    {{ paidInFullClaimantButtonClaimDetails(claim) }}
+  {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
       <h2 class="heading-small">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
 
@@ -79,7 +89,9 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantClaimDetails(claim) %}
-  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+  {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+    {{ mediationSuccessForDefendantClaimDetails(claim) }}
+  {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ statesPaidRejectionMediationYESDefendantClaimDetails(claim) }}
   {% else %}
 

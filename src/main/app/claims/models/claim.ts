@@ -348,7 +348,7 @@ export class Claim {
         this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
       if (input.mediationOutcome) {
-        this.mediationOutcome = input.mediationResult
+        this.mediationOutcome = input.mediationOutcome
       }
     }
 
