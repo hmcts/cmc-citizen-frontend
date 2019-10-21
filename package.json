@@ -60,7 +60,7 @@
     "config": "^3.2.2",
     "cookie-encrypter": "^1.0.1",
     "cookie-parser": "^1.4.4",
-    "cookies": "^0.7.3",
+    "cookies": "^0.8.0",
     "csurf": "^1.10.0",
     "express": "^4.17.1",
     "govuk-elements-sass": "^3.1.3",
