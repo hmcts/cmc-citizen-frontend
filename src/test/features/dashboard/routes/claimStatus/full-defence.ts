@@ -442,7 +442,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
-      referenceNumber: '000MC001',
+      createdAt: '2019-08-25',
       response: {
         ...baseResponseData,
         ...baseDefenceData

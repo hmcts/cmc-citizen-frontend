@@ -652,8 +652,8 @@ export class Claim {
   }
 
   public isIntentionToProceedEligible (): boolean {
-    const claimNumber: number = 87536
-    return claimNumber < parseInt(this.claimNumber.replace('MC', ''), 10)
+    const dateIntentionToProceedWasReleased: Moment = MomentFactory.parse('2019-09-09').hour(15).minute(12)
+    return this.createdAt.isAfter(dateIntentionToProceedWasReleased)
   }
 
   private hasIntentionToProceedDeadlinePassed (): boolean {

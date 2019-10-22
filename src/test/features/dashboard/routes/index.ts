@@ -65,8 +65,8 @@ const testData = [
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
     },
-    claimantAssertions: ['100MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
+    claimantAssertions: ['000MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
   {
     status: 'full admission, pay immediately, past deadline',
@@ -75,8 +75,8 @@ const testData = [
       response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
       responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
-    claimantAssertions: ['100MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
+    claimantAssertions: ['000MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
   {
     status: 'full admission, pay by set date',
@@ -84,8 +84,8 @@ const testData = [
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC000', 'The defendant has offered to pay by a set date. You can accept or reject their offer.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.']
+    claimantAssertions: ['000MC000', 'The defendant has offered to pay by a set date. You can accept or reject their offer.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by 31 December 2050.']
   },
   {
     status: 'full admission, pay by set date, claimant accept the repayment plan, defendant past deadline, Request CCJ',
@@ -94,8 +94,8 @@ const testData = [
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
       responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
-    claimantAssertions: ['100MC000', 'The defendant has offered to pay by a set date. You can accept or reject their offer.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted all of the claim and offered to pay the full amount by']
+    claimantAssertions: ['000MC000', 'The defendant has offered to pay by a set date. You can accept or reject their offer.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount by']
   },
   {
     status: 'full admission, pay by set date, claimant and defendant both accept the repayment plan and sign settlement agreement',
@@ -106,8 +106,8 @@ const testData = [
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC050', 'You’ve both signed a settlement agreement'],
-    defendantAssertions: ['100MC050', 'You’ve both signed a settlement agreement']
+    claimantAssertions: ['000MC050', 'You’ve both signed a settlement agreement'],
+    defendantAssertions: ['000MC050', 'You’ve both signed a settlement agreement']
   },
   {
     status: 'full admission, pay by set date , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
@@ -117,8 +117,8 @@ const testData = [
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC050', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not'],
-    defendantAssertions: ['100MC050', 'John Smith asked you to sign a settlement agreement']
+    claimantAssertions: ['000MC050', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not'],
+    defendantAssertions: ['000MC050', 'John Smith asked you to sign a settlement agreement']
   },
   {
     status: 'full admission, pay by set date, claimant accept the repayment plan and request a CCJ',
@@ -129,8 +129,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'full admission, pay by set date, claimant accept the repayment plan and request a CCJ, claim settled by claimant',
@@ -143,8 +143,8 @@ const testData = [
       moneyReceivedOn:  MomentFactory.currentDate(),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC050', 'This claim is settled.'],
-    defendantAssertions: ['100MC050', 'John Smith confirmed you’ve paid']
+    claimantAssertions: ['000MC050', 'This claim is settled.'],
+    defendantAssertions: ['000MC050', 'John Smith confirmed you’ve paid']
   },
   {
     status: 'full admission, pay by set date,  rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
@@ -154,8 +154,8 @@ const testData = [
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC050', 'Awaiting judge’s review'],
-    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['000MC050', 'Awaiting judge’s review'],
+    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'full admission, pay by set date , claimant accept the repayment plan, defendant reject the settlement',
@@ -165,8 +165,8 @@ const testData = [
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
-    defendantAssertions: ['100MC050', 'You rejected the settlement agreement']
+    claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
+    defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
   },
   {
     status: 'full admission, pay by repayment plan',
@@ -175,8 +175,8 @@ const testData = [
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
       amount: 30
     },
-    claimantAssertions: ['100MC000', 'The defendant has offered to pay in instalments. You can accept or reject their offer.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
+    claimantAssertions: ['000MC000', 'The defendant has offered to pay in instalments. You can accept or reject their offer.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and offered to pay the full amount in instalments.']
   },
   {
     status: 'full admission, pay by repayment plan, claimant and defendant both accept the repayment plan and sign settlement agreement',
@@ -187,8 +187,8 @@ const testData = [
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['100MC050', 'You’ve both signed a settlement agreement'],
-    defendantAssertions: ['100MC050', 'You’ve both signed a settlement agreement']
+    claimantAssertions: ['000MC050', 'You’ve both signed a settlement agreement'],
+    defendantAssertions: ['000MC050', 'You’ve both signed a settlement agreement']
   },
   {
     status: 'full admission, pay by repayment plan , claimant accept the repayment plan and signed a settlement agreement. defendant yet to respond',
@@ -198,8 +198,8 @@ const testData = [
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['100MC050', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not'],
-    defendantAssertions: ['100MC050', 'John Smith asked you to sign a settlement agreement']
+    claimantAssertions: ['000MC050', 'You’ve signed a settlement agreement. The defendant can choose to sign it or not'],
+    defendantAssertions: ['000MC050', 'John Smith asked you to sign a settlement agreement']
   },
   {
     status: 'full admission, pay by repayment plan, claimant accept the repayment plan and request a CCJ',
@@ -210,8 +210,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'full admission, pay by repayment plan, claimant accept the repayment plan and request a CCJ, claim settled by claimant',
@@ -224,8 +224,8 @@ const testData = [
       moneyReceivedOn:  MomentFactory.currentDate(),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['100MC050', 'This claim is settled.'],
-    defendantAssertions: ['100MC050', 'John Smith confirmed you’ve paid']
+    claimantAssertions: ['000MC050', 'This claim is settled.'],
+    defendantAssertions: ['000MC050', 'John Smith confirmed you’ve paid']
   },
   {
     status: 'full admission, pay by repayment plan,  rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
@@ -235,8 +235,8 @@ const testData = [
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['100MC050', 'Awaiting judge’s review'],
-    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['000MC050', 'Awaiting judge’s review'],
+    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'full admission, pay by instalments , claimant accept the repayment plan, defendant reject the settlement',
@@ -246,8 +246,8 @@ const testData = [
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['100MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
-    defendantAssertions: ['100MC050', 'You rejected the settlement agreement']
+    claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
+    defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
   },
   {
     status: 'partial admission, pay immediately',
@@ -255,8 +255,8 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData }
     },
-    claimantAssertions: ['100MC000', 'Respond to the defendant.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted part of the claim.']
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
     status: 'partial admission, pay immediately, offer accepted',
@@ -265,8 +265,8 @@ const testData = [
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
       claimantResponse: baseAcceptationClaimantResponseData
     },
-    claimantAssertions: ['100MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
-    defendantAssertions: ['100MC000', 'John Smith accepted your admission of £30']
+    claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
+    defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
   },
   {
     status: 'partial admission, pay immediately, offer accepted, payment past deadline',
@@ -275,8 +275,8 @@ const testData = [
       response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
       claimantResponse: baseAcceptationClaimantResponseData
     },
-    claimantAssertions: ['100MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
-    defendantAssertions: ['100MC000', 'John Smith accepted your admission of £30']
+    claimantAssertions: ['000MC000', 'You’ve accepted the defendant’s part admission. They said they’d pay immediately.'],
+    defendantAssertions: ['000MC000', 'John Smith accepted your admission of £30']
   },
   {
     status: 'partial admission, pay by set date',
@@ -284,8 +284,8 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['100MC000', 'Respond to the defendant.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted part of the claim.']
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
     status: 'partial admission, pay by repayment plan',
@@ -293,8 +293,8 @@ const testData = [
     claimOverride: {
       response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['100MC000', 'Respond to the defendant.'],
-    defendantAssertions: ['100MC000', 'You’ve admitted part of the claim.']
+    claimantAssertions: ['000MC000', 'Respond to the defendant.'],
+    defendantAssertions: ['000MC000', 'You’ve admitted part of the claim.']
   },
   {
     status: 'partial admission, states paid accepted',
@@ -303,8 +303,8 @@ const testData = [
       response: { ...partialAdmissionAlreadyPaidData },
       claimantResponse: { type: 'ACCEPTATION' }
     },
-    claimantAssertions: ['100MC000', 'This claim is settled.'],
-    defendantAssertions: ['100MC000', 'This claim is settled.']
+    claimantAssertions: ['000MC000', 'This claim is settled.'],
+    defendantAssertions: ['000MC000', 'This claim is settled.']
   },
   {
     status: 'partial admission, states paid rejected',
@@ -313,8 +313,8 @@ const testData = [
       response: { ...partialAdmissionAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['100MC000', 'Wait for the court to review the case'],
-    defendantAssertions: ['100MC000', 'Wait for the court to review the case']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   },
   {
     status: 'full defence, states paid accepted',
@@ -323,8 +323,8 @@ const testData = [
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
       claimantResponse: { type: 'ACCEPTATION' }
     },
-    claimantAssertions: ['100MC000', 'This claim is settled.'],
-    defendantAssertions: ['100MC000', 'This claim is settled.']
+    claimantAssertions: ['000MC000', 'This claim is settled.'],
+    defendantAssertions: ['000MC000', 'This claim is settled.']
   },
   {
     status: 'full defence, states paid rejected',
@@ -333,8 +333,8 @@ const testData = [
       response: { ...defenceWithAmountClaimedAlreadyPaidData },
       claimantResponse: { type: 'REJECTION' }
     },
-    claimantAssertions: ['100MC000', 'Wait for the court to review the case'],
-    defendantAssertions: ['100MC000', 'Wait for the court to review the case']
+    claimantAssertions: ['000MC000', 'Wait for the court to review the case'],
+    defendantAssertions: ['000MC000', 'Wait for the court to review the case']
   }
 ]
 
@@ -431,7 +431,7 @@ describe('Dashboard page', () => {
             await request(app)
               .get(Paths.dashboardPage.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.successful.withText('100MC050', 'Respond to claim'))
+              .expect(res => expect(res).to.be.successful.withText('000MC050', 'Respond to claim'))
           })
 
           testData.forEach(data => {

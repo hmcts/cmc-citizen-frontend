@@ -17,7 +17,7 @@ describe('CheckClaimReferenceNumberConstraint', () => {
       })
 
       it('given reference is valid CMC claim reference', () => {
-        expect(constraint.validate('100MC001')).to.equal(true)
+        expect(constraint.validate('000MC001')).to.equal(true)
       })
 
       it('given reference is valid CCBC reference', () => {

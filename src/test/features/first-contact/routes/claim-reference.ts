@@ -34,7 +34,7 @@ describe('Defendant first contact: claim reference page', () => {
 
       await request(app)
         .post(DefendantFirstContactPaths.claimReferencePage.uri)
-        .send({ reference: '100MC001' })
+        .send({ reference: '000MC001' })
         .expect(res => expect(res).to.be.redirect.toLocation(redirectPattern))
     })
 
@@ -50,7 +50,7 @@ describe('Defendant first contact: claim reference page', () => {
 
       await request(app)
         .post(DefendantFirstContactPaths.claimReferencePage.uri)
-        .send({ reference: '100MC001' })
+        .send({ reference: '000MC001' })
         .expect(res => expect(res).to.be.redirect.toLocation('/'))
     })
     it('should return 500 and render error page when cannot check claim status', async () => {
@@ -58,7 +58,7 @@ describe('Defendant first contact: claim reference page', () => {
 
       await request(app)
         .post(DefendantFirstContactPaths.claimReferencePage.uri)
-        .send({ reference: '100MC001' })
+        .send({ reference: '000MC001' })
         .expect(res => expect(res).to.be.serverError.withText('Error'))
     })
   })

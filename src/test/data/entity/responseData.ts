@@ -402,7 +402,7 @@ export const statementOfMeansWithAllFieldsData = {
     monthlyPayments: 100
   }],
   courtOrders: [{
-    claimNumber: '100MC001',
+    claimNumber: '000MC001',
     amountOwed: 100,
     monthlyInstalmentAmount: 10
   }],

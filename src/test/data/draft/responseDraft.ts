@@ -406,7 +406,7 @@ export const statementOfMeansWithAllFieldsDraft = {
   courtOrders: {
     declared: true,
     rows: [{
-      claimNumber: '100MC001',
+      claimNumber: '000MC001',
       amount: 100,
       instalmentAmount: 10
     }]

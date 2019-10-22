@@ -63,7 +63,7 @@ function check (uri: string): void {
 
 async function extractPageText (url: string): Promise<string> {
   const res: supertest.Response = await agent.get(url)
-    .set('Cookie', `${cookieName}=ABC;state=100MC000`)
+    .set('Cookie', `${cookieName}=ABC;state=000MC000`)
 
   if (res.redirect) {
     throw new Error(`Call to ${url} resulted in a redirect to ${res.get('Location')}`)

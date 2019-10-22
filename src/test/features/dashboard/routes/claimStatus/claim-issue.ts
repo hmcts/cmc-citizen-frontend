@@ -23,10 +23,10 @@ const testData = [
     claimOverride: {
       responseDeadline: MomentFactory.currentDate().add(1, 'days')
     },
-    claimantAssertions: ['100MC050', 'Wait for the defendant to respond',
+    claimantAssertions: ['000MC050', 'Wait for the defendant to respond',
       'They can request an extra 14 days if they need it.'
     ],
-    defendantAssertions: ['100MC050', 'You haven’t responded to this claim',
+    defendantAssertions: ['000MC050', 'You haven’t responded to this claim',
       'You need to respond before 4pm on ',
       'Respond to claim'
     ]
@@ -38,11 +38,11 @@ const testData = [
       moreTimeRequested: true,
       responseDeadline: '2099-08-08'
     },
-    claimantAssertions: ['100MC050', 'The defendant has requested more time to respond',
+    claimantAssertions: ['000MC050', 'The defendant has requested more time to respond',
       'John Doe has requested an extra 14 days to respond. They now have until 4pm on 8 August 2099 to respond.',
       'You can request a County Court Judgment against them if they don’t respond by the deadline.'
     ],
-    defendantAssertions: ['100MC050', 'More time requested',
+    defendantAssertions: ['000MC050', 'More time requested',
       'You need to respond before 4pm on 8 August 2099',
       'Respond to claim'
     ]

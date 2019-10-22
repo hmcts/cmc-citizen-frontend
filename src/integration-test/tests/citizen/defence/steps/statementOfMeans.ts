@@ -117,7 +117,7 @@ export class StatementOfMeansSteps {
     onTaxPaymentsPage.enterDetails(100, 'Various taxes')
     onTaxPaymentsPage.clickContinue()
     courtOrdersPage.selectDeclared()
-    courtOrdersPage.enterCourtOrder('100MC001', 100, 10)
+    courtOrdersPage.enterCourtOrder('000MC001', 100, 10)
     courtOrdersPage.clickContinue()
     priorityDebtsPage.declareMortgage(500)
     priorityDebtsPage.declareMaintenance(200)

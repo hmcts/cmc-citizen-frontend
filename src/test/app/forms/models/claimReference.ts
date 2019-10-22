@@ -28,9 +28,9 @@ describe('ClaimReference', () => {
 
     it('should return a ClaimReference instance with set fields from given object', () => {
       let result = new ClaimReference().deserialize({
-        reference: '100MC001'
+        reference: '000MC001'
       })
-      expect(result.reference).to.equal('100MC001')
+      expect(result.reference).to.equal('000MC001')
     })
   })
 
@@ -45,13 +45,13 @@ describe('ClaimReference', () => {
     })
 
     it('should accepts valid CMC claim reference', () => {
-      const errors = validator.validateSync(new ClaimReference('100MC001'))
+      const errors = validator.validateSync(new ClaimReference('000MC001'))
 
       expect(errors.length).to.equal(0)
     })
 
     it('should accept valid CMC claim reference ignoring case', () => {
-      const errors = validator.validateSync(new ClaimReference('100MC001'))
+      const errors = validator.validateSync(new ClaimReference('000MC001'))
 
       expect(errors.length).to.equal(0)
     })
