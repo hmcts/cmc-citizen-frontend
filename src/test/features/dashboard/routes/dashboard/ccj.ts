@@ -49,9 +49,9 @@ const testData = [
     claimOverride: {
       responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
-    claimantAssertions: ['000MC050',
+    claimantAssertions: ['100MC050',
       'The defendant has not responded to your claim. You can request a County Court Judgment against them.'],
-    defendantAssertions: ['000MC050',
+    defendantAssertions: ['100MC050',
       'You haven’t responded to the claim.',
       'John Smith can now ask for a County Court Judgment (CCJ) against you.',
       'You can still respond to this claim before they ask for a CCJ.']
@@ -66,8 +66,8 @@ const testData = [
       } },
       responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
     },
-    claimantAssertions: ['000MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
-    defendantAssertions: ['000MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
+    claimantAssertions: ['100MC000', 'The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
+    defendantAssertions: ['100MC000', 'You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
   {
     status: 'CCJ - full admission, pay immediately, past deadline - claimant requests CCJ',
@@ -82,8 +82,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
     },
-    claimantAssertions: ['000MC000', 'You requested a County Court Judgment on '],
-    defendantAssertions: ['000MC000', 'The claimant has requested a County Court Judgment (CCJ) against you on']
+    claimantAssertions: ['100MC000', 'You requested a County Court Judgment on '],
+    defendantAssertions: ['100MC000', 'The claimant has requested a County Court Judgment (CCJ) against you on']
   },
   {
     status: 'CCJ - full admission, pay by set date, claimant accepts the repayment plan and request a CCJ',
@@ -94,8 +94,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - part admission, pay by set date, claimant accepts the repayment plan and request a CCJ',
@@ -106,8 +106,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - full admission, pay by set date, claimant accept the repayment plan with settlement agreement, defendant rejects the settlement agreement',
@@ -117,8 +117,8 @@ const testData = [
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
-    defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
+    claimantAssertions: ['100MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
+    defendantAssertions: ['100MC050', 'You rejected the settlement agreement']
   },
   {
     status: 'CCJ - part admission, pay by set date, claimant accept the repayment plan with settlement agreement, defendant rejects the settlement agreement',
@@ -128,8 +128,8 @@ const testData = [
       claimantResponse: { type: 'ACCEPTATION', formaliseOption: 'SETTLEMENT' },
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
-    defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
+    claimantAssertions: ['100MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
+    defendantAssertions: ['100MC050', 'You rejected the settlement agreement']
   },
   {
     status: 'CCJ - full admission, pay by set date, rejected the defendants repayment plan and accepted alternative plan suggested by the court then requests a CCJ.',
@@ -146,8 +146,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - part admission, pay by set date, rejected the defendants repayment plan and accepted alternative plan suggested by the court then requests a CCJ.',
@@ -164,8 +164,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - full admission, pay by set date, rejected the defendants repayment plan and claimants suggested repayment plan accepted by the court then requests a CCJ.',
@@ -186,8 +186,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - part admission, pay by set date, rejected the defendants repayment plan and claimants suggested repayment plan accepted by the court then requests a CCJ.',
@@ -208,8 +208,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - full admission, pay by set date, rejected the defendants repayment plan and rejected alternative plan suggested by the court.',
@@ -219,8 +219,8 @@ const testData = [
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'Awaiting judge’s review'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'Awaiting judge’s review'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - part admission, pay by set date, rejected the defendants repayment plan and rejected alternative plan suggested by the court.',
@@ -230,8 +230,8 @@ const testData = [
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'Awaiting judge’s review'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'Awaiting judge’s review'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - full admission, pay by repayment plan, claimant accepts the repayment plan and requests a CCJ',
@@ -242,8 +242,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - full admission, pay by repayment plan, rejected the defendants repayment plan and rejected alternative plan suggested by the court.',
@@ -253,8 +253,8 @@ const testData = [
       settlementReachedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'Awaiting judge’s review'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you']
+    claimantAssertions: ['100MC050', 'Awaiting judge’s review'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you']
   },
   {
     status: 'CCJ - full admission, pay by repayment plan, claimant accepts the repayment plan and offers a settlement agreement, defendant rejects the settlement agreement',
@@ -264,8 +264,8 @@ const testData = [
       claimantResponse: { 'type': 'ACCEPTATION', 'formaliseOption': 'SETTLEMENT' },
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
-    defendantAssertions: ['000MC050', 'You rejected the settlement agreement']
+    claimantAssertions: ['100MC050', 'John Doe has rejected your settlement agreement. You can request a County Court Judgment against them'],
+    defendantAssertions: ['100MC050', 'You rejected the settlement agreement']
   },
   {
     status: 'CCJ - full admission, pay by repayment plan, claimant accepts the repayment plan and offers a settlement agreement, defendant accepts the settlement agreement, claimant requests CCJ after set date',
@@ -277,8 +277,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   },
   {
     status: 'CCJ - full admission, pay by repayment plan, claimant rejects the repayment plan, their offer is accepted by the court and offers a settlement agreement, defendant accepts the settlement agreement, claimant requests CCJ after set date',
@@ -301,8 +301,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   },
   {
     status: 'CCJ - full admission, pay by repayment plan, claimant rejects the repayment plan, accepts the courts offer and offers a settlement agreement, defendant rejects the settlement agreement. Claimant then requests a CCJ',
@@ -324,8 +324,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   }
   ,
   {
@@ -348,8 +348,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   },
   {
     status: 'CCJ - full admission, pay by repayment plan, claimant rejects the repayment plan, the court accepts their plan and they offer a settlement agreement, defendant rejects the settlement agreement. Claimant then requests a CCJ',
@@ -371,8 +371,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   },
   {
     status: 'CCJ - part admission, pay by repayment plan, claimant rejects the repayment plan, the courts accepts their plan and offers a settlement agreement, defendant rejects the settlement agreement and claimant requests a CCJ',
@@ -394,8 +394,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   },
   {
     status: 'CCJ - part admission, pay by repayment plan, claimant rejects the repayment plan, accepts the courts offer and offers a settlement agreement, defendant rejects the settlement agreement. Claimant then requests a CCJ',
@@ -417,8 +417,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   },
   {
     status: 'CCJ - part admission, pay by repayment plan, claimant accepts the repayment plan and they offer a settlement agreement, defendant rejects the settlement agreement. Claimant then requests a CCJ',
@@ -433,8 +433,8 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       response: { ...partialAdmissionWithSoMPaymentBySetDateData }
     },
-    claimantAssertions: ['000MC050', 'You requested a County Court Judgment against John Doe'],
-    defendantAssertions: ['000MC050', 'John Smith requested a County Court Judgment against you.']
+    claimantAssertions: ['100MC050', 'You requested a County Court Judgment against John Doe'],
+    defendantAssertions: ['100MC050', 'John Smith requested a County Court Judgment against you.']
   }
 ]
 

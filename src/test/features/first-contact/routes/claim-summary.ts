@@ -29,7 +29,7 @@ describe('Defendant first contact: claim summary page', () => {
       })
 
       it('should redirect to access denied page when not eligible page claim reference number does not match', async () => {
-        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('100MC001')
 
         await request(app)
           .get(Paths.claimSummaryPage.uri)
@@ -47,16 +47,16 @@ describe('Defendant first contact: claim summary page', () => {
       })
 
       it('should return 200 and render view when everything is fine', async () => {
-        claimStoreServiceMock.resolveRetrieveByLetterHolderId('000MC001')
+        claimStoreServiceMock.resolveRetrieveByLetterHolderId('100MC001')
         await request(app)
           .get(Paths.claimSummaryPage.uri)
-          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .set('Cookie', `${cookieName}=ABC;state=100MC001`)
           .expect(res => expect(res).to.be.successful.withText('Claim details'))
       })
 
       it('should include evidence section when evidence was provided', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId(
-          '000MC001',
+          '100MC001',
           {
             claim: {
               ...claimStoreServiceMock.sampleClaimObj.claim,
@@ -67,19 +67,19 @@ describe('Defendant first contact: claim summary page', () => {
 
         await request(app)
           .get(Paths.claimSummaryPage.uri)
-          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .set('Cookie', `${cookieName}=ABC;state=100MC001`)
           .expect(res => expect(res).to.be.successful.withText('Evidence'))
       })
 
       it('should not include evidence section when evidence was not provided', async () => {
         claimStoreServiceMock.resolveRetrieveByLetterHolderId(
-          '000MC001',
+          '100MC001',
           { claim: { ...claimStoreServiceMock.sampleClaimObj.claim, evidence: null } }
         )
 
         await request(app)
           .get(Paths.claimSummaryPage.uri)
-          .set('Cookie', `${cookieName}=ABC;state=000MC001`)
+          .set('Cookie', `${cookieName}=ABC;state=100MC001`)
           .expect(res => expect(res).to.be.successful.withoutText('Evidence'))
       })
 
@@ -113,12 +113,12 @@ describe('Defendant first contact: claim summary page', () => {
     it('should redirect to ccj error page', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen', 'letter-holder')
       claimStoreServiceMock.resolveRetrieveByLetterHolderId(
-        '000MC000', { countyCourtJudgmentRequestedAt: MomentFactory.parse('2010-10-10') }
+        '100MC000', { countyCourtJudgmentRequestedAt: MomentFactory.parse('2010-10-10') }
       )
 
       await request(app)
         .get(Paths.claimSummaryPage.uri)
-        .set('Cookie', `${cookieName}=ABC;state = 000MC000`)
+        .set('Cookie', `${cookieName}=ABC;state = 100MC000`)
         .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.ccjRequestedHandoffPage.uri))
     })
   })

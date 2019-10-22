@@ -24,7 +24,7 @@ idamServiceMock.resolveRetrieveServiceToken().persist()
 draftStoreMock.resolveFindAllDrafts().persist()
 
 claimStoreMock.resolvePostponedDeadline('2020-01-01').persist()
-claimStoreMock.resolveRetrieveByLetterHolderId('000MC000').persist()
+claimStoreMock.resolveRetrieveByLetterHolderId('100MC000').persist()
 claimStoreMock.resolveRetrieveClaimByExternalId({
   respondedAt: '2017-08-07T15:27:34.654',
   claimantRespondedAt: MomentFactory.parse('2017-09-09'),

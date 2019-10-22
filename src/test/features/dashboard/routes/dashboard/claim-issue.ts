@@ -24,8 +24,8 @@ const testData = [
     claimOverride: {
       responseDeadline: MomentFactory.currentDate().add(1, 'days')
     },
-    claimantAssertions: ['000MC050', 'Wait for the defendant to respond'],
-    defendantAssertions: ['000MC050', 'Respond to claim.']
+    claimantAssertions: ['100MC050', 'Wait for the defendant to respond'],
+    defendantAssertions: ['100MC050', 'Respond to claim.']
   },
   {
     status: 'Requested more time',
@@ -34,8 +34,8 @@ const testData = [
       moreTimeRequested: true,
       responseDeadline: '2099-08-08'
     },
-    claimantAssertions: ['000MC050', 'John Doe has requested more time to respond.'],
-    defendantAssertions: ['000MC050', 'You need to respond before 4pm on 8 August 2099.']
+    claimantAssertions: ['100MC050', 'John Doe has requested more time to respond.'],
+    defendantAssertions: ['100MC050', 'You need to respond before 4pm on 8 August 2099.']
   }
 ]
 

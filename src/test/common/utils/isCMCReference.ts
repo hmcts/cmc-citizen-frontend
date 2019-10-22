@@ -4,12 +4,12 @@ import { isCMCReference } from 'shared/utils/isCMCReference'
 
 describe('isCMCReference', () => {
   it('should return true when the reference number is in CMC format with upper case MC', () => {
-    const referenceNumber = '000MC001'
+    const referenceNumber = '100MC001'
     expect(isCMCReference(referenceNumber)).to.be.true
   })
 
   it('should return true when the reference number is in CMC format with lower case mc', () => {
-    const referenceNumber = '000mc001'
+    const referenceNumber = '100mc001'
     expect(isCMCReference(referenceNumber)).to.be.true
   })
 

@@ -439,6 +439,36 @@ const mediationDQEnabledClaimDetails = [
     ]
   },
   {
+    status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      referenceNumber: '000MC001',
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData
+      },
+      ...directionsQuestionnaireDeadline,
+      ...settlementOfferReject
+    },
+    claimantAssertions: [
+      'The defendant has rejected your claim',
+      'They said they dispute your claim.',
+      'Your claim won’t proceed if you don’t complete and return the form before 4pm on',
+      'Download their response',
+      'Settle out of court',
+      'You’ve rejected the defendant’s offer to settle out of court. You won’t receive any more offers from the defendant.',
+      'If you’ve been paid',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You’ve rejected the claim and said you don’t want to use mediation to solve it. You’ll have to go to a hearing.',
+      'Your defence will be cancelled if you don’t complete and return the form before 4pm on',
+      'Settle out of court',
+      'The claimant has rejected your offer to settle the claim. Complete the directions questionnaire.'
+    ]
+  },
+  {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant accepted offer',
     claim: fullDefenceClaim,
     claimOverride: {

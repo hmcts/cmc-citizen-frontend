@@ -29,7 +29,7 @@ describe('Returning user: Enter claim number', () => {
     it('should redirect to home page when form is valid and everything is fine', async () => {
       await request(app)
         .post(Paths.enterClaimNumberPage.uri)
-        .send({ reference: '000MC001' })
+        .send({ reference: '100MC001' })
         .expect(res => expect(res).to.be.redirect.toLocation(Paths.homePage.uri))
     })
 

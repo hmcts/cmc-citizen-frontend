@@ -176,7 +176,7 @@ describe('Login receiver', async () => {
         it('should redirect to dashboard', async () => {
           claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveByDefendantId('100MC001')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -191,7 +191,7 @@ describe('Login receiver', async () => {
         it('should redirect to dashboard', async () => {
           claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveByDefendantId('100MC001')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFind('response')
 
@@ -207,7 +207,7 @@ describe('Login receiver', async () => {
         it('should redirect to dashboard', async () => {
           claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantIdToEmptyList()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveByDefendantId('100MC001')
           draftStoreServiceMock.resolveFind('claim')
           draftStoreServiceMock.resolveFindNoDraftFound()
 
@@ -222,7 +222,7 @@ describe('Login receiver', async () => {
         it('should redirect to dashboard', async () => {
           claimStoreServiceMock.resolveLinkDefendant()
           claimStoreServiceMock.resolveRetrieveByClaimantId()
-          claimStoreServiceMock.resolveRetrieveByDefendantId('000MC001')
+          claimStoreServiceMock.resolveRetrieveByDefendantId('100MC001')
           draftStoreServiceMock.resolveFindNoDraftFound()
           draftStoreServiceMock.resolveFindNoDraftFound()
 

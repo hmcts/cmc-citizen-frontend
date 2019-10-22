@@ -59,7 +59,7 @@ describe('isCCBCCaseReference', () => {
     })
 
     it('ccbc identifier doesn’t match', () => {
-      const referenceNumber = '000MC001'
+      const referenceNumber = '100MC001'
       expect(isCCBCCaseReference(referenceNumber)).to.be.false
     })
 
