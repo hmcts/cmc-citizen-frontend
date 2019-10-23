@@ -34,7 +34,9 @@
   {% endif %}
 
   {% if phone is defined %}
-    {{ textInput(form = form, label = t(phone.label), name = phone.name, autocomplete = phone.autocomplete, hint = phone.hint) }}
+    <h2 class="heading-medium">{{ t('Your phone number') }}</h2>
+    <p>{{ t('We might need to speak to you about this claim. We’ll only call on weekdays between 9am and 5pm.') }}</p>
+    {{ textInput(form = form, name = phone.name, autocomplete = phone.autocomplete, hint = phone.hint) }}
   {% endif %}
 
 {% endmacro %}
