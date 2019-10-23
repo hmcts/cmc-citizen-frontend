@@ -1,4 +1,7 @@
 import * as express from 'express'
+import { Claim } from 'claims/models/claim'
+import { Draft } from '@hmcts/draft-store-client'
+import { PartyDetails } from 'forms/models/partyDetails'
 import * as path from 'path'
 
 import { AuthorizationMiddleware } from 'idam/authorizationMiddleware'
@@ -21,6 +24,11 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 import { OptInFeatureToggleGuard } from 'guards/optInFeatureToggleGuard'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { PartyType } from 'common/partyType'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
+import { CompanyDetails } from 'forms/models/companyDetails'
+import { OrganisationDetails } from 'forms/models/organisationDetails'
 
 function defendantResponseRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -32,6 +40,30 @@ function defendantResponseRequestHandler (): express.RequestHandler {
   ]
   const unprotectedPaths = []
   return AuthorizationMiddleware.requestHandler(requiredRoles, accessDeniedCallback, unprotectedPaths)
+}
+
+function deserializeFn (value: any): PartyDetails {
+  switch (value.type) {
+    case PartyType.INDIVIDUAL.value:
+      return IndividualDetails.fromObject(value)
+    case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+      return SoleTraderDetails.fromObject(value)
+    case PartyType.COMPANY.value:
+      return CompanyDetails.fromObject(value)
+    case PartyType.ORGANISATION.value:
+      return OrganisationDetails.fromObject(value)
+    default:
+      throw new Error(`Unknown party type: ${value.type}`)
+  }
+}
+
+function initiatePartyFromClaimHandler (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const draft: Draft<ResponseDraft> = res.locals.responseDraft
+  if (!draft.document.defendantDetails.partyDetails) {
+    const claim: Claim = res.locals.claim
+    draft.document.defendantDetails.partyDetails = deserializeFn(claim.claimData.defendant)
+  }
+  next()
 }
 
 export class Feature {
@@ -68,7 +100,8 @@ export class Feature {
       (req: express.Request, res: express.Response, next: express.NextFunction) => {
         res.locals.draft = res.locals.responseDraft
         next()
-      }
+      },
+      initiatePartyFromClaimHandler
     )
     app.all(/^\/case\/.+\/response\/(?!confirmation|receipt|summary).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {
