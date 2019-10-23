@@ -439,7 +439,7 @@ export class Claim {
       return true
     }
 
-    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasRedeterminationBeenRequested()) {
+    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasClaimantRejectedPartAdmissionDQs() || this.hasRedeterminationBeenRequested()) {
       return true
     }
 
@@ -451,7 +451,7 @@ export class Claim {
       return false
     }
 
-    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
+    if (this.hasClaimantRejectedDefendantDefence()) {
       return true
     }
 
