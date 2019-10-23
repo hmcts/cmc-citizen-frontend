@@ -118,6 +118,8 @@ describe('ResponseModelConverter', () => {
           expertReportDate: '2019-02-27'
         }
       ],
+      expertRequired: 'yes',
+      permissionForExpert: 'yes',
       expertRequest: {
         expertEvidenceToExamine: 'Photographs',
         reasonForExpertAdvice: 'for expert opinion'
