@@ -1018,6 +1018,24 @@ describe('Claim', () => {
     })
   })
 
+  describe('isIntentionToProceedEligible', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+    })
+
+    it('should return true when createdAt is after 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.currentDate()
+      expect(claim.isIntentionToProceedEligible()).to.be.true
+    })
+
+    it('should return false when createdAt is before 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.parse('2019-09-08')
+      expect(claim.isIntentionToProceedEligible()).to.be.false
+    })
+  })
+
 })
 
 function prepareSettlement (paymentIntention: PaymentIntention, party: MadeBy): Settlement {
