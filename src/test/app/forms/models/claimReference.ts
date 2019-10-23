@@ -51,7 +51,7 @@ describe('ClaimReference', () => {
     })
 
     it('should accept valid CMC claim reference ignoring case', () => {
-      const errors = validator.validateSync(new ClaimReference('000MC001'))
+      const errors = validator.validateSync(new ClaimReference('000mc001'))
 
       expect(errors.length).to.equal(0)
     })

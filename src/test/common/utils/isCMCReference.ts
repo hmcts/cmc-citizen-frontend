@@ -9,7 +9,7 @@ describe('isCMCReference', () => {
   })
 
   it('should return true when the reference number is in CMC format with lower case mc', () => {
-    const referenceNumber = '000MC001'
+    const referenceNumber = '000mc001'
     expect(isCMCReference(referenceNumber)).to.be.true
   })
 
