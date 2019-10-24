@@ -42,6 +42,14 @@
     }}
 
     {{ row('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri, bold = true) }}
+
+    {% if draftClaim.defendant.mobilePhone %}
+      {% set defendantPhone = draftClaim.defendant.mobilePhone.number %}
+    {% else %}
+      {% set defendantPhone = '' %}
+    {% endif %}
+
+    {{ row('Contact number (optional)', defendantPhone, paths.defendantPhonePage.uri, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('claimAmount', 'Claim amount') }}

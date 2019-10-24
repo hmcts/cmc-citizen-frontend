@@ -96,11 +96,16 @@
   directionsOrderReviewRequestedClaimantDashboard,
   directionsOrderReviewRequestedDefendantDashboard %}
 
+{% from "./claimStatus/intentionToProceed.njk" import
+  intentionToProceedPastDeadlineForClaimantDashboard,
+  intentionToProceedPastDeadlineForDefendantDashboard %}
+
 {% from "./claimStatus/paperResponse.njk" import
   paperResponseForClaimantDashboard,
   paperResponseForDefendantDashboard %}
 
 {% macro caseStatusForClaimant(status, claim) %}
+
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
@@ -194,6 +199,8 @@
     {{ directionsOrderIssuedClaimantDashboard() }}
   {% elif status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
     {{ directionsOrderReviewRequestedClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+    {{ intentionToProceedPastDeadlineForClaimantDashboard(claim) }}
   {% endif %}
 {% endmacro %}
 
@@ -296,5 +303,7 @@
     {{ directionsOrderIssuedDefendantDashboard() }}
   {% elif status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
     {{ directionsOrderReviewRequestedDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+    {{ intentionToProceedPastDeadlineForDefendantDashboard(claim) }}
   {% endif %}
 {% endmacro %}

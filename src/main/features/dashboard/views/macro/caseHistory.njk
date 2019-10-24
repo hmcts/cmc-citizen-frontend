@@ -121,6 +121,10 @@
   statesPaidClaimSettledClaimantDetails,
   statesPaidClaimSettledDefendantsDetails %}
 
+{% from "./claimStatus/intentionToProceed.njk" import
+  intentionToProceedPastDeadlineForClaimantClaimDetails,
+  intentionToProceedPastDeadlineForDefendantClaimDetails %}
+
 {% from "./claimStatus/paperResponse.njk" import
   paperResponseForClaimantClaimDetails,
   paperResponseForDefendantClaimDetails
@@ -236,6 +240,8 @@
         {{ reviewReceiver(claim, respondToReviewOrderDeadline) }}
       {% endif %}
       {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+    {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+      {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
@@ -349,6 +355,8 @@
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
       {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+    {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+      {{ intentionToProceedPastDeadlineForDefendantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}

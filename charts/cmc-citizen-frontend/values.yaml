@@ -1,8 +1,8 @@
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
-  memoryRequests: 256Mi
-  memoryLimits: 512Mi
+  memoryRequests: 512Mi
+  memoryLimits: 1024Mi
   cpuLimits: 1
   environment:
     NODE_ENV: production
@@ -24,6 +24,7 @@ nodejs:
     FEATURE_MEDIATION_PILOT: true
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_NEW_DASHBOARD_STATUS: false
+    FEATURE_WEB_CHAT: true
   keyVaults:
     cmc:
       resourceGroup: cmc
@@ -36,3 +37,8 @@ nodejs:
       - citizen-draft-store-secondary
       - citizen-cookie-encryption-key
       - staff-email
+      - cmc-webchat-id
+      - cmc-webchat-tenant
+      - cmc-webchat-button-no-agents
+      - cmc-webchat-button-agents-busy
+      - cmc-webchat-button-service-closed
