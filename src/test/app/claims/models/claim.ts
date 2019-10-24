@@ -167,6 +167,19 @@ describe('Claim', () => {
       claim.moreTimeRequested = true
 
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
+    })
+
+    it('should return PAPER_RESPONSE when a paper response received', () => {
+      claim.response = {
+        responseType: ResponseType.FULL_DEFENCE,
+        defenceType: DefenceType.DISPUTE,
+        defence: 'defence reasoning',
+        freeMediation: FreeMediationOption.NO,
+        defendant: new Individual().deserialize(individual),
+        paperResponse : true
+      }
+
+      expect(claim.status).to.be.equal(ClaimStatus.PAPER_RESPONSE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {

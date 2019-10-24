@@ -93,6 +93,20 @@ const testData = [
     defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
   },
   {
+    status: 'Full defence - defendant sent paper response',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES,
+        paperResponse: true
+      }
+    },
+    claimantAssertions: ['The claim will continue by post'],
+    defendantAssertions: ['The claim will continue by post']
+  },
+  {
     status: 'Full defence - defendant dispute all of the claim and reject mediation',
     claim: fullDefenceClaim,
     claimOverride: {
