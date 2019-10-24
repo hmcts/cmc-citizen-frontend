@@ -1,10 +1,9 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 
-{% macro downloadResponseLink(claim) %}
-  {{ internalLink(t('Download your response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-  {{ t('(PDF)') }}
-{% endmacro %}
+{% macro downloadResponseLink(claim, title='Download your response') %}
+  {{ internalLink(t(title), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
+  {{ t('(PDF)') }}{% endmacro %}
 
 {% macro downloadTheirResponseLink(claim) %}
   {{ internalLink(t('Download their response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
