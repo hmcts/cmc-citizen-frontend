@@ -38,6 +38,7 @@ export class Claim {
   id: number
   claimantId: string
   externalId: string
+  state: string
   defendantId: string
   claimNumber: string
   responseDeadline: Moment
@@ -286,6 +287,7 @@ export class Claim {
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id
+      this.state = input.state
       this.claimantId = input.submitterId
       this.externalId = input.externalId
       this.defendantId = input.defendantId

@@ -22,13 +22,12 @@ import { Fee } from 'payment-hub-client/fee'
 import { PaymentRetrieveResponse } from 'payment-hub-client/paymentRetrieveResponse'
 import * as HttpStatus from 'http-status-codes'
 import { FeatureToggles } from 'utils/featureToggles'
-import { FeatureTogglesClient } from 'shared/clients/featureTogglesClient'
 import { trackCustomEvent } from 'logging/customEventTracker'
 import { Claim } from 'claims/models/claim'
 import { MockPayClient } from 'mock-clients/mockPayClient'
+import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
-const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
 
 const logger = Logger.getLogger('router/pay')
 const event: string = config.get<string>('fees.issueFee.event')
@@ -68,23 +67,7 @@ async function successHandler (req, res, next) {
       logger.error(`missing consent not given role for user, User Id : ${user.id}`)
     }
 
-    let features: string
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
-      features = 'admissions'
-    }
-
-    if (draft.document.amount.totalAmount() <= 300 && FeatureToggles.isEnabled('directionsQuestionnaire')) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-        features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
-      }
-    }
-
-    const totalAmount = await draftClaimAmountWithInterest(draft.document)
-    if (totalAmount <= 300) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
-        features += features === undefined ? 'mediationPilot' : ', mediationPilot'
-      }
-    }
+    const features = await FeaturesBuilder.features(draft, user)
 
     savedClaim = await claimStoreClient.saveClaim(draft, user, features)
 
