@@ -286,10 +286,10 @@
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.4.tgz#8936cffad3c96ec470a2dc26a38c3ba8b9b6f619"
   integrity sha512-7qvf9F9tMTzo0akeswHPGqgUx/gIaJqrOEET/FCD8CFRkSUHlygQiM5yB6OvjrtdxBVLSyw7COJubsFYs0683g==
 
-"@types/config@^0.0.34":
-  version "0.0.34"
-  resolved "https://registry.yarnpkg.com/@types/config/-/config-0.0.34.tgz#123f91bdb5afdd702294b9de9ca04d9ea11137b0"
-  integrity sha512-jWi9DXx77hnzN4kHCNEvP/kab+nchRLTg9yjXYxjTcMBkuc5iBb3QuwJ4sPrb+nzy1GQjrfyfMqZOdR4i7opRQ==
+"@types/config@^0.0.35":
+  version "0.0.35"
+  resolved "https://registry.yarnpkg.com/@types/config/-/config-0.0.35.tgz#afd0cf04946b4c52b9dd44543f6213a3284bd2e9"
+  integrity sha512-7U79ubpUKlZb5oayMB0axGejGQo+T8IMgnrwb/Ho4e71Qal2zUSalTMIzgsy/CNN8PHLXNPwwEJMwqPQkcGH4A==
 
 "@types/connect@*":
   version "3.4.32"
