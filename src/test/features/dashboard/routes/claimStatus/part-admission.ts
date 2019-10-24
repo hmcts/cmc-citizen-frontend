@@ -25,6 +25,7 @@ import {
   directionsQuestionnaireDeadline
 } from 'test/data/entity/fullDefenceData'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -158,6 +159,69 @@ const mediationDQEnabledClaimDetails = [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
       'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
+    ]
+  },
+  {
+    status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation failed',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.FAILED
+    },
+    claimantAssertions: [
+      'We’ll contact you to try to arrange a mediation appointment',
+      'You rejected the defendant’s admission of ',
+      'You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.',
+      'Find out how mediation works'
+    ],
+    defendantAssertions: [
+      partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
+      'They believe you owe them the full ',
+      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
+    ]
+  },
+  {
+    status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation success',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: [
+      'You both agreed a settlement through mediation',
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: [
+      'You both agreed a settlement through mediation',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms',
+      'Contact ' + partAdmissionClaim.claim.claimants[0].name,
+      'if you need their payment details. Make sure you get receipts for any payments.'
     ]
   }
 ]

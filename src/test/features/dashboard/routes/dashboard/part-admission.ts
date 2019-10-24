@@ -25,6 +25,7 @@ import {
   respondedAt,
   directionsQuestionnaireDeadline
 } from 'test/data/entity/fullDefenceData'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -79,6 +80,49 @@ const mediationDQEnabledClaimDetails = [
     },
     claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
     defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
+  },
+  {
+    status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation failed',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      mediationOutcome: MediationOutcome.FAILED
+    },
+    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
+    defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
+  },
+  {
+    status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation success',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: ['You both agreed a settlement through mediation'],
+    defendantAssertions: ['You both agreed a settlement through mediation']
   }
 ]
 

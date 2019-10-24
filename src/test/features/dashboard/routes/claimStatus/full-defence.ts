@@ -34,6 +34,7 @@ import {
   intentionToProceedDeadline
 } from 'test/data/entity/fullDefenceData'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -406,6 +407,66 @@ const mediationDQEnabledClaimDetails = [
       'We’ll contact you to try to arrange a mediation appointment',
       'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
       'Find out how mediation works'
+    ]
+  },
+  {
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation - mediation failed',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithAmountClaimedAlreadyPaidData,
+        freeMediation: 'yes'
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.FAILED
+    },
+    claimantAssertions: [
+      'You’ve rejected the defendant’s response.',
+      'We’ll contact you to try to arrange a mediation appointment',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
+    ],
+    defendantAssertions: [
+      'John Smith has rejected your defence.',
+      'We’ll contact you to try to arrange a mediation appointment',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
+    ]
+  },
+  {
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation - mediation success',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData,
+        freeMediation: 'yes'
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: [
+      'You both agreed a settlement through mediation',
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: [
+      'You both agreed a settlement through mediation',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms',
+      'Contact ' + fullDefenceClaim.claim.claimants[0].name,
+      'if you need their payment details. Make sure you get receipts for any payments.'
     ]
   },
   {

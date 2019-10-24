@@ -20,8 +20,9 @@ import {
 
 import {
   respondedAt,
-  claimantRejectAlreadyPaid, claimantRejectAlreadyPaidWithMediation
+  claimantRejectAlreadyPaid, claimantRejectAlreadyPaidWithMediation, directionsQuestionnaireDeadline
 } from 'test/data/entity/fullDefenceData'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 
 const statesPaidClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -77,7 +78,54 @@ const testData = [
       'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
       'Find out how mediation works'
     ]
+  },
+  {
+    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation failed',
+    claim: statesPaidClaim,
+    claimOverride: {
+      response: {
+        ...partialAdmissionFromStatesPaidWithMediationDefence
+      },
+      ...claimantRejectAlreadyPaidWithMediation,
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.FAILED
+    },
+    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
+      'You’ve rejected the defendant’s response.',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
+    ],
+    defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
+      'John Smith has rejected your defence.',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
+    ]
+  },
+  {
+    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation success',
+    claim: statesPaidClaim,
+    claimOverride: {
+      response: {
+        ...partialAdmissionFromStatesPaidWithMediationDefence
+      },
+      ...claimantRejectAlreadyPaidWithMediation,
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: [
+      'You both agreed a settlement through mediation',
+      'Tell us you’ve ended the claim',
+      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: [
+      'You both agreed a settlement through mediation',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms',
+      'Contact ' + statesPaidClaim.claim.claimants[0].name,
+      'if you need their payment details. Make sure you get receipts for any payments.'
+    ]
   }
+
 ]
 
 describe('Dashboard page', () => {

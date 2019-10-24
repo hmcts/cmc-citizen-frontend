@@ -50,7 +50,7 @@
       {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
         {{ mediationSuccessForClaimantClaimDetails(claim) }}
       {% else %}
-        <h2 class="heading-medium">{{ t('We’ll contact you with a mediation appointment') }}</h2>
+        <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
 
         <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
         <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.') }}</p>

@@ -22,6 +22,7 @@ import {
   claimantRejectAlreadyPaidWithMediation,
   respondedAt
 } from 'test/data/entity/fullDefenceData'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 
 const statesPaidClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
@@ -55,6 +56,32 @@ const testData = [
     },
     claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
     defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
+  },
+  {
+    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation failed',
+    claim: statesPaidClaim,
+    claimOverride: {
+      response: {
+        ...partialAdmissionFromStatesPaidWithMediationDefence
+      },
+      ...claimantRejectAlreadyPaidWithMediation,
+      mediationOutcome: MediationOutcome.FAILED
+    },
+    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
+    defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
+  },
+  {
+    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation failed',
+    claim: statesPaidClaim,
+    claimOverride: {
+      response: {
+        ...partialAdmissionFromStatesPaidWithMediationDefence
+      },
+      ...claimantRejectAlreadyPaidWithMediation,
+      mediationOutcome: MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: ['You both agreed a settlement through mediation'],
+    defendantAssertions: ['You both agreed a settlement through mediation']
   }
 ]
 
