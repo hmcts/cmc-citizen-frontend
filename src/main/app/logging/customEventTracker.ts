@@ -12,6 +12,6 @@ export function trackCustomEvent (eventName: string, trackingProperties: {}) {
       })
     }
   } catch (err) {
-    logger.logError(err.stack)
+    logger.error(err.stack)
   }
 }

@@ -2,6 +2,7 @@ $(document).ready(function () {
   numeral.locale('en-gb')
 
   const updateTotal = function () {
+
     var total = $('input.claim-amount-column-2')
       .map(toNumber)
       .get()
@@ -12,15 +13,20 @@ $(document).ready(function () {
     return true
   }
 
-  $('input.claim-amount-column-2').keyup(updateTotal)
+  $('#claim-amount').on('keyup','input.claim-amount-column-2', updateTotal)
 
   function toNumber (index, inputElement) {
-    var parsed = parseFloat($(inputElement).val())
+    var regex =  /^(\d+|\d{1,3}(,\d{3})*)(\.\d+)?$/;
+    var val = String($(inputElement).val())
+
+    if(!regex.test(val)) {
+      return 0
+    }
+    var parsed = parseFloat(val.replace(/,/g, ''))
     if (isNaN(parsed)) {
       return 0
-    } else {
-      return parsed
     }
+    return parsed
   }
 
   function sum (accumulator, currentValue) {

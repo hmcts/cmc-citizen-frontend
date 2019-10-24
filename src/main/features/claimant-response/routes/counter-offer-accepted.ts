@@ -44,7 +44,7 @@ export default express.Router()
   .post(
     Paths.counterOfferAcceptedPage.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const { externalId } = await req.params
+      const { externalId } = req.params
       const draft: Draft<DraftClaimantResponse> = res.locals.draft
       const user: User = res.locals.user
 
