@@ -60,7 +60,6 @@ withPipeline("nodejs", product, component) {
 
   after('test') {
     onMaster {
-      yarnBuilder.yarn('tests:coverage')
       yarnBuilder.yarn('tests:a11y')
     }
   }
