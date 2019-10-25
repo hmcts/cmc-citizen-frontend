@@ -66,7 +66,7 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<PartyDetails> = req.body
 
-      if (form. hasErrors()) {
+      if (form.hasErrors()) {
         renderView(form, res)
       } else {
         const claim: Claim = res.locals.claim
