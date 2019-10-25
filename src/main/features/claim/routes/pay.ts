@@ -61,16 +61,8 @@ async function successHandler (req, res, next) {
   let savedClaim: Claim
 
   try {
-    const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
-
-    if (!roles.length) {
-      logger.error(`missing consent not given role for user, User Id : ${user.id}`)
-    }
-
     const features = await FeaturesBuilder.features(draft, user)
-
     savedClaim = await claimStoreClient.saveClaim(draft, user, features)
-
   } catch (err) {
     if (err.statusCode === HttpStatus.INTERNAL_SERVER_ERROR || err.statusCode === HttpStatus.SERVICE_UNAVAILABLE) {
       logError(

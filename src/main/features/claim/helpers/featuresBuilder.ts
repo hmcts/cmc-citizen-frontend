@@ -13,23 +13,23 @@ export class FeaturesBuilder {
   static async features (draft: Draft<DraftClaim>, user: User): Promise<string> {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
-    let features: string
+    let features = ''
     if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
       features = 'admissions'
     }
 
     if (draft.document.amount.totalAmount() <= 300 && FeatureToggles.isEnabled('directionsQuestionnaire')) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
-        features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
+        features += (features === '') ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
       }
     }
 
     const totalAmount = await draftClaimAmountWithInterest(draft.document)
     if (totalAmount <= 300) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
-        features += features === undefined ? 'mediationPilot' : ', mediationPilot'
+        features += (features === '') ? 'mediationPilot' : ', mediationPilot'
       }
     }
-    return features
+    return (features === '') ? undefined : features
   }
 }
