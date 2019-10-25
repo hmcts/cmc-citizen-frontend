@@ -45,3 +45,7 @@ output "feature_mock_pay" {
 output "feature_testing_support" {
   value = "${var.feature_testing_support}"
 }
+
+output "feature_inversionOfControl" {
+  value = "${var.feature_inversionOfControl}"
+}
