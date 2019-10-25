@@ -113,10 +113,7 @@ const testData = [
       mediationOutcome: MediationOutcome.SUCCEEDED
     },
     claimantAssertions: [
-      'You both agreed a settlement through mediation',
-      'Tell us you’ve ended the claim',
-      'If you’ve been paid or you’ve made another agreement with the defendant, you need to tell us.',
-      'Tell us you’ve settled'
+      'You both agreed a settlement through mediation'
     ],
     defendantAssertions: [
       'You both agreed a settlement through mediation',

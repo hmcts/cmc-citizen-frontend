@@ -29,6 +29,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 
 interface State {
   status: ClaimStatus
@@ -428,6 +429,10 @@ export class Claim {
     }
 
     if (this.isSettlementReached()) {
+      return false
+    }
+
+    if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
       return false
     }
 
