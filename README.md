@@ -55,7 +55,7 @@ Mocha is used for writing tests.
 Run them with:
 
 ```bash
-$ yarn test
+$ yarn tests
 ```
 
 For functional testing:
@@ -67,13 +67,13 @@ $ yarn test:routes
 For accessibility testing:
 
 ```bash
-$ yarn test:a11y
+$ yarn tests:a11y
 ```
 
 For test coverage:
 
 ```bash
-$ yarn test:coverage
+$ yarn tests:coverage
 ```
 
 For unit test coverage only:

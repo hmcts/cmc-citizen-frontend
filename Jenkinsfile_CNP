@@ -58,6 +58,12 @@ withPipeline("nodejs", product, component) {
     yarnBuilder.yarn('setup')
   }
 
+  after('test') {
+    onMaster {
+      yarnBuilder.yarn('tests:a11y')
+    }
+  }
+
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   enableDockerBuild()
