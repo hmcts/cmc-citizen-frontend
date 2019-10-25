@@ -14,6 +14,7 @@ export interface DirectionOrder {
   preferredDQCourt?: string
   preferredCourtObjectingReason?: string
   hearingCourt?: string
+  hearingCourtName?: string
   estimatedHearingDuration?: string,
   postDocumentsLastDay?: moment.Moment
 }
@@ -25,6 +26,7 @@ export namespace DirectionOrder {
     }
     return {
       createdOn: MomentFactory.parse(input.createdOn),
+      hearingCourtName: input.hearingCourtName,
       hearingCourtAddress: input.hearingCourtAddress,
       directions: Direction.deserialize(input.directions),
       extraDocUploadList: input.extraDocUploadList,
