@@ -1,5 +1,5 @@
 import { isAfter4pm } from 'shared/dateUtils'
-import { TranslationOptions } from 'i18next'
+import { InitOptions } from 'i18next'
 import * as path from 'path'
 import * as express from 'express'
 import * as config from 'config'
@@ -75,6 +75,7 @@ const packageDotJson = require('../../../../package.json')
 const appAssetPaths = {
   js: '/js',
   js_vendor: '/js/lib',
+  webchat: '/webchat',
   style: '/stylesheets',
   style_vendor: '/stylesheets/lib',
   images: '/img',
@@ -121,7 +122,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('development', this.developmentMode)
     nunjucksEnv.addGlobal('govuk_template_version', packageDotJson.dependencies.govuk_template_jinja)
     nunjucksEnv.addGlobal('gaTrackingId', config.get<string>('analytics.gaTrackingId'))
-    nunjucksEnv.addGlobal('t', (key: string, options?: TranslationOptions): string => this.i18next.t(key, options))
+    nunjucksEnv.addGlobal('t', (key: string, options?: InitOptions): string => this.i18next.t(key, options))
     nunjucksEnv.addFilter('date', dateFilter)
     nunjucksEnv.addFilter('inputDate', dateInputFilter)
     nunjucksEnv.addFilter('dateWithDayAtFront', dateWithDayAtFrontFilter)
