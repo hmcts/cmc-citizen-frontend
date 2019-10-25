@@ -8,9 +8,10 @@ import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { User } from 'idam/user'
 import { ClaimState } from 'claims/models/claimState'
 import { Logger } from '@hmcts/nodejs-logging'
+import * as HttpStatus from 'http-status-codes'
 
+const logger = Logger.getLogger('router/initiate-payment')
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
-const logger = Logger.getLogger('initiate-payment')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -18,23 +19,25 @@ export default express.Router()
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     const user: User = res.locals.user
     const externalId: string = draft.document.externalId
+    if (!externalId) {
+      throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
+    }
     try {
-      if (!externalId) {
-        throw new Error(`externalId is missing from the draft claim. User Id : ${user.id}`)
-      }
       const existingClaim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 
-      if (!existingClaim) {
-        const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
-        res.redirect(nextUrl)
-      } else if (ClaimState[existingClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
+      if (ClaimState[existingClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
         const nextUrl: string = await claimStoreClient.resumePayment(draft, user)
         res.redirect(nextUrl)
       } else {
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId: externalId }))
       }
     } catch (err) {
-      logger.logError(err.stack)
-      next(err)
+      if (err.statusCode === HttpStatus.NOT_FOUND) {
+        const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
+        res.redirect(nextUrl)
+      } else {
+        logger.error(`claim with external id ${externalId} not found, redirecting user to check and send`)
+        next(err)
+      }
     }
   })

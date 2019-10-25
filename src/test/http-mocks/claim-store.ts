@@ -11,25 +11,25 @@ import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { MomentFactory } from 'shared/momentFactory'
 
 import {
+  defenceWithDisputeData,
   fullAdmissionWithSoMPaymentByInstalmentsData,
   fullAdmissionWithSoMPaymentByInstalmentsDataCompany,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
+  fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
-  fullDefenceWithStatesPaidGreaterThanClaimAmount,
   fullDefenceWithStatesLessThanClaimAmount,
   fullDefenceWithStatesLessThanClaimAmountWithMediation,
-  fullAdmissionWithSoMPaymentBySetDateInNext2Days,
+  fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  partialAdmissionWithImmediatePaymentData,
+  partialAdmissionWithImmediatePaymentDataV2,
+  partialAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithPaymentByInstalmentsWithMediationData,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData,
-  partialAdmissionWithImmediatePaymentData,
-  defenceWithDisputeData,
-  partialAdmissionWithSoMPaymentBySetDateWithMediationData,
-  partialAdmissionWithPaymentByInstalmentsWithMediationData,
-  partialAdmissionWithPaymentByInstalmentsData,
-  partialAdmissionWithImmediatePaymentDataV2
+  partialAdmissionWithSoMPaymentBySetDateWithMediationData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
@@ -155,6 +155,10 @@ export const sampleClaimIssueObj = {
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
+}
+
+export const paymentResponse = {
+  nextUrl: 'http://localhost/payment-page'
 }
 
 export const sampleClaimObj = {
@@ -298,13 +302,16 @@ export const partySettlementWithInstalmentsAndRejection = {
     type: 'OFFER',
     offer: {
       completionDate: MomentFactory.currentDate().add(2, 'years'),
-      paymentIntention: { 'paymentDate': MomentFactory.currentDate().add(2, 'years'), 'paymentOption': 'BY_SPECIFIED_DATE' }
+      paymentIntention: {
+        'paymentDate': MomentFactory.currentDate().add(2, 'years'),
+        'paymentOption': 'BY_SPECIFIED_DATE'
+      }
     },
     madeBy: 'DEFENDANT'
   }, {
     type: 'ACCEPTATION',
     madeBy: 'CLAIMANT'
-  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+  }, { type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
 }
 export const partySettlementWithInstalmentsAndAcceptation = {
   partyStatements: [{
@@ -334,7 +341,7 @@ export const partySettlementWithSetDateAndRejection = {
   }, {
     type: 'ACCEPTATION',
     madeBy: 'CLAIMANT'
-  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+  }, { type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
 }
 export const partySettlementWithSetDateAndAcceptation = {
   partyStatements: [{
@@ -960,4 +967,16 @@ export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
   mock(`${serviceBaseURL}/defendant`)
     .get(new RegExp('/defendant/[0-9]+'))
     .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function resolveInitiatePayment (nextUrl?: object) {
+  return mock(`${serviceBaseURL}/claims`)
+    .post('/initiate-citizen-payment')
+    .reply(HttpStatus.OK, { ...paymentResponse, ...nextUrl })
+}
+
+export function resolveResumePayment (nextUrl?: object) {
+  return mock(`${serviceBaseURL}/claims`)
+    .put('/resume-citizen-payment')
+    .reply(HttpStatus.OK, { ...paymentResponse, ...nextUrl })
 }

@@ -82,7 +82,7 @@ export class ClaimStoreClient {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
-      .post(`${claimStoreApiUrl}/${claimant.id}/initiate-citizen-payment`, {
+      .post(`${claimStoreApiUrl}/initiate-citizen-payment`, {
         body: convertedDraftClaim,
         headers: buildCaseSubmissionHeaders(claimant, [])
       })
@@ -95,7 +95,7 @@ export class ClaimStoreClient {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
-      .post(`${claimStoreApiUrl}/${claimant.id}/resume-citizen-payment`, {
+      .put(`${claimStoreApiUrl}/resume-citizen-payment`, {
         body: convertedDraftClaim,
         headers: buildCaseSubmissionHeaders(claimant, [])
       })
