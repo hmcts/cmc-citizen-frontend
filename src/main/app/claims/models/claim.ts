@@ -29,6 +29,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { ClaimState } from 'claims/models/claimState'
 
 interface State {
   status: ClaimStatus
@@ -38,7 +39,7 @@ export class Claim {
   id: number
   claimantId: string
   externalId: string
-  state: string
+  state: ClaimState
   defendantId: string
   claimNumber: string
   responseDeadline: Moment

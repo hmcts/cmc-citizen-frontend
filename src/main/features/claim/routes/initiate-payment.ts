@@ -25,7 +25,7 @@ export default express.Router()
     try {
       const existingClaim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
 
-      if (ClaimState[existingClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
+      if (existingClaim.state === ClaimState.AWAITING_CITIZEN_PAYMENT) {
         const nextUrl: string = await claimStoreClient.resumePayment(draft, user)
         res.redirect(nextUrl)
       } else {

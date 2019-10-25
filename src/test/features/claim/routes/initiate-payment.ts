@@ -12,6 +12,7 @@ import { Paths as ClaimPaths } from 'claim/paths'
 import { app } from 'main/app'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { ClaimState } from 'claims/models/claimState'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -40,7 +41,7 @@ describe('Claim: Initiate payment page', () => {
     it('should redirect to nextUrl returned by resume payment if claim is in AWAITING_CITIZEN_PAYMENT state', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', roles)
       draftStoreServiceMock.resolveFind(draftType, { externalId })
-      claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: 'AWAITING_CITIZEN_PAYMENT' })
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: ClaimState.AWAITING_CITIZEN_PAYMENT })
       claimStoreServiceMock.resolveResumePayment({ nextUrl: 'http://payment-api-resume' })
 
       await request(app)
@@ -52,7 +53,7 @@ describe('Claim: Initiate payment page', () => {
     it('should redirect to confirmation page if claim is not in AWAITING_CITIZEN_PAYMENT state', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', roles)
       draftStoreServiceMock.resolveFind(draftType, { externalId })
-      claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: 'CREATE' })
+      claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: ClaimState.CREATE })
 
       await request(app)
         .get(pagePath)
