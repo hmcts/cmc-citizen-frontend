@@ -38,6 +38,7 @@ export class Claim {
   id: number
   claimantId: string
   externalId: string
+  state: string
   defendantId: string
   claimNumber: string
   responseDeadline: Moment
@@ -286,6 +287,7 @@ export class Claim {
       this.claimantId = input.submitterId
       this.externalId = input.externalId
       this.defendantId = input.defendantId
+      this.state = input.state
       this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.responseDeadline = MomentFactory.parse(input.responseDeadline)
