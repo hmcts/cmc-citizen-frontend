@@ -13,7 +13,7 @@
 
 {% macro claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('Respond to the defendant') }}</h2>
+    <h2 class="heading-medium">{{ t('Respond to the defendant') }}</h2>
     <p>{{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
         { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral, paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}</p>
     <p>{{ t('You can accept or reject this response.') }}</p>
@@ -28,7 +28,7 @@
 
 {% macro claimPartAdmittedToOweForClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
+    <h2 class="heading-medium">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
 
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
       <p>{{ t('They said they don’t owe the full amount you claimed.') }}</p>
@@ -55,7 +55,7 @@
 
 {% macro partAdmittedPayImmediatelyClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
+    <h2 class="heading-medium">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
     <p>{{ t('They said they’ll pay you immediately.') }}</p>
     <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
         { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>

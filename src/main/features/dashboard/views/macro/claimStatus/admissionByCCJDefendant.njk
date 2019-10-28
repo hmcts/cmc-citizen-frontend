@@ -44,7 +44,7 @@
 
 {% macro CCJAfterDefendantDidNotSignSettlementAgreementClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
+    <h2 class="heading-medium">{{ t('A County Court Judgment (CCJ) has been issued against you') }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       {% if claim.claimantResponse.courtDetermination %}
         <p>{{ t('They rejected your repayment plan.') }}</p>
@@ -75,7 +75,7 @@
 
 {% macro CCJByDeterminationDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <h2 class="heading-medium">{{ t('{{ claimantName }} requested a County Court Judgment (CCJ) against you', { claimantName: claim.claimData.claimant.name }) }}</h2>
     {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
       <p>{{ t('They rejected your repayment plan.') }}</p>
     {% elif claim.response.responseType === domain.ResponseType.PART_ADMISSION %}

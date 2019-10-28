@@ -23,12 +23,13 @@
       <p>{{ t('{{ defendantName }} can no longer respond to the claim using this service.', { defendantName: defendantName }) }}</p>
       <p>{{ t('If we receive a postal response that they sent before the deadline we’ll reject your request for judgment.') }}</p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
-      <p>{{ internalLink('Continue', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
+      <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
 
       {{ supportWidget() }}
     </div>
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

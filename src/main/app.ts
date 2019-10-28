@@ -52,7 +52,8 @@ app.enable('trust proxy')
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
+  limit: '10mb'
 }))
 app.use(cookieParser())
 app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
@@ -61,6 +62,8 @@ app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   }
 }))
 
+// Web Chat
+app.use('/webchat', express.static(path.join(__dirname, '/public/webchat')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 if (env !== 'mocha') {
@@ -77,11 +80,7 @@ new CCJFeature().enableFor(app)
 new OfferFeature().enableFor(app)
 new SettlementAgreementFeature().enableFor(app)
 new MediationFeature().enableFor(app)
-
-if (FeatureToggles.isEnabled('paidInFull')) {
-  logger.info('FeatureToggles.paidInFull enabled')
-  new PaidInFullFeature().enableFor(app)
-}
+new PaidInFullFeature().enableFor(app)
 
 if (FeatureToggles.isEnabled('testingSupport')) {
   logger.info('FeatureToggles.testingSupport enabled')

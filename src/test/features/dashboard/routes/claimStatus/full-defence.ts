@@ -19,7 +19,8 @@ import { NumberFormatter } from 'utils/numberFormatter'
 import {
   baseDefenceData,
   baseResponseData,
-  defenceWithAmountClaimedAlreadyPaidData
+  defenceWithAmountClaimedAlreadyPaidData,
+  defenceWithDisputeData
 } from 'test/data/entity/responseData'
 
 import {
@@ -29,7 +30,8 @@ import {
   settlementOffer,
   settlementOfferAccept,
   settlementOfferReject,
-  settledWithAgreement
+  settledWithAgreement,
+  intentionToProceedDeadline
 } from 'test/data/entity/fullDefenceData'
 import { FeatureToggles } from 'utils/featureToggles'
 
@@ -63,6 +65,25 @@ const testData = [
       'Your response to the claim',
       'We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.',
       'Download your response'
+    ]
+  },
+  {
+    status: 'Full defence - defendant paid what he believe - claimant does not proceed in time',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: { ...defenceWithAmountClaimedAlreadyPaidData },
+      ...intentionToProceedDeadline
+    },
+    claimantAssertions: [
+      'The court ended the claim',
+      'This is because you didn’t proceed before the deadline of 4pm on',
+      'You can contact us to apply for the claim to be restarted.',
+      'Download the defendant’s full response'
+    ],
+    defendantAssertions: [
+      'The court ended the claim',
+      'This is because John Smith didn’t proceed with it before the deadline of 4pm on',
+      'If they want to restart the claim, they need to ask for permission from the court. We’ll contact you by post if they do this.'
     ]
   },
   {
@@ -217,7 +238,8 @@ const legacyClaimDetails = [
         ...baseResponseData,
         ...baseDefenceData,
         freeMediation: FreeMediationOption.YES
-      }
+      },
+      ...directionsQuestionnaireDeadline
     },
     claimantAssertions: [
       'The defendant’s response',
@@ -502,10 +524,32 @@ const mediationDQEnabledClaimDetails = [
     ]
   },
   {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation - claimant does not do intention to proceed',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData
+      },
+      ...directionsQuestionnaireDeadline,
+      ...intentionToProceedDeadline
+    },
+    claimantAssertions: [
+      'The court ended the claim',
+      'This is because you didn’t proceed before the deadline of 4pm on',
+      'You can contact us to apply for the claim to be restarted.',
+      'Download the defendant’s full response'
+    ],
+    defendantAssertions: [
+      'The court ended the claim',
+      'This is because John Smith didn’t proceed with it before the deadline of 4pm on',
+      'If they want to restart the claim, they need to ask for permission from the court. We’ll contact you by post if they do this.'
+    ]
+  },
+  {
     status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
     claim: fullDefenceClaim,
     claimOverride: {
-      directionsQuestionnaireDeadline: MomentFactory.currentDate().add(1, 'days'),
+      ...directionsQuestionnaireDeadline,
       features: ['admissions', 'directionsQuestionnaire'],
       response: {
         ...baseResponseData,
@@ -531,6 +575,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant dispute all of the claim and accepts mediation',
     claim: fullDefenceClaim,
     claimOverride: {
+      ...directionsQuestionnaireDeadline,
       response: {
         ...baseResponseData,
         ...baseDefenceData,

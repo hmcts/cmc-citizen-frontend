@@ -161,6 +161,8 @@ export class ClaimSteps {
     } else {
       citizenEmailPage.submitForm()
     }
+
+    citizenMobilePage.enterMobile(defendant.mobilePhone)
   }
 
   enterClaimAmount (amount1: number, amount2: number, amount3): void {

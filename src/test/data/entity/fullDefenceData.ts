@@ -27,7 +27,11 @@ export const claimantRejectAlreadyPaidWithMediation = {
 }
 
 export const directionsQuestionnaireDeadline = {
-  directionsQuestionnaireDeadline: MomentFactory.currentDate()
+  directionsQuestionnaireDeadline: MomentFactory.currentDate().add(19, 'days')
+}
+
+export const intentionToProceedDeadline = {
+  intentionToProceedDeadline: MomentFactory.currentDateTime().subtract(1, 'days')
 }
 
 export const defendantOffersSettlement = [{

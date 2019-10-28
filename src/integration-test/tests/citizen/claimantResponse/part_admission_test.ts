@@ -40,7 +40,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('You agreed to try to resolve the claim using mediation')
     confirmationPage.clickGoToYourAccount()
     I.see(testData.claimRef)
-    I.see('Wait for the court to review the case')
+    I.see('We’ll contact you to try to arrange a mediation appointment')
   })
 
   Scenario('I can as a claimant accept the defendants part admission by immediately with settlement agreement and accepting defendants payment method @nightly @admissions', { retries: 3 }, async (I: I) => {

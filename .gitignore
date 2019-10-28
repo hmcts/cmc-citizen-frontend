@@ -30,3 +30,4 @@ smoke-output/
 functional-output/
 acb.yaml
 output/*
+/src/main/public/webchat/sass/
