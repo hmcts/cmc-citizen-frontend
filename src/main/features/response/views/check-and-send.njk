@@ -23,10 +23,19 @@
           contactPerson: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
           address: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
           dateOfBirth: ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId })
-        }
+        },
+        claim = claim
       )
     }}
-    {{ row(label = 'Contact number (optional)', value = draft.defendantDetails.phone.number, changeLink = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+    {% if not claim.claimData.defendant.phone %}
+      {{ row(
+        label = 'Contact number (optional)',
+        value = draft.defendantDetails.phone.number,
+        changeLink = ResponsePaths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }) ,
+        bold = true)
+      }}
+    {% endif %}
 
     {{ tableEnd() }}
 

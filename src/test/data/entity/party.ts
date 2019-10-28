@@ -67,6 +67,14 @@ export const organisation = {
   name: 'Organisation.',
   contactPerson: 'Organisation Smith',
   ...addressCorrespondenceAddress,
+  email: 'organisation@example.com'
+}
+
+export const organisationWithPhone = {
+  type: PartyType.ORGANISATION.value,
+  name: 'Organisation.',
+  contactPerson: 'Organisation Smith',
+  ...addressCorrespondenceAddress,
   phone: '0700000004',
   email: 'organisation@example.com'
 }

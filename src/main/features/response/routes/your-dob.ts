@@ -60,6 +60,10 @@ export default express.Router()
 
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
+        if (claim.claimData.defendant.phone === undefined) {
+          res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
+        } else {
+          res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+        }
       }
     }))
