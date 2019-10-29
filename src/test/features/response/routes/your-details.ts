@@ -165,13 +165,24 @@ describe('Defendant user details: your name page', () => {
         })
 
         context('when form is invalid', () => {
-          it('should render page when everything is fine', async () => {
+          it('should render details page when form has error for address', async () => {
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
 
             await request(app)
               .post(pagePath)
               .send({ type: 'individual' })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
+          })
+
+          it('should render details page when form has error for phone', async () => {
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
+
+            await request(app)
+              .post(pagePath)
+              .send({ type: 'individual', name: 'John Smith', address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' }, phone: '' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
@@ -250,6 +261,29 @@ describe('Defendant user details: your name page', () => {
           })
           .expect(res => expect(res).to.be.redirect
             .toLocation(ResponsePaths.defendantMobilePage
+              .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+      })
+    })
+    context('When it is company v company', () => {
+      it('should redirect to task list when defendant phone number is provided by claimant', async () => {
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimIssueOrgVOrgObj.defendantId, 'citizen')
+        claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgPhone)
+        draftStoreServiceMock.resolveFind('response:company')
+        draftStoreServiceMock.resolveFind('mediation')
+        draftStoreServiceMock.resolveUpdate()
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: 'company',
+            name: 'John Smith',
+            address: { line1: 'Apartment 99', line2: '', line3: '', city: 'London', postcode: 'E10AA' },
+            contactPerson: 'Joe Blogs'
+          })
+          .expect(res => expect(res).to.be.redirect
+            .toLocation(ResponsePaths.taskListPage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
     })

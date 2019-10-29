@@ -59,15 +59,24 @@
           {% set addressSectionHeading = 'Organisation address' %}
         {% endif %}
 
-        {{ partyDetailsFragment(
-          form,
-          fields = fields,
-          addressSection = {
-            heading: addressSectionHeading,
-            name: 'address'
-          },
-          showCorrespondenceAddressSection = true
-        ) }}
+        {% if claim.claimData.defendant.phone %}
+          {%   set defendantPhone =
+            { readOnly: false, name: 'phone', label: 'Phone number' }
+          %}
+        {% endif %}
+
+        {{
+          partyDetailsFragment(
+            form,
+            fields = fields,
+            addressSection = {
+              heading: addressSectionHeading,
+              name: 'address'
+            },
+            showCorrespondenceAddressSection = true,
+            phone = defendantPhone
+          )
+        }}
 
         {{ saveAndContinueButton() }}
       </form>
