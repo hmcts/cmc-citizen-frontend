@@ -107,7 +107,7 @@ export class DefenceSteps {
     loginPage.login(defendantEmail, DEFAULT_PASSWORD)
   }
 
-  confirmYourDetails (defendant: Party): void {
+  confirmYourDetails (defendant: Party, expectPhonePage: boolean = true): void {
 
     defendantSteps.selectTaskConfirmYourDetails()
     defendantNameAndAddressPage.enterAddress(updatedAddress)
@@ -115,7 +115,9 @@ export class DefenceSteps {
     if (defendant.type === PartyType.INDIVIDUAL) {
       defendantDobPage.enterDOB(defendant.dateOfBirth)
     }
-    defendantPhonePage.enterPhone(defendant.phone)
+    if (expectPhonePage) {
+      defendantPhonePage.enterPhone(defendant.phone)
+    }
   }
 
   requestNoExtraTimeToRespond (): void {
@@ -289,12 +291,13 @@ export class DefenceSteps {
     defendantType: PartyType,
     defenceType: DefenceType,
     isRequestMoreTimeToRespond: boolean = true,
-    isClaimAlreadyPaid: boolean = true
+    isClaimAlreadyPaid: boolean = true,
+    expectPhonePage: boolean = true
   ): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
-    this.confirmYourDetails(defendantParty)
+    this.confirmYourDetails(defendantParty, expectPhonePage)
     I.see('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {

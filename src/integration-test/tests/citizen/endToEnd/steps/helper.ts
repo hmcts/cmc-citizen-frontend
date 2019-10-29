@@ -47,7 +47,8 @@ export class Helper {
       testData.defendantPartyType,
       testData.defenceType,
       isRequestMoreTimeToRespond,
-      testData.defendantClaimsToHavePaidInFull
+      testData.defendantClaimsToHavePaidInFull,
+      false
     )
   }
 
