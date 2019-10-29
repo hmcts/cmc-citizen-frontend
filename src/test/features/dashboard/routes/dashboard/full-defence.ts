@@ -19,7 +19,8 @@ import { FreeMediationOption } from 'forms/models/freeMediation'
 import {
   baseDefenceData,
   baseResponseData,
-  defenceWithAmountClaimedAlreadyPaidData
+  defenceWithAmountClaimedAlreadyPaidData,
+  defenceWithDisputeData
 } from 'test/data/entity/responseData'
 
 import {
@@ -29,7 +30,8 @@ import {
   settlementOffer,
   settlementOfferAccept,
   settlementOfferReject,
-  settledWithAgreement
+  settledWithAgreement,
+  intentionToProceedDeadline
 } from 'test/data/entity/fullDefenceData'
 import { DefenceType } from 'claims/models/response/defenceType'
 
@@ -55,6 +57,16 @@ const testData = [
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' believes that they’ve paid the claim in full.'],
     defendantAssertions: ['We’ve emailed ' + fullDefenceClaim.claim.claimants[0].name + ' telling them when and how you said you paid the claim.']
+  },
+  {
+    status: 'Full defence - defendant paid what he believe - claimant does not proceed in time',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: { ...defenceWithAmountClaimedAlreadyPaidData },
+      ...intentionToProceedDeadline
+    },
+    claimantAssertions: ['This claim has ended'],
+    defendantAssertions: ['This claim has ended']
   },
   {
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response',
@@ -92,6 +104,19 @@ const testData = [
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.'],
     defendantAssertions: ['You’ve rejected the claim.']
+  },
+  {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation - claimant does not do intention to proceed',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData
+      },
+      ...directionsQuestionnaireDeadline,
+      ...intentionToProceedDeadline
+    },
+    claimantAssertions: ['This claim has ended'],
+    defendantAssertions: ['This claim has ended']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',
@@ -212,8 +237,8 @@ const testData = [
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['We will contact you with a meditation appointment'],
-    defendantAssertions: ['We will contact you with a meditation appointment']
+    claimantAssertions: ['We will contact you to try to arrange a mediation appointment'],
+    defendantAssertions: ['We will contact you to try to arrange a mediation appointment']
   }
 ]
 

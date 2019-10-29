@@ -219,7 +219,8 @@
           changeLink = ClaimantResponsePaths.rejectionReasonPage.evaluateUri({ externalId: claim.externalId }), bottomBorder = true) }}
       {% endif %}
 
-      {% if claim.response.freeMediation === YesNoOption.YES.option and draft.accepted.accepted.option === YesNoOption.NO.option or draft.partPaymentReceived %}
+      {% if claim.response.freeMediation === YesNoOption.YES.option and (draft.accepted.accepted.option === YesNoOption.NO.option
+        or draft.partPaymentReceived.received.option === YesNoOption.NO.option) %}
         {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
       {% else %}
         {{ tableEnd() }}

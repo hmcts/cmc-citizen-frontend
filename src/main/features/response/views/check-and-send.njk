@@ -23,10 +23,19 @@
           contactPerson: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
           address: ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claim.externalId }),
           dateOfBirth: ResponsePaths.defendantDateOfBirthPage.evaluateUri({ externalId: claim.externalId })
-        }
+        },
+        claim = claim
       )
     }}
-    {{ row(label = 'Contact number (optional)', value = draft.defendantDetails.mobilePhone.number, changeLink = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }), bold = true) }}
+
+    {% if not claim.claimData.defendant.phone %}
+      {{ row(
+        label = 'Contact number (optional)',
+        value = draft.defendantDetails.mobilePhone.number,
+        changeLink = ResponsePaths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }) ,
+        bold = true)
+      }}
+    {% endif %}
 
     {{ tableEnd() }}
 
@@ -284,8 +293,8 @@
       }}
     {% endif %}
 
-    {% if mediationDraft %}
-      {{ freeMediationBlock(claim, mediationDraft, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
+    {% if mediationDraft.id !== 0 %}
+      {{ freeMediationBlock(claim, mediationDraft.document, contactPerson, contactNumber, mediationPilot, mediationEnabled) }}
     {% endif %}
 
 

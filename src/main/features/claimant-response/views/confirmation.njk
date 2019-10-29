@@ -101,14 +101,15 @@
             { deadline: claim.directionsQuestionnaireDeadline | date }) }}
         </p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === YesNoOption.YES %}
-        <p>{{ t('The court will contact you and the defendant within 14 days to arrange a mediation appointment.') }}</p>
+        <p>{{ t('The court will contact you and the defendant within 14 days to try to arrange a mediation appointment.') }}</p>
       {% endif %}
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
-      <p>{{ internalLink(t('Continue'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
+      <p>{{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
 
       {{ supportWidget() }}
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

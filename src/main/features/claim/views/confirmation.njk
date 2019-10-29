@@ -37,9 +37,9 @@
       <h2 class="heading-medium">{{ t('If the defendant pays you') }}</h2>
       <p>{{ t('You need to sign in to your account to tell us you’ve been paid.') }}</p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
-      {{ internalLink(t('Continue'), DashboardPaths.dashboardPage.uri, 'button') }}
+      {{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}
 
       {{ supportWidget() }}
 
@@ -48,3 +48,4 @@
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}
