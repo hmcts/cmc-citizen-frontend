@@ -20,6 +20,26 @@ import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-i
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.defendantYourDetailsPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
+const splitNameDetails = {
+  claim: {
+    defendants: [
+      {
+        type: 'individual',
+        name: 'Mr. John Doe',
+        title: 'Mr.',
+        firstName: 'John',
+        lastName: 'Doe',
+        address: {
+          line1: 'line1',
+          line2: 'line2',
+          city: 'city',
+          postcode: 'bb127nq'
+        }
+      }
+    ]
+  }
+}
+
 describe('Defendant user details: your name page', () => {
   attachDefaultHooks(app)
 
@@ -55,6 +75,72 @@ describe('Defendant user details: your name page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Confirm your details'))
+        })
+
+        it('should render page without firstName when claim doesn\'t have firstName', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('First Name'))
+        })
+
+        it('should render page without lastName when claim doesn\'t have lastName', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('Last Name'))
+        })
+
+        it('should render page without firstName when claim does not have title', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withoutText('Title'))
+        })
+
+        it('should render page with firstName when claim has firstName', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(splitNameDetails)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('First name'))
+        })
+
+        it('should render page with lastName when claim has lastName', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(splitNameDetails)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Last name'))
+        })
+
+        it('should render page with title when claim has title', async () => {
+          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('mediation')
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(splitNameDetails)
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Title'))
         })
       })
     })
@@ -100,6 +186,29 @@ describe('Defendant user details: your name page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
           })
+
+          it('should render page with error when firstName is available in the claim', async () => {
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', splitNameDetails)
+
+            await request(app)
+              .post(pagePath)
+              .send({ type: 'individual' })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
+          })
+
+          it('should render page with error when lastName is available in the claim', async () => {
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('response', splitNameDetails)
+
+            await request(app)
+              .post(pagePath)
+              .send({ type: 'individual' })
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.successful.withText('Confirm your details', 'div class="error-summary"'))
+          })
+
         })
 
         context('when form is valid', () => {
