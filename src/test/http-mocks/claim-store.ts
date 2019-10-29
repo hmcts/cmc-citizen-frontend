@@ -33,7 +33,7 @@ import {
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { organisation } from 'test/data/entity/party'
+import { organisation, organisationWithPhone } from 'test/data/entity/party'
 import { Moment } from 'moment'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
@@ -89,6 +89,22 @@ export const sampleClaimIssueOrgVOrgObj = {
     reason: 'Because I can',
     feeAmountInPennies: 2500,
     timeline: { rows: [{ date: 'a', description: 'b' }] }
+  }
+}
+
+export const sampleClaimIssueOrgVOrgPhone = {
+  ...sampleClaimIssueCommonObj,
+  claim: {
+    claimants: [
+      {
+        ...organisation
+      }
+    ],
+    defendants: [
+      {
+        ...organisationWithPhone
+      }
+    ]
   }
 }
 
