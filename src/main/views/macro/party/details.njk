@@ -2,7 +2,8 @@
 {% from "address.njk" import postcodeLookupAddressFragment, addressFragment, correspondenceAddressFragment %}
 {% from "table.njk" import tableStart,tableEnd, row, rowWithMultipleValue %}
 
-{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false, postcodeLabel = 'Enter a UK postcode') %}
+{% macro partyDetailsFragment(form, fields, addressSection, showCorrespondenceAddressSection = false,
+  postcodeLabel = 'Enter a UK postcode', phone ) %}
   {% for field in fields %}
     {% if field.readOnly %}
       {% if field.value %}
@@ -31,20 +32,27 @@
   {% if showCorrespondenceAddressSection == true %}
     {{ correspondenceAddressFragment(form) }}
   {% endif %}
+
+  {% if phone is defined %}
+    <h2 class="heading-medium">{{ t('Your phone number') }}</h2>
+    <p>{{ t('We might need to speak to you about this claim. We’ll only call on weekdays between 9am and 5pm.') }}</p>
+    {{ textInput(form = form, name = phone.name, autocomplete = phone.autocomplete, hint = phone.hint) }}
+  {% endif %}
+
 {% endmacro %}
 
-{% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}) %}
-  {{ row('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name or changeLinks.contactPerson, bold = true, bottomBorder = not partyDetails.contactPerson ) }}
+{% macro partyDetailsSummaryFragment(partyDetails, showCorrespondenceAddressSection = true, changeLinks = {}, claim) %}
+  {{ row('Full name', partyDetails.name, changeLinks.partyDetails or changeLinks.name or changeLinks.contactPerson, bold = true, bottomBorder = false ) }}
 
   {% if (partyDetails.type === 'company' or partyDetails.type === 'organisation') %}
     {% if partyDetails.contactPerson %}
-      {{ row('Contact person', partyDetails.contactPerson, bold = true) }}
+      {{ row('Contact person', partyDetails.contactPerson, bold = true, bottomBorder = falase) }}
     {% endif %}
   {% endif %}
 
   {% if (partyDetails.type === 'soleTrader') %}
     {% if partyDetails.businessName %}
-      {{ row('Business name', 'Trading as ' + partyDetails.businessName, changeLinks.partyDetails or changeLinks.businessName, bold = true) }}
+      {{ row('Business name', 'Trading as ' + partyDetails.businessName, changeLinks.partyDetails or changeLinks.businessName, bold = true, bottomBorder = false) }}
     {% endif %}
   {% endif %}
 
@@ -57,8 +65,7 @@
   partyDetails.address.city,
   partyDetails.address.postcode
   ],
-  bottomBorder = not showCorrespondenceAddressSection,
-  changeLink = changeLinks.partyDetails or changeLinks.address,
+  bottomBorder = not showCorrespondenceAddressSection and not claim.claimData.defendant.phone,
   bold = true
   ) }}
 
@@ -77,8 +84,17 @@
     {{ rowWithMultipleValue(
     label = 'Correspondence address',
     values = correspondenceAddressLines,
+    bottomBorder = not claim.claimData.defendant.phone,
     bold = true
     ) }}
+  {% endif %}
+
+  {% if claim and claim.claimData.defendant.phone %}
+    {{ row(
+      label = 'Contact number',
+      value = partyDetails.phone,
+      bold = true)
+    }}
   {% endif %}
 
   {% if (partyDetails.type === 'individual' and partyDetails.dateOfBirth and partyDetails.dateOfBirth.date) %}
