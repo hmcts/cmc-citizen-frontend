@@ -20,6 +20,7 @@ import {
   basePayByInstalmentsData,
   basePayBySetDateData,
   basePayImmediatelyData,
+  basePayImmediatelyDatePastData,
   baseResponseData
 } from 'test/data/entity/responseData'
 
@@ -62,22 +63,20 @@ const testData = [
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData }
     },
-    claimantAssertions: ['The defendant admits they owe all the money. They’ve said that they will pay immediately.'],
+    claimantAssertions: ['Wait for the defendant to pay you'],
     defendantAssertions: ['You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
   {
     status: 'Full admission - defendant responded pay immediately - past payment deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
-      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+      response: {
+        ...fullAdmissionClaim.response,
+        ...basePayImmediatelyDatePastData
+      }
     },
-    claimantAssertions: ['The defendant has not responded to your claim. You can request a County Court Judgment against them'],
-    defendantAssertions: [
-      'You haven’t responded to the claim.',
-      fullAdmissionClaim.claim.claimants[0].name + ' can now ask for a County Court Judgment (CCJ) against you.',
-      'You can still respond to this claim before they ask for a CCJ.'
-    ]
+    claimantAssertions: ['Wait for the defendant to pay you'],
+    defendantAssertions: ['You’ve admitted all of the claim and said you’ll pay the full amount immediately.']
   },
 
   {
