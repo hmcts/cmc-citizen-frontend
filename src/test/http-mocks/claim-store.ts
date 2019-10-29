@@ -33,7 +33,7 @@ import {
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { organisation } from 'test/data/entity/party'
+import { organisation, organisationWithPhone } from 'test/data/entity/party'
 import { Moment } from 'moment'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
@@ -46,7 +46,7 @@ export const sampleClaimIssueCommonObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC050',
-  createdAt: '2017-07-25T22:45:51.785',
+  createdAt: MomentFactory.currentDateTime(),
   issuedOn: '2017-07-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
@@ -92,6 +92,22 @@ export const sampleClaimIssueOrgVOrgObj = {
   }
 }
 
+export const sampleClaimIssueOrgVOrgPhone = {
+  ...sampleClaimIssueCommonObj,
+  claim: {
+    claimants: [
+      {
+        ...organisation
+      }
+    ],
+    defendants: [
+      {
+        ...organisationWithPhone
+      }
+    ]
+  }
+}
+
 export const sampleClaimIssueObj = {
   id: 1,
   submitterId: '1',
@@ -99,7 +115,7 @@ export const sampleClaimIssueObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC050',
-  createdAt: '2017-07-25T22:45:51.785',
+  createdAt: MomentFactory.currentDateTime(),
   issuedOn: '2017-07-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
@@ -165,8 +181,8 @@ export const sampleClaimObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC000',
-  createdAt: '2017-07-25T22:45:51.785',
-  issuedOn: '2017-07-25',
+  createdAt: MomentFactory.currentDateTime(),
+  issuedOn: '2019-09-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
@@ -652,7 +668,7 @@ export function mockNextWorkingDay (expected: Moment): mock.Scope {
 export function rejectNextWorkingDay (expected: Moment): mock.Scope {
   return mock(serviceBaseURL)
     .get('/calendar/next-working-day')
-    .query({ date: expected })
+    .query({ date: expected.format() })
     .reply(400)
 }
 
@@ -806,10 +822,10 @@ export function resolveSaveClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
+export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+    .reply(status, reason)
 }
 
 export function resolveSaveCcjForExternalId () {

@@ -311,6 +311,15 @@ export class ResponseModelConverter {
         if ((defendant.partyDetails as IndividualDetails).dateOfBirth) {
           (party as Individual).dateOfBirth = (defendant.partyDetails as IndividualDetails).dateOfBirth.date.asString()
         }
+        if ((defendant.partyDetails as IndividualDetails).title) {
+          (party as Individual).title = (defendant.partyDetails as IndividualDetails).title
+        }
+        if ((defendant.partyDetails as IndividualDetails).firstName) {
+          (party as Individual).firstName = (defendant.partyDetails as IndividualDetails).firstName
+        }
+        if ((defendant.partyDetails as IndividualDetails).lastName) {
+          (party as Individual).lastName = (defendant.partyDetails as IndividualDetails).lastName
+        }
         break
       case PartyType.COMPANY.value:
         party = new Company()
@@ -329,6 +338,16 @@ export class ResponseModelConverter {
         if ((defendant.partyDetails as SoleTraderDetails).businessName) {
           (party as SoleTrader).businessName = (defendant.partyDetails as SoleTraderDetails).businessName
         }
+
+        if ((defendant.partyDetails as SoleTraderDetails).title) {
+          (party as SoleTrader).title = (defendant.partyDetails as SoleTraderDetails).title
+        }
+        if ((defendant.partyDetails as SoleTraderDetails).firstName) {
+          (party as SoleTrader).firstName = (defendant.partyDetails as SoleTraderDetails).firstName
+        }
+        if ((defendant.partyDetails as SoleTraderDetails).lastName) {
+          (party as SoleTrader).lastName = (defendant.partyDetails as SoleTraderDetails).lastName
+        }
         break
     }
     party.address = new Address().deserialize(defendant.partyDetails.address)
@@ -338,6 +357,7 @@ export class ResponseModelConverter {
     if (defendant.partyDetails.name) {
       party.name = defendant.partyDetails.name
     }
+
     if (defendant.email) {
       party.email = defendant.email.address
     }

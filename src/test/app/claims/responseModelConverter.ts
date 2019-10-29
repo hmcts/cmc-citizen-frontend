@@ -16,7 +16,7 @@ import {
   statementOfMeansWithAllFieldsDraft,
   statementOfMeansWithMandatoryFieldsDraft
 } from 'test/data/draft/responseDraft'
-import { companyDetails, individualDetails, organisationDetails, soleTraderDetails } from 'test/data/draft/partyDetails'
+import { companyDetails, individualDetails, organisationDetails, soleTraderDetails, individualSplitNameDetails } from 'test/data/draft/partyDetails'
 
 import { Response } from 'claims/models/response'
 import {
@@ -32,7 +32,7 @@ import {
   statementOfMeansWithAllFieldsData,
   statementOfMeansWithMandatoryFieldsOnlyData
 } from 'test/data/entity/responseData'
-import { company, individual, organisation, soleTrader } from 'test/data/entity/party'
+import { company, individual, organisation, soleTrader, individualDefendant } from 'test/data/entity/party'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { Claim } from 'claims/models/claim'
 import * as claimStoreMock from 'test/http-mocks/claim-store'
@@ -118,6 +118,8 @@ describe('ResponseModelConverter', () => {
           expertReportDate: '2019-02-27'
         }
       ],
+      expertRequired: 'yes',
+      permissionForExpert: 'yes',
       expertRequest: {
         expertEvidenceToExamine: 'Photographs',
         reasonForExpertAdvice: 'for expert opinion'
@@ -188,6 +190,21 @@ describe('ResponseModelConverter', () => {
           })
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize({}), directionsQuestionnaireDraft, claim)))
+            .to.deep.equal(convertObjectLiteralToJSON(responseData))
+        })
+
+        it('should convert full admission paid immediately with title, firstName and lastName', () => {
+          const responseDraft = prepareResponseDraft(
+            {
+              ...fullAdmissionWithImmediatePaymentDraft,
+              ...sampleMediationDraftObj
+            }, individualSplitNameDetails)
+          const responseData = prepareResponseData({
+            ...fullAdmissionWithImmediatePaymentData
+          }, individualDefendant)
+          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
@@ -449,6 +466,24 @@ describe('ResponseModelConverter', () => {
             ...fullAdmissionWithImmediatePaymentData,
             ...mediationResponseData
           }, individual)
+          const claim: Claim = new Claim().deserialize({
+            ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
+          })
+
+          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+            .to.deep.equal(convertObjectLiteralToJSON(responseData))
+        })
+
+        it('should convert full admission paid immediately with title, firstName and lastName', () => {
+          const responseDraft = prepareResponseDraft(
+            {
+              ...fullAdmissionWithImmediatePaymentDraft,
+              ...sampleMediationDraftObj
+            }, individualSplitNameDetails)
+          const responseData = prepareResponseData({
+            ...fullAdmissionWithImmediatePaymentData,
+            ...mediationResponseData
+          }, individualDefendant)
           const claim: Claim = new Claim().deserialize({
             ...claimStoreMock.sampleClaimObj, ...{ features: ['admissions', 'directionsQuestionnaire'] }
           })
@@ -758,6 +793,15 @@ describe('ResponseModelConverter', () => {
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
 
+        it('should convert full admission paid immediately with title, firstname and lastname', () => {
+          const responseDraft = prepareResponseDraft(fullAdmissionWithImmediatePaymentDraft, individualSplitNameDetails)
+          const responseData = prepareResponseData(fullAdmissionWithImmediatePaymentData, individualDefendant)
+          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+            .to.deep.equal(convertObjectLiteralToJSON(responseData))
+        })
+
         it('should convert full admission paid by set date', () => {
           const responseDraft = prepareResponseDraft(fullAdmissionWithPaymentBySetDateDraft, individualDetails)
           const responseData = prepareResponseData(fullAdmissionWithPaymentBySetDateData, individual)
@@ -983,6 +1027,22 @@ describe('ResponseModelConverter', () => {
             ...fullAdmissionWithImmediatePaymentData,
             ...mediationResponseData
           }, individual)
+          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))
+            .to.deep.equal(convertObjectLiteralToJSON(responseData))
+        })
+
+        it('should convert full admission with title, firstName and lastName', () => {
+          const responseDraft = prepareResponseDraft(
+            {
+              ...fullAdmissionWithImmediatePaymentDraft,
+              ...sampleMediationDraftObj
+            }, individualSplitNameDetails)
+          const responseData = prepareResponseData({
+            ...fullAdmissionWithImmediatePaymentData,
+            ...mediationResponseData
+          }, individualDefendant)
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, mediationDraft, directionsQuestionnaireDraft, claim)))

@@ -3,6 +3,9 @@ import { PartyType } from 'common/partyType'
 
 export class Party {
   type: string
+  title?: string
+  firstName?: string
+  lastName?: string
   name: string
   address: Address
   correspondenceAddress?: Address
@@ -10,11 +13,12 @@ export class Party {
   email?: string
 
   constructor (
-              type?: string,
-              name?: string,
-              address?: Address,
-              correspondenceAddress?: Address,
-              mobilePhone?: string, email?: string) {
+    type?: string,
+    name?: string,
+    address?: Address,
+    correspondenceAddress?: Address,
+    mobilePhone?: string,
+    email?: string) {
     this.type = type
     this.name = name
     this.address = address
@@ -33,6 +37,15 @@ export class Party {
       this.type = input.type
       this.email = input.email
       this.mobilePhone = input.mobilePhone
+      if (input.title) {
+        this.title = input.title
+      }
+      if (input.firstName) {
+        this.firstName = input.firstName
+      }
+      if (input.lastName) {
+        this.lastName = input.lastName
+      }
       if (input.address) {
         this.address = new Address().deserialize(input.address)
       }
