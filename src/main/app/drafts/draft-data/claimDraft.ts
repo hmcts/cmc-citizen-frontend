@@ -49,7 +49,7 @@ export function prepareClaimDraft (userEmailAddress: string) {
       email: {
         address: userEmailAddress
       },
-      mobilePhone: {
+      phone: {
         number: ''
       }
     },
