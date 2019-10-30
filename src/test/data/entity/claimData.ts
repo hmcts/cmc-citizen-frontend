@@ -62,20 +62,20 @@ export const claimData = {
   }
 }
 
-export const sampleClaimData = {
+export const defenceClaimData = {
   id: 1571828179733564,
   submitterId: '1f9d9e49-c52c-4ae2-8999-0012efb2ef88',
   letterHolderId: '4605000b-10b7-40da-83b3-c83241907859',
   defendantId: '1f9d9e49-c52c-4ae2-8999-0012efb2ef88',
   externalId: '62302059-cad1-40d1-9762-daede5cace7e',
   referenceNumber: '000MC001',
-  createdAt: '2019-10-23T11:56:18.85',
-  issuedOn: '2019-10-23',
-  serviceDate: '2019-10-28',
-  responseDeadline: '2019-11-11',
+  createdAt: moment().subtract(2, 'days'),
+  issuedOn: moment().subtract(2, 'days'),
+  serviceDate: moment().subtract(2, 'days'),
+  responseDeadline: moment().add(13, 'days'),
   moreTimeRequested: false,
   submitterEmail: 'sudheer.chakka@hmcts.net',
-  respondedAt: '2019-10-23T10:59:37.203',
+  respondedAt: moment(),
   response: {
     responseType: 'FULL_DEFENCE',
     freeMediation: 'yes',
@@ -118,7 +118,7 @@ export const sampleClaimData = {
     'admissions',
     'directionsQuestionnaire'
   ],
-  claimantRespondedAt: '2019-10-23T11:00:46.521',
+  claimantRespondedAt: moment(),
   claimantResponse: {
     type: 'REJECTION',
     freeMediation: 'yes',
@@ -191,7 +191,7 @@ export const sampleClaimData = {
     claimIssueReceiptUpload: 'yes'
   },
   ccdCaseId: 1571828179733564,
-  intentionToProceedDeadline: '2019-11-25',
+  intentionToProceedDeadline: moment().add(15, 'days'),
   totalInterestTillDateOfIssue: 0,
   totalClaimAmount: 75,
   totalInterest: 0,
