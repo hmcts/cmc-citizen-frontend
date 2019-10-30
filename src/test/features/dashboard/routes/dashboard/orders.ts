@@ -56,6 +56,7 @@ const ordersClaim = {
     paperDetermination: 'no',
     preferredDQCourt: 'Central London County Court',
     hearingCourt: 'CLERKENWELL',
+    hearingCourtName: 'Clerkenwell and Shoreditch County Court and Family Court',
     hearingCourtAddress: {
       line1: 'The Gee Street Courthouse',
       line2: '29-41 Gee Street',
