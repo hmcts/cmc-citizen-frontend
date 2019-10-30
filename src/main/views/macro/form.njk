@@ -13,7 +13,7 @@
     <input id="{{ name }}" name="{{ name }}" type="{{ type }}" autocomplete="{{ autocomplete | default('on') }}"
            class="form-control {{ inputClass }} {% if error %}form-control-error{% endif %}"
            {% if maxLength %}maxlength="{{ maxLength }}"{% endif %}
-           value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
+             value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
   </div>
 {% endmacro %}
 
@@ -382,6 +382,7 @@
           </div>
         </details>
         {% endif %}
+      </details>
     </fieldset>
   </div>
 {% endmacro %}
