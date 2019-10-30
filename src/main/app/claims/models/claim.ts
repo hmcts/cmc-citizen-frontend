@@ -29,7 +29,6 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
-import { ClaimState } from 'claims/models/claimState'
 
 interface State {
   status: ClaimStatus
@@ -39,7 +38,7 @@ export class Claim {
   id: number
   claimantId: string
   externalId: string
-  state: ClaimState
+  state: string
   defendantId: string
   claimNumber: string
   responseDeadline: Moment
@@ -509,11 +508,14 @@ export class Claim {
       const now = MomentFactory.currentDate()
       if (offer && offer.paymentIntention) {
         switch (offer.paymentIntention.paymentOption) {
-          case PaymentOption.BY_SPECIFIED_DATE : const paymentDate = offer.paymentIntention.paymentDate
+          case PaymentOption.BY_SPECIFIED_DATE :
+            const paymentDate = offer.paymentIntention.paymentDate
             return (paymentDate.isAfter(now) || paymentDate.isSame(now))
-          case PaymentOption.INSTALMENTS : const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
+          case PaymentOption.INSTALMENTS :
+            const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
             return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
-          case PaymentOption.IMMEDIATELY : return true
+          case PaymentOption.IMMEDIATELY :
+            return true
         }
       }
     }
