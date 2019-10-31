@@ -42,6 +42,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const testData = await EndToEndTestData.prepareData(I, PartyType.COMPANY, PartyType.INDIVIDUAL)
     testData.defenceType = DefenceType.PART_ADMISSION_NONE_PAID
     testData.paymentOption = PaymentOption.IMMEDIATELY
+    testData.defendant.phone = undefined
     const claimantResponseTestData: ClaimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
     helperSteps.finishResponse(testData, false)

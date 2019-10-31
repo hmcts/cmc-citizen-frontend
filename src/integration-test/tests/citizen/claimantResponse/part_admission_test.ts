@@ -72,6 +72,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     testData.defenceType = DefenceType.PART_ADMISSION
     testData.claimantPaymentOption = PaymentOption.IMMEDIATELY
     testData.defendantClaimsToHavePaidInFull = false
+    testData.defendant.phone = undefined
     const claimantResponseTestData = new ClaimantResponseTestData()
     claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage = true
     // as defendant
