@@ -34,10 +34,10 @@ export const postcodeLookupQuery: PostcodeLookupQuery = {
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
 
 export function createClaimData (claimantType: PartyType, defendantType: PartyType, hasEmailAddress: boolean = true,
-                                 interestType: InterestType = InterestType.STANDARD): ClaimData {
+                                 hasPhoneNumber: boolean = true, interestType: InterestType = InterestType.STANDARD): ClaimData {
   let claimData = {
     claimants: [createClaimant(claimantType)],
-    defendants: [createDefendant(defendantType, hasEmailAddress)],
+    defendants: [createDefendant(defendantType, hasEmailAddress, hasPhoneNumber)],
     payment: {
       amount: claimFee * 100,
       reference: 'RC-1524-6488-1670-7520',
@@ -130,7 +130,7 @@ export function createClaimant (type: PartyType): Party {
   return claimant
 }
 
-export function createDefendant (type: PartyType, hasEmailAddress: boolean = false): Party {
+export function createDefendant (type: PartyType, hasEmailAddress: boolean = false, hasPhoneNumber: boolean = false): Party {
   const defendant: Party = {
     type: type,
     name: undefined,
@@ -140,7 +140,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
       city: 'Manchester',
       postcode: 'M13 9PL'
     },
-    phone: '07700000002',
+    phone: hasPhoneNumber ? '07700000002' : undefined,
     email: hasEmailAddress ? 'civilmoneyclaims+automatedtest-defendant@gmail.com' : undefined
   }
 
@@ -174,7 +174,7 @@ export function createResponseData (defendantType: PartyType): ResponseData {
   return {
     responseType: 'FULL_DEFENCE',
     defenceType: 'DISPUTE',
-    defendant: createDefendant(defendantType, false),
+    defendant: createDefendant(defendantType, false, true),
     moreTimeNeeded: 'no',
     freeMediation: 'no',
     defence: 'I fully dispute this claim'

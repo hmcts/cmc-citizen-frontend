@@ -104,7 +104,7 @@ export class ClaimSteps {
   }
 
   enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): void {
-    const defendant = createDefendant(defendantType, enterDefendantEmail)
+    const defendant = createDefendant(defendantType, enterDefendantEmail, true)
 
     let manualEntryLink = true
     switch (defendantType) {
