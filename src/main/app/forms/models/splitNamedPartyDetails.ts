@@ -13,18 +13,20 @@ export class ValidationErrors {
 
 export class SplitNamedPartyDetails extends PartyDetails {
 
-  @ValidateIf(o => o.title !== undefined, { groups: ['defendant'] })
-  @MaxLength(35, { message: ValidationErrors.errorTooLong('Title'), groups: ['defendant'] })
+  @ValidateIf(o => o.title !== undefined, { groups: ['defendant', 'response'] })
+  @MaxLength(35, { message: ValidationErrors.errorTooLong('Title'), groups: ['defendant', 'response'] })
   title?: string
 
-  @IsDefined({ message: ValidationErrors.FIRSTNAME_REQUIRED, groups: ['defendant'] })
-  @IsNotBlank({ message: ValidationErrors.FIRSTNAME_REQUIRED, groups: ['defendant'] })
-  @MaxLength(255, { message: ValidationErrors.errorTooLong('First name'), groups: ['defendant'] })
+  @ValidateIf(o => o.firstName !== undefined, { groups: ['response'] })
+  @IsDefined({ message: ValidationErrors.FIRSTNAME_REQUIRED, groups: ['defendant', 'response'] })
+  @IsNotBlank({ message: ValidationErrors.FIRSTNAME_REQUIRED, groups: ['defendant', 'response'] })
+  @MaxLength(255, { message: ValidationErrors.errorTooLong('First name'), groups: ['defendant', 'response'] })
   firstName?: string
 
-  @IsDefined({ message: ValidationErrors.LASTNAME_REQUIRED, groups: ['defendant'] })
-  @IsNotBlank({ message: ValidationErrors.LASTNAME_REQUIRED, groups: ['defendant'] })
-  @MaxLength(255, { message: ValidationErrors.errorTooLong('Last name'), groups: ['defendant'] })
+  @ValidateIf(o => o.lastName !== undefined, { groups: ['response'] })
+  @IsDefined({ message: ValidationErrors.LASTNAME_REQUIRED, groups: ['defendant', 'response'] })
+  @IsNotBlank({ message: ValidationErrors.LASTNAME_REQUIRED, groups: ['defendant', 'response'] })
+  @MaxLength(255, { message: ValidationErrors.errorTooLong('Last name'), groups: ['defendant', 'response'] })
   lastName?: string
 
   constructor () {
