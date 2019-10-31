@@ -31,6 +31,7 @@ export class EndToEndTestData {
     claimantPartyType: PartyType
   ) {
     const claimData: ClaimData = createClaimData(claimantPartyType, defendantPartyType)
+    claimData.defendants[0].phone = undefined
     return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
   }
 
@@ -40,6 +41,7 @@ export class EndToEndTestData {
     claimantPartyType: PartyType
   ) {
     const claimData: ClaimData = createClaimData(claimantPartyType, defendantPartyType, false)
+    claimData.defendants[0].phone = undefined
     return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
   }
 
