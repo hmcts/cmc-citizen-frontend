@@ -24,7 +24,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
-    testData.defendant.phone = undefined
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
@@ -41,7 +40,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
-    testData.defendant.phone = undefined
     const claimantResponseTestData = new ClaimantResponseTestData()
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
@@ -117,7 +115,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
     testData.claimantPaymentOption = PaymentOption.INSTALMENTS
-    testData.defendant.phone = undefined
     const unreasonableClaimantResponseTestDate = new UnreasonableClaimantResponseTestData()
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
@@ -136,7 +133,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and no previous payments made @admissions @citizen', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
-    testData.defendant.phone = undefined
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
