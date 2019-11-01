@@ -6,13 +6,14 @@ export class Individual extends Party {
   dateOfBirth: string
 
   constructor (
-              name?: string,
-              address?: Address,
-              correspondenceAddress?: Address,
-              mobilePhone?: string,
-              email?: string,
-              dateOfBirth?: string) {
-    super(PartyType.INDIVIDUAL.value, name, address, correspondenceAddress, mobilePhone, email)
+    name?: string,
+    address?: Address,
+    correspondenceAddress?: Address,
+    phone?: string,
+    email?: string,
+    dateOfBirth?: string
+  ) {
+    super(PartyType.INDIVIDUAL.value, name, address, correspondenceAddress, phone, email)
     this.dateOfBirth = dateOfBirth
   }
 
@@ -21,7 +22,16 @@ export class Individual extends Party {
       Object.assign(this, new Party().deserialize(input))
       this.dateOfBirth = input.dateOfBirth
       this.type = PartyType.INDIVIDUAL.value
+      if (input.title) {
+        this.title = input.title
+      }
+      if (input.firstName) {
+        this.firstName = input.firstName
+      }
+      if (input.lastName) {
+        this.lastName = input.lastName
+      }
+      return this
     }
-    return this
   }
 }

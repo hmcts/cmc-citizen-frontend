@@ -102,7 +102,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = undefined
       soleTraderDetails.lastName = 'some name'
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      let errors: ValidationError[] = validator.validateSync(soleTraderDetails,{ groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -130,7 +130,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.name = undefined
       soleTraderDetails.firstName = 'some name'
       soleTraderDetails.lastName = undefined
-      let errors: ValidationError[] = validator.validateSync(soleTraderDetails)
+      let errors: ValidationError[] = validator.validateSync(soleTraderDetails, { groups: ['defendant'] })
       expectValidationErrorNotPresent(errors, PartyDetailsValidationErrors.NAME_REQUIRED)
       expectValidationErrorNotPresent(errors, SplitNamedPartyDetailsValidationErrors.FIRSTNAME_REQUIRED)
       expectValidationError(errors, SplitNamedPartyDetailsValidationErrors.LASTNAME_REQUIRED)
@@ -319,7 +319,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.businessName = 'business'
       soleTraderDetails.hasCorrespondenceAddress = true
       soleTraderDetails.correspondenceAddress = validAddress
-      expect(soleTraderDetails.isCompleted()).to.equal(false)
+      expect(soleTraderDetails.isCompleted('defendant')).to.equal(false)
     })
 
     it('should return false when has name is undefined and last name is undefined', () => {
@@ -330,7 +330,7 @@ describe('SoleTraderDetails', () => {
       soleTraderDetails.businessName = 'business'
       soleTraderDetails.hasCorrespondenceAddress = true
       soleTraderDetails.correspondenceAddress = validAddress
-      expect(soleTraderDetails.isCompleted()).to.equal(false)
+      expect(soleTraderDetails.isCompleted('defendant')).to.equal(false)
     })
 
     it('should return false when has name is undefined and first and last name are undefined', () => {
