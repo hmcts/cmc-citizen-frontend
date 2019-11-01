@@ -73,14 +73,12 @@ async function successHandler (req, res, next) {
       features = 'admissions'
     }
 
-    if (draft.document.amount.totalAmount() <= 300 && FeatureToggles.isEnabled('directionsQuestionnaire')) {
-      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
+    const pilotAmount = 300
+    if (draft.document.amount.totalAmount() <= pilotAmount) {
+      if (FeatureToggles.isEnabled('directionsQuestionnaire') && await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
         features += features === undefined ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
       }
-    }
 
-    const totalAmount = await draftClaimAmountWithInterest(draft.document)
-    if (totalAmount <= 300) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
         features += features === undefined ? 'mediationPilot' : ', mediationPilot'
       }
