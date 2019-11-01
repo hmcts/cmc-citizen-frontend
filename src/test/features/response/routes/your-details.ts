@@ -260,7 +260,7 @@ describe('Defendant user details: your name page', () => {
             contactPerson: 'Joe Blogs'
           })
           .expect(res => expect(res).to.be.redirect
-            .toLocation(ResponsePaths.defendantMobilePage
+            .toLocation(ResponsePaths.defendantPhonePage
               .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
       })
     })
