@@ -28,7 +28,7 @@
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === YesNoOption.YES %}
             {{ t('You’ve agreed to mediation') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION and claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
-            {{ t('You didn’t proceeded with the claim') }}
+            {{ t('You didn’t proceed with the claim') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
             {{ t('You’ve accepted their response') }}
           {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION %}
