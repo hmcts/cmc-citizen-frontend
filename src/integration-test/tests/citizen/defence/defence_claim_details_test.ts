@@ -29,7 +29,7 @@ Scenario('I can view the claim details from a link on the dashboard for interest
   const claimantEmail: string = await I.createCitizenUser()
   const defendantEmail: string = await I.createCitizenUser()
 
-  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, true, InterestType.BREAKDOWN)
+  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, InterestType.BREAKDOWN)
   const claimRef: string = await I.createClaim(claimData, claimantEmail)
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)

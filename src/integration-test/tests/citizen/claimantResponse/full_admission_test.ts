@@ -148,7 +148,6 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   Scenario('I can as a claimant accept the defendants full admission by set date with CCJ and a previous payment made @admissions @citizen', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
-    testData.defendant.phone = undefined
     // as defendant
     helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')

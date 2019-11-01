@@ -17,7 +17,7 @@ Scenario('Request judgment as an individual with no defendant email and pay by i
     const claimantType: PartyType = PartyType.INDIVIDUAL
     const defendantType: PartyType = PartyType.INDIVIDUAL
     const hasDefendantEmail = false
-    const claimData = createClaimData(claimantType, defendantType, hasDefendantEmail, true, InterestType.NO_INTEREST)
+    const claimData = createClaimData(claimantType, defendantType, hasDefendantEmail, InterestType.NO_INTEREST)
     const claimRef: string = await I.createClaim(claimData, email)
 
     userSteps.login(email)
@@ -32,7 +32,7 @@ Scenario('Request judgment as a Company, pay by set date @nightly', { retries: 3
   const claimantType: PartyType = PartyType.COMPANY
   const defendantType: PartyType = PartyType.COMPANY
 
-  const claimData = createClaimData(claimantType, defendantType, true, true, InterestType.NO_INTEREST)
+  const claimData = createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST)
   const claimRef: string = await I.createClaim(claimData, email)
 
   userSteps.login(email)
@@ -47,7 +47,7 @@ Scenario('Request judgment as a sole trader, pay immediately @nightly', { retrie
   const claimantType: PartyType = PartyType.SOLE_TRADER
   const defendantType: PartyType = PartyType.ORGANISATION
 
-  const claimData = createClaimData(claimantType, defendantType, true, true, InterestType.NO_INTEREST)
+  const claimData = createClaimData(claimantType, defendantType, true, InterestType.NO_INTEREST)
   const claimRef: string = await I.createClaim(claimData, email)
 
   userSteps.login(email)

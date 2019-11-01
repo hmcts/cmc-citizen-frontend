@@ -66,7 +66,7 @@ export class ClaimantCheckAndSendPage {
   }
 
   verifyDefendantCheckAndSendAnswers (defendantType: PartyType, enterDefendantEmail: boolean = true): void {
-    const defendant: Party = createDefendant(defendantType, enterDefendantEmail, true)
+    const defendant: Party = createDefendant(defendantType, enterDefendantEmail)
 
     I.see(defendant.address.line1)
     I.see(defendant.address.line2)

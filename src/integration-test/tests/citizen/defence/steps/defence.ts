@@ -33,8 +33,8 @@ import { AlreadyPaidPage } from 'integration-test/tests/citizen/defence/pages/st
 import { DefendantHaveYouPaidTheClaimantTheAmountYouAdmitYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-have-you-paid-the-claimant-the-amount-you-admit-you-owe'
 import { DefendantHowMuchYouOwePage } from 'integration-test/tests/citizen/defence/pages/defendant-how-much-you-owe'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
+import { DefendantPhonePage } from 'integration-test/tests/citizen/defence/pages/defendant-phone'
 import I = CodeceptJS.I
-import { DefendantPhonePage } from '../pages/defendant-phone'
 
 const I: I = actor()
 const defendantStartPage: DefendantStartPage = new DefendantStartPage()
@@ -107,7 +107,7 @@ export class DefenceSteps {
     loginPage.login(defendantEmail, DEFAULT_PASSWORD)
   }
 
-  confirmYourDetails (defendant: Party): void {
+  confirmYourDetails (defendant: Party, expectPhonePage: boolean = false): void {
 
     defendantSteps.selectTaskConfirmYourDetails()
     defendantNameAndAddressPage.enterAddress(updatedAddress)
@@ -116,7 +116,7 @@ export class DefenceSteps {
       defendantDobPage.enterDOB(defendant.dateOfBirth)
     }
 
-    if (defendant.phone !== undefined) {
+    if (expectPhonePage) {
       defendantPhonePage.enterPhone(defendant.phone)
     }
   }
@@ -292,12 +292,13 @@ export class DefenceSteps {
     defendantType: PartyType,
     defenceType: DefenceType,
     isRequestMoreTimeToRespond: boolean = true,
-    isClaimAlreadyPaid: boolean = true
+    isClaimAlreadyPaid: boolean = true,
+    expectPhonePage: boolean = false
   ): void {
     I.see('Confirm your details')
     I.see('Decide if you need more time to respond')
     I.see('Choose a response')
-    this.confirmYourDetails(defendantParty)
+    this.confirmYourDetails(defendantParty, expectPhonePage)
     I.see('COMPLETE')
 
     if (isRequestMoreTimeToRespond) {
