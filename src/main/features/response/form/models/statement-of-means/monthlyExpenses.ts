@@ -129,7 +129,6 @@ export class MonthlyExpenses {
     if (!value) {
       return value
     }
-
     return new MonthlyExpenses(
       value.mortgageDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MORTGAGE.displayValue, value.mortgage),
       value.rentDeclared, ExpenseSource.fromObject(MonthlyExpenseType.RENT.displayValue, value.rent),

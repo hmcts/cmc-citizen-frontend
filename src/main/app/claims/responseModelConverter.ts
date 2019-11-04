@@ -361,8 +361,8 @@ export class ResponseModelConverter {
     if (defendant.email) {
       party.email = defendant.email.address
     }
-    if (defendant.mobilePhone) {
-      party.mobilePhone = defendant.mobilePhone.number
+    if (defendant.phone) {
+      party.phone = defendant.phone.number
     }
     return party
   }
