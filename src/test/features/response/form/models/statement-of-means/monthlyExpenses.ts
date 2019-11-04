@@ -7,7 +7,7 @@ import { ExpenseSource, ValidationErrors as MonthlyExpensesSourceValidationError
 import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
 import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
 
-function getSampleMonthtlyExpensesObject (options?: object) {
+function getSampleMonthlyExpensesObject (options?: object) {
   const DEFAULT_SAMPLE_VALID_MONTHLY_EXPENSES = {
     mortgage: {
       amount: 100,
@@ -285,8 +285,8 @@ describe('MonthlyExpenses', () => {
     })
 
     it('should return a new instance initialised with set fields from object parameter provided', () => {
-      const sampleMonthlyExpensesData = getSampleMonthtlyExpensesObject().forFromObjectMethod()
-      const expectedMonthlyExpensesObject = getSampleMonthtlyExpensesObject().forConstructor()
+      const sampleMonthlyExpensesData = getSampleMonthlyExpensesObject().forFromObjectMethod()
+      const expectedMonthlyExpensesObject = getSampleMonthlyExpensesObject().forConstructor()
 
       expect(MonthlyExpenses.fromObject(sampleMonthlyExpensesData)).to.deep.equal(expectedMonthlyExpensesObject)
     })
@@ -298,7 +298,7 @@ describe('MonthlyExpenses', () => {
     })
 
     it('should return instance initialised with set fields from object provided', () => {
-      expect(new MonthlyExpenses().deserialize(getSampleMonthtlyExpensesObject().forDeserialize())).to.deep.equal(getSampleMonthtlyExpensesObject().forConstructor())
+      expect(new MonthlyExpenses().deserialize(getSampleMonthlyExpensesObject().forDeserialize())).to.deep.equal(getSampleMonthlyExpensesObject().forConstructor())
     })
   })
 
@@ -343,7 +343,7 @@ describe('MonthlyExpenses', () => {
 
       describe('when successful', () => {
         it('should return no error when `hasSource` is true and `source` is invalid', () => {
-          const sampleMonthlyExpensesData = getSampleMonthtlyExpensesObject().forFromObjectMethod()
+          const sampleMonthlyExpensesData = getSampleMonthlyExpensesObject().forFromObjectMethod()
 
           const errors = validator.validateSync(sampleMonthlyExpensesData)
           expect(errors.length).to.equal(0)
