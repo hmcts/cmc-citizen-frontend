@@ -9,7 +9,7 @@ describe('YourDetails', () => {
           type: 'individual',
           name: undefined,
           email: undefined,
-          mobilePhone: undefined
+          phone: undefined
         })
         expect(theirDetails.isBusiness()).to.equal(false)
       })
@@ -18,7 +18,7 @@ describe('YourDetails', () => {
           type: 'company',
           name: undefined,
           email: undefined,
-          mobilePhone: undefined
+          phone: undefined
         })
         expect(theirDetails.isBusiness()).to.equal(true)
       })
@@ -29,7 +29,7 @@ describe('YourDetails', () => {
           type: 'individual',
           name: 'Mr. David Welcome',
           email: undefined,
-          mobilePhone: undefined,
+          phone: undefined,
           title: 'Mr.',
           firstName: 'David',
           lastName: 'Welcome'
@@ -43,7 +43,7 @@ describe('YourDetails', () => {
             type: 'individual',
             name: 'Mr. David Welcome',
             email: undefined,
-            mobilePhone: undefined,
+            phone: undefined,
             title: 'Mr.',
             firstName: 'David',
             lastName: 'Welcome'
@@ -58,7 +58,7 @@ describe('YourDetails', () => {
             type: 'individual',
             name: 'Mr. David Welcome',
             email: undefined,
-            mobilePhone: undefined,
+            phone: undefined,
             title: 'Mr.',
             firstName: 'David',
             lastName: 'Welcome'
@@ -73,7 +73,7 @@ describe('YourDetails', () => {
             type: 'individual',
             name: 'Mr. David Welcome',
             email: undefined,
-            mobilePhone: undefined,
+            phone: undefined,
             title: 'Mr.',
             firstName: 'David',
             lastName: 'Welcome'
@@ -88,7 +88,7 @@ describe('YourDetails', () => {
             type: 'individual',
             name: 'Mr. David Welcome',
             email: 'david@gmail.com',
-            mobilePhone: undefined,
+            phone: undefined,
             title: 'Mr.',
             firstName: 'David',
             lastName: 'Welcome'
@@ -98,17 +98,17 @@ describe('YourDetails', () => {
       })
 
       describe('Check Properties', () => {
-        it('should have mobilePhone when input have mobilePhone ', () => {
+        it('should have phone when input have phone ', () => {
           const theirDetails = new Party().deserialize({
             type: 'individual',
             name: 'Mr. David Welcome',
             email: undefined,
-            mobilePhone: '8768768768',
+            phone: '8768768768',
             title: 'Mr.',
             firstName: 'David',
             lastName: 'Welcome'
           })
-          expect(theirDetails.mobilePhone).to.equal('8768768768')
+          expect(theirDetails.phone).to.equal('8768768768')
         })
       })
     })

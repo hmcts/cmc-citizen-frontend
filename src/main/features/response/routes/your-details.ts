@@ -21,7 +21,7 @@ import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 
 function renderView (form: Form<PartyDetails>, res: express.Response) {
   const claim: Claim = res.locals.claim
@@ -76,8 +76,8 @@ export default express.Router()
         draft.document.defendantDetails.partyDetails = form.model
 
         if (draft.document.defendantDetails.partyDetails.phone !== undefined) {
-          draft.document.defendantDetails.mobilePhone =
-            new MobilePhone(draft.document.defendantDetails.partyDetails.phone)
+          draft.document.defendantDetails.phone =
+            new Phone(draft.document.defendantDetails.partyDetails.phone)
         }
         // Cache date of birth so we don't overwrite it
         if (oldPartyDetails && oldPartyDetails.type === PartyType.INDIVIDUAL.value && oldPartyDetails['dateOfBirth']) {
@@ -107,7 +107,7 @@ export default express.Router()
           case PartyType.COMPANY.value:
           case PartyType.ORGANISATION.value:
             if (claim.claimData.defendant.phone === undefined) {
-              res.redirect(Paths.defendantMobilePage.evaluateUri({ externalId: claim.externalId }))
+              res.redirect(Paths.defendantPhonePage.evaluateUri({ externalId: claim.externalId }))
             } else {
               res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
             }

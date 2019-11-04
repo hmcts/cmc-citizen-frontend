@@ -6,29 +6,29 @@ import { Validator } from '@hmcts/class-validator'
 
 import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 
-import { MobilePhone, ValidationErrors } from 'forms/models/mobilePhone'
+import { Phone, ValidationErrors } from 'forms/models/phone'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
-describe('MobilePhone', () => {
+describe('Phone', () => {
 
   describe('constructor', () => {
     it('should have the primitive fields set to undefined', () => {
-      let mobilePhone = new MobilePhone()
-      expect(mobilePhone.number).to.be.undefined
+      let phone = new Phone()
+      expect(phone.number).to.be.undefined
     })
   })
 
   describe('deserialize', () => {
-    it('should return a MobilePhone instance initialised with defaults given undefined', () => {
-      expect(new MobilePhone().deserialize(undefined)).to.eql(new MobilePhone())
+    it('should return a Phone instance initialised with defaults given undefined', () => {
+      expect(new Phone().deserialize(undefined)).to.eql(new Phone())
     })
 
-    it('should return a MobilePhone instance initialised with defaults when given null', () => {
-      expect(new MobilePhone().deserialize(null)).to.eql(new MobilePhone())
+    it('should return a Phone instance initialised with defaults when given null', () => {
+      expect(new Phone().deserialize(null)).to.eql(new Phone())
     })
 
-    it('should return a MobilePhone instance with set fields from given object', () => {
-      let result = new MobilePhone().deserialize({
+    it('should return a Phone instance with set fields from given object', () => {
+      let result = new Phone().deserialize({
         number: '+447123456789'
       })
       expect(result.number).to.equal('+447123456789')
@@ -38,28 +38,28 @@ describe('MobilePhone', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    it('should reject empty mobile number', () => {
-      const errors = validator.validateSync(new MobilePhone())
+    it('should reject empty phone number', () => {
+      const errors = validator.validateSync(new Phone())
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, ValidationErrors.NUMBER_REQUIRED)
     })
 
     it('should reject max allowed characters in phone number', () => {
-      const errors = validator.validateSync(new MobilePhone(generateString(31)))
+      const errors = validator.validateSync(new Phone(generateString(31)))
 
       expect(errors.length).to.equal(1)
       expectValidationError(errors, CommonValidationErrors.TEXT_TOO_LONG)
     })
 
-    it('should accepts valid mobile number', () => {
-      const errors = validator.validateSync(new MobilePhone('07555055505'))
+    it('should accept valid mobile phone number', () => {
+      const errors = validator.validateSync(new Phone('07555055505'))
 
       expect(errors.length).to.equal(0)
     })
 
-    it('should accepts valid land line number', () => {
-      const errors = validator.validateSync(new MobilePhone('0203 010 3512'))
+    it('should accept valid land line number', () => {
+      const errors = validator.validateSync(new Phone('0203 010 3512'))
 
       expect(errors.length).to.equal(0)
     })
