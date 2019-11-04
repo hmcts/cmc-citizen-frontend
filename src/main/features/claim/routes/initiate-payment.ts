@@ -37,7 +37,7 @@ export default express.Router()
         res.redirect(nextUrl)
       } else {
         logger.error(`claim with external id ${externalId} not found, redirecting user to check and send`)
-        next(err)
+        res.redirect(Paths.checkAndSendPage.uri)
       }
     }
   })
