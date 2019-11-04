@@ -90,10 +90,11 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       mediationOutcome: MediationOutcome.FAILED
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-      'You’ve rejected the defendant’s response.',
-      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-      'Find out how mediation works'
+    claimantAssertions: ['Wait for the court to review the case',
+      'You’ve rejected John Doe’s response and said you want to take the case to court.',
+      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.',
+      'Download their response',
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
       'John Smith has rejected your defence.',

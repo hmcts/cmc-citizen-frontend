@@ -67,11 +67,11 @@ const testData = [
       ...claimantRejectAlreadyPaidWithMediation,
       mediationOutcome: MediationOutcome.FAILED
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
+    claimantAssertions: ['Wait for the court to review the case'],
     defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
   },
   {
-    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation failed',
+    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - mediation success',
     claim: statesPaidClaim,
     claimOverride: {
       response: {

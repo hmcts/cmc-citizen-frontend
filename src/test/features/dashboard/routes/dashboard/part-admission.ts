@@ -99,7 +99,7 @@ const mediationDQEnabledClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate(),
       mediationOutcome: MediationOutcome.FAILED
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment'],
+    claimantAssertions: ['Wait for the court to review the case'],
     defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
   },
   {
@@ -118,7 +118,6 @@ const mediationDQEnabledClaimDetails = [
         type: 'REJECTION'
       },
       claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline,
       mediationOutcome: MediationOutcome.SUCCEEDED
     },
     claimantAssertions: ['You both agreed a settlement through mediation'],

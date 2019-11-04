@@ -10,10 +10,12 @@
 {% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
-  {% if  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
-    {{ t('You both agreed a settlement through mediation') }}
-  {% elseif claim.directionsQuestionnaireDeadline %}
+  {% if claim.directionsQuestionnaireDeadline %}
     {{ t('You’ve rejected the defendant’s admission.') }}
+  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+    {{ t('Wait for the court to review the case') }}
+  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+    {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you to try to arrange a mediation appointment.') }}
   {% else %}
@@ -34,7 +36,9 @@
 {% macro statesPaidRejectedMediationYESClaimantClaimDetails(claim) %}
   {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ mediationSuccessForClaimantClaimDetails(claim) }}
-
+  {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+    {{ statesPaidRejectedMediationNOClaimantClaimDetails(claim) }}
+    <p>{{ downloadTheirResponseLink(claim) }}</p>
   {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     <div class="status-block">
       <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
