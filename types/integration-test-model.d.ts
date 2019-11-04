@@ -32,7 +32,7 @@ declare type Party = {
   contactPerson?: string
   address: Address
   correspondenceAddress?: Address
-  mobilePhone?: string
+  phone?: string
   email?: string
   dateOfBirth?: string
 }

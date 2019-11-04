@@ -59,7 +59,7 @@ function prepareResponseDraft (draftTemplate: any, partyDetails: object): Respon
 function prepareResponseData (template, party: object): Response {
   return Response.deserialize({
     ...template,
-    defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' },
+    defendant: { ...party, email: 'user@example.com', phone: '0700000000' },
     timeline: { rows: [], comment: 'I do not agree' }
   })
 }
@@ -67,7 +67,7 @@ function prepareResponseData (template, party: object): Response {
 function preparePartialResponseData (template, party: object): Response {
   return Response.deserialize({
     ...template,
-    defendant: { ...party, email: 'user@example.com', mobilePhone: '0700000000' },
+    defendant: { ...party, email: 'user@example.com', phone: '0700000000' },
     timeline: template.timeline
   })
 }
@@ -915,6 +915,15 @@ describe('ResponseModelConverter', () => {
           const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
 
           expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, new MediationDraft().deserialize(sampleLegacyMediationDraftObj), directionsQuestionnaireDraft, claim)))
+            .to.deep.equal(convertObjectLiteralToJSON(responseData))
+        })
+
+        it('should convert partial admission already paid', () => {
+          const responseDraft = prepareResponseDraft(partialAdmissionAlreadyPaidDraft, individualDetails)
+          const responseData = preparePartialResponseData(partialAdmissionAlreadyPaidData, individual)
+          const claim: Claim = new Claim().deserialize(claimStoreMock.sampleClaimObj)
+
+          expect(convertObjectLiteralToJSON(ResponseModelConverter.convert(responseDraft, undefined, undefined, claim)))
             .to.deep.equal(convertObjectLiteralToJSON(responseData))
         })
       })

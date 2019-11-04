@@ -28,11 +28,11 @@ variable "http_timeout" {
 }
 
 variable "payments_api_url" {
-  default = "http://payment-api-saat.service.core-compute-saat.internal"
+  default = "http://payment-api-aat.service.core-compute-aat.internal"
 }
 
 variable "fees_api_url" {
-  default = "http://fees-register-api-saat.service.core-compute-saat.internal"
+  default = "http://fees-register-api-aat.service.core-compute-aat.internal"
 }
 
 variable "idam_api_url" {
