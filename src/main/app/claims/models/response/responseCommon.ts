@@ -19,7 +19,7 @@ export interface ResponseCommon {
   mediationPhoneNumber?: string
   mediationContactPerson?: string
   statementOfTruth?: StatementOfTruth
-  paperResponse?: boolean
+  paperResponse?: YesNoOption
 }
 
 export namespace ResponseCommon {

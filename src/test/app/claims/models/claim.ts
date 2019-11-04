@@ -41,6 +41,7 @@ import { User } from 'idam/user'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -169,17 +170,17 @@ describe('Claim', () => {
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
     })
 
-    it('should return PAPER_RESPONSE when a paper response received', () => {
+    it('should return DEFENDANT_PAPER_RESPONSE when a paper response received', () => {
       claim.response = {
         responseType: ResponseType.FULL_DEFENCE,
         defenceType: DefenceType.DISPUTE,
         defence: 'defence reasoning',
         freeMediation: FreeMediationOption.NO,
         defendant: new Individual().deserialize(individual),
-        paperResponse : true
+        paperResponse : YesNoOption.YES
       }
 
-      expect(claim.status).to.be.equal(ClaimStatus.PAPER_RESPONSE)
+      expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {

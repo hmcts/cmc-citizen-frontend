@@ -148,7 +148,7 @@
       {% if not claim.isFullAdmissionPastPaymentDate %}
         {{ ccjEligibleForClaimantClaimDetails(claim, csrf) }}
       {% endif %}
-    {% elif state.status === ClaimStatus.PAPER_RESPONSE %}
+    {% elif state.status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
       {{ paperResponseForClaimantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ_AFTER_FULL_ADMIT_PAY_IMMEDIATELY_PAST_DEADLINE %}
       {{ claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) }}
@@ -260,7 +260,7 @@
       {{ moreTimeRequestedForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.ELIGIBLE_FOR_CCJ %}
       {{ ccjEligibleForDefendantClaimDetails(claim, csrf) }}
-    {% elif state.status === ClaimStatus.PAPER_RESPONSE %}
+    {% elif state.status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
       {{ paperResponseForDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ %}
       {{ admissionByCCJDefendantClaimDetails(claim) }}

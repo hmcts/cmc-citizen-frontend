@@ -29,6 +29,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -159,8 +160,8 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
-    } else if (this.response && this.response.paperResponse) {
-      return ClaimStatus.PAPER_RESPONSE
+    } else if (this.response && this.response.paperResponse && this.response.paperResponse === YesNoOption.YES) {
+      return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {

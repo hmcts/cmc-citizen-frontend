@@ -119,7 +119,7 @@
     {{ ccjRequestedForClaimantDashboard(claim) }}
   {% elif status === ClaimStatus.REDETERMINATION_BY_JUDGE %}
     {{ redeterminationClaimantDashboard() }}
-  {% elif status === ClaimStatus.PAPER_RESPONSE %}
+  {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForClaimantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
@@ -219,7 +219,7 @@
     {{ redeterminationDefendantDashboard(claim) }}
   {% elif status === ClaimStatus.CCJ_REQUESTED %}
     {{ ccjRequestedForDefendantDashboard(claim) }}
-  {% elif status === ClaimStatus.PAPER_RESPONSE %}
+  {% elif status === ClaimStatus.DEFENDANT_PAPER_RESPONSE %}
     {{ paperResponseForDefendantDashboard() }}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_ADMISSION_AND_REQUESTED_CCJ or
     status === ClaimStatus.CLAIMANT_ALTERNATIVE_PLAN_WITH_CCJ or
