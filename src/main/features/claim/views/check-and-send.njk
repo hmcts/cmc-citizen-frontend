@@ -25,7 +25,7 @@
           }
         )
     }}
-    {{ row('Contact number (optional)', draftClaim.claimant.mobilePhone.number, paths.claimantMobilePage.uri, bold = true) }}
+    {{ row('Contact number (optional)', draftClaim.claimant.phone.number, paths.claimantPhonePage.uri, bold = true) }}
     {{ tableEnd() }}
 
     {{ tableStart('theirDetails', 'Their details (defendant)') }}
@@ -43,8 +43,8 @@
 
     {{ row('Email', draftClaim.defendant.email.address, paths.defendantEmailPage.uri, bold = true) }}
 
-    {% if draftClaim.defendant.mobilePhone %}
-      {% set defendantPhone = draftClaim.defendant.mobilePhone.number %}
+    {% if draftClaim.defendant.phone %}
+      {% set defendantPhone = draftClaim.defendant.phone.number %}
     {% else %}
       {% set defendantPhone = '' %}
     {% endif %}

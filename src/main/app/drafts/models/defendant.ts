@@ -6,17 +6,17 @@ import { CompanyDetails } from 'forms/models/companyDetails'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 
 export class Defendant implements CompletableTask {
   partyDetails?: PartyDetails
   email?: Email
-  mobilePhone?: MobilePhone
+  phone?: Phone
 
-  constructor (partyDetails?: PartyDetails, email?: Email, mobilePhone?: MobilePhone) {
+  constructor (partyDetails?: PartyDetails, email?: Email, phone?: Phone) {
     this.partyDetails = partyDetails
     this.email = email
-    this.mobilePhone = mobilePhone
+    this.phone = phone
   }
 
   deserialize (input: any): Defendant {
@@ -24,8 +24,10 @@ export class Defendant implements CompletableTask {
       if (input.email) {
         this.email = new Email().deserialize(input.email)
       }
-      if (input.mobilePhone) {
-        this.mobilePhone = MobilePhone.fromObject(input.mobilePhone)
+      if (input.phone) {
+        this.phone = new Phone().deserialize(input.phone)
+      } else if (input.mobilePhone) {
+        this.phone = new Phone().deserialize(input.mobilePhone)
       }
       if (input.partyDetails && input.partyDetails.type) {
         switch (input.partyDetails.type) {

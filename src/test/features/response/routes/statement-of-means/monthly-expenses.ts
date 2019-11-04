@@ -215,7 +215,7 @@ describe('Defendant response: Statement of means: monthly-expenses', () => {
               schoolCosts: 1,
               foodAndHousekeeping: 1,
               tvAndBroadband: 1,
-              mobilePhone: 1,
+              phone: 1,
               maintenance: 1,
               rows: [{ amount: 10, description: 'bla bla bla' }]
             })

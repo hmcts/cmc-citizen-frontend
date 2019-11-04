@@ -5,7 +5,7 @@ export class ValidationErrors {
   static readonly NUMBER_REQUIRED: string = 'Enter UK phone number'
 }
 
-export class MobilePhone {
+export class Phone {
 
   @IsDefined({ message: ValidationErrors.NUMBER_REQUIRED })
   @MaxLength(30, { message: CommonValidationErrors.TEXT_TOO_LONG })
@@ -15,11 +15,11 @@ export class MobilePhone {
     this.number = num
   }
 
-  static fromObject (input?: any): MobilePhone {
-    return new MobilePhone(input.number)
+  static fromObject (input?: any): Phone {
+    return new Phone(input.number)
   }
 
-  deserialize (input?: any): MobilePhone {
+  deserialize (input?: any): Phone {
     if (input) {
       this.number = input.number
     }
