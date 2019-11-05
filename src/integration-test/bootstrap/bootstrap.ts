@@ -70,7 +70,7 @@ async function waitTillHealthy (appURL: string) {
   return Promise.reject(error)
 }
 
-async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: string, password: string): Promise<void> {
+async function createSmokeTestsUserIfDoesntExist (username: string, userRole: string, password: string): Promise<void> {
   let bearerToken
   try {
     bearerToken = await IdamClient.authenticateUser(username, password)
@@ -79,7 +79,7 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
       return
     }
 
-    await IdamClient.createUser(username, userGroup, password)
+    await IdamClient.createUser(username, userRole, password)
     bearerToken = await IdamClient.authenticateUser(username, password)
   }
 
