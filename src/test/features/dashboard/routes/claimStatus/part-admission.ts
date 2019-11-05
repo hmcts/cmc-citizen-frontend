@@ -41,7 +41,7 @@ import {
   settlementOfferAcceptInInstalment,
   settlementOfferByInstalments,
   settlementOfferBySetDate
-} from '../../../../data/entity/partAdmitData'
+} from 'test/data/entity/partAdmitData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
