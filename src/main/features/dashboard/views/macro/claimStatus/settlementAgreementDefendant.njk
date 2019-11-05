@@ -42,8 +42,7 @@
     {% endif %}
     <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms.') }}</p>
     <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
-    <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) +
-        ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
+    <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) + ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
     <p>{{ downloadResponseLink(claim) }}</p>
   </div>
 {% endmacro %}
