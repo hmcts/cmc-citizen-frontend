@@ -211,7 +211,10 @@ describe('Claim issue: check and send page', () => {
             claimant: {
               ...draftStoreServiceMock.sampleClaimDraftObj.claimant,
               partyDetails: claimantSoleTraderDetails
-            }, defendant: { ...draftStoreServiceMock.sampleClaimDraftObj.defendant, partyDetails: companyDetails }
+            }, defendant: {
+              ...draftStoreServiceMock.sampleClaimDraftObj.defendant,
+              partyDetails: companyDetails
+            }
           })
         feesServiceMock.resolveCalculateIssueFee()
 
