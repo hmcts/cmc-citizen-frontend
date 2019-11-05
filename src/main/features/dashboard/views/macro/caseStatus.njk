@@ -32,7 +32,10 @@
   claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard,
   claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard,
   mediationSuccessForClaimantDashboard,
-  mediationSuccessForDefendantDashboard %}
+  mediationSuccessForDefendantDashboard,
+  mediationFailedForClaimantDashboard,
+  mediationFailedForDefendantDashboard
+%}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
@@ -156,7 +159,7 @@
       {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
     {% else %}
       {% if(claim.mediationOutcome === MediationOutcome.FAILED) %}
-        {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
+        {{ mediationFailedForClaimantDashboard(claim) }}
       {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
          {{ mediationSuccessForClaimantDashboard(claim) }}
       {% else %}
@@ -194,7 +197,7 @@
       {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
     {% else %}
       {% if claim.mediationOutcome === MediationOutcome.FAILED %}
-        {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
+        {{ mediationFailedForClaimantDashboard(claim) }}
       {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
         {{ mediationSuccessForClaimantDashboard(claim) }}
       {% else %}
@@ -266,7 +269,7 @@
     {% else %}
       {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
         {% if claim.mediationOutcome === MediationOutcome.FAILED %}
-            {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
+            {{ mediationFailedForDefendantDashboard(claim) }}
         {% elif claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
           {{ mediationSuccessForDefendantDashboard(claim) }}
         {% else %}
@@ -308,7 +311,7 @@
       {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
     {% else %}
       {% if claim.mediationOutcome === MediationOutcome.FAILED %}
-        {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
+        {{ mediationFailedForDefendantDashboard(claim) }}
       {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
         {{ mediationSuccessForDefendantDashboard(claim) }}
       {% else %}

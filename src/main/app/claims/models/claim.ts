@@ -30,6 +30,7 @@ import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { YesNoOption } from 'models/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -71,6 +72,7 @@ export class Claim {
   reviewOrder: ReviewOrder
   intentionToProceedDeadline?: Moment
   mediationOutcome: string
+  pilotCourt: YesNoOption
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -354,6 +356,10 @@ export class Claim {
       this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
       if (input.mediationOutcome) {
         this.mediationOutcome = input.mediationOutcome
+      }
+
+      if (input.pilotCourt) {
+        this.pilotCourt = input.pilotCourt
       }
     }
 

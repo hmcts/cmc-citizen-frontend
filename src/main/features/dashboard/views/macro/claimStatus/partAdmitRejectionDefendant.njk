@@ -3,15 +3,23 @@
 {% from "./utilityMacros.njk" import downloadResponseLink %}
 
 {% from "./claimRejected.njk" import
-  mediationSuccessForDefendantClaimDetails
+  mediationSuccessForDefendantClaimDetails,
+  mediationFailedOnlineDQForDefendantClaimDetails,
+  mediationFailedOfflineDQForDefendantClaimDetails
 %}
 
 
 {% macro partAdmitRejectedByClaimantDefendantDashboard(claim) %}
-  {% if  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+  {% if claim.directionsQuestionnaireDeadline %}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+      {{ t('Mediation was unsuccessful') }}
+    {% else %}
+      {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
+    {% endif %}
+  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+    {{ t('Mediation was unsuccessful') }}
+  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
-  {% elseif claim.directionsQuestionnaireDeadline %}
-    {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you to try to arrange a mediation appointment') }}
   {% else %}
@@ -23,6 +31,8 @@
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
       {{ mediationSuccessForDefendantClaimDetails(claim) }}
+    {% elseif(claim.mediationOutcome === MediationOutcome.FAILED) %}
+        {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
     {% else %}
       <div class="status-block">
         <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
@@ -52,6 +62,8 @@
 {% macro partAdmitRejectedByClaimantDefendantDQClaimDetails(claim) %}
   {% if(claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
     {{ mediationSuccessForDefendantClaimDetails(claim) }}
+  {% elseif(claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED) %}
+    {{ mediationFailedOnlineDQForDefendantClaimDetails(claim) }}
   {% else %}
     <div class="status-block">
       <h2 class="heading-medium">{{ t('{{ claimantName }} has rejected your admission of {{ amount }}',

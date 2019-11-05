@@ -48,6 +48,14 @@
   {{ t('You both agreed a settlement through mediation') }}
 {% endmacro %}
 
+{% macro mediationFailedForClaimantDashboard(claim) %}
+  {{ t('Mediation was unsuccessful') }}
+{% endmacro %}
+
+{% macro mediationFailedForDefendantDashboard(claim) %}
+  {{ t('Mediation was unsuccessful') }}
+{% endmacro %}
+
 {% macro claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) %}
   {{ t('Wait for the court to review the case') }}
 {% endmacro %}
@@ -326,6 +334,66 @@
 {% macro mediationSuccessForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-small">{{ t('You both agreed a settlement through mediation') }}</h2>
+  </div>
+{% endmacro %}
+
+{% macro mediationFailedForOnlineDQClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('Mediation was unsuccessful') }}</h2>
+    <p>{{ t('You wheren’t able to resolve your claim against {{defendantName}} using mediation.',{ defendantName: claim.claimData.defendant.name }) }}</p>
+    {% if claim.pilotCourt === YesNoOption.YES %}
+      <p>{{ t('The court will review the case. We’ll contact you to tell you what to do next.') }}</p>
+    {% else %}
+      <p>{{ t('You’ll have to go to a hearing. We’ll contact you with the details.') }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro mediationFailedForOfflineDQClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('Mediation was unsuccessful') }}</h2>
+    <p>{{ t('You wheren’t able to resolve your claim against {{ defendantName }} using mediation.',{ defendantName: claim.claimData.defendant.name }) }}</p>
+    <p>{{ t('You need to {{ completeDQ }} form to give us more information in case there’s a hearing.',
+        { completeDQ: internalLink(
+          'complete a directions questionnaire',
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
+        }
+      ) | safe
+      }}</p>
+    <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}. or we’ll cancel your claim.',
+        { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ defendantName }}', { defendantName: claim.claimData.defendant.name } )}}</p>
+    <p>{{ t('Your online account won’t be updated with any more details about this claim.') }}</p>
+  </div>
+{% endmacro %}
+
+{% macro mediationFailedOnlineDQForDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('Mediation was unsuccessful') }}</h2>
+    <p>{{ t('You wheren’t able to resolve {{ claimantName }}’s claim against you using mediation.',{ claimantName: claim.claimData.claimant.name }) }}</p>
+    {% if claim.pilotCourt === YesNoOption.YES %}
+      <p>{{ t('The court will review the case. We’ll contact you to tell you what to do next.') }}</p>
+    {% else %}
+      <p>{{ t('You’ll have to go to a hearing. We’ll contact you with the details.') }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}
+
+{% macro mediationFailedOfflineDQForDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-small">{{ t('Mediation was unsuccessful') }}</h2>
+    <p>{{ t('You wheren’t able to resolve {{ claimantName }}’s claim against you using mediation.',{ claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('You need to {{ completeDQ }} form to give us more information in case there’s a hearing.',
+        { completeDQ: internalLink(
+          'complete a directions questionnaire',
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
+        }
+      ) | safe
+      }}</p>
+    <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}. or we’ll cancel your defence.',
+        { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } )}}</p>
+    <p>{{ t('Your online account won’t be updated with any more details about this claim.') }}</p>
   </div>
 {% endmacro %}
 
