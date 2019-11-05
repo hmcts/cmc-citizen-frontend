@@ -423,20 +423,17 @@ const mediationDQEnabledClaimDetails = [
         type: 'REJECTION'
       },
       claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline,
       mediationOutcome: MediationOutcome.FAILED
     },
     claimantAssertions: [
-      'Wait for the court to review the case',
-      'You’ve rejected John Doe’s response and said you want to take the case to court.',
-      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.',
-      'Download their response'
+      'Mediation was unsuccessful',
+      'You wheren’t able to resolve your claim against ' + fullDefenceClaim.claim.defendants[0].name + ' using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
     ],
     defendantAssertions: [
-      'John Smith has rejected your defence.',
-      'We’ll contact you to try to arrange a mediation appointment',
-      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-      'Find out how mediation works'
+      'Mediation was unsuccessful',
+      'You wheren’t able to resolve ' + fullDefenceClaim.claim.claimants[0].name + '’s claim against you using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
     ]
   },
   {

@@ -181,14 +181,14 @@ const mediationDQEnabledClaimDetails = [
       mediationOutcome: MediationOutcome.FAILED
     },
     claimantAssertions: [
-      'Wait for the court to review the case',
-      'You’ve rejected ' + partAdmissionClaim.claim.defendants[0].name + '’s response and said you want to take the case to court.',
-      'The court will review the case. We’ll contact you to tell you what to do next.'
+      'Mediation was unsuccessful',
+      'You wheren’t able to resolve your claim against ' + partAdmissionClaim.claim.defendants[0].name + ' using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
     ],
     defendantAssertions: [
-      partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
-      'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
+      'Mediation was unsuccessful',
+      'You wheren’t able to resolve ' + partAdmissionClaim.claim.claimants[0].name + '’s claim against you using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
     ]
   },
   {

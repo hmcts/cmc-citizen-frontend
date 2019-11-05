@@ -87,19 +87,17 @@ const testData = [
         ...partialAdmissionFromStatesPaidWithMediationDefence
       },
       ...claimantRejectAlreadyPaidWithMediation,
-      ...directionsQuestionnaireDeadline,
       mediationOutcome: MediationOutcome.FAILED
     },
-    claimantAssertions: ['Wait for the court to review the case',
-      'You’ve rejected John Doe’s response and said you want to take the case to court.',
-      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.',
-      'Download their response',
-      'Tell us you’ve ended the claim'
+    claimantAssertions: [
+      'Mediation was unsuccessful',
+      'You wheren’t able to resolve your claim against ' + statesPaidClaim.claim.defendants[0].name + ' using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
     ],
-    defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-      'John Smith has rejected your defence.',
-      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
-      'Find out how mediation works'
+    defendantAssertions: [
+      'Mediation was unsuccessful',
+      'You wheren’t able to resolve ' + statesPaidClaim.claim.claimants[0].name + '’s claim against you using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
     ]
   },
   {

@@ -260,8 +260,8 @@ const testData = [
       ...directionsQuestionnaireDeadline,
       mediationOutcome : MediationOutcome.FAILED
     },
-    claimantAssertions: ['Tell us your hearing requirements'],
-    defendantAssertions: ['Tell us your hearing requirements']
+    claimantAssertions: ['Mediation was unsuccessful'],
+    defendantAssertions: ['Mediation was unsuccessful']
   },
   {
     status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - mediation success',

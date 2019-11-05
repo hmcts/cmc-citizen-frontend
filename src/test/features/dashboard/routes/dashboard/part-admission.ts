@@ -99,8 +99,8 @@ const mediationDQEnabledClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate(),
       mediationOutcome: MediationOutcome.FAILED
     },
-    claimantAssertions: ['Wait for the court to review the case'],
-    defendantAssertions: ['We’ll contact you to try to arrange a mediation appointment']
+    claimantAssertions: ['Mediation was unsuccessful'],
+    defendantAssertions: ['Mediation was unsuccessful']
   },
   {
     status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation success',
