@@ -100,7 +100,7 @@ module.exports = async function (done: () => void) {
     await waitTillHealthy(citizenAppURL)
     if (process.env.IDAM_URL) {
       if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-        await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'cmc-private-beta', process.env.SMOKE_TEST_USER_PASSWORD)
+        await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
       }
     }
   } catch (error) {
