@@ -576,6 +576,29 @@ const mediationDQEnabledClaimDetails = [
     ]
   },
   {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation - claimant accepts full defense.',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData,
+        freeMediation: 'no'
+      },
+      claimantResponse: {
+        type: 'ACCEPTATION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: [
+      ' '
+    ],
+    defendantAssertions: [
+      'This claim has ended',
+      fullDefenceClaim.claim.claimants[0].name
+      + ' ended their claim against you on ' + fullDefenceClaim.respondedAt + '.'
+    ]
+  },
+  {
     status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
     claim: fullDefenceClaim,
     claimOverride: {
