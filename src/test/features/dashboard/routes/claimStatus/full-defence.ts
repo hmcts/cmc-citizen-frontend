@@ -427,17 +427,17 @@ const mediationDQEnabledClaimDetails = [
     },
     claimantAssertions: [
       'Mediation was unsuccessful',
-      'You wheren’t able to resolve your claim against ' + fullDefenceClaim.claim.defendants[0].name + ' using mediation.',
+      'You weren’t able to resolve your claim against ' + fullDefenceClaim.claim.defendants[0].name + ' using mediation.',
       'You’ll have to go to a hearing. We’ll contact you with the details.'
     ],
     defendantAssertions: [
       'Mediation was unsuccessful',
-      'You wheren’t able to resolve ' + fullDefenceClaim.claim.claimants[0].name + '’s claim against you using mediation.',
+      'You weren’t able to resolve ' + fullDefenceClaim.claim.claimants[0].name + '’s claim against you using mediation.',
       'You’ll have to go to a hearing. We’ll contact you with the details.'
     ]
   },
   {
-    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation - mediation success',
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant§ response with mediation - mediation success',
     claim: fullDefenceClaim,
     claimOverride: {
       response: {
