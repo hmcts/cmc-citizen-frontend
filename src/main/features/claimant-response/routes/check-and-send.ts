@@ -17,7 +17,6 @@ import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { PaymentIntention } from 'claims/models/response/core/paymentIntention'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { ResponseType } from 'claims/models/response/responseType'
-import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
 import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { FeatureToggles } from 'utils/featureToggles'
 import { SignatureType } from 'common/signatureType'
@@ -26,6 +25,10 @@ import { StatementOfTruth } from 'claimant-response/form/models/statementOfTruth
 import { FormValidator } from 'forms/validation/formValidator'
 import { DirectionsQuestionnaireHelper } from 'claimant-response/helpers/directionsQuestionnaireHelper'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
+import { FreeMediationUtil } from 'shared/utils/freeMediationUtil'
+import { PaymentType } from 'shared/components/payment-intention/model/paymentOption'
+import { Moment } from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): PaymentIntention {
   const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
@@ -35,9 +38,9 @@ function getPaymentIntention (draft: DraftClaimantResponse, claim: Claim): Payme
     return undefined
   }
 
-  // both parties agree the amount
   if (draft.acceptPaymentMethod) {
     if (draft.acceptPaymentMethod.accept.option === YesNoOption.YES) {
+      // both parties agree the amount
       return response.paymentIntention
     }
 
@@ -71,6 +74,16 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
   if (dqsEnabled) {
     datesUnavailable = directionsQuestionnaireDraft.document.availability.unavailableDates.map(date => date.toMoment().format('LL'))
   }
+  let alternatePaymentMethodDate: Moment
+  if (draft.document.alternatePaymentMethod) {
+    if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.INSTALMENTS) {
+      alternatePaymentMethodDate = draft.document.alternatePaymentMethod.paymentPlan.firstPaymentDate.toMoment()
+    } else if (draft.document.alternatePaymentMethod.paymentOption.option === PaymentType.BY_SET_DATE) {
+      alternatePaymentMethodDate = draft.document.alternatePaymentMethod.paymentDate.date.toMoment()
+    } else {
+      alternatePaymentMethodDate = MomentFactory.currentDate().add(5, 'days')
+    }
+  }
 
   form.model.type = dqsEnabled ? SignatureType.DIRECTION_QUESTIONNAIRE : form.model.type
 
@@ -80,6 +93,7 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     form: form,
     totalAmount: AmountHelper.calculateTotalAmount(claim, res.locals.draft.document),
     paymentIntention: paymentIntention,
+    claimantPaymentPlan: draft.document.alternatePaymentMethod ? draft.document.alternatePaymentMethod.toDomainInstance() : undefined,
     alreadyPaid: alreadyPaid,
     amount: alreadyPaid ? StatesPaidHelper.getAlreadyPaidAmount(claim) : undefined,
     mediationEnabled: FeatureToggles.isEnabled('mediation'),
@@ -90,7 +104,8 @@ function renderView (form: Form<StatementOfTruth>, res: express.Response): void 
     directionsQuestionnaireDraft: directionsQuestionnaireDraft.document,
     datesUnavailable: datesUnavailable,
     dispute: dispute,
-    mediationPilot: mediationPilot
+    mediationPilot: mediationPilot,
+    alternatePaymentMethodDate: alternatePaymentMethodDate
   })
 }
 
