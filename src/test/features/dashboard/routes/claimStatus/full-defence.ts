@@ -592,11 +592,6 @@ const mediationDQEnabledClaimDetails = [
     claimantAssertions: [
       'You stopped this claim',
       'You ended the claim on ' + fullDefenceClaim.respondedAt + '.'
-    ],
-    defendantAssertions: [
-      'This claim has ended',
-      fullDefenceClaim.claim.defendants[0].name + ' ' +
-      'ended their claim against you on ' + fullDefenceClaim.respondedAt + '.'
     ]
   },
   {
