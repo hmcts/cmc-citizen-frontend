@@ -15,7 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = ClaimPaths.initiatePaymentController.evaluateUri({ externalId })
+const pagePath = ClaimPaths.initiatePaymentController.uri
 const draftType = 'claim'
 const roles = 'citizen'
 
