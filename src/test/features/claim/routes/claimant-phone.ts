@@ -17,27 +17,27 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 const cookieName: string = config.get<string>('session.cookieName')
 const headerText: string = 'Enter a phone number (optional)'
 
-describe('Claim issue: claimant mobile page', () => {
+describe('Claim issue: claimant phone page', () => {
   attachDefaultHooks(app)
 
   describe('on GET', () => {
-    checkAuthorizationGuards(app, 'get', ClaimPaths.claimantMobilePage.uri)
-    checkEligibilityGuards(app, 'get', ClaimPaths.claimantMobilePage.uri)
+    checkAuthorizationGuards(app, 'get', ClaimPaths.claimantPhonePage.uri)
+    checkEligibilityGuards(app, 'get', ClaimPaths.claimantPhonePage.uri)
 
     it('should render page when everything is fine', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim')
 
       await request(app)
-        .get(ClaimPaths.claimantMobilePage.uri)
+        .get(ClaimPaths.claimantPhonePage.uri)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.successful.withText(headerText))
     })
   })
 
   describe('on POST', () => {
-    checkAuthorizationGuards(app, 'post', ClaimPaths.claimantMobilePage.uri)
-    checkEligibilityGuards(app, 'post', ClaimPaths.claimantMobilePage.uri)
+    checkAuthorizationGuards(app, 'post', ClaimPaths.claimantPhonePage.uri)
+    checkEligibilityGuards(app, 'post', ClaimPaths.claimantPhonePage.uri)
 
     describe('for authorized user', () => {
       beforeEach(() => {
@@ -48,7 +48,7 @@ describe('Claim issue: claimant mobile page', () => {
         draftStoreServiceMock.resolveFind('claim')
 
         await request(app)
-          .post(ClaimPaths.claimantMobilePage.uri)
+          .post(ClaimPaths.claimantPhonePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(headerText, 'div class="error-summary"'))
       })
@@ -58,7 +58,7 @@ describe('Claim issue: claimant mobile page', () => {
         draftStoreServiceMock.rejectUpdate()
 
         await request(app)
-          .post(ClaimPaths.claimantMobilePage.uri)
+          .post(ClaimPaths.claimantPhonePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ number: '07000000000' })
           .expect(res => expect(res).to.be.serverError.withText('Error'))
@@ -69,7 +69,7 @@ describe('Claim issue: claimant mobile page', () => {
         draftStoreServiceMock.resolveUpdate()
 
         await request(app)
-          .post(ClaimPaths.claimantMobilePage.uri)
+          .post(ClaimPaths.claimantPhonePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ number: '' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
@@ -80,7 +80,7 @@ describe('Claim issue: claimant mobile page', () => {
         draftStoreServiceMock.resolveUpdate()
 
         await request(app)
-          .post(ClaimPaths.claimantMobilePage.uri)
+          .post(ClaimPaths.claimantPhonePage.uri)
           .set('Cookie', `${cookieName}=ABC`)
           .send({ number: '07000000000' })
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.taskListPage.uri))
