@@ -5,7 +5,7 @@ import {
 } from '../../http-mocks/claim-store'
 
 export const respondedAt = {
-  respondedAt: MomentFactory.currentDate().format('LL')
+  respondedAt: MomentFactory.currentDate()
 }
 
 export const claimantRejectAlreadyPaid = {
