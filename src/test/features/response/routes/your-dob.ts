@@ -99,7 +99,7 @@ describe('Defendant user details: your date of birth page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to your mobile page when phone is not provided by claimant', async () => {
+          it('should redirect to your phone page when phone is not provided by claimant', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
@@ -110,7 +110,7 @@ describe('Defendant user details: your date of birth page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defendantMobilePage
+                .toLocation(ResponsePaths.defendantPhonePage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
