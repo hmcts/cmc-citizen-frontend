@@ -41,8 +41,9 @@
      {% endif %}
   {% else %}
     <div class="status-block">
-      <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-      <p>{{ t('You rejected the defendant’s admission of {{ amount }}', { amount: claim.response.amount | numeral }) }}</p>
+      <h2 class="heading-medium">{{ t('Wait for the court to review the case') }}</h2>
+      <p>{{ t('You’ve rejected {{ defendantName }}’s response and said you want to take the case to court.',
+          { defendantName: claim.claimData.defendant.name }) }}</p>
       <h2 class="heading-small">{{ t('Tell us your hearing requirements') }}</h2>
 
       <p>{{ t('You need to ' + internalLink(t('complete a directions questionnaire form '),
