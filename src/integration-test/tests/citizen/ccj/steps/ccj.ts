@@ -29,7 +29,7 @@ const ccjRepaymentPlan: PaymentPlan = {
 }
 
 const paymentBySetDate = '2025-01-01'
-const defendant: Party = createDefendant(PartyType.INDIVIDUAL)
+const defendant: Party = createDefendant(PartyType.INDIVIDUAL, false)
 const defendantPaidAmount = 35.50
 
 export class CountyCourtJudgementSteps {
