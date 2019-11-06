@@ -18,8 +18,7 @@
   <div class="status-block">
     {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
     <h2 class="heading-medium">{{ t('The defendant said they’ll pay you immediately') }}</h2>
-    <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your
-      account.',
+    <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
       { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
     <p>{{ t('You can settle for less than the full claim amount.') }}</p>
@@ -53,8 +52,7 @@
 {% macro claimFullAdmissionPayImmediatelyPastDeadlineForClaimantClaimDetails(claim) %}
 <div class="status-block">
   <h2 class="heading-medium">{{ t('The defendant said they’ll pay you immediately') }}</h2>
-  <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your
-    account.',
+  <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
     { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
   <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
   <p>{{ t('You can settle for less than the full claim amount.') }}</p>

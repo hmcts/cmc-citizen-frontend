@@ -55,7 +55,7 @@ const testData = [
     claimOverride: {
       responseDeadline: MomentFactory.currentDate().add(1, 'days')
     },
-    claimantAssertions: ['000MC050', 'Your claim has been sent.'],
+    claimantAssertions: ['000MC050', 'Wait for the defendant to respond'],
     defendantAssertions: ['000MC050', 'Respond to claim.', '(1 day remaining)']
   },
   {

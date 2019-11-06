@@ -19,7 +19,7 @@ import {
   baseFullAdmissionData,
   basePayByInstalmentsData,
   basePayBySetDateData,
-  basePayImmediatelyData,
+  basePayImmediatelyData, basePayImmediatelyDatePastData,
   baseResponseData
 } from 'test/data/entity/responseData'
 
@@ -67,14 +67,21 @@ const testData = [
     },
     claimantAssertions: [
       'The defendant said they’ll pay you immediately',
-      'Tell us you’ve settled',
+      'They must make sure you have the money by',
+      'Any cheques or transfers should be clear in your account.',
+      'You need to tell us if you’ve settled the claim, for example because the defendant has paid you.',
+      'You can settle for less than the full claim amount.',
+      'Tell us if you want to end the claim',
       'If you haven’t been paid',
-      `If the defendant has not paid you by ${moment(fullAdmissionClaim.responseDeadline).format('LL')}, you can request a County Court Judgment.`
+      `If the defendant has not paid you, you can`,
+      'request a County Court Judgment.'
     ],
     defendantAssertions: [
       'Your response to the claim',
-      `You said you’ll pay ${fullAdmissionClaim.claim.claimants[0].name} ${NumberFormatter.formatMoney(fullAdmissionClaim.claim.amount.rows[0].amount)} before 4pm on ${moment(fullAdmissionClaim.responseDeadline).format('LL')}.`,
-      `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
+      'You said you’ll pay John Smith £200 before 4pm on',
+      'If you pay by cheque or transfer the money must be clear in their account.',
+      'If they don’t receive the money by then, they can request a County Court Judgment against you.',
+      'you need their payment details. Make sure you get receipts for any payments.',
       'Download your response'
     ]
   },
@@ -82,20 +89,26 @@ const testData = [
     status: 'Full admission - defendant responded pay immediately - past payment deadline',
     claim: fullAdmissionClaim,
     claimOverride: {
-      response: { ...fullAdmissionClaim.response, ...basePayImmediatelyData },
+      response: { ...fullAdmissionClaim.response, ...basePayImmediatelyDatePastData },
       responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
     },
     claimantAssertions: [
-      'You can request a County Court Judgment',
-      `${fullAdmissionClaim.claim.defendants[0].name} has not responded to your claim by the deadline. You can request a County Court Judgment (CCJ) against them.`,
-      `${fullAdmissionClaim.claim.defendants[0].name} can still respond to the claim until you request a CCJ.`,
-      'Request a CCJ'
+      'The defendant said they’ll pay you immediately',
+      'They must make sure you have the money by',
+      'Any cheques or transfers should be clear in your account.',
+      'You need to tell us if you’ve settled the claim, for example because the defendant has paid you.',
+      'You can settle for less than the full claim amount.',
+      'If you haven’t been paid',
+      'If the defendant has not paid you, you can',
+      'request a County Court Judgment'
     ],
     defendantAssertions: [
-      'You haven’t responded to the claim.',
-      `You haven’t responded to the claim. ${fullAdmissionClaim.claim.claimants[0].name} can now ask for a County Court Judgment against you.`,
-      'You can still respond to the claim before they ask for a judgment.',
-      'Respond to claim'
+      'Your response to the claim',
+      `You said you’ll pay John Smith £200 before 4pm on`,
+      'If you pay by cheque or transfer the money must be clear in their account.',
+      'If they don’t receive the money by then, they can request a County Court Judgment against you.',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
     ]
   },
   {
