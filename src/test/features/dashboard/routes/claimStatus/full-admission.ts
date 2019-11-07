@@ -11,7 +11,6 @@ import { app } from 'main/app'
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import * as moment from 'moment'
 import { MomentFactory } from 'shared/momentFactory'
 import { NumberFormatter } from 'utils/numberFormatter'
 
@@ -19,7 +18,8 @@ import {
   baseFullAdmissionData,
   basePayByInstalmentsData,
   basePayBySetDateData,
-  basePayImmediatelyData, basePayImmediatelyDatePastData,
+  basePayImmediatelyData,
+  basePayImmediatelyDatePastData,
   baseResponseData
 } from 'test/data/entity/responseData'
 
@@ -40,9 +40,7 @@ import {
   defendantRejectedSettlementOfferAcceptInInstalments,
   claimantAcceptRepaymentPlanByDetermination,
   claimantAcceptRepaymentPlanInInstalmentsByDetermination,
-  setByDatePaymentIntentionPastDeadline,
-  defendantOffersSettlementByInstalments,
-  setByDatePaymentIntention
+  defendantOffersSettlementByInstalments
 
 } from 'test/data/entity/fullAdmission'
 
@@ -71,9 +69,9 @@ const testData = [
       'Any cheques or transfers should be clear in your account.',
       'You need to tell us if you’ve settled the claim, for example because the defendant has paid you.',
       'You can settle for less than the full claim amount.',
-      'Tell us if you want to end the claim',
+      'Tell us you’ve settled',
       'If you haven’t been paid',
-      `If the defendant has not paid you, you can`,
+      `If the defendant has not paid you by`,
       'request a County Court Judgment.'
     ],
     defendantAssertions: [
@@ -119,14 +117,14 @@ const testData = [
       ...settlementOfferBySetDate
     },
     claimantAssertions: [
-      `The defendant has offered to pay by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}.`,
+      `The defendant has offered to pay by`,
       'View and respond to the offer',
       'If you’ve been paid',
       'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'Your response to the claim',
-      `You’ve offered to pay ${fullAdmissionClaim.claim.claimants[0].name} by ${moment(basePayBySetDateData.paymentIntention.paymentDate).format('LL')}.`,
+      `You’ve offered to pay ${fullAdmissionClaim.claim.claimants[0].name} by`,
       'Download your response'
     ]
   },
@@ -162,7 +160,8 @@ const testData = [
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
-      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
+      'They must respond by',
+      'We’ll email you when they respond.',
       'If you’ve been paid',
       'Tell us you’ve settled'
     ],
@@ -207,7 +206,7 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntention.paymentDate).format('LL')}.`,
+      'The agreement says the defendant will pay you in full by',
       'Download the settlement agreement',
       'Tell us you’ve settled'
     ],
@@ -229,7 +228,7 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntentionPastDeadline.paymentDate).format('LL')}.`,
+      'The agreement says the defendant will pay you in full by ',
       'Download the settlement agreement',
       'Tell us you’ve settled',
       'Request County Court Judgment',
@@ -273,7 +272,8 @@ const testData = [
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
-      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`
+      'They must respond by ',
+      'We’ll email you when they respond.'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan.`,
@@ -314,7 +314,7 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntention.paymentDate).format('LL')}.`,
+      'The agreement says the defendant will pay you in full by',
       'Download the settlement agreement',
       'Tell us you’ve settled'
     ],
@@ -336,7 +336,7 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says the defendant will pay you in full by ${moment(setByDatePaymentIntentionPastDeadline.paymentDate).format('LL')}.`,
+      'The agreement says the defendant will pay you in full by',
       'Download the settlement agreement',
       'Tell us you’ve settled',
       'Request County Court Judgment',
@@ -384,8 +384,7 @@ const testData = [
     ],
     defendantAssertions: [
       'Your response to the claim',
-      `You’ve offered to pay ${fullAdmissionClaim.claim.claimants[0].name} ${NumberFormatter.formatMoney(basePayByInstalmentsData.paymentIntention.repaymentPlan.instalmentAmount)}`,
-      `starting ${moment(basePayByInstalmentsData.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      `You’ve offered to pay ${fullAdmissionClaim.claim.claimants[0].name} ${NumberFormatter.formatMoney(basePayByInstalmentsData.paymentIntention.repaymentPlan.instalmentAmount)} every week starting`,
       'Download your response'
     ]
   },
@@ -421,7 +420,8 @@ const testData = [
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
-      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`,
+      'They must respond by',
+      'We’ll email you when they respond.',
       'If you’ve been paid',
       'Tell us you’ve settled'
     ],
@@ -466,15 +466,13 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
-      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)} every month starting`,
       'Download the settlement agreement',
       'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says you’ll repay ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
-      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      `The agreement says you’ll repay ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)} every month starting`,
       'Download the settlement agreement',
       `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
       'Download your response'
@@ -535,7 +533,8 @@ const testData = [
     claimantAssertions: [
       'You’ve signed a settlement agreement',
       `We’ve emailed ${fullAdmissionClaim.claim.defendants[0].name} the repayment plan and the settlement agreement for them to sign.`,
-      `They must respond by ${moment(MomentFactory.currentDate().add(7, 'days')).format('LL')}. We’ll email you when they respond.`
+      'They must respond by',
+      'We’ll email you when they respond.'
     ],
     defendantAssertions: [
       `${fullAdmissionClaim.claim.claimants[0].name} rejected your repayment plan.`,
@@ -576,15 +575,13 @@ const testData = [
     },
     claimantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
-      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      `The agreement says the defendant will pay you in instalments of ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)} every month starting`,
       'Download the settlement agreement',
       'Tell us you’ve settled'
     ],
     defendantAssertions: [
       'You’ve both signed a settlement agreement',
-      `The agreement says you’ll repay ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)}`,
-      `starting ${moment(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.firstPaymentDate).format('LL')}.`,
+      `The agreement says you’ll repay ${NumberFormatter.formatMoney(defendantOffersSettlementByInstalments[0].offer.paymentIntention.repaymentPlan.instalmentAmount)} every month starting`,
       'Download the settlement agreement',
       `Contact ${fullAdmissionClaim.claim.claimants[0].name}`,
       'Download your response'
