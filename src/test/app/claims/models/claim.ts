@@ -171,14 +171,7 @@ describe('Claim', () => {
     })
 
     it('should return DEFENDANT_PAPER_RESPONSE when a paper response received', () => {
-      claim.response = {
-        responseType: ResponseType.FULL_DEFENCE,
-        defenceType: DefenceType.DISPUTE,
-        defence: 'defence reasoning',
-        freeMediation: FreeMediationOption.NO,
-        defendant: new Individual().deserialize(individual),
-        paperResponse : YesNoOption.YES
-      }
+      claim.paperResponse = YesNoOption.YES
 
       expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
     });

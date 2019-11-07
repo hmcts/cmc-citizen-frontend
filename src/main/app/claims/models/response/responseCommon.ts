@@ -19,7 +19,6 @@ export interface ResponseCommon {
   mediationPhoneNumber?: string
   mediationContactPerson?: string
   statementOfTruth?: StatementOfTruth
-  paperResponse?: YesNoOption
 }
 
 export namespace ResponseCommon {
@@ -33,7 +32,6 @@ export namespace ResponseCommon {
       statementOfTruth: input.statementOfTruth
         ? new StatementOfTruth().deserialize(input.statementOfTruth)
         : undefined,
-      paperResponse: input.paperResponse ? input.paperResponse : undefined
     }
   }
 }

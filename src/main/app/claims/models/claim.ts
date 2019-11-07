@@ -70,6 +70,7 @@ export class Claim {
   directionOrder: DirectionOrder
   reviewOrder: ReviewOrder
   intentionToProceedDeadline?: Moment
+  paperResponse: YesNoOption
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -160,7 +161,7 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
-    } else if (this.response && this.response.paperResponse && this.response.paperResponse === YesNoOption.YES) {
+    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
       return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
@@ -353,6 +354,10 @@ export class Claim {
         this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
       this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
+
+      if (input.paperResponse) {
+        this.paperResponse = input.paperResponse
+      }
     }
 
     return this
