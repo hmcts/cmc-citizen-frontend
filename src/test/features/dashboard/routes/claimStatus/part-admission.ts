@@ -16,7 +16,7 @@ import { MomentFactory } from 'shared/momentFactory'
 import { FreeMediationOption } from 'forms/models/freeMediation'
 
 import {
-  basePartialAdmissionData,
+  basePartialAdmissionData, basePayByInstalmentsData, basePayBySetDateData, basePayImmediatelyData,
   baseResponseData
 } from 'test/data/entity/responseData'
 
@@ -24,7 +24,24 @@ import {
   respondedAt,
   directionsQuestionnaireDeadline
 } from 'test/data/entity/fullDefenceData'
-import { FeatureToggles } from 'utils/featureToggles'
+import {
+  claimantAcceptRepaymentPlan,
+  claimantAcceptRepaymentPlanByDetermination,
+  claimantAcceptRepaymentPlanInInstalmentsByDetermination,
+  claimantReferredToJudgeResponse,
+  claimantReferredToJudgeResponseForInstalments,
+  defendantRejectedSettlementOfferAcceptBySetDate,
+  defendantRejectedSettlementOfferAcceptInInstalments,
+  partialAdmissionAlreadyPaidData,
+  settledWithAgreementBySetDate,
+  settledWithAgreementBySetDatePastPaymentDeadline,
+  settledWithAgreementInInstalments,
+  settledWithAgreementInInstalmentsPastPaymentDeadline,
+  settlementOfferAcceptBySetDate,
+  settlementOfferAcceptInInstalment,
+  settlementOfferByInstalments,
+  settlementOfferBySetDate
+} from 'test/data/entity/partAdmitData'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -41,6 +58,637 @@ const partAdmissionClaim = {
 
 const legacyClaimDetails = [
   {
+    status: 'Partial admission - defendant responded pay immediately',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayImmediatelyData }
+    },
+    claimantAssertions: ['The defendant has admitted they owe £30',
+      'They said they don’t owe the full amount you claimed.',
+      'They’ve offered to pay the £30 immediately.',
+      'They must make sure you have the money by',
+      'Any cheques or transfers should be clear in your account.',
+      'You can accept or reject their admission.',
+      'View and respond',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['Your response to the claim',
+      'You’ve said you owe £30 and offered to pay John Smith immediately.',
+      'We’ll contact you when they respond.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay immediately - past payment deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayImmediatelyData },
+      responseDeadline: MomentFactory.currentDate().subtract(1, 'days')
+    },
+    claimantAssertions: ['The defendant has admitted they owe £30',
+      'They said they don’t owe the full amount you claimed.',
+      'They’ve offered to pay the £30 immediately.',
+      'They must make sure you have the money by',
+      'Any cheques or transfers should be clear in your account.',
+      'You can accept or reject their admission.',
+      'View and respond',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['Your response to the claim',
+      'You’ve said you owe £30 and offered to pay John Smith immediately.',
+      'We’ll contact you when they respond.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      ...settlementOfferBySetDate
+    },
+    claimantAssertions: ['The defendant has admitted they owe £30',
+      'They’ve offered to pay by ',
+      'You can accept or reject their admission.',
+      'View and respond',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['Your response to the claim',
+      'You’ve said you owe £30 and offered to pay John Smith by',
+      'We’ll contact you when they respond.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant rejects repayment plan and referred to judge',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: { ...claimantReferredToJudgeResponse }
+    },
+    claimantAssertions: ['Awaiting judge’s review',
+      'You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
+      'A County Court Judgment has been issued against the defendant.',
+      'We’ll post a copy of the judgment to you and to John Doe',
+      'A judge will decide what John Doe can afford to pay, based on their financial details.',
+      'We’ll contact you to tell you what to do next.',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: [partAdmissionClaim.claim.claimants[0].name + ' requested a County Court Judgment (CCJ) against you',
+      'They accepted your offer to pay £30. They rejected your repayment plan.',
+      'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
+      'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
+      'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by admission and offered a settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: {
+        ...claimantAcceptRepaymentPlan
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement',
+      'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+      'They must respond by',
+      'We’ll email you when they respond.',
+      'If they do not respond you can request a County Court Judgment.',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: [`John Smith asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by ',
+      'they can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by admission and offered a settlement agreement - defendant past counter signature deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['The defendant has not signed your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
+      'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
+      'John Doe can still sign the settlement agreement until you request a CCJ.',
+      'Request a County Court Judgment',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: [`John Smith asked you to sign a settlement agreement`,
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by ',
+      'they can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by admission and offered a settlement agreement - defendant signed agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementBySetDate
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in full by ',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms.',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by admission and offered a settlement agreement - defendant signed agreement - past payment deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementBySetDatePastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in full by',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms.',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by admission and offered a settlement agreement - defendant rejects settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...defendantRejectedSettlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['The defendant has rejected your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan they offered.',
+      'The court will order them to pay the money. It doesn’t guarantee that they’ll pay you.',
+      'Request a County Court Judgment (CCJ)'
+    ],
+    defendantAssertions: ['You rejected the settlement agreement',
+      'John Smith can request a County Court Judgment (CCJ) against you.',
+      'A CCJ would order you to repay the money in line with the terms of the agreement.',
+      'The court has reviewed the repayment plan and believes you can afford it.',
+      'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
+      'We’ll email you when John Smith responds',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by determination and offered a settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement',
+      'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+      'They must respond by',
+      'We’ll email you when they respond.',
+      'If they do not respond you can request a County Court Judgment.',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['John Smith rejected your repayment plan.',
+      'John Smith accepted your offer to pay £30 but rejected your repayment plan.',
+      'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
+      'They asked you to sign a settlement agreement to formalise the plan.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by ',
+      'they can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by determination and offered a settlement agreement - defendant past counter signature deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['The defendant has not signed your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
+      'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
+      'John Doe can still sign the settlement agreement until you request a CCJ.',
+      'Request a County Court Judgment'
+    ],
+    defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by ',
+      'hey can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by determination and offered a settlement agreement - defendant signed agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settledWithAgreementBySetDate
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in full by',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by determination and offered a settlement agreement - defendant signed agreement - past payment deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...settledWithAgreementBySetDatePastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in full by',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms.',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay by set date - claimant accepts repayment plan by determination and offered a settlement agreement - defendant rejects settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
+      ...defendantRejectedSettlementOfferAcceptBySetDate
+    },
+    claimantAssertions: ['The defendant has rejected your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan they offered.',
+      'The court will order them to pay the money. It doesn’t guarantee that they’ll pay you.',
+      'Request a County Court Judgment (CCJ)'
+    ],
+    defendantAssertions: ['You rejected the settlement agreement',
+      'John Smith can request a County Court Judgment (CCJ) against you.',
+      'A CCJ would order you to repay the money in line with the terms of the agreement.',
+      'The court has reviewed the repayment plan and believes you can afford it.',
+      'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
+      'We’ll email you when John Smith responds',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      ...settlementOfferByInstalments
+    },
+    claimantAssertions: ['The defendant has admitted they owe £30',
+      'They’ve offered to pay in instalments.',
+      'You can accept or reject their admission.',
+      'View and respond',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['Your response to the claim',
+      'You’ve said you owe £30 and offered to pay John Smith £100 every week starting',
+      'We’ll contact you when they respond.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant rejects court repayment plan and referred to judge',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantReferredToJudgeResponseForInstalments }
+    },
+    claimantAssertions: ['Awaiting judge’s review',
+      'You’ve rejected the defendant’s repayment plan and an alternative plan suggested by the court.',
+      'A County Court Judgment has been issued against the defendant.',
+      'We’ll post a copy of the judgment to you and to John Doe',
+      'A judge will decide what John Doe can afford to pay, based on their financial details.',
+      'We’ll contact you to tell you what to do next.',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['John Smith requested a County Court Judgment (CCJ) against you',
+      'They accepted your offer to pay £30. They rejected your repayment plan.',
+      'They also rejected a repayment plan determined by the court, based on the financial details you provided.',
+      'When we’ve processed the request we’ll post a copy of the judgment to you and to John Smith.',
+      'A judge will make a repayment plan. We’ll contact you to tell you what to do next.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by admission and offered a settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement',
+      'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+      'They must respond by',
+      'We’ll email you when they respond.',
+      'If they do not respond you can request a County Court Judgment.',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by',
+      'they can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by admission and offered a settlement agreement - defendant past counter signature deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['The defendant has not signed your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
+      'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
+      'John Doe can still sign the settlement agreement until you request a CCJ.',
+      'Request a County Court Judgment',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by ',
+      'they can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by admission and offered a settlement agreement - defendant signed settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementInInstalments
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in instalments of £10 every month starting',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement',
+      'When you’ve been paid in full, you need to let us know.'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay £10 every month starting',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms.',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by admission and offered a settlement agreement - defendant signed settlement agreement - past payment deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...settledWithAgreementInInstalmentsPastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in instalments of £10 every month starting',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement',
+      'When you’ve been paid in full, you need to let us know.',
+      'Request County Court Judgment',
+      'If the defendant doesn’t pay or breaks the terms of the settlement agreement, you can'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay £10 every month starting',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms.',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by admission and offered a settlement agreement - defendant rejects settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlan },
+      ...defendantRejectedSettlementOfferAcceptInInstalments
+    },
+    claimantAssertions: ['The defendant has rejected your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan they offered.',
+      'The court will order them to pay the money. It doesn’t guarantee that they’ll pay you.',
+      'Request a County Court Judgment'
+    ],
+    defendantAssertions: ['You rejected the settlement agreement',
+      'John Smith can request a County Court Judgment (CCJ) against you.',
+      'A CCJ would order you to repay the money in line with the terms of the agreement.',
+      'The court has reviewed the repayment plan and believes you can afford it.',
+      'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
+      'We’ll email you when John Smith responds',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by determination and offered a settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['You’ve signed a settlement agreement',
+      'We’ve emailed John Doe the repayment plan and the settlement agreement for them to sign.',
+      'They must respond by',
+      'We’ll email you when they respond.',
+      'If they do not respond you can request a County Court Judgment.',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['John Smith rejected your repayment plan.',
+      'John Smith accepted your offer to pay £30 but rejected your repayment plan.',
+      'They accepted a new repayment plan determined by the court, based on the financial details you provided.',
+      'They asked you to sign a settlement agreement to formalise the plan.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by',
+      'they can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by determination and offered a settlement agreement - defendant past counter signature deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settlementOfferAcceptInInstalment
+    },
+    claimantAssertions: ['The defendant has not signed your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.',
+      'The court will make an order requiring them to pay the money. It does not guarantee that they pay it.',
+      'John Doe can still sign the settlement agreement until you request a CCJ.',
+      'Request a County Court Judgment',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['John Smith asked you to sign a settlement agreement',
+      'They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.',
+      'If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.',
+      'If you don’t sign or respond by',
+      'they can request a County Court Judgment against you.',
+      'View the repayment plan',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by determination  and offered a settlement agreement - defendant signed settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settledWithAgreementInInstalments
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in instalments of £10 every month starting',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement',
+      'When you’ve been paid in full, you need to let us know.',
+      'Tell us you’ve settled'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay £10 every month starting ',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms.',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by determination and offered a settlement agreement - defendant signed settlement agreement - past payment deadline',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...settledWithAgreementInInstalmentsPastPaymentDeadline
+    },
+    claimantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says the defendant will pay you in instalments of £10 every month starting',
+      'The agreement explains what you can do if the defendant breaks the terms.',
+      'Download the settlement agreement'
+    ],
+    defendantAssertions: ['You’ve both signed a settlement agreement',
+      'The agreement says you’ll repay £10 every month starting',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms.',
+      'Download the settlement agreement',
+      'you need their payment details. Make sure you get receipts for any payments.',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant responded pay in instalments - claimant accepts repayment plan by determination and offered a settlement agreement - defendant rejects settlement agreement',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days'),
+      claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
+      ...defendantRejectedSettlementOfferAcceptInInstalments
+    },
+    claimantAssertions: ['The defendant has rejected your settlement agreement',
+      'You can request a County Court Judgment (CCJ) against them based on the repayment plan they offered.',
+      'The court will order them to pay the money. It doesn’t guarantee that they’ll pay you.',
+      'Request a County Court Judgment'
+    ],
+    defendantAssertions: ['You rejected the settlement agreement',
+      'John Smith can request a County Court Judgment (CCJ) against you.',
+      'A CCJ would order you to repay the money in line with the terms of the agreement.',
+      'The court has reviewed the repayment plan and believes you can afford it.',
+      'If John Smith requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.',
+      'We’ll email you when John Smith responds',
+      'Download your response'
+    ]
+  },
+  {
+    status: 'Partial admission - defendant states paid, less than claim amount accepted',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      response: { ...partialAdmissionAlreadyPaidData },
+      claimantRespondedAt: MomentFactory.currentDate().subtract(8, 'days')
+    },
+    claimantAssertions: ['Respond to the defendant',
+      'Respond to the defendant',
+      'You can accept or reject this response.',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: ['Your response to the claim',
+      'We’ve emailed John Smith telling them when and how you said you paid the claim.',
+      'We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is settled, or they can proceed with it.',
+      'Download your response'
+    ]
+  },
+  {
     status: 'Part admission - defendant part admits and rejects mediation DQs not enabled - claimant rejects part admission',
     claim: partAdmissionClaim,
     claimOverride: {
@@ -51,22 +699,28 @@ const legacyClaimDetails = [
       },
       claimantResponse: {
         settleForAmount: 'no',
-        type: 'REJECTION'
+        type: 'REJECTION',
+        freeMediation: FreeMediationOption.NO
       },
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: [
+    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
+      'You rejected the defendant’s admission of',
       'Tell us your hearing requirements',
       'You rejected the defendant’s admission of',
-      'Your claim won’t proceed if you don’t complete and return the form before'
+      'You need to',
+      'to tell us more about the claim.',
+      'Your claim won’t proceed if you don’t complete and return the form before',
+      'Tell us you’ve ended the claim'
     ],
-    defendantAssertions: [
-      partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of ',
-      'They believe you owe them the full',
+    defendantAssertions: ['John Smith has rejected your admission of',
+      'They believe you owe them the full £200 claimed.',
       'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
-      'You need to ',
-      'Your defence won’t proceed if you don’t complete and return the form before'
+      'You need to',
+      'to tell us more about the claim.',
+      'Your defence won’t proceed if you don’t complete and return the form before',
+      'Download your response'
     ]
   },
   {
@@ -89,14 +743,16 @@ const legacyClaimDetails = [
     },
     claimantAssertions: [
       'We’ll contact you to try to arrange a mediation appointment',
-      'You rejected the defendant’s admission of ',
-      'You’ve both agreed to try mediation. We’ll contact you to arrange a call with the mediator.',
-      'Find out how mediation works'
+      'You’ve rejected the defendant’s response.',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works',
+      'Tell us you’ve ended the claim'
     ],
     defendantAssertions: [
-      partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
-      'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
+      'We’ll contact you to try to arrange a mediation appointment',
+      partAdmissionClaim.claim.claimants[0].name + ' has rejected your defence.',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
     ]
   }
 ]
@@ -180,29 +836,27 @@ describe('Dashboard page', () => {
             claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-08-16'))
           })
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            mediationDQEnabledClaimDetails.forEach(data => {
-              it(`should render mediation or DQ status: ${data.status}`, async () => {
-                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+          mediationDQEnabledClaimDetails.forEach(data => {
+            it(`should render mediation or DQ status: ${data.status}`, async () => {
+              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
 
-                await request(app)
-                  .get(claimPagePath)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-              })
+              await request(app)
+                .get(claimPagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
-          } else {
-            legacyClaimDetails.forEach(data => {
-              it(`should render legacy claim status: ${data.status}`, async () => {
-                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+          })
 
-                await request(app)
-                  .get(claimPagePath)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
-              })
+          legacyClaimDetails.forEach(data => {
+            it(`should render legacy claim status: ${data.status}`, async () => {
+              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
+              await request(app)
+                .get(claimPagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.claimantAssertions))
             })
-          }
+          })
         })
 
         context('as a defendant', () => {
@@ -210,29 +864,27 @@ describe('Dashboard page', () => {
             idamServiceMock.resolveRetrieveUserFor('123', 'citizen')
           })
 
-          if (FeatureToggles.isEnabled('mediation')) {
-            mediationDQEnabledClaimDetails.forEach(data => {
-              it(`should render mediation or DQ dashboard: ${data.status}`, async () => {
-                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+          mediationDQEnabledClaimDetails.forEach(data => {
+            it(`should render mediation or DQ dashboard: ${data.status}`, async () => {
+              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
 
-                await request(app)
-                  .get(defendantPagePath)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
-              })
+              await request(app)
+                .get(defendantPagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
-          } else {
-            legacyClaimDetails.forEach(data => {
-              it(`should render non mediation or DQ dashboard: ${data.status}`, async () => {
-                claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+          })
 
-                await request(app)
-                  .get(defendantPagePath)
-                  .set('Cookie', `${cookieName}=ABC`)
-                  .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
-              })
+          legacyClaimDetails.forEach(data => {
+            it(`should render non mediation or DQ dashboard: ${data.status}`, async () => {
+              claimStoreServiceMock.resolveRetrieveByExternalId(data.claim, data.claimOverride)
+
+              await request(app)
+                .get(defendantPagePath)
+                .set('Cookie', `${cookieName}=ABC`)
+                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
-          }
+          })
         })
       })
     })
