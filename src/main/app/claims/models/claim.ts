@@ -199,8 +199,6 @@ export class Claim {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
-    } else if (this.isResponseSubmitted()) {
-      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
@@ -223,6 +221,8 @@ export class Claim {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (this.isResponseSubmitted()) {
+      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
