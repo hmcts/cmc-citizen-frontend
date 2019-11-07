@@ -24,7 +24,6 @@ import {
 } from 'test/data/entity/responseData'
 
 import {
-  claimantResponseAt,
   claimantReferredToJudgeResponse,
   claimantReferredToJudgeResponseForInstalments,
   claimantAcceptRepaymentPlan,
@@ -52,8 +51,7 @@ const fullAdmissionClaim = {
   response: {
     ...baseResponseData,
     ...baseFullAdmissionData
-  },
-  ...claimantResponseAt
+  }
 }
 
 const testData = [
@@ -69,9 +67,8 @@ const testData = [
       'Any cheques or transfers should be clear in your account.',
       'You need to tell us if you’ve settled the claim, for example because the defendant has paid you.',
       'You can settle for less than the full claim amount.',
-      'Tell us you’ve settled',
       'If you haven’t been paid',
-      `If the defendant has not paid you by`,
+      `If the defendant has not paid you`,
       'request a County Court Judgment.'
     ],
     defendantAssertions: [
@@ -154,6 +151,7 @@ const testData = [
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
       claimantResponse: { ...claimantAcceptRepaymentPlan },
       ...settlementOfferAcceptBySetDate
     },
@@ -266,6 +264,7 @@ const testData = [
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayBySetDateData },
+      claimantRespondedAt: MomentFactory.currentDate(),
       claimantResponse: { ...claimantAcceptRepaymentPlanByDetermination },
       ...settlementOfferAcceptBySetDate
     },
@@ -414,6 +413,7 @@ const testData = [
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
       claimantResponse: { ...claimantAcceptRepaymentPlan },
       ...settlementOfferAcceptInInstalment
     },
@@ -527,6 +527,7 @@ const testData = [
     claim: fullAdmissionClaim,
     claimOverride: {
       response: { ...fullAdmissionClaim.response, ...basePayByInstalmentsData },
+      claimantRespondedAt: MomentFactory.currentDate(),
       claimantResponse: { ...claimantAcceptRepaymentPlanInInstalmentsByDetermination },
       ...settlementOfferAcceptInInstalment
     },
