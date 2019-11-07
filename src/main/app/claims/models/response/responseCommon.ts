@@ -31,7 +31,7 @@ export namespace ResponseCommon {
       mediationContactPerson: input.mediationContactPerson,
       statementOfTruth: input.statementOfTruth
         ? new StatementOfTruth().deserialize(input.statementOfTruth)
-        : undefined,
+        : undefined
     }
   }
 }
