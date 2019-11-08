@@ -32,6 +32,14 @@ export const individualDetails = {
   }
 }
 
+export const individualSplitNameDetails = {
+  ...individualDetails,
+  name: 'Mr. John Smith',
+  title: 'Mr.',
+  firstName: 'John',
+  lastName: 'Smith'
+}
+
 export const defendantIndividualDetails = {
   ...individualDetails,
   title: 'Mr.',
