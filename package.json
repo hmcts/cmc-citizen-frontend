@@ -71,7 +71,7 @@
     "helmet": "^3.21.2",
     "http-status-codes": "^1.4.0",
     "i18next": "^18.0.0",
-    "i18next-conv": "^9.1.0",
+    "i18next-conv": "^9.2.0",
     "i18next-express-middleware": "^1.8.2",
     "i18next-sprintf-postprocessor": "^0.2.2",
     "jquery": "3.4.1",
@@ -94,7 +94,7 @@
     "ts-node": "^8.4.1",
     "tsconfig-paths": "^3.9.0",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.6.3",
+    "typescript": "^3.7.2",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
