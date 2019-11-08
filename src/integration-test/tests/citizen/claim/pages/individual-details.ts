@@ -1,5 +1,5 @@
 import I = CodeceptJS.I
-import { postcodeLookupQuery } from '../../../../data/test-data'
+import { postcodeLookupQuery } from 'integration-test/data/test-data'
 
 const I: I = actor()
 

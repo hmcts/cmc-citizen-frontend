@@ -4,7 +4,7 @@ import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/intere
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentSteps } from './steps/payment'
-import { TestingSupportSteps } from '../testingSupport/steps/testingSupport'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()

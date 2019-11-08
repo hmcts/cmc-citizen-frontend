@@ -1,7 +1,7 @@
 import I = CodeceptJS.I
 import { PaymentConfirmationPage } from 'integration-test/tests/citizen/claim/pages/govpay/payment-confirmation'
 import { PaymentDetailsPage } from 'integration-test/tests/citizen/claim/pages/govpay/payment-details'
-import { UserSteps } from '../../home/steps/user'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 class CardDetailsFactory {
   static createForCard (cardNumber: number): CardDetails {
