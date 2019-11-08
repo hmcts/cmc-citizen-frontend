@@ -60,7 +60,7 @@ export class ClaimantCheckAndSendPage {
       default:
         throw new Error('non-matching claimant type for claim')
     }
-    I.see(claimant.mobilePhone)
+    I.see(claimant.phone)
     I.see(claimReason)
   }
 

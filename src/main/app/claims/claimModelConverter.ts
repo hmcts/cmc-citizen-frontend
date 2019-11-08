@@ -36,6 +36,7 @@ import { getStandardInterestRate } from 'shared/interestUtils'
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { Phone } from 'forms/models/phone'
 
 export class ClaimModelConverter {
 
@@ -69,7 +70,7 @@ export class ClaimModelConverter {
           individualDetails.name,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           individualDetails.dateOfBirth.date.asString()
         )
@@ -81,7 +82,7 @@ export class ClaimModelConverter {
           soleTraderDetails.name,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           soleTraderDetails.businessName
         )
@@ -93,7 +94,7 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           companyDetails.contactPerson
         )
@@ -105,7 +106,7 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           organisationDetails.contactPerson
         )
@@ -126,7 +127,8 @@ export class ClaimModelConverter {
           individualDetails.firstName,
           individualDetails.lastName,
           this.convertAddress(individualDetails.address),
-          StringUtils.trimToUndefined(draftClaim.defendant.email.address)
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address),
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
 
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
@@ -138,7 +140,8 @@ export class ClaimModelConverter {
           soleTraderDetails.lastName,
           this.convertAddress(soleTraderDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          soleTraderDetails.businessName
+          soleTraderDetails.businessName,
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
 
       case PartyType.COMPANY.value:
@@ -148,7 +151,8 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          companyDetails.contactPerson
+          companyDetails.contactPerson,
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
       case PartyType.ORGANISATION.value:
         const organisationDetails = defendantDetails as OrganisationDetails
@@ -157,7 +161,8 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          organisationDetails.contactPerson
+          organisationDetails.contactPerson,
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
       default:
         throw Error('Something went wrong, No defendant type is set')
@@ -245,5 +250,9 @@ export class ClaimModelConverter {
       status: payment.status,
       date_created: payment.date_created
     }
+  }
+
+  private static convertPhoneNumber (phone: Phone): string {
+    return phone ? StringUtils.trimToUndefined(phone.number) : undefined
   }
 }
