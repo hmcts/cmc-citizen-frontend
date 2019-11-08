@@ -70,7 +70,7 @@ async function waitTillHealthy (appURL: string) {
   return Promise.reject(error)
 }
 
-async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: string, password: string): Promise<void> {
+async function createSmokeTestsUserIfDoesntExist (username: string, userRole: string, password: string): Promise<void> {
   let bearerToken
   try {
     bearerToken = await IdamClient.authenticateUser(username, password)
@@ -79,7 +79,7 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userGroup: s
       return
     }
 
-    await IdamClient.createUser(username, userGroup, password)
+    await IdamClient.createUser(username, userRole, password)
     bearerToken = await IdamClient.authenticateUser(username, password)
   }
 
@@ -100,7 +100,7 @@ module.exports = async function (done: () => void) {
     await waitTillHealthy(citizenAppURL)
     if (process.env.IDAM_URL) {
       if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-        await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'cmc-private-beta', process.env.SMOKE_TEST_USER_PASSWORD)
+        await createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
       }
     }
   } catch (error) {
