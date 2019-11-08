@@ -1,15 +1,25 @@
 /* tslint:disable:no-console */
 
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+import { UserEmails } from 'integration-test/data/test-data'
 
-module.exports = async function (done: () => void) {
-  try {
-    const result = await IdamClient.deleteUsers()
-    console.log('Teardown finished: ' + result)
-  } catch (error) {
-    handleError(error)
+const userEmails: UserEmails = new UserEmails()
+
+module.exports = {
+  teardownAll: function (done) {
+    try {
+      if (process.env.IDAM_URL) {
+        if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
+          IdamClient.deleteUser(process.env.SMOKE_TEST_CITIZEN_USERNAME)
+          IdamClient.deleteUser(userEmails.getDefendant())
+          IdamClient.deleteUser(userEmails.getClaimant())
+          IdamClient.deleteUsers()
+        }
+      }
+    } catch (error) {
+      handleError(error)
+    }
   }
-  done()
 }
 
 function handleError (error) {
