@@ -4016,10 +4016,10 @@ husky@^3.0.9:
     run-node "^1.0.0"
     slash "^3.0.0"
 
-i18next-conv@^9.1.0:
-  version "9.1.0"
-  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-9.1.0.tgz#c943f68b8881e966c13852bcd3162c2943ed5a06"
-  integrity sha512-RXi64K753q2U9FMzCE1jzzU/W8hU62oljbcyej3xpBylX3fP2NhIRWZBToLGPPYYzvpaP4GGG4HIvdKBcTc3iw==
+i18next-conv@^9.2.0:
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/i18next-conv/-/i18next-conv-9.2.0.tgz#4aa9e238d2c955a935e4e7b75121827e734a985a"
+  integrity sha512-36Y8hU0yzPQ365y2g5Sb/uz735ZxdYLE0g1X56T1F4SSBHXtoSPRrF+2/qYgYB/5TkwX/vOXj1a0TDm16a1OTA==
   dependencies:
     bluebird "^3.5.3"
     chalk "^2.4.2"
@@ -8383,10 +8383,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.6.3:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
-  integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
+typescript@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.2.tgz#27e489b95fa5909445e9fef5ee48d81697ad18fb"
+  integrity sha512-ml7V7JfiN2Xwvcer+XAf2csGO1bPBdRbFCkYBczNZggrBZ9c7G3riSUeJmqEU5uOtXNPMhE3n+R4FA/3YOAWOQ==
 
 uglify-js@^3.1.4:
   version "3.6.1"
