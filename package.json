@@ -70,7 +70,7 @@
     "gulp": "^4.0.2",
     "helmet": "^3.21.2",
     "http-status-codes": "^1.4.0",
-    "i18next": "^18.0.0",
+    "i18next": "^19.0.0",
     "i18next-conv": "^9.2.0",
     "i18next-express-middleware": "^1.8.2",
     "i18next-sprintf-postprocessor": "^0.2.2",
