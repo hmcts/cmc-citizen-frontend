@@ -32,7 +32,8 @@ export class Helper {
 
   finishResponse (
     testData: EndToEndTestData,
-    isRequestMoreTimeToRespond: boolean = true
+    isRequestMoreTimeToRespond: boolean = true,
+    expectPhonePage: boolean = false
   ): void {
     if (testData.defenceType === undefined) {
       testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
@@ -48,7 +49,8 @@ export class Helper {
       testData.defendantPartyType,
       testData.defenceType,
       isRequestMoreTimeToRespond,
-      testData.defendantClaimsToHavePaidInFull
+      testData.defendantClaimsToHavePaidInFull,
+      expectPhonePage
     )
   }
 

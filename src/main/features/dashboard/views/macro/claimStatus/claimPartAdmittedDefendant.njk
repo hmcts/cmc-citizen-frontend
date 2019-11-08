@@ -45,8 +45,7 @@
         {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
         {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
         {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
-        {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }}
-            {{ installmentAmount }} {{ paymentSchedule }} starting {{ paymentDate }}.',
+        {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ installmentAmount }} {{ paymentSchedule }} starting {{ paymentDate }}.',
           { amount: claim.response.amount | numeral, claimantName: claimant.name, installmentAmount: installmentAmount,
             paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
       {% endif %}
@@ -70,7 +69,6 @@
     <p>{{ t('You must pay them by {{ paymentDate }}. Any cheques or transfers must be clear in their account by then.',
         { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
     <p>{{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }}</p>
-    <p>{{ internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}
-      {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
+    <p>{{ internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}{{ t( 'if you need their payment details. Make sure you get receipts for any payments.') }}</p>
   </div>
 {% endmacro %}

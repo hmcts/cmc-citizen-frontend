@@ -100,7 +100,7 @@ export const basePartialAdmissionData = {
   responseType: 'PART_ADMISSION'
 }
 
-const basePartialEvidencesAndTimeLines = {
+export const basePartialEvidencesAndTimeLines = {
   evidence: {
     rows: [
       {

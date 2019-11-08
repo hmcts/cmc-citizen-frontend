@@ -18,11 +18,11 @@ export class IdamClient {
    * Creates user with default password
    *
    * @param {string} email
-   * @param {string} userGroupCode
+   * @param {string} userRoleCode
    * @param password the user's password, will use a default if undefined
    * @returns {Promise<void>}
    */
-  static createUser (email: string, userGroupCode: string, password: string = process.env.SMOKE_TEST_USER_PASSWORD): Promise<void> {
+  static createUser (email: string, userRoleCode: string, password: string = process.env.SMOKE_TEST_USER_PASSWORD): Promise<void> {
     const options = {
       method: 'POST',
       uri: `${baseURL}/testing-support/accounts`,
@@ -31,9 +31,7 @@ export class IdamClient {
         forename: 'John',
         surname: 'Smith',
         levelOfAccess: 0,
-        userGroup: {
-          code: userGroupCode
-        },
+        roles: [{ code: userRoleCode }],
         activationDate: '',
         lastAccess: '',
         password: password ? password : defaultPassword

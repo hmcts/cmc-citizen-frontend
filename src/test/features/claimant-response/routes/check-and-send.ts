@@ -264,7 +264,40 @@ describe('Claimant response: check and send page', () => {
               settlementAgreement: undefined,
               freeMediation: undefined,
               rejectionReason: undefined,
-              alternatePaymentMethod: undefined,
+              alternatePaymentMethod: {
+                paymentOption: {
+                  option: {
+                    value: 'INSTALMENTS',
+                    displayValue: 'By instalments'
+                  }
+                },
+                paymentPlan: {
+                  totalAmount: 3326.59,
+                  instalmentAmount: 10,
+                  firstPaymentDate: LocalDate.fromMoment(MomentFactory.currentDate().add(50, 'days')),
+                  paymentSchedule: {
+                    value: 'EACH_WEEK',
+                    displayValue: 'Each week'
+                  }
+                }
+              },
+              courtDetermination: {
+                courtDecision: {
+                  paymentOption: {
+                    value: 'INSTALMENTS'
+                  },
+                  repaymentPlan: {
+                    instalmentAmount: 4.3333335,
+                    firstPaymentDate: '2019-01-01T00:00:00.000',
+                    paymentSchedule: 'EVERY_MONTH',
+                    completionDate: MomentFactory.parse('2039-05-08T00:00:00.000'),
+                    paymentLength: '20 years 5 months'
+                  }
+                },
+                rejectionReason: {
+                  text: 'i reject repayment plan because ...'
+                }
+              },
               courtOfferedPaymentIntention: undefined
             })
           draftStoreServiceMock.resolveFind('mediation')

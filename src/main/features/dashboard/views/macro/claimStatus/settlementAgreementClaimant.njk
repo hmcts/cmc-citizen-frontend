@@ -36,10 +36,8 @@
   {% set defendantName = claim.claimData.defendant.name %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('The defendant has not signed your settlement agreement') }}</h2>
-    <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the
-      agreement.') }}</p>
-    <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay it.')
-      }}</p>
+    <p>{{ t('You can request a County Court Judgment (CCJ) against them based on the repayment plan shown in the agreement.') }}</p>
+    <p>{{ t('The court will make an order requiring them to pay the money. It does not guarantee that they pay it.') }}</p>
     <p>{{ t('{{ defendantName }} can still sign the settlement agreement until you request a CCJ.',
       { defendantName: claim.claimData.defendant.name }) }}</p>
     <form novalidate method="post">
@@ -56,13 +54,12 @@
     <p>{{ t('The agreement says the defendant will pay you in full by {{ paymentDate }}.',
       { paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date }) }}</p>
     {% elif claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
-    <p>{{ t('The agreement says the defendant will pay you in instalments of {{ instalmentAmount }} {{ paymentSchedule }}
-      starting {{ firstPaymentDate }}.',
+    <p>{{ t('The agreement says the defendant will pay you in instalments of {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
       {
-      instalmentAmount: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.instalmentAmount | numeral,
-      paymentSchedule: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.paymentSchedule |
-      renderPaymentSchedule | lower,
-      firstPaymentDate: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.firstPaymentDate | date
+        instalmentAmount: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.instalmentAmount | numeral,
+        paymentSchedule: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.paymentSchedule |
+        renderPaymentSchedule | lower,
+        firstPaymentDate: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.firstPaymentDate | date
       }) }}</p>
     {% endif %}
     <p>{{ t('The agreement explains what you can do if the defendant breaks the terms.') }}</p>

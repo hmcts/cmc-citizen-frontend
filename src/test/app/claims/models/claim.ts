@@ -143,6 +143,7 @@ describe('Claim', () => {
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -620,6 +621,7 @@ describe('Claim', () => {
           paperDetermination: 'no',
           preferredDQCourt: 'Central London County Court',
           hearingCourt: 'CLERKENWELL',
+          hearingCourtName: 'Clerkenwell and Shoreditch County Court and Family Court',
           hearingCourtAddress: {
             line1: 'The Gee Street Courthouse',
             line2: '29-41 Gee Street',
@@ -827,6 +829,7 @@ describe('Claim', () => {
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     })
 
     it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_LINK_ELIGIBLE if an offer has been submitted.', () => {
@@ -989,6 +992,24 @@ describe('Claim', () => {
       claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
       expect(claim.isCCJPaidWithinMonth()).to.be.false
+    })
+  })
+
+  describe('isIntentionToProceedEligible', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+    })
+
+    it('should return true when createdAt is after 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.currentDate()
+      expect(claim.isIntentionToProceedEligible()).to.be.true
+    })
+
+    it('should return false when createdAt is before 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.parse('2019-09-08')
+      expect(claim.isIntentionToProceedEligible()).to.be.false
     })
   })
 

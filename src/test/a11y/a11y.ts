@@ -31,7 +31,8 @@ const cookieName: string = config.get<string>('session.cookieName')
 const agent = supertest(app)
 
 interface Issue {
-  type
+  type,
+  code
 }
 
 async function runPa11y (url: string): Promise<Issue[]> {
@@ -44,6 +45,8 @@ async function runPa11y (url: string): Promise<Issue[]> {
     }
   })
   return result.issues
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent')
 }
 
 function check (uri: string): void {

@@ -3,7 +3,7 @@ import { YesNoOption } from 'main/app/claims/models/response/core/yesNoOption'
 import { ResponseDraft } from 'main/features/response/draft/responseDraft'
 import { Claim } from 'main/app/claims/models/claim'
 import { FreeMediationOption } from 'main/app/forms/models/freeMediation'
-import { CompanyDetails } from 'main/app/forms/models/companyDetails'
+import { CompanyDetails } from 'forms/models/companyDetails'
 import { FeatureToggles } from 'utils/featureToggles'
 
 export class FreeMediationUtil {
@@ -34,9 +34,9 @@ export class FreeMediationUtil {
     } else if (mediationDraft.canWeUse) {
       if (mediationDraft.canWeUse.option === FreeMediationOption.YES) {
         if (!claim.isResponseSubmitted() && draft) {
-          return draft.defendantDetails.mobilePhone.number || undefined
+          return draft.defendantDetails.phone.number || undefined
         } else {
-          return claim.claimData.claimant.mobilePhone || mediationDraft.canWeUse.mediationPhoneNumber
+          return claim.claimData.claimant.phone || mediationDraft.canWeUse.mediationPhoneNumber
         }
       } else {
         return mediationDraft.canWeUse.mediationPhoneNumber

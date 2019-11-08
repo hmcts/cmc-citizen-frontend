@@ -41,7 +41,7 @@ export class EndToEndTestData {
     defendantPartyType: PartyType,
     claimantPartyType: PartyType
   ) {
-    const claimData: ClaimData = createClaimData(defendantPartyType, claimantPartyType, false)
+    const claimData: ClaimData = createClaimData(claimantPartyType, defendantPartyType, false)
     return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
   }
 
@@ -54,7 +54,7 @@ export class EndToEndTestData {
     const claimantEmail: string = userSteps.getClaimantEmail()
     const defendantEmail: string = userSteps.getDefendantEmail()
 
-    const claimRef: string = await I.createClaim(claimData, claimantEmail, ['admissions','directionsQuestionnaire'],'cmc-new-features-consent-given')
+    const claimRef: string = await I.createClaimWithFeaturesAndRole(claimData, claimantEmail, 'cmc-new-features-consent-given', ['admissions', 'directionsQuestionnaire'])
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
     const testData = new EndToEndTestData()
