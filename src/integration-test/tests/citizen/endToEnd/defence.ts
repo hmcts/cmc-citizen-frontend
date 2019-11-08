@@ -72,7 +72,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.see('You’ve rejected their response')
 })
 
-Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence @nightly @admissions', { retries: 3 },
+Scenario('I can as an Individual make a claim against an Individual who then rejects the claim as they have paid less than the amount claimed and I then accept their defence @nightly', { retries: 3 },
   async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     const claimantResponseTestData = new ClaimantResponseTestData()
@@ -100,7 +100,7 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
     // check dashboard
     I.click('My account')
     I.see(testData.claimRef)
-    I.see(`Respond to the defendant.`) // TODO IS THIS WRONG? should be defendants name
+    I.see(`Respond to the defendant.`)
     // check status
     I.click(testData.claimRef)
     I.see(testData.claimRef)
