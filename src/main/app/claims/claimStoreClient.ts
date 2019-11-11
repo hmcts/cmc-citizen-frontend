@@ -78,6 +78,32 @@ export class ClaimStoreClient {
       })
   }
 
+  initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .post(`${claimStoreApiUrl}/initiate-citizen-payment`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, [])
+      })
+      .then(response => {
+        return response.nextUrl
+      })
+  }
+
+  resumePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .put(`${claimStoreApiUrl}/resume-citizen-payment`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, [])
+      })
+      .then(response => {
+        return response.nextUrl
+      })
+  }
+
   saveResponseForUser (claim: Claim, draft: Draft<ResponseDraft>, mediationDraft: Draft<MediationDraft>, directionsQuestionnaireDraft: Draft<DirectionsQuestionnaireDraft>, user: User): Promise<void> {
     const response = ResponseModelConverter.convert(draft.document, mediationDraft.document, directionsQuestionnaireDraft.document, claim)
     const externalId: string = claim.externalId
