@@ -16,7 +16,7 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
-const pagePath = ClaimPaths.finishClaimCreation.evaluateUri({ externalId })
+const pagePath = ClaimPaths.finishPaymentController.evaluateUri({ externalId })
 
 describe('Claim issue: finish payment page', () => {
   attachDefaultHooks(app)

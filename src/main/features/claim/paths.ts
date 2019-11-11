@@ -33,7 +33,6 @@ export class Paths {
   static readonly checkAndSendPage = new RoutablePath('/claim/check-and-send')
   static readonly startPaymentReceiver = new RoutablePath('/claim/pay')
   static readonly finishPaymentReceiver = new RoutablePath('/claim/pay/:externalId/receiver')
-  static readonly finishClaimCreation = new RoutablePath('/claim/:externalId/finish-payment')
   static readonly confirmationPage = new RoutablePath('/claim/:externalId/confirmation')
   static readonly receiptReceiver = new RoutablePath('/claim/:externalId/receipt')
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
@@ -42,6 +41,7 @@ export class Paths {
   static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
   static readonly newFeaturesConsentPage = new RoutablePath('/claim/new-features-consent')
   static readonly initiatePaymentController = new RoutablePath('/claim/initiate-payment')
+  static readonly finishPaymentController = new RoutablePath('/claim/:externalId/finish-payment')
 
 }
 

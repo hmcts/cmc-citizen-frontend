@@ -94,7 +94,7 @@ function ensureNoAccessibilityErrors (issues: Issue[]): void {
 }
 
 const excludedPaths: Paths[] = [
-  ClaimIssuePaths.finishClaimCreation,
+  ClaimIssuePaths.finishPaymentController,
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
   ClaimIssuePaths.initiatePaymentController,

@@ -19,7 +19,7 @@ const logger = Logger.getLogger('router/finish-payment')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.finishClaimCreation.uri, async (req, res, next) => {
+  .get(Paths.finishPaymentController.uri, async (req, res, next) => {
     const { externalId } = req.params
     const user: User = res.locals.user
     const draft: Draft<DraftClaim> = res.locals.claimDraft
