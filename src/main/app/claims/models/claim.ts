@@ -359,7 +359,7 @@ export class Claim {
       }
 
       if (input.pilotCourt) {
-        this.pilotCourt = input.pilotCourt
+        this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
       }
     }
 

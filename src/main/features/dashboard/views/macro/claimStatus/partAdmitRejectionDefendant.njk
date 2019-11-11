@@ -5,8 +5,7 @@
 {% from "./claimRejected.njk" import
   mediationSuccessForDefendantClaimDetails,
   mediationFailedOnlineDQForDefendantClaimDetails,
-  mediationFailedOfflineDQForDefendantClaimDetails
-%}
+  mediationFailedOfflineDQForDefendantClaimDetails %}
 
 
 {% macro partAdmitRejectedByClaimantDefendantDashboard(claim) %}
@@ -32,7 +31,7 @@
     {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
       {{ mediationSuccessForDefendantClaimDetails(claim) }}
     {% elseif(claim.mediationOutcome === MediationOutcome.FAILED) %}
-        {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
+      {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
     {% else %}
       <div class="status-block">
         <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
@@ -49,10 +48,10 @@
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
       <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
       {% if claim.directionsQuestionnaireDeadline %}
-      <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
-          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
-      <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before {{ deadline }}.',
-          { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+        <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
+            DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
+        <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before {{ deadline }}.',
+            { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
       {% endif %}
       <p>{{ downloadResponseLink(claim) }}</p>
     </div>
@@ -70,17 +69,17 @@
           { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
       <p>{{ t('They believe you owe them the full {{ amount }} claimed.', { amount: claim.totalAmountTillToday | numeral }) }}</p>
 
-    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('They have agreed to try mediation. We’ll contact you to try to arrange an appointment.') }}</p>
-    {% else %}
-      <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
-      {% if claim.directionsQuestionnaireDeadline %}
-        <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
-            DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
-        <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before {{ deadline }}.',
-            { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+      {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
+        <p>{{ t('They have agreed to try mediation. We’ll contact you to try to arrange an appointment.') }}</p>
+      {% else %}
+        <p>{{ t('You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
+        {% if claim.directionsQuestionnaireDeadline %}
+          <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
+              DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
+          <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before {{ deadline }}.',
+              { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+        {% endif %}
       {% endif %}
-    {% endif %}
 
       <p>{{ downloadResponseLink(claim) }}</p>
     </div>

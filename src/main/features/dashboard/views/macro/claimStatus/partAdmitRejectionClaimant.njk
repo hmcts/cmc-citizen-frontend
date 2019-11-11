@@ -4,8 +4,7 @@
 {% from "./claimRejected.njk" import
   mediationSuccessForClaimantClaimDetails,
   mediationFailedForOnlineDQClaimantClaimDetails,
-  mediationFailedForOfflineDQClaimantClaimDetails
-%}
+  mediationFailedForOfflineDQClaimantClaimDetails %}
 
 {% macro partAdmitRejectedByClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
@@ -34,11 +33,11 @@
     {% else %}
       <div class="status-block">
         <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
-        <p>{{ t('You’ve rejected the defendant’s response.')}}</p>
+        <p>{{ t('You’ve rejected the defendant’s response.') }}</p>
         <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
         <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
       </div>
-     {% endif %}
+    {% endif %}
   {% else %}
     <div class="status-block">
       <h2 class="heading-medium">{{ t('Wait for the court to review the case') }}</h2>
@@ -47,9 +46,9 @@
       <h2 class="heading-small">{{ t('Tell us your hearing requirements') }}</h2>
 
       <p>{{ t('You need to ' + internalLink(t('complete a directions questionnaire form '),
-            DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
+          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
       <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
-            { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+          { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     </div>
   {% endif %}
 {% endmacro %}

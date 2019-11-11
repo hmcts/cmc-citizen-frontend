@@ -8,8 +8,7 @@
   mediationFailedForOnlineDQClaimantClaimDetails,
   mediationFailedForOfflineDQClaimantClaimDetails,
   mediationFailedOnlineDQForDefendantClaimDetails,
-  mediationFailedOfflineDQForDefendantClaimDetails
-%}
+  mediationFailedOfflineDQForDefendantClaimDetails %}
 
 {% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
 
@@ -20,7 +19,7 @@
     {% else %}
       {{ t('You’ve rejected the defendant’s admission.') }}
     {% endif %}
-  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
     {{ t('Mediation was unsuccessful') }}
   {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
@@ -54,7 +53,7 @@
     <div class="status-block">
       <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>
 
-      <p>{{ t('You’ve rejected the defendant’s response.')}}</p>
+      <p>{{ t('You’ve rejected the defendant’s response.') }}</p>
       <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
       <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
 
@@ -63,7 +62,7 @@
     {% if claim.response.responseType === 'PART_ADMISSION' %}
       {% set amount = claim.response.amount %}
     {% else %}
-      {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+      {% set amount = claim.response.paymentDeclaration.paidAmount %}
     {% endif %}
 
     <h2 class="heading-small">{{ t('You’ve rejected the defendant’s admission') }}</h2>
@@ -91,12 +90,11 @@
     {% if claim.response.responseType === 'PART_ADMISSION' %}
       {% set amount = claim.response.amount %}
     {% else %}
-      {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+      {% set amount = claim.response.paymentDeclaration.paidAmount %}
     {% endif %}
     {{ t('{{ claimantName }} rejected your admission of {{ amount }}', {
       claimantName: claim.claimData.claimant.name,
-      amount: amount | numeral})
-    }}
+      amount: amount | numeral}) }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you to try to arrange a mediation appointment') }}
   {% else %}
@@ -120,7 +118,7 @@
     {% if claim.response.responseType === 'PART_ADMISSION' %}
       {% set amount = claim.response.amount %}
     {% else %}
-      {% set amount = claim.response.paymentDeclaration.paidAmount  %}
+      {% set amount = claim.response.paymentDeclaration.paidAmount %}
     {% endif %}
     {% set mediation = claim.claimantResponse.freeMediation and claim.claimantResponse.freeMediation === YesNoOption.YES.option %}
 

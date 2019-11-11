@@ -189,9 +189,9 @@
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
         {{ mediationFailedForOnlineDQClaimantClaimDetails(claim) }}
-      {% elif(claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+      {% elif (claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
         {{ mediationSuccessForClaimantClaimDetails(claim) }}
-      {% elif(claim.claimantResponse.freeMediation === FreeMediationOption.NO) %}
+      {% elif (claim.claimantResponse.freeMediation === FreeMediationOption.NO) %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDetails(claim) }}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}
@@ -230,7 +230,7 @@
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
         {% if claim.mediationOutcome === MediationOutcome.FAILED %}
           {{ mediationFailedForOfflineDQClaimantClaimDetails(claim) }}
-        {% elif(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {% elif (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
           {{ mediationSuccessForClaimantClaimDetails(claim) }}
         {% else %}
           {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) }}

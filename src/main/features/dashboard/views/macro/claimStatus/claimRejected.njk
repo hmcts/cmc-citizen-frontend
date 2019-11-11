@@ -163,20 +163,21 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('We’ll contact you to try to arrange a mediation appointment') }}
+<p>{{ t('We’ll contact you to try to arrange a mediation appointment') }}
   {% else %}
-      {{ t('Wait for the court to review the case') }}
+    {{ t('Wait for the court to review the case') }}
   {% endif %}
-{% endmacro %}
+  {% endmacro %}
 
-{% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
+  {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-medium">{{ t('You’ve rejected {{ defendantName }} response.', { defendantName: claim.claimData.defendant.name }) }}</h2>
+    <h2
+      class="heading-medium">{{ t('You’ve rejected {{ defendantName }} response.', { defendantName: claim.claimData.defendant.name }) }}</h2>
 
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
-      <p>{{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}</p>
-    {% endif %}
+  <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
+  <p>{{ externalLink(t('Find out how mediation works'), 'https://www.gov.uk/government/publications/small-claims-mediation-service-ex730') }}</p>
+  {% endif %}
   </div>
 {% endmacro %}
 
@@ -232,12 +233,11 @@
 
 {% macro _linkToDirectionsQuestionnairePage(externalId) %}
   <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
-        { completeDQ: internalLink(
-          'complete a directions questionnaire',
-          DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
-        }
-      ) | safe
-  }}</p>
+      { completeDQ: internalLink(
+        'complete a directions questionnaire',
+        DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: externalId }))
+      }
+    ) | safe }}</p>
 {% endmacro %}
 
 {% macro _respond(claim, text) %}
@@ -253,7 +253,7 @@
           { intentionToProceedDeadline: claim.intentionToProceedDeadline | date }) }}</p>
       <p>{{ internalLink(t('View and respond'), ClaimantResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}</p>
     </div>
-  {% elif claim.response.freeMediation === YesNoOption.YES.option %}
+    {% elif claim.response.freeMediation === YesNoOption.YES.option %}
     <div class="status-block">
       <h2 class="heading-medium">{{ t('The defendant’s response') }}</h2>
       <p>{{ t('{{ defendantName }} has rejected the claim. They’ve suggested mediation to help resolve this dispute.',
@@ -290,14 +290,13 @@
 {% macro claimRejectedFreeMediationNOWithoutDQsForClaimantClaimDetails(claim) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('You rejected {{ defendantName }}’s response',
-          { defendantName: claim.claimData.defendant.name }) }}</h2>
+        { defendantName: claim.claimData.defendant.name }) }}</h2>
     <p>{{ t('You need to {{ completeDQ }} form to tell us your requirements in case there’s a hearing.',
         { completeDQ: internalLink(
           'complete a directions questionnaire',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
         }
-      ) | safe
-      }}</p>
+      ) | safe }}</p>
     <p>{{ t('The claim won’t proceed if you don’t complete and return the form to us before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     <p>{{ t('You also need to send a copy of the form to {{ defendantName }}', { defendantName: claim.claimData.defendant.name }) }}</p>
@@ -314,11 +313,10 @@
           'complete a directions questionnaire',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
         }
-      ) | safe
-      }}</p>
+      ) | safe }}</p>
     <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } )}}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } ) }}</p>
   </div>
 {% endmacro %}
 
@@ -359,11 +357,10 @@
           'complete a directions questionnaire',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
         }
-      ) | safe
-      }}</p>
+      ) | safe }}</p>
     <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}. or we’ll cancel your claim.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-    <p>{{ t('You also need to send a copy of the form to {{ defendantName }}', { defendantName: claim.claimData.defendant.name } )}}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ defendantName }}', { defendantName: claim.claimData.defendant.name } ) }}</p>
     <p>{{ t('Your online account won’t be updated with any more details about this claim.') }}</p>
   </div>
 {% endmacro %}
@@ -390,11 +387,10 @@
           'complete a directions questionnaire',
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
         }
-      ) | safe
-      }}</p>
+      ) | safe }}</p>
     <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}. or we’ll cancel your defence.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
-    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } )}}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } ) }}</p>
     <p>{{ t('Your online account won’t be updated with any more details about this claim.') }}</p>
   </div>
 {% endmacro %}
