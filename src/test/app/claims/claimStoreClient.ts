@@ -44,6 +44,10 @@ const claimant = {
   bearerToken: 'SuperSecretToken'
 } as any as User
 
+const paymentResponse = {
+  nextUrl: 'http://localhost/payment-page'
+}
+
 describe('ClaimStoreClient', () => {
   context('timeouts and retries handling', () => {
     const requestDelayInMillis = 500
@@ -155,6 +159,74 @@ describe('ClaimStoreClient', () => {
 
         try {
           await claimStoreClient.saveOrder(ordersDraft, new Claim().deserialize(sampleClaimIssueObj), claimant)
+        } catch (err) {
+          expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
+          expect(err.error).to.equal('An unexpected error occurred')
+          return
+        }
+
+        expect.fail() // Exception should have been thrown due to 500 response code
+      })
+    })
+
+    describe('Initiate citizen payment', async () => {
+      function resolveInitiatePayment () {
+        mock(`${claimStoreApiUrl}`)
+          .post(`/initiate-citizen-payment`)
+          .reply(HttpStatus.OK, paymentResponse)
+      }
+
+      it('should return nextUrl on successful initiate payment call', async () => {
+        resolveInitiatePayment()
+        const returnedUrl: string = await claimStoreClient.initiatePayment(claimDraft, claimant)
+        expect(returnedUrl).to.deep.equal(paymentResponse.nextUrl)
+      })
+
+      function mockInternalServerErrorOnInitiatePayment () {
+        mock(`${claimStoreApiUrl}`)
+          .post(`/initiate-citizen-payment`)
+          .times(retryAttempts)
+          .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
+      }
+
+      it('should propagate error responses', async () => {
+        mockInternalServerErrorOnInitiatePayment()
+        try {
+          await claimStoreClient.initiatePayment(claimDraft, claimant)
+        } catch (err) {
+          expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
+          expect(err.error).to.equal('An unexpected error occurred')
+          return
+        }
+
+        expect.fail() // Exception should have been thrown due to 500 response code
+      })
+    })
+
+    describe('Resume citizen payment', async () => {
+      function resolveInitiatePayment () {
+        mock(`${claimStoreApiUrl}`)
+          .put(`/resume-citizen-payment`)
+          .reply(HttpStatus.OK, paymentResponse)
+      }
+
+      it('should return nextUrl on successful resume payment call', async () => {
+        resolveInitiatePayment()
+        const returnedUrl: string = await claimStoreClient.resumePayment(claimDraft, claimant)
+        expect(returnedUrl).to.deep.equal(paymentResponse.nextUrl)
+      })
+
+      function mockInternalServerErrorOnResumePayment () {
+        mock(`${claimStoreApiUrl}`)
+          .put(`/resume-citizen-payment`)
+          .times(retryAttempts)
+          .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
+      }
+
+      it('should propagate error responses', async () => {
+        mockInternalServerErrorOnResumePayment()
+        try {
+          await claimStoreClient.resumePayment(claimDraft, claimant)
         } catch (err) {
           expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
           expect(err.error).to.equal('An unexpected error occurred')
