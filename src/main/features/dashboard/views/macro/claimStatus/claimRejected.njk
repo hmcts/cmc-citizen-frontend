@@ -163,7 +163,7 @@
 
 {% macro claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-<p>{{ t('We’ll contact you to try to arrange a mediation appointment') }}
+    {{ t('We’ll contact you to try to arrange a mediation appointment') }}
   {% else %}
     {{ t('Wait for the court to review the case') }}
   {% endif %}

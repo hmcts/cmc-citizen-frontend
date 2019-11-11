@@ -315,7 +315,7 @@
       {% elif (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
         {{ mediationSuccessForDefendantDashboard(claim) }}
       {% else %}
-          {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
+        {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
       {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}

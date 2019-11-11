@@ -14,7 +14,7 @@
 
 {% macro statesPaidRejectedClaimantDashboard(claim) %}
   {% if claim.directionsQuestionnaireDeadline %}
-    {% if  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+    {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
       {{ t('Mediation was unsuccessful') }}
     {% else %}
       {{ t('You’ve rejected the defendant’s admission.') }}
