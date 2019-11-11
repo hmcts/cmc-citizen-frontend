@@ -40,7 +40,7 @@ export const claimDraft = {
       }
     },
     partyDetails: individualDetails,
-    mobilePhone: {
+    phone: {
       number: '07000000000'
     }
   },

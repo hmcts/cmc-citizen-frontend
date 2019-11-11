@@ -71,12 +71,10 @@ describe('Defendant user details: your date of birth page', () => {
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
 
       context('when response not submitted', () => {
-        beforeEach(() => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-        })
 
         context('when form is invalid', () => {
           it('should render page when everything is fine', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
 
@@ -89,6 +87,7 @@ describe('Defendant user details: your date of birth page', () => {
 
         context('when form is valid', () => {
           it('should return 500 and render error page when cannot save draft', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.rejectUpdate()
@@ -100,7 +99,8 @@ describe('Defendant user details: your date of birth page', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should redirect to your mobile page when everything is fine', async () => {
+          it('should redirect to your phone page when phone is not provided by claimant', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveUpdate()
@@ -110,11 +110,12 @@ describe('Defendant user details: your date of birth page', () => {
               .set('Cookie', `${cookieName}=ABC`)
               .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
               .expect(res => expect(res).to.be.redirect
-                .toLocation(ResponsePaths.defendantMobilePage
+                .toLocation(ResponsePaths.defendantPhonePage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
 
           it('should redirect to the under-18 hand-off page when the date is too recent', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('response')
             draftStoreServiceMock.resolveFind('mediation')
             const fifteenYearsAgo: moment.Moment = MomentFactory.currentDate().subtract(15, 'years')
@@ -131,6 +132,21 @@ describe('Defendant user details: your date of birth page', () => {
               })
               .expect(res => expect(res).to.be.redirect
                 .toLocation(ResponsePaths.under18Page
+                  .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
+
+          it('should redirect to task list when phone is provided by claimant', async () => {
+            claimStoreServiceMock.resolveRetrieveClaimBySampleExternalId(claimStoreServiceMock.sampleClaimIssueOrgVOrgPhone)
+            draftStoreServiceMock.resolveFind('response')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .send({ known: 'true', date: { year: '1978', month: '1', day: '11' } })
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(ResponsePaths.taskListPage
                   .evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
           })
         })

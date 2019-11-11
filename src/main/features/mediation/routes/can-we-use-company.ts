@@ -29,9 +29,9 @@ function getPhoneNumber (res: express.Response) {
   const claim: Claim = res.locals.claim
   if (!claim.isResponseSubmitted()) {
     const draftResponse: Draft<ResponseDraft> = res.locals.responseDraft
-    return draftResponse.document.defendantDetails.mobilePhone ? draftResponse.document.defendantDetails.mobilePhone.number : undefined
+    return draftResponse.document.defendantDetails.phone ? draftResponse.document.defendantDetails.phone.number : undefined
   } else {
-    return claim.claimData.claimant.mobilePhone
+    return claim.claimData.claimant.phone
   }
 }
 
