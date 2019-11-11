@@ -1,4 +1,6 @@
 import * as express from 'express'
+import * as config from 'config'
+import * as toBoolean from 'to-boolean'
 
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
@@ -67,7 +69,7 @@ function deserializerFunction (value: any): StatementOfTruth | QualifiedStatemen
   }
 }
 
-function getStatementOfTruthClassFor (draft: Draft<DraftClaim>): { new(): StatementOfTruth | QualifiedStatementOfTruth } {
+function getStatementOfTruthClassFor (draft: Draft<DraftClaim>): { new (): StatementOfTruth | QualifiedStatementOfTruth } {
   if (draft.document.claimant.partyDetails.isBusiness()) {
     return QualifiedStatementOfTruth
   } else {
@@ -145,10 +147,13 @@ export default express.Router()
         if (form.model.type === SignatureType.QUALIFIED) {
           const draft: Draft<DraftClaim> = res.locals.claimDraft
           const user: User = res.locals.user
-
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        res.redirect(Paths.startPaymentReceiver.uri)
+        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
+          res.redirect(Paths.initiatePaymentController.uri)
+        } else {
+          res.redirect(Paths.startPaymentReceiver.uri)
+        }
       }
     })
