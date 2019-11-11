@@ -112,5 +112,6 @@ module.exports = {
     } catch (error) {
       handleError(error)
     }
+    done()
   }
 }
