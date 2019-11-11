@@ -21,11 +21,14 @@ class ClaimStoreHelper extends codecept_helper {
     return isClaimOpen
   }
 
-  async createClaim (claimData: ClaimData, submitterEmail: string, features: string[] = ['admissions','directionsQuestionnaire'], role: string): Promise<string> {
+  async createClaim (claimData: ClaimData, submitterEmail: string, linkDefendant: boolean = true, features: string[] = ['admissions','directionsQuestionnaire'], role: string): Promise<string> {
     const submitter: User = await this.prepareAuthenticatedUser(submitterEmail)
     const { referenceNumber } = await ClaimStoreClient.create(claimData, submitter, features)
     await this.waitForOpenClaim(referenceNumber)
-    await this.linkDefendant(referenceNumber)
+
+    if (linkDefendant) {
+      await this.linkDefendant(referenceNumber)
+    }
 
     return referenceNumber
   }
@@ -35,7 +38,7 @@ class ClaimStoreHelper extends codecept_helper {
     let defendant = userEmails.getDefendant()
     let uri = `${baseURL}/testing-support/claims/${referenceNumber}/defendant/${defendant}/${password}`
 
-    request.put(uri, {})
+    await request.put(uri, {}).promise()
   }
 
   async respondToClaim (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string): Promise<void> {

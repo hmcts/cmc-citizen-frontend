@@ -54,7 +54,7 @@ export class EndToEndTestData {
     const claimantEmail: string = userSteps.getClaimantEmail()
     const defendantEmail: string = userSteps.getDefendantEmail()
 
-    const claimRef: string = await I.createClaim(claimData, claimantEmail, ['admissions','directionsQuestionnaire'],'cmc-new-features-consent-given')
+    const claimRef: string = await I.createClaim(claimData, claimantEmail, true, ['admissions','directionsQuestionnaire'],'cmc-new-features-consent-given')
     await helperSteps.enterPinNumber(claimRef, claimantEmail)
 
     const testData = new EndToEndTestData()

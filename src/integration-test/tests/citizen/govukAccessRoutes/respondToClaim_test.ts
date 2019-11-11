@@ -15,7 +15,7 @@ Scenario('I can enter a CCBC reference and get sent to MCOL @nightly', { retries
 
 Scenario('I can enter a moneyclaims reference and get sent to enter a pin @nightly', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
-  const claimRef: string = await I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail)
+  const claimRef: string = await I.createClaim(createClaimData(PartyType.SOLE_TRADER, PartyType.INDIVIDUAL), claimantEmail, false)
 
   accessRoutesSteps.respondToClaimMoneyClaims(claimRef)
 })
