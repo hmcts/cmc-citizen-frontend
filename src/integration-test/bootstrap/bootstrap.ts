@@ -105,8 +105,8 @@ module.exports = {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
           createSmokeTestsUserIfDoesntExist(process.env.SMOKE_TEST_CITIZEN_USERNAME, 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
-          createSmokeTestsUserIfDoesntExist(userEmails.getDefendant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
-          createSmokeTestsUserIfDoesntExist(userEmails.getClaimant(), 'citizens', process.env.SMOKE_TEST_USER_PASSWORD)
+          createSmokeTestsUserIfDoesntExist(userEmails.getDefendant(), 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
+          createSmokeTestsUserIfDoesntExist(userEmails.getClaimant(), 'citizen', process.env.SMOKE_TEST_USER_PASSWORD)
         }
       }
     } catch (error) {
