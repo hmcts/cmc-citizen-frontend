@@ -291,6 +291,7 @@ export class Claim {
       this.claimantId = input.submitterId
       this.externalId = input.externalId
       this.defendantId = input.defendantId
+      this.state = input.state
       this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.responseDeadline = MomentFactory.parse(input.responseDeadline)
@@ -508,11 +509,14 @@ export class Claim {
       const now = MomentFactory.currentDate()
       if (offer && offer.paymentIntention) {
         switch (offer.paymentIntention.paymentOption) {
-          case PaymentOption.BY_SPECIFIED_DATE : const paymentDate = offer.paymentIntention.paymentDate
+          case PaymentOption.BY_SPECIFIED_DATE :
+            const paymentDate = offer.paymentIntention.paymentDate
             return (paymentDate.isAfter(now) || paymentDate.isSame(now))
-          case PaymentOption.INSTALMENTS : const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
+          case PaymentOption.INSTALMENTS :
+            const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
             return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
-          case PaymentOption.IMMEDIATELY : return true
+          case PaymentOption.IMMEDIATELY :
+            return true
         }
       }
     }
