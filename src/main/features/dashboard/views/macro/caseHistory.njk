@@ -292,7 +292,7 @@
       {{ settlementAgreementSignedByBothDefendantClaimDetails(claim) }}
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
-        {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
+        {{ mediationFailedOnlineDQForDefendantClaimDetails(claim) }}
       {% elif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
         {{ mediationSuccessForDefendantClaimDetails(claim) }}
       {% elif claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
