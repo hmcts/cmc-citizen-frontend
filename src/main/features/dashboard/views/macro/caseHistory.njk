@@ -354,7 +354,7 @@
     {% elif state.status === ClaimStatus.CLAIMANT_REJECTED_DEFENDANT_DEFENCE_NO_DQ %}
       {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
         {% if claim.mediationOutcome === MediationOutcome.FAILED %}
-          {{ mediationFailedForOfflineDQDefendantClaimDetails(claim) }}
+          {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
           {% elif claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
           {{ mediationSuccessForDefendantClaimDetails(claim) }}
         {% else %}
