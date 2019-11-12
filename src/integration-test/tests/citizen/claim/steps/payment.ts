@@ -22,6 +22,7 @@ const userSteps: UserSteps = new UserSteps()
 
 const billingDetails: Address = {
   line1: '221B Baker Street',
+  line2: 'Baker Street',
   city: 'London',
   postcode: 'NW1 6XE'
 }
