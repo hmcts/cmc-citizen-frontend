@@ -236,5 +236,39 @@ describe('ClaimStoreClient', () => {
         expect.fail() // Exception should have been thrown due to 500 response code
       })
     })
+
+    describe('createCitizenClaim', async () => {
+
+      function mockCreateCitizenClaimCall () {
+        mock(`${claimStoreApiUrl}`)
+          .put(`/create-citizen-claim`)
+          .reply(HttpStatus.OK, returnedClaim)
+      }
+      it('should return a claim that was successfully saved', async () => {
+        mockCreateCitizenClaimCall()
+        const claim: Claim = await claimStoreClient.createCitizenClaim(claimDraft, claimant, 'admissions')
+        expect(claim.claimData).to.deep.equal(new ClaimData().deserialize(expectedClaimData))
+      })
+
+      function mockInternalServerErrorOnAllAttempts () {
+        mock(`${claimStoreApiUrl}`)
+          .put(`/create-citizen-claim`)
+          .times(retryAttempts)
+          .reply(HttpStatus.INTERNAL_SERVER_ERROR, 'An unexpected error occurred')
+      }
+
+      it('should propagate error responses', async () => {
+        mockInternalServerErrorOnAllAttempts()
+        try {
+          await claimStoreClient.createCitizenClaim(claimDraft, claimant, 'admissions')
+        } catch (err) {
+          expect(err.statusCode).to.equal(HttpStatus.INTERNAL_SERVER_ERROR)
+          expect(err.error).to.equal('An unexpected error occurred')
+          return
+        }
+
+        expect.fail() // Exception should have been thrown due to 500 response code
+      })
+    })
   })
 })
