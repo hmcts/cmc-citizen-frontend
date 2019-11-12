@@ -33,8 +33,13 @@ export default express.Router()
       }
     } catch (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
-        const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
-        res.redirect(nextUrl)
+        const payment = draft.document.claimant.payment
+        if (payment !== undefined && payment.status === 'Success') {
+          res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId }))
+        } else {
+          const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
+          res.redirect(nextUrl)
+        }
       } else {
         logger.error(`claim with external id ${externalId} not found, redirecting user to check and send`)
         res.redirect(Paths.checkAndSendPage.uri)
