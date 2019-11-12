@@ -868,6 +868,12 @@ export function resolveSaveOffer () {
     .reply(HttpStatus.CREATED)
 }
 
+export function resolveCreateClaimCitizen (claimOverride?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .put('/create-citizen-claim')
+    .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
+}
+
 export function resolveSaveOrder () {
   const expectedData = {
     ...this.sampleClaimIssueObj,

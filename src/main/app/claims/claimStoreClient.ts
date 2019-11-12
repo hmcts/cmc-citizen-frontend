@@ -78,6 +78,27 @@ export class ClaimStoreClient {
       })
   }
 
+  createCitizenClaim (draft: Draft<DraftClaim>, claimant: User, ...features: string[]): Promise<Claim> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .put(`${claimStoreApiUrl}/create-citizen-claim`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, features)
+      })
+      .then(claim => {
+        return new Claim().deserialize(claim)
+      })
+      .catch((err) => {
+        if (err.statusCode === HttpStatus.CONFLICT) {
+          logger.warn(`Claim ${draft.document.externalId} appears to have been saved successfully on initial timed out attempt, retrieving the saved instance`)
+          return this.retrieveByExternalId(draft.document.externalId, claimant)
+        } else {
+          throw err
+        }
+      })
+  }
+
   initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
