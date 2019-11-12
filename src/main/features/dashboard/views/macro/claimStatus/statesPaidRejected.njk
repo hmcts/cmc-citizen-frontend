@@ -21,7 +21,7 @@
     {% endif %}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
     {{ t('Mediation was unsuccessful') }}
-  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you to try to arrange a mediation appointment.') }}
@@ -44,7 +44,7 @@
   {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ mediationSuccessForClaimantClaimDetails(claim) }}
   {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
-    {% if(claim.directionsQuestionnaireDeadline) %}
+    {% if (claim.directionsQuestionnaireDeadline) %}
       {{ mediationFailedForOfflineDQClaimantClaimDetails(claim) }}
     {% else %}
       {{ mediationFailedForOnlineDQClaimantClaimDetails(claim) }}
@@ -82,7 +82,7 @@
 {% endmacro %}
 
 {% macro statesPaidRejectedDefendantDashboard(claim) %}
-  {% if  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+  {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
     {{ t('Mediation was unsuccessful') }}
@@ -106,7 +106,7 @@
   {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ mediationSuccessForDefendantClaimDetails(claim) }}
   {% elseif featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
-    {% if(claim.claim.directionsQuestionnaireDeadline ) %}
+    {% if (claim.claim.directionsQuestionnaireDeadline ) %}
       {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
     {% else %}
       {{ mediationFailedOnlineDQForDefendantClaimDetails(claim) }}

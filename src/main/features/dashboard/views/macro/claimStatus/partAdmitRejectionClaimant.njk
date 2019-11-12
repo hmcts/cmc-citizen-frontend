@@ -26,9 +26,9 @@
 
 {% macro partAdmitRejectedByClaimantClaimDetails(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+    {% if (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
       {{ mediationSuccessForClaimantClaimDetails(claim) }}
-    {% elseif(claim.mediationOutcome === MediationOutcome.FAILED) %}
+    {% elseif (claim.mediationOutcome === MediationOutcome.FAILED) %}
       {{ mediationFailedForOfflineDQClaimantClaimDetails(claim) }}
     {% else %}
       <div class="status-block">
@@ -56,9 +56,9 @@
 {% macro partAdmitRejectedByClaimantDQClaimDetails(claim) %}
   <div class="status-block">
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-      {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+      {% if (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
         {{ mediationSuccessForClaimantClaimDetails(claim) }}
-      {% elseif(claim.mediationOutcome === MediationOutcome.FAILED) %}
+      {% elseif (claim.mediationOutcome === MediationOutcome.FAILED) %}
         {{ mediationFailedForOnlineDQClaimantClaimDetails(claim) }}
       {% else %}
         <h2 class="heading-medium">{{ t('We’ll contact you to try to arrange a mediation appointment') }}</h2>

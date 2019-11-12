@@ -15,9 +15,9 @@
     {% else %}
       {{ t('{{ claimantName }} rejected your admission of {{ amount }}', { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
     {% endif %}
-  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED %}
     {{ t('Mediation was unsuccessful') }}
-  {% elseif  claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+  {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
     {{ t('You both agreed a settlement through mediation') }}
   {% elseif claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
     {{ t('We’ll contact you to try to arrange a mediation appointment') }}
@@ -28,9 +28,9 @@
 
 {% macro partAdmitRejectedByClaimantDefendantClaimDetails(claim) %}
   {% if claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-    {% if(claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+    {% if (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
       {{ mediationSuccessForDefendantClaimDetails(claim) }}
-    {% elseif(claim.mediationOutcome === MediationOutcome.FAILED) %}
+    {% elseif (claim.mediationOutcome === MediationOutcome.FAILED) %}
       {{ mediationFailedOfflineDQForDefendantClaimDetails(claim) }}
     {% else %}
       <div class="status-block">
@@ -59,9 +59,9 @@
 {% endmacro %}
 
 {% macro partAdmitRejectedByClaimantDefendantDQClaimDetails(claim) %}
-  {% if(claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+  {% if (claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
     {{ mediationSuccessForDefendantClaimDetails(claim) }}
-  {% elseif(claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED) %}
+  {% elseif (claim.claimantResponse.freeMediation === FreeMediationOption.YES and claim.mediationOutcome === MediationOutcome.FAILED) %}
     {{ mediationFailedOnlineDQForDefendantClaimDetails(claim) }}
   {% else %}
     <div class="status-block">
