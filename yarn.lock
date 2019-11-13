@@ -106,10 +106,10 @@
     google-libphonenumber "^3.1.6"
     validator "10.4.0"
 
-"@hmcts/cmc-draft-store-middleware@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-draft-store-middleware/-/cmc-draft-store-middleware-2.0.0.tgz#6900c3ed23ac1173ef4b68b88623704fc92be377"
-  integrity sha512-/wlmRcXBGfXMUQDegptsEINwz5mtEw4Wa4MK1puc8p1F29GtNNP3+CAdbaoIkC/WtmnehaHbBLVHrIatc8w4Cw==
+"@hmcts/cmc-draft-store-middleware@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-draft-store-middleware/-/cmc-draft-store-middleware-2.0.1.tgz#07414dbc33421a67e16b65e3e2c34b4c4f10717f"
+  integrity sha512-cMnfDytTicSGUq8GZCax6xMPy7aqXKxfOpWo20ds3sz3wju/vVxesIS3XFtQAhA8faXAgdcwV7VU5yqUZcAtPQ==
   dependencies:
     "@hmcts/draft-store-client" "^1.2.1"
     moment "^2.19.1"
@@ -281,10 +281,10 @@
   dependencies:
     "@types/chai" "*"
 
-"@types/chai@*", "@types/chai@^4.2.4":
-  version "4.2.4"
-  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.4.tgz#8936cffad3c96ec470a2dc26a38c3ba8b9b6f619"
-  integrity sha512-7qvf9F9tMTzo0akeswHPGqgUx/gIaJqrOEET/FCD8CFRkSUHlygQiM5yB6OvjrtdxBVLSyw7COJubsFYs0683g==
+"@types/chai@*", "@types/chai@^4.2.5":
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.5.tgz#f8da153ebbe30babb0adc9a528b9ad32be3175a2"
+  integrity sha512-YvbLiIc0DbbhiANrfVObdkLEHJksQZVq0Uvfg550SRAKVYaEJy+V70j65BVe2WNp6E3HtKsUczeijHFCjba3og==
 
 "@types/config@^0.0.36":
   version "0.0.36"
@@ -690,10 +690,10 @@ append-transform@^1.0.0:
   dependencies:
     default-require-extensions "^2.0.0"
 
-applicationinsights@^1.4.2:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/applicationinsights/-/applicationinsights-1.5.0.tgz#074df9e525dcfd592822e7b80723b9284d2716fd"
-  integrity sha512-D+JyPrDx9RWVNIwukoe03ANKNdyVe/ejExbR7xMvZTm09553TzXenW2oPZmfN9jeguKSDugzIWdbILMPNSRRlg==
+applicationinsights@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/applicationinsights/-/applicationinsights-1.6.0.tgz#8d46717b1c3db0f3c8a2e7bdbe32857a51207c0a"
+  integrity sha512-bTK91ZMPAh3UrN0q3Bq0ePn7RHmURbiPztsNPMpsURPOipNqLKgZlQ6Vg3kjwHiqehrCN/24753ED0nritvr5g==
   dependencies:
     cls-hooked "^4.2.2"
     continuation-local-storage "^3.2.1"
