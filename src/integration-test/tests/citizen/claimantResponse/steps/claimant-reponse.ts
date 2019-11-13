@@ -25,6 +25,8 @@ import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/m
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
 import { ClaimantIntentionToProceedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-intention-to-proceed'
 import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-part-payment-received'
+import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
+import { claimAmount } from 'integration-test/data/test-data'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -47,6 +49,7 @@ const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
 const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantIntentionToProceedPage()
 const partPaymentReceivedPage: ClaimantPartPaymentReceivedPage = new ClaimantPartPaymentReceivedPage()
+const claimantRejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
 
 export class ClaimantResponseSteps {
 
@@ -86,7 +89,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(false, testData)
+    this.acceptCCJ(false)
   }
 
   acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
@@ -95,7 +98,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(true, testData)
+    this.acceptCCJ(true)
   }
 
   acceptCcjFromDashboardWhenRejectPaymentMethod (
@@ -147,6 +150,21 @@ export class ClaimantResponseSteps {
     I.see('Do you want to proceed with the claim?')
     intentionToProceedSteps.chooseYes()
     this.finishClaimantResponse()
+  }
+
+  decideNotToProceed (): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Decide whether to proceed')
+    I.see('Do you want to proceed with the claim?')
+    intentionToProceedSteps.chooseNo()
+    I.see('COMPLETE')
+    I.click('Check and submit your response')
+    I.see(`Do you agree the defendant has paid £${claimAmount.getTotal()}`)
+    I.see('Yes')
+    I.click('input[type=submit]')
+    I.see('You didn’t proceed with the claim')
   }
 
   finishClaimantResponse (): void {
@@ -297,7 +315,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  acceptCCJ (shouldPaySome: boolean, testData: EndToEndTestData): void {
+  acceptCCJ (shouldPaySome: boolean): void {
     taskListPage.selectTaskViewDefendantResponse()
     I.click('Continue')
     I.see('COMPLETE')
@@ -376,5 +394,36 @@ export class ClaimantResponseSteps {
     partPaymentReceivedPage.yesTheDefendantHasPaid()
     I.see('Settle the claim for ')
     I.click('Settle the claim for')
+  }
+
+  acceptFullDefencePaidFullAmount (testData: EndToEndTestData): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    I.see(`${testData.claimantName} states they paid you £${claimAmount.getTotal()}`)
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Accept or reject their response')
+    I.see(`Do you agree the defendant has paid the £${claimAmount.getTotal()} in full`)
+    partPaymentReceivedPage.yesTheDefendantHasPaid()
+    I.see('COMPLETE')
+    I.click('Check and submit your response')
+    I.see(`Do you agree the defendant has paid £${claimAmount.getTotal()}`)
+    I.see('Yes')
+    I.click('input[type=submit]')
+    I.see('You didn’t proceed with the claim')
+  }
+
+  rejectFullDefencePaidFullAmount (testData: EndToEndTestData): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    I.see(`${testData.claimantName} states they paid you £${claimAmount.getTotal()}`)
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Accept or reject their response')
+    I.see(`Do you agree the defendant has paid the £${claimAmount.getTotal()} in full`)
+    partPaymentReceivedPage.noTheDefendantHasNotPaid()
+    I.see('Why did you reject their response')
+    claimantRejectionReasonPage.enterReason('No money received')
+    I.see('COMPLETE')
+    this.finishClaimantResponse()
+    I.see('You’ve rejected their response')
   }
 }

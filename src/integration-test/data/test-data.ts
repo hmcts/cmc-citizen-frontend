@@ -96,6 +96,7 @@ export function createClaimant (type: PartyType): Party {
     name: undefined,
     address: {
       line1: '10, DALBERG ROAD',
+      line2: 'Brixton',
       city: 'LONDON',
       postcode: 'SW2 1AN'
     },
@@ -135,7 +136,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
     name: undefined,
     address: {
       line1: '11 Dalberg road',
-      line2: '',
+      line2: 'Brixton',
       city: 'London',
       postcode: 'SW2 1AN'
     },
