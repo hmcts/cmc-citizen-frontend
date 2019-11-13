@@ -29,7 +29,7 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
-import { YesNoOption } from 'claims/models/response/core/yesNoOption'
+import { YesNoOption } from 'models/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -359,7 +359,7 @@ export class Claim {
       this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
 
       if (input.paperResponse) {
-        this.paperResponse = input.paperResponse
+        this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
     }
 
