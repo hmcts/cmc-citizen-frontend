@@ -34,7 +34,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('The defendant said they’ll pay you immediately')
     I.click('My account')
     I.see(testData.claimRef)
-    I.see('The defendant admits they owe all the money. They’ve said that they will pay immediately.')
+    I.see('Wait for the defendant to pay you')
   })
 
   Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions', { retries: 3 }, async (I: I) => {
