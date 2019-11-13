@@ -34,6 +34,7 @@ import {
   intentionToProceedDeadline
 } from 'test/data/entity/fullDefenceData'
 import { FeatureToggles } from 'utils/featureToggles'
+import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -386,9 +387,9 @@ const mediationDQEnabledClaimDetails = [
       response: {
         ...baseResponseData,
         ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES,
-        paperResponse: true
-      }
+        freeMediation: FreeMediationOption.YES
+      },
+      paperResponse: YesNoOption.YES.option
     },
     claimantAssertions: [
       'The claim will continue by post',
