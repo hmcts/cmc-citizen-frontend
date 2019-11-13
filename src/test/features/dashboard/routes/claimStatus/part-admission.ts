@@ -706,14 +706,13 @@ const legacyClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-      'You rejected the defendant’s admission of',
+    claimantAssertions: ['You’ve rejected John Doe’s response and said you want to take the case to court.',
       'Tell us your hearing requirements',
-      'You rejected the defendant’s admission of',
+      'complete a directions questionnaire form',
       'You need to',
       'to tell us more about the claim.',
       'Your claim won’t proceed if you don’t complete and return the form before',
-      'Tell us you’ve ended the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: ['John Smith has rejected your admission of',
       'They believe you owe them the full £200 claimed.',
