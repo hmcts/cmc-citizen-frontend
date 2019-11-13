@@ -4,6 +4,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths as ResponsePaths } from 'response/paths'
 import { app } from 'main/app'
@@ -19,14 +20,13 @@ describe('Mediation unsuccessful - Claim details page', () => {
 
     context('when user authorised', () => {
       beforeEach(() => {
-        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.submitterId, 'citizen')
+        idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimIssueObj.submitterId, 'citizen')
       })
 
       context('when defendant clicks on claimant hearing requirements', () => {
 
         it('should call documentclient to download claimant hearing requirement', async () => {
-
-          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+          draftStoreServiceMock.resolveFind('response')
           claimStoreServiceMock.resolveRetrieveDocument()
 
           await request(app)
