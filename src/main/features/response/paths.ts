@@ -30,6 +30,8 @@ export class Paths {
   static readonly claimDetailsPage = new RoutablePath(`${responsePath}/claim-details`)
   static readonly summaryPage = new RoutablePath(`${responsePath}/summary`)
   static readonly sendCompanyFinancialDetailsPage = new RoutablePath(`${responsePath}/send-company-financial-details`)
+  static readonly claimantDQs = new RoutablePath(`${responsePath}/claimant-dqs`)
+
 }
 
 const statementOfMeansPath = `${responsePath}/statement-of-means`

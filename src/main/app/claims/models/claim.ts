@@ -359,6 +359,8 @@ export class Claim {
       this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
       if (input.mediationOutcome) {
         this.mediationOutcome = input.mediationOutcome
+      } else {
+        this.mediationOutcome = 'FAILED'
       }
 
       if (input.pilotCourt) {
