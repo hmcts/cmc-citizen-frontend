@@ -14,5 +14,5 @@ export default express.Router()
       const claim: Claim = res.locals.claim
 
       const pdf: Buffer = await documentsClient.getClaimantHearingRequirementPDF(claim.externalId, res.locals.user.bearerToken)
-      DownloadUtils.downloadPDF(res, pdf, `${claim.claimNumber}-claim-form-defendant-copy`)
+      DownloadUtils.downloadPDF(res, pdf, `${claim.claimNumber}-claimant-hearing-requirements-defendant-copy`)
     }))
