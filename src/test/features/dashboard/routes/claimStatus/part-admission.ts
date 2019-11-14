@@ -693,6 +693,7 @@ const legacyClaimDetails = [
     status: 'Part admission - defendant part admits and rejects mediation DQs not enabled - claimant rejects part admission',
     claim: partAdmissionClaim,
     claimOverride: {
+      features: ['admissions'],
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
@@ -706,14 +707,8 @@ const legacyClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-      'You rejected the defendant’s admission of',
-      'Tell us your hearing requirements',
-      'You rejected the defendant’s admission of',
-      'You need to',
-      'to tell us more about the claim.',
-      'Your claim won’t proceed if you don’t complete and return the form before',
-      'Tell us you’ve ended the claim'
+    claimantAssertions: ['Wait for the court to review the case',
+      'You’ve rejected ' + partAdmissionClaim.claim.defendants[0].name + '’s response and said you want to take the case to court.'
     ],
     defendantAssertions: ['John Smith has rejected your admission of',
       'They believe you owe them the full £200 claimed.',
