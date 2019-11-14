@@ -47,6 +47,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.see('Mrs. Rose Smith has rejected your claim.')
   I.click('View and respond')
   claimantResponseSteps.decideToProceed()
+  I.click('input[type=submit]')
   I.see('You’ve rejected their response')
 })
 
@@ -79,7 +80,6 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.see('Mrs. Rose Smith has rejected your claim.')
   I.click('View and respond')
   claimantResponseSteps.decideNotToProceed()
-  I.see('You didn’t proceed with the claim')
 })
 
 Scenario('I can as an Individual make a claim against an Individual who then fully rejects the claim as they have already paid and I proceed with the claim @citizen', { retries: 3 }, async (I: I) => {
