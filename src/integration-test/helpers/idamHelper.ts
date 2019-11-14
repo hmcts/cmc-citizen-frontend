@@ -3,12 +3,12 @@ import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 class IdamHelper extends codecept_helper {
 
   createCitizenUser (): Promise<string> {
-    return this.createRandomUser('citizens')
+    return this.createRandomUser('citizen')
   }
 
-  private async createRandomUser (userGroupCode: string): Promise<string> {
+  private async createRandomUser (userRoleCode: string): Promise<string> {
     const email: string = this.generateRandomEmailAddress()
-    await IdamClient.createUser(email, userGroupCode)
+    await IdamClient.createUser(email, userRoleCode)
 
     return email
   }
