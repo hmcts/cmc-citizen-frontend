@@ -29,6 +29,8 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { YesNoOption } from 'models/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -70,6 +72,8 @@ export class Claim {
   directionOrder: DirectionOrder
   reviewOrder: ReviewOrder
   intentionToProceedDeadline?: Moment
+  mediationOutcome: string
+  pilotCourt: YesNoOption
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -353,6 +357,13 @@ export class Claim {
         this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
       this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
+      if (input.mediationOutcome) {
+        this.mediationOutcome = input.mediationOutcome
+      }
+
+      if (input.pilotCourt) {
+        this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
+      }
     }
 
     return this
@@ -430,6 +441,10 @@ export class Claim {
       return false
     }
 
+    if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
+      return false
+    }
+
     if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
       return true
     }
@@ -438,7 +453,7 @@ export class Claim {
       return true
     }
 
-    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasRedeterminationBeenRequested()) {
+    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasClaimantRejectedPartAdmissionDQs() || this.hasRedeterminationBeenRequested()) {
       return true
     }
 
@@ -450,7 +465,7 @@ export class Claim {
       return false
     }
 
-    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
+    if (this.hasClaimantRejectedDefendantDefence()) {
       return true
     }
 
