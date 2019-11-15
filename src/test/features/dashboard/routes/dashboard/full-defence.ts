@@ -34,6 +34,7 @@ import {
   intentionToProceedDeadline
 } from 'test/data/entity/fullDefenceData'
 import { DefenceType } from 'claims/models/response/defenceType'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -254,6 +255,50 @@ const testData = [
     },
     claimantAssertions: ['We will contact you to try to arrange a mediation appointment'],
     defendantAssertions: ['We will contact you to try to arrange a mediation appointment']
+  },
+  {
+    status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - mediation failed',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES,
+        defenceType: DefenceType.DISPUTE
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome : MediationOutcome.FAILED
+    },
+    claimantAssertions: ['Mediation was unsuccessful'],
+    defendantAssertions: ['Mediation was unsuccessful']
+  },
+  {
+    status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - mediation success',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES,
+        defenceType: DefenceType.DISPUTE
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome : MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: ['You both agreed a settlement through mediation'],
+    defendantAssertions: ['You both agreed a settlement through mediation']
   }
 ]
 
