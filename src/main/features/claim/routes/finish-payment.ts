@@ -38,6 +38,9 @@ export default express.Router()
           res.redirect(Paths.confirmationPage.evaluateUri({ externalId }))
         }
       } else {
+        if (draft && draft.id) {
+          await new DraftService().delete(draft.id, user.bearerToken)
+        }
         res.redirect(Paths.confirmationPage.evaluateUri({ externalId }))
       }
     } catch (err) {
