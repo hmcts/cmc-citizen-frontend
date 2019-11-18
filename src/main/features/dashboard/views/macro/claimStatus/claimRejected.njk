@@ -65,7 +65,7 @@
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantDashboard(claim) %}
-  {{ t('The claim has been settled') }}
+  {{ t('This claim has ended') }}
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceClaimantDashboard(claim) %}
@@ -73,7 +73,11 @@
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceDefendantClaimDetails(claim) %}
-  {{ t('You accepted the defendants defence') }}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('This claim has ended') }}</h2>
+    <p>{{ t(' {{ claimantName }} ended their claim against you on {{  acceptFullDefenseDate }}.',
+        { claimantName: claim.claimData.claimant.name, acceptFullDefenseDate: claim.claimantRespondedAt| date }) }}</p>
+  </div>
 {% endmacro %}
 
 {% macro claimantAcceptedDefendantDefenceClaimantClaimDetails(claim) %}
