@@ -9,12 +9,14 @@ import { createClaimData } from 'integration-test/data/test-data'
 import { DashboardClaimDetails } from 'integration-test/tests/citizen/defence/pages/defendant-claim-details'
 import { ClaimantResponseTestData } from '../claimantResponse/data/ClaimantResponseTestData'
 import { DefendantResponseSteps } from '../claimantResponse/steps/defendant'
+import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const defendantDetails: DashboardClaimDetails = new DashboardClaimDetails()
 const defendantResponseSteps: DefendantResponseSteps = new DefendantResponseSteps()
+const defenceSteps: DefenceSteps = new DefenceSteps()
 
 Feature('E2E tests for defence journeys')
 
@@ -47,7 +49,7 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   I.see('Mrs. Rose Smith has rejected your claim.')
   I.click('View and respond')
   claimantResponseSteps.decideToProceed()
-  I.click('input[type=submit]')
+  defenceSteps.checkAndSendAndSubmit(PartyType.INDIVIDUAL, testData.defenceType)
   I.see('You’ve rejected their response')
 })
 

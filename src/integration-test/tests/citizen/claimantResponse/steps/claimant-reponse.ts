@@ -424,6 +424,7 @@ export class ClaimantResponseSteps {
     claimantRejectionReasonPage.enterReason('No money received')
     I.see('COMPLETE')
     this.finishClaimantResponse()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve rejected their response')
   }
 }
