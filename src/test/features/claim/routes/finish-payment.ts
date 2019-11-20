@@ -5,7 +5,6 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
-import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 
@@ -23,7 +22,6 @@ describe('Claim issue: finish payment page', () => {
 
   describe('on GET', () => {
     checkAuthorizationGuards(app, 'get', pagePath)
-    checkEligibilityGuards(app, 'get', pagePath)
 
     it('should redirect to check and send page if claim is not found', async () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -66,6 +64,7 @@ describe('Claim issue: finish payment page', () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       draftStoreServiceMock.resolveFind('claim', { externalId })
       claimStoreServiceMock.resolveRetrieveClaimByExternalId({ externalId, state: 'OPEN' })
+      draftStoreServiceMock.resolveDelete()
 
       await request(app)
         .get(pagePath)

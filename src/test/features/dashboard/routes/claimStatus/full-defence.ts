@@ -433,8 +433,7 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       'Mediation was unsuccessful',
       'You weren’t able to resolve ' + fullDefenceClaim.claim.claimants[0].name + '’s claim against you using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.',
-      'Download ' + fullDefenceClaim.claim.claimants[0].name + '’s hearing requirements'
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
     ]
   },
   {
@@ -629,6 +628,30 @@ const mediationDQEnabledClaimDetails = [
       'The court ended the claim',
       'This is because John Smith didn’t proceed with it before the deadline of 4pm on',
       'If they want to restart the claim, they need to ask for permission from the court. We’ll contact you by post if they do this.'
+    ]
+  },
+  {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation - claimant accepts full defense.',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData,
+        freeMediation: 'no'
+      },
+      claimantResponse: {
+        type: 'ACCEPTATION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: [
+      'You stopped this claim',
+      'You ended the claim on'
+    ],
+    defendantAssertions: [
+      'This claim has ended',
+      fullDefenceClaim.claim.claimants[0].name
+      + ' ended their claim against you on'
     ]
   },
   {
