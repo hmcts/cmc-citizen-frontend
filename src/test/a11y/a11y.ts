@@ -105,7 +105,7 @@ const excludedPaths: Paths[] = [
   OfferPaths.agreementReceiver,
   DefendantFirstContactPaths.receiptReceiver,
   ClaimantResponsePaths.receiptReceiver,
-  ClaimantResponsePaths.claimantReceiptReceiver,
+  DirectionQuestionnairePaths.claimantReceiptReceiver,
   ClaimantResponsePaths.courtOfferedSetDatePage,
   DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
   DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
