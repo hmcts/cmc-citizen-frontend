@@ -246,7 +246,7 @@ export class ClaimModelConverter {
    * @returns {Payment} - simplified payment object required by the backend API
    */
   private static makeShallowCopy (payment: Payment): Payment {
-    if (!payment) {
+    if (!payment || Object.keys(payment).length === 0) {
       return undefined
     }
     return {

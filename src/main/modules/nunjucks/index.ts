@@ -50,6 +50,7 @@ import { FullRejectionPaths, PartAdmissionPaths, Paths as ResponsePaths } from '
 import { HowMuchPaidClaimantOption } from 'response/form/models/howMuchPaidClaimant'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
 import { Service } from 'models/service'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
@@ -153,6 +154,7 @@ export class Nunjucks {
     nunjucksEnv.addGlobal('NotEligibleReason', NotEligibleReason)
     nunjucksEnv.addGlobal('InterestType', InterestType)
     nunjucksEnv.addGlobal('InterestTypeOption', InterestTypeOption)
+    nunjucksEnv.addGlobal('MediationOutcome', MediationOutcome)
     nunjucksEnv.addGlobal('InterestDateType', InterestDateType)
     nunjucksEnv.addGlobal('InterestEndDateOption', InterestEndDateOption)
     nunjucksEnv.addGlobal('FormaliseOption', FormaliseOption)
