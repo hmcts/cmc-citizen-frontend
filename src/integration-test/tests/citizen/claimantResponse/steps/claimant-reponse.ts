@@ -27,6 +27,7 @@ import { ClaimantIntentionToProceedPage } from 'integration-test/tests/citizen/c
 import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-part-payment-received'
 import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
 import { claimAmount } from 'integration-test/data/test-data'
+import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -50,6 +51,7 @@ const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new Direction
 const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantIntentionToProceedPage()
 const partPaymentReceivedPage: ClaimantPartPaymentReceivedPage = new ClaimantPartPaymentReceivedPage()
 const claimantRejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
+const claimantSettleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
 
 export class ClaimantResponseSteps {
 
@@ -161,8 +163,8 @@ export class ClaimantResponseSteps {
     intentionToProceedSteps.chooseNo()
     I.see('COMPLETE')
     I.click('Check and submit your response')
-    I.see(`Do you agree the defendant has paid £${claimAmount.getTotal()}`)
-    I.see('Yes')
+    I.see('Do you want to proceed with the claim?')
+    I.see('No')
     I.click('input[type=submit]')
     I.see('You didn’t proceed with the claim')
   }
@@ -394,6 +396,26 @@ export class ClaimantResponseSteps {
     partPaymentReceivedPage.yesTheDefendantHasPaid()
     I.see('Settle the claim for ')
     I.click('Settle the claim for')
+    claimantSettleClaimPage.selectAcceptedYes()
+    I.click('Check and submit your response')
+    I.see('Do you agree the defendant has paid')
+    I.see('Yes')
+    I.see('Do you want to settle the claim for the')
+    I.click('input[type=submit]')
+    I.see('You’ve accepted their response')
+  }
+
+  rejectFullDefencePaidLessThanFullAmount (testData: EndToEndTestData): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Have you been paid the £50')
+    partPaymentReceivedPage.noTheDefendantHasNotPaid()
+    taskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.see('You’ve rejected their response')
   }
 
   acceptFullDefencePaidFullAmount (testData: EndToEndTestData): void {
@@ -414,12 +436,12 @@ export class ClaimantResponseSteps {
 
   rejectFullDefencePaidFullAmount (testData: EndToEndTestData): void {
     taskListPage.selectTaskViewDefendantResponse()
-    I.see(`${testData.claimantName} states they paid you £${claimAmount.getTotal()}`)
+    I.see(`${testData.defendantName} states they paid you £${claimAmount.getTotal()}`)
     viewDefendantsResponsePage.submit()
     I.see('COMPLETE')
     I.click('Accept or reject their response')
-    I.see(`Do you agree the defendant has paid the £${claimAmount.getTotal()} in full`)
-    partPaymentReceivedPage.noTheDefendantHasNotPaid()
+    I.see(`Do you agree the defendant has paid the £105.50 in full?`)
+    claimantSettleClaimPage.selectAcceptedNo()
     I.see('Why did you reject their response')
     claimantRejectionReasonPage.enterReason('No money received')
     I.see('COMPLETE')
