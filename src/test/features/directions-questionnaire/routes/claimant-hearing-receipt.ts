@@ -7,6 +7,7 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'directions-questionnaire/paths'
 import { app } from 'main/app'
+import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
@@ -29,9 +30,7 @@ describe('Claimant response: confirmation page', () => {
       context('when claimant click on download hearing requirements', () => {
 
         it('should call documentclient to download claimant hearing requirement', async () => {
-
-         // claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse(claimWithDQ)
           claimStoreServiceMock.resolveRetrieveDocument()
 
           await request(app)
