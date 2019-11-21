@@ -9,6 +9,10 @@ import { Paths } from 'directions-questionnaire/paths'
 import { app } from 'main/app'
 
 const cookieName: string = config.get<string>('session.cookieName')
+const claimWithDQ = {
+  ...claimStoreServiceMock.sampleClaimObj,
+  ...{ features: ['directionsQuestionnaire'] }
+}
 
 const pagePath = Paths.claimantReceiptReceiver.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
 
@@ -26,7 +30,8 @@ describe('Claimant response: confirmation page', () => {
 
         it('should call documentclient to download claimant hearing requirement', async () => {
 
-          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+         // claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
           claimStoreServiceMock.resolveRetrieveDocument()
 
           await request(app)
