@@ -383,8 +383,7 @@
       <p>{{ t('You’ll have to go to a hearing. We’ll contact you with the details.') }}</p>
     {% endif %}
     <p class="receipt-download-container">
-      {{ internalLink(t('Download {{ claimantName }}’s hearing requirements ', { claimantName: claim.claimData.claimant.name} ), DirectionsQuestionnairePaths.claimantReceiptReceiver.evaluateUri({ externalId: claim.externalId }) )}}
-      {{ t('(PDF)') }}
+      {{ internalLink(t('Download {{ claimantName }}’s hearing requirements ', { claimantName: claim.claimData.claimant.name} ), DirectionsQuestionnairePaths.claimantReceiptReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
     </p>
   </div>
 {% endmacro %}
