@@ -17,8 +17,8 @@
 {% endmacro %}
 
 {% macro paidInFullDefendantClaimSettledDetails(claim) %}
-  <p>{{ t('{{ claimantName }} confirmed you paid {{ totalAmountTillToday }} on {{ moneyReceivedOn }}. This claim is now settled.',
-      { claimantName: claim.claimData.claimant.name, totalAmountTillToday: claim.totalAmountTillToday | numeral,
+  <p>{{ t('{{ claimantName }} confirmed you settled on {{ moneyReceivedOn }}. This claim is now settled.',
+      { claimantName: claim.claimData.claimant.name,
         moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
 {% endmacro %}
 
