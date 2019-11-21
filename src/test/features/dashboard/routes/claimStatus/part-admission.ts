@@ -24,6 +24,7 @@ import {
   respondedAt,
   directionsQuestionnaireDeadline
 } from 'test/data/entity/fullDefenceData'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 import {
   claimantAcceptRepaymentPlan,
   claimantAcceptRepaymentPlanByDetermination,
@@ -705,14 +706,13 @@ const legacyClaimDetails = [
       claimantRespondedAt: MomentFactory.currentDate(),
       ...directionsQuestionnaireDeadline
     },
-    claimantAssertions: ['We’ll contact you to try to arrange a mediation appointment',
-      'You rejected the defendant’s admission of',
+    claimantAssertions: ['You’ve rejected John Doe’s response and said you want to take the case to court.',
       'Tell us your hearing requirements',
-      'You rejected the defendant’s admission of',
+      'complete a directions questionnaire form',
       'You need to',
       'to tell us more about the claim.',
       'Your claim won’t proceed if you don’t complete and return the form before',
-      'Tell us you’ve ended the claim'
+      'Tell us you’ve settled'
     ],
     defendantAssertions: ['John Smith has rejected your admission of',
       'They believe you owe them the full £200 claimed.',
@@ -814,6 +814,65 @@ const mediationDQEnabledClaimDetails = [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
       'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
+    ]
+  },
+  {
+    status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation failed',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.FAILED
+    },
+    claimantAssertions: [
+      'Mediation was unsuccessful',
+      'You weren’t able to resolve your claim against ' + partAdmissionClaim.claim.defendants[0].name + ' using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
+    ],
+    defendantAssertions: [
+      'Mediation was unsuccessful',
+      'You weren’t able to resolve ' + partAdmissionClaim.claim.claimants[0].name + '’s claim against you using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
+    ]
+  },
+  {
+    status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation success',
+    claim: partAdmissionClaim,
+    claimOverride: {
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...basePartialAdmissionData,
+        freeMediation: FreeMediationOption.YES
+      },
+      claimantResponse: {
+        settleForAmount: 'no',
+        freeMediation: FreeMediationOption.YES,
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: [
+      'You both agreed a settlement through mediation'
+    ],
+    defendantAssertions: [
+      'You both agreed a settlement through mediation',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms',
+      'Contact ' + partAdmissionClaim.claim.claimants[0].name,
+      'if you need their payment details. Make sure you get receipts for any payments.'
     ]
   }
 ]
