@@ -4,7 +4,6 @@ import { Claim } from 'claims/models/claim'
 import { DocumentsClient } from 'documents/documentsClient'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DownloadUtils } from 'utils/downloadUtils'
-import { User } from 'idam/user'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
