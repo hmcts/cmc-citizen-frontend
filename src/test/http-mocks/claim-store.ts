@@ -170,7 +170,7 @@ export const sampleClaimIssueObj = {
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
   intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
-  features: ['admissions', 'directionsQuestionnaire']
+  features: ['admissions']
 }
 
 export const paymentResponse = {
@@ -255,7 +255,7 @@ export const sampleClaimObj = {
     ]
   },
   intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
-  features: ['admissions']
+  features: ['admissions', 'directionsQuestionnaire']
 }
 
 export const settlementWithInstalmentsAndAcceptation = {
