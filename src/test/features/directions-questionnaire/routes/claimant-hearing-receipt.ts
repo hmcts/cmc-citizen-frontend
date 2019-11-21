@@ -7,15 +7,15 @@ import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths } from 'directions-questionnaire/paths'
 import { app } from 'main/app'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
 
+const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const claimWithDQ = {
   ...claimStoreServiceMock.sampleClaimObj,
   ...{ features: ['directionsQuestionnaire'] }
 }
 
-const pagePath = Paths.claimantReceiptReceiver.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
+const pagePath = Paths.claimantReceiptReceiver.evaluateUri({ externalId: externalId })
 
 describe('Claimant response: confirmation page', () => {
   attachDefaultHooks(app)
