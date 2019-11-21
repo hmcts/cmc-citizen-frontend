@@ -396,7 +396,7 @@
           DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId }))
         }
       ) | safe }}</p>
-    <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}. or we’ll cancel your defence.',
+    <p>{{ t('You must make sure we receive the form before 4pm on {{ deadline }}, or we’ll cancel your defence.',
         { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
     <p>{{ t('You also need to send a copy of the form to {{ claimantName }}', { claimantName: claim.claimData.claimant.name } ) }}</p>
     <p>{{ t('Your online account won’t be updated with any more details about this claim.') }}</p>
