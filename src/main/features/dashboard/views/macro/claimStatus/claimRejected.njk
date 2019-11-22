@@ -94,6 +94,10 @@
     <p>{{ t('{{ claimantName }} has rejected your defence.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.') }}</p>
+    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+    <p class="receipt-download-container">
+      {{ internalLink(t('Download their hearing requirements ', { claimantName: claim.claimData.claimant.name} ), DirectionsQuestionnairePaths.claimantReceiptReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+    </p>
   </div>
 {% endmacro %}
 
