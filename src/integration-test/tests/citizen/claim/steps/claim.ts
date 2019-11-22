@@ -237,11 +237,11 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
+    testingSupport.deleteClaimDraft()
     this.completeEligibility()
     if (fillInNewFeaturesPage) {
       this.optIntoNewFeatures()
     }
-    testingSupport.deleteClaimDraft()
     this.completeStartOfClaimJourney(claimantType, defendantType, enterDefendantEmail)
     interestSteps.enterDefaultInterest()
     I.see('Total amount you’re claiming')
