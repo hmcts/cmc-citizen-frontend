@@ -85,5 +85,5 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
 Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
-  claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, false)
+  claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
 })
