@@ -1,5 +1,4 @@
 import I = CodeceptJS.I
-import { postcodeLookupQuery } from 'integration-test/data/test-data'
 
 const I: I = actor()
 
@@ -73,7 +72,11 @@ export class IndividualDetailsPage {
   }
 
   enterAddresses (address: Address, correspondenceAddress: Address): void {
-    this.lookupAddress(postcodeLookupQuery)
+    I.click(fields.address.enterManually)
+    I.fillField(fields.address.line1, address.line1)
+    I.fillField(fields.address.line2, address.line2)
+    I.fillField(fields.address.city, address.city)
+    I.fillField(fields.address.postcode, address.postcode)
 
     I.checkOption(fields.hasCorrespondenceAddress)
     I.click(fields.correspondenceAddress.enterManually)
