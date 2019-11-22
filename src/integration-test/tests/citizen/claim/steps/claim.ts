@@ -267,6 +267,7 @@ export class ClaimSteps {
   }
 
   completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+    this.optIntoNewFeatures()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
