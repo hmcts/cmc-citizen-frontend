@@ -29,6 +29,7 @@ import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -52,6 +53,7 @@ const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 export class ClaimSteps {
 
@@ -239,6 +241,7 @@ export class ClaimSteps {
     if (fillInNewFeaturesPage) {
       this.optIntoNewFeatures()
     }
+    testingSupport.deleteClaimDraft()
     this.completeStartOfClaimJourney(claimantType, defendantType, enterDefendantEmail)
     interestSteps.enterDefaultInterest()
     I.see('Total amount you’re claiming')
