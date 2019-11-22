@@ -4,11 +4,13 @@ import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/intere
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 Feature('Claimant Enter details of claim')
 
@@ -85,5 +87,6 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user
 
 Scenario('I can enter a claim details and navigate up to payment page @smoke-test', { retries: 3 }, (I: I) => {
+  testingSupport.deleteClaimDraft()
   claimSteps.makeAClaimAndNavigateUpToPayment(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true, false)
 })
