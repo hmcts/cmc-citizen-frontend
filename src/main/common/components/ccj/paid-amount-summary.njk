@@ -10,9 +10,11 @@
 
     <div class="form-group">
       {% set total = claim.totalAmountTillToday if amountSettledFor === undefined else amountSettledFor + (claimFee | pennies2pounds) %}
-
-      <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee and any interest.', { totalAmount: total | numeral }) }}</p>
-      <p>{{ t('This means you´ll recover the {{ totalAmount }} as follows:', { totalAmount: total | numeral }) }}</p>
+      {% if interestDetails %}
+        <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee and any interest, as shown in this table:', { totalAmount: total | numeral }) }}</p>
+      {% else %}
+        <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee, as shown in this table:', { totalAmount: total | numeral }) }}</p>
+      {% endif %}
 
       <table class="table-form">
         <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
@@ -35,7 +37,7 @@
             <th scope="row">{{ t('Amount you’re settling for') }}</th>
             <td class="numeric last">
               <span class="font-small">{{ amountSettledFor | numeral }}</span>
-            </td>
+            </td><x></x>
           </tr>
         {% endif %}
         {% if amountSettledFor === undefined and interestDetails %}
