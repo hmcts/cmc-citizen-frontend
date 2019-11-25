@@ -42,9 +42,11 @@
         <p>
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
+        <p class="receipt-download-container">
         {% if claim.response.directionsQuestionnaire %}
         {{ internalLink(t('Download your hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
         {% endif %}
+        </p>
       </div>
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
