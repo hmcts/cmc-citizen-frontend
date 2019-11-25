@@ -94,8 +94,8 @@
     <p>{{ t('{{ claimantName }} has rejected your defence.',
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.') }}</p>
+    {% if claim.response.directionsQuestionnaire %}
     <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
-      {% if claim.response.directionsQuestionnaire %}
         {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
       {% endif %}
   </div>
@@ -108,8 +108,8 @@
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
     <p>{{ internalLink( t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
-    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
     {% if claim.response.directionsQuestionnaire %}
+    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
       {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
     {% endif %}
   </div>
