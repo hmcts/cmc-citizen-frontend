@@ -138,7 +138,7 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.see(testData.claimRef)
   I.see('Claim status')
   I.see(`${testData.defendantName} has rejected your claim.`)
-  I.click('Decide whether to proceed')
+  I.click('View and respond')
   claimantResponseSteps.acceptFullDefencePaidFullAmount(testData)
   I.click('Sign out')
 })
