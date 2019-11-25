@@ -43,9 +43,7 @@
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
         <p class="receipt-download-container">
-          {% if directionsQuestionnaireEnabled %}
-            {{ internalLink(t('Download your hearing requirements'), DirectionsQuestionnairePaths.claimantReceiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t('(PDF)') }}
-          {% else %}
+            {{ internalLink(t('Download your hearing requirements'), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t('(PDF)') }}
         </p>
       </div>
 

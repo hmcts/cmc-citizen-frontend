@@ -84,7 +84,14 @@ const testData = [
     claim: statesPaidClaim,
     claimOverride: {
       response: {
-        ...partialAdmissionFromStatesPaidWithMediationDefence
+        ...partialAdmissionFromStatesPaidWithMediationDefence,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       ...claimantRejectAlreadyPaidWithMediation,
       mediationOutcome: MediationOutcome.FAILED

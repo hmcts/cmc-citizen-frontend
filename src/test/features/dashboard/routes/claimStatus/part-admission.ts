@@ -820,7 +820,14 @@ const mediationDQEnabledClaimDetails = [
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
-        freeMediation: FreeMediationOption.YES
+        freeMediation: FreeMediationOption.YES,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       claimantResponse: {
         settleForAmount: 'no',
