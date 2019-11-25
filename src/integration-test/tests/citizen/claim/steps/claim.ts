@@ -239,7 +239,7 @@ export class ClaimSteps {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
     testingSupport.deleteClaimDraft()
     this.completeEligibility()
-    this.completeStartOfClaimJourney(claimantType, defendantType, enterDefendantEmail)
+    this.completeStartOfClaimJourney(claimantType, defendantType, enterDefendantEmail, false)
     interestSteps.enterDefaultInterest()
     I.see('Total amount you’re claiming')
     I.see('£25')
@@ -263,8 +263,10 @@ export class ClaimSteps {
     }
   }
 
-  completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
-    this.optIntoNewFeatures()
+  completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
+    if (fillInNewFeaturesPage) {
+      this.optIntoNewFeatures()
+    }
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
