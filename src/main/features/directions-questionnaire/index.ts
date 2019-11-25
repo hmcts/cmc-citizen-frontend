@@ -10,6 +10,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { DirectionsQuestionnaireGuard } from 'directions-questionnaire/guard/directionsQuestionnaireGuard'
 import { RouterFinder } from 'shared/router/routerFinder'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { OnlyPartiesLinkedToClaimCanDoIt } from 'guards/onlyPartiesLinkedToClaimCanDoIt'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -28,6 +29,7 @@ export class DirectionsQuestionnaireFeature {
     app.all(allDQs, ClaimMiddleware.retrieveByExternalId)
     app.all(allDQs, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(allDQs, DirectionsQuestionnaireGuard.requestHandler)
+    app.all(allDQs, OnlyPartiesLinkedToClaimCanDoIt.check())
     app.all(allDQs,
       DraftMiddleware.requestHandler(new DraftService(), 'directionsQuestionnaire', 100, (value: any): DirectionsQuestionnaireDraft => {
         return new DirectionsQuestionnaireDraft().deserialize(value)
