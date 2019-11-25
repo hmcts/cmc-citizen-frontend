@@ -168,7 +168,6 @@
 
 {% macro statesPaidRejectedMediationNODefendantClaimDetails(claim) %}
   <p>{{ t('You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.') }}</p>
-  <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
 
   {% if not claim.response.directionsQuestionnaire and not claim.response.directionsQuestionnaire.selfWitness %}
     <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
