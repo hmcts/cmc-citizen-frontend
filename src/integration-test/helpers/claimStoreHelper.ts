@@ -38,7 +38,14 @@ class ClaimStoreHelper extends codecept_helper {
     let defendant = userEmails.getDefendant()
     let uri = `${baseURL}/testing-support/claims/${referenceNumber}/defendant/${defendant}/${password}`
 
-    await request.put(uri, {}).promise()
+    await request.put({
+      uri: uri,
+      body: {
+        defendantUsername: defendant,
+        defendantPassword: password
+      },
+      json: true
+    }).promise()
   }
 
   async respondToClaim (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string): Promise<void> {
