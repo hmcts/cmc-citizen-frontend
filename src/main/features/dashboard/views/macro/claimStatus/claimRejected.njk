@@ -95,11 +95,9 @@
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.') }}</p>
     <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
-    {% if directionsQuestionnaireEnabled %}
-      <p class="receipt-download-container">
-        {{ internalLink(t('Download their hearing requirements ', { claimantName: claim.claimData.claimant.name} ), DirectionsQuestionnairePaths.claimantReceiptReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
-      </p>
-    {% endif %}
+      {% if claim.response.directionsQuestionnaire %}
+        {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+      {% endif %}
   </div>
 {% endmacro %}
 
@@ -110,6 +108,10 @@
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
     <p>{{ internalLink( t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+    {% if claim.response.directionsQuestionnaire %}
+      {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+    {% endif %}
   </div>
 {% endmacro %}
 
@@ -141,6 +143,10 @@
       <p>{{ t('Your defence will be cancelled if you don’t complete and return the form before 4pm on {{ deadline }}.',
           { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
       <p>{{ _downloadResponseLink(claim, 'Download your response') }}</p>
+      {% if claim.response.directionsQuestionnaire %}
+      <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+      {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+      {% endif %}
     </div>
   {% endif %}
 {% endmacro %}
@@ -388,11 +394,9 @@
     {% else %}
       <p>{{ t('You’ll have to go to a hearing. We’ll contact you with the details.') }}</p>
     {% endif %}
-    <p class="receipt-download-container">
       {% if claim.response.directionsQuestionnaire %}
         {{ internalLink(t('Download {{ claimantName }}’s hearing requirements ', { claimantName: claim.claimData.claimant.name} ), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
       {% endif %}
-    </p>
   </div>
 {% endmacro %}
 

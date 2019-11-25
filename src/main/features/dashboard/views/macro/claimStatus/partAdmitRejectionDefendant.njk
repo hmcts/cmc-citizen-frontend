@@ -82,6 +82,10 @@
       {% endif %}
 
       <p>{{ downloadResponseLink(claim) }}</p>
+      {% if claim.response.directionsQuestionnaire %}
+      <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+        {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+      {% endif %}
     </div>
   {% endif %}
 {% endmacro %}
