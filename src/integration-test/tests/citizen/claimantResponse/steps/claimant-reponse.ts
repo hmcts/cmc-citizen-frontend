@@ -191,7 +191,7 @@ export class ClaimantResponseSteps {
   acceptPartAdmitFromBusinessWithAlternativePaymentIntention (): void {
     taskListPage.selectTaskViewDefendantResponse()
     viewDefendantsResponsePage.submit()
-    viewDefendantsResponsePage.submitHowTheyWantToPay() // bug
+    viewDefendantsResponsePage.submitHowTheyWantToPay()
     I.see('COMPLETE')
     taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
     settleAdmittedPage.selectAdmittedYes()
@@ -207,7 +207,7 @@ export class ClaimantResponseSteps {
   acceptFullAdmitFromBusinessWithAlternativePaymentIntention (claimantResponseTestData: ClaimantResponseTestData): void {
     taskListPage.selectTaskViewDefendantResponse()
     viewDefendantsResponsePage.submit()
-    viewDefendantsResponsePage.submitHowTheyWantToPay() // bug
+    viewDefendantsResponsePage.submitHowTheyWantToPay()
     I.see('COMPLETE')
     taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
     settleAdmittedPage.selectAdmittedYes()
