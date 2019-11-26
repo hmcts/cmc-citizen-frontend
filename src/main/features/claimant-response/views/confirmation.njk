@@ -80,7 +80,7 @@
       {% elseif claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION %}
         {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
           <p>{{ t('The claim is now ended. We’ve emailed {{ defendantName }} to tell them.', { defendantName: claim.claimData.defendant.name }) }}</p>
-        {% elseif claim.response.responseType === domain.ResponseType.PART_ADMISSION.value and claim.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY %}
+        {% elseif claim.response.responseType === domain.ResponseType.PART_ADMISSION and claim.response.paymentIntention.paymentOption === PaymentOption.IMMEDIATELY %}
           <p>{{ t('The defendant said they’ll pay you {{ amount }} immediately.', { amount: claim.response.amount | numeral }) }}</p>
           <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
               { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
