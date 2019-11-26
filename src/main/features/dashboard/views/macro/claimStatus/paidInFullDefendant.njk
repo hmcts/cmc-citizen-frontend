@@ -11,14 +11,14 @@
 
 {% macro paidInFullDefendantClaimDetails(claim) %}
   <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
-  <p>{{ t('{{ claimantName }} confirmed you paid on {{ moneyReceivedOn }}.',
+  <p>{{ t('{{ claimantName }} confirmed you settled on {{ moneyReceivedOn }}.',
       { claimantName: claim.claimData.claimant.name, moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
   <p>{{ downloadResponseLink(claim) }}</p>
 {% endmacro %}
 
 {% macro paidInFullDefendantClaimSettledDetails(claim) %}
-  <p>{{ t('{{ claimantName }} confirmed you paid {{ totalAmountTillToday }} on {{ moneyReceivedOn }}. This claim is now settled.',
-      { claimantName: claim.claimData.claimant.name, totalAmountTillToday: claim.totalAmountTillToday | numeral,
+  <p>{{ t('{{ claimantName }} confirmed you settled on {{ moneyReceivedOn }}. This claim is now settled.',
+      { claimantName: claim.claimData.claimant.name,
         moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
 {% endmacro %}
 
