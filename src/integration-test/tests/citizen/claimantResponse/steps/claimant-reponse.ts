@@ -20,9 +20,14 @@ import { ClaimantCourtOfferedSetDatePage } from 'integration-test/tests/citizen/
 import { ClaimantCourtOfferedInstalmentsPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-instalments'
 import { ClaimantPayBySetDateAcceptedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-pay-by-set-date-accepted'
 import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
-import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
+import { PaidInFullPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-paid-in-full'
 import { MediationSteps } from 'integration-test/tests/citizen/mediation/steps/mediation'
 import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
+import { ClaimantIntentionToProceedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-intention-to-proceed'
+import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-part-payment-received'
+import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
+import { claimAmount } from 'integration-test/data/test-data'
+import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -38,11 +43,15 @@ const paymentPlanPage: ClaimantPaymentPlanPage = new ClaimantPaymentPlanPage()
 const courtOfferedSetDataPage: ClaimantCourtOfferedSetDatePage = new ClaimantCourtOfferedSetDatePage()
 const courtOfferedInstalmentsPage: ClaimantCourtOfferedInstalmentsPage = new ClaimantCourtOfferedInstalmentsPage()
 const payBySetDateAccepted: ClaimantPayBySetDateAcceptedPage = new ClaimantPayBySetDateAcceptedPage()
-const defendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
+const viewDefendantsResponsePage: ClaimantDefendantResponsePage = new ClaimantDefendantResponsePage()
 const settleAdmittedPage: ClaimantSettleAdmittedPage = new ClaimantSettleAdmittedPage()
-const settleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
+const settleClaimPage: PaidInFullPage = new PaidInFullPage()
 const mediationSteps: MediationSteps = new MediationSteps()
 const directionsQuestionnaireSteps: DirectionsQuestionnaireSteps = new DirectionsQuestionnaireSteps()
+const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantIntentionToProceedPage()
+const partPaymentReceivedPage: ClaimantPartPaymentReceivedPage = new ClaimantPartPaymentReceivedPage()
+const claimantRejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
+const claimantSettleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
 
 export class ClaimantResponseSteps {
 
@@ -82,7 +91,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(false, testData)
+    this.acceptCCJ(false)
   }
 
   acceptCcjFromDashboardWhenDefendantHasPaidSomeAndAcceptPaymentMethod (
@@ -91,7 +100,7 @@ export class ClaimantResponseSteps {
   ): void {
     this.viewClaimFromDashboard(testData.claimRef)
     this.respondToOffer(buttonText)
-    this.acceptCCJ(true, testData)
+    this.acceptCCJ(true)
   }
 
   acceptCcjFromDashboardWhenRejectPaymentMethod (
@@ -119,9 +128,9 @@ export class ClaimantResponseSteps {
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    viewDefendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
-      defendantsResponsePage.submitHowTheyWantToPay()
+      viewDefendantsResponsePage.submitHowTheyWantToPay()
     }
     I.see('COMPLETE')
     if (!testData.defendantClaimsToHavePaidInFull) {
@@ -129,7 +138,40 @@ export class ClaimantResponseSteps {
       settleAdmittedPage.selectAdmittedNo()
     }
     taskListPage.selectTaskFreeMediation()
-    mediationSteps.acceptMediationAsIndividualPhoneNumberProvidedIsUsed()
+    mediationSteps.acceptMediationAfterDisagreeing()
+    taskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+  }
+
+  decideToProceed (): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Decide whether to proceed')
+    I.see('Do you want to proceed with the claim?')
+    intentionToProceedSteps.chooseYes()
+    this.finishClaimantResponse()
+  }
+
+  decideNotToProceed (): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Decide whether to proceed')
+    I.see('Do you want to proceed with the claim?')
+    intentionToProceedSteps.chooseNo()
+    I.see('COMPLETE')
+    I.click('Check and submit your response')
+    I.see('Do you want to proceed with the claim?')
+    I.see('No')
+    I.click('input[type=submit]')
+    I.see('You didn’t proceed with the claim')
+  }
+
+  finishClaimantResponse (): void {
+    taskListPage.selectTaskFreeMediation()
+    mediationSteps.acceptMediationAfterDisagreeing()
     taskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
     taskListPage.selectTaskCheckandSubmitYourResponse()
@@ -148,8 +190,8 @@ export class ClaimantResponseSteps {
 
   acceptPartAdmitFromBusinessWithAlternativePaymentIntention (): void {
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
-    defendantsResponsePage.submitHowTheyWantToPay() // bug
+    viewDefendantsResponsePage.submit()
+    viewDefendantsResponsePage.submitHowTheyWantToPay()
     I.see('COMPLETE')
     taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
     settleAdmittedPage.selectAdmittedYes()
@@ -164,8 +206,8 @@ export class ClaimantResponseSteps {
 
   acceptFullAdmitFromBusinessWithAlternativePaymentIntention (claimantResponseTestData: ClaimantResponseTestData): void {
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
-    defendantsResponsePage.submitHowTheyWantToPay() // bug
+    viewDefendantsResponsePage.submit()
+    viewDefendantsResponsePage.submitHowTheyWantToPay()
     I.see('COMPLETE')
     taskListPage.selectTaskAcceptOrRejectSpecificAmount(50)
     settleAdmittedPage.selectAdmittedYes()
@@ -183,9 +225,9 @@ export class ClaimantResponseSteps {
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    viewDefendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
-      defendantsResponsePage.submitHowTheyWantToPay()
+      viewDefendantsResponsePage.submitHowTheyWantToPay()
     }
     I.see('COMPLETE')
     if (!testData.defendantClaimsToHavePaidInFull) {
@@ -210,9 +252,9 @@ export class ClaimantResponseSteps {
     claimantResponseTestData: ClaimantResponseTestData
   ): void {
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    viewDefendantsResponsePage.submit()
     if (claimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
-      defendantsResponsePage.submitHowTheyWantToPay()
+      viewDefendantsResponsePage.submitHowTheyWantToPay()
     }
     I.see('COMPLETE')
     if (!testData.defendantClaimsToHavePaidInFull) {
@@ -257,9 +299,9 @@ export class ClaimantResponseSteps {
     unReasonableClaimantResponseTestData: UnreasonableClaimantResponseTestData
   ): void {
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    viewDefendantsResponsePage.submit()
     if (unReasonableClaimantResponseTestData.isExpectingToSeeHowTheyWantToPayPage) {
-      defendantsResponsePage.submitHowTheyWantToPay()
+      viewDefendantsResponsePage.submitHowTheyWantToPay()
     }
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseNo()
@@ -275,7 +317,7 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
   }
 
-  acceptCCJ (shouldPaySome: boolean, testData: EndToEndTestData): void {
+  acceptCCJ (shouldPaySome: boolean): void {
     taskListPage.selectTaskViewDefendantResponse()
     I.click('Continue')
     I.see('COMPLETE')
@@ -302,7 +344,7 @@ export class ClaimantResponseSteps {
   ): void {
     I.dontSeeElement({ css: 'div.task-finished:not(.unfinished)>strong' })
     taskListPage.selectTaskViewDefendantResponse()
-    defendantsResponsePage.submit()
+    viewDefendantsResponsePage.submit()
     taskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
     acceptPaymentMethodPage.chooseNo()
     taskListPage.selectProposeAnAlternativeRepaymentPlan()
@@ -344,5 +386,67 @@ export class ClaimantResponseSteps {
     taskListPage.selectTaskCheckandSubmitYourResponse()
     checkAndSendPage.verifyFactsForCCJ()
     I.click('input[type=submit]')
+  }
+
+  acceptFullDefencePaidLessThanFullAmount (): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Have you been paid the ')
+    partPaymentReceivedPage.yesTheDefendantHasPaid()
+    I.see('Settle the claim for ')
+    I.click('Settle the claim for')
+    claimantSettleClaimPage.selectAcceptedYes()
+    I.click('Check and submit your response')
+    I.see('Do you agree the defendant has paid')
+    I.see('Yes')
+    I.see('Do you want to settle the claim for the')
+    I.click('input[type=submit]')
+    I.see('You’ve accepted their response')
+  }
+
+  rejectFullDefencePaidLessThanFullAmount (testData: EndToEndTestData): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Have you been paid the £50')
+    partPaymentReceivedPage.noTheDefendantHasNotPaid()
+    taskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
+    taskListPage.selectTaskCheckandSubmitYourResponse()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.see('You’ve rejected their response')
+  }
+
+  acceptFullDefencePaidFullAmount (testData: EndToEndTestData): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    I.see(`${testData.defendantName} states they paid you £105.50.`)
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Accept or reject their response')
+    I.see(`Do you agree the defendant has paid the £105.50 in full?`)
+    claimantSettleClaimPage.selectAcceptedYes()
+    I.see('COMPLETE')
+    I.click('Check and submit your response')
+    I.see(`Do you agree the defendant has paid £105.50`)
+    I.see('Yes')
+    I.click('input[type=submit]')
+    I.see('You didn’t proceed with the claim')
+  }
+
+  rejectFullDefencePaidFullAmount (testData: EndToEndTestData): void {
+    taskListPage.selectTaskViewDefendantResponse()
+    I.see(`${testData.defendantName} states they paid you £${claimAmount.getTotal()}`)
+    viewDefendantsResponsePage.submit()
+    I.see('COMPLETE')
+    I.click('Accept or reject their response')
+    I.see(`Do you agree the defendant has paid the £105.50 in full?`)
+    claimantSettleClaimPage.selectAcceptedNo()
+    I.see('Why did you reject their response')
+    claimantRejectionReasonPage.enterReason('No money received')
+    I.see('COMPLETE')
+    this.finishClaimantResponse()
+    checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
+    I.see('You’ve rejected their response')
   }
 }
