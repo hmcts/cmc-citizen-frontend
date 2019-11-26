@@ -10,7 +10,11 @@ import { checkNotClaimantInCaseGuard } from 'test/features/claimant-response/rou
 
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import { rejectionClaimantResponseData, rejectionClaimantResponseWithDQ } from 'test/data/entity/claimantResponseData'
+import {
+  baseAcceptationClaimantResponseData,
+  rejectionClaimantResponseData,
+  rejectionClaimantResponseWithDQ
+} from 'test/data/entity/claimantResponseData'
 
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 
@@ -56,6 +60,21 @@ describe('Claimant response: confirmation page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Your claim number:'))
+        })
+
+        it('should render page when claim is ended', async () => {
+          let claimantResponseData = {
+            ...claimStoreServiceMock.sampleFullDefenceRejectEntirely,
+            ...{ claimantRespondedAt: '2017-07-25T22:45:51.785' },
+            ...{ claimantResponse: baseAcceptationClaimantResponseData }
+          }
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimantResponseData)
+          claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('The claim is now ended.'))
         })
 
         it('should render page with hearing requirement', async () => {
