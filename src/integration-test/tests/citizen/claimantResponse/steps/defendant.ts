@@ -94,7 +94,7 @@ export class DefendantResponseSteps {
       )
     }
     defendantTaskListPage.selectTaskFreeMediation()
-    mediationSteps.rejectMediation()
+    mediationSteps.rejectMediationByDisagreeing()
     defendantTaskListPage.selectTaskHearingRequirements()
     directionsQuestionnaireSteps.acceptDirectionsQuestionnaireYesJourney()
     defendantSteps.selectCheckAndSubmitYourDefence()
