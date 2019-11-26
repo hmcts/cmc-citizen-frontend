@@ -56,7 +56,9 @@ const testData = [
       'They said you didn’t pay them £100.',
       'You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
       'complete a directions questionnaire',
-      'Download your response'
+      'Download your response',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements'
     ]
   },
   {
