@@ -50,8 +50,9 @@
       {% if claim.directionsQuestionnaireDeadline %}
         <p>{{ t('You need to ' + internalLink('complete a directions questionnaire form ',
             DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) + 'to tell us more about the claim.') | safe }}</p>
-        <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before {{ deadline }}.',
+        <p>{{ t('Your defence won’t proceed if you don’t complete and return the form before 4pm on {{ deadline }}.',
             { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
+        <p>{{ t('You also need to send a copy of the form to {{ claimantName }}.', { claimantName: claim.claimData.claimant.name }) }}</p>
       {% endif %}
       <p>{{ downloadResponseLink(claim) }}</p>
     </div>
