@@ -11,7 +11,9 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="form-group-related no-bottom-margin">
-        <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }} v {{ claim.claimData.defendant.name }}</h2>
+        {% if claim.claimNumber %}
+          <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }} v {{ claim.claimData.defendant.name }}</h2>
+        {% endif %}
         <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
       </div>
       <div>

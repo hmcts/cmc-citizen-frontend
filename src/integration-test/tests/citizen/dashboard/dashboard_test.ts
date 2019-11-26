@@ -21,7 +21,6 @@ Scenario('Check newly created claim is in my account dashboard with correct clai
   I.click(claimRef)
   I.see('Claim number:')
   I.see(claimRef)
-  I.see('Claim status')
   dashboardClaimDetails.clickViewClaim()
   dashboardClaimDetails.checkClaimData(claimRef, claimData)
 })
