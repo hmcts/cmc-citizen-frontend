@@ -79,7 +79,6 @@ export class IndividualDetailsPage {
     I.fillField(fields.address.postcode, address.postcode)
 
     I.checkOption(fields.hasCorrespondenceAddress)
-
     I.click(fields.correspondenceAddress.enterManually)
     I.fillField(fields.correspondenceAddress.line1, correspondenceAddress.line1)
     I.fillField(fields.correspondenceAddress.line2, correspondenceAddress.line2)
