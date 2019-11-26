@@ -36,9 +36,16 @@ class ClaimStoreHelper extends codecept_helper {
   private async linkDefendant (referenceNumber) {
     let password = process.env.SMOKE_TEST_USER_PASSWORD
     let defendant = userEmails.getDefendant()
-    let uri = `${baseURL}/testing-support/claims/${referenceNumber}/defendant/${defendant}/${password}`
+    let uri = `${baseURL}/testing-support/claims/${referenceNumber}/defendant`
 
-    await request.put(uri, {}).promise()
+    await request.put({
+      uri: uri,
+      body: {
+        defendantUsername: defendant,
+        defendantPassword: password
+      },
+      json: true
+    }).promise()
   }
 
   async respondToClaim (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string): Promise<void> {
