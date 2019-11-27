@@ -35,6 +35,7 @@ import {
 } from 'test/data/entity/fullDefenceData'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { DefenceType } from 'claims/models/response/defenceType'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -664,32 +665,6 @@ const mediationDQEnabledClaimDetails = [
     ]
   },
   {
-    status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      ...directionsQuestionnaireDeadline,
-      features: ['admissions', 'directionsQuestionnaire'],
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.NO
-      }
-    },
-    claimantAssertions: [
-      'Decide whether to proceed',
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
-      'View and respond'
-    ],
-    defendantAssertions: [
-      'Wait for the claimant to respond',
-      'You’ve rejected the claim.',
-      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
-      'We’ll contact you when the claimant responds.',
-      'Settle out of court',
-      'settle the claim out of court'
-    ]
-  },
-  {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation',
     claim: fullDefenceClaim,
     claimOverride: {
@@ -711,6 +686,32 @@ const mediationDQEnabledClaimDetails = [
       'You have rejected the claim. You’ve suggested mediation.',
       'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
       'Download your response',
+      'Settle out of court',
+      'settle the claim out of court'
+    ]
+  },
+  {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      ...directionsQuestionnaireDeadline,
+      features: ['admissions', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.NO
+      }
+    },
+    claimantAssertions: [
+      'Decide whether to proceed',
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
+      'View and respond'
+    ],
+    defendantAssertions: [
+      'Wait for the claimant to respond',
+      'You’ve rejected the claim.',
+      'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
+      'We’ll contact you when the claimant responds.',
       'Settle out of court',
       'settle the claim out of court'
     ]
@@ -739,6 +740,67 @@ const mediationDQEnabledClaimDetails = [
       'Settle out of court',
       'settle the claim out of court'
     ]
+  },
+  {
+    status: 'Full defence - defendant disputes the claim - claimant rejected defendant response without mediation - online DQ',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      features: ['admission', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.NO,
+        defenceType: DefenceType.DISPUTE,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
+      },
+      settlement: {},
+      claimantResponse: { type: 'REJECTION' },
+      claimantRespondedAt: MomentFactory.currentDate()
+    },
+    claimantAssertions: ['You’ve rejected defendant’s response and said you want to take the case to court.',
+      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.'],
+    defendantAssertions: [ fullDefenceClaim.claim.claimants[0].name + 'rejected your defence.',
+      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements ']
+  },
+  {
+    status: 'Full defence - defendant disputes the claim - claimant rejected defendant response with mediation - online DQ',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      features: ['admission', 'directionsQuestionnaire'],
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES,
+        defenceType: DefenceType.DISPUTE,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
+      },
+      settlement: {},
+      claimantResponse: {
+        freeMediation: 'yes',
+        type: 'REJECTION' },
+      claimantRespondedAt: MomentFactory.currentDate()
+    },
+    claimantAssertions: ['You’ve both agreed to try mediation.',
+      'We’ll contact you to try to arrange a call with the mediator.'],
+    defendantAssertions: [ fullDefenceClaim.claim.claimants[0].name + 'has rejected your defence.',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and accepts mediation - defendant offers settlement to settle out of court',

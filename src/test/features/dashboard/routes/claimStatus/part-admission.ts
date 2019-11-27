@@ -762,14 +762,20 @@ const mediationDQEnabledClaimDetails = [
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
-        freeMediation: FreeMediationOption.NO
+        freeMediation: FreeMediationOption.NO,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       claimantResponse: {
         settleForAmount: 'no',
         type: 'REJECTION'
       },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
+      claimantRespondedAt: MomentFactory.currentDate()
     },
     claimantAssertions: [
       'Wait for the court to review the case',
@@ -779,7 +785,9 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
-      'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.'
+      'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements'
     ]
   },
   {
@@ -790,15 +798,21 @@ const mediationDQEnabledClaimDetails = [
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
-        freeMediation: FreeMediationOption.YES
+        freeMediation: FreeMediationOption.YES,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       claimantResponse: {
         settleForAmount: 'no',
         freeMediation: FreeMediationOption.YES,
         type: 'REJECTION'
       },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
+      claimantRespondedAt: MomentFactory.currentDate()
     },
     claimantAssertions: [
       'We’ll contact you to try to arrange a mediation appointment',
@@ -809,7 +823,9 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
+      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements'
     ]
   },
   {
