@@ -58,7 +58,9 @@ const testData = [
       'They said you didn’t pay them £100.',
       'You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
       'complete a directions questionnaire',
-      'Download your response'
+      'Download your response',
+      'You must make sure we receive the form before 4pm on',
+      'You also need to send a copy of the form to ' + statesPaidClaim.claim.claimants[0].name
     ]
   },
   {

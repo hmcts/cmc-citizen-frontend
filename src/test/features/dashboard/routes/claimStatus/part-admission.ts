@@ -715,7 +715,8 @@ const legacyClaimDetails = [
       'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
       'You need to',
       'to tell us more about the claim.',
-      'Your defence won’t proceed if you don’t complete and return the form before',
+      'Your defence won’t proceed if you don’t complete and return the form before 4pm on',
+      'You also need to send a copy of the form to ' + partAdmissionClaim.claim.claimants[0].name,
       'Download your response'
     ]
   },
