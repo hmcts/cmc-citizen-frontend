@@ -144,9 +144,9 @@
 
     <p>{{ downloadResponseLink(claim) }}</p>
     {% if claim.response.directionsQuestionnaire %}
-    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
-        {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
-      {% endif %}
+      <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+      {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+    {% endif %}
   {% endif %}
 {% endmacro %}
 
@@ -162,6 +162,10 @@
         { claimantName: claim.claimData.claimant.name }) }}</p>
     <p>{{ t('You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.') }}</p>
     <p>{{ internalLink(t('Find out how mediation works'), DashboardPaths.howFreeMediationWorksPage.uri) }}</p>
+    {% if claim.response.directionsQuestionnaire %}
+      <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+      {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+    {% endif %}
   </div>
 {% endmacro %}
 
