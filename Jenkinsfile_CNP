@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@increase-functional-temporarily")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"
