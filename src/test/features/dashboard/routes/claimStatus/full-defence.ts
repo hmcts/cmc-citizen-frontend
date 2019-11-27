@@ -665,32 +665,6 @@ const mediationDQEnabledClaimDetails = [
     ]
   },
   {
-    status: 'Full defence - defendant dispute all of the claim and accepts mediation',
-    claim: fullDefenceClaim,
-    claimOverride: {
-      ...directionsQuestionnaireDeadline,
-      response: {
-        ...baseResponseData,
-        ...baseDefenceData,
-        freeMediation: FreeMediationOption.YES
-      }
-    },
-    claimantAssertions: [
-      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
-      'You need to decide whether to proceed with the claim',
-      'If you’ve been paid',
-      'Tell us you’ve ended the claim'
-    ],
-    defendantAssertions: [
-      'Your response to the claim',
-      'You have rejected the claim. You’ve suggested mediation.',
-      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
-      'Download your response',
-      'Settle out of court',
-      'settle the claim out of court'
-    ]
-  },
-  {
     status: 'Full defence - defendant dispute all of the claim and rejects mediation with directions questionnaire enabled',
     claim: fullDefenceClaim,
     claimOverride: {
@@ -712,6 +686,32 @@ const mediationDQEnabledClaimDetails = [
       'You’ve rejected the claim.',
       'You said you don’t want to use mediation to solve it. You might have to go to a hearing.',
       'We’ll contact you when the claimant responds.',
+      'Settle out of court',
+      'settle the claim out of court'
+    ]
+  },
+  {
+    status: 'Full defence - defendant dispute all of the claim and accepts mediation',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      ...directionsQuestionnaireDeadline,
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES
+      }
+    },
+    claimantAssertions: [
+      fullDefenceClaim.claim.defendants[0].name + ' has rejected your claim.',
+      'You need to decide whether to proceed with the claim',
+      'If you’ve been paid',
+      'Tell us you’ve ended the claim'
+    ],
+    defendantAssertions: [
+      'Your response to the claim',
+      'You have rejected the claim. You’ve suggested mediation.',
+      'We’ll ask ' + fullDefenceClaim.claim.claimants[0].name + ' if they agree to take part in mediation.',
+      'Download your response',
       'Settle out of court',
       'settle the claim out of court'
     ]
@@ -759,7 +759,6 @@ const mediationDQEnabledClaimDetails = [
           hearingLocationOption: 'SUGGESTED_COURT'
         }
       },
-      settlement: {},
       claimantResponse: { type: 'REJECTION' },
       claimantRespondedAt: MomentFactory.currentDate()
     },
@@ -788,7 +787,6 @@ const mediationDQEnabledClaimDetails = [
           hearingLocationOption: 'SUGGESTED_COURT'
         }
       },
-      settlement: {},
       claimantResponse: {
         freeMediation: 'yes',
         type: 'REJECTION' },
