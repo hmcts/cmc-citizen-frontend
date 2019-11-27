@@ -237,7 +237,9 @@ export class ClaimSteps {
 
   makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
-    testingSupport.deleteClaimDraft()
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.deleteClaimDraft()
+    }
     this.completeEligibility()
     this.completeStartOfClaimJourney(claimantType, defendantType, enterDefendantEmail, false)
     interestSteps.enterDefaultInterest()
