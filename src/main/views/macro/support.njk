@@ -1,8 +1,10 @@
 {% from "externalLink.njk" import externalLink %}
 
 {% macro _webChatWidget(label = 'Web chat') %}
-    <h2 class="heading-medium contact-us">{{ t(label)}}</h2>
-    <div id="ctsc-web-chat" class="web-chat"></div>
+    {% if featureToggles.webChat %}
+        <h2 class="heading-medium contact-us">{{ t(label)}}</h2>
+        <div id="ctsc-web-chat" class="web-chat"></div>
+    {% endif %}
 {% endmacro%}
 
 {% macro _emailWidget(email = supportEmailAddress) %}
@@ -21,34 +23,26 @@
 {% endmacro %}
 
 {% macro _holidayWidget() %}
-  <h2 class="heading-medium contact-us"> {{ t('Christmas hours')}}</h2>
-  <p>{{ t("We're closed 25, 26, 27 December, and 1 January.")}}</p>
+  {% if (toDate() < toDate("2020-01-02") and toDate() >= toDate("2019-12-01")) %}
+    <h2 class="heading-medium contact-us"> {{ t('Christmas hours')}}</h2>
+    <p>{{ t("We're closed 25, 26, 27 December, and 1 January.")}}</p>
+  {% endif %}
 {% endmacro %}
 
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
-    {% if featureToggles.webChat %}
-       {{ _webChatWidget() }}
-    {% endif %}
+    {{ _webChatWidget() }}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
-    {% if (toDate() < toDate("2020-01-02") and toDate() > toDate("2019-12-01")) %}
-       {{ _holidayWidget() }}
-    {% endif %}
-
+    {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro mcolSupportWidget(label = 'Help and advice') %}
   <h2 class="heading-medium">{{ t(label) }}</h2>
-  {% if featureToggles.webChat %}
-    {{ _webChatWidget() }}
-  {% endif %}
-
+  {{ _webChatWidget() }}
   {{ _emailWidget('ccbc@hmcts.gsi.gov.uk') }}
   {{ _phoneWidget('0300 123 1057') }}
-  {% if (toDate() < toDate("2020-01-02") and toDate() > toDate("2019-12-01")) %}
-     {{ _holidayWidget() }}
-  {% endif %}
+  {{ _holidayWidget() }}
 {% endmacro %}
 
 {% macro _callCharges() %}
@@ -68,14 +62,10 @@
 
   <summary><span class="summary">{{ t('Contact us for help') }}</span></summary>
   <div class="panel">
-    {% if featureToggles.webChat %}
-       {{ _webChatWidget() }}
-    {% endif %}
+    {{ _webChatWidget() }}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
-    {% if (toDate() < toDate("2020-01-02") and toDate() >= toDate("2019-12-01")) %}
-      {{ _holidayWidget() }}
-    {% endif %}
+    {{ _holidayWidget() }}
   </div>
 </details>
 {% endmacro %}
