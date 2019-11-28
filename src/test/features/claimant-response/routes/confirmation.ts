@@ -61,7 +61,8 @@ describe('Claimant response: confirmation page', () => {
         it('should render page with hearing requirement', async () => {
           let claimantResponseData = {
             ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
-            ...{ claimantResponse: rejectionClaimantResponseWithDQ }
+            ...{ claimantResponse: rejectionClaimantResponseWithDQ,
+              settleForAmount: 'no'}
           }
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimantResponseData)
           claimStoreServiceMock.mockNextWorkingDay(MomentFactory.parse('2019-07-01'))
