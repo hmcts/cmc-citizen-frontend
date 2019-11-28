@@ -73,7 +73,7 @@
     {% endif %}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
-    {% if (toDate() < toDate("2020-01-02") and toDate() > toDate("2019-12-01")) %}
+    {% if (toDate() < toDate("2020-01-02") and toDate() >= toDate("2019-12-01")) %}
       {{ _holidayWidget() }}
     {% endif %}
   </div>
