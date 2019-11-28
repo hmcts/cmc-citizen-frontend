@@ -61,6 +61,7 @@ describe('Claimant response: confirmation page', () => {
         it('should render page with hearing requirement', async () => {
           let claimantResponseData = {
             ...claimStoreServiceMock.samplePartialAdmissionWithPaymentBySetDateResponseObj,
+            features: ['admissions', 'directionsQuestionnaire'],
             ...{ claimantResponse: rejectionClaimantResponseWithDQ,
               settleForAmount: 'no'}
           }
