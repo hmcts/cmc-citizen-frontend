@@ -1,11 +1,12 @@
 import { PartyType } from 'integration-test/data/party-type'
 import {
   claimAmount,
-  createClaimant,
   claimReason,
+  createClaimant,
   createDefendant,
+  postcodeLookupQuery,
   SMOKE_TEST_CITIZEN_USERNAME,
-  SMOKE_TEST_USER_PASSWORD, postcodeLookupQuery
+  SMOKE_TEST_USER_PASSWORD
 } from 'integration-test/data/test-data'
 import { CitizenCompletingClaimInfoPage } from 'integration-test/tests/citizen/claim/pages/citizen-completing-claim-info'
 import { CitizenDobPage } from 'integration-test/tests/citizen/claim/pages/citizen-dob'
@@ -24,12 +25,12 @@ import { EligibilitySteps } from 'integration-test/tests/citizen/claim/steps/eli
 import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/interest'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
-import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
 import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
+import I = CodeceptJS.I
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -235,13 +236,43 @@ export class ClaimSteps {
     newFeaturesPage.optIn()
   }
 
-  makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
+  makeAClaimAndNavigateUpToPayment () {
+    const claimant = createClaimant(PartyType.INDIVIDUAL)
+    const defendant = createDefendant(PartyType.INDIVIDUAL, true)
+
     userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
     if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
       testingSupport.deleteClaimDraft()
     }
     this.completeEligibility()
-    this.completeStartOfClaimJourney(claimantType, defendantType, enterDefendantEmail, false)
+    userSteps.selectResolvingThisDispute()
+    this.resolveDispute()
+    userSteps.selectCompletingYourClaim()
+    this.readCompletingYourClaim()
+    userSteps.selectYourDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterName(claimant.name)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(claimant.address, false)
+    individualDetailsPage.submit()
+    citizenDOBPage.enterDOB(claimant.dateOfBirth)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectTheirDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterTitle(defendant.title)
+    individualDetailsPage.enterFirstName(defendant.firstName)
+    individualDetailsPage.enterLastName(defendant.lastName)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(defendant.address, false)
+    individualDetailsPage.submit()
+    citizenEmailPage.enterEmail(defendant.email)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectClaimAmount()
+    I.see('Claim amount')
+    this.enterClaimAmount(10, 20.50, 50)
+    I.see('£80.50')
+    this.claimantTotalAmountPageRead()
+    I.see('Do you want to claim interest?')
     interestSteps.enterDefaultInterest()
     I.see('Total amount you’re claiming')
     I.see('£25')
@@ -256,7 +287,7 @@ export class ClaimSteps {
     I.see('SW2 1AN')
     I.see('07700000001')
     I.see(claimReason)
-    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(defendantType, enterDefendantEmail)
+    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
     claimantCheckAndSendPage.verifyClaimAmount()
 
     if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
