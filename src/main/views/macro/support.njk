@@ -7,7 +7,7 @@
 
 {% macro _emailWidget(email = supportEmailAddress) %}
     <h2 class="heading-medium contact-mail">{{ t('Email') }}</h2>
-    <p><a href="mailto:{{t(email)}}" target="_blank">{{ t(email)}}</a>
+    <p><a href="mailto:{{t(email)}}">{{ t(email)}}</a>
       <span class="block">{{ t("We'll get back to you within 10 days.") }}</span>
     </p>
 {% endmacro%}
@@ -18,7 +18,12 @@
       <span class="block">{{ t("Monday to Friday, 9am to 5pm.") }}</span>
       <span class="block">{{ _callCharges()}}</span>
     </p>
-{% endmacro%}
+{% endmacro %}
+
+{% macro _holidayWidget() %}
+  <h2 class="heading-medium contact-us"> {{ t('Christmas hours')}}</h2>
+  <p>{{ t("We're closed 25, 26, 27 December, and 1 January.")}}</p>
+{% endmacro %}
 
 {% macro supportWidget(label = 'Help and support') %}
     <h2 class="heading-medium">{{ t(label) }}</h2>
@@ -27,6 +32,9 @@
     {% endif %}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
+    {% if (toDate() < toDate("2020-01-02") and toDate() > toDate("2019-12-01")) %}
+       {{ _holidayWidget() }}
+    {% endif %}
 
 {% endmacro %}
 
@@ -38,6 +46,9 @@
 
   {{ _emailWidget('ccbc@hmcts.gsi.gov.uk') }}
   {{ _phoneWidget('0300 123 1057') }}
+  {% if (toDate() < toDate("2020-01-02") and toDate() > toDate("2019-12-01")) %}
+     {{ _holidayWidget() }}
+  {% endif %}
 {% endmacro %}
 
 {% macro _callCharges() %}
@@ -62,6 +73,9 @@
     {% endif %}
     {{ _emailWidget() }}
     {{ _phoneWidget() }}
+    {% if (toDate() < toDate("2020-01-02") and toDate() > toDate("2019-12-01")) %}
+      {{ _holidayWidget() }}
+    {% endif %}
   </div>
 </details>
 {% endmacro %}
