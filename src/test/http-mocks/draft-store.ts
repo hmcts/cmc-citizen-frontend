@@ -10,7 +10,7 @@ import { Defendant } from 'drafts/models/defendant'
 import { Claimant } from 'drafts/models/claimant'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { Payment } from 'payment-hub-client/payment'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
@@ -141,9 +141,9 @@ const commonIndividualClaimant = {
         } as LocalDate
       } as DateOfBirth
     } as IndividualDetails,
-    mobilePhone: {
+    phone: {
       number: '07000000000'
-    } as MobilePhone,
+    } as Phone,
     payment: {
       reference: '123',
       date_created: 12345,
@@ -156,6 +156,34 @@ const commonIndividualClaimant = {
         }
       }
     } as Payment
+  } as Claimant
+}
+
+const commonIndividualClaimantIOC = {
+  claimant: {
+    partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
+      address: {
+        line1: 'Apt 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'bb127nq'
+      } as Address,
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        known: true,
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
+    } as IndividualDetails,
+    phone: {
+      number: '07000000000'
+    } as Phone
   } as Claimant
 }
 
@@ -174,9 +202,9 @@ const commonCompanyClaimant = {
       } as Address,
       hasCorrespondenceAddress: false
     } as CompanyDetails,
-    mobilePhone: {
+    phone: {
       number: '07000000000'
-    } as MobilePhone,
+    } as Phone,
     payment: {
       reference: '123',
       date_created: 12345,
@@ -244,13 +272,19 @@ const commonIndividualDefendant = {
       hasCorrespondenceAddress: false
     } as IndividualDetails,
     email: { address: 'example@example.com' },
-    mobilePhone: { number: '07799889988' }
+    phone: { number: '07799889988' }
   } as Defendant
 }
 
 export const sampleClaimDraftObj = {
   ...commonClaimObject,
   ...commonIndividualClaimant,
+  ...commonIndividualDefendant
+} as DraftClaim
+
+export const sampleClaimDraftObjIOC = {
+  ...commonClaimObject,
+  ...commonIndividualClaimantIOC,
   ...commonIndividualDefendant
 } as DraftClaim
 
@@ -263,7 +297,7 @@ export const sampleCompanyClaimDraftObj = {
 const commonIndividualResponsePartial = {
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
-    mobilePhone: { number: '01223344444' } as MobilePhone,
+    phone: { number: '01223344444' } as Phone,
     partyDetails: {
       type: 'individual',
       firstName: 'John',
@@ -288,7 +322,7 @@ const commonIndividualResponsePartial = {
 const commonCompanyResponsePartial = {
   defendantDetails: {
     email: { address: 'example@example.com' } as Email,
-    mobilePhone: { number: '01223344444' } as MobilePhone,
+    phone: { number: '01223344444' } as Phone,
     partyDetails: {
       type: 'company',
       name: 'Monsters Inc.',
@@ -400,7 +434,7 @@ export const sampleFullAdmissionResponseDraftObj = {
       schoolCosts: 1,
       foodAndHousekeeping: 1,
       tvAndBroadband: 1,
-      mobilePhone: 1,
+      phone: 1,
       maintenance: 1,
       rows: [{ amount: 10, description: 'bla bla bla' }]
     },
@@ -690,6 +724,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
   switch (draftType) {
     case 'claim':
       documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
+      break
+    case 'claim:ioc':
+      documentDocument = { ...sampleClaimDraftObjIOC, ...draftOverride }
       break
     case 'claim:company':
       documentDocument = { ...sampleCompanyClaimDraftObj, ...draftOverride }

@@ -15,116 +15,116 @@
 
       {% if claimsAsClaimant | length or claimDraftSaved %}
 
-      <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>
-      <table class="claim-dashboard">
-        <thead>
-        <tr>
-          <th scope="col">{{ t('Claim number') }}</th>
-          <th scope="col">{{ t('Defendant name') }}</th>
-          <th scope="col">{{ t('Claim amount') }}</th>
-
-          <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if claimDraftSaved %}
-          <tr class="draft mobile-table">
-            <td>{{ internalLink(t('Draft claim'), DashboardPaths.claimantPage.evaluateUri({ externalId: 'draft' })) }}</td>
-            <td>-</td>
-
-            <td>-</td>
-            <td class="mobile-hide">
-              {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
-            </td>
-          </tr>
+        <h2 class="heading-medium"> {{ t('Claims you’ve made') }}</h2>
+        <table class="claim-dashboard">
+          <thead>
           <tr>
-            <td colspan="3" class="mobile-table-status">
-              {{ t('Status:') }} {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
-            </td>
+            <th scope="col">{{ t('Claim number') }}</th>
+            <th scope="col">{{ t('Defendant name') }}</th>
+            <th scope="col">{{ t('Claim amount') }}</th>
+
+            <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
           </tr>
-        {% endif %}
-        {% for claim in claimsAsClaimant %}
-          {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
-          <tr class="claims default mobile-table">
-            <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant') }}</td>
-            <td>{{ claim.claimData.defendant.name }}</td>
-            <td>{{ claim.totalAmountTillToday | numeral }}</td>
-            <td class="mobile-hide">
-            {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
-            {% else %}
-              {{ caseStatusForClaimant(claim.status, claim) }}
-            {% endif %}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="3" class="mobile-table-status">
-              {{ t('Status:') }}
+          </thead>
+          <tbody>
+          {% if claimDraftSaved %}
+            <tr class="draft mobile-table">
+              <td>{{ internalLink(t('Draft claim'), DashboardPaths.claimantPage.evaluateUri({ externalId: 'draft' })) }}</td>
+              <td>-</td>
+
+              <td>-</td>
+              <td class="mobile-hide">
+                {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="mobile-table-status">
+                {{ t('Status:') }} {{ internalLink(t('Continue with claim'), ClaimPaths.taskListPage.uri) }}
+              </td>
+            </tr>
+          {% endif %}
+          {% for claim in claimsAsClaimant %}
+            {% set claimantDashboardStatus = claim | dashboardStatusForClaimant %}
+            <tr class="claims default mobile-table">
+              <td>{{ internalLink(claim.claimNumber, '/dashboard/' + claim.externalId + '/claimant') }}</td>
+              <td>{{ claim.claimData.defendant.name }}</td>
+              <td>{{ claim.totalAmountTillToday | numeral }}</td>
+              <td class="mobile-hide">
               {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
+                  {% include claim.template.dashboard ignore missing %}
               {% else %}
                 {{ caseStatusForClaimant(claim.status, claim) }}
               {% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="mobile-table-status">
+                {{ t('Status:') }}
+                {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
+                  {% include claim.template.dashboard ignore missing %}
+                {% else %}
+                  {{ caseStatusForClaimant(claim.status, claim) }}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+     {% endif %}
     </div>
-    {% endif %}
 
     {% if claimsAsDefendant | length or responseDraftSaved %}
-    <div class="column-full">
-      <h2 class="heading-medium"> {{ t('Claims made against you') }}</h2>
+      <div class="column-full">
+        <h2 class="heading-medium"> {{ t('Claims made against you') }}</h2>
 
-      <table class="claim-dashboard">
-        <thead>
-        <tr class="mobile-table">
-          <th scope="col">{{ t('Claim number') }}</th>
-          <th scope="col">{{ t('Claimant name') }}</th>
-          <th scope="col">{{ t('Claim amount') }}</th>
-
-          <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% if responseDraftSaved %}
-          <tr class="draft mobile-table">
-            <td>{{ internalLink(t('Draft response'), ResponsePaths.taskListPage.uri) }}</td>
-            <td>-</td>
-
-            <td>-</td>
-            <td>In progress</td>
-          </tr>
-        {% endif %}
-        {% for claim in claimsAsDefendant %}
-          {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
+        <table class="claim-dashboard">
+          <thead>
           <tr class="mobile-table">
-            <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })) }}</td>
-            <td>{{ claim.claimData.claimant.name }}</td>
-            <td>{{ claim.totalAmountTillToday | numeral }}</td>
-            <td class="mobile-hide">
-              {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
-              {% else %}
-                {{ caseStatusForDefendant(claim.status, claim) }}
-              {% endif %}
-            </td>
+            <th scope="col">{{ t('Claim number') }}</th>
+            <th scope="col">{{ t('Claimant name') }}</th>
+            <th scope="col">{{ t('Claim amount') }}</th>
+
+            <th scope="col" class="mobile-hide">{{ t('Status') }}</th>
           </tr>
-          <tr>
-            <td colspan="3" class="mobile-table-status">
-              {{ t('Status:') }}
-              {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
-                {% include claim.template.dashboard ignore missing %}
-              {% else %}
-                {{ caseStatusForDefendant(claim.status, claim) }}
-              {% endif %}
-            </td>
-          </tr>
-        {% endfor %}
-        </tbody>
-      </table>
-      {% endif %}
-    </div>
+          </thead>
+          <tbody>
+          {% if responseDraftSaved %}
+            <tr class="draft mobile-table">
+              <td>{{ internalLink(t('Draft response'), ResponsePaths.taskListPage.uri) }}</td>
+              <td>-</td>
+
+              <td>-</td>
+              <td>In progress</td>
+            </tr>
+          {% endif %}
+          {% for claim in claimsAsDefendant %}
+            {% set defendantDashboardStatus = claim | dashboardStatusForDefendant %}
+            <tr class="mobile-table">
+              <td>{{ internalLink(claim.claimNumber, DashboardPaths.defendantPage.evaluateUri({ externalId: claim.externalId })) }}</td>
+              <td>{{ claim.claimData.claimant.name }}</td>
+              <td>{{ claim.totalAmountTillToday | numeral }}</td>
+              <td class="mobile-hide">
+                {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
+                  {% include claim.template.dashboard ignore missing %}
+                {% else %}
+                  {{ caseStatusForDefendant(claim.status, claim) }}
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="3" class="mobile-table-status">
+                {{ t('Status:') }}
+                {% if featureToggles.newDashboardStatus and claim.template.dashboard %}
+                  {% include claim.template.dashboard ignore missing %}
+                {% else %}
+                  {{ caseStatusForDefendant(claim.status, claim) }}
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endif %}
   </div>
 {% endblock %}

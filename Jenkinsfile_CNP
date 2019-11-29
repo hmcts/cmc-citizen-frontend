@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@increase-functional-temporarily")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -56,6 +56,12 @@ withPipeline("nodejs", product, component) {
 
   after('build') {
     yarnBuilder.yarn('setup')
+  }
+
+  after('test') {
+    onMaster {
+      yarnBuilder.yarn('tests:a11y')
+    }
   }
 
   loadVaultSecrets(secrets)

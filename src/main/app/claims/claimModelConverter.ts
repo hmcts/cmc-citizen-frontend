@@ -36,7 +36,7 @@ import { getStandardInterestRate } from 'shared/interestUtils'
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 
 export class ClaimModelConverter {
 
@@ -51,7 +51,9 @@ export class ClaimModelConverter {
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.evidence = { rows: convertEvidence(draftClaim.evidence) as any } as Evidence
-    claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
+    if (draftClaim.claimant.payment) {
+      claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
+    }
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
       claimData.statementOfTruth = new StatementOfTruth(
         draftClaim.qualifiedStatementOfTruth.signerName,
@@ -70,7 +72,7 @@ export class ClaimModelConverter {
           individualDetails.name,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           individualDetails.dateOfBirth.date.asString()
         )
@@ -82,7 +84,7 @@ export class ClaimModelConverter {
           soleTraderDetails.name,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           soleTraderDetails.businessName
         )
@@ -94,7 +96,7 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           companyDetails.contactPerson
         )
@@ -106,7 +108,7 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           organisationDetails.contactPerson
         )
@@ -128,7 +130,7 @@ export class ClaimModelConverter {
           individualDetails.lastName,
           this.convertAddress(individualDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
 
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
@@ -141,7 +143,7 @@ export class ClaimModelConverter {
           this.convertAddress(soleTraderDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
           soleTraderDetails.businessName,
-          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
 
       case PartyType.COMPANY.value:
@@ -152,7 +154,7 @@ export class ClaimModelConverter {
           this.convertAddress(companyDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
           companyDetails.contactPerson,
-          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
       case PartyType.ORGANISATION.value:
         const organisationDetails = defendantDetails as OrganisationDetails
@@ -162,7 +164,7 @@ export class ClaimModelConverter {
           this.convertAddress(organisationDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
           organisationDetails.contactPerson,
-          this.convertPhoneNumber(draftClaim.defendant.mobilePhone)
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
       default:
         throw Error('Something went wrong, No defendant type is set')
@@ -244,6 +246,9 @@ export class ClaimModelConverter {
    * @returns {Payment} - simplified payment object required by the backend API
    */
   private static makeShallowCopy (payment: Payment): Payment {
+    if (!payment || Object.keys(payment).length === 0) {
+      return undefined
+    }
     return {
       reference: payment.reference,
       amount: payment.amount,
@@ -252,7 +257,7 @@ export class ClaimModelConverter {
     }
   }
 
-  private static convertPhoneNumber (phone: MobilePhone): string {
+  private static convertPhoneNumber (phone: Phone): string {
     return phone ? StringUtils.trimToUndefined(phone.number) : undefined
   }
 }
