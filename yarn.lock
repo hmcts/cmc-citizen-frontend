@@ -187,10 +187,10 @@
     request "^2.83.0"
     request-promise-native "^1.0.5"
 
-"@hmcts/os-places-client@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.0.4.tgz#90e1754d199b7394233b6562aa1d8193b808be84"
-  integrity sha512-WaoQl2MC7OB0lAbht+ib5buM029WW1ghWI1dpEMTQFiTLEbiPyPhI+NYmJ/7P1Q8NKnhfk/tJJoEp9sMjUaQAQ==
+"@hmcts/os-places-client@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@hmcts/os-places-client/-/os-places-client-1.0.6.tgz#435fdfffb7a523f02354f645adc5ec3ee6eb31fb"
+  integrity sha512-FMppnNjgMzLymUyPiZWyXth1O+k9c3qmCOUjYHbdLZy136R53v7Cj1IZq9ylMZfIRfDbN22iQ6S9K/fz5Sddvw==
   dependencies:
     request "^2.83.0"
     request-promise-native "^1.0.5"
