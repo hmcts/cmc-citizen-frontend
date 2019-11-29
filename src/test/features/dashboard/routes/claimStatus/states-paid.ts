@@ -191,7 +191,6 @@ const testData = [
       'if you need their payment details. Make sure you get receipts for any payments.'
     ]
   }
-
 ]
 
 describe('Dashboard page', () => {
