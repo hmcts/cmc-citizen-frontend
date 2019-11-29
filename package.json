@@ -39,7 +39,7 @@
     "@hmcts/nodejs-healthcheck": "^1.5.1",
     "@hmcts/nodejs-logging": "^3.0.1",
     "@hmcts/os-names-client": "^1.0.4",
-    "@hmcts/os-places-client": "^1.0.4",
+    "@hmcts/os-places-client": "^1.0.6",
     "@hmcts/properties-volume": "0.0.9",
     "@hmcts/requestretry": "^1.1.2",
     "@taoqf/javascript-state-machine": "^3.1.3",
