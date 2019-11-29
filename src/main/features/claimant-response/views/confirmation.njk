@@ -43,10 +43,9 @@
           <span class="bold">{{ confirmationDate | date }}</span>
         </p>
         {% if directionsQuestionnaireEnabled %}
-        <p class="receipt-download-container">
-          {{ internalLink(t('Download your hearing requirements'), ClaimantResponsePaths.claimantReceiptReceiver.evaluateUri({ externalId: claim.externalId })) }}
-          {{ t('(PDF)') }}
-        </p>
+          <p class="receipt-download-container">
+            {{ internalLink(t('Download your hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+          </p>
         {% endif %}
 
       </div>
@@ -92,14 +91,9 @@
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and directionsQuestionnaireEnabled %}
         <p>{{ t('We’ll review the case. We’ll contact you to tell you what to do next.') }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.directionsQuestionnaireDeadline %}
-        <p>
-          {{ t('You need to') }}
-          {{ internalLink(t('complete a directions questionnaire form'), DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) }}
-          {{ t('to tell us more about the claim.') }}.
-        </p>
+        <p>{{ t('You need to') }}{{ internalLink(t(' complete a directions questionnaire form '), DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) }}{{ t('to tell us more about the claim.') }}.</p>
         <p>{{ t('Your claim won’t proceed if you don’t complete and return the form before {{ deadline }}.',
-            { deadline: claim.directionsQuestionnaireDeadline | date }) }}
-        </p>
+            { deadline: claim.directionsQuestionnaireDeadline | date }) }}</p>
       {% elseif claim.claimantResponse.type === ClaimantResponseType.REJECTION and claim.claimantResponse.freeMediation === YesNoOption.YES %}
         <p>{{ t('The court will contact you and the defendant within 14 days to try to arrange a mediation appointment.') }}</p>
       {% endif %}
