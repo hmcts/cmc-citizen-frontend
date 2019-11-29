@@ -34,7 +34,6 @@ export class ClaimantCheckAndSendPage {
 
   verifyClaimantCheckAndSendAnswers (claimant: Party, claimantType: PartyType): void {
     I.see(claimant.address.line1)
-    I.see(claimant.address.line2)
     I.see(claimant.address.city)
     I.see(claimant.address.postcode)
     I.see(claimant.correspondenceAddress.line1)

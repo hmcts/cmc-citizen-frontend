@@ -3,22 +3,22 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const radioButtons = {
-  optionYes: 'input[id=acceptedyes]',
-  optionNo: 'input[id=acceptedno]'
+  optionYes: 'input[id=receivedyes]',
+  optionNo: 'input[id=receivedno]'
 }
 
 const buttons = {
   submit: 'input[type=submit]'
 }
 
-export class ClaimantSettleClaimPage {
+export class ClaimantPartPaymentReceivedPage {
 
-  selectAcceptedYes (): void {
+  yesTheDefendantHasPaid (): void {
     I.checkOption(radioButtons.optionYes)
     I.click(buttons.submit)
   }
 
-  selectAcceptedNo (): void {
+  noTheDefendantHasNotPaid (): void {
     I.checkOption(radioButtons.optionNo)
     I.click(buttons.submit)
   }
