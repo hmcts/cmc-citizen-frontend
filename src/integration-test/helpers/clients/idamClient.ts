@@ -58,6 +58,7 @@ export class IdamClient {
     }
 
     return request(options).then(function (resp) {
+      // tslint:disable-next-line:no-console
       console.log(resp)
       return Promise.resolve()
     }).catch(function (err) {
