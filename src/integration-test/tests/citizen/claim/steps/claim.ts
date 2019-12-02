@@ -217,7 +217,6 @@ export class ClaimSteps {
     this.enterClaimDetails()
     userSteps.selectCheckAndSubmitYourClaim()
     this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
-
   }
 
   makeAClaimAndSubmit (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true): Promise<string> {

@@ -24,7 +24,7 @@ Scenario('I can see send your response by email page when I reject all of the cl
   helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_WITH_COUNTER_CLAIM)
 })
 
-Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can see send your response by email page when I reject all of the claim with amount paid less than claimed amount @nightly', { retries: 3 }, async (I: I) => {
   const claimantEmail: string = userSteps.getClaimantEmail()
   const defendantEmail: string = userSteps.getDefendantEmail()
 
@@ -35,7 +35,6 @@ Scenario('I can see send your response by email page when I reject all of the cl
   const claimRef: string = await I.createClaim(claimData, claimantEmail, true, [])
 
   await helperSteps.enterPinNumber(claimRef, claimantEmail)
-  helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant,
-    defendantEmail, DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT
+  helperSteps.finishResponseWithHandOff(claimRef, defendant, claimant, defendantEmail, DefenceType.FULL_REJECTION_BECAUSE_ALREADY_PAID_LESS_THAN_CLAIMED_AMOUNT
   )
 })

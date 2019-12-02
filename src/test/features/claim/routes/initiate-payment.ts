@@ -16,7 +16,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = ClaimPaths.initiatePaymentController.uri
-const draftType = 'claim'
+const draftType = 'claim:ioc'
 const roles = 'citizen'
 
 describe('Claim: Initiate payment page', () => {
@@ -35,6 +35,16 @@ describe('Claim: Initiate payment page', () => {
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
         .expect(res => expect(res).to.be.redirect.toLocation('http://payment-api-initiate'))
+    })
+
+    it('should redirect to finishPaymentReceiver if claim is not found in claim store but payment is successful', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', roles)
+      draftStoreServiceMock.resolveFind('claim', { externalId })
+      claimStoreServiceMock.resolveRetrieveClaimByExternalIdTo404HttpCode()
+      await request(app)
+        .get(pagePath)
+        .set('Cookie', `${cookieName}=ABC`)
+        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.finishPaymentReceiver.evaluateUri({ externalId })))
     })
 
     it('should redirect to nextUrl returned by resume payment if claim is in AWAITING_CITIZEN_PAYMENT state', async () => {

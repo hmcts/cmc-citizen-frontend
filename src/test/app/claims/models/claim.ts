@@ -41,6 +41,8 @@ import { User } from 'idam/user'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { defenceClaimData } from 'test/data/entity/claimData'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -493,7 +495,7 @@ describe('Claim', () => {
         paymentOption: PaymentOption.INSTALMENTS,
         repaymentPlan: {
           instalmentAmount: 100,
-          firstPaymentDate: MomentFactory.currentDate().add(1,'day'),
+          firstPaymentDate: MomentFactory.currentDate().add(1, 'day'),
           paymentSchedule: PaymentSchedule.EACH_WEEK,
           completionDate: '2051-12-31',
           paymentLength: '1'
@@ -821,6 +823,28 @@ describe('Claim', () => {
 
       expect(claim.isEligibleForReDetermination()).to.be.false
     })
+  })
+
+  describe('mediationOutcome', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim().deserialize(defenceClaimData)
+      claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
+      claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+    })
+
+    it('should return FAILED when mediation is failed', () => {
+      claim.mediationOutcome = MediationOutcome.FAILED
+      expect(claim.mediationOutcome).to.be.equal('FAILED')
+    })
+
+    it('should return SUCCEEDED when mediation is success', () => {
+      claim.mediationOutcome = MediationOutcome.SUCCEEDED
+      expect(claim.mediationOutcome).to.be.equal('SUCCEEDED')
+    })
+
   })
 
   describe('stateHistory', () => {
