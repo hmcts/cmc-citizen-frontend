@@ -47,15 +47,18 @@ export class IdamClient {
    *
    * @returns {Promise<void>}
    */
-  static deleteUser (username: string): Promise<void> {
+  static deleteUser (usernames: string[]): Promise<void> {
+    let params = usernames.map(function (s) {
+      return `userNames=${encodeURIComponent(s)}`
+    }).join('&')
+
     const options = {
       method: 'DELETE',
-      uri: `${baseURL}/testing-support/test-data/`,
-      body: {
-        userNames: username
-      }
+      uri: `${baseURL}/testing-support/test-data?${params}`
     }
-    return request(options).then(function () {
+
+    return request(options).then(function (resp) {
+      console.log(resp)
       return Promise.resolve()
     }).catch(function (err) {
       // tslint:disable-next-line:no-console

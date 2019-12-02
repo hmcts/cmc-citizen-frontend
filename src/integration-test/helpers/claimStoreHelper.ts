@@ -41,8 +41,8 @@ class ClaimStoreHelper extends codecept_helper {
     await request.put({
       uri: uri,
       body: {
-        defendantUsername: defendant,
-        defendantPassword: password
+        "username": defendant,
+        "password": password
       },
       json: true
     }).promise()
