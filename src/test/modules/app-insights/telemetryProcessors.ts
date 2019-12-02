@@ -46,11 +46,21 @@ describe('app-insights telemetryProcessors', () => {
   })
 
   context('errorLogger', () => {
-    const ERROR: Envelope = {
-      data: { baseData: {
-        name: 'Test error name',
-        properties: { error: 'Test error description' }
-      } }
+    const CMC_DASHBOARD_FAILURE: Envelope = {
+      data: {
+        baseData: {
+          name: 'CMC Dashboard Failure',
+          properties: { error: 'Test error description' }
+        }
+      }
+    } as unknown as Envelope
+    const OTHER_ERROR: Envelope = {
+      data: {
+        baseData: {
+          name: 'Some other failure',
+          properties: { error: 'Some other description' }
+        }
+      }
     } as unknown as Envelope
 
     it('should throw not error if logger is undefined when envelope is empty', () => {
@@ -62,7 +72,19 @@ describe('app-insights telemetryProcessors', () => {
     })
 
     it('should throw error if logger is undefined when envelope holds error data', () => {
-      expect(() => telemetryProcessors.errorLogger(undefined)(ERROR)).to.throw()
+      expect(() => telemetryProcessors.errorLogger(undefined)(CMC_DASHBOARD_FAILURE)).to.throw()
+    })
+
+    it('should not log the error if logger is valid but envelope holds error data about something else', () => {
+      const stack: string[] = []
+      const logger: LoggerInstance = {
+        stack: [],
+        info: (message: string) => {
+          stack.push(message)
+        }
+      } as unknown as LoggerInstance
+      expect(telemetryProcessors.errorLogger(logger)(OTHER_ERROR)).to.be.true
+      expect(stack).to.be.empty
     })
 
     it('should log the error if logger is valid and envelope holds error data', () => {
@@ -73,9 +95,9 @@ describe('app-insights telemetryProcessors', () => {
           stack.push(message)
         }
       } as unknown as LoggerInstance
-      expect(telemetryProcessors.errorLogger(logger)(ERROR)).to.be.true
+      expect(telemetryProcessors.errorLogger(logger)(CMC_DASHBOARD_FAILURE)).to.be.true
       expect(stack).to.have.length(1)
-      expect(stack[0]).to.be.equal(`AppInsights error: {"name":"Test error name","error":"Test error description"}`)
+      expect(stack[0]).to.be.equal(`AppInsights error: {"name":"CMC Dashboard Failure","error":"Test error description"}`)
     })
   })
 })

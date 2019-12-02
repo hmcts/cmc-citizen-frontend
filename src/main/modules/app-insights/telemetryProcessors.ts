@@ -23,7 +23,9 @@ export function operationNameUUIDHider (): (envelope: Envelope, contextObjects?:
 
 export function errorLogger (logger: LoggerInstance): (envelope: Envelope, contextObjects?: any) => boolean {
   return (envelope) => {
-    if (envelope.data && envelope.data['baseData'] && envelope.data['baseData'].properties.error) {
+    if (envelope.data && envelope.data['baseData']
+          && envelope.data['baseData'].properties.error
+          && envelope.data['baseData'].name === 'CMC Dashboard Failure') {
       logger.info(`AppInsights error: ${JSON.stringify({
         name: envelope.data['baseData'].name,
         error: envelope.data['baseData'].properties.error
