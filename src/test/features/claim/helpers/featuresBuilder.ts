@@ -39,6 +39,21 @@ const limitDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserial
   }
 }), moment(), moment())
 
+const legalAdvisorEligibleLimit = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: pilotLimit
+      }
+    ]
+  },
+  interest: {
+    option: YesNoOption.NO
+  }
+}), moment(), moment())
+
 const overLimitDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
   ...claimDraftData,
   amount: {
@@ -127,7 +142,7 @@ describe('FeaturesBuilder', () => {
   describe('Legal advisor Pilot Feature', () => {
     it('should add legal advisor eligible to features if principal amount <= 300 and flag is set', async () => {
       mockFeatureFlag('cmc_legal_advisor', true)
-      const features = await FeaturesBuilder.features(limitDraft, user)
+      const features = await FeaturesBuilder.features(legalAdvisorEligibleLimit, user)
       expect(features).to.equal('LAPilotEligible')
     })
 
