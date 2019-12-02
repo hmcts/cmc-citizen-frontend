@@ -159,6 +159,34 @@ const commonIndividualClaimant = {
   } as Claimant
 }
 
+const commonIndividualClaimantIOC = {
+  claimant: {
+    partyDetails: {
+      type: 'individual',
+      name: 'John Smith',
+      address: {
+        line1: 'Apt 99',
+        line2: '',
+        line3: '',
+        city: 'London',
+        postcode: 'bb127nq'
+      } as Address,
+      hasCorrespondenceAddress: false,
+      dateOfBirth: {
+        known: true,
+        date: {
+          day: 31,
+          month: 12,
+          year: 1980
+        } as LocalDate
+      } as DateOfBirth
+    } as IndividualDetails,
+    phone: {
+      number: '07000000000'
+    } as Phone
+  } as Claimant
+}
+
 const commonCompanyClaimant = {
   claimant: {
     partyDetails: {
@@ -251,6 +279,12 @@ const commonIndividualDefendant = {
 export const sampleClaimDraftObj = {
   ...commonClaimObject,
   ...commonIndividualClaimant,
+  ...commonIndividualDefendant
+} as DraftClaim
+
+export const sampleClaimDraftObjIOC = {
+  ...commonClaimObject,
+  ...commonIndividualClaimantIOC,
   ...commonIndividualDefendant
 } as DraftClaim
 
@@ -690,6 +724,9 @@ export function resolveFind (draftType: string, draftOverride?: object): mock.Sc
   switch (draftType) {
     case 'claim':
       documentDocument = { ...sampleClaimDraftObj, ...draftOverride }
+      break
+    case 'claim:ioc':
+      documentDocument = { ...sampleClaimDraftObjIOC, ...draftOverride }
       break
     case 'claim:company':
       documentDocument = { ...sampleCompanyClaimDraftObj, ...draftOverride }

@@ -29,6 +29,8 @@ import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 import { CalendarClient } from 'claims/calendarClient'
 import { DirectionOrder } from 'claims/models/directionOrder'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { YesNoOption } from 'models/yesNoOption'
 
 interface State {
   status: ClaimStatus
@@ -38,6 +40,7 @@ export class Claim {
   id: number
   claimantId: string
   externalId: string
+  state: string
   defendantId: string
   claimNumber: string
   responseDeadline: Moment
@@ -69,6 +72,8 @@ export class Claim {
   directionOrder: DirectionOrder
   reviewOrder: ReviewOrder
   intentionToProceedDeadline?: Moment
+  mediationOutcome: string
+  pilotCourt: YesNoOption
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -199,8 +204,6 @@ export class Claim {
       return ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED
     } else if (this.hasDefendantRejectedClaimWithDQs()) {
       return ClaimStatus.DEFENDANT_REJECTS_WITH_DQS
-    } else if (this.isResponseSubmitted()) {
-      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.hasClaimantAcceptedStatesPaid()) {
       return ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID
     } else if (this.hasClaimantRejectedStatesPaid()) {
@@ -223,6 +226,8 @@ export class Claim {
       return ClaimStatus.PART_ADMIT_PAY_IMMEDIATELY
     } else if (this.eligibleForCCJ) {
       return ClaimStatus.ELIGIBLE_FOR_CCJ
+    } else if (this.isResponseSubmitted()) {
+      return ClaimStatus.RESPONSE_SUBMITTED
     } else if (this.isInterlocutoryJudgmentRequestedOnAdmissions()) {
       return ClaimStatus.REDETERMINATION_BY_JUDGE
     } else if (this.isClaimantResponseSubmitted()) {
@@ -286,9 +291,11 @@ export class Claim {
   deserialize (input: any): Claim {
     if (input) {
       this.id = input.id
+      this.state = input.state
       this.claimantId = input.submitterId
       this.externalId = input.externalId
       this.defendantId = input.defendantId
+      this.state = input.state
       this.claimNumber = input.referenceNumber
       this.createdAt = MomentFactory.parse(input.createdAt)
       this.responseDeadline = MomentFactory.parse(input.responseDeadline)
@@ -350,6 +357,13 @@ export class Claim {
         this.reviewOrder = new ReviewOrder().deserialize(input.reviewOrder)
       }
       this.intentionToProceedDeadline = input.intentionToProceedDeadline && MomentFactory.parse(input.intentionToProceedDeadline)
+      if (input.mediationOutcome) {
+        this.mediationOutcome = input.mediationOutcome
+      }
+
+      if (input.pilotCourt) {
+        this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
+      }
     }
 
     return this
@@ -427,6 +441,10 @@ export class Claim {
       return false
     }
 
+    if (this.mediationOutcome !== undefined && this.mediationOutcome === MediationOutcome.SUCCEEDED) {
+      return false
+    }
+
     if (this.isResponseSubmitted() && this.response.responseType === ResponseType.PART_ADMISSION && (this.response && !this.response.paymentDeclaration)) {
       return true
     }
@@ -435,7 +453,7 @@ export class Claim {
       return true
     }
 
-    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasRedeterminationBeenRequested()) {
+    if (this.isOfferAccepted() || this.hasClaimantRejectedPartAdmission() || this.hasClaimantRejectedPartAdmissionDQs() || this.hasRedeterminationBeenRequested()) {
       return true
     }
 
@@ -447,7 +465,7 @@ export class Claim {
       return false
     }
 
-    if (this.hasClaimantRejectedDefendantDefence() || this.hasClaimantRejectedPartAdmissionDQs()) {
+    if (this.hasClaimantRejectedDefendantDefence()) {
       return true
     }
 
@@ -506,11 +524,14 @@ export class Claim {
       const now = MomentFactory.currentDate()
       if (offer && offer.paymentIntention) {
         switch (offer.paymentIntention.paymentOption) {
-          case PaymentOption.BY_SPECIFIED_DATE : const paymentDate = offer.paymentIntention.paymentDate
+          case PaymentOption.BY_SPECIFIED_DATE :
+            const paymentDate = offer.paymentIntention.paymentDate
             return (paymentDate.isAfter(now) || paymentDate.isSame(now))
-          case PaymentOption.INSTALMENTS : const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
+          case PaymentOption.INSTALMENTS :
+            const firstPaymentDate = offer.paymentIntention.repaymentPlan.firstPaymentDate
             return (firstPaymentDate.isAfter(now) || firstPaymentDate.isSame(now))
-          case PaymentOption.IMMEDIATELY : return true
+          case PaymentOption.IMMEDIATELY :
+            return true
         }
       }
     }

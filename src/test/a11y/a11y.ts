@@ -11,7 +11,7 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
-import { FullAdmissionPaths, Paths as DefendantResponsePaths, StatementOfMeansPaths } from 'response/paths'
+import { FullAdmissionPaths, Paths, Paths as DefendantResponsePaths, StatementOfMeansPaths } from 'response/paths'
 import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
@@ -93,9 +93,11 @@ function ensureNoAccessibilityErrors (issues: Issue[]): void {
   expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
 }
 
-const excludedPaths: DefendantResponsePaths[] = [
+const excludedPaths: Paths[] = [
+  ClaimIssuePaths.finishPaymentController,
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
+  ClaimIssuePaths.initiatePaymentController,
   ClaimIssuePaths.receiptReceiver,
   ClaimIssuePaths.sealedClaimPdfReceiver,
   DefendantResponsePaths.receiptReceiver,
@@ -103,7 +105,7 @@ const excludedPaths: DefendantResponsePaths[] = [
   OfferPaths.agreementReceiver,
   DefendantFirstContactPaths.receiptReceiver,
   ClaimantResponsePaths.receiptReceiver,
-  ClaimantResponsePaths.claimantReceiptReceiver,
+  DirectionQuestionnairePaths.claimantHearingRequirementsReceiver,
   ClaimantResponsePaths.courtOfferedSetDatePage,
   DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
   DirectionQuestionnairePaths.hearingDatesReplaceReceiver,

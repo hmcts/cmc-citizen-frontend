@@ -51,7 +51,9 @@ export class ClaimModelConverter {
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.evidence = { rows: convertEvidence(draftClaim.evidence) as any } as Evidence
-    claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
+    if (draftClaim.claimant.payment) {
+      claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
+    }
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
       claimData.statementOfTruth = new StatementOfTruth(
         draftClaim.qualifiedStatementOfTruth.signerName,
@@ -244,6 +246,9 @@ export class ClaimModelConverter {
    * @returns {Payment} - simplified payment object required by the backend API
    */
   private static makeShallowCopy (payment: Payment): Payment {
+    if (!payment || Object.keys(payment).length === 0) {
+      return undefined
+    }
     return {
       reference: payment.reference,
       amount: payment.amount,

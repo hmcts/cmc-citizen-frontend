@@ -34,6 +34,7 @@ import {
   intentionToProceedDeadline
 } from 'test/data/entity/fullDefenceData'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -409,6 +410,69 @@ const mediationDQEnabledClaimDetails = [
     ]
   },
   {
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation - mediation failed',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      features: ['admissions','directionsQuestionnaire'],
+      response: {
+        ...defenceWithAmountClaimedAlreadyPaidData,
+        freeMediation: 'yes',
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      mediationOutcome: MediationOutcome.FAILED
+    },
+    claimantAssertions: [
+      'Mediation was unsuccessful',
+      'You weren’t able to resolve your claim against ' + fullDefenceClaim.claim.defendants[0].name + ' using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.'
+    ],
+    defendantAssertions: [
+      'Mediation was unsuccessful',
+      'You weren’t able to resolve ' + fullDefenceClaim.claim.claimants[0].name + '’s claim against you using mediation.',
+      'You’ll have to go to a hearing. We’ll contact you with the details.',
+      'Download ' + fullDefenceClaim.claim.claimants[0].name + '’s hearing requirements'
+    ]
+  },
+  {
+    status: 'Full defence - defendant paid what he believe - claimant rejected defendant§ response with mediation - mediation success',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData,
+        freeMediation: 'yes'
+      },
+      claimantResponse: {
+        freeMediation: 'yes',
+        settleForAmount: 'no',
+        type: 'REJECTION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline,
+      mediationOutcome: MediationOutcome.SUCCEEDED
+    },
+    claimantAssertions: [
+      'You both agreed a settlement through mediation'
+    ],
+    defendantAssertions: [
+      'You both agreed a settlement through mediation',
+      'The claimant can’t request a County Court Judgment against you unless you break the terms',
+      'Contact ' + fullDefenceClaim.claim.claimants[0].name,
+      'if you need their payment details. Make sure you get receipts for any payments.'
+    ]
+  },
+  {
     status: 'Full defence - defendant dispute all of the claim and reject mediation - defendant offers settlement to settle out of court - claimant rejected offer',
     claim: fullDefenceClaim,
     claimOverride: {
@@ -573,6 +637,30 @@ const mediationDQEnabledClaimDetails = [
       'The court ended the claim',
       'This is because John Smith didn’t proceed with it before the deadline of 4pm on',
       'If they want to restart the claim, they need to ask for permission from the court. We’ll contact you by post if they do this.'
+    ]
+  },
+  {
+    status: 'Full defence - defendant dispute all of the claim and rejects mediation - claimant accepts full defense.',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...defenceWithDisputeData,
+        freeMediation: 'no'
+      },
+      claimantResponse: {
+        type: 'ACCEPTATION'
+      },
+      claimantRespondedAt: MomentFactory.currentDate(),
+      ...directionsQuestionnaireDeadline
+    },
+    claimantAssertions: [
+      'You stopped this claim',
+      'You ended the claim on'
+    ],
+    defendantAssertions: [
+      'This claim has ended',
+      fullDefenceClaim.claim.claimants[0].name
+      + ' ended their claim against you on'
     ]
   },
   {
