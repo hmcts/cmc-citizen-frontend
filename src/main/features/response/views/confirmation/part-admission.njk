@@ -1,4 +1,5 @@
 {% from "../macro/confirmation/sendFinancialDetails.njk" import sendFinancialDetailsForBusiness %}
+{% from "./utilityMacros.njk" import downloadClaimantDQs %}
 
 {% set claimantName = claim.claimData.claimant.name %}
 {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}

@@ -1,6 +1,6 @@
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
-{% from "./utilityMacros.njk" import downloadResponseLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink, downloadClaimantDQs %}
 
 {% from "./claimRejected.njk" import
   mediationSuccessForDefendantClaimDetails,
@@ -83,10 +83,7 @@
       {% endif %}
 
       <p>{{ downloadResponseLink(claim) }}</p>
-      {% if claim.response.directionsQuestionnaire %}
-      <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
-        {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
-      {% endif %}
+      {{ downloadClaimantDQs(claim) }}
     </div>
   {% endif %}
 {% endmacro %}
