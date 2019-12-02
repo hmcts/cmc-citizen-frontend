@@ -169,7 +169,7 @@
   {% if not claim.response.directionsQuestionnaire and not claim.response.directionsQuestionnaire.selfWitness %}
     <p>{{ t('You need to {{ completeDQ }} form to tell us more about the claim.',
         { completeDQ: internalLink('complete a directions questionnaire', DashboardPaths.directionsQuestionnairePage.evaluateUri({ externalId: claim.externalId })) } ) | safe }}</p>
-<p>{{ t('You must make sure we receive the form before 4pm on {{ dqdeadline }} or we’ll cancel your defence.', { dqdeadline: claim.directionsQuestionnaireDeadline | date}) }}</p>
-<p>{{ t('You also need to send a copy of the form to {{ claimantName }}.', { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('You must make sure we receive the form before 4pm on {{ dqdeadline }} or we’ll cancel your defence.', { dqdeadline: claim.directionsQuestionnaireDeadline | date}) }}</p>
+    <p>{{ t('You also need to send a copy of the form to {{ claimantName }}.', { claimantName: claim.claimData.claimant.name }) }}</p>
   {% endif %}
 {% endmacro %}
