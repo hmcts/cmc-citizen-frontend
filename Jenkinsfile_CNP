@@ -39,20 +39,20 @@ env.FEATURE_TESTING_SUPPORT = 'true'
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
-  after('checkout') {
-    onMaster {
-      withCredentials([usernamePassword(credentialsId: 'jenkins-github-hmcts-api-token', passwordVariable: 'BEARER_TOKEN', usernameVariable: 'USERNAME')]) {
-        try {
-          def url = sh(returnStdout: true, script: 'git config remote.origin.url').replace('github.com', '${BEARER_TOKEN}@github.com')
-          sh('git remote set-url origin ' + url)
-          sh('git fetch origin demo:demo')
-          sh('git push --force origin HEAD:demo')
-        } catch (err) {
-          notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
-        }
-      }
-    }
-  }
+//  after('checkout') {
+//    onMaster {
+//      withCredentials([usernamePassword(credentialsId: 'jenkins-github-hmcts-api-token', passwordVariable: 'BEARER_TOKEN', usernameVariable: 'USERNAME')]) {
+//        try {
+//          def url = sh(returnStdout: true, script: 'git config remote.origin.url').replace('github.com', '${BEARER_TOKEN}@github.com')
+//          sh('git remote set-url origin ' + url)
+//          sh('git fetch origin demo:demo')
+//          sh('git push --force origin HEAD:demo')
+//        } catch (err) {
+//          notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+//        }
+//      }
+//    }
+//  }
 
   after('build') {
     yarnBuilder.yarn('setup')
