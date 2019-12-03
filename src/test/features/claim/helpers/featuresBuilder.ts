@@ -198,10 +198,11 @@ describe('FeaturesBuilder', () => {
     })
   })
 
-  it('should add legal advisor and mediation pilot to features if principal amount <= 300 and flag is set', async () => {
+  it('should add legal advisor, dqOnline and mediation pilot to features if principal amount <= 300 and flag is set', async () => {
+    mockFeatureFlag('cmc_directions_questionnaire', true)
     mockFeatureFlag('cmc_legal_advisor', true)
     mockFeatureFlag('cmc_mediation_pilot', true)
     const features = await FeaturesBuilder.features(limitDraft, user)
-    expect(features).to.equal('mediationPilot, LAPilotEligible')
+    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
   })
 })

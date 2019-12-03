@@ -27,7 +27,9 @@ export class FeaturesBuilder {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_legal_advisor')) {
         features += features === '' ? 'LAPilotEligible' : ', LAPilotEligible'
       }
-    } else if (draft.document.amount.totalAmount() <= ONLINE_DQ_THRESHOLD) {
+    }
+
+    if (draft.document.amount.totalAmount() <= ONLINE_DQ_THRESHOLD) {
       if (FeatureToggles.isEnabled('directionsQuestionnaire') && await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
         features += features === '' ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
       }
