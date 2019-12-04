@@ -26,6 +26,10 @@ export class FeaturesBuilder {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
         features += features === '' ? 'mediationPilot' : ', mediationPilot'
       }
+
+      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_legal_advisor')) {
+        features += features === '' ? 'LAPilotEligible' : ', LAPilotEligible'
+      }
     }
     return (features === '') ? undefined : features
   }
