@@ -18,7 +18,7 @@ describe('PostCode Lookup', () => {
 
     await request(app)
       .get(Paths.postcodeLookupProxy.uri)
-      .query({ 'postcode': 'SW19 1AA' })
+      .query({ 'postcode': 'SW2 1AN' })
       .expect(res => expect(res).to.be.successful.withText('SW2 1AN'))
   })
 
@@ -26,11 +26,11 @@ describe('PostCode Lookup', () => {
 
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
-      .reply(200, Promise.reject('asdfaf'))
+      .reply(401, 'Authentication failed')
 
     await request(app)
       .get(Paths.postcodeLookupProxy.uri)
-      .query({ 'postcode': 'drery' })
+      .query({ 'postcode': 'SW2 1AN' })
       .expect(res => expect(res).to.serverError.withText('Authentication failed'))
   })
 })
