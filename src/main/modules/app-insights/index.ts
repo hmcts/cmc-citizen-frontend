@@ -7,19 +7,41 @@ import { Logger } from '@hmcts/nodejs-logging'
 const logger: LoggerInstance = Logger.getLogger('customEventTracker')
 
 export class AppInsights {
-  static enable () {
+  private readonly instrumentationKey: string
+  private client?: appInsights.TelemetryClient
 
-    const aiInstrumentationKey = config.get<string>('secrets.cmc.AppInsightsInstrumentationKey')
-    appInsights.setup(aiInstrumentationKey)
-      .setAutoCollectConsole(true, true)
-    appInsights.defaultClient.context.tags[appInsights.defaultClient.context.keys.cloudRole] = config.get<string>('appInsights.roleName')
+  constructor (instrumentationKey?: string, client?: appInsights.TelemetryClient) {
+    this.instrumentationKey = instrumentationKey
+      ? instrumentationKey
+      : config.get<string>('secrets.cmc.AppInsightsInstrumentationKey')
+    this.client = client
+      ? client
+      : appInsights.defaultClient
+  }
 
-    appInsights.defaultClient.addTelemetryProcessor(telemetryProcessors.operationNameUUIDHider())
+  enable () {
+    this.setup()
+    this.prepareClientContext(config.get<string>('appInsights.roleName'))
+    this.prepareTelemetryProcessors()
+    this.start()
+  }
 
-    if (aiInstrumentationKey === 'STDOUT') {
-      appInsights.defaultClient.addTelemetryProcessor(telemetryProcessors.errorLogger(logger))
+  setup (): typeof appInsights.Configuration {
+    return appInsights.setup(this.instrumentationKey).setAutoCollectConsole(true, true)
+  }
+
+  prepareClientContext (cloudRole: string) {
+    this.client.context.tags[this.client.context.keys.cloudRole] = cloudRole
+  }
+
+  prepareTelemetryProcessors () {
+    this.client.addTelemetryProcessor(telemetryProcessors.operationNameUUIDHider())
+    if (this.instrumentationKey === 'STDOUT') {
+      this.client.addTelemetryProcessor(telemetryProcessors.errorLogger(logger))
     }
+  }
 
+  start () {
     appInsights.start()
   }
 }
