@@ -9,7 +9,7 @@ describe('Application Insights facade', () => {
       public telemetryProcessors: any[] = []
 
       constructor () {
-        super('')
+        super('setup string')
       }
 
       addTelemetryProcessor (telemetryProcessor): void {
