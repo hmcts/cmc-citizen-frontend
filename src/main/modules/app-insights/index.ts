@@ -26,12 +26,19 @@ export class AppInsights {
     return appInsights.setup(this.instrumentationKey).setAutoCollectConsole(true, true)
   }
 
+  getClient () {
+    if (!this.client) {
+      this.client = appInsights.defaultClient
+    }
+    return this.client
+  }
+
   prepareClientContext (cloudRole: string) {
-    this.client.context.tags[this.client.context.keys.cloudRole] = cloudRole
+    this.getClient().context.tags[this.client.context.keys.cloudRole] = cloudRole
   }
 
   prepareTelemetryProcessors () {
-    this.client.addTelemetryProcessor(telemetryProcessors.operationNameUUIDHider())
+    this.getClient().addTelemetryProcessor(telemetryProcessors.operationNameUUIDHider())
     if (this.instrumentationKey === 'STDOUT') {
       this.client.addTelemetryProcessor(telemetryProcessors.errorLogger(logger))
     }
