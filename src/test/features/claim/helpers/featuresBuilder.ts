@@ -124,6 +124,25 @@ describe('FeaturesBuilder', () => {
     })
   })
 
+  describe('Legal advisor Pilot Feature', () => {
+    it('should add legal advisor eligible to features if principal amount <= 300 and flag is set', async () => {
+      mockFeatureFlag('cmc_legal_advisor', true)
+      const features = await FeaturesBuilder.features(limitDraft, user)
+      expect(features).to.equal('LAPilotEligible')
+    })
+
+    it('should add legal advisor eligible to features if principal amount <= 300 but with interest is > 300 and flag is set', async () => {
+      mockFeatureFlag('cmc_legal_advisor', true)
+      const features = await FeaturesBuilder.features(limitPlusInterestDraft, user)
+      expect(features).to.equal('LAPilotEligible')
+    })
+
+    it('should not add legal advisor eligible to features if principal amount is > 300', async () => {
+      const features = await FeaturesBuilder.features(overLimitDraft, user)
+      expect(features).to.be.undefined
+    })
+  })
+
   it('should add dq and mediation pilot to features if principal amount <= 300 and flag is set', async () => {
     mockFeatureFlag('cmc_directions_questionnaire', true)
     mockFeatureFlag('cmc_mediation_pilot', true)
