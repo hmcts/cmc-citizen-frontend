@@ -1,22 +1,27 @@
 // tslint:disable:no-unused-expression
 import { AppInsights } from 'modules/app-insights'
-import { expect } from 'chai'
 import { TelemetryClient } from 'applicationinsights'
+import { expect } from 'chai'
+
+class TelemetryClientStub extends TelemetryClient {
+  public telemetryProcessors: any[] = []
+
+  constructor () {
+    super('setup string')
+  }
+
+  addTelemetryProcessor (telemetryProcessor): void {
+    this.telemetryProcessors.push(telemetryProcessor)
+  }
+}
 
 describe('Application Insights facade', () => {
+  it('should start without errors', () => {
+    expect(() => new AppInsights('instrumentation key', new TelemetryClientStub()).enable())
+      .to.not.throw()
+  })
+
   context('error logging telemetry processor', () => {
-    class TelemetryClientStub extends TelemetryClient {
-      public telemetryProcessors: any[] = []
-
-      constructor () {
-        super('')
-      }
-
-      addTelemetryProcessor (telemetryProcessor): void {
-        this.telemetryProcessors.push(telemetryProcessor)
-      }
-    }
-
     let client: TelemetryClientStub
 
     beforeEach(() => {

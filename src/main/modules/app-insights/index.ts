@@ -8,15 +8,11 @@ const logger: LoggerInstance = Logger.getLogger('customEventTracker')
 
 export class AppInsights {
   private readonly instrumentationKey: string
-  private client?: appInsights.TelemetryClient
+  private client: appInsights.TelemetryClient
 
   constructor (instrumentationKey?: string, client?: appInsights.TelemetryClient) {
-    this.instrumentationKey = instrumentationKey
-      ? instrumentationKey
-      : config.get<string>('secrets.cmc.AppInsightsInstrumentationKey')
-    this.client = client
-      ? client
-      : appInsights.defaultClient
+    this.instrumentationKey = instrumentationKey || config.get<string>('secrets.cmc.AppInsightsInstrumentationKey')
+    this.client = client || appInsights.defaultClient
   }
 
   enable () {
