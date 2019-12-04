@@ -22,7 +22,7 @@ describe('PostCode Lookup', () => {
       .expect(res => expect(res).to.be.successful.withText('SW2 1AN'))
   })
 
-  it('should produce appinsights custom event when postCode lookup key does not work', async () => {
+  it('should produce appinsights custom event when Ordnance Survey keys stopped working', async () => {
 
     mock(mockPostcodeServer)
       .get(mockPostcodePath)
