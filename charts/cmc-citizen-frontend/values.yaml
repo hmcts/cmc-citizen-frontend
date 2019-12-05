@@ -25,7 +25,7 @@ nodejs:
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
-    FEATURE_INVERSION_OF_CONTROL: false
+    FEATURE_INVERSION_OF_CONTROL: true
   keyVaults:
     cmc:
       resourceGroup: cmc
