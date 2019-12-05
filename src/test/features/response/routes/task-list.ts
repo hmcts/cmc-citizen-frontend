@@ -17,6 +17,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = ResponsePaths.taskListPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -52,6 +53,7 @@ describe('Defendant response: task list page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
@@ -64,6 +66,7 @@ describe('Defendant response: task list page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
