@@ -84,7 +84,14 @@ const testData = [
     claim: statesPaidClaim,
     claimOverride: {
       response: {
-        ...partialAdmissionFromStatesPaidWithMediationDefence
+        ...partialAdmissionFromStatesPaidWithMediationDefence,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       ...claimantRejectAlreadyPaidWithMediation,
       mediationOutcome: MediationOutcome.FAILED
@@ -97,7 +104,8 @@ const testData = [
     defendantAssertions: [
       'Mediation was unsuccessful',
       'You weren’t able to resolve ' + statesPaidClaim.claim.claimants[0].name + '’s claim against you using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.'
+      'You’ll have to go to a hearing. We’ll contact you with the details.',
+      'Download ' + statesPaidClaim.claim.claimants[0].name + '’s hearing requirements'
     ]
   },
   {
@@ -126,7 +134,6 @@ const testData = [
       'if you need their payment details. Make sure you get receipts for any payments.'
     ]
   }
-
 ]
 
 describe('Dashboard page', () => {

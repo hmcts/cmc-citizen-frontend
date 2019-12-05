@@ -413,9 +413,17 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation - mediation failed',
     claim: fullDefenceClaim,
     claimOverride: {
+      features: ['admissions','directionsQuestionnaire'],
       response: {
         ...defenceWithAmountClaimedAlreadyPaidData,
-        freeMediation: 'yes'
+        freeMediation: 'yes',
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       claimantResponse: {
         freeMediation: 'yes',
@@ -433,7 +441,8 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       'Mediation was unsuccessful',
       'You weren’t able to resolve ' + fullDefenceClaim.claim.claimants[0].name + '’s claim against you using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.'
+      'You’ll have to go to a hearing. We’ll contact you with the details.',
+      'Download ' + fullDefenceClaim.claim.claimants[0].name + '’s hearing requirements'
     ]
   },
   {
