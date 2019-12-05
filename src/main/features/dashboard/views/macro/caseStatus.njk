@@ -30,7 +30,12 @@
   claimRejectedWithDQsForDefendantDashboard,
   claimRejectedWithDQsForClaimantDashboard,
   claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard,
-  claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard %}
+  claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard,
+  mediationSuccessForClaimantDashboard,
+  mediationSuccessForDefendantDashboard,
+  mediationFailedForClaimantDashboard,
+  mediationFailedForDefendantDashboard
+%}
 
 {% from "./claimStatus/claimPartAdmittedDefendant.njk" import
   claimPartAdmittedAlreadyPaidForDefendantDashboard,
@@ -96,7 +101,12 @@
   directionsOrderReviewRequestedClaimantDashboard,
   directionsOrderReviewRequestedDefendantDashboard %}
 
+{% from "./claimStatus/intentionToProceed.njk" import
+  intentionToProceedPastDeadlineForClaimantDashboard,
+  intentionToProceedPastDeadlineForDefendantDashboard %}
+
 {% macro caseStatusForClaimant(status, claim) %}
+
   {% if status === ClaimStatus.PAID_IN_FULL or status === ClaimStatus.PAID_IN_FULL_CCJ_CANCELLED or status === ClaimStatus.PAID_IN_FULL_CCJ_SATISFIED
     or status === ClaimStatus.CLAIMANT_ACCEPTED_STATES_PAID %}
     {{ claimSettledDashboard() }}
@@ -148,7 +158,13 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedDefendantDefenceFreeMediationNOForClaimantDashboard(claim) }}
     {% else %}
-      {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
+      {% if (claim.mediationOutcome === MediationOutcome.FAILED) %}
+        {{ mediationFailedForClaimantDashboard(claim) }}
+      {% elif (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+         {{ mediationSuccessForClaimantDashboard(claim) }}
+      {% else %}
+        {{ claimRejectedDefendantDefenceFreeMediationYESForClaimantDashboard(claim) }}
+      {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.CLAIMANT_ACCEPTED_DEFENDANT_DEFENCE %}
     {{ claimantAcceptedDefendantDefenceClaimantDashboard() }}
@@ -180,7 +196,13 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedFreeMediationNOWithoutDQsForClaimantDashboard(claim) }}
     {% else %}
-      {{ claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard(claim) }}
+      {% if claim.mediationOutcome === MediationOutcome.FAILED %}
+        {{ mediationFailedForClaimantDashboard(claim) }}
+      {% elif (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {{ mediationSuccessForClaimantDashboard(claim) }}
+      {% else %}
+        {{ claimRejectedFreeMediationYesWithoutDQsForClaimantDashboard(claim) }}
+      {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForClaimantDashboard(claim) }}
@@ -188,6 +210,8 @@
     {{ directionsOrderIssuedClaimantDashboard() }}
   {% elif status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
     {{ directionsOrderReviewRequestedClaimantDashboard(claim) }}
+  {% elif status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+    {{ intentionToProceedPastDeadlineForClaimantDashboard(claim) }}
   {% endif %}
 {% endmacro %}
 
@@ -244,7 +268,13 @@
       {{ directionsOrderIssuedDefendantDashboard() }}
     {% else %}
       {% if featureToggles.mediation and claim.claimantResponse.freeMediation === FreeMediationOption.YES %}
-        {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+        {% if claim.mediationOutcome === MediationOutcome.FAILED %}
+            {{ mediationFailedForDefendantDashboard(claim) }}
+        {% elif claim.mediationOutcome === MediationOutcome.SUCCEEDED %}
+          {{ mediationSuccessForDefendantDashboard(claim) }}
+        {% else %}
+            {{ claimRejectedDefendantDefenceFreeMediationYESForDefendantDashboard(claim) }}
+        {% endif %}
       {% else %}
         {{ claimRejectedDefendantDefenceFreeMediationNOForDefendantDashboard(claim) }}
       {% endif %}
@@ -280,7 +310,13 @@
     {% if claim.claimantResponse.freeMediation === FreeMediationOption.NO %}
       {{ claimRejectedFreeMediationNOWithoutDQsForDefendantDashboard(claim) }}
     {% else %}
-      {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
+      {% if claim.mediationOutcome === MediationOutcome.FAILED %}
+        {{ mediationFailedForDefendantDashboard(claim) }}
+      {% elif (claim.mediationOutcome === MediationOutcome.SUCCEEDED) %}
+        {{ mediationSuccessForDefendantDashboard(claim) }}
+      {% else %}
+        {{ claimRejectedFreeMediationYesWithoutDQsForDefendantDashboard(claim) }}
+      {% endif %}
     {% endif %}
   {% elif status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
     {{ claimRejectedWithDQsForDefendantDashboard(claim) }}
@@ -288,5 +324,7 @@
     {{ directionsOrderIssuedDefendantDashboard() }}
   {% elif status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
     {{ directionsOrderReviewRequestedDefendantDashboard(claim) }}
+  {% elif status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
+    {{ intentionToProceedPastDeadlineForDefendantDashboard(claim) }}
   {% endif %}
 {% endmacro %}

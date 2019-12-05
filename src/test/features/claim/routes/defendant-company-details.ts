@@ -119,7 +119,7 @@ describe('defendant as company details page', () => {
         })
       })
 
-      it('should redirect to mobile phone page when including contact person ', async () => {
+      it('should redirect to phone page when including contact person ', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
         await request(app)
@@ -129,7 +129,7 @@ describe('defendant as company details page', () => {
           .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.defendantEmailPage.uri))
       })
 
-      it('should redirect to mobile phone page when contact person is not included', async () => {
+      it('should redirect to phone page when contact person is not included', async () => {
         const noContactPersonInput = { ...input, ...{ contactPerson: '' } }
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()

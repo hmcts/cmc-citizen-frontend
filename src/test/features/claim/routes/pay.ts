@@ -21,7 +21,7 @@ import { Defendant } from 'drafts/models/defendant'
 import { Claimant } from 'drafts/models/claimant'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { Payment } from 'payment-hub-client/payment'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
@@ -81,9 +81,9 @@ describe('Claim issue: initiate payment receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,
@@ -281,9 +281,9 @@ describe('Claim issue: post payment callback receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,
@@ -420,6 +420,11 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed()
+            claimStoreServiceMock.rejectSaveClaimForUser('reason', 409)
+            claimStoreServiceMock.resolveRetrieveByExternalId()
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
@@ -472,7 +477,7 @@ describe('Claim issue: post payment callback receiver', () => {
               .expect(res => expect(res).to.be.serverError.withText('Error'))
           })
 
-          it('should return 404 and render error page when feature toggle api fails', async () => {
+          it('should return 500 and render error page when feature toggle api fails', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
@@ -483,7 +488,7 @@ describe('Claim issue: post payment callback receiver', () => {
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.notFound)
+              .expect(res => expect(res).to.be.serverError)
           })
 
           it('should return 500 and render error page when retrieve user roles fails', async () => {

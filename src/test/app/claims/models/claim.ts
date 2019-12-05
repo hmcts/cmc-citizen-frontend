@@ -41,6 +41,8 @@ import { User } from 'idam/user'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
 import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { defenceClaimData } from 'test/data/entity/claimData'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -143,6 +145,7 @@ describe('Claim', () => {
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     });
 
     [true, false].forEach(isMoreTimeRequested => {
@@ -492,7 +495,7 @@ describe('Claim', () => {
         paymentOption: PaymentOption.INSTALMENTS,
         repaymentPlan: {
           instalmentAmount: 100,
-          firstPaymentDate: MomentFactory.currentDate().add(1,'day'),
+          firstPaymentDate: MomentFactory.currentDate().add(1, 'day'),
           paymentSchedule: PaymentSchedule.EACH_WEEK,
           completionDate: '2051-12-31',
           paymentLength: '1'
@@ -620,6 +623,7 @@ describe('Claim', () => {
           paperDetermination: 'no',
           preferredDQCourt: 'Central London County Court',
           hearingCourt: 'CLERKENWELL',
+          hearingCourtName: 'Clerkenwell and Shoreditch County Court and Family Court',
           hearingCourtAddress: {
             line1: 'The Gee Street Courthouse',
             line2: '29-41 Gee Street',
@@ -821,12 +825,35 @@ describe('Claim', () => {
     })
   })
 
+  describe('mediationOutcome', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim().deserialize(defenceClaimData)
+      claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
+      claim.response = FullDefenceResponse.deserialize(defenceWithDisputeData)
+    })
+
+    it('should return FAILED when mediation is failed', () => {
+      claim.mediationOutcome = MediationOutcome.FAILED
+      expect(claim.mediationOutcome).to.be.equal('FAILED')
+    })
+
+    it('should return SUCCEEDED when mediation is success', () => {
+      claim.mediationOutcome = MediationOutcome.SUCCEEDED
+      expect(claim.mediationOutcome).to.be.equal('SUCCEEDED')
+    })
+
+  })
+
   describe('stateHistory', () => {
     let claim
 
     beforeEach(() => {
       claim = new Claim()
       claim.responseDeadline = MomentFactory.currentDate().add(1, 'day')
+      claim.intentionToProceedDeadline = MomentFactory.currentDateTime().add(33, 'days')
     })
 
     it('should return OFFER_SUBMITTED, RESPONSE_SUBMITTED and PAID_IN_FULL_LINK_ELIGIBLE if an offer has been submitted.', () => {
@@ -989,6 +1016,24 @@ describe('Claim', () => {
       claim.moneyReceivedOn = MomentFactory.currentDate().add(2, 'month')
       claim.countyCourtJudgmentRequestedAt = MomentFactory.currentDate()
       expect(claim.isCCJPaidWithinMonth()).to.be.false
+    })
+  })
+
+  describe('isIntentionToProceedEligible', () => {
+    let claim
+
+    beforeEach(() => {
+      claim = new Claim()
+    })
+
+    it('should return true when createdAt is after 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.currentDate()
+      expect(claim.isIntentionToProceedEligible()).to.be.true
+    })
+
+    it('should return false when createdAt is before 09/09/19 3:12', () => {
+      claim.createdAt = MomentFactory.parse('2019-09-08')
+      expect(claim.isIntentionToProceedEligible()).to.be.false
     })
   })
 

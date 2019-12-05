@@ -1,16 +1,17 @@
 import { PartyType } from 'integration-test/data/party-type'
 import {
   claimAmount,
-  createClaimant,
   claimReason,
+  createClaimant,
   createDefendant,
+  postcodeLookupQuery,
   SMOKE_TEST_CITIZEN_USERNAME,
-  SMOKE_TEST_USER_PASSWORD, postcodeLookupQuery
+  SMOKE_TEST_USER_PASSWORD
 } from 'integration-test/data/test-data'
 import { CitizenCompletingClaimInfoPage } from 'integration-test/tests/citizen/claim/pages/citizen-completing-claim-info'
 import { CitizenDobPage } from 'integration-test/tests/citizen/claim/pages/citizen-dob'
 import { CitizenEmailPage } from 'integration-test/tests/citizen/claim/pages/citizen-email'
-import { CitizenMobilePage } from 'integration-test/tests/citizen/claim/pages/citizen-mobile'
+import { CitizenPhonePage } from 'integration-test/tests/citizen/claim/pages/citizen-phone'
 import { CitizenResolveDisputePage } from 'integration-test/tests/citizen/claim/pages/citizen-resolve-dispute'
 import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claim/pages/claimant-check-and-send'
 import { ClaimantClaimAmountPage } from 'integration-test/tests/citizen/claim/pages/claimant-claim-amount'
@@ -24,11 +25,12 @@ import { EligibilitySteps } from 'integration-test/tests/citizen/claim/steps/eli
 import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/interest'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
-import I = CodeceptJS.I
 import { ClaimantTimelinePage } from 'integration-test/tests/citizen/claim/pages/claimant-timeline'
 import { ClaimantEvidencePage } from 'integration-test/tests/citizen/claim/pages/claimant-evidence'
 import { AmountHelper } from 'integration-test/helpers/amountHelper'
 import { NewFeaturesPage } from 'integration-test/tests/citizen/claim/pages/new-features'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
+import I = CodeceptJS.I
 
 const I: I = actor()
 const citizenResolveDisputePage: CitizenResolveDisputePage = new CitizenResolveDisputePage()
@@ -38,7 +40,7 @@ const companyDetailsPage: CompanyDetailsPage = new CompanyDetailsPage()
 const individualDetailsPage: IndividualDetailsPage = new IndividualDetailsPage()
 const organisationDetailsPage: OrganisationDetailsPage = new OrganisationDetailsPage()
 const citizenDOBPage: CitizenDobPage = new CitizenDobPage()
-const citizenMobilePage: CitizenMobilePage = new CitizenMobilePage()
+const citizenPhonePage: CitizenPhonePage = new CitizenPhonePage()
 const citizenEmailPage: CitizenEmailPage = new CitizenEmailPage()
 const claimantClaimAmountPage: ClaimantClaimAmountPage = new ClaimantClaimAmountPage()
 const claimantReasonPage: ClaimantReasonPage = new ClaimantReasonPage()
@@ -52,6 +54,7 @@ const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 export class ClaimSteps {
 
@@ -100,7 +103,7 @@ export class ClaimSteps {
       default:
         throw new Error('non-matching claimant type for claim')
     }
-    citizenMobilePage.enterMobile(claimant.mobilePhone)
+    citizenPhonePage.enterPhone(claimant.phone)
   }
 
   enterTheirDetails (defendantType: PartyType, enterDefendantEmail: boolean = true, byLookup: boolean = false): void {
@@ -159,6 +162,8 @@ export class ClaimSteps {
     } else {
       citizenEmailPage.submitForm()
     }
+
+    citizenPhonePage.enterPhone(defendant.phone)
   }
 
   enterClaimAmount (amount1: number, amount2: number, amount3): void {
@@ -211,10 +216,7 @@ export class ClaimSteps {
     I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
     I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
     interestSteps.skipClaimantInterestTotalPage()
-    userSteps.selectClaimDetails()
-    this.enterClaimReason()
-    this.enterClaimTimeline()
-    this.enterClaimEvidence()
+    this.enterClaimDetails()
     userSteps.selectCheckAndSubmitYourClaim()
     this.checkClaimFactsAreTrueAndSubmit(claimantType, defendantType, enterDefendantEmail)
   }
@@ -234,30 +236,67 @@ export class ClaimSteps {
     newFeaturesPage.optIn()
   }
 
-  enterClaimantDetails (claimantType: PartyType, byLookup: boolean = false): void {
-    const claimant = createClaimant(claimantType)
-    switch (claimantType) {
-      case PartyType.INDIVIDUAL:
-        partyTypePage.selectIndividual()
-        individualDetailsPage.enterName(claimant.name)
-        let manualEntryLink = true
-        if (byLookup) {
-          individualDetailsPage.lookupAddress(postcodeLookupQuery)
-          manualEntryLink = false
-        }
-        individualDetailsPage.enterAddress(claimant.address, manualEntryLink)
-        individualDetailsPage.submit()
-        citizenDOBPage.enterDOB(claimant.dateOfBirth)
-        break
-      default:
-        throw new Error('non-matching claimant type for claim')
+  makeAClaimAndNavigateUpToPayment () {
+    const claimant = createClaimant(PartyType.INDIVIDUAL)
+    const defendant = createDefendant(PartyType.INDIVIDUAL, true)
+
+    userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.deleteClaimDraft()
     }
-    citizenMobilePage.enterMobile(claimant.mobilePhone)
+    this.completeEligibility()
+    userSteps.selectResolvingThisDispute()
+    this.resolveDispute()
+    userSteps.selectCompletingYourClaim()
+    this.readCompletingYourClaim()
+    userSteps.selectYourDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterName(claimant.name)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(claimant.address, false)
+    individualDetailsPage.submit()
+    citizenDOBPage.enterDOB(claimant.dateOfBirth)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectTheirDetails()
+    partyTypePage.selectIndividual()
+    individualDetailsPage.enterTitle(defendant.title)
+    individualDetailsPage.enterFirstName(defendant.firstName)
+    individualDetailsPage.enterLastName(defendant.lastName)
+    individualDetailsPage.lookupAddress(postcodeLookupQuery)
+    individualDetailsPage.enterAddress(defendant.address, false)
+    individualDetailsPage.submit()
+    citizenEmailPage.enterEmail(defendant.email)
+    citizenPhonePage.enterPhone(claimant.phone)
+    userSteps.selectClaimAmount()
+    I.see('Claim amount')
+    this.enterClaimAmount(10, 20.50, 50)
+    I.see('£80.50')
+    this.claimantTotalAmountPageRead()
+    I.see('Do you want to claim interest?')
+    interestSteps.enterDefaultInterest()
+    I.see('Total amount you’re claiming')
+    I.see('£25')
+    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
+    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
+    interestSteps.skipClaimantInterestTotalPage()
+    this.enterClaimDetails()
+    userSteps.selectCheckAndSubmitYourClaim()
+    I.see('John Smith')
+    I.see('10, DALBERG')
+    I.see('LONDON')
+    I.see('SW2 1AN')
+    I.see('07700000001')
+    I.see(claimReason)
+    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(PartyType.INDIVIDUAL, true)
+    claimantCheckAndSendPage.verifyClaimAmount()
+
+    if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
+      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
+      I.waitForText('Enter card details')
+    }
   }
 
-  makeAClaimAndNavigateUpToPayment (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
-    userSteps.loginWithPreRegisteredUser(SMOKE_TEST_CITIZEN_USERNAME, SMOKE_TEST_USER_PASSWORD)
-    this.completeEligibility()
+  completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
     if (fillInNewFeaturesPage) {
       this.optIntoNewFeatures()
     }
@@ -266,38 +305,21 @@ export class ClaimSteps {
     userSteps.selectCompletingYourClaim()
     this.readCompletingYourClaim()
     userSteps.selectYourDetails()
-    this.enterClaimantDetails(claimantType, true)
+    this.enterMyDetails(claimantType)
     userSteps.selectTheirDetails()
     this.enterTheirDetails(defendantType, enterDefendantEmail, true)
     userSteps.selectClaimAmount()
-    this.enterTestDataClaimAmount()
+    I.see('Claim amount')
+    this.enterClaimAmount(10, 20.50, 50)
     I.see('£80.50')
     this.claimantTotalAmountPageRead()
-    interestSteps.enterDefaultInterest()
-    I.see('Total amount you’re claiming')
-    I.see('£25')
-    I.see(AmountHelper.formatMoney(claimAmount.getClaimTotal()), 'table.table-form > tbody > tr:nth-of-type(1) >td.numeric.last > span')
-    I.see(AmountHelper.formatMoney(claimAmount.getTotal()), 'table.table-form > tfoot > tr > td.numeric.last > span')
-    interestSteps.skipClaimantInterestTotalPage()
+    I.see('Do you want to claim interest?')
+  }
+
+  enterClaimDetails () {
     userSteps.selectClaimDetails()
     this.enterClaimReason()
     this.enterClaimTimeline()
     this.enterClaimEvidence()
-    userSteps.selectCheckAndSubmitYourClaim()
-    I.see('John Smith')
-    I.see('Oxford Road')
-    I.see('Manchester')
-    I.see('M13 9PL')
-    I.see('07700000001')
-    I.see(claimReason)
-    claimantCheckAndSendPage.verifyDefendantCheckAndSendAnswers(defendantType, enterDefendantEmail)
-    claimantCheckAndSendPage.verifyClaimAmount()
-
-    if (!process.env.CITIZEN_APP_URL.includes('sprod')) {
-      claimantCheckAndSendPage.checkFactsTrueAndSubmit()
-      I.waitForText('Enter card details')
-    }
-
   }
-
 }

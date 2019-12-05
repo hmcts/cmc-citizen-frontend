@@ -4,20 +4,22 @@ import { OrganisationDetails } from 'forms/models/organisationDetails'
 import { IndividualDetails } from 'forms/models/individualDetails'
 import { PartyType } from 'common/partyType'
 import { PartyDetails } from 'forms/models/partyDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { Payment } from 'payment-hub-client/payment'
 import { CompletableTask } from 'models/task'
 
 export class Claimant implements CompletableTask {
   partyDetails?: PartyDetails
-  mobilePhone?: MobilePhone
+  phone?: Phone
   payment: Payment = new Payment()
 
   deserialize (input?: any): Claimant {
     if (input) {
       this.payment = Payment.deserialize(input.payment)
-      if (input.mobilePhone) {
-        this.mobilePhone = new MobilePhone().deserialize(input.mobilePhone)
+      if (input.phone) {
+        this.phone = new Phone().deserialize(input.phone)
+      } else if (input.mobilePhone) {
+        this.phone = new Phone().deserialize(input.mobilePhone)
       }
       if (input.partyDetails && input.partyDetails.type) {
         switch (input.partyDetails.type) {
@@ -61,6 +63,6 @@ export class Claimant implements CompletableTask {
           break
       }
     }
-    return result && !!this.mobilePhone
+    return result && !!this.phone
   }
 }

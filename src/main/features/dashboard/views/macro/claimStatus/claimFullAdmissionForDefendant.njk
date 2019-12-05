@@ -31,8 +31,7 @@
           { claimantName: claimant.name, amount: amount, paymentDate: paymentDate }) }}</p>
       <p>{{ t('If you pay by cheque or transfer the money must be clear in their account.') }}</p>
       <p>{{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }}</p>
-      <p>{{ internalLink( t('Contact {{ claimantName }}' , { claimantName: claimant.name } ), claimantDetailsPageURI) }}
-        {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
+      <p>{{ internalLink( t('Contact {{ claimantName }}' , { claimantName: claimant.name } ), claimantDetailsPageURI) }}{{ t(' if you need their payment details. Make sure you get receipts for any payments.') }}</p>
     {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
       <p>{{ t('You’ve offered to pay {{ claimantName }} by {{ paymentDate }}.',
       { claimantName: claimant.name, amount: amount, paymentDate: paymentDate }) }}
@@ -41,8 +40,7 @@
       {% set repaymentDate = repaymentPlan.firstPaymentDate | date %}
       {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
       {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
-      <p>{{ t('You’ve offered to pay {{ claimantName }} {{ installmentAmount }}
-            {{ paymentSchedule }} starting {{ paymentDate }}.',
+      <p>{{ t('You’ve offered to pay {{ claimantName }} {{ installmentAmount }} {{ paymentSchedule }} starting {{ paymentDate }}.',
           { amount: amount, claimantName: claimant.name, installmentAmount: installmentAmount,
             paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
     {% endif %}

@@ -11,29 +11,29 @@ import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { MomentFactory } from 'shared/momentFactory'
 
 import {
+  defenceWithDisputeData,
   fullAdmissionWithSoMPaymentByInstalmentsData,
   fullAdmissionWithSoMPaymentByInstalmentsDataCompany,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithNoDisposableIncome,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentByInstalmentsDataWithUnResonablePaymentSchedule,
   fullAdmissionWithSoMPaymentBySetDate,
+  fullAdmissionWithSoMPaymentBySetDateInNext2Days,
   fullAdmissionWithSoMReasonablePaymentBySetDateAndNoDisposableIncome,
-  fullDefenceWithStatesPaidGreaterThanClaimAmount,
   fullDefenceWithStatesLessThanClaimAmount,
   fullDefenceWithStatesLessThanClaimAmountWithMediation,
-  fullAdmissionWithSoMPaymentBySetDateInNext2Days,
+  fullDefenceWithStatesPaidGreaterThanClaimAmount,
+  partialAdmissionWithImmediatePaymentData,
+  partialAdmissionWithImmediatePaymentDataV2,
+  partialAdmissionWithPaymentByInstalmentsData,
+  partialAdmissionWithPaymentByInstalmentsWithMediationData,
   partialAdmissionWithPaymentBySetDateCompanyData,
   partialAdmissionWithSoMPaymentBySetDateData,
-  partialAdmissionWithImmediatePaymentData,
-  defenceWithDisputeData,
-  partialAdmissionWithSoMPaymentBySetDateWithMediationData,
-  partialAdmissionWithPaymentByInstalmentsWithMediationData,
-  partialAdmissionWithPaymentByInstalmentsData,
-  partialAdmissionWithImmediatePaymentDataV2
+  partialAdmissionWithSoMPaymentBySetDateWithMediationData
 } from 'test/data/entity/responseData'
 import { PaymentOption } from 'claims/models/paymentOption'
 import { PaymentSchedule } from 'claims/models/response/core/paymentSchedule'
-import { organisation } from 'test/data/entity/party'
+import { organisation, organisationWithPhone } from 'test/data/entity/party'
 import { Moment } from 'moment'
 
 const serviceBaseURL: string = config.get<string>('claim-store.url')
@@ -46,7 +46,7 @@ export const sampleClaimIssueCommonObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC050',
-  createdAt: '2017-07-25T22:45:51.785',
+  createdAt: MomentFactory.currentDateTime(),
   issuedOn: '2017-07-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
@@ -92,6 +92,22 @@ export const sampleClaimIssueOrgVOrgObj = {
   }
 }
 
+export const sampleClaimIssueOrgVOrgPhone = {
+  ...sampleClaimIssueCommonObj,
+  claim: {
+    claimants: [
+      {
+        ...organisation
+      }
+    ],
+    defendants: [
+      {
+        ...organisationWithPhone
+      }
+    ]
+  }
+}
+
 export const sampleClaimIssueObj = {
   id: 1,
   submitterId: '1',
@@ -99,7 +115,7 @@ export const sampleClaimIssueObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC050',
-  createdAt: '2017-07-25T22:45:51.785',
+  createdAt: MomentFactory.currentDateTime(),
   issuedOn: '2017-07-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
@@ -153,7 +169,12 @@ export const sampleClaimIssueObj = {
     timeline: { rows: [{ date: 'a', description: 'b' }] }
   },
   responseDeadline: MomentFactory.currentDate().add(19, 'days'),
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
+}
+
+export const paymentResponse = {
+  nextUrl: 'http://localhost/payment-page'
 }
 
 export const sampleClaimObj = {
@@ -164,8 +185,8 @@ export const sampleClaimObj = {
   externalId: '400f4c57-9684-49c0-adb4-4cf46579d6dc',
   defendantId: '123',
   referenceNumber: '000MC000',
-  createdAt: '2017-07-25T22:45:51.785',
-  issuedOn: '2017-07-25',
+  createdAt: MomentFactory.currentDateTime(),
+  issuedOn: '2019-09-25',
   totalAmountTillToday: 200,
   totalAmountTillDateOfIssue: 200,
   moreTimeRequested: false,
@@ -233,6 +254,7 @@ export const sampleClaimObj = {
       }
     ]
   },
+  intentionToProceedDeadline: MomentFactory.currentDateTime().add(33, 'days'),
   features: ['admissions']
 }
 
@@ -296,13 +318,16 @@ export const partySettlementWithInstalmentsAndRejection = {
     type: 'OFFER',
     offer: {
       completionDate: MomentFactory.currentDate().add(2, 'years'),
-      paymentIntention: { 'paymentDate': MomentFactory.currentDate().add(2, 'years'), 'paymentOption': 'BY_SPECIFIED_DATE' }
+      paymentIntention: {
+        'paymentDate': MomentFactory.currentDate().add(2, 'years'),
+        'paymentOption': 'BY_SPECIFIED_DATE'
+      }
     },
     madeBy: 'DEFENDANT'
   }, {
     type: 'ACCEPTATION',
     madeBy: 'CLAIMANT'
-  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+  }, { type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
 }
 export const partySettlementWithInstalmentsAndAcceptation = {
   partyStatements: [{
@@ -332,7 +357,7 @@ export const partySettlementWithSetDateAndRejection = {
   }, {
     type: 'ACCEPTATION',
     madeBy: 'CLAIMANT'
-  }, {  type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
+  }, { type: 'REJECTION', 'madeBy': 'DEFENDANT' }]
 }
 export const partySettlementWithSetDateAndAcceptation = {
   partyStatements: [{
@@ -650,7 +675,7 @@ export function mockNextWorkingDay (expected: Moment): mock.Scope {
 export function rejectNextWorkingDay (expected: Moment): mock.Scope {
   return mock(serviceBaseURL)
     .get('/calendar/next-working-day')
-    .query({ date: expected })
+    .query({ date: expected.format() })
     .reply(400)
 }
 
@@ -804,10 +829,10 @@ export function resolveSaveClaimForUser () {
     .reply(HttpStatus.OK, { ...sampleClaimObj })
 }
 
-export function rejectSaveClaimForUser (reason: string = 'HTTP error') {
+export function rejectSaveClaimForUser (reason: string = 'HTTP error', status: number = HttpStatus.INTERNAL_SERVER_ERROR) {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/[0-9]+'))
-    .reply(HttpStatus.INTERNAL_SERVER_ERROR, reason)
+    .reply(status, reason)
 }
 
 export function resolveSaveCcjForExternalId () {
@@ -841,6 +866,12 @@ export function resolveSaveOffer () {
   mock(`${serviceBaseURL}/claims`)
     .post(new RegExp('/.+/offers/defendant'))
     .reply(HttpStatus.CREATED)
+}
+
+export function resolveCreateClaimCitizen (claimOverride?: object): mock.Scope {
+  return mock(`${serviceBaseURL}/claims`)
+    .put('/create-citizen-claim')
+    .reply(HttpStatus.OK, { ...sampleClaimObj, ...claimOverride })
 }
 
 export function resolveSaveOrder () {
@@ -958,4 +989,16 @@ export function resolveRetrieveBySampleDataDefendant (sampleData?: object) {
   mock(`${serviceBaseURL}/defendant`)
     .get(new RegExp('/defendant/[0-9]+'))
     .reply(HttpStatus.OK, [{ ...sampleData }])
+}
+
+export function resolveInitiatePayment (nextUrl?: object) {
+  return mock(`${serviceBaseURL}/claims`)
+    .post('/initiate-citizen-payment')
+    .reply(HttpStatus.OK, { ...paymentResponse, ...nextUrl })
+}
+
+export function resolveResumePayment (nextUrl?: object) {
+  return mock(`${serviceBaseURL}/claims`)
+    .put('/resume-citizen-payment')
+    .reply(HttpStatus.OK, { ...paymentResponse, ...nextUrl })
 }

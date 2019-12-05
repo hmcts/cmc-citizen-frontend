@@ -91,7 +91,7 @@
     {% endif %}
 
     <h2 class="heading-small">{{ t('Where to post the details') }}</h2>
-    {{ addressFragment(claim.directionOrder.hearingCourtAddress, 'The court’s address is:') }}
+    {{ addressFragment(claim.directionOrder.hearingCourtAddress, 'The court’s address is:', claim.directionOrder.hearingCourtName) }}
     {% if party === MadeBy.DEFENDANT.value %}
       {{ addressFragment(claim.claimData.claimant.address, 'The claimant’s address is:') }}
     {% else %}

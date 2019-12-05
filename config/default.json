@@ -87,7 +87,9 @@
     "mediation": false,
     "mediationPilot": false,
     "directionsQuestionnaire": false,
-    "newDashboardStatus": false
+    "newDashboardStatus": false,
+    "webChat": true,
+    "inversionOfControl": false
   },
   "oauth": {
     "clientId": "cmc_citizen"
@@ -98,8 +100,8 @@
   "appInsights": {
     "roleName": "citizen-frontend"
   },
-  "secrets":{
-    "cmc":{
+  "secrets": {
+    "cmc": {
       "cmc-s2s-secret": "AAAAAAAAAAAAAAAA",
       "citizen-draft-store-primary": "not-a-real-primary-secret",
       "citizen-draft-store-secondary": "not-a-real-secondary-secret",
@@ -107,7 +109,12 @@
       "citizen-oauth-client-secret": "12345678",
       "os-postcode-lookup-api-key": "AAAAAAA",
       "encryptionKey": "not-a-real-32-bit-encryption-key",
-      "AppInsightsInstrumentationKey":"APPINSIGHTS_INSTRUMENTATIONKEY"
+      "AppInsightsInstrumentationKey": "APPINSIGHTS_INSTRUMENTATIONKEY",
+      "webchat-chat-id": "17284281475d5519274e25a3.69472655",
+      "webchat-tenant": "aG1jdHNzdGFnaW5nMDE",
+      "webchat-button-no-agents": "7732814745cac6f4603c4d1.53357933",
+      "webchat-button-agents-busy": "2042157415cc19c95669039.65793052",
+      "webchat-button-service-closed": "20199488815cc1a89e0861d5.73103009"
     }
   }
 }

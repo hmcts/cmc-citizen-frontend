@@ -62,6 +62,8 @@ app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
   }
 }))
 
+// Web Chat
+app.use('/webchat', express.static(path.join(__dirname, '/public/webchat')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 if (env !== 'mocha') {
