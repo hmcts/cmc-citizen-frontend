@@ -94,7 +94,7 @@
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.7.2",
+    "typescript": "^3.7.3",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
@@ -115,7 +115,7 @@
     "gulp-livereload": "^4.0.2",
     "gulp-nodemon": "^2.4.2",
     "gulp-plumber": "^1.2.1",
-    "gulp-rename": "^1.4.0",
+    "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
     "html_codesniffer": "2.4.1",
@@ -141,7 +141,7 @@
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
     "urlencode": "^1.1.0",
-    "webdriverio": "^5.1.1"
+    "webdriverio": "^5.16.11"
   },
   "nyc": {
     "extension": [
