@@ -16,9 +16,9 @@ exports.config = {
     }
   },
   helpers: {
-    WebDriver: {
+    WebDriverIO: {
       host: process.env.WEB_DRIVER_HOST || 'localhost',
-      port: process.env.WEB_DRIVER_PORT || 4444,
+      port: process.env.WEB_DRIVER_PORT || '4444',
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 15000,
