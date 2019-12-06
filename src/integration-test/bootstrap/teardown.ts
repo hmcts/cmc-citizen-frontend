@@ -10,11 +10,8 @@ module.exports = {
     try {
       if (process.env.IDAM_URL) {
         if (process.env.SMOKE_TEST_CITIZEN_USERNAME) {
-          IdamClient.deleteUser([
-            process.env.SMOKE_TEST_CITIZEN_USERNAME,
-            userEmails.getDefendant(),
-            userEmails.getClaimant()
-          ])
+          IdamClient.deleteUser(userEmails.getDefendant())
+          IdamClient.deleteUser(userEmails.getClaimant())
         }
       }
     } catch (error) {
