@@ -108,14 +108,12 @@ module "citizen-frontend" {
   asp_rg = "${local.asp_name}"
   instance_size = "${local.sku_size}"
   website_local_cache_sizeinmb = "${var.website_local_cache_sizeinmb}"
-  app_settings = {
-    WEBSITE_NODE_DEFAULT_VERSION = "10.15.2"
-  }
 
   app_settings = {
     // Node specific vars
     NODE_DEBUG="${var.node_debug}"
     NODE_ENV = "${var.node_env}"
+    WEBSITE_NODE_DEFAULT_VERSION = "10.15.2"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src"
