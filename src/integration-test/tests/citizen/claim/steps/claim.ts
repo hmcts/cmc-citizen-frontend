@@ -198,6 +198,9 @@ export class ClaimSteps {
 
   makeAClaimAndSubmitStatementOfTruth (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.login(email)
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.deleteClaimDraft()
+    }
     this.completeEligibility()
     this.optIntoNewFeatures()
     userSteps.selectResolvingThisDispute()
