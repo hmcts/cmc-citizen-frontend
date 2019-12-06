@@ -95,7 +95,7 @@ variable "feature_web_chat" {
 }
 
 variable "feature_inversionOfControl" {
-  default = "false"
+  default = "true"
 }
 
 variable "jenkins_AAD_objectId" {

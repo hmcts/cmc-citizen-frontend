@@ -28,8 +28,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
-env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
-env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
+env.IDAM_URL = 'https://idam-api.demo.platform.hmcts.net'
+env.CLAIM_STORE_URL = 'http://cmc-claim-store-demo.service.core-compute-demo.internal'
 env.FEATURE_ADMISSIONS = 'true'
 env.FEATURE_MEDIATION = 'true'
 env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
