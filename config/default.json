@@ -75,7 +75,7 @@
     "timeout": 10000
   },
   "requestRetry": {
-    "maxAttempts": 0
+    "maxAttempts": 3
   },
   "featureToggles": {
     "clusterMode": false,

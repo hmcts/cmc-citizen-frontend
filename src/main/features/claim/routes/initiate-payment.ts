@@ -10,9 +10,10 @@ import { ClaimState } from 'claims/models/claimState'
 import { Logger } from '@hmcts/nodejs-logging'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
+import { noRetryRequest } from 'client/request'
 
 const logger = Logger.getLogger('router/initiate-payment')
-const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
 
 /* tslint:disable:no-default-export */
 export default express.Router()
