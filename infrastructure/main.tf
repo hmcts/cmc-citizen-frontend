@@ -108,7 +108,7 @@ module "citizen-frontend" {
   asp_rg = "${local.asp_name}"
   instance_size = "${local.sku_size}"
   website_local_cache_sizeinmb = "${var.website_local_cache_sizeinmb}"
-  app_settings           = {
+  app_settings = {
     WEBSITE_NODE_DEFAULT_VERSION = "10.15.2"
   }
 
