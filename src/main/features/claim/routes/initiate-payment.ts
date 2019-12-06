@@ -9,13 +9,14 @@ import { User } from 'idam/user'
 import { ClaimState } from 'claims/models/claimState'
 import { Logger } from '@hmcts/nodejs-logging'
 import * as HttpStatus from 'http-status-codes'
+import { ErrorHandling } from 'shared/errorHandling'
 
 const logger = Logger.getLogger('router/initiate-payment')
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.initiatePaymentController.uri, async (req, res, next) => {
+  .get(Paths.initiatePaymentController.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
     const draft: Draft<DraftClaim> = res.locals.claimDraft
     const user: User = res.locals.user
     const externalId: string = draft.document.externalId
@@ -45,4 +46,4 @@ export default express.Router()
         res.redirect(Paths.checkAndSendPage.uri)
       }
     }
-  })
+  }))
