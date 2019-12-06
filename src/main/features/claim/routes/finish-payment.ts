@@ -12,6 +12,7 @@ import { Claim } from 'claims/models/claim'
 import { ClaimState } from 'claims/models/claimState'
 import { FeaturesBuilder } from 'claim/helpers/featuresBuilder'
 import * as HttpStatus from 'http-status-codes'
+import { ErrorHandling } from 'shared/errorHandling'
 
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
@@ -19,7 +20,8 @@ const logger = Logger.getLogger('router/finish-payment')
 
 /* tslint:disable:no-default-export */
 export default express.Router()
-  .get(Paths.finishPaymentController.uri, async (req, res, next) => {
+  .get(Paths.finishPaymentController.uri, ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+
     const { externalId } = req.params
     const user: User = res.locals.user
     const draft: Draft<DraftClaim> = res.locals.claimDraft
@@ -51,4 +53,4 @@ export default express.Router()
         next(err)
       }
     }
-  })
+  }))

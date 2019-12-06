@@ -110,10 +110,6 @@ export class ClaimStoreClient {
       .then(response => {
         return response.nextUrl
       })
-      .catch((err) => {
-        logger.warn('ERROR CODE:: ', err.statusCode)
-        throw err
-      })
   }
 
   resumePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
