@@ -2,13 +2,11 @@ tags:
   - rpe-feature-toggle-api-pod
   - idam-pr
 
-postgresql:
-  enabled: true # for rpe-feature-toggle-api
-
 rpe-feature-toggle-api:
   java:
     releaseNameOverride: ${SERVICE_NAME}-java
     postgresql:
+      enabled: true # for rpe-feature-toggle-api
       image:
         tag: '11.3.0'
   importer:

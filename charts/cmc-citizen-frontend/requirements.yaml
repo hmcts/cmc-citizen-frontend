@@ -8,7 +8,7 @@ dependencies:
     tags:
       - idam-pr
   - name: rpe-feature-toggle-api
-    version: ~3.0.2
+    version: ~3.1.0
     repository: '@hmctspublic'
     tags:
       - rpe-feature-toggle-api-pod
