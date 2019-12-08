@@ -13,10 +13,6 @@ variable "location" {
   default = "UK South"
 }
 
-variable "deployment_env" {
-  type = "string"
-}
-
 variable "env" { }
 
 variable "ilbIp" { }
