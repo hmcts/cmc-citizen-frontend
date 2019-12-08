@@ -13,6 +13,10 @@ variable "location" {
   default = "UK South"
 }
 
+variable "deployment_env" {
+  type = "string"
+}
+
 variable "env" { }
 
 variable "ilbIp" { }
@@ -146,6 +150,7 @@ variable "log_level" {
 variable "node_debug" {
   default = ""
 }
+
 variable "node_version" {
   default = "10.15.2"
 }
