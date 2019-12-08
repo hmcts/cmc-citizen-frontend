@@ -34,9 +34,10 @@ import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { DetailsInCaseOfHearingTask } from 'response/tasks/detailsInCaseOfHearingTask'
 import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/directionsQuestionnaireDraft'
 import { FeatureToggles } from 'utils/featureToggles'
+import { DeadlineCalculatorClient } from 'claims/deadlineCalculatorClient'
 
 export class TaskListBuilder {
-  static buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): TaskList {
+  static async buildBeforeYouStartSection (draft: ResponseDraft, claim: Claim, now: moment.Moment): Promise<TaskList> {
     const tasks: TaskListItem[] = []
     const externalId: string = claim.externalId
 
@@ -53,7 +54,8 @@ export class TaskListBuilder {
       )
     )
 
-    if (!isPastDeadline(now, claim.responseDeadline)) {
+    const postponedDeadline: moment.Moment = await DeadlineCalculatorClient.calculatePostponedDeadline(claim.issuedOn)
+    if (!isPastDeadline(now, postponedDeadline)) {
       tasks.push(
         new TaskListItem(
           'Decide if you need more time to respond',
@@ -332,15 +334,15 @@ export class TaskListBuilder {
       && ValidationUtils.isValid(draft.rejectAllOfClaim.whyDoYouDisagree)
   }
 
-  static buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionQuestionnaireDraft: DirectionsQuestionnaireDraft): TaskListItem[] {
+  static async buildRemainingTasks (draft: ResponseDraft, claim: Claim, mediationDraft: MediationDraft, directionQuestionnaireDraft: DirectionsQuestionnaireDraft): Promise<TaskListItem[]> {
     const resolvingClaimTaskList: TaskList = TaskListBuilder.buildResolvingClaimSection(draft, claim, mediationDraft)
     let resolveDirectionsQuestionnaireTaskList: TaskList
     if (FeatureToggles.isEnabled('directionsQuestionnaire') && ClaimFeatureToggles.isFeatureEnabledOnClaim(claim, 'directionsQuestionnaire')) {
       resolveDirectionsQuestionnaireTaskList = TaskListBuilder.buildDirectionsQuestionnaireSection(draft, claim, directionQuestionnaireDraft)
     }
-
+    const beforeYouStartSectionTasks = (await TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime())).tasks
     return [].concat(
-      TaskListBuilder.buildBeforeYouStartSection(draft, claim, MomentFactory.currentDateTime()).tasks,
+      beforeYouStartSectionTasks,
       TaskListBuilder.buildRespondToClaimSection(draft, claim).tasks,
       resolvingClaimTaskList !== undefined ? resolvingClaimTaskList.tasks : [],
       resolveDirectionsQuestionnaireTaskList !== undefined ? resolveDirectionsQuestionnaireTaskList.tasks : []

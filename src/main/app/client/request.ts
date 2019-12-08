@@ -25,6 +25,17 @@ const retryingRequest: RequestPromiseAPI = RequestLoggingHandler.proxy(requestRe
   ...defaultRequestRetryOptions
 }))
 
+const noRetryRequestRetryOptions = {
+  fullResponse: false,
+  maxAttempts: 0
+}
+
+const noRetryRequest: RequestPromiseAPI = RequestLoggingHandler.proxy(requestRetry.defaults({
+  ...defaultOptions,
+  ...noRetryRequestRetryOptions
+}))
+
 export {
-  retryingRequest as request
+  retryingRequest as request,
+  noRetryRequest as noRetryRequest
 }
