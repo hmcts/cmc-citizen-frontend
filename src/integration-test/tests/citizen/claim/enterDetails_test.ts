@@ -4,15 +4,17 @@ import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/intere
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I) => {
+Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, async (I: I) => {
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
   claimSteps.completeEligibility()
@@ -54,6 +56,9 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   const email: string = await I.createCitizenUser()
   userSteps.login(email)
 
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
