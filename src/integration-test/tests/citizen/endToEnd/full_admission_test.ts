@@ -11,12 +11,43 @@ import {
   ClaimantResponseTestData,
   UnreasonableClaimantResponseTestData
 } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
+import { createClaimData } from '../../../data/test-data'
+import { DefenceSteps } from '../defence/steps/defence'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
 const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
+const defenceSteps: DefenceSteps = new DefenceSteps()
+
+async function prepareIndividualClaim (I: I) {
+  const claimantEmail: string = await I.createCitizenUser()
+  const defendantEmail: string = await I.createCitizenUser()
+
+  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail)
+
+  await helperSteps.enterPinNumber(claimRef, claimantEmail)
+  helperSteps.linkClaimToDefendant(defendantEmail)
+  helperSteps.startResponseFromDashboard(claimRef)
+
+  return { data: claimData }
+}
+
+async function prepareCompanyClaim (I: I) {
+  const claimantEmail: string = await I.createCitizenUser()
+  const defendantEmail: string = await I.createCitizenUser()
+
+  const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.COMPANY)
+  const claimRef: string = await I.createClaim(claimData, claimantEmail)
+
+  await helperSteps.enterPinNumber(claimRef, claimantEmail)
+  helperSteps.linkClaimToDefendant(defendantEmail)
+  helperSteps.startResponseFromDashboard(claimRef)
+
+  return { data: claimData }
+}
 
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response: Fully Admit')
@@ -183,4 +214,43 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see(testData.claimRef)
     I.see('This claim is settled.')
   })
+
+  Scenario('I can as a defendant complete the journey when I fully admit all of the claim with immediate payment @nightly @admissions', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareIndividualClaim(I)
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY, claimData.data.claimants[0].name, false)
+  })
+
+  Scenario('I can as a defendant complete the journey when I fully admit all of the claim with payment by set date @nightly @admissions', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareCompanyClaim(I)
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
+  })
+
+  Scenario('I can as a defendant complete the journey when I fully admit all of the claim with full payment by instalments @citizen @admissions', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareIndividualClaim(I)
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false)
+  })
+
+  Scenario('I can as a defendant sign the settlement agreement after I fully admit all of the claim with full payment by instalments @citizen @admission', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareIndividualClaim(I)
+    const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
+    testData.paymentOption = PaymentOption.INSTALMENTS
+    const claimantResponseTestData = new ClaimantResponseTestData()
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false)
+    I.click('Sign out')
+    // as claimant
+    userSteps.login(testData.claimantEmail)
+    claimantResponseSteps.acceptSettlementFromDashboardWhenAcceptPaymentMethod(testData, claimantResponseTestData, 'View and respond to the offer')
+    checkAndSendPage.verifyFactsForSettlement()
+    I.click('input[type=submit]')
+    I.see('You’ve signed a settlement agreement')
+    confirmationPage.clickGoToYourAccount()
+    I.see(testData.claimRef)
+    I.see('You’ve signed a settlement agreement')
+    I.click('Sign out')
+    // as defendant
+    userSteps.login(testData.defendantEmail)
+    helperSteps.signSettlementAgreement()
+    I.see('You\'ve both signed a settlement agreement')
+  })
+
 }

@@ -4,10 +4,12 @@ import { DefenceType } from 'integration-test/data/defence-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { IdamClient } from 'integration-test/helpers/clients/idamClient'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
+import { DefendantSignSettlement } from '../../defence/pages/defendant-sign-settlement'
 
 const I: I = actor()
 const defenceSteps: DefenceSteps = new DefenceSteps()
 const claimDetailsHeading: string = 'Claim details'
+const defendantSignSettlement: DefendantSignSettlement = new DefendantSignSettlement()
 
 export class Helper {
 
@@ -78,5 +80,10 @@ export class Helper {
     I.waitForText(claimDetailsHeading)
     defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
+  }
+
+  signSettlementAgreement (): void {
+    defendantSignSettlement.selectYes()
+    defendantSignSettlement.confirm()
   }
 }

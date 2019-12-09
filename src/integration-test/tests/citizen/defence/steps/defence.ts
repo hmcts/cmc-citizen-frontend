@@ -107,6 +107,10 @@ export class DefenceSteps {
     loginPage.login(defendantEmail, DEFAULT_PASSWORD)
   }
 
+  loginAsDefendantAgain (defendantEmail: string): void {
+    loginPage.login(defendantEmail, DEFAULT_PASSWORD)
+  }
+
   confirmYourDetails (defendant: Party, expectPhonePage: boolean = false): void {
 
     defendantSteps.selectTaskConfirmYourDetails()
