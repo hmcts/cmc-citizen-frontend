@@ -31,10 +31,10 @@ export default express.Router()
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         const payment = draft.document.claimant.payment
         if (payment !== undefined && payment.status === 'Success') {
-          res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId }))
+          return res.redirect(Paths.finishPaymentReceiver.evaluateUri({ externalId }))
         } else {
           const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
-          res.redirect(nextUrl)
+          return res.redirect(nextUrl)
         }
       } else {
         logger.error(`error retrieving claim with external id ${externalId}`)
