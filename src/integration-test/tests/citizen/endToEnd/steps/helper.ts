@@ -31,6 +31,12 @@ export class Helper {
     I.click('Respond to claim')
   }
 
+  goToClaimDetailsPageAndStartSettlementJourney (claimRef: string): void {
+    I.click(claimRef)
+    I.see('asked you to sign a settlement agreement')
+    I.click('View the repayment plan')
+  }
+
   finishResponse (
     testData: EndToEndTestData,
     isRequestMoreTimeToRespond: boolean = true,

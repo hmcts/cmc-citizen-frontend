@@ -222,7 +222,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
 
   Scenario('I can as a defendant complete the journey when I fully admit all of the claim with payment by set date @nightly @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareCompanyClaim(I)
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
+    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.COMPANY, PaymentOption.BY_SET_DATE, claimData.data.claimants[0].name, false)
   })
 
   Scenario('I can as a defendant complete the journey when I fully admit all of the claim with full payment by instalments @citizen @admissions', { retries: 3 }, async (I: I) => {
@@ -231,11 +231,11 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
   })
 
   Scenario('I can as a defendant sign the settlement agreement after I fully admit all of the claim with full payment by instalments @citizen @admission', { retries: 3 }, async (I: I) => {
-    const claimData = await prepareIndividualClaim(I)
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.INSTALMENTS
     const claimantResponseTestData = new ClaimantResponseTestData()
-    defenceSteps.makeFullAdmission(claimData.data.defendants[0], PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS, claimData.data.claimants[0].name, false)
+    // as defendant
+    helperSteps.finishResponseWithFullAdmission(testData)
     I.click('Sign out')
     // as claimant
     userSteps.login(testData.claimantEmail)
@@ -249,8 +249,9 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.click('Sign out')
     // as defendant
     userSteps.login(testData.defendantEmail)
+    helperSteps.goToClaimDetailsPageAndStartSettlementJourney(testData.claimRef)
     helperSteps.signSettlementAgreement()
-    I.see('You\'ve both signed a settlement agreement')
+    I.see('You’ve both signed a settlement agreement')
   })
 
 }

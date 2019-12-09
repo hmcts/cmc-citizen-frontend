@@ -9,7 +9,7 @@ const buttons = {
 export class DefendantSignSettlement {
 
   selectYes (): void {
-    I.click('Yes - I confirm I\'ve read and accept the terms of the agreement.')
+    I.click('Yes - I confirm I’ve read and accept the terms of the agreement.')
   }
 
   selectNo (): void {
