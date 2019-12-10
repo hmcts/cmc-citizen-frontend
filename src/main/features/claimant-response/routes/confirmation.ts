@@ -29,7 +29,7 @@ function hasAcceptedDefendantsPaymentIntention (claim: Claim): boolean {
     case PaymentOption.INSTALMENTS:
       return paymentIntentionFromResponse.repaymentPlan === claim.countyCourtJudgment.repaymentPlan
     default:
-      throw new Error(`Unhandled payment option ${paymentOptionFromCCJ}`)
+      throw new Error(`Unhandled payment option ${ paymentOptionFromCCJ }`)
   }
 }
 
@@ -41,7 +41,6 @@ export default express.Router()
       const response: FullAdmissionResponse | PartialAdmissionResponse = claim.response as FullAdmissionResponse | PartialAdmissionResponse
       const alreadyPaid: boolean = StatesPaidHelper.isResponseAlreadyPaid(claim)
       const acceptedPaymentPlanClaimantDeadline = await new CalendarClient().getNextWorkingDayAfterDays(claim.claimantRespondedAt, 7)
-
       res.render(
         Paths.confirmationPage.associatedView,
         {
