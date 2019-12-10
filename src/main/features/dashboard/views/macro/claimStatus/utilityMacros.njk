@@ -32,3 +32,10 @@
   <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) + ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
   <p>{{ downloadResponseLink(claim) }}</p>
 {% endmacro %}
+
+{% macro downloadClaimantDQs(claim) %}
+  {% if claim.response.directionsQuestionnaire %}
+    <p>{{ t('They’ve also sent us their hearing requirements.') }}</p>
+    {{ internalLink(t('Download their hearing requirements '), DirectionsQuestionnairePaths.claimantHearingRequirementsReceiver.evaluateUri({ externalId: claim.externalId }) )}}{{ t('(PDF)') }}
+  {% endif %}
+{% endmacro %}
