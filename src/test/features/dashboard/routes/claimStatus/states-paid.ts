@@ -15,6 +15,7 @@ import { checkAuthorizationGuards } from 'test/features/dashboard/routes/checks/
 import { MomentFactory } from 'shared/momentFactory'
 
 import {
+  partialAdmissionAlreadyPaidData,
   partialAdmissionFromStatesPaidDefence, partialAdmissionFromStatesPaidWithMediationDefence
 } from 'test/data/entity/responseData'
 
@@ -43,7 +44,8 @@ const testData = [
       response: {
         ...partialAdmissionFromStatesPaidDefence
       },
-      ...claimantRejectAlreadyPaid
+      ...claimantRejectAlreadyPaid,
+      ...directionsQuestionnaireDeadline
     },
     claimantAssertions: ['Wait for the court to review the case',
       'You’ve rejected John Doe’s response and said you want to take the case to court.',
@@ -56,7 +58,9 @@ const testData = [
       'They said you didn’t pay them £100.',
       'You might have to go to a court hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
       'complete a directions questionnaire',
-      'Download your response'
+      'Download your response',
+      'You must make sure we receive the form before 4pm on',
+      'You also need to send a copy of the form to ' + statesPaidClaim.claim.claimants[0].name
     ]
   },
   {
@@ -106,6 +110,64 @@ const testData = [
       'You weren’t able to resolve ' + statesPaidClaim.claim.claimants[0].name + '’s claim against you using mediation.',
       'You’ll have to go to a hearing. We’ll contact you with the details.',
       'Download ' + statesPaidClaim.claim.claimants[0].name + '’s hearing requirements'
+    ]
+  },
+  {
+    status: 'States paid defence with mediation - defendant paid what he believed he owed with mediation - claimant rejects - DQs enabled',
+    claim: statesPaidClaim,
+    claimOverride: {
+      response: {
+        ...partialAdmissionFromStatesPaidWithMediationDefence,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
+      },
+      ...claimantRejectAlreadyPaidWithMediation
+    },
+    claimantAssertions: [
+      'You’ve rejected the defendant’s response.',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works'
+    ],
+    defendantAssertions: [
+      statesPaidClaim.claim.claimants[0].name + ' has rejected your defence.',
+      'You’ve both agreed to try mediation. We’ll contact you to try to arrange a call with the mediator.',
+      'Find out how mediation works',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements'
+    ]
+  },
+  {
+    status: 'States paid defence with mediation - defendant paid what he believed he owed without mediation - claimant rejects - DQEnabled',
+    claim: statesPaidClaim,
+    claimOverride: {
+      response: {
+        ...partialAdmissionAlreadyPaidData,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
+      },
+      ...claimantRejectAlreadyPaid
+    },
+    claimantAssertions: [
+      'You’ve rejected ' + statesPaidClaim.claim.defendants[0].name + '’s response and said you want to take the case to court.',
+      'The court will review the case. We’ll email you if we set a hearing date to tell you how to prepare.'
+    ],
+    defendantAssertions: [
+      'They said you didn’t pay them',
+      'You might have to go to a court hearing.',
+      'We’ll contact you if we set a hearing date to tell you how to prepare.',
+      'Download your response',
+      'They’ve also sent us their hearing requirements',
+      'Download their hearing requirements'
     ]
   },
   {
