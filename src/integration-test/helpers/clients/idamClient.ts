@@ -62,23 +62,27 @@ export class IdamClient {
   }
 
   /**
-   * Deletes users with that begin with this regex: '/(civilmoneyclaims.citizen)+/g'
+   * Deletes users with the supplied usernames
    *
    * @returns {Promise<void>}
    */
-  static deleteUsers (): Promise<void> {
+  static deleteUsers (usernames: string[]): Promise<void> {
+    let params = usernames.map(function (s) {
+      return `userNames=${encodeURIComponent(s)}`
+    }).join('&')
+
     const options = {
       method: 'DELETE',
-      uri: `${baseURL}/testing-support/test-data/`,
-      body: {
-        testDataPrefix: '/(civilmoneyclaims.citizen)+/g'
-      }
+      uri: `${baseURL}/testing-support/test-data?${params}`
     }
-    return request(options).then(function () {
+
+    return request(options).then(function (resp) {
+      // tslint:disable-next-line:no-console
+      console.log(resp)
       return Promise.resolve()
     }).catch(function (err) {
       // tslint:disable-next-line:no-console
-      console.log('error deleting users: ' + err)
+      console.log('error deleting user: ' + err)
     })
   }
 
