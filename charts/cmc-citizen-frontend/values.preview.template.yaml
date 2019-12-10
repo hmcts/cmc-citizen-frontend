@@ -29,13 +29,14 @@ nodejs:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
-    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
-    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
-    IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
-    FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
-    DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
+    IDAM_API_URL: https://idam-api.demo.platform.hmcts.net
+    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.demo.platform.hmcts.net
+    IDAM_S2S_AUTH: http://rpe-service-auth-provider-demo.service.core-compute-demo.internal
+    PAY_URL: http://payment-api-demo.service.core-compute-demo.internal
+    FEES_URL: http://fees-register-api-demo.service.core-compute-demo.internal
+    CLAIM_STORE_URL: http://cmc-claim-store-demo.service.core-compute-demo.internal
+    DRAFT_STORE_URL: http://draft-store-service-demo.service.core-compute-demo.internal
+    FEATURE_INVERSION_OF_CONTROL: true
 
 idam-pr:
   redirect_uris:
