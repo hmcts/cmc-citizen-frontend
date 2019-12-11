@@ -43,3 +43,8 @@ nodejs:
       - cmc-webchat-button-no-agents
       - cmc-webchat-button-agents-busy
       - cmc-webchat-button-service-closed
+
+cmc-claim-store:
+  enabled: false
+tags:
+  cmc-ccd-stack: false

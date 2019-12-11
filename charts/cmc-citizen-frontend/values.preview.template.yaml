@@ -50,8 +50,7 @@ idam-pr:
       - https://${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
-  java:
-    ingressHost: ${SERVICE_FQDN}
+  enabled: true
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     environment:
       LOG_LEVEL: DEBUG
@@ -72,8 +71,6 @@ cmc-claim-store:
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
       CORE_CASE_DATA_API_URL: http://ccd-data-store-api-aat.service.core-compute-aat.internal
-  ccd:
-    ingressHost: ${SERVICE_FQDN}
 
 postgresql:
   image:
