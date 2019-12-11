@@ -1,16 +1,10 @@
 tags:
-  - rpe-feature-toggle-api-pod: true
-  - cmc-claim-store-pod: true
-  - cmc-citizen-frontend-pod: false
-  - cmc-claim-store-postgresql-pod: false # stop cmc-claim-store subchart starting its own postgres instance
-  - cmc-ccd-stack: false
-  - ccd-idam-pr: false
-  - postgresql-pod: false  # stop any subcharts starting their own postgres instance
+  - rpe-feature-toggle-api-pod
   - idam-pr
 
 rpe-feature-toggle-api:
   java:
-    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
+    releaseNameOverride: ${SERVICE_NAME}-java
     postgresql:
       enabled: true # for rpe-feature-toggle-api
       image:
@@ -34,13 +28,13 @@ nodejs:
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
-    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl-api
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
     IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
     FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
+    CLAIM_STORE_URL: http://cmc-claim-store-aat.service.core-compute-aat.internal
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
     FEATURE_INVERSION_OF_CONTROL: true
 
@@ -48,46 +42,3 @@ idam-pr:
   redirect_uris:
     Money Claims - Citizen:
       - https://${SERVICE_FQDN}/receiver
-
-cmc-claim-store:
-  enabled: true
-  releaseNameOverride: ${SERVICE_NAME}-claim-store
-  environment:
-    LOG_LEVEL: DEBUG
-    IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    SEND_LETTER_URL: http://rpe-send-letter-service-aat.service.core-compute-aat.internal
-    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
-    PDF_SERVICE_URL: http://cmc-pdf-service-aat.service.core-compute-aat.internal
-    DOCUMENT_MANAGEMENT_URL: http://dm-store-aat.service.core-compute-aat.internal
-    PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
-    FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    DOC_ASSEMBLY_URL: false
-    FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
-    RESPOND_TO_CLAIM_URL: https://www-${SERVICE_FQDN}/first-contact/start
-    CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
-    CLAIM_STORE_DB_USERNAME: hmcts
-    CLAIM_STORE_DB_PASSWORD: hmcts
-    CMC_DB_HOST: ${SERVICE_NAME}-postgres
-    CMC_DB_USERNAME: hmcts
-    CMC_DB_PASSWORD: hmcts
-    CORE_CASE_DATA_API_URL: http://ccd-data-store-api-aat.service.core-compute-aat.internal
-
-postgresql:
-  image:
-    tag: '11.3.0'
-  resources:
-    requests:
-      cpu: 25m
-  initdbScripts:
-    init.sql: |-
-      CREATE DATABASE claimstore WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE features WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-      CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
-  postgresqlUsername: hmcts
-  postgresqlPassword: hmcts
-  postgresqlDatabase: user-profile
-  nameOverride: postgres
-  persistence:
-    enabled: false

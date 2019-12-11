@@ -14,10 +14,3 @@ dependencies:
     repository: '@hmctspublic'
     tags:
       - rpe-feature-toggle-api-pod
-
-  - name: cmc-claim-store
-    version: ~1.2.0
-    repository: '@hmctspublic'
-    condition: cmc-claim-store.enabled
-    tags:
-      - cmc-claim-store-pod
