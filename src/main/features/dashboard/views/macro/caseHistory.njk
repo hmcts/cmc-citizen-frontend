@@ -131,7 +131,7 @@
   intentionToProceedPastDeadlineForClaimantClaimDetails,
   intentionToProceedPastDeadlineForDefendantClaimDetails %}
 
-{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) %}
+{% macro caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.PAID_IN_FULL_LINK_ELIGIBLE %}
       {{ paidInFullClaimantClaimDetails(claim.externalId) }}
@@ -241,21 +241,21 @@
     {% elif state.status === ClaimStatus.DEFENDANT_REJECTS_WITH_DQS %}
       {{ claimRejectedWithDQsForClaimantClaimDetails(claim, mediationDeadline) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
-      {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+      {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
     {% elif state.status === ClaimStatus.REVIEW_ORDER_REQUESTED %}
       {% if claim.reviewOrder.requestedBy === MadeBy.CLAIMANT.value %}
         {{ reviewRequester(claim, respondToReviewOrderDeadline) }}
       {% else %}
         {{ reviewReceiver(claim, respondToReviewOrderDeadline) }}
       {% endif %}
-      {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+      {{ directionsOrderIssued(claim, MadeBy.CLAIMANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
     {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
       {{ intentionToProceedPastDeadlineForClaimantClaimDetails(claim) }}
     {% endif %}
   {% endfor %}
 {% endmacro %}
 
-{% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) %}
+{% macro caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) %}
   {% for state in claim.stateHistory %}
     {% if state.status === ClaimStatus.NO_RESPONSE %}
       {{ noResponseForDefendantClaimDetails(claim) }}
@@ -369,9 +369,9 @@
       {% else %}
         {{ reviewReceiver(claim, respondToReviewOrderDeadline) }}
       {% endif %}
-      {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+      {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
     {% elif state.status === ClaimStatus.ORDER_DRAWN %}
-      {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible) }}
+      {{ directionsOrderIssued(claim, MadeBy.DEFENDANT.value, reconsiderationDeadline, isReviewOrderEligible, judgePilot) }}
     {% elif state.status === ClaimStatus.INTENTION_TO_PROCEED_DEADLINE_PASSED %}
       {{ intentionToProceedPastDeadlineForDefendantClaimDetails(claim) }}
     {% endif %}
