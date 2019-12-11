@@ -51,26 +51,26 @@ idam-pr:
 
 cmc-claim-store:
   enabled: true
-    releaseNameOverride: ${SERVICE_NAME}-claim-store
-    environment:
-      LOG_LEVEL: DEBUG
-      IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-      SEND_LETTER_URL: http://rpe-send-letter-service-aat.service.core-compute-aat.internal
-      IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
-      PDF_SERVICE_URL: http://cmc-pdf-service-aat.service.core-compute-aat.internal
-      DOCUMENT_MANAGEMENT_URL: http://dm-store-aat.service.core-compute-aat.internal
-      PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
-      FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-      DOC_ASSEMBLY_URL: false
-      FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
-      RESPOND_TO_CLAIM_URL: https://www-${SERVICE_FQDN}/first-contact/start
-      CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
-      CLAIM_STORE_DB_USERNAME: hmcts
-      CLAIM_STORE_DB_PASSWORD: hmcts
-      CMC_DB_HOST: ${SERVICE_NAME}-postgres
-      CMC_DB_USERNAME: hmcts
-      CMC_DB_PASSWORD: hmcts
-      CORE_CASE_DATA_API_URL: http://ccd-data-store-api-aat.service.core-compute-aat.internal
+  releaseNameOverride: ${SERVICE_NAME}-claim-store
+  environment:
+    LOG_LEVEL: DEBUG
+    IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
+    SEND_LETTER_URL: http://rpe-send-letter-service-aat.service.core-compute-aat.internal
+    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
+    PDF_SERVICE_URL: http://cmc-pdf-service-aat.service.core-compute-aat.internal
+    DOCUMENT_MANAGEMENT_URL: http://dm-store-aat.service.core-compute-aat.internal
+    PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
+    FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
+    DOC_ASSEMBLY_URL: false
+    FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
+    RESPOND_TO_CLAIM_URL: https://www-${SERVICE_FQDN}/first-contact/start
+    CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
+    CLAIM_STORE_DB_USERNAME: hmcts
+    CLAIM_STORE_DB_PASSWORD: hmcts
+    CMC_DB_HOST: ${SERVICE_NAME}-postgres
+    CMC_DB_USERNAME: hmcts
+    CMC_DB_PASSWORD: hmcts
+    CORE_CASE_DATA_API_URL: http://ccd-data-store-api-aat.service.core-compute-aat.internal
 
 postgresql:
   image:
