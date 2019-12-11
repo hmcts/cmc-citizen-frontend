@@ -4,13 +4,15 @@ import { PartyType } from 'integration-test/data/party-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
+import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
+const userSteps: UserSteps = new UserSteps()
 
 async function prepareClaim (I: I) {
-  const claimantEmail: string = await I.createCitizenUser()
-  const defendantEmail: string = await I.createCitizenUser()
+  const claimantEmail: string = userSteps.getClaimantEmail()
+  const defendantEmail: string = userSteps.getDefendantEmail()
 
   const claimData: ClaimData = createClaimData(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
   const claimRef: string = await I.createClaim(claimData, claimantEmail)
