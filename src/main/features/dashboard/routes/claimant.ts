@@ -25,7 +25,7 @@ export default express.Router()
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
-      const judgePilot: boolean = claim.features !== undefined && claim.features.includes('judgePilotEligible')
+      const judgePilot: boolean = claim ? claim.features !== undefined && claim.features.includes('judgePilotEligible') : false
 
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
 
