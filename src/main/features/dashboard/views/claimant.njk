@@ -17,7 +17,7 @@
       <div>
         <h2 class="heading-medium">{{ t('Claim status') }}</h2>
         {% if claim %}
-          {{ caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) }}
+          {{ caseHistoryForClaimantClaimDetails(claim, csrf, mediationDeadline, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) }}
         {% else %}
           <h2 class="bold-small">{{ t('This claim has not been submitted') }}</h2>
           <p>

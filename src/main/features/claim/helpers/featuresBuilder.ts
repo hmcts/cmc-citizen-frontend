@@ -17,9 +17,9 @@ export class FeaturesBuilder {
       features = 'admissions'
     }
 
-    const PILOT_AMOUNT = 300
-    const ONLINE_DQ_THRESHOLD = 1000
-    if (draft.document.amount.totalAmount() <= PILOT_AMOUNT) {
+    const LEGAL_ADVISOR_PILOT_THRESHOLD = 300
+    const JUDGE_PILOT_THRESHOLD = 1000
+    if (draft.document.amount.totalAmount() <= LEGAL_ADVISOR_PILOT_THRESHOLD) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {
         features += features === '' ? 'mediationPilot' : ', mediationPilot'
       }
@@ -29,7 +29,12 @@ export class FeaturesBuilder {
       }
     }
 
-    if (draft.document.amount.totalAmount() <= ONLINE_DQ_THRESHOLD) {
+    if (draft.document.amount.totalAmount() <= JUDGE_PILOT_THRESHOLD) {
+
+      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_judge_pilot')) {
+        features += features === '' ? 'judgePilotEligible' : ', judgePilotEligible'
+      }
+
       if (FeatureToggles.isEnabled('directionsQuestionnaire') && await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
         features += features === '' ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
       }

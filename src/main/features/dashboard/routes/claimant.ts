@@ -25,6 +25,8 @@ export default express.Router()
       const mediationDeadline: Moment = claim ? await claim.respondToMediationDeadline() : undefined
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
+      const judgePilot: boolean = claim.features !== undefined && claim.features.includes('judgePilotEligible')
+
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
 
       if (claim && claim.claimantId !== res.locals.user.id) {
@@ -35,7 +37,8 @@ export default express.Router()
         mediationDeadline: mediationDeadline,
         reconsiderationDeadline: reconsiderationDeadline,
         isReviewOrderEligible: isReviewOrderEligible,
-        respondToReviewOrderDeadline: respondToReviewOrderDeadline
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline,
+        judgePilot: judgePilot
       })
     }))
   .post(Paths.claimantPage.uri,
