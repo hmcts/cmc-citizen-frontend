@@ -18,6 +18,8 @@ services:
         - FEATURE_MEDIATION
         - FEATURE_DIRECTIONS_QUESTIONNAIRE
         - FEATURE_TESTING_SUPPORT
+        - SMOKE_TEST_CITIZEN_USERNAME
+        - SMOKE_TEST_USER_PASSWORD
       volumes:
         - ./functional-output:/usr/src/app/output
     remote-webdriver:

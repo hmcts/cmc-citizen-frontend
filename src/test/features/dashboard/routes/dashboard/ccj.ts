@@ -69,7 +69,7 @@ const testData = [
       countyCourtJudgmentRequestedAt:  MomentFactory.currentDate().subtract(1, 'days'),
       responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
     },
-    claimantAssertions: ['000MC000', 'You requested a County Court Judgment on '],
+    claimantAssertions: ['000MC000', 'Wait for the judgment to be confirmed'],
     defendantAssertions: ['000MC000', 'The claimant has requested a County Court Judgment (CCJ) against you on']
   },
   {
