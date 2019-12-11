@@ -72,6 +72,8 @@ cmc-claim-store:
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
       CORE_CASE_DATA_API_URL: http://ccd-data-store-api-aat.service.core-compute-aat.internal
+  ccd:
+    ingressHost: ""
 
 postgresql:
   image:
