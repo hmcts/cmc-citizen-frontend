@@ -14,7 +14,7 @@ const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, async (I: I) => {
+Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I) => {
   userSteps.login(userSteps.getClaimantEmail())
   if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
     testingSupport.deleteClaimDraft()
