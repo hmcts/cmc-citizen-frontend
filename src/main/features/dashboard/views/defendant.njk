@@ -8,14 +8,14 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">
-        <span class="heading-secondary">{{ t('Claim number:') }}</span>
-        {{ claim.claimNumber }}
-      </h1>
-      <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-      {{ caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) }}
+      <div class="form-group-related no-bottom-margin">
+        <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }} v {{ claim.claimData.defendant.name }}</h2>
+        <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+      </div>
+      <div>
+        {{ caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) }}
+      </div>
     </div>
-
     <div class="column-one-third">
       {{ aboutClaimWidget(claim = claim, otherParty = 'claimant') }}
     </div>
