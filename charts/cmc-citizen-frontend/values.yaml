@@ -1,5 +1,8 @@
 tags:
-  - cmc-citizen-frontend-pod: false
+  cmc-frontend-postgresql-pod: false
+  cmc-citizen-frontend-pod: false
+  cmc-claim-store-postgresql-pod: false
+  cmc-ccd-stack: false
 
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
@@ -50,3 +53,6 @@ nodejs:
 # sub-charts conditions
 cmc-claim-store:
   enabled: false
+  ccd:
+   enabled: false
+   ingressHost: ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
