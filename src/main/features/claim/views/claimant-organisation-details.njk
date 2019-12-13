@@ -15,7 +15,7 @@
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('The defendant will see these details.') }}</p>
+        <p>{{ t('The defendant will see these details. Don’t enter an email address if you’re naming a contact person.') }}</p>
 
         {{
           partyDetailsFragment(
