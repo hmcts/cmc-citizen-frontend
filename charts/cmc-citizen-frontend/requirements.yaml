@@ -18,7 +18,7 @@ dependencies:
   - name: cmc-claim-store
     version: ~2.0.0
     repository: '@hmctspublic'
-    condition: cmc-claim-store.enabled
+    #condition: cmc-claim-store.enabled
     tags:
       - cmc-claim-store-pod
 

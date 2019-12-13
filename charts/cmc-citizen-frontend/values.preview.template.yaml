@@ -52,7 +52,7 @@ idam-pr:
       - https://${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
-  enabled: true
+  #enabled: true
   java:
     releaseNameOverride: claim-store
     environment:
