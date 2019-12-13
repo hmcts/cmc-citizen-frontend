@@ -1,3 +1,6 @@
+tags:
+  - cmc-citizen-frontend-pod: false
+
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
@@ -43,3 +46,7 @@ nodejs:
       - cmc-webchat-button-no-agents
       - cmc-webchat-button-agents-busy
       - cmc-webchat-button-service-closed
+
+# sub-charts conditions
+cmc-claim-store:
+  enabled: false
