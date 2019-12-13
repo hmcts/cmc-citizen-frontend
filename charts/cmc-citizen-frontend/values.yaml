@@ -52,7 +52,6 @@ nodejs:
 
 # sub-charts conditions
 cmc-claim-store:
-  #enabled: false
   ccd:
    enabled: false
    ingressHost: ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal

@@ -31,6 +31,8 @@ rpe-feature-toggle-api:
 nodejs:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
+  readinessDelay: 90  # claim-store will start much slower
+  livenessDelay: 90  # claim-store will start much slower
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
@@ -52,9 +54,13 @@ idam-pr:
       - https://${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
-  #enabled: true
   java:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
+    ingressIP: ${INGRESS_IP}
+    consulIP: ${CONSUL_LB_IP}
+    registerAdditionalDns:
+      enabled: true
+      primaryIngressHost: ${SERVICE_FQDN}
     environment:
       LOG_LEVEL: DEBUG
       IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
