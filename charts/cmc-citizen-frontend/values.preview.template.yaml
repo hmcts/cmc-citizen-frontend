@@ -1,10 +1,11 @@
 tags:
   cmc-frontend-postgresql-pod: true
+  rpe-feature-toggle-api-pod: true
   idam-pr: true
 
 rpe-feature-toggle-api:
   java:
-    releaseNameOverride: ftr-tgl-api
+    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
     environment:
       FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
       FEATURES_DB_NAME: features
