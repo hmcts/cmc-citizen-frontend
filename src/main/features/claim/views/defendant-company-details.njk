@@ -14,6 +14,7 @@
     <div class="column-two-thirds">
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
+        <p>{{ t('Don’t enter an email address if you’re naming a contact person.') }}</p>
         <p>{{ t('You’ll have to pay an extra fee if you later want to change the name of anyone involved with the claim.') }}</p>
 
         {{
