@@ -115,7 +115,8 @@ app.use((req, res, next) => {
 
 // error handlers
 const errorLogger = new ErrorLogger()
-app.use((err, req, res, next) => {
+// exported for testability
+export const errorHandler = (err, req, res, next) => {
   errorLogger.log(err)
   res.status(err.statusCode || 500)
   if (err.statusCode === 302 && err.associatedView) {
@@ -135,4 +136,5 @@ app.use((err, req, res, next) => {
     })
   }
   next()
-})
+}
+app.use(errorHandler)
