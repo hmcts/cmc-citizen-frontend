@@ -6,7 +6,7 @@ tags:
 
 rpe-feature-toggle-api:
   java:
-    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl-api
+    releaseNameOverride: ${SERVICE_NAME}-java
     environment:
       FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
       FEATURES_DB_NAME: features
@@ -36,7 +36,7 @@ nodejs:
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
-    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl-api
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
     IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
