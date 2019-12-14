@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@increase-helm-timeout")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"

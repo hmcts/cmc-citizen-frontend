@@ -4,30 +4,6 @@ tags:
   cmc-claim-store-pod: true
   idam-pr: true
 
-rpe-feature-toggle-api:
-  java:
-    releaseNameOverride: ${SERVICE_NAME}-java
-    environment:
-      FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
-      FEATURES_DB_NAME: features
-      FEATURES_DB_USER_NAME: hmcts
-      FEATURES_DB_PASSWORD: hmcts
-    postgresql:
-      image:
-        tag: '11.3.0'
-  importer:
-    apiUrl: http://${SERVICE_NAME}-java/api/ff4j/store/features/
-    kvSecretRef: kvcreds
-    cron:
-      enabled: false
-    oneoff:
-      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
-        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
-        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
-      enabled: true
-      permissions: cmc-new-features-consent-given
-
 nodejs:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
@@ -36,7 +12,7 @@ nodejs:
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
-    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-java
+    FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
     IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
     IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
@@ -47,6 +23,30 @@ nodejs:
     FEATURE_INVERSION_OF_CONTROL: true
 
 # sub-charts configuration
+
+rpe-feature-toggle-api:
+  java:
+    releaseNameOverride: ${SERVICE_NAME}-ftr-tgl
+    environment:
+      FEATURES_DB_HOST: ${SERVICE_NAME}-postgres
+      FEATURES_DB_NAME: features
+      FEATURES_DB_USER_NAME: hmcts
+      FEATURES_DB_PASSWORD: hmcts
+    postgresql:
+      image:
+        tag: '11.3.0'
+  importer:
+    apiUrl: http://${SERVICE_NAME}-ftr-tgl/api/ff4j/store/features/
+    kvSecretRef: kvcreds
+    cron:
+      enabled: false
+    oneoff:
+      command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
+        /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
+      enabled: true
+      permissions: cmc-new-features-consent-given
 
 idam-pr:
   redirect_uris:
