@@ -31,6 +31,7 @@ import { PaidInFullFeature } from 'paid-in-full/index'
 import { MediationFeature } from 'mediation/index'
 import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
 import { OrdersFeature } from 'orders/index'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 export const app: express.Express = express()
 
@@ -114,7 +115,8 @@ app.use((req, res, next) => {
 
 // error handlers
 const errorLogger = new ErrorLogger()
-app.use((err, req, res, next) => {
+// exported for testability
+export const errorHandler = (err, req, res, next) => {
   errorLogger.log(err)
   res.status(err.statusCode || 500)
   if (err.statusCode === 302 && err.associatedView) {
@@ -125,10 +127,14 @@ app.use((err, req, res, next) => {
     res.render(new ForbiddenError().associatedView)
   } else {
     const view = FeatureToggles.isEnabled('returnErrorToUser') ? 'error_dev' : 'error'
+    if (err.name === 'Template render error') {
+      trackCustomEvent('CMC Dashboard Failure', { error: err })
+    }
     res.render(view, {
       error: err,
       title: 'error'
     })
   }
   next()
-})
+}
+app.use(errorHandler)
