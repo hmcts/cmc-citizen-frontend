@@ -66,7 +66,7 @@ cmc-claim-store:
       PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
       FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
       DOC_ASSEMBLY_URL: false
-      FRONTEND_BASE_URL: https://${SERVICE_FQDN}
+      FRONTEND_BASE_URL: http://${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
       CLAIM_STORE_DB_USERNAME: hmcts
