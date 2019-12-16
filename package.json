@@ -23,7 +23,7 @@
     "test:codacy-upload": "cat ./coverage-report/lcov.info | codacy-coverage",
     "test:codecov-upload": "codecov -f ./coverage-report/lcov.info",
     "test:smoke": "./bin/run-smoke-tests.sh",
-    "test:integration": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --config default.conf.js --reporter mocha-multi",
+    "test:integration": "TS_NODE_TRANSPILE_ONLY=true codeceptjs --config default.conf.js --reporter mocha-multi",
     "test:integration-verbose": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config default.conf.js",
     "test:crossbrowser": "TS_NODE_TRANSPILE_ONLY=true codeceptjs run-multiple parallel --verbose --config saucelabs.conf.js --reporter mocha-multi",
     "list-supported-browsers": "node -e 'Object.keys(require(\"@hmcts/cmc-supported-browsers\").supportedBrowsers).forEach(key => console.log(key))'",
