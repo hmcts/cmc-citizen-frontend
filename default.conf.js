@@ -7,8 +7,8 @@ const tearDownFn = require('./src/integration-test/bootstrap/teardown').teardown
 
 exports.config = {
   name: 'citizen-integration-tests',
-  bootstrapAll: bootstrapFn,
-  teardownAll: tearDownFn,
+  bootstrap: bootstrapFn,
+  teardown: tearDownFn,
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
