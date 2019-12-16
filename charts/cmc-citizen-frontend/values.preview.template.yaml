@@ -6,12 +6,7 @@ tags:
 
 nodejs:
   image: ${IMAGE_NAME}
-  ingressIP: ${INGRESS_IP}
-  consulIP: ${CONSUL_LB_IP}
-  registerAdditionalDns:
-    enabled: true
-    primaryIngressHost: ${SERVICE_FQDN}
-    prefix: www
+  ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
   environment:
@@ -23,7 +18,7 @@ nodejs:
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
     FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://${SERVICE_FQDN}
+    CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
     FEATURE_INVERSION_OF_CONTROL: true
 
@@ -60,7 +55,6 @@ idam-pr:
 
 cmc-claim-store:
   java:
-    ingressHost: ${SERVICE_FQDN}
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     environment:
       LOG_LEVEL: DEBUG
@@ -72,8 +66,8 @@ cmc-claim-store:
       PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
       FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
       DOC_ASSEMBLY_URL: false
-      FRONTEND_BASE_URL: http://www-${SERVICE_FQDN}
-      RESPOND_TO_CLAIM_URL: https://www-${SERVICE_FQDN}/first-contact/start
+      FRONTEND_BASE_URL: http://${SERVICE_FQDN}
+      RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
       CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
       CLAIM_STORE_DB_USERNAME: hmcts
       CLAIM_STORE_DB_PASSWORD: hmcts
