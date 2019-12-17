@@ -13,7 +13,7 @@
 
         {{ dateInput(form = form, name = 'date', hint = t('For example, {{ twoWeeksAgo }}', { twoWeeksAgo : 'now' | addDays(-14) | inputDate })) }}
 
-        {{ submitButton() }}
+        {{ submitButton('Settle the claim') }}
       </form>
     </div>
   </div>
