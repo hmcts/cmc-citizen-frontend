@@ -57,7 +57,7 @@ cmc-claim-store:
   java:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     environment:
-      LOG_LEVEL: DEBUG
+      LOG_LEVEL: INFO
       IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
       SEND_LETTER_URL: http://rpe-send-letter-service-aat.service.core-compute-aat.internal
       IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
