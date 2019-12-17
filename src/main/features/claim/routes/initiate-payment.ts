@@ -30,7 +30,7 @@ export default express.Router()
     } catch (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         const payment = draft.document.claimant.payment
-        if (payment !== undefined ) {
+        if (payment !== undefined) {
           return res.redirect(Paths.startPaymentReceiver.uri)
         } else {
           const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
