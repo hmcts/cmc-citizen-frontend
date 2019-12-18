@@ -102,13 +102,11 @@ const testData = [
     },
     claimantAssertions: [
       'Mediation was unsuccessful',
-      'You weren’t able to resolve your claim against ' + statesPaidClaim.claim.defendants[0].name + ' using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.'
+      'You weren’t able to resolve your claim against ' + statesPaidClaim.claim.defendants[0].name + ' using mediation.'
     ],
     defendantAssertions: [
       'Mediation was unsuccessful',
       'You weren’t able to resolve ' + statesPaidClaim.claim.claimants[0].name + '’s claim against you using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.',
       'Download ' + statesPaidClaim.claim.claimants[0].name + '’s hearing requirements'
     ]
   },
