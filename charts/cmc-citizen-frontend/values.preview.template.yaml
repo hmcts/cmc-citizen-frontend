@@ -2,7 +2,6 @@ tags:
   cmc-frontend-postgresql-pod: true
   rpe-feature-toggle-api-pod: true
   cmc-claim-store-pod: true
-  cmc-ccd-stack: true
   idam-pr: true
 
 nodejs:
