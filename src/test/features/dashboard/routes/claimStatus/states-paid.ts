@@ -181,13 +181,13 @@ const testData = [
     },
     claimantAssertions: [
       'You settled the claim through mediation',
-      'You signed an agreement which means the claim is now ended and sets out the terms of how ' + statesPaidClaim.claim.defendants[0].name + ' must repay you.',
+      'You made an agreement which means the claim is now ended and sets out the terms of how ' + statesPaidClaim.claim.defendants[0].name + ' must repay you.',
       'Download the agreement',
       '(PDF)'
     ],
     defendantAssertions: [
       'You settled the claim through mediation',
-      'You signed an agreement which means the claim is now ended and sets out the terms of how you must repay ' + statesPaidClaim.claim.claimants[0].name + '.',
+      'You made an agreement which means the claim is now ended and sets out the terms of how you must repay ' + statesPaidClaim.claim.claimants[0].name + '.',
       'Download the agreement',
       '(PDF)',
       'Contact ' + statesPaidClaim.claim.claimants[0].name,
