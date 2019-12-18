@@ -1,0 +1,27 @@
+
+{% macro paperResponseForClaimantDashboard() %}
+  {{ t('The claim will continue by post') }}
+{% endmacro %}
+
+{% macro paperResponseForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('The claim will continue by post') }}</h2>
+    <p>{{ t('The defendant responded to your claim by post. This means you can no longer use this service to continue the claim - you’ll need to use paper forms instead.') }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim.') }}</p>
+    <p>{{ t('We’ll post you a copy of the defendant’s response. This will explain what you need to do next.') }}</p>
+  </div>
+{% endmacro %}
+
+{% macro paperResponseForDefendantDashboard() %}
+  {{ t('The claim will continue by post') }}
+{% endmacro %}
+
+{% macro paperResponseForDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('The claim will continue by post') }}</h2>
+    <p>{{ t('Because you responded to the claim using a paper form, all further action in this claim will be by post.') }}</p>
+    <p>{{ t('Your online account won’t be updated with the progress of this claim.') }}</p>
+    <p>{{ t('If {{ claimantName }} chooses to continue the claim we’ll post you a copy of their response. This will explain what you need to do next.',{claimantName: claim.claimData.claimant.name}) }}</p>
+  </div>
+{% endmacro %}
+

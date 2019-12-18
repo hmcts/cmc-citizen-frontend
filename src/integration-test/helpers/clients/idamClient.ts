@@ -4,7 +4,7 @@ import * as urlencode from 'urlencode'
 
 const baseURL: string = process.env.IDAM_URL
 
-const defaultPassword = 'Password12'
+const defaultPassword = process.env.SMOKE_TEST_USER_PASSWORD
 
 const oauth2 = {
   client_id: 'cmc_citizen',
@@ -22,7 +22,7 @@ export class IdamClient {
    * @param password the user's password, will use a default if undefined
    * @returns {Promise<void>}
    */
-  static createUser (email: string, userRoleCode: string, password: string = undefined): Promise<void> {
+  static createUser (email: string, userRoleCode: string, password: string = process.env.SMOKE_TEST_USER_PASSWORD): Promise<void> {
     const options = {
       method: 'POST',
       uri: `${baseURL}/testing-support/accounts`,
@@ -39,6 +39,50 @@ export class IdamClient {
     }
     return request(options).then(function () {
       return Promise.resolve()
+    })
+  }
+
+  /**
+   * Deletes user with the supplied username
+   *
+   * @returns {Promise<void>}
+   */
+  static deleteUser (username: string): Promise<void> {
+    const options = {
+      method: 'DELETE',
+      uri: `${baseURL}/testing-support/accounts/${username}`
+    }
+
+    return request(options).then(function (resp) {
+      return Promise.resolve()
+    }).catch(function (err) {
+      // tslint:disable-next-line:no-console
+      console.log('error deleting user: ' + err)
+    })
+  }
+
+  /**
+   * Deletes users with the supplied usernames
+   *
+   * @returns {Promise<void>}
+   */
+  static deleteUsers (usernames: string[]): Promise<void> {
+    let params = usernames.map(function (s) {
+      return `userNames=${encodeURIComponent(s)}`
+    }).join('&')
+
+    const options = {
+      method: 'DELETE',
+      uri: `${baseURL}/testing-support/test-data?${params}`
+    }
+
+    return request(options).then(function (resp) {
+      // tslint:disable-next-line:no-console
+      console.log(resp)
+      return Promise.resolve()
+    }).catch(function (err) {
+      // tslint:disable-next-line:no-console
+      console.log('error deleting user: ' + err)
     })
   }
 
@@ -79,41 +123,6 @@ export class IdamClient {
     }
     return request(options).then(function (response) {
       return response.body
-    })
-  }
-
-  /**
-   * Uplift's a users account
-   *
-   * @param {string} email
-   * @param upliftToken the pin user's authorization header
-   * @returns {Promise<string>}
-   */
-  static async upliftUser (email: string, upliftToken: string): Promise<void> {
-    const upliftParams = IdamClient.toUrlParams({
-      userName: email,
-      password: defaultPassword,
-      jwt: upliftToken,
-      clientId: oauth2.client_id,
-      redirectUri: oauth2.redirect_uri
-    })
-    const options = {
-      uri: `${baseURL}/login/uplift?${upliftParams}`,
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      },
-      simple: false,
-      followRedirect: false,
-      json: false,
-      resolveWithFullResponse: true
-    }
-    return require('request-promise-native').post(options).then(function (response) {
-      return response
-    }).then(function (response) {
-      const code: any = url.parse(response.headers.location, true).query.code
-      return IdamClient.exchangeCode(code).then(function (response) {
-        return response
-      })
     })
   }
 

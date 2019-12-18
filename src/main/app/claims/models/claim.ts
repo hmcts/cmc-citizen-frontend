@@ -74,6 +74,7 @@ export class Claim {
   intentionToProceedDeadline?: Moment
   mediationOutcome: string
   pilotCourt: YesNoOption
+  paperResponse: YesNoOption
 
   get defendantOffer (): Offer {
     if (!this.settlement) {
@@ -164,6 +165,8 @@ export class Claim {
       } else {
         return ClaimStatus.ORDER_DRAWN
       }
+    } else if (this.paperResponse && this.paperResponse === YesNoOption.YES) {
+      return ClaimStatus.DEFENDANT_PAPER_RESPONSE
     } else if (this.moneyReceivedOn) {
       return ClaimStatus.PAID_IN_FULL
     } else if (this.countyCourtJudgmentRequestedAt) {
@@ -363,6 +366,10 @@ export class Claim {
 
       if (input.pilotCourt) {
         this.pilotCourt = YesNoOption.fromObject(input.pilotCourt)
+      }
+
+      if (input.paperResponse) {
+        this.paperResponse = YesNoOption.fromObject(input.paperResponse)
       }
     }
 

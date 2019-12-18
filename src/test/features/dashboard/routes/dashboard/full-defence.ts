@@ -35,6 +35,7 @@ import {
 } from 'test/data/entity/fullDefenceData'
 import { DefenceType } from 'claims/models/response/defenceType'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
+import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -92,6 +93,20 @@ const testData = [
     },
     claimantAssertions: [fullDefenceClaim.claim.defendants[0].name + ' has rejected the claim. They’ve suggested a mediation session to help resolve this dispute.'],
     defendantAssertions: ['You’ve rejected the claim and suggested mediation. We’ll ask the claimant if they agree to take part in mediation.']
+  },
+  {
+    status: 'Full defence - defendant sent paper response',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES
+      },
+      paperResponse: YesNoOption.YES.option
+    },
+    claimantAssertions: ['The claim will continue by post'],
+    defendantAssertions: ['The claim will continue by post']
   },
   {
     status: 'Full defence - defendant dispute all of the claim and reject mediation',
