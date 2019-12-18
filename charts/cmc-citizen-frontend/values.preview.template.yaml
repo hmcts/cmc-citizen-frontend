@@ -2,6 +2,8 @@ tags:
   cmc-frontend-postgresql-pod: true
   rpe-feature-toggle-api-pod: true
   cmc-claim-store-pod: true
+  cmc-ccd-stack: true
+  ccd-idam-pr: true
   idam-pr: true
 
 nodejs:
@@ -56,8 +58,8 @@ idam-pr:
 cmc-claim-store:
   java:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
-    readinessDelay: 120  # ccd-stack will start much slower
-    livenessDelay: 120  # ccd-stack will start much slower
+    readinessDelay: 90  # ccd-stack will start much slower
+    livenessDelay:  90  # ccd-stack will start much slower
     environment:
       LOG_LEVEL: DEBUG
       IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
@@ -103,17 +105,6 @@ cmc-claim-store:
     definitionStoreApi:
       s2sKey: ${DEFINITION_STORE_S2S_KEY}
       s2sAuthorisedServices: ccd_admin,ccd_data,cmc_claim_store,ccd_gw
-    caseManagementWeb:
-      enabled: true
-      environment:
-        NODE_TLS_REJECT_UNAUTHORIZED: 0
-    adminWeb:
-      enabled: true
-      s2sKey: ${ADMIN_S2S_KEY}
-      idamClientSecret:
-        value: ${ADMIN_WEB_IDAM_SECRET}
-      environment:
-        NODE_TLS_REJECT_UNAUTHORIZED: 0
     importer:
       userprofile:
         enabled: true
