@@ -3,6 +3,7 @@ tags:
   rpe-feature-toggle-api-pod: true
   cmc-claim-store-pod: true
   frontend-ccd-stack: true
+  ccd-idam-pr: true
   postgresql-pod: false
   idam-pr: true
 
