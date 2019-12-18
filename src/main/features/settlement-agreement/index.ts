@@ -8,6 +8,7 @@ import { Paths } from 'offer/paths'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { SettlementAgreementGuard } from 'settlement-agreement/guards/settlementAgreementGuard'
 import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
+import { AlreadyPaidInFullGuard } from 'settlement-agreement/guards/alreadyPaidInFullGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -31,6 +32,7 @@ export class Feature {
     app.all(/^\/case\/.+\/settlement-agreement\/.*$/, ClaimMiddleware.retrieveByExternalId)
     app.all(/^\/case\/.+\/settlement-agreement\/.*$/, OnlyDefendantLinkedToClaimCanDoIt.check())
     app.all(/^\/case\/.+\/settlement-agreement\/(?!settlement-agreement-confirmation).*$/, SettlementAgreementGuard.requestHandler)
+    app.all(/^\/case\/.+\/settlement-agreement\/.*$/, AlreadyPaidInFullGuard.requestHandler)
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

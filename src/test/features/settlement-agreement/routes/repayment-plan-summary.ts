@@ -14,6 +14,8 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as settlementAgreementServiceMock from 'test/http-mocks/settlement-agreement'
 
 import { Paths } from 'settlement-agreement/paths'
+import { MomentFactory } from 'shared/momentFactory'
+import { Paths as DashboardPaths } from 'dashboard/paths'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -78,6 +80,26 @@ describe('Settlement agreement: repayment plan summary page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('The court’s repayment plan'))
+        })
+
+        it('should redirect to claim status when claimant declared paid in full', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
+            ...claimStoreServiceMock.sampleClaimObj,
+            settlement: {
+              ...settlementAgreementServiceMock.sampleSettlementAgreementOffer
+            },
+            claimantResponse: {
+              type: 'ACCEPTATION',
+              formaliseOption: 'SETTLEMENT'
+            },
+            moneyReceivedOn: MomentFactory.currentDate()
+          })
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.defendantPage
+              .evaluateUri({ externalId })))
         })
       })
     })
