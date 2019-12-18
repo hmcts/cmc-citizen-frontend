@@ -3,6 +3,7 @@ tags:
   rpe-feature-toggle-api-pod: true
   cmc-claim-store-pod: true
   frontend-ccd-stack: true
+  postgresql-pod: false
   idam-pr: true
 
 nodejs:
@@ -133,7 +134,7 @@ ccd:
       enabled: true
       image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.3
       environment:
-        CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-java
+        CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
       kvSecretRef: kvcreds
       gitSecretRef: kvcreds
       redirectUri: https://case-management-web-${SERVICE_FQDN}/oauth2redirect
