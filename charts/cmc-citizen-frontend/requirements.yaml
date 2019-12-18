@@ -18,7 +18,6 @@ dependencies:
   - name: cmc-claim-store
     version: ~2.0.0
     repository: '@hmctspublic'
-    #condition: cmc-claim-store.enabled
     tags:
       - cmc-claim-store-pod
 
@@ -27,3 +26,9 @@ dependencies:
     repository: '@stable'
     tags:
       - cmc-frontend-postgresql-pod
+
+  - name: ccd
+    version: ~3.3.1
+    repository: '@hmctspublic'
+    tags:
+      - frontend-ccd-stack

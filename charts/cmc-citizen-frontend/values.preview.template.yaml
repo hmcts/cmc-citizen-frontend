@@ -2,8 +2,7 @@ tags:
   cmc-frontend-postgresql-pod: true
   rpe-feature-toggle-api-pod: true
   cmc-claim-store-pod: true
-  cmc-ccd-stack: true
-  ccd-idam-pr: true
+  frontend-ccd-stack: true
   idam-pr: true
 
 nodejs:
@@ -79,65 +78,76 @@ cmc-claim-store:
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-data-store-api
-  ccd:
+
+ccd:
+  ingressHost: ${SERVICE_FQDN}
+  ingressIP: ${INGRESS_IP}
+  consulIP: ${CONSUL_LB_IP}
+  postgresql:
+    nameOverride: postgres
+  idam-pr:
+    releaseNameOverride: ${SERVICE_NAME}-ccd-idam-pr
+    redirect_uris:
+      CCD:
+        - https://case-management-web-${SERVICE_FQDN}/oauth2redirect
+      CCD Admin:
+        - https://admin-web-${SERVICE_FQDN}/oauth2redirect
+  apiGateway:
+    s2sKey: ${API_GATEWAY_S2S_KEY}
+    idamClientSecret:
+      value: ${API_GATEWAY_IDAM_SECRET}
+  userProfileApi:
+    authorisedServices: ccd_admin,ccd_data,ccd_definition,cmc_claim_store
+  dataStoreApi:
+    s2sKey: ${DATA_STORE_S2S_KEY}
+    s2sAuthorisedServices: cmc_claim_store,ccd_gw
+  definitionStoreApi:
+    s2sKey: ${DEFINITION_STORE_S2S_KEY}
+    s2sAuthorisedServices: ccd_admin,ccd_data,cmc_claim_store,ccd_gw
+  caseManagementWeb:
     enabled: true
-    ingressHost: ${SERVICE_FQDN}
-    ingressIP: ${INGRESS_IP}
-    consulIP: ${CONSUL_LB_IP}
-    postgresql:
-      nameOverride: postgres
-    idam-pr:
-      releaseNameOverride: ${SERVICE_NAME}-ccd-idam-pr
-      redirect_uris:
-        CCD:
-          - https://case-management-web-${SERVICE_FQDN}/oauth2redirect
-        CCD Admin:
-          - https://admin-web-${SERVICE_FQDN}/oauth2redirect
-      apiGateway:
-        s2sKey: ${API_GATEWAY_S2S_KEY}
-      idamClientSecret:
-        value: ${API_GATEWAY_IDAM_SECRET}
-    userProfileApi:
-      authorisedServices: ccd_admin,ccd_data,ccd_definition,cmc_claim_store
-    dataStoreApi:
-      s2sKey: ${DATA_STORE_S2S_KEY}
-      s2sAuthorisedServices: cmc_claim_store,ccd_gw
-    definitionStoreApi:
-      s2sKey: ${DEFINITION_STORE_S2S_KEY}
-      s2sAuthorisedServices: ccd_admin,ccd_data,cmc_claim_store,ccd_gw
-    importer:
-      userprofile:
-        enabled: true
-        jurisdictions:
-          - CMC
-        users:
-          - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
-          - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
-          - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
-        userProfileDatabaseHost: ${SERVICE_NAME}-postgres
-        userProfileDatabasePort: 5432
-        userProfileDatabaseUser: hmcts
-        userProfileDatabasePassword: hmcts
-        userProfileDatabaseName: user-profile
-      definition:
-        enabled: true
-        image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.3
-        environment:
-          CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-java
-        kvSecretRef: kvcreds
-        gitSecretRef: kvcreds
-        redirectUri: https://case-management-web-${SERVICE_FQDN}/oauth2redirect
-        definitionFilename: cmc-ccd.xlsx
-        userRoles:
-          - citizen
-          - caseworker-cmc
-          - caseworker-cmc-solicitor
-          - caseworker-cmc-systemupdate
-          - letter-holder
-          - caseworker-autotest1
-          - caseworker-cmc-anonymouscitizen
-          - caseworker-cmc-judge
-          - caseworker-cmc-legaladvisor
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+  adminWeb:
+    enabled: true
+    s2sKey: ${ADMIN_S2S_KEY}
+    idamClientSecret:
+      value: ${ADMIN_WEB_IDAM_SECRET}
+    environment:
+      NODE_TLS_REJECT_UNAUTHORIZED: 0
+  importer:
+    userprofile:
+      enabled: true
+      jurisdictions:
+        - CMC
+      users:
+        - civilmoneyclaims+ccd@gmail.com|CMC|MoneyClaimCase|open
+        - civilmoneyclaims+judge@gmail.com|CMC|MoneyClaimCase|orderForJudgeReview
+        - civilmoneyclaims+la@gmail.com|CMC|MoneyClaimCase|readyForDirections
+      userProfileDatabaseHost: ${SERVICE_NAME}-postgres
+      userProfileDatabasePort: 5432
+      userProfileDatabaseUser: hmcts
+      userProfileDatabasePassword: hmcts
+      userProfileDatabaseName: user-profile
+    definition:
+      enabled: true
+      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.3
+      environment:
+        CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-java
+      kvSecretRef: kvcreds
+      gitSecretRef: kvcreds
+      redirectUri: https://case-management-web-${SERVICE_FQDN}/oauth2redirect
+      definitionFilename: cmc-ccd.xlsx
+      userRoles:
+        - citizen
+        - caseworker-cmc
+        - caseworker-cmc-solicitor
+        - caseworker-cmc-systemupdate
+        - letter-holder
+        - caseworker-autotest1
+        - caseworker-cmc-anonymouscitizen
+        - caseworker-cmc-judge
+        - caseworker-cmc-legaladvisor
 
 postgresql:
   image:
