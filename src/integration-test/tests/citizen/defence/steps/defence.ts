@@ -11,7 +11,7 @@ import { DefendantMoreTimeRequestPage } from 'integration-test/tests/citizen/def
 import { DefendantNameAndAddressPage } from 'integration-test/tests/citizen/defence/pages/defendant-name-and-address'
 import { DefendantPaymentDatePage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-date'
 import { DefendantPaymentPlanPage } from 'integration-test/tests/citizen/defence/pages/defendant-payment-plan'
-import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
+// import { DefendantRegisterPage } from 'integration-test/tests/citizen/defence/pages/defendant-register'
 import { DefendantRejectAllOfClaimPage } from 'integration-test/tests/citizen/defence/pages/defendant-reject-all-of-claim'
 import { DefendantStartPage } from 'integration-test/tests/citizen/defence/pages/defendant-start'
 import { DefendantTaskListPage } from 'integration-test/tests/citizen/defence/pages/defendant-task-list'
@@ -41,7 +41,7 @@ const defendantStartPage: DefendantStartPage = new DefendantStartPage()
 const defendantEnterClaimRefPage: DefendantEnterClaimReferencePage = new DefendantEnterClaimReferencePage()
 const defendantEnterPinPage: DefendantEnterClaimPinNumberPage = new DefendantEnterClaimPinNumberPage()
 const defendantViewClaimPage: DefendantViewClaimPage = new DefendantViewClaimPage()
-const defendantRegisterPage: DefendantRegisterPage = new DefendantRegisterPage()
+// const defendantRegisterPage: DefendantRegisterPage = new DefendantRegisterPage()
 const defendantNameAndAddressPage: DefendantNameAndAddressPage = new DefendantNameAndAddressPage()
 const defendantDobPage: DefendantDobPage = new DefendantDobPage()
 const defendantPhonePage: DefendantPhonePage = new DefendantPhonePage()
@@ -103,7 +103,8 @@ export class DefenceSteps {
   }
 
   loginAsDefendant (defendantEmail: string): void {
-    defendantRegisterPage.clickLinkIAlreadyHaveAnAccount()
+    // defendantRegisterPage.clickLinkIAlreadyHaveAnAccount()
+    loginPage.open()
     loginPage.login(defendantEmail, DEFAULT_PASSWORD)
   }
 

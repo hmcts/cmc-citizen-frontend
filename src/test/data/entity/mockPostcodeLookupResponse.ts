@@ -73,6 +73,13 @@ export const mockPostcodeLookupResponse = {
   ]
 }
 
+export const mockPostCodeException = {
+  error: {
+    status: 500,
+    message: 'Authentication failed'
+  }
+}
+
 export const mockScottishPostcodeLookupResponse = {
   'header': {
     'uri': 'https://api.ordnancesurvey.co.uk/places/v1/addresses/postcode?offset=0&postcode=EH9%201SH',

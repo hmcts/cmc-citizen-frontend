@@ -4,17 +4,21 @@ import { InterestSteps } from 'integration-test/tests/citizen/claim/steps/intere
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentSteps } from 'integration-test/tests/citizen/claim/steps/payment'
+import { TestingSupportSteps } from 'integration-test/tests/citizen/testingSupport/steps/testingSupport'
 
 const userSteps: UserSteps = new UserSteps()
 const claimSteps: ClaimSteps = new ClaimSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 Feature('Claimant Enter details of claim')
 
-Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, async (I: I) => {
-  const email: string = await I.createCitizenUser()
-  userSteps.login(email)
+Scenario('I can prepare a claim with no interest @citizen', { retries: 0 }, async (I: I) => {
+  userSteps.login(userSteps.getClaimantEmail())
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.skipClaimInterest()
@@ -51,9 +55,10 @@ Scenario('I can prepare a claim with no interest @citizen', { retries: 3 }, asyn
 })
 
 Scenario('I can prepare a claim with different interest rate and date @citizen', { retries: 3 }, async (I: I) => {
-  const email: string = await I.createCitizenUser()
-  userSteps.login(email)
-
+  userSteps.login(userSteps.getClaimantEmail())
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterSpecificInterestRateAndDate(2, '1990-01-01')
@@ -63,12 +68,16 @@ Scenario('I can prepare a claim with different interest rate and date @citizen',
   claimSteps.enterClaimDetails()
   userSteps.selectCheckAndSubmitYourClaim()
   I.see('£80.50')
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
 })
 
 Scenario('I can prepare a claim with a manually entered interest amount and a daily amount added @citizen', { retries: 3 }, async (I: I) => {
-  const email: string = await I.createCitizenUser()
-  userSteps.login(email)
-
+  userSteps.login(userSteps.getClaimantEmail())
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
   claimSteps.completeEligibility()
   claimSteps.completeStartOfClaimJourney(PartyType.INDIVIDUAL, PartyType.INDIVIDUAL, true)
   interestSteps.enterBreakdownInterestAmountAndDailyAmount()
@@ -80,6 +89,9 @@ Scenario('I can prepare a claim with a manually entered interest amount and a da
   I.see('£80.50')
   I.see('Break down interest for different time periods or items')
   I.see('Show how you calculated the amount')
+  if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+    testingSupport.deleteClaimDraft()
+  }
 })
 
 // The @citizen-smoke-test tag used for running smoke tests with pre-registered user

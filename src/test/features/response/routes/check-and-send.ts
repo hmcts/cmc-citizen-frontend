@@ -27,6 +27,7 @@ import { InterestDate } from 'claims/models/interestDate'
 import { Interest } from 'claims/models/interest'
 import { fullAdmissionWithPaymentByInstalmentsDataCompany } from 'test/data/entity/responseData'
 import { FeatureToggles } from 'utils/featureToggles'
+import { MomentFactory } from 'shared/momentFactory'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -59,6 +60,7 @@ describe('Defendant response: check and send page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
@@ -81,6 +83,7 @@ describe('Defendant response: check and send page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .get(pagePath)
@@ -94,6 +97,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .get(pagePath)
@@ -109,6 +113,7 @@ describe('Defendant response: check and send page', () => {
               draftStoreServiceMock.resolveFind('mediation')
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithDQ)
+              claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
               await request(app)
                 .get(pagePath)
@@ -195,6 +200,7 @@ describe('Defendant response: check and send page', () => {
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .get(pagePath)
@@ -270,6 +276,7 @@ describe('Defendant response: check and send page', () => {
               }
             }
             claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreOverride)
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
               await request(app)
@@ -324,6 +331,7 @@ describe('Defendant response: check and send page', () => {
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+          claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
           await request(app)
             .post(pagePath)
@@ -349,6 +357,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)
@@ -363,6 +372,7 @@ describe('Defendant response: check and send page', () => {
               draftStoreServiceMock.resolveFind('mediation')
               draftStoreServiceMock.resolveFind('directionsQuestionnaire')
               claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+              claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
               let sendData: any = { signed: 'true', type: SignatureType.BASIC }
               if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
@@ -398,6 +408,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.rejectSaveResponse('HTTP error')
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)
@@ -413,6 +424,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.rejectDelete()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)
@@ -429,6 +441,7 @@ describe('Defendant response: check and send page', () => {
             claimStoreServiceMock.resolveSaveResponse()
             draftStoreServiceMock.resolveDelete()
             draftStoreServiceMock.resolveDelete()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             let sendData: any = { signed: 'true', type: SignatureType.BASIC }
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
@@ -458,6 +471,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveDelete()
             draftStoreServiceMock.resolveDelete()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
             if (FeatureToggles.isEnabled('directionsQuestionnaire') && (draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.DEFENCE || draftStoreServiceMock.sampleResponseDraftObj.response.type === ResponseType.PART_ADMISSION)) {
               draftStoreServiceMock.resolveDelete()
             }
@@ -478,6 +492,7 @@ describe('Defendant response: check and send page', () => {
             draftStoreServiceMock.resolveFind('mediation')
             draftStoreServiceMock.resolveFind('directionsQuestionnaire')
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            claimStoreServiceMock.resolvePostponedDeadline(MomentFactory.currentDateTime().add(14, 'days').toString())
 
             await request(app)
               .post(pagePath)
