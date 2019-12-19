@@ -37,7 +37,9 @@ export class FeaturesBuilder {
       if (FeatureToggles.isEnabled('directionsQuestionnaire') && await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_directions_questionnaire')) {
         features += features === '' ? 'directionsQuestionnaire' : ', directionsQuestionnaire'
       }
+    }
 
+    if (draft.document.amount.totalAmount() > this.PILOT_AMOUNT && draft.document.amount.totalAmount() <= this.ONLINE_DQ_THRESHOLD) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_judge_pilot')) {
         features += features === '' ? 'judgePilotEligible' : ', judgePilotEligible'
       }
