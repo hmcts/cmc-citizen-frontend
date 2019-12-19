@@ -14,7 +14,7 @@ services:
         - OAUTH_CLIENT_SECRET
         - SMOKE_TEST_CITIZEN_USERNAME
         - SMOKE_TEST_USER_PASSWORD
-        - CLAIM_STORE_URL
+        - CLAIM_STORE_URL=http://cmc-citizen-frontend-pr-2023.service.core-compute-preview.internal
         - HEALTHCHECK_CITIZEN=true
         - CHUNKS=1
         - FEATURE_ADMISSIONS
