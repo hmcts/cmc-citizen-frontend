@@ -23,6 +23,8 @@ import { QualifiedStatementOfTruth } from 'forms/models/qualifiedStatementOfTrut
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { Draft } from '@hmcts/draft-store-client'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+import { Claim } from 'claims/models/claim'
 
 async function getClaimAmountTotal (draft: DraftClaim): Promise<TotalAmount> {
   const interest: number = await draftInterestAmount(draft)
@@ -144,16 +146,29 @@ export default express.Router()
       if (form.hasErrors()) {
         renderView(form, res, next)
       } else {
+        const draft: Draft<DraftClaim> = res.locals.claimDraft
+        const user: User = res.locals.user
         if (form.model.type === SignatureType.QUALIFIED) {
-          const draft: Draft<DraftClaim> = res.locals.claimDraft
-          const user: User = res.locals.user
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
         if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
           res.redirect(Paths.initiatePaymentController.uri)
         } else {
-          res.redirect(Paths.startPaymentReceiver.uri)
+          const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
+          const externalId: string = draft.document.externalId
+          let existingClaim: Claim
+          try {
+            existingClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
+          } catch (err) {
+            // Do nothing as its just a call to check if claim exist.
+          }
+
+          if (!existingClaim) {
+            res.redirect(Paths.startPaymentReceiver.uri)
+          } else {
+            res.redirect(Paths.initiatePaymentController.uri)
+          }
         }
       }
     })
