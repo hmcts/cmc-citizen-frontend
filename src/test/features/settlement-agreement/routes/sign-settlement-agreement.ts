@@ -14,8 +14,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as settlementAgreementServiceMock from 'test/http-mocks/settlement-agreement'
 
 import { Paths } from 'settlement-agreement/paths'
-import { Paths as DashboardPaths } from 'dashboard/paths'
-import { MomentFactory } from 'shared/momentFactory'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -63,18 +65,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
             .expect(res => expect(res).to.be.successful.withText('Respond to the settlement agreement'))
         })
 
-        it('should redirect to claim status when claimant declared paid in full', async () => {
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-            ...claim,
-            moneyReceivedOn: MomentFactory.currentDate()
-          })
-
-          await request(app)
-            .get(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.defendantPage
-              .evaluateUri({ externalId })))
-        })
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, claim)
       })
     })
   })
@@ -148,19 +139,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
                   .evaluateUri({ externalId: externalId })))
           })
 
-          it('should redirect to claim status when claimant declared paid in full', async () => {
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId({
-              ...claim,
-              moneyReceivedOn: MomentFactory.currentDate()
-            })
-
-            await request(app)
-              .post(pagePath)
-              .set('Cookie', `${cookieName}=ABC`)
-              .send({ option: 'yes' })
-              .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.defendantPage
-                .evaluateUri({ externalId })))
-          })
+          verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, claim, { option: 'yes' })
         })
       })
     })

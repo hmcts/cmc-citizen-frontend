@@ -8,7 +8,7 @@ import { Paths } from 'offer/paths'
 import { OAuthHelper } from 'idam/oAuthHelper'
 import { SettlementAgreementGuard } from 'settlement-agreement/guards/settlementAgreementGuard'
 import { OnlyDefendantLinkedToClaimCanDoIt } from 'guards/onlyDefendantLinkedToClaimCanDoIt'
-import { AlreadyPaidInFullGuard } from 'settlement-agreement/guards/alreadyPaidInFullGuard'
+import { AlreadyPaidInFullGuard } from 'guards/alreadyPaidInFullGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
