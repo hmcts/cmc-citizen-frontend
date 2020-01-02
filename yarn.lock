@@ -475,10 +475,10 @@
   resolved "https://registry.yarnpkg.com/@types/validator/-/validator-9.4.2.tgz#9fec264b35f0ea21d0967eeec2dcd6a798b34350"
   integrity sha512-v6H2QH+oXVdLKp9keOJi5LQSt6X5/XIOtK1YmbCzvkAT2kHW9WyQkixit9w1UgJpBGrDCqqCZlQ+Qucpmsf8hA==
 
-"@wdio/config@5.16.11":
-  version "5.16.11"
-  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-5.16.11.tgz#2f2c58e4a50ab3fc9251f2ea8ec64c86d4266e5c"
-  integrity sha512-fGa7gDTyzzs28QIkJGPqG2ocgOvHBUanSDan4pw1pX7y1yJtPI0Nc3hkfxB6u/MqsW67GXCNMRyOS9Ri1I912A==
+"@wdio/config@5.18.2":
+  version "5.18.2"
+  resolved "https://registry.yarnpkg.com/@wdio/config/-/config-5.18.2.tgz#268d4a87d53c7f8229c9c47a1a9397fe61c62fe6"
+  integrity sha512-vH49hYOybXKiQQcOuyHtSW0XP7cMV3dwzaIxny73J7PJGDYQCPdHtF2DLsNiTP+i+/JvUl5Tnim0y46XKaigFg==
   dependencies:
     "@wdio/logger" "5.16.10"
     deepmerge "^4.0.0"
@@ -8753,24 +8753,24 @@ vinyl@^2.0.0, vinyl@^2.2.0:
     remove-trailing-separator "^1.0.1"
     replace-ext "^1.0.0"
 
-webdriver@5.16.15:
-  version "5.16.15"
-  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-5.16.15.tgz#605ba0c25632ae54b030eb36e1ba816ae737527f"
-  integrity sha512-jR632i8Wt0O1yQzFVmv3pbCiGxtBpaA8Q+RD79yFlZVvqAgZDhGZEQj/5xYsbnXNZCmTjnGlmLi4FDH8u+jXCg==
+webdriver@5.18.2:
+  version "5.18.2"
+  resolved "https://registry.yarnpkg.com/webdriver/-/webdriver-5.18.2.tgz#a548b64a57b2800bc64204b522e3524ae9a4fe73"
+  integrity sha512-eu15DMw8AxOaOZu5BoyDNnyeKqcRObpTcqKw4TDzK+htw7Ke+AKi7BP/3Dysovd8RvGVE3t2yx+Vd0hWq8gVHA==
   dependencies:
-    "@wdio/config" "5.16.11"
+    "@wdio/config" "5.18.2"
     "@wdio/logger" "5.16.10"
     "@wdio/protocols" "5.16.7"
     "@wdio/utils" "5.16.15"
     lodash.merge "^4.6.1"
     request "^2.83.0"
 
-webdriverio@^5.16.15:
-  version "5.16.15"
-  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-5.16.15.tgz#1bb577dfc96f3fa8cbbc34c13fc8cf3623d689e0"
-  integrity sha512-Sm2vpahcFPlVJIT9XoUPsXJGV2jEeebIIGaBAjTUXmOf3aS/12oClPCCcn1AgJ+muhPNbdK7ULkTGEmBFC1XUA==
+webdriverio@^5.18.2:
+  version "5.18.2"
+  resolved "https://registry.yarnpkg.com/webdriverio/-/webdriverio-5.18.2.tgz#7c28e84c2855fe6dfa679ef00d70be8d3c0a494f"
+  integrity sha512-qKYHJf54hSe811AcJka8FyXIVtiauSuXODTvjGAbtMtSxLF7hLH68YSxGgs9cLb2FIFSv8aJ5Pc69zYxOBYKXg==
   dependencies:
-    "@wdio/config" "5.16.11"
+    "@wdio/config" "5.18.2"
     "@wdio/logger" "5.16.10"
     "@wdio/repl" "5.16.15"
     "@wdio/utils" "5.16.15"
@@ -8784,7 +8784,7 @@ webdriverio@^5.16.15:
     resq "^1.6.0"
     rgb2hex "^0.1.0"
     serialize-error "^5.0.0"
-    webdriver "5.16.15"
+    webdriver "5.18.2"
 
 websocket-driver@>=0.5.1:
   version "0.7.3"
