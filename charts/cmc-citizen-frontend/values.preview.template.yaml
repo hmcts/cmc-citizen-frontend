@@ -9,7 +9,6 @@ tags:
 
 nodejs:
   image: ${IMAGE_NAME}
-  ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
   ingressHost: ${SERVICE_FQDN}
   readinessDelay: 90  # claim-store will start much slower
@@ -65,6 +64,7 @@ idam-pr:
 cmc-claim-store:
   java:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
+    ingressIP: ${INGRESS_IP}
     #ingressHost: ${SERVICE_FQDN}
     registerAdditionalDns:
       enabled: true
