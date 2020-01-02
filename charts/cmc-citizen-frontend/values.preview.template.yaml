@@ -65,6 +65,7 @@ cmc-claim-store:
   java:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressIP: ${INGRESS_IP}
+    consulIP: ${CONSUL_LB_IP}
     #ingressHost: ${SERVICE_FQDN}
     registerAdditionalDns:
       enabled: true
