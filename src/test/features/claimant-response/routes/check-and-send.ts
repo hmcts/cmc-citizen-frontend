@@ -86,7 +86,7 @@ describe('Claimant response: check and send page', () => {
 
         it('should render page when everything is fine along with court decision', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimStoreServiceMock.sampleFullAdmissionWithPaymentByInstalmentsResponseObj)
-          draftStoreServiceMock.resolveFind(draftType)
+          draftStoreServiceMock.resolveFind(draftType, { acceptPaymentMethod: { accept: { option: 'no' } } })
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('directionsQuestionnaire')
 
