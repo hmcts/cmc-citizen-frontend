@@ -11,4 +11,8 @@ export class DashboardPage {
   selectClaim (claimRef: string): void {
     I.click(claimRef)
   }
+
+  logout (): void {
+    I.click('Sign out')
+  }
 }

@@ -26,8 +26,9 @@ import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/dir
 import { ClaimantIntentionToProceedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-intention-to-proceed'
 import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-part-payment-received'
 import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
-import { claimAmount } from 'integration-test/data/test-data'
+import { claimAmount, DEFAULT_PASSWORD } from 'integration-test/data/test-data'
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
+import { LoginPage } from '../../home/pages/login'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
@@ -52,6 +53,8 @@ const intentionToProceedSteps: ClaimantIntentionToProceedPage = new ClaimantInte
 const partPaymentReceivedPage: ClaimantPartPaymentReceivedPage = new ClaimantPartPaymentReceivedPage()
 const claimantRejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRejectionReasonPage()
 const claimantSettleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
+const loginPage: LoginPage = new LoginPage()
+
 
 export class ClaimantResponseSteps {
 
@@ -448,5 +451,10 @@ export class ClaimantResponseSteps {
     this.finishClaimantResponse()
     checkAndSendPage.checkFactsTrueAndSubmit(testData.defenceType)
     I.see('You’ve rejected their response')
+  }
+
+  loginAsClaimant (claimantEmail: string): void {
+    loginPage.open()
+    loginPage.login(claimantEmail, DEFAULT_PASSWORD)
   }
 }

@@ -39,6 +39,12 @@ export class ClaimantCheckAndSendPage {
     I.see('I reject this amount')
   }
 
+  verifyFactsForPartAdmitAcceptance (): void {
+    I.see('Your response')
+    I.see('Do you accept or reject the defendant’s admission?')
+    I.see('I accept this amount')
+  }
+
   verifyFactsForSettlement (): void {
     I.see('Your response')
     I.see('Do you accept the defendant’s repayment plan?')
