@@ -12,7 +12,7 @@ services:
         - no_proxy=remote-webdriver
         - IDAM_URL
         - OAUTH_CLIENT_SECRET
-        - CLAIM_STORE_URL=http://cmc-citizen-frontend-pr-2023.service.core-compute-preview.internal
+        - CLAIM_STORE_URL=${BACKEND_URL}
         - HEALTHCHECK_CITIZEN=true
         - FEATURE_ADMISSIONS
         - FEATURE_MEDIATION
