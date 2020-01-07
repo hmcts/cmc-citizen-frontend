@@ -140,6 +140,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     dashboardPage.selectClaim(claimData.claimRef)
     claimantDashboardPage.clickViewAndRespond()
     claimantTaskListPage.selectTaskViewDefendantResponse()
+    claimantDefendantResponsePage.submit()
     claimantDefendantResponsePage.submitHowTheyWantToPay()
     claimantTaskListPage.selectTaskAcceptOrRejectSpecificAmount(10)
     claimantSettleAdmittedPage.selectAdmittedYes()
