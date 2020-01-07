@@ -94,7 +94,7 @@ async function createSmokeTestsUserIfDoesntExist (username: string, userRole: st
       console.log('User already has user consent role')
       return
     }
-    console.log(`Failed to add user consent role with errorStatus code => ${err.statusCode}`)
+    console.log('Failed to add user consent role')
     throw err
   }
 }
