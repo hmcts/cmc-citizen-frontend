@@ -34,4 +34,8 @@ export class DefendantPaidAnyMoneyPage {
     I.fillField(fields.paidAmount, amount.toString())
     I.click(buttons.submit)
   }
+
+  submit (): void {
+    I.click(buttons.submit)
+  }
 }

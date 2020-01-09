@@ -18,6 +18,11 @@ export class PaidAmountSummaryPage {
     I.see('Total ' + AmountHelper.formatMoney(amountOutstanding))
   }
 
+  checkAmountsNotPaidSome (outstandingAmount: number): void {
+    I.see('Judgment amount')
+    I.see('Amount you’re settling for £' + outstandingAmount)
+  }
+
   continue (): void {
     I.click(buttons.submit)
   }

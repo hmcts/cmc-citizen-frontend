@@ -8,4 +8,7 @@ export class DefendantSignSettlementAgreementConfirmation {
     I.see('You’ve both signed a settlement agreement')
   }
 
+  verifyRejectionConfirmation (): void {
+    I.see('You’ve rejected the settlement agreement')
+  }
 }

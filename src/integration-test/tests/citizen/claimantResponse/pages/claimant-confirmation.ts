@@ -27,4 +27,12 @@ export class ClaimantConfirmation {
   verifyAcceptanceSettlementConfirmation (): void {
     I.see('You’ve signed a settlement agreement')
   }
+
+  verifyCCJConfirmation (): void {
+    I.see('County Court Judgment requested')
+  }
+
+  verifyCourtRepaymentPlanConfirmation (): void {
+    I.see('You’ve accepted the repayment plan')
+  }
 }
