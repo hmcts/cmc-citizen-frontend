@@ -55,7 +55,6 @@ const claimantRejectionReasonPage: ClaimantRejectionReasonPage = new ClaimantRej
 const claimantSettleClaimPage: ClaimantSettleClaimPage = new ClaimantSettleClaimPage()
 const loginPage: LoginPage = new LoginPage()
 
-
 export class ClaimantResponseSteps {
 
   acceptSettlementFromDashboardWhenRejectPaymentMethod (
