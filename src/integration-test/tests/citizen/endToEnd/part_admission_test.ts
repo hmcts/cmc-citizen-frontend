@@ -92,7 +92,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with immediate payment and claimant accept the payment @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with immediate payment and claimant accept the payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
@@ -112,7 +112,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantConfirmation.clickGoToYourAccount()
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with immediate payment and claimant reject the payment @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with immediate payment and claimant reject the payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.IMMEDIATELY)
@@ -139,7 +139,63 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defendantDashboardPage.verifyPartAdmitRejectStatus(claimData.data.claimants[0].name, 10)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with settlement agreement and defendant accept settlement agreement @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with installments and claimant reject the payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareClaim(I)
+    defenceSteps.makePartialAdmission(claimData.data.defendants[0])
+    defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
+    const claimantEmail: string = userSteps.getClaimantEmail()
+    const defendantEmail: string = userSteps.getDefendantEmail()
+    dashboardPage.logout()
+    claimantResponseSteps.loginAsClaimant(claimantEmail)
+    dashboardPage.selectClaim(claimData.claimRef)
+    claimantDashboardPage.clickViewAndRespond()
+    claimantTaskListPage.selectTaskViewDefendantResponse()
+    claimantDefendantResponsePage.submit()
+    claimantDefendantResponsePage.submitHowTheyWantToPay()
+    claimantTaskListPage.selectTaskAcceptOrRejectSpecificAmount(10)
+    claimantSettleAdmittedPage.selectAdmittedNo()
+    claimantTaskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
+    claimantTaskListPage.selectTaskCheckandSubmitYourResponse()
+    claimantCheckAndSendPage.verifyFactsForPartAdmitRejection()
+    claimantCheckAndSendPage.checkFactsTrueAndSubmit(DefenceType.PART_ADMISSION)
+    claimantConfirmation.verifyRejectionConfirmation(DefenceType.PART_ADMISSION)
+    claimantConfirmation.clickGoToYourAccount()
+    dashboardPage.logout()
+    defenceSteps.loginAsDefendant(defendantEmail)
+    dashboardPage.selectClaim(claimData.claimRef)
+    defendantDashboardPage.verifyPartAdmitRejectStatus(claimData.data.claimants[0].name, 10)
+  })
+
+  Scenario('I can complete the journey when I partially admit the claim by set date and claimant reject the payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareClaim(I)
+    defenceSteps.makePartialAdmission(claimData.data.defendants[0])
+    defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
+    const claimantEmail: string = userSteps.getClaimantEmail()
+    const defendantEmail: string = userSteps.getDefendantEmail()
+    dashboardPage.logout()
+    claimantResponseSteps.loginAsClaimant(claimantEmail)
+    dashboardPage.selectClaim(claimData.claimRef)
+    claimantDashboardPage.clickViewAndRespond()
+    claimantTaskListPage.selectTaskViewDefendantResponse()
+    claimantDefendantResponsePage.submit()
+    claimantDefendantResponsePage.submitHowTheyWantToPay()
+    claimantTaskListPage.selectTaskAcceptOrRejectSpecificAmount(10)
+    claimantSettleAdmittedPage.selectAdmittedNo()
+    claimantTaskListPage.selectTaskHearingRequirements()
+    directionsQuestionnaireSteps.acceptDirectionsQuestionnaireNoJourneyAsClaimant()
+    claimantTaskListPage.selectTaskCheckandSubmitYourResponse()
+    claimantCheckAndSendPage.verifyFactsForPartAdmitRejection()
+    claimantCheckAndSendPage.checkFactsTrueAndSubmit(DefenceType.PART_ADMISSION)
+    claimantConfirmation.verifyRejectionConfirmation(DefenceType.PART_ADMISSION)
+    claimantConfirmation.clickGoToYourAccount()
+    dashboardPage.logout()
+    defenceSteps.loginAsDefendant(defendantEmail)
+    dashboardPage.selectClaim(claimData.claimRef)
+    defendantDashboardPage.verifyPartAdmitRejectStatus(claimData.data.claimants[0].name, 10)
+  })
+
+  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with settlement agreement and defendant accept settlement agreement @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
@@ -174,7 +230,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defendantSignSettlementAgreementConfirmation.verifyAcceptanceConfirmation()
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with settlement agreement and defendant rejects settlement agreement @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with settlement agreement and defendant rejects settlement agreement @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
@@ -209,7 +265,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defendantSignSettlementAgreementConfirmation.verifyRejectionConfirmation()
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with CCJ @nightly @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with CCJ @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
@@ -244,7 +300,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defendantDashboardPage.verifyCCJRequestStatus(claimData.data.claimants[0].name)
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with installments and claimant reject the repayment plan and suggest immediately but accept court repayment plan with settlement agreement and defendant accept settlement agreement @nightly @admissions', { retries: 1 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with installments and claimant reject the repayment plan and suggest immediately but accept court repayment plan with settlement agreement and defendant accept settlement agreement @citizen @admissions', { retries: 3 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
@@ -284,4 +340,38 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defendantSignSettlementAgreementConfirmation.verifyAcceptanceConfirmation()
   })
 
+  Scenario('I can complete the journey when I partially admit the claim by set date and claimant accept the repayment plan with settlement agreement and defendant accept settlement agreement @citizen @admissions', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareClaim(I)
+    defenceSteps.makePartialAdmission(claimData.data.defendants[0])
+    defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.BY_SET_DATE)
+    const claimantEmail: string = userSteps.getClaimantEmail()
+    const defendantEmail: string = userSteps.getDefendantEmail()
+    dashboardPage.logout()
+    claimantResponseSteps.loginAsClaimant(claimantEmail)
+    dashboardPage.selectClaim(claimData.claimRef)
+    claimantDashboardPage.clickViewAndRespond()
+    claimantTaskListPage.selectTaskViewDefendantResponse()
+    claimantDefendantResponsePage.submit()
+    claimantDefendantResponsePage.submitHowTheyWantToPay()
+    claimantTaskListPage.selectTaskAcceptOrRejectSpecificAmount(10)
+    claimantSettleAdmittedPage.selectAdmittedYes()
+    claimantTaskListPage.selectTaskAcceptOrRejectTheirRepaymentPlan()
+    claimantAcceptPaymentMethod.chooseYes()
+    claimantTaskListPage.selectTaskChooseHowToFormaliseRepayment()
+    claimantChooseHowToProceed.chooseSettlement()
+    claimantTaskListPage.selectTaskSignASettlementAgreement()
+    claimantSignSettlementAgreement.confirm()
+    claimantTaskListPage.selectTaskCheckandSubmitYourResponse()
+    claimantCheckAndSendPage.verifyFactsForPartAdmitAcceptance()
+    claimantCheckAndSendPage.submitNoDq()
+    claimantConfirmation.verifyAcceptanceSettlementConfirmation()
+    claimantConfirmation.clickGoToYourAccount()
+    dashboardPage.logout()
+    defenceSteps.loginAsDefendant(defendantEmail)
+    dashboardPage.selectClaim(claimData.claimRef)
+    defendantDashboardPage.verifySettlementAggrement(claimData.data.claimants[0].name)
+    defendantDashboardPage.clickViewTheRepaymentPlane()
+    defendantSignSettlementAgreement.confirm()
+    defendantSignSettlementAgreementConfirmation.verifyAcceptanceConfirmation()
+  })
 }
