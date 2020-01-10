@@ -230,7 +230,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defendantSignSettlementAgreementConfirmation.verifyAcceptanceConfirmation()
   })
 
-  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with settlement agreement and defendant rejects settlement agreement @citizen @admissions', { retries: 3 }, async (I: I) => {
+  Scenario('I can complete the journey when I partially admit the claim with installments and claimant accept the repayment plan with settlement agreement and defendant rejects settlement agreement @citizen @admissions', { retries: 1 }, async (I: I) => {
     const claimData = await prepareClaim(I)
     defenceSteps.makePartialAdmission(claimData.data.defendants[0])
     defenceSteps.partialPaymentNotMade(PartyType.INDIVIDUAL, PaymentOption.INSTALMENTS)
@@ -249,10 +249,10 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     claimantAcceptPaymentMethod.chooseYes()
     claimantTaskListPage.selectTaskChooseHowToFormaliseRepayment()
     claimantChooseHowToProceed.chooseSettlement()
-    claimantTaskListPage.selectTaskRequestCountyCourtJudgment()
+    claimantTaskListPage.selectTaskSignASettlementAgreement()
     claimantSignSettlementAgreement.confirm()
     claimantTaskListPage.selectTaskCheckandSubmitYourResponse()
-    claimantCheckAndSendPage.verifyFactsForPartAdmitAcceptance()
+    claimantCheckAndSendPage.verifyFactsForSettlement()
     claimantCheckAndSendPage.submitNoDq()
     claimantConfirmation.verifyAcceptanceSettlementConfirmation()
     claimantConfirmation.clickGoToYourAccount()
