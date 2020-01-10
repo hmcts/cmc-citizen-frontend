@@ -16,6 +16,7 @@ const claimantResponseSteps: ClaimantResponseSteps = new ClaimantResponseSteps()
 const checkAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const confirmationPage: ClaimantConfirmation = new ClaimantConfirmation()
 
+Feature('EMPTY')
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response: Part Admit')
 

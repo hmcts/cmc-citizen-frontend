@@ -44,7 +44,7 @@ describe('Claim: Initiate payment page', () => {
       await request(app)
         .get(pagePath)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.finishPaymentReceiver.evaluateUri({ externalId })))
+        .expect(res => expect(res).to.be.redirect.toLocation(ClaimPaths.startPaymentReceiver.uri))
     })
 
     it('should redirect to nextUrl returned by resume payment if claim is in AWAITING_CITIZEN_PAYMENT state', async () => {

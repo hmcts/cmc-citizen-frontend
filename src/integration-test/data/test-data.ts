@@ -1,8 +1,9 @@
 import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
 import * as uuid from 'uuid'
+import * as moment from 'moment'
 
-export const DEFAULT_PASSWORD = 'Password12'
+export const DEFAULT_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
 export const SMOKE_TEST_CITIZEN_USERNAME = process.env.SMOKE_TEST_CITIZEN_USERNAME
 export const SMOKE_TEST_USER_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
@@ -141,7 +142,7 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
       postcode: 'SW2 1AN'
     },
     phone: '07700000002',
-    email: hasEmailAddress ? 'civilmoneyclaims+automatedtest-defendant@gmail.com' : undefined
+    email: hasEmailAddress ? new UserEmails().getDefendant() : undefined
   }
 
   switch (type) {
@@ -208,5 +209,27 @@ export const defence: PartialDefence = {
 
 export const offer: Offer = {
   offerText: 'My Offer is that I can only afford, x, y, z and so will only pay £X amount',
-  completionDate: '2020-01-01'
+  completionDate: moment().add(6, 'months').format('YYYY-MM-DD')
+}
+
+export class UserEmails {
+
+  getUser (type: string): string {
+    let subdomain = process.env.CITIZEN_APP_URL
+      .replace('https://', '')
+      .replace('http://', '')
+      .split('/')[0]
+      .split('.')[0]
+
+    return `civilmoneyclaims+${type}-${subdomain}@gmail.com`
+  }
+
+  getClaimant (): string {
+    return this.getUser('claimant')
+  }
+
+  getDefendant (): string {
+    return this.getUser('defendant')
+  }
+
 }
