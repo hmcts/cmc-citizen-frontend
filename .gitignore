@@ -3,7 +3,6 @@
 node_modules/
 .nyc_output
 .sass-cache
-.cache
 *.css
 
 .idea/
