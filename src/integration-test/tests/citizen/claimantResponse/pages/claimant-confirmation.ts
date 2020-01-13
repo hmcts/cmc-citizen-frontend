@@ -1,5 +1,5 @@
 import I = CodeceptJS.I
-import { DefenceType } from '../../../../data/defence-type'
+import { DefenceType } from 'integration-test/data/defence-type'
 
 const I: I = actor()
 

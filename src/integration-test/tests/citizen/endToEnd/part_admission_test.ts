@@ -2,30 +2,30 @@ import I = CodeceptJS.I
 import { createClaimData } from 'integration-test/data/test-data'
 import { PartyType } from 'integration-test/data/party-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
-import { DefenceType } from '../../../data/defence-type'
+import { DefenceType } from 'integration-test/data/defence-type'
 import { Helper } from 'integration-test/tests/citizen/endToEnd/steps/helper'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
 import { UserSteps } from 'integration-test/tests/citizen/home/steps/user'
-import { ClaimantResponseSteps } from '../claimantResponse/steps/claimant-reponse'
-import { DashboardPage } from '../dashboard/pages/dashboard'
-import { ClaimantDashboardPage } from '../dashboard/pages/claimant'
-import { ClaimantTaskListPage } from '../claimantResponse/pages/claimant-task-list'
-import { ClaimantDefendantResponsePage } from '../claimantResponse/pages/claimant-defendant-response'
-import { ClaimantSettleAdmittedPage } from '../claimantResponse/pages/claimant-settle-admitted'
-import { ClaimantCheckAndSendPage } from '../claimantResponse/pages/claimant-check-and-send'
-import { ClaimantConfirmation } from '../claimantResponse/pages/claimant-confirmation'
-import { DirectionsQuestionnaireSteps } from '../directionsQuestionnaire/steps/directionsQuestionnaireSteps'
-import { DefendantDashboardPage } from '../dashboard/pages/defendant'
-import { ClaimantAcceptPaymentMethod } from '../claimantResponse/pages/claimant-accept-payment-method'
-import { ClaimantChooseHowToProceed } from '../claimantResponse/pages/claimant-choose-how-to-proceed'
-import { ClaimantSignSettlementAgreement } from '../claimantResponse/pages/claimant-sign-settlement-agreement'
-import { DefendantSignSettlementAgreement } from '../defence/pages/defendant-sign-settlement-agreement'
-import { DefendantSignSettlementAgreementConfirmation } from '../defence/pages/defendant-sign-settlement-agreement-confirmation'
-import { DefendantPaidAnyMoneyPage } from '../ccj/pages/defendant-paid-any-money'
-import { PaidAmountSummaryPage } from '../ccj/pages/paid-amount-summary'
-import { ClaimantPaymentOptionPage } from '../claimantResponse/pages/claimant-payment-option'
-import { ClaimantCourtOfferedInstalmentsPage } from '../claimantResponse/pages/claimant-court-offered-instalments'
-import { DefendantSettlementAgreementRepaymentPlanSummary } from '../defence/pages/defendant-settlement-agreement-repayment-plan-summary'
+import { ClaimantResponseSteps } from 'integration-test/tests/citizen/claimantResponse/steps/claimant-reponse'
+import { DashboardPage } from 'integration-test/tests/citizen/dashboard/pages/dashboard'
+import { ClaimantDashboardPage } from 'integration-test/tests/citizen/dashboard/pages/claimant'
+import { ClaimantTaskListPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-task-list'
+import { ClaimantDefendantResponsePage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-defendant-response'
+import { ClaimantSettleAdmittedPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-admitted'
+import { ClaimantCheckAndSendPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-check-and-send'
+import { ClaimantConfirmation } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-confirmation'
+import { DirectionsQuestionnaireSteps } from 'integration-test/tests/citizen/directionsQuestionnaire/steps/directionsQuestionnaireSteps'
+import { DefendantDashboardPage } from 'integration-test/tests/citizen/dashboard/pages/defendant'
+import { ClaimantAcceptPaymentMethod } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-accept-payment-method'
+import { ClaimantChooseHowToProceed } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-choose-how-to-proceed'
+import { ClaimantSignSettlementAgreement } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-sign-settlement-agreement'
+import { DefendantSignSettlementAgreement } from 'integration-test/tests/citizen/defence/pages/defendant-sign-settlement-agreement'
+import { DefendantSignSettlementAgreementConfirmation } from 'integration-test/tests/citizen/defence/pages/defendant-sign-settlement-agreement-confirmation'
+import { DefendantPaidAnyMoneyPage } from 'integration-test/tests/citizen/ccj/pages/defendant-paid-any-money'
+import { PaidAmountSummaryPage } from 'integration-test/tests/citizen/ccj/pages/paid-amount-summary'
+import { ClaimantPaymentOptionPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-payment-option'
+import { ClaimantCourtOfferedInstalmentsPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-court-offered-instalments'
+import { DefendantSettlementAgreementRepaymentPlanSummary } from 'integration-test/tests/citizen/defence/pages/defendant-settlement-agreement-repayment-plan-summary'
 
 const helperSteps: Helper = new Helper()
 const defenceSteps: DefenceSteps = new DefenceSteps()
@@ -374,4 +374,25 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     defendantSignSettlementAgreement.confirm()
     defendantSignSettlementAgreementConfirmation.verifyAcceptanceConfirmation()
   })
+
+  Scenario('I as a SOLE TRADER can complete the journey when I partially admit the claim with immediate payment and claimant accept the payment @citizen @admissions', { retries: 3 }, async (I: I) => {
+    const claimData = await prepareClaim(I)
+    defenceSteps.makePartialAdmission(claimData.data.defendants[0])
+    defenceSteps.partialPaymentNotMade(PartyType.SOLE_TRADER, PaymentOption.IMMEDIATELY)
+    const claimantEmail: string = userSteps.getClaimantEmail()
+    dashboardPage.logout()
+    claimantResponseSteps.loginAsClaimant(claimantEmail)
+    dashboardPage.selectClaim(claimData.claimRef)
+    claimantDashboardPage.clickViewAndRespond()
+    claimantTaskListPage.selectTaskViewDefendantResponse()
+    claimantDefendantResponsePage.submit()
+    claimantTaskListPage.selectTaskAcceptOrRejectSpecificAmount(10)
+    claimantSettleAdmittedPage.selectAdmittedYes()
+    claimantTaskListPage.selectTaskCheckandSubmitYourResponse()
+    claimantCheckAndSendPage.verifyFactsForPartAdmitAcceptance()
+    claimantCheckAndSendPage.submitNoDq()
+    claimantConfirmation.verifyAcceptanceConfirmation()
+    claimantConfirmation.clickGoToYourAccount()
+  })
+
 }

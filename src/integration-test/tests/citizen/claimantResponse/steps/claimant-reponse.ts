@@ -28,7 +28,7 @@ import { ClaimantPartPaymentReceivedPage } from 'integration-test/tests/citizen/
 import { ClaimantRejectionReasonPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-rejection-reason'
 import { claimAmount, DEFAULT_PASSWORD } from 'integration-test/data/test-data'
 import { ClaimantSettleClaimPage } from 'integration-test/tests/citizen/claimantResponse/pages/claimant-settle-claim'
-import { LoginPage } from '../../home/pages/login'
+import { LoginPage } from 'integration-test/tests/citizen/home/pages/login'
 
 const I: I = actor()
 const taskListPage: ClaimantTaskListPage = new ClaimantTaskListPage()
