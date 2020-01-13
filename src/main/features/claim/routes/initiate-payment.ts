@@ -30,6 +30,7 @@ export default express.Router()
     } catch (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
         const paymentRef = draft.document.claimant.payment ? draft.document.claimant.payment.reference : undefined
+        logger.info(`payment for claim with external id ${externalId} is ${paymentRef}`)
         if (paymentRef) {
           return res.redirect(Paths.startPaymentReceiver.uri)
         } else {
