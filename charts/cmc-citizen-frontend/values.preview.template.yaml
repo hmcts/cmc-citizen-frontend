@@ -24,7 +24,7 @@ rpe-feature-toggle-api:
 
 nodejs:
   image: ${IMAGE_NAME}
-  ingressHost: ${SERVICE_FQDN}
+  ingressHost: www-${SERVICE_FQDN}
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
