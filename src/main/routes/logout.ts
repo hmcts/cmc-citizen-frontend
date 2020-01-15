@@ -18,10 +18,11 @@ export default express.Router()
   .get(Paths.logoutReceiver.uri,
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
       const jwt: string = JwtExtractor.extract(req)
+      const user: User = await IdamClient.retrieveUserFor(jwt)
 
       if (jwt) {
         try {
-          await IdamClient.invalidateSession(jwt)
+          await IdamClient.invalidateSession(jwt, user.bearerToken)
         } catch (error) {
           const { id } = JwtUtils.decodePayload(jwt)
           logger.error(`Failed invalidating JWT for userId  ${id}`)

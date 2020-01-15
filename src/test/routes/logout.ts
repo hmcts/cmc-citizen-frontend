@@ -19,6 +19,8 @@ describe('Logout receiver', () => {
 
   beforeEach(() => {
     mock.cleanAll()
+    idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
+
   })
 
   describe('on GET', () => {
@@ -32,7 +34,7 @@ describe('Logout receiver', () => {
     })
 
     it('should remove session cookie even when session invalidation is failed ', async () => {
-      idamServiceMock.rejectInvalidateSession(idamServiceMock.defaultAuthToken)
+      idamServiceMock.rejectInvalidateSession(idamServiceMock.defaultAuthToken, 'bearerToken')
 
       await request(app)
         .get(AppPaths.logoutReceiver.uri)
