@@ -83,7 +83,7 @@
       {{ t('(PDF) to find out the details you need to send.') }}</p>
     <p>{{ t('Make sure you include the claim number ({{ claimNumber }}) in the letter.', { claimNumber: claim.claimNumber }) }}</p>
 
-    {% if directions != null %}
+    {% if claim.directionOrder.postDocumentsLastDay != null %}
       <h2 class="heading-small">{{ t('Deadline for posting the details') }}</h2>
       {% if party === MadeBy.DEFENDANT.value %}
         <p>{{ t('You must make sure the court and the claimant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
