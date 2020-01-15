@@ -23,20 +23,34 @@ export namespace DirectionOrder {
   export function deserialize (input?: any): DirectionOrder {
     if (!input) {
       return input
-    }
-    return {
-      createdOn: MomentFactory.parse(input.createdOn),
-      hearingCourtName: input.hearingCourtName,
-      hearingCourtAddress: input.hearingCourtAddress,
-      directions: Direction.deserialize(input.directions),
-      extraDocUploadList: input.extraDocUploadList,
-      paperDetermination: input.paperDetermination,
-      newRequestedCourt: input.newRequestedCourt,
-      preferredDQCourt: input.preferredDQCourt,
-      preferredCourtObjectingReason: input.preferredCourtObjectingReason,
-      hearingCourt: input.hearingCourt,
-      estimatedHearingDuration: input.estimatedHearingDuration,
-      postDocumentsLastDay: getPostDocumentsLastDay(input.directions)
+    } else if (!input.directions) {
+      return {
+        createdOn: MomentFactory.parse(input.createdOn),
+        hearingCourtName: input.hearingCourtName,
+        hearingCourtAddress: input.hearingCourtAddress,
+        extraDocUploadList: input.extraDocUploadList,
+        paperDetermination: input.paperDetermination,
+        newRequestedCourt: input.newRequestedCourt,
+        preferredDQCourt: input.preferredDQCourt,
+        preferredCourtObjectingReason: input.preferredCourtObjectingReason,
+        hearingCourt: input.hearingCourt,
+        estimatedHearingDuration: input.estimatedHearingDuration
+      }
+    } else {
+      return {
+        createdOn: MomentFactory.parse(input.createdOn),
+        hearingCourtName: input.hearingCourtName,
+        hearingCourtAddress: input.hearingCourtAddress,
+        directions: Direction.deserialize(input.directions),
+        extraDocUploadList: input.extraDocUploadList,
+        paperDetermination: input.paperDetermination,
+        newRequestedCourt: input.newRequestedCourt,
+        preferredDQCourt: input.preferredDQCourt,
+        preferredCourtObjectingReason: input.preferredCourtObjectingReason,
+        hearingCourt: input.hearingCourt,
+        estimatedHearingDuration: input.estimatedHearingDuration,
+        postDocumentsLastDay: getPostDocumentsLastDay(input.directions)
+      }
     }
   }
 
