@@ -41,6 +41,9 @@ export namespace DirectionOrder {
   }
 
   export function getPostDocumentsLastDay (directions: Direction[]): moment.Moment {
+    if (directions === null) {
+      return null
+    }
     const directionActionedDates: moment.Moment[] = directions.map(direction => moment(direction.directionActionedDate))
     return moment.max(directionActionedDates)
   }

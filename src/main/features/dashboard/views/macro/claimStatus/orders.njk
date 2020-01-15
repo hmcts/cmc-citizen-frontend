@@ -83,26 +83,28 @@
       {{ t('(PDF) to find out the details you need to send.') }}</p>
     <p>{{ t('Make sure you include the claim number ({{ claimNumber }}) in the letter.', { claimNumber: claim.claimNumber }) }}</p>
 
-    <h2 class="heading-small">{{ t('Deadline for posting the details') }}</h2>
-    {% if party === MadeBy.DEFENDANT.value %}
-      <p>{{ t('You must make sure the court and the claimant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
-    {% else %}
-      <p>{{ t('You must make sure the court and the defendant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
-    {% endif %}
+    {% if directions != null %}
+      <h2 class="heading-small">{{ t('Deadline for posting the details') }}</h2>
+      {% if party === MadeBy.DEFENDANT.value %}
+        <p>{{ t('You must make sure the court and the claimant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
+      {% else %}
+        <p>{{ t('You must make sure the court and the defendant receive a letter with the details before 4pm on {{ postDocumentsLastDay }}.', { postDocumentsLastDay: claim.directionOrder.postDocumentsLastDay | date }) }}
+      {% endif %}
 
-    <h2 class="heading-small">{{ t('Where to post the details') }}</h2>
-    {{ addressFragment(claim.directionOrder.hearingCourtAddress, 'The court’s address is:', claim.directionOrder.hearingCourtName) }}
-    {% if party === MadeBy.DEFENDANT.value %}
-      {{ addressFragment(claim.claimData.claimant.address, 'The claimant’s address is:') }}
-    {% else %}
-      {{ addressFragment(claim.claimData.defendant.address, 'The defendant’s address is:') }}
-    {% endif %}
+      <h2 class="heading-small">{{ t('Where to post the details') }}</h2>
+      {{ addressFragment(claim.directionOrder.hearingCourtAddress, 'The court’s address is:', claim.directionOrder.hearingCourtName) }}
+      {% if party === MadeBy.DEFENDANT.value %}
+        {{ addressFragment(claim.claimData.claimant.address, 'The claimant’s address is:') }}
+      {% else %}
+        {{ addressFragment(claim.claimData.defendant.address, 'The defendant’s address is:') }}
+      {% endif %}
 
-    <h2 class="heading-small">{{ t('If you don’t send us more details') }}</h2>
-    {% if party === MadeBy.DEFENDANT.value %}
-      <p>{{ t('The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.') }}</p>
-    {% else %}
-      <p>{{ t('The court may cancel your claim.') }}</p>
+      <h2 class="heading-small">{{ t('If you don’t send us more details') }}</h2>
+      {% if party === MadeBy.DEFENDANT.value %}
+        <p>{{ t('The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.') }}</p>
+      {% else %}
+        <p>{{ t('The court may cancel your claim.') }}</p>
+      {% endif %}
     {% endif %}
 
     {% if (isReviewOrderEligible and claim.reviewOrder === undefined) %}
