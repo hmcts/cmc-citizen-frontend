@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@cmc-features")
 
 String product = "cmc"
 String component = "citizen-frontend"
@@ -29,11 +29,12 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
-env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
+env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat-staging.service.core-compute-aat.internal'
 env.FEATURE_ADMISSIONS = 'true'
 env.FEATURE_MEDIATION = 'true'
 env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
 env.FEATURE_TESTING_SUPPORT = 'true'
+env.FEATURE_INVERSION_OF_CONTROL = 'true'
 // add any others needed to selective testing...
 
 String notificationsChannel = '#cmc-tech-notification'
