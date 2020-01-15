@@ -19,12 +19,11 @@ describe('Logout receiver', () => {
 
   beforeEach(() => {
     mock.cleanAll()
-    idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
-
   })
 
   describe('on GET', () => {
     it('should remove session cookie', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       idamServiceMock.resolveInvalidateSession('ABC')
 
       await request(app)
@@ -34,6 +33,7 @@ describe('Logout receiver', () => {
     })
 
     it('should remove session cookie even when session invalidation is failed ', async () => {
+      idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
       idamServiceMock.rejectInvalidateSession(idamServiceMock.defaultAuthToken, 'bearerToken')
 
       await request(app)
