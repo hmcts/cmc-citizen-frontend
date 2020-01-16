@@ -25,4 +25,6 @@ export class Paths {
   static readonly enterClaimNumberPage = new RoutablePath('/enter-claim-number', false)
   static readonly noClaimNumberPage = new RoutablePath('/no-claim-number', false)
 
+  // waf error page(s)
+  static readonly waf403Page = new RoutablePath('/waf.html', false)
 }
