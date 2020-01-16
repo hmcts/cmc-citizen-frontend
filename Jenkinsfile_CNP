@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@add-all-flag-to-delete")
+@Library("Infrastructure")
 
 String product = "cmc"
 String component = "citizen-frontend"
