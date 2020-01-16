@@ -59,7 +59,7 @@ rpe-feature-toggle-api:
 idam-pr:
   redirect_uris:
     Money Claims - Citizen:
-      - https://${SERVICE_FQDN}/receiver
+      - https://www-${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
   java:
