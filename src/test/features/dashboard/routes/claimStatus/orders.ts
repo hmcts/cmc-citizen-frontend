@@ -78,31 +78,31 @@ const testData = [
       'Send us more details before the hearing',
       'The court has ordered you to send us more details.',
       'to find out the details you need to send.',
-      'Make sure you include the claim number'
-      // 'Deadline for posting the details',
-      // 'You must make sure the court and the defendant receive a letter with the details before',
-      // 'Where to post the details',
-      // 'The defendant’s address is:',
-      // 'If you don’t send us more details',
-      // 'The court may cancel your claim.',
-      // 'If you have a problem with the order',
-      // 'ask the court to review it',
-      // 'A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.'
+      'Make sure you include the claim number',
+      'Deadline for posting the details',
+      'You must make sure the court and the defendant receive a letter with the details before',
+      'Where to post the details',
+      'The defendant’s address is:',
+      'If you don’t send us more details',
+      'The court may cancel your claim.',
+      'If you have a problem with the order',
+      'ask the court to review it',
+      'A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.'
     ],
     defendantAssertions: [
       'Send us more details before the hearing',
       'The court has ordered you to send us more details.',
       'to find out the details you need to send.',
-      'Make sure you include the claim number'
-      // 'Deadline for posting the details',
-      // 'You must make sure the court and the claimant receive a letter with the details before',
-      // 'Where to post the details',
-      // 'The claimant’s address is:',
-      // 'If you don’t send us more details',
-      // 'The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.',
-      // 'If you have a problem with the order',
-      // 'ask the court to review it',
-      // 'A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.'
+      'Make sure you include the claim number',
+      'Deadline for posting the details',
+      'You must make sure the court and the claimant receive a letter with the details before',
+      'Where to post the details',
+      'The claimant’s address is:',
+      'If you don’t send us more details',
+      'The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.',
+      'If you have a problem with the order',
+      'ask the court to review it',
+      'A judge will consider your request. You should give details of how you want the order changed and the reasons for your request.'
     ]
   }
 ]
@@ -120,40 +120,40 @@ const testDatWithExtraWorkingDayCall = [
     },
     claimantAssertions: [
       'You’ve asked the court to review the order',
-      'We’ll tell John Doe. They can comment until'
-      // 'A judge will then review the order and any comments. We’ll contact you by post to tell you what to do next.',
-      // 'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
-      // 'Send us more details before the hearing',
-      // 'The court has ordered you to send us more details.',
-      // 'to find out the details you need to send.',
-      // 'Make sure you include the claim number',
-      // 'Deadline for posting the details',
-      // 'You must make sure the court and the defendant receive a letter with the details before',
-      // 'Where to post the details',
-      // 'The defendant’s address is:',
-      // 'If you don’t send us more details',
-      // 'The court may cancel your claim.'
+      'We’ll tell John Doe. They can comment until',
+      'A judge will then review the order and any comments. We’ll contact you by post to tell you what to do next.',
+      'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
+      'Send us more details before the hearing',
+      'The court has ordered you to send us more details.',
+      'to find out the details you need to send.',
+      'Make sure you include the claim number',
+      'Deadline for posting the details',
+      'You must make sure the court and the defendant receive a letter with the details before',
+      'Where to post the details',
+      'The defendant’s address is:',
+      'If you don’t send us more details',
+      'The court may cancel your claim.'
     ],
     defendantAssertions: [
       'Read John Smith’s request',
-      'John Smith has asked the court to change the order.'
-      // 'A judge will review their request and any comments you’ve sent. We’ll contact you by post if the judge makes a new order.',
-      // 'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
-      // 'Comment on John Smith’s request',
-      // 'If you want to comment on the request, email your comments to the court and to John Smith before 4pm on',
-      // 'Include the claim number (000MC000) in the emails.',
-      // 'The court’s email address is:',
-      // 'John Smith’s email address is:',
-      // 'Send us more details before the hearing',
-      // 'The court has ordered you to send us more details.',
-      // 'to find out the details you need to send.',
-      // 'Make sure you include the claim number',
-      // 'Deadline for posting the details',
-      // 'You must make sure the court and the claimant receive a letter with the details before',
-      // 'Where to post the details',
-      // 'The claimant’s address is:',
-      // 'If you don’t send us more details',
-      // 'The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.'
+      'John Smith has asked the court to change the order.',
+      'A judge will review their request and any comments you’ve sent. We’ll contact you by post if the judge makes a new order.',
+      'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
+      'Comment on John Smith’s request',
+      'If you want to comment on the request, email your comments to the court and to John Smith before 4pm on',
+      'Include the claim number (000MC000) in the emails.',
+      'The court’s email address is:',
+      'John Smith’s email address is:',
+      'Send us more details before the hearing',
+      'The court has ordered you to send us more details.',
+      'to find out the details you need to send.',
+      'Make sure you include the claim number',
+      'Deadline for posting the details',
+      'You must make sure the court and the claimant receive a letter with the details before',
+      'Where to post the details',
+      'The claimant’s address is:',
+      'If you don’t send us more details',
+      'The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.'
     ]
   },
   {
@@ -168,40 +168,40 @@ const testDatWithExtraWorkingDayCall = [
     },
     claimantAssertions: [
       'Read John Doe’s request',
-      'John Doe has asked the court to change the order.'
-      // 'A judge will review their request and any comments you’ve sent. We’ll contact you by post if the judge makes a new order.',
-      // 'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
-      // 'Comment on John Doe’s request',
-      // 'If you want to comment on the request, email your comments to the court and to John Doe before 4pm on',
-      // 'Include the claim number (000MC000) in the emails.',
-      // 'The court’s email address is:',
-      // 'John Doe’s email address is:',
-      // 'Send us more details before the hearing',
-      // 'The court has ordered you to send us more details.',
-      // 'to find out the details you need to send.',
-      // 'Make sure you include the claim number',
-      // 'Deadline for posting the details',
-      // 'You must make sure the court and the defendant receive a letter with the details before',
-      // 'Where to post the details',
-      // 'The defendant’s address is:'
-      // 'If you don’t send us more details',
-      // 'The court may cancel your claim.'
+      'John Doe has asked the court to change the order.',
+      'A judge will review their request and any comments you’ve sent. We’ll contact you by post if the judge makes a new order.',
+      'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
+      'Comment on John Doe’s request',
+      'If you want to comment on the request, email your comments to the court and to John Doe before 4pm on',
+      'Include the claim number (000MC000) in the emails.',
+      'The court’s email address is:',
+      'John Doe’s email address is:',
+      'Send us more details before the hearing',
+      'The court has ordered you to send us more details.',
+      'to find out the details you need to send.',
+      'Make sure you include the claim number',
+      'Deadline for posting the details',
+      'You must make sure the court and the defendant receive a letter with the details before',
+      'Where to post the details',
+      'The defendant’s address is:',
+      'If you don’t send us more details',
+      'The court may cancel your claim.'
     ],
     defendantAssertions: [
       'You’ve asked the court to review the order',
-      'We’ll tell John Smith. They can comment until'
-      // 'A judge will then review the order and any comments. We’ll contact you by post to tell you what to do next.',
-      // 'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
-      // 'Send us more details before the hearing',
-      // 'The court has ordered you to send us more details.',
-      // 'to find out the details you need to send.',
-      // 'Make sure you include the claim number',
-      // 'Deadline for posting the details',
-      // 'You must make sure the court and the claimant receive a letter with the details before',
-      // 'Where to post the details',
-      // 'The claimant’s address is:',
-      // 'If you don’t send us more details',
-      // 'The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.'
+      'We’ll tell John Smith. They can comment until',
+      'A judge will then review the order and any comments. We’ll contact you by post to tell you what to do next.',
+      'Continue doing everything the current order tells you to do unless we tell you a judge has made a new one.',
+      'Send us more details before the hearing',
+      'The court has ordered you to send us more details.',
+      'to find out the details you need to send.',
+      'Make sure you include the claim number',
+      'Deadline for posting the details',
+      'You must make sure the court and the claimant receive a letter with the details before',
+      'Where to post the details',
+      'The claimant’s address is:',
+      'If you don’t send us more details',
+      'The court may cancel your defence and the claimant can request a County Court Judgment (CCJ) against you.'
     ]
   }
 ]
@@ -263,7 +263,7 @@ describe('Dashboard page', () => {
               await request(app)
                 .get(defendantPagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('i'))
+                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })
 
@@ -275,7 +275,7 @@ describe('Dashboard page', () => {
               await request(app)
                 .get(defendantPagePath)
                 .set('Cookie', `${cookieName}=ABC`)
-                .expect(res => expect(res).to.be.successful.withText('i'))
+                .expect(res => expect(res).to.be.successful.withText(...data.defendantAssertions))
             })
           })
         })
