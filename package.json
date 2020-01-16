@@ -94,7 +94,7 @@
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0",
     "tslint-microsoft-contrib": "^6.2.0",
-    "typescript": "^3.7.3",
+    "typescript": "^3.7.4",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
@@ -127,21 +127,21 @@
     "mocha-parallel-tests": "^2.2.2",
     "mochawesome": "^4.1.0",
     "mock-require": "^3.0.3",
-    "nock": "^11.7.0",
+    "nock": "^11.7.2",
     "nsp": "^3.2.1",
-    "nyc": "^14.1.1",
+    "nyc": "^15.0.0",
     "pa11y": "^5.2.0",
     "randomstring": "^1.1.5",
     "sass-lint": "^1.13.1",
     "sinon": "^7.4.2",
-    "sinon-chai": "^3.3.0",
+    "sinon-chai": "^3.4.0",
     "sinon-express-mock": "^2.2.1",
     "sonarqube-scanner": "^2.5.0",
     "supertest": "^4.0.2",
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
     "urlencode": "^1.1.0",
-    "webdriverio": "^5.16.15"
+    "webdriverio": "^5.18.5"
   },
   "nyc": {
     "extension": [
