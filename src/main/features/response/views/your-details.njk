@@ -19,9 +19,9 @@
         {% if form.model.type == 'individual' %}
           {% if claim.claimData.defendant.firstName and claim.claimData.defendant.firstName !== 'undefined' %}
             {% set fields = [
-              { label: 'Title', name: 'title', inputClass: 'title' },
-              { label: 'First name', name: 'firstName' },
-              { label: 'Last name', name: 'lastName' }
+              {  readOnly: true, label: 'Title', name: 'title', inputClass: 'title', value: claim.claimData.defendant.title },
+              {  readOnly: true, label: 'First name', name: 'firstName', value: claim.claimData.defendant.firstName },
+              {  readOnly: true, label: 'Last name', name: 'lastName', value: claim.claimData.defendant.lastName }
             ] %}
           {% else %}
             {% set fields = [
@@ -33,9 +33,9 @@
           {% elif form.model.type == 'soleTrader' %}
           {% if claim.claimData.defendant.firstName and claim.claimData.defendant.firstName !== 'undefined' %}
             {% set fields = [
-              { label: 'Title', name: 'title', inputClass: 'title' },
-              { label: 'First name', name: 'firstName' },
-              { label: 'Last name', name: 'lastName' },
+              { readOnly: true, label: 'Title', name: 'title', inputClass: 'title', value: claim.claimData.defendant.title },
+              { readOnly: true, label: 'First name', name: 'firstName', value: claim.claimData.defendant.firstName },
+              { readOnly: true, label: 'Last name', name: 'lastName', value: claim.claimData.defendant.lastName },
               { readOnly: true, label: 'Business name', value: claim.claimData.defendant.businessName }
             ] %}
           {% else %}
