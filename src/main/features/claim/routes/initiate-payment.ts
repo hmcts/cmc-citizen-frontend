@@ -35,6 +35,7 @@ export default express.Router()
           return res.redirect(Paths.startPaymentReceiver.uri)
         } else {
           const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
+          logger.info('RETURN URL PAYMENT: ', nextUrl)
           return res.redirect(nextUrl)
         }
       } else {
