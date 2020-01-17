@@ -29,7 +29,7 @@ export default express.Router()
 
     try {
       const claim: Claim = await claimStoreClient.retrieveByExternalId(externalId, user)
-
+      logger.info('CLAIM IN FINISH PAYMENT: ', JSON.stringify(claim))
       if (ClaimState[claim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
         const features = await FeaturesBuilder.features(draft, user)
 
