@@ -36,6 +36,7 @@ import {
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { DefenceType } from 'claims/models/response/defenceType'
+import { YesNoOption } from 'models/yesNoOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -382,6 +383,30 @@ const legacyClaimDetails = [
 
 const mediationDQEnabledClaimDetails = [
   {
+    status: 'Full defence - defendant sent a paper response',
+    claim: fullDefenceClaim,
+    claimOverride: {
+      response: {
+        ...baseResponseData,
+        ...baseDefenceData,
+        freeMediation: FreeMediationOption.YES
+      },
+      paperResponse: YesNoOption.YES.option
+    },
+    claimantAssertions: [
+      'The claim will continue by post',
+      'The defendant responded to your claim by post. This means you can no longer use this service to continue the claim - you’ll need to use paper forms instead.',
+      'Your online account won’t be updated with the progress of this claim.',
+      'We’ll post you a copy of the defendant’s response. This will explain what you need to do next.'
+    ],
+    defendantAssertions: [
+      'The claim will continue by post',
+      'Because you responded to the claim using a paper form, all further action in this claim will be by post.',
+      'Your online account won’t be updated with the progress of this claim.',
+      'If ' + fullDefenceClaim.claim.claimants[0].name + ' chooses to continue the claim we’ll post you a copy of their response. This will explain what you need to do next.'
+    ]
+  },
+  {
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation',
     claim: fullDefenceClaim,
     claimOverride: {
@@ -436,13 +461,11 @@ const mediationDQEnabledClaimDetails = [
     },
     claimantAssertions: [
       'Mediation was unsuccessful',
-      'You weren’t able to resolve your claim against ' + fullDefenceClaim.claim.defendants[0].name + ' using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.'
+      'You weren’t able to resolve your claim against ' + fullDefenceClaim.claim.defendants[0].name + ' using mediation.'
     ],
     defendantAssertions: [
       'Mediation was unsuccessful',
       'You weren’t able to resolve ' + fullDefenceClaim.claim.claimants[0].name + '’s claim against you using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.',
       'Download ' + fullDefenceClaim.claim.claimants[0].name + '’s hearing requirements'
     ]
   },
