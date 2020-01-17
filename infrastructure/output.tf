@@ -3,7 +3,7 @@ output "idam_url" {
 }
 
 output "claim_store_url" {
-  value = "${local.claimStoreUrl}"
+  value = "${var.claimStoreUrl}"
 }
 
 output "feature_admissions" {
