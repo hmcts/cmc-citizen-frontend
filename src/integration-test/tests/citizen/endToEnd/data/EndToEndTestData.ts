@@ -31,7 +31,7 @@ export class EndToEndTestData {
     I: I,
     defendantPartyType: PartyType,
     claimantPartyType: PartyType
-  ) {
+  ): EndToEndTestData {
     const claimData: ClaimData = createClaimData(claimantPartyType, defendantPartyType)
     return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
   }
@@ -45,12 +45,12 @@ export class EndToEndTestData {
     return this.prepare(I, defendantPartyType, claimantPartyType, claimData)
   }
 
-  private static async prepare (
+  private static async prepare(
     I: I,
     defendantPartyType: PartyType,
     claimantPartyType: PartyType,
     claimData: ClaimData
-  ) {
+  ): EndToEndTestData {
     const claimantEmail: string = userSteps.getClaimantEmail()
     const defendantEmail: string = userSteps.getDefendantEmail()
 
