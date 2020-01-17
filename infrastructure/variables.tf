@@ -146,3 +146,10 @@ variable "log_level" {
 variable "node_debug" {
   default = ""
 }
+
+variable "staging_slot_app_settings" {
+  type = "map"
+  default = {
+    SLOT = "STAGING"
+  }
+}
