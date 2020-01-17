@@ -153,3 +153,7 @@ variable "staging_slot_app_settings" {
     SLOT = "STAGING"
   }
 }
+
+variable "claimStoreUrl" {
+  default = "http://cmc-claim-store-aat.service.core-compute-aat.internal"
+}
