@@ -91,7 +91,7 @@ data "azurerm_key_vault_secret" "cmc_webchat_button_service_closed" {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=cmc-features"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
