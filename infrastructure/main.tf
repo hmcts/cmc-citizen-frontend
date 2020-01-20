@@ -19,6 +19,7 @@ locals {
   vaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
   s2sUrl = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
+  claimStoreUrl = "http://cmc-claim-store-${local.local_env}.service.${local.local_ase}.internal"
   featureTogglesApiUrl = "http://rpe-feature-toggle-api-${local.local_env}.service.${local.local_ase}.internal"
   draftStoreUrl = "http://draft-store-service-${local.local_env}.service.${local.local_ase}.internal"
 
@@ -91,7 +92,7 @@ data "azurerm_key_vault_secret" "cmc_webchat_button_service_closed" {
 }
 
 module "citizen-frontend" {
-  source = "git@github.com:hmcts/cnp-module-webapp?ref=cmc-features"
+  source = "git@github.com:hmcts/cnp-module-webapp?ref=master"
   product = "${var.product}-${var.microservice}"
   location = "${var.location}"
   env = "${var.env}"
@@ -147,7 +148,7 @@ module "citizen-frontend" {
     DRAFT_STORE_SECRET_SECONDARY = "${data.azurerm_key_vault_secret.draft_store_secondary.value}"
 
     // Our service dependencies
-    CLAIM_STORE_URL = "${var.claimStoreUrl}"
+    CLAIM_STORE_URL = "${local.claimStoreUrl}"
 
     FEATURE_TOGGLES_API_URL = "${local.featureTogglesApiUrl}"
     // Surveys
@@ -176,7 +177,6 @@ module "citizen-frontend" {
     WEBCHAT_BUTTON_NO_AGENTS = "${data.azurerm_key_vault_secret.cmc_webchat_button_no_agents.value}"
     WEBCHAT_BUTTON_AGENTS_BUSY = "${data.azurerm_key_vault_secret.cmc_webchat_button_busy.value}"
     WEBCHAT_BUTTON_SERVICE_CLOSED = "${data.azurerm_key_vault_secret.cmc_webchat_button_service_closed.value}"
-
   }
 }
 
