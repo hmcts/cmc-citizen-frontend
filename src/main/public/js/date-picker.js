@@ -86,8 +86,8 @@ const datePicker = {
     const csrf = $("input[name=\"_csrf\"]").val();
 
     let dates = event.dates.map(function(eventDate) { return datePickerUtils.formatDateForData(eventDate)});
-
     let hasUnavailableDates = $("input[name=hasUnavailableDates]:checked").val();
+
     if (hasUnavailableDates === "true") {
       $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
         _csrf: csrf,
