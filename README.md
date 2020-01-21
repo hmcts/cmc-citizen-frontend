@@ -12,7 +12,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 
 ## Getting Started
 
-### Prerequisites
+### Prerequisites 
 
 * [Node.js](https://nodejs.org/) >= v10.15.2
 * [yarn](https://yarnpkg.com/)
