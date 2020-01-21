@@ -86,9 +86,12 @@ const datePicker = {
     const csrf = $("input[name=\"_csrf\"]").val();
 
     let dates = event.dates.map(function(eventDate) { return datePickerUtils.formatDateForData(eventDate)});
+
+    let hasUnavailableDates = $("input[name=hasUnavailableDates]:checked").val()
+    if (hasUnavailableDates === "true") {
     $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
       _csrf: csrf,
-      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val(),
+      hasUnavailableDates: hasUnavailableDates,
       unavailableDates: dates
     }, function(result) {
       $("#date-selection-wrapper").empty().append(result);
@@ -103,6 +106,7 @@ const datePicker = {
         datePicker.selector().datepicker("setDates", d);
       });
     });
+    }
   },
 
   getData: function() {
