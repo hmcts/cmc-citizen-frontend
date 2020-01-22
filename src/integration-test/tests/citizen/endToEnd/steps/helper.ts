@@ -3,7 +3,7 @@ import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defen
 import { DefenceType } from 'integration-test/data/defence-type'
 import { PaymentOption } from 'integration-test/data/payment-option'
 import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
-import { DefendantSignSettlement } from '../../defence/pages/defendant-sign-settlement'
+import { DefendantSignSettlement } from 'integration-test/tests/citizen/defence/pages/defendant-sign-settlement'
 
 const I: I = actor()
 const defenceSteps: DefenceSteps = new DefenceSteps()

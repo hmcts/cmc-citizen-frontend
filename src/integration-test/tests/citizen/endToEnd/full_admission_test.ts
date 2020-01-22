@@ -11,8 +11,8 @@ import {
   ClaimantResponseTestData,
   UnreasonableClaimantResponseTestData
 } from 'integration-test/tests/citizen/claimantResponse/data/ClaimantResponseTestData'
-import { createClaimData } from '../../../data/test-data'
-import { DefenceSteps } from '../defence/steps/defence'
+import { createClaimData } from 'integration-test/data/test-data'
+import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
 
 const helperSteps: Helper = new Helper()
 const userSteps: UserSteps = new UserSteps()
@@ -52,7 +52,7 @@ async function prepareCompanyClaim (I: I) {
 if (process.env.FEATURE_ADMISSIONS === 'true') {
   Feature('Claimant Response: Fully Admit')
 
-  Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', { retries: 0 }, async (I: I) => {
+  Scenario('I can as a claimant view the defendants full admission with immediate payment @citizen @admissions', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.IMMEDIATELY
     // as defendant
@@ -68,7 +68,7 @@ if (process.env.FEATURE_ADMISSIONS === 'true') {
     I.see('Wait for the defendant to pay you')
   })
 
-  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions', { retries: 0 }, async (I: I) => {
+  Scenario('I can as a claimant accept the defendants full admission by set date with settlement agreement and accepting defendants payment method @citizen @admissions', { retries: 3 }, async (I: I) => {
     const testData = await EndToEndTestData.prepareData(I, PartyType.INDIVIDUAL, PartyType.INDIVIDUAL)
     testData.paymentOption = PaymentOption.BY_SET_DATE
     const claimantResponseTestData = new ClaimantResponseTestData()
