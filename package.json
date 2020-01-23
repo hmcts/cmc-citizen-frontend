@@ -133,7 +133,7 @@
     "pa11y": "^5.2.0",
     "randomstring": "^1.1.5",
     "sass-lint": "^1.13.1",
-    "sinon": "^7.4.2",
+    "sinon": "^8.1.1",
     "sinon-chai": "^3.4.0",
     "sinon-express-mock": "^2.2.1",
     "sonarqube-scanner": "^2.5.0",
