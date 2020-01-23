@@ -1,0 +1,45 @@
+{% from "./utilityMacros.njk" import downloadResponseLink %}
+{% from "internalLink.njk" import internalLink %}
+
+{% macro claimSettledDashboard() %}
+  {{ t('This claim is settled.') }}
+{% endmacro %}
+
+{% macro paidInFullCancelledOrSatisfiedDefendantDashboard(claim) %}
+  <p>{{ t('{{ claimantName }} confirmed you’ve paid.', { claimantName: claim.claimData.claimant.name }) }}</p>
+{% endmacro %}
+
+{% macro paidInFullDefendantClaimDetails(claim) %}
+  <h2 class="heading-small">{{ t('This claim is settled') }}</h2>
+  <p>{{ t('{{ claimantName }} confirmed you settled on {{ moneyReceivedOn }}.',
+      { claimantName: claim.claimData.claimant.name, moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
+  <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro paidInFullDefendantClaimSettledDetails(claim) %}
+  <p>{{ t('{{ claimantName }} confirmed you settled on {{ moneyReceivedOn }}. This claim is now settled.',
+      { claimantName: claim.claimData.claimant.name,
+        moneyReceivedOn: claim.moneyReceivedOn | date }) }}</p>
+{% endmacro %}
+
+{% macro paidInFullCCJCancelledDefendantClaimDetails(claim) %}
+  {{ paidInFullDefendantClaimSettledDetails(claim) }}
+  <p>{{ t('We’ll tell the Registry Trust to remove your County Court Judgment (CCJ) from the register of judgments.') }}</p>
+  <p>{{ t('The CCJ won’t appear in credit agency searches, though some agencies may not update their records immediately.') }}</p>
+  <p>{{ paidInFullCCJCertificate() }}</p>
+  <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro paidInFullCCJSatisfiedDefendantClaimDetails(claim) %}
+  {{ paidInFullDefendantClaimSettledDetails(claim) }}
+  <p>{{ t('We’ll tell the Registry Trust to mark your County Court Judgment (CCJ) as paid on the register of judgments.') }}</p>
+  <p>{{ t('Any credit agency that checks the register will see you’ve paid the money, though some may not update their records immediately.') }}</p>
+  <p>{{ t('The judgment will remain on the register for 6 years but it’ll be marked as satisfied.') }}</p>
+  <p>{{ paidInFullCCJCertificate() }}</p>
+  <p>{{ downloadResponseLink(claim) }}</p>
+{% endmacro %}
+
+{% macro paidInFullCCJCertificate() %}
+  <p>{{ t('If you need proof that the CCJ is paid you can ' + internalLink('contact us to get a certificate of satisfaction',
+      AppPaths.contactUsPage.uri) + '. This costs £15.') | safe }}</p>
+{% endmacro %}

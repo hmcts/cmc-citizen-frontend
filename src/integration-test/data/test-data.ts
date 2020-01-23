@@ -1,7 +1,9 @@
 import { PartyType } from 'integration-test/data/party-type'
 import { InterestType } from 'integration-test/data/interest-type'
+import * as uuid from 'uuid'
+import * as moment from 'moment'
 
-export const DEFAULT_PASSWORD = 'Password12'
+export const DEFAULT_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
 
 export const SMOKE_TEST_CITIZEN_USERNAME = process.env.SMOKE_TEST_CITIZEN_USERNAME
 export const SMOKE_TEST_USER_PASSWORD = process.env.SMOKE_TEST_USER_PASSWORD
@@ -25,9 +27,9 @@ export const claimAmount: Amount = {
   }
 }
 
-export const postCodeLookup = {
-  postCode: 'M13 9PL',
-  selectedOption: 'University of Manchester, Oxford Road, Manchester, M13 9PL'
+export const postcodeLookupQuery: PostcodeLookupQuery = {
+  postcode: 'SW2 1AN',
+  address: '10, DALBERG ROAD, LONDON, SW2 1AN'
 }
 
 export const claimReason = 'My reasons for the claim are that I am owed this money for a variety of reason, these being...'
@@ -49,6 +51,7 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
     },
     reason: claimReason,
     timeline: { rows: [{ date: 'may', description: 'ok' }] },
+    externalId: uuid(),
     get total (): number {
       switch (interestType) {
         case InterestType.STANDARD:
@@ -56,7 +59,8 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         case InterestType.BREAKDOWN:
           return this.amount.getClaimTotal() + fixedInterestAmount + claimFee
       }
-    }
+    },
+    moneyReceivedOn: null
   } as ClaimData
 
   switch (interestType) {
@@ -69,7 +73,7 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         },
         specificDailyAmount: dailyInterestAmount
       }
-      claimData.interestDate = {
+      claimData.interest.interestDate = {
         endDateType: 'settled_or_judgment'
       }
       break
@@ -78,7 +82,7 @@ export function createClaimData (claimantType: PartyType, defendantType: PartyTy
         type: 'standard',
         rate: 8
       }
-      claimData.interestDate = {
+      claimData.interest.interestDate = {
         type: 'submission'
       }
       break
@@ -92,10 +96,10 @@ export function createClaimant (type: PartyType): Party {
     type: type,
     name: undefined,
     address: {
-      line1: '23 Acacia Road',
-      line2: 'some area',
-      city: 'London',
-      postcode: 'SW1A 1AA'
+      line1: '10, DALBERG ROAD',
+      line2: 'Brixton',
+      city: 'LONDON',
+      postcode: 'SW2 1AN'
     },
     correspondenceAddress: {
       line1: '234 Acacia Road',
@@ -103,7 +107,7 @@ export function createClaimant (type: PartyType): Party {
       city: 'Edinburgh',
       postcode: 'G72 7ZY'
     },
-    mobilePhone: '07700000001'
+    phone: '07700000001'
   }
 
   switch (type) {
@@ -132,22 +136,27 @@ export function createDefendant (type: PartyType, hasEmailAddress: boolean = fal
     type: type,
     name: undefined,
     address: {
-      line1: 'University of Manchester',
-      line2: 'Oxford Road',
-      city: 'Manchester',
-      postcode: 'M13 9PL'
+      line1: '11 Dalberg road',
+      line2: 'Brixton',
+      city: 'London',
+      postcode: 'SW2 1AN'
     },
-    mobilePhone: '07700000002',
-    email: hasEmailAddress ? 'civilmoneyclaims+adefendant@gmail.com' : undefined
+    phone: '07700000002',
+    email: hasEmailAddress ? new UserEmails().getDefendant() : undefined
   }
 
   switch (type) {
     case PartyType.INDIVIDUAL:
-      defendant.name = 'Rose Smith'
+      defendant.name = 'Mrs. Rose Smith'
+      defendant.title = 'Mrs.'
+      defendant.firstName = 'Rose'
+      defendant.lastName = 'Smith'
       defendant.dateOfBirth = '1982-07-26'
       break
     case PartyType.SOLE_TRADER:
       defendant.name = 'Sole fish trader'
+      defendant.firstName = 'Sole fish'
+      defendant.lastName = 'trader'
       break
     case PartyType.COMPANY:
       defendant.name = 'Defendant company Inc'
@@ -200,5 +209,27 @@ export const defence: PartialDefence = {
 
 export const offer: Offer = {
   offerText: 'My Offer is that I can only afford, x, y, z and so will only pay £X amount',
-  completionDate: '2020-01-01'
+  completionDate: moment().add(6, 'months').format('YYYY-MM-DD')
+}
+
+export class UserEmails {
+
+  getUser (type: string): string {
+    let subdomain = process.env.CITIZEN_APP_URL
+      .replace('https://', '')
+      .replace('http://', '')
+      .split('/')[0]
+      .split('.')[0]
+
+    return `civilmoneyclaims+${type}-${subdomain}@gmail.com`
+  }
+
+  getClaimant (): string {
+    return this.getUser('claimant')
+  }
+
+  getDefendant (): string {
+    return this.getUser('defendant')
+  }
+
 }

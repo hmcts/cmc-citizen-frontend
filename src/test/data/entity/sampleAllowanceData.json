@@ -1,0 +1,328 @@
+{
+  "allowances":[
+    {
+      "personal": [
+        {
+          "item": "SINGLE_18_TO_24",
+          "weekly": 5,
+          "monthly": 25
+        },
+        {
+          "item": "SINGLE_OVER_25",
+          "weekly": 10,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_UNDER_25_PARTNER_UNDER_18",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_OVER_25_PARTNER_UNDER_18",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_OVER_18",
+          "weekly": 40,
+          "monthly": 200
+        }
+      ],
+      "dependant": [
+        {
+          "item": "EACH",
+          "weekly": 50,
+          "monthly": 100
+        }
+      ],
+      "pensioner": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 40,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 80,
+          "monthly": 100
+        }
+      ],
+      "disability": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_ONLY_SEVERE",
+          "weekly": 40,
+          "monthly": 200
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_SEVERE",
+          "weekly": 50,
+          "monthly": 250
+        },
+        {
+          "item": "DEPENDANT",
+          "weekly": 35,
+          "monthly": 180
+        },
+        {
+          "item": "CARER",
+          "weekly": 30,
+          "monthly": 90
+        }
+      ],
+      "startDate": "2017-04-02T00:00:00.000Z"
+    },
+    {
+      "personal": [
+        {
+          "item": "SINGLE_18_TO_24",
+          "weekly": 5,
+          "monthly": 25
+        },
+        {
+          "item": "SINGLE_OVER_25",
+          "weekly": 10,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_UNDER_25_PARTNER_UNDER_18",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_OVER_25_PARTNER_UNDER_18",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_OVER_18",
+          "weekly": 40,
+          "monthly": 200
+        }
+      ],
+      "dependant": [
+        {
+          "item": "EACH",
+          "weekly": 50,
+          "monthly": 100
+        }
+      ],
+      "pensioner": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 40,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 80,
+          "monthly": 100
+        }
+      ],
+      "disability": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_ONLY_SEVERE",
+          "weekly": 40,
+          "monthly": 200
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_SEVERE",
+          "weekly": 50,
+          "monthly": 250
+        },
+        {
+          "item": "DEPENDANT",
+          "weekly": 35,
+          "monthly": 180
+        },
+        {
+          "item": "CARER",
+          "weekly": 30,
+          "monthly": 90
+        }
+      ],
+      "startDate": "2018-04-02T00:00:00.000Z"
+    },
+    {
+      "personal": [
+        {
+          "item": "SINGLE_18_TO_24",
+          "weekly": 5,
+          "monthly": 25
+        },
+        {
+          "item": "SINGLE_OVER_25",
+          "weekly": 10,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_UNDER_25_PARTNER_UNDER_18",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_OVER_25_PARTNER_UNDER_18",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_OVER_18",
+          "weekly": 40,
+          "monthly": 200
+        }
+      ],
+      "dependant": [
+        {
+          "item": "EACH",
+          "weekly": 50,
+          "monthly": 100
+        }
+      ],
+      "pensioner": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 40,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 80,
+          "monthly": 100
+        }
+      ],
+      "disability": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_ONLY_SEVERE",
+          "weekly": 40,
+          "monthly": 200
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_SEVERE",
+          "weekly": 50,
+          "monthly": 250
+        },
+        {
+          "item": "DEPENDANT",
+          "weekly": 35,
+          "monthly": 180
+        },
+        {
+          "item": "CARER",
+          "weekly": 30,
+          "monthly": 90
+        }
+      ],
+      "startDate": "2019-04-05T00:00:00.000Z"
+    },
+    {
+      "personal": [
+        {
+          "item": "SINGLE_18_TO_24",
+          "weekly": 5,
+          "monthly": 25
+        },
+        {
+          "item": "SINGLE_OVER_25",
+          "weekly": 10,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_UNDER_25_PARTNER_UNDER_18",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_OVER_25_PARTNER_UNDER_18",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_OVER_18",
+          "weekly": 40,
+          "monthly": 200
+        }
+      ],
+      "dependant": [
+        {
+          "item": "EACH",
+          "weekly": 50,
+          "monthly": 100
+        }
+      ],
+      "pensioner": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 40,
+          "monthly": 50
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 80,
+          "monthly": 100
+        }
+      ],
+      "disability": [
+        {
+          "item": "DEFENDANT_ONLY",
+          "weekly": 20,
+          "monthly": 100
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER",
+          "weekly": 30,
+          "monthly": 150
+        },
+        {
+          "item": "DEFENDANT_ONLY_SEVERE",
+          "weekly": 40,
+          "monthly": 200
+        },
+        {
+          "item": "DEFENDANT_AND_PARTNER_SEVERE",
+          "weekly": 50,
+          "monthly": 250
+        },
+        {
+          "item": "DEPENDANT",
+          "weekly": 35,
+          "monthly": 180
+        },
+        {
+          "item": "CARER",
+          "weekly": 30,
+          "monthly": 90
+        }
+      ],
+      "startDate": "2020-04-01T00:00:00.000Z"
+    }
+  ]
+}

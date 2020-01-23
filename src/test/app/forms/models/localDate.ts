@@ -1,9 +1,10 @@
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { LocalDate, ValidationErrors } from 'forms/models/localDate'
+import moment = require('moment')
 
 describe('LocalDate', () => {
 
@@ -60,12 +61,19 @@ describe('LocalDate', () => {
     })
 
     it('should accept date withing the range limit', () => {
-      expect(validator.validateSync(new LocalDate(1, 1, 1)).length).to.equal(0)
+      expect(validator.validateSync(new LocalDate(1000, 1, 1)).length).to.equal(0)
       expect(validator.validateSync(new LocalDate(9999, 12, 31)).length).to.equal(0)
     })
 
     it('should accept valid date', () => {
       expect(validator.validateSync(new LocalDate(2017, 12, 31)).length).to.equal(0)
+    })
+  })
+
+  describe('fromMoment', () => {
+    it('should return LocalDate from moment object', () => {
+      expect(LocalDate.fromMoment(moment('2018-01-01'))).to.deep.equal(new LocalDate(2018,1,1))
+      expect(LocalDate.fromMoment(moment('2018-12-01'))).to.deep.equal(new LocalDate(2018,12,1))
     })
   })
 

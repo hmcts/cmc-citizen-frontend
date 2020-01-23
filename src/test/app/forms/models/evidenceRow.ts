@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from './validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { EvidenceRow } from 'forms/models/evidenceRow'
 import { EvidenceType } from 'forms/models/evidenceType'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

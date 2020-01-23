@@ -2,8 +2,8 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
-import { expectValidationError } from './validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { StatementOfTruth, ValidationErrors } from 'forms/models/statementOfTruth'
 
 describe('StatementOfTruth', () => {

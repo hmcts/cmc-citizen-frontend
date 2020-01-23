@@ -1,0 +1,47 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, numericInput, textArea, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'Do you support anyone else financially?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" novalidate
+        class="analytics-submit-event-trigger"
+        data-event-action="SoM: Do you support anyone else financially?"
+        data-event-label-from="declared">
+
+        {{ csrfProtection(csrf) }}
+
+        {% set error = form.errorFor('declared') %}
+        <fieldset id="declared[label]" class="form-group {% if error %} form-group-error {% endif %}">
+          <legend>{{ t('This can include adults and people you don’t live with.') }}</legend>
+
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+
+          {{
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
+          }}
+
+          {% set atLeastOfNumberShouldBeEnteredError = form.errorFor('numberOfPeople') %}
+
+          <div class="form-group panel panel-border-narrow js-hidden {% if atLeastOfNumberShouldBeEnteredError %} form-group-error {% endif %}"
+               id="declared-true" aria-hidden="false">
+
+            {{ numericInput(label = 'Number of people', name = 'numberOfPeople[value]', form = form, inputClass = 'form-control-1-8') }}
+            {{ textArea(label = 'Give details', name = 'numberOfPeople[details]', form = form) }}
+
+          </div>
+
+          {{
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
+          }}
+
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

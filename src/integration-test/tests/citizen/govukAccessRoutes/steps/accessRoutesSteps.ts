@@ -14,7 +14,7 @@ const selectors = {
   moneyclaimsRadio: 'input[id="service-moneyclaims"]'
 }
 
-const ccbcReference = 'AA123213'
+const ccbcReference = 'A1QZ1234'
 const mcolText = 'Money Claim Online'
 const dashboardHeading = 'Your money claims account'
 
@@ -64,6 +64,6 @@ export class AccessRoutesSteps {
     I.amOnPage(respondToClaimPage)
     I.fillField(selectors.reference, reference)
     I.click(selectors.submit)
-    I.see('Please enter your security code to continue')
+    I.see('Security code')
   }
 }

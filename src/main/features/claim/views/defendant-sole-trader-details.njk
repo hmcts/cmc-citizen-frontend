@@ -3,7 +3,7 @@
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
 {% from "party/details.njk" import partyDetailsFragment %}
 
-{% set heading = 'Their details' %}
+{% set heading = 'Enter the defendant’s details' %}
 
 {% block additional_scripts %}
   {% include "postcode-lookup-client-scripts.njk" %}
@@ -14,22 +14,25 @@
     <div class="column-two-thirds">
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
+        <p>{{ t('You’ll have to pay an extra fee if you later want to change the name of anyone involved with the claim.') }}</p>
 
         {{
           partyDetailsFragment(
             form,
             fields = [
-              { label: 'Full name (include title)', name: 'name' },
+              { label: 'Title', name: 'title' },
+              { label: 'First name', name: 'firstName' },
+              { label: 'Last name', name: 'lastName' },
               { label: 'Trading as (if you know it)', name: 'businessName' }
             ],
             addressSection = {
-              heading: 'Their postal address',
+              heading: 'Their address',
               hint: 'You can enter their residential or trade address. The address must be in England or Wales.',
               name: 'address',
               postcodeLookup: true
             },
             showCorrespondenceAddressSection = false,
-            postcodeLabel = 'Enter a postcode'
+            postcodeLabel = 'Enter a UK postcode'
           )
         }}
 

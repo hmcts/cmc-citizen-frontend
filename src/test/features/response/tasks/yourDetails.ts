@@ -3,7 +3,7 @@ import { expect } from 'chai'
 
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { YourDetails } from 'response/tasks/yourDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { PartyDetails } from 'forms/models/partyDetails'
 import { Address } from 'forms/models/address'
 import { IndividualDetails } from 'forms/models/individualDetails'
@@ -12,7 +12,7 @@ import { LocalDate } from 'forms/models/localDate'
 import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
 import { CompanyDetails } from 'forms/models/companyDetails'
 import { OrganisationDetails } from 'forms/models/organisationDetails'
-import { generateString } from '../../../app/forms/models/validationUtils'
+import { generateString } from 'test/app/forms/models/validationUtils'
 
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'SW1A 1AA')
 const invalidAddress = new Address('', '', '', '', '')
@@ -50,7 +50,7 @@ describe('Your details task', () => {
     it('defendant party address is undefined', () => {
       draft.defendantDetails.partyDetails = new PartyDetails()
       draft.defendantDetails.partyDetails.address = undefined
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
@@ -58,7 +58,7 @@ describe('Your details task', () => {
     it('defendant party address is invalid', () => {
       draft.defendantDetails.partyDetails = new PartyDetails()
       draft.defendantDetails.partyDetails.address = invalidAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
@@ -68,7 +68,7 @@ describe('Your details task', () => {
       draft.defendantDetails.partyDetails.address = validAddress
       draft.defendantDetails.partyDetails.hasCorrespondenceAddress = true
       draft.defendantDetails.partyDetails.correspondenceAddress = invalidAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
@@ -78,17 +78,17 @@ describe('Your details task', () => {
 
       draft.defendantDetails.partyDetails = individualDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant individual mobile phone is undefined', () => {
+    it('defendant individual phone is undefined', () => {
       individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(1981, 11, 11))
 
       draft.defendantDetails.partyDetails = individualDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.phone = undefined
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
@@ -98,101 +98,101 @@ describe('Your details task', () => {
 
       draft.defendantDetails.partyDetails = individualDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant individual mobile phone is invalid', () => {
+    it('defendant individual phone is invalid', () => {
       individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(1981, 11, 11))
 
       draft.defendantDetails.partyDetails = individualDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone(generateString(31))
+      draft.defendantDetails.phone = new Phone(generateString(31))
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant sole trader mobile phone is undefined', () => {
+    it('defendant sole trader phone is undefined', () => {
       draft.defendantDetails.partyDetails = soleTraderDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.phone = undefined
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant sole trader mobile phone is invalid', () => {
+    it('defendant sole trader phone is invalid', () => {
       draft.defendantDetails.partyDetails = soleTraderDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone(generateString(31))
+      draft.defendantDetails.phone = new Phone(generateString(31))
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant company mobile phone is undefined', () => {
+    it('defendant company phone is undefined', () => {
       draft.defendantDetails.partyDetails = companyDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.phone = undefined
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant company mobile phone is invalid', () => {
+    it('defendant company phone is invalid', () => {
       draft.defendantDetails.partyDetails = companyDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone(generateString(31))
+      draft.defendantDetails.phone = new Phone(generateString(31))
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant organisation mobile phone is undefined', () => {
+    it('defendant organisation phone is undefined', () => {
       draft.defendantDetails.partyDetails = organisationDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = undefined
+      draft.defendantDetails.phone = undefined
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
 
-    it('defendant organisation mobile phone is invalid', () => {
+    it('defendant organisation phone is invalid', () => {
       draft.defendantDetails.partyDetails = organisationDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone(generateString(31))
+      draft.defendantDetails.phone = new Phone(generateString(31))
 
       expect(YourDetails.isCompleted(draft)).to.be.false
     })
   })
 
   context('should be completed when', () => {
-    it('all individual address, date of birth and mobile phone are valid', () => {
+    it('all individual address, date of birth and phone are valid', () => {
       individualDetails.dateOfBirth = new DateOfBirth(true, new LocalDate(1981, 11, 11))
 
       draft.defendantDetails.partyDetails = individualDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.true
     })
 
-    it('both sole trader address and mobile phone are valid', () => {
+    it('both sole trader address and phone are valid', () => {
       draft.defendantDetails.partyDetails = soleTraderDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.true
     })
 
-    it('both company address and mobile phone are valid', () => {
+    it('both company address and phone are valid', () => {
       draft.defendantDetails.partyDetails = companyDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.true
     })
 
-    it('both organisation address and mobile phone are valid', () => {
+    it('both organisation address and phone are valid', () => {
       draft.defendantDetails.partyDetails = organisationDetails
       draft.defendantDetails.partyDetails.address = validAddress
-      draft.defendantDetails.mobilePhone = new MobilePhone('09998877777')
+      draft.defendantDetails.phone = new Phone('09998877777')
 
       expect(YourDetails.isCompleted(draft)).to.be.true
     })

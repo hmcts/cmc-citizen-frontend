@@ -2,10 +2,6 @@ import I = CodeceptJS.I
 
 const I: I = actor()
 
-const fields = {
-  pinNumber: 'input#pinnumber'
-}
-
 const buttons = {
   submit: 'input[type=submit]'
 }
@@ -13,8 +9,7 @@ const buttons = {
 export class DefendantEnterClaimPinNumberPage {
 
   enterPinNumber (pinNumber: string): void {
-    I.fillField(fields.pinNumber, pinNumber)
-
+    I.fillField('input#pin', pinNumber)
     I.click(buttons.submit)
   }
 }

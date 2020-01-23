@@ -1,4 +1,5 @@
 {% from "timeRemaining.njk" import timeRemaining %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro moreTimeRequestedForClaimantDashboard(claim) %}
   {{ t('{{ defendantName }} has requested more time to respond.',
@@ -6,11 +7,12 @@
 {% endmacro %}
 
 {% macro moreTimeRequestedForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('The defendant has requested more time to respond') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} has requested an extra 14 days to respond. They need to respond by {{ responseDeadline }}.',
-      { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) | safe }}
-  </p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('The defendant has requested more time to respond') }}</h2>
+    <p>{{ t('{{ defendantName }} has requested an extra 14 days to respond. They now have until 4pm on {{ responseDeadline }} to respond.',
+        { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) | safe }}</p>
+    <p>{{ t('You can request a County Court Judgment against them if they don’t respond by the deadline.') }}</p>
+  </div>
 {% endmacro %}
 
 {% macro moreTimeRequestedForDefendantDashboard(claim) %}
@@ -19,16 +21,15 @@
 {% endmacro %}
 
 {% macro moreTimeRequestedForDefendantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('More time requested') }}</h2>
-  <p>
-    {{ t('You need to respond before 4pm on {{ responseDeadline }} {{ remainingTime }}.',
-      { responseDeadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm()) }) | safe }}
-  </p>
-  <p>
-    {{ _respondToClaimLink(claim) }}
-  </p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('More time requested') }}</h2>
+    <p>{{ t('You need to respond before 4pm on {{ responseDeadline }} {{ remainingTime }}.',
+        { responseDeadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm()) }) | safe }}</p>
+    <p>{{ _respondToClaimLink(claim) }}</p>
+  </div>
+
 {% endmacro %}
 
 {% macro _respondToClaimLink(claim) %}
-  <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
+  {{ internalLink(t('Respond to claim'), ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}

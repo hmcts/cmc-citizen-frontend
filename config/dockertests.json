@@ -1,13 +1,14 @@
 {
   "featureToggles": {
     "testingSupport": true,
-    "countyCourtJudgment": true,
-    "fullAdmission": true,
-    "partialAdmission": true,
-    "offer": true,
-    "statementOfMeans": true,
-    "ccd": false,
-    "returnErrorToUser": true
+    "newFeaturesConsent": true,
+    "admissions": true,
+    "returnErrorToUser": true,
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
+    "newDashboardStatus": false,
+    "inversionOfControl": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

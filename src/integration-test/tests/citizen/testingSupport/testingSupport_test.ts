@@ -10,8 +10,10 @@ const testingSupportSteps = new TestingSupportSteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 
-Scenario('I create a claim draft using testing support and submit it @citizen', function* (I: I) {
-  const email: string = yield I.createCitizenUser()
+Feature('Testing support')
+
+Scenario('I create a claim draft using testing support and submit it @nightly', { retries: 3 }, async (I: I) => {
+  const email: string = userSteps.getClaimantEmail()
 
   userSteps.login(email)
   testingSupportSteps.createClaimDraft()

@@ -1,7 +1,13 @@
 {% extends "layout.njk" %}
-{% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, saveAndContinueButton, errorSummary %}
+{% from "form.njk" import csrfProtection, textInputInline, poundInputInline, poundInput, linkButton, option, saveAndContinueButton %}
+{% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
+{% from "expandableCheckboxOption.njk" import expandableCheckboxOption %}
 
-{% set heading = 'Monthly expenses' %}
+{% set heading = 'What are your regular expenses?' %}
+
+{% block additional_scripts %}
+  {% include "income-expense-scripts.njk" %}
+{% endblock %}
 
 {% macro expenseRow(index, form) %}
 
@@ -33,48 +39,31 @@
 <div class="grid-row">
   <div class="column-two-thirds">
 
-    <form method="post" novalidate>
+    <form method="post" novalidate class="income-expense-calculation">
       {{ csrfProtection(csrf) }}
 
-      {{ poundInput(label = 'Mortgage', name = 'mortgage', form = form, hint = 'Include all mortgages') }}
-      {{ poundInput(label = 'Rent', name = 'rent', form = form) }}
-      {{ poundInput(label = 'Council Tax', name = 'councilTax', form = form) }}
-      {{ poundInput(label = 'Gas', name = 'gas', form = form) }}
-      {{ poundInput(label = 'Electricity', name = 'electricity', form = form) }}
-      {{ poundInput(label = 'Water', name = 'water', form = form) }}
-      {{ poundInput(label = 'Travel (school or work)', name = 'travel', form = form) }}
-      {{ poundInput(label = 'School costs (include clothing)', name = 'schoolCosts', form = form) }}
-      {{ poundInput(label = 'Food and Housekeeping', name = 'foodAndHousekeeping', form = form) }}
-      {{ poundInput(label = 'TV and Broadband', name = 'tvAndBroadband', form = form) }}
-      {{ poundInput(label = 'Mobile phone', name = 'mobilePhone', form = form) }}
-      {{ poundInput(label = 'Maintenance payments', name = 'maintenance', form = form) }}
+      <p>{{ t('Select all that apply. The information you enter must be truthful and accurate. Do not include any arrears repayments.') }}</p>
 
-      <div class="statement-of-means-container">
-        {% if form.model and form.model.rows.length > 0 %}
-        <div class="multiline">
-          <div class="multiline-rows">
-            <div class="triple-column mobile-hide">
-              <div class="column-1 mobile-hide">
-                <label id="description-label" class="form-label-bold">{{ t('Name of expense') }}</label>
-              </div>
-              <div class="column-4 mobile-hide">
-                <label id="amount-label" class="form-label-bold">{{ t('Amount') }}</label>
-              </div>
-            </div>
+      {{ expenseSource(form, name = 'mortgage', label = MonthlyExpenseType.MORTGAGE.displayValue | capitalize, hint = 'Include all mortgages') }}
+      {{ expenseSource(form, name = 'rent', label = MonthlyExpenseType.RENT.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'councilTax', label = MonthlyExpenseType.COUNCIL_TAX.displayValue) }}
+      {{ expenseSource(form, name = 'gas', label = MonthlyExpenseType.GAS.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'electricity', label = MonthlyExpenseType.ELECTRICITY.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'water', label = MonthlyExpenseType.WATER.displayValue | capitalize, hint = 'Include sewerage payments') }}
+      {{ expenseSource(form, name = 'travel', label = MonthlyExpenseType.TRAVEL.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'schoolCosts', label = MonthlyExpenseType.SCHOOL_COSTS.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'foodAndHousekeeping', label = MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'tvAndBroadband', label = MonthlyExpenseType.TV_AND_BROADBAND.displayValue) }}
+      {{ expenseSource(form, name = 'hirePurchase', label = MonthlyExpenseType.HIRE_PURCHASES.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'mobilePhone', label = MonthlyExpenseType.MOBILE_PHONE.displayValue | capitalize) }}
+      {{ expenseSource(form, name = 'maintenance', label = MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue | capitalize) }}
+      {{ expenseSources(form, name = 'other', label = MonthlyExpenseType.OTHER.displayValue | capitalize) }}
 
-            {% for row in form.model.rows %}
-              {{ expenseRow(loop.index0, form) }}
-            {% endfor %}
-          </div>
-        </div>
-        {% endif %}
+      {{ linkButton('Recalculate total monthly expenditure', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
 
-        {% if form.model and form.model.canAddMoreRows() %}
-          <div id="add-event-container" class="form-group">
-            {{ linkButton('Add another expense', 'action[addRow]', 'button button-secondary') }}
-          </div>
-        {% endif %}
-      </div>
+      <p class="heading-small calculation-outcome-container">
+        {{ t('Total monthly expenditure:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyExpense | default('0.00') }} </span>
+      </p>
 
       {{ saveAndContinueButton() }}
 
@@ -82,3 +71,35 @@
   </div>
 </div>
 {% endblock %}
+
+{% macro expenseSource(form, name, label, hint) %}
+  {% set checkboxName = name + 'Declared' %}
+
+  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
+    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of expense', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every') }}
+    {{ linkButton(name = 'action[reset][' + name + ']', label = 'Reset this expense source', class = 'link-button js-hidden') }}
+  {% endcall %}
+{% endmacro %}
+
+{% macro expenseSources(form, name, label, hint) %}
+  {% set checkboxName = name + 'Declared' %}
+
+  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.model.anyOtherExpensePopulated)), label = label, additionalClasses = 'other-section') %}
+    <div>
+      {% for source in form.model.other %}
+        <div class="other-income-expense-source">
+          {{ incomeExpenseSource(form = form, name = name + '[' + loop.index0 + ']', sourceLabel = 'Source of expense', amountLabel = 'Amount paid', amountHint = hint, scheduleLabel = 'Paid every', nameEditable = true) }}
+          {% if form.model.other.length > 1 %}
+            {{ linkButton(name = 'action[removeOther][other.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button') }}
+          {% else %}
+            {{ linkButton(name = 'action[removeOther][other.' + loop.index0 + ']', label = 'Remove this expense source', class = 'link-button hidden') }}
+            {{ linkButton(name = 'action[reset][' + name + '.0]', label = 'Reset this expense source', class = 'link-button js-hidden') }}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+
+    {{ linkButton(name = 'action[addOther]', label = 'Add another expense', class = 'button button-secondary') }}
+  {% endcall %}
+{% endmacro %}
+

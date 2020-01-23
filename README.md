@@ -14,7 +14,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 
 ### Prerequisites
 
-* [Node.js](https://nodejs.org/) >= v8.0.0
+* [Node.js](https://nodejs.org/) >= v10.15.2
 * [yarn](https://yarnpkg.com/)
 * [Gulp](http://gulpjs.com/)
 * [Docker](https://www.docker.com)
@@ -55,7 +55,7 @@ Mocha is used for writing tests.
 Run them with:
 
 ```bash
-$ yarn test
+$ yarn tests
 ```
 
 For functional testing:
@@ -67,13 +67,13 @@ $ yarn test:routes
 For accessibility testing:
 
 ```bash
-$ yarn test:a11y
+$ yarn tests:a11y
 ```
 
 For test coverage:
 
 ```bash
-$ yarn test:coverage
+$ yarn tests:coverage
 ```
 
 For unit test coverage only:
@@ -118,6 +118,11 @@ Example:
 warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules shouldn't be copied twice in one bulk copy
 warning The case-insensitive file ..\cmc-citizen-frontend\node_modules\nyc\node_modules\ansi-regex shouldn't be copied twice in one bulk copy
 ```
+
+## Preview Environment
+
+We get a fully functional environment in Azure Kubernetes (AKS) per pull request. For more
+info see: https://tools.hmcts.net/confluence/display/ROC/AKS+-+Azure+Managed+Kubernetes
 
 ## License
 

@@ -1,0 +1,70 @@
+{% from "internalLink.njk" import internalLink %}
+
+{% set claimantName = claim.claimData.claimant.name %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+  <p>{{ t('You need to make sure that:') }}</p>
+
+  <ul class="list list-bullet">
+    <li>{{ t('they get the money by {{ paymentDate }} - they can request a County Court Judgment against you if not', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</li>
+    <li>{{ t('any cheques or bank transfers are clear in their account by the deadline') }}</li>
+    <li>{{ t('you get a receipt for any payments') }}</li>
+    <li>{{ t('they tell the court that you’ve paid') }}</li>
+  </ul>
+
+  <p>
+    {{ internalLink('Contact ' + claimantName, claimantDetailsPageURI) }}
+    {{ t('if you need their payment details.') }}
+  </p>
+{% endif %}
+
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  <h3 class="bold">{{ t('If {{ claimantName }} accepts your offer', { claimantName: claimantName }) }}</h3>
+  <p>{{ t('You should:') }}</p>
+
+  <ul class="list list-bullet">
+    <li>{{ t('pay {{ claimantName }} by {{ paymentDate }}', { claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</li>
+    <li>{{ t('make sure any cheques or bank transfers are clear in their account by the deadline') }}</li>
+    <li>
+      {{ internalLink('contact ' + claimantName, claimantDetailsPageURI) }}
+      {{ t('if you need their payment details.') }}
+    </li>
+    <li>{{ t('make sure you get a receipt for any payments') }}</li>
+  </ul>
+
+  <p>{{ t('Because you’ve said you won’t pay immediately, {{ claimantName }} can either:', { claimantName: claimantName }) }}</p>
+
+  <ul class="list list-bullet">
+    <li>{{ t('ask you to sign a settlement agreement to formalise the repayment plan') }}</li>
+    <li>{{ t('request a County Court Judgment against you') }}</li>
+  </ul>
+
+  <h3 class="bold">{{ t('If {{ claimantName }} rejects your offer', { claimantName: claimantName }) }}</h3>
+  <p>{{ t('The court will decide how you must pay.') }}</p>
+
+{% endif %}
+
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+  <h3 class="bold">{{ t('If {{ claimantName }} accepts your offer', { claimantName: claimantName }) }}</h3>
+  <p>{{ t('You should:') }}</p>
+
+  <ul class="list list-bullet">
+    <li>{{ t('set up your repayment plan to begin when you said it would') }}</li>
+    <li>
+      {{ internalLink('contact ' + claimantName, claimantDetailsPageURI) }}
+      {{ t('if you need their payment details.') }}
+    </li>
+    <li>{{ t('make sure you get a receipt for any payments') }}</li>
+  </ul>
+
+  <p>{{ t('Because you’ve said you won’t pay immediately, {{ claimantName }} can either:', { claimantName: claimantName }) }}</p>
+
+  <ul class="list list-bullet">
+    <li>{{ t('ask you to sign a settlement agreement to formalise the repayment plan') }}</li>
+    <li>{{ t('request a County Court Judgment against you') }}</li>
+  </ul>
+
+  <h3 class="bold">{{ t('If {{ claimantName }} rejects your offer', { claimantName: claimantName }) }}</h3>
+  <p>{{ t('The court will decide how you must pay.') }}</p>
+{% endif %}

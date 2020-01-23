@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { CourtOrders, ValidationErrors } from 'response/form/models/statement-of-means/courtOrders'
 import { CourtOrderRow } from 'response/form/models/statement-of-means/courtOrderRow'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { INIT_ROW_COUNT } from 'forms/models/multiRowForm'
 
 describe('CourtOrders', () => {
@@ -24,13 +24,13 @@ describe('CourtOrders', () => {
       const actual: CourtOrders = new CourtOrders().deserialize(undefined)
 
       expect(actual).to.be.instanceof(CourtOrders)
-      expect(actual.hasAnyCourtOrders).to.be.eq(undefined)
+      expect(actual.declared).to.be.eq(undefined)
       expect(actual.rows.length).to.eql(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual.rows)
     })
 
-    it('should return CourtOrders with list of empty CourtOrderRow[] when hasAnyCourtOrders = false', () => {
-      const actual: CourtOrders = new CourtOrders().deserialize({ hasAnyCourtOrders: false })
+    it('should return CourtOrders with list of empty CourtOrderRow[] when declared = false', () => {
+      const actual: CourtOrders = new CourtOrders().deserialize({ declared: false })
 
       expect(actual.rows.length).to.eql(INIT_ROW_COUNT)
       expectAllRowsToBeEmpty(actual.rows)
@@ -38,14 +38,15 @@ describe('CourtOrders', () => {
 
     it('should return CourtOrders with first element on list populated', () => {
       const actual: CourtOrders = new CourtOrders().deserialize({
-        hasAnyCourtOrders: true,
-        rows: [{ details: 'abc', amount: 100 }]
+        declared: true,
+        rows: [{ amount: 100, instalmentAmount: 100, claimNumber: 'abc' }]
       })
 
       const populatedItem: CourtOrderRow = actual.rows.pop()
 
-      expect(populatedItem.details).to.eq('abc')
+      expect(populatedItem.claimNumber).to.eq('abc')
       expect(populatedItem.amount).to.eq(100)
+      expect(populatedItem.instalmentAmount).to.eq(100)
 
       expectAllRowsToBeEmpty(actual.rows)
     })
@@ -59,8 +60,8 @@ describe('CourtOrders', () => {
       expect(actual).to.eql(undefined)
     })
 
-    it('should return CourtOrders with list of empty CourtOrderRow[] when hasAnyCourtOrders = false', () => {
-      const actual: CourtOrders = CourtOrders.fromObject({ hasAnyCourtOrders: 'false' })
+    it('should return CourtOrders with list of empty CourtOrderRow[] when declared = false', () => {
+      const actual: CourtOrders = CourtOrders.fromObject({ declared: 'false' })
 
       expect(actual.rows.length).to.eql(0)
       expectAllRowsToBeEmpty(actual.rows)
@@ -68,14 +69,15 @@ describe('CourtOrders', () => {
 
     it('should return CourtOrders with first element on list populated', () => {
       const actual: CourtOrders = CourtOrders.fromObject({
-        hasAnyCourtOrders: 'true',
-        rows: [{ details: 'abc', amount: 100 }]
+        declared: 'true',
+        rows: [{ amount: 100, instalmentAmount: 100, claimNumber: 'abc' }]
       })
 
       const populatedItem: CourtOrderRow = actual.rows.pop()
 
-      expect(populatedItem.details).to.eq('abc')
+      expect(populatedItem.claimNumber).to.eq('abc')
       expect(populatedItem.amount).to.eq(100)
+      expect(populatedItem.instalmentAmount).to.eq(100)
 
       expectAllRowsToBeEmpty(actual.rows)
     })
@@ -96,28 +98,28 @@ describe('CourtOrders', () => {
 
     context('should accept', () => {
 
-      it('when hasAnyCourtOrders = false', () => {
+      it('when declared = false', () => {
         const errors = validator.validateSync(new CourtOrders(false, undefined))
 
         expect(errors.length).to.equal(0)
       })
 
-      it('when hasAnyCourtOrders = true and one valid row given', () => {
-        const errors = validator.validateSync(new CourtOrders(true, [new CourtOrderRow('abc', 100)]))
+      it('when declared = true and one valid row given', () => {
+        const errors = validator.validateSync(new CourtOrders(true, [new CourtOrderRow(100, 100, 'abc')]))
 
         expect(errors.length).to.equal(0)
       })
 
-      it('when hasAnyCourtOrders = true and many valid row given', () => {
-        const o: CourtOrderRow = new CourtOrderRow('abc', 100) // valid row
+      it('when declared = true and many valid row given', () => {
+        const o: CourtOrderRow = new CourtOrderRow(100, 100, 'abc') // valid row
         const errors = validator.validateSync(new CourtOrders(true, [o, o, o, o, o, o, o, o, o, o, o, o]))
 
         expect(errors.length).to.equal(0)
       })
 
-      it('when hasAnyCourtOrders = true and one valid row and many many empty ones given', () => {
+      it('when declared = true and one valid row and many many empty ones given', () => {
         const o: CourtOrderRow = CourtOrderRow.empty()
-        const errors = validator.validateSync(new CourtOrders(true, [o, o, new CourtOrderRow('abc', 1), o, o, o, o]))
+        const errors = validator.validateSync(new CourtOrders(true, [o, o, new CourtOrderRow(1, 1, 'abc'), o, o, o, o]))
 
         expect(errors.length).to.equal(0)
       })
@@ -125,29 +127,29 @@ describe('CourtOrders', () => {
 
     context('should reject', () => {
 
-      it('when hasAnyCourtOrders = true and empty list of rows', () => {
+      it('when declared = true and empty list of rows', () => {
         const errors = validator.validateSync(new CourtOrders(true, []))
 
         expect(errors.length).to.equal(1)
         expectValidationError(errors, ValidationErrors.ENTER_AT_LEAST_ONE_ROW)
       })
 
-      it('when hasAnyCourtOrders = true and invalid row given', () => {
-        const errors = validator.validateSync(new CourtOrders(true, [new CourtOrderRow('', 100)]))
+      it('when declared = true and invalid row given', () => {
+        const errors = validator.validateSync(new CourtOrders(true, [new CourtOrderRow(100, -100, '')]))
 
         expect(errors.length).to.equal(1)
       })
 
-      it('when hasAnyCourtOrders = true and many invalid row given', () => {
-        const o: CourtOrderRow = new CourtOrderRow('abc', -100) // invalid row
+      it('when declared = true and many invalid row given', () => {
+        const o: CourtOrderRow = new CourtOrderRow(-100, -100, 'abc') // invalid row
         const errors = validator.validateSync(new CourtOrders(true, [o, o, o, o, o, o, o, o, o, o, o, o]))
 
         expect(errors.length).to.equal(1)
       })
 
-      it('when hasAnyCourtOrders = true and many empty rows and one invalid given', () => {
+      it('when declared = true and many empty rows and one invalid given', () => {
         const o: CourtOrderRow = CourtOrderRow.empty()
-        const errors = validator.validateSync(new CourtOrders(true, [o, o, o, o, o, new CourtOrderRow('abc', -100), o]))
+        const errors = validator.validateSync(new CourtOrders(true, [o, o, o, o, o, new CourtOrderRow(-100, -100, 'abc'), o]))
 
         expect(errors.length).to.equal(1)
       })

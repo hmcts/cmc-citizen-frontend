@@ -11,13 +11,13 @@ import { TheirDetails } from 'drafts/tasks/theirDetails'
 
 export class TaskListBuilder {
   static buildBeforeYouStartSection (draft: DraftClaim): TaskList {
-    return new TaskList(1, 'Before you start', [
+    return new TaskList('Consider other options', [
       new TaskListItem('Resolving this dispute', Paths.resolvingThisDisputerPage.uri, ResolveDispute.isCompleted(draft))
     ])
   }
 
   static buildPrepareYourClaimSection (draft: DraftClaim): TaskList {
-    return new TaskList(2, 'Prepare your claim', [
+    return new TaskList('Prepare your claim', [
       new TaskListItem('Completing your claim', Paths.completingClaimPage.uri, CompletingYourClaim.isCompleted(draft)),
       new TaskListItem('Your details', Paths.claimantPartyTypeSelectionPage.uri, YourDetails.isCompleted(draft)),
       new TaskListItem('Their details', Paths.defendantPartyTypeSelectionPage.uri, TheirDetails.isCompleted(draft)),
@@ -27,7 +27,7 @@ export class TaskListBuilder {
   }
 
   static buildSubmitSection (): TaskList {
-    return new TaskList(3, 'Submit', [
+    return new TaskList('Submit', [
       new TaskListItem('Check and submit your claim', Paths.checkAndSendPage.uri, false)
     ])
   }

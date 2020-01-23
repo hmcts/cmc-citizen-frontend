@@ -2,26 +2,29 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 
 import { Paths as CCJPaths } from 'ccj/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
+import { Paths } from 'dashboard/paths'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { SignatureType } from 'common/signatureType'
 import { ValidationErrors as BasicValidationErrors } from 'ccj/form/models/declaration'
 import { ValidationErrors as QualifiedValidationErrors } from 'ccj/form/models/qualifiedDeclaration'
-import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
+import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
+import { MomentFactory } from 'shared/momentFactory'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = CCJPaths.checkAndSendPage.evaluateUri({ externalId: externalId })
-const confirmationPage = CCJPaths.confirmationPage.evaluateUri({ externalId: externalId })
+const dashboardUri = Paths.dashboardPage.uri
+const confirmationPage = CCJPaths.ccjConfirmationPage.evaluateUri({ externalId: externalId })
 
 describe('CCJ: check and send page', () => {
   attachDefaultHooks(app)
@@ -64,6 +67,52 @@ describe('CCJ: check and send page', () => {
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Check your answers'))
+        })
+
+        it('should render page when everything is fine when settlement is broken with instalments - cannot change DOB and Payment options', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement(claimStoreServiceMock.settlementAndSettlementReachedAt)
+          draftStoreServiceMock.resolveFind('ccj')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('Check your answers', 'Date of birth', 'By instalments'))
+            .expect(res => expect(res).to.be.successful.withoutText('/ccj/payment-options', '/ccj/date-of-birth'))
+        })
+
+        it('should render page with admitted amount when part admission response has been accepted', async () => {
+          let claimWithAdmission = {
+            ...claimStoreServiceMock.sampleClaimObj,
+            ...claimStoreServiceMock.samplePartialAdmissionWithPayImmediatelyData,
+            ...{
+              countyCourtJudgment: undefined,
+              settlement: undefined,
+              claimantResponse: {
+                type: 'ACCEPTATION'
+              }
+            }
+          }
+
+          claimWithAdmission.response.paymentIntention.paymentDate = MomentFactory.currentDate().subtract(1, 'days')
+          claimWithAdmission.response.amount = 10
+
+          claimStoreServiceMock.resolveRetrieveClaimByExternalId(claimWithAdmission)
+          draftStoreServiceMock.resolveFind('ccj')
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.be.successful.withText('£10'))
+        })
+
+        it('should redirect to dashboard when claim is not eligible for CCJ', async () => {
+          claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithFullAdmissionAndSettlement()
+
+          await request(app)
+            .get(pagePath)
+            .set('Cookie', `${cookieName}=ABC`)
+            .expect(res => expect(res).to.redirect.toLocation(dashboardUri))
+
         })
       })
     })
@@ -124,7 +173,7 @@ describe('CCJ: check and send page', () => {
         it('should redirect to confirmation page when signature is qualified', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
           claimStoreServiceMock.resolveSaveCcjForExternalId()
           draftStoreServiceMock.resolveDelete()
 

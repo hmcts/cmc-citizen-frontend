@@ -1,3 +1,3 @@
-<p><a class="survey-link" href="{{ customerSurveyUrl }}" target="_blank">{{ t('What did you think of this service?') }}</a>
-(takes 30 seconds)
-</p>
+{% from "externalLink.njk" import externalLink %}
+
+<p>{{ externalLink('What did you think of this service?', customerSurveyUrl, 'Survey link clicked') }}</p>

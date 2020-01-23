@@ -8,7 +8,7 @@ const fields = {
 
 export class ClaimantClaimConfirmedPage {
 
-  getClaimReference (): string {
+  getClaimReference (): Promise<string> {
     return I.grabTextFrom(fields.claimReference)
   }
 }

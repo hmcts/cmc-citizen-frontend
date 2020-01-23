@@ -56,7 +56,7 @@ export class AuthorizationMiddleware {
           .catch((err) => {
             if (hasTokenExpired(err)) {
               const cookies = new Cookies(req, res)
-              cookies.set(sessionCookieName, '', { sameSite: 'lax' })
+              cookies.set(sessionCookieName, '')
               logger.debug(`Protected path - invalid JWT - access to ${req.path} rejected`)
               return accessDeniedCallback(req, res)
             }

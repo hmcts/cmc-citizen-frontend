@@ -1,8 +1,7 @@
-import { MaxLength, IsDefined, ValidateNested } from 'class-validator'
-import { IsNotBlank } from '@hmcts/cmc-validators'
+import { MaxLength, IsDefined, ValidateNested } from '@hmcts/class-validator'
+import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { IsFutureDate } from 'forms/validation/validators/dateFutureConstraint'
 import { LocalDate } from 'forms/models/localDate'
-import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {

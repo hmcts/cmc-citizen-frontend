@@ -2,9 +2,9 @@
 
 import { expect } from 'chai'
 import * as _ from 'lodash'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { InterestRate, ValidationErrors } from 'claim/form/models/interestRate'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 

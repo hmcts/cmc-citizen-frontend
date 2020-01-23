@@ -9,9 +9,20 @@ properties([
 		])
 ])
 
-List<LinkedHashMap<String, Object>> secrets = [
-  secret('AatTestUserUsername', 'SMOKE_TEST_CITIZEN_USERNAME'),
-  secret('AatTestUserPassword', 'SMOKE_TEST_USER_PASSWORD')
+def secrets = [
+  'cmc-${env}':
+    [
+      secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
+      secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
+      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
+    ],
+  'rpe-ft-api-${env}' :
+    [
+      secret('admin-username-test', 'ADMIN_USERNAME_TEST'),
+      secret('admin-password-test', 'ADMIN_PASSWORD_TEST'),
+      secret('editor-username-test', 'EDITOR_USERNAME_TEST'),
+      secret('editor-password-test', 'EDITOR_PASSWORD_TEST')
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {

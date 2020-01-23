@@ -10,11 +10,13 @@ export class CCJGuard {
   static async requestHandler (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     const claim: Claim = res.locals.claim
 
-    if (!claim.eligibleForCCJ) {
+    if (claim.eligibleForCCJ
+      || claim.eligibleForCCJAfterBreachedSettlementTerms
+      || claim.isSettlementAgreementRejected) {
+      next()
+    } else {
       logger.warn(`Claim ${claim.claimNumber} not eligible for a CCJ - redirecting to dashboard page`)
       res.redirect(Paths.dashboardPage.uri)
-    } else {
-      next()
     }
   }
 

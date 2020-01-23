@@ -1,26 +1,26 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationMiddleware } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationMiddleware } from 'test/features/eligibility/routes/checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.helpWithFeesPage.uri
-const pageRedirect: string = Paths.claimantAddressPage.uri
+const pageRedirect: string = Paths.singleDefendantPage.uri
 const expectedTextOnPage: string = 'Do you need help paying your court fees?'
 const notEligibleReason: string = NotEligibleReason.HELP_WITH_FEES
 
 describe('Claim eligibility: help with fees page', () => {
   attachDefaultHooks(app)
 
-  describe('on GET', () => {
+  context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
@@ -31,7 +31,7 @@ describe('Claim eligibility: help with fees page', () => {
     })
   })
 
-  describe('on POST', () => {
+  context('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
     it('should render page when form is invalid and everything is fine', async () => {

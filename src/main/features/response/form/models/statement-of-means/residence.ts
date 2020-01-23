@@ -1,5 +1,5 @@
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
-import { IsDefined, IsIn, MaxLength, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { IsNotBlank } from '@hmcts/cmc-validators'
@@ -19,9 +19,9 @@ export class Residence {
   @MaxLength(ValidationConstraints.FREE_TEXT_MAX_LENGTH, { message: DefaultValidationErrors.TEXT_TOO_LONG })
   housingDetails?: string
 
-  constructor (type?: ResidenceType, otherTypeDetails?: string) {
+  constructor (type?: ResidenceType, housingDetails?: string) {
     this.type = type
-    this.housingDetails = otherTypeDetails
+    this.housingDetails = housingDetails
   }
 
   static fromObject (input?: any) {

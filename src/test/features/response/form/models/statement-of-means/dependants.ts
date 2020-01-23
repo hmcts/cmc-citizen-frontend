@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { Dependants, ValidationErrors } from 'response/form/models/statement-of-means/dependants'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
@@ -13,34 +13,34 @@ describe('Dependants', () => {
       const actual = new Dependants().deserialize(undefined)
 
       expect(actual).to.be.instanceof(Dependants)
-      expect(actual.hasAnyChildren).to.be.eq(undefined)
+      expect(actual.declared).to.be.eq(undefined)
       expect(actual.numberOfChildren).to.be.eq(undefined)
     })
 
-    it('should return Dependants with populated only hasAnyChildren', () => {
-      const actual = new Dependants().deserialize({ hasAnyChildren: false })
+    it('should return Dependants with populated only declared', () => {
+      const actual = new Dependants().deserialize({ declared: false })
 
-      expect(actual.hasAnyChildren).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfChildren).to.be.eq(undefined)
     })
 
     it('should return fully populated Dependants', () => {
       const actual = new Dependants().deserialize(
-        { hasAnyChildren: true, numberOfChildren: { under11: 1, between11and15: 2, between16and19: 3 } }
+        { declared: true, numberOfChildren: { under11: 1, between11and15: 2, between16and19: 3 } }
       )
 
-      expect(actual.hasAnyChildren).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.numberOfChildren.under11).to.be.eq(1)
       expect(actual.numberOfChildren.between11and15).to.be.eq(2)
       expect(actual.numberOfChildren.between16and19).to.be.eq(3)
     })
 
-    it('should NOT populate other fields when hasAnyChildren = false', () => {
+    it('should NOT populate other fields when declared = false', () => {
       const actual = new Dependants().deserialize(
-        { hasAnyChildren: false, numberOfChildren: { under11: 1, between11and15: 2, between16and19: 3 } }
+        { declared: false, numberOfChildren: { under11: 1, between11and15: 2, between16and19: 3 } }
       )
 
-      expect(actual.hasAnyChildren).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfChildren).to.be.eq(undefined)
     })
   })
@@ -53,30 +53,30 @@ describe('Dependants', () => {
       expect(actual).to.be.eq(undefined)
     })
 
-    it('should return Dependants with populated only hasAnyChildren', () => {
-      const actual = Dependants.fromObject({ hasAnyChildren: false })
+    it('should return Dependants with populated only declared', () => {
+      const actual = Dependants.fromObject({ declared: false })
 
-      expect(actual.hasAnyChildren).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfChildren).to.be.eq(undefined)
     })
 
     it('should return fully populated Dependants', () => {
       const actual = Dependants.fromObject(
-        { hasAnyChildren: true, numberOfChildren: { under11: '1', between11and15: '2', between16and19: '3' } }
+        { declared: true, numberOfChildren: { under11: '1', between11and15: '2', between16and19: '3' } }
       )
 
-      expect(actual.hasAnyChildren).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.numberOfChildren.under11).to.be.eq(1)
       expect(actual.numberOfChildren.between11and15).to.be.eq(2)
       expect(actual.numberOfChildren.between16and19).to.be.eq(3)
     })
 
-    it('should NOT populate other fields when hasAnyChildren = false', () => {
+    it('should NOT populate other fields when declared = false', () => {
       const actual = Dependants.fromObject(
-        { hasAnyChildren: false, numberOfChildren: { under11: '1', between11and15: '2', between16and19: '3' } }
+        { declared: false, numberOfChildren: { under11: '1', between11and15: '2', between16and19: '3' } }
       )
 
-      expect(actual.hasAnyChildren).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.numberOfChildren).to.be.eq(undefined)
     })
   })
@@ -84,7 +84,7 @@ describe('Dependants', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    describe('when hasAnyChildren is', () => {
+    describe('when declared is', () => {
 
       context('undefined', () => {
 

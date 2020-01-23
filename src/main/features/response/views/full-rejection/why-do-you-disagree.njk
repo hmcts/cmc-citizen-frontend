@@ -1,0 +1,22 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, textArea, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'Why do you disagree with the claim amount?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.',
+                  { totalAmount: claim.totalAmountTillToday | numeral }) }}</p>
+
+        {{ textArea(name = 'text', form = form, rows = 10) }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

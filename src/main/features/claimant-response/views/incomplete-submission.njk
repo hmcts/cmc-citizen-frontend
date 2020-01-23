@@ -1,0 +1,15 @@
+{% extends "layout.njk" %}
+{% from "remainingTasksFragment.njk" import remainingTasksFragment  %}
+
+{% set heading = 'You need to complete all sections before you submit your response' %}
+
+{% block content %}
+
+  {{
+    remainingTasksFragment(
+      tasks = tasks,
+      backLink = taskListUri
+    )
+  }}
+
+{% endblock %}

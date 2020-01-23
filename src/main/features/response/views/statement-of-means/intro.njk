@@ -1,0 +1,20 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton %}
+
+{% set claimantFullName = claim.claimData.claimant.name %}
+{% set heading = 'Send ' + claimantFullName + ' your financial details' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        <p>{{ t('You need to give {{ claimantName }} details of your finances.', { claimantName: claimantFullName }) }}</p>
+        <p>{{ t('We’ll ask you for the details then we’ll send them to {{ claimantName }} to review.', { claimantName: claimantFullName }) }}</p>
+        <p>{{ t('They can reject your proposal if they believe you can pay sooner.') }}</p>
+        <p>{{ t('If they reject your proposal, the court will make a new plan using your financial details.') }}</p>
+        {{ submitButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

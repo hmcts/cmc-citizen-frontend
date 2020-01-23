@@ -1,0 +1,80 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import linkButton, saveAndContinueButton, errorSummary, csrfProtection, radioOption, poundInput, textArea %}
+{% from "date.njk" import dateInput %}
+{% from "financialDetails.njk" import financialDetailsTable, financialDetailsBlock %}
+
+{% block additional_scripts %}
+  {% include "payment-plan-calculation-scripts.njk" %}
+{% endblock %}
+
+{% block content %}
+  <div class="column-two-thirds">
+
+    <p class="panel">{{ t('The court will review your suggestion and may reject it if it’s more than the defendant can afford.') }}</p>
+
+    <p>{{ t('Total claim amount is {{ totalAmount }}.', { totalAmount: totalAmount | numeral }) }} </p>
+
+    {% if featureToggles.testingSupport and disposableIncome !== undefined %}
+      <p>For testing use only: Disposable Income value: {{ disposableIncome }}</p>
+    {% endif %}
+
+    <form method="post" novalidate class="payment-plan-calculation">
+      {{ csrfProtection(csrf) }}
+
+      {{ financialDetailsBlock(claim, 'Their finances', 'See their financial details', 'form-group') }}
+
+      <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
+      {{ poundInput('Regular payments of', 'instalmentAmount', form, 'For example, £10', bold = true) }}
+
+      <div class="form-group">
+        {% set error = form.errorFor('paymentSchedule') %}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <fieldset id="paymentSchedule[label]">
+            <legend>
+              <span class="form-label-bold">{{ t('How often do you want to receive payments?') }}</span>
+              <span class="form-hint">{{ t('The court will accept the defendant`s payment frequency.
+                  We`ll only consider your preferred frequency if a different plan is set by a judge later.') }}</span>
+              {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+            </legend>
+
+            {{ radioOption(
+              form = form,
+              name = 'paymentSchedule',
+              label = PaymentSchedule.EACH_WEEK.displayValue,
+              value = PaymentSchedule.EACH_WEEK.value,
+              checked = form.valueFor('paymentSchedule') === PaymentSchedule.EACH_WEEK,
+              bold = true
+            ) }}
+
+            {{ radioOption(
+              form = form,
+              name = 'paymentSchedule',
+              label = PaymentSchedule.EVERY_TWO_WEEKS.displayValue,
+              value = PaymentSchedule.EVERY_TWO_WEEKS.value,
+              checked = form.valueFor('paymentSchedule') === PaymentSchedule.EVERY_TWO_WEEKS,
+              bold = true
+            ) }}
+
+            {{ radioOption(
+              form = form,
+              name = 'paymentSchedule',
+              label = PaymentSchedule.EVERY_MONTH.displayValue,
+              value = PaymentSchedule.EVERY_MONTH.value,
+              checked = form.valueFor('paymentSchedule') === PaymentSchedule.EVERY_MONTH,
+              bold = true
+            ) }}
+          </fieldset>
+        </div>
+      </div>
+
+      {{ linkButton('Calculate length of repayment plan', 'action[calculatePaymentPlan]', 'button button-secondary calculateLengthOfRepayment') }}
+
+      <h2 class="heading-small">{{ t('Length of repayment plan') }}</h2>
+      <p id="lengthOfRepayment" class="lengthOfRepayment"> {{ paymentLength | default('-') }} </p>
+
+      {{ dateInput('firstPaymentDate', form, hint = t('This must be no sooner than {{ nextMonth }}', { nextMonth: 'now' | addDays(30) | inputDate }), label = 'Date for first instalment') }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+  </div>
+{% endblock %}

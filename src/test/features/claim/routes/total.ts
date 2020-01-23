@@ -2,18 +2,19 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkEligibilityGuards } from './checks/eligibility-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
+import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 
-import { Paths as ClaimPaths } from 'claim/paths'
+import { ErrorPaths, Paths as ClaimPaths } from 'claim/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import * as feesServiceMock from '../../../http-mocks/fees'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as feesServiceMock from 'test/http-mocks/fees'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pageContent: string = 'Total amount you’re claiming'
@@ -87,7 +88,18 @@ describe('Claim issue: total page', () => {
         await request(app)
           .get(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.successful.withText(pageContent))
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'Total claim amount'))
+      })
+
+      it('should throw error when claim value is above £10000 including interest', async () => {
+        draftStoreServiceMock.resolveFind('claim', draftStoreServiceMock.aboveAllowedAmountWithInterest)
+        claimStoreServiceMock.mockCalculateInterestRate(0)
+        claimStoreServiceMock.mockCalculateInterestRate(500)
+
+        await request(app)
+          .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.redirect.toLocation(ErrorPaths.amountExceededPage.uri))
       })
     })
   })

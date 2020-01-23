@@ -1,206 +1,200 @@
-import { AmountDescriptionRow } from 'features/response/form/models/statement-of-means/amountDescriptionRow'
-import { MultiRowForm } from 'forms/models/multiRowForm'
-import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsDefined } from 'class-validator'
-import { Fractions } from 'forms/validation/validators/fractions'
-import { Min } from 'forms/validation/validators/min'
-import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
+import { MonthlyExpenseType } from './monthlyExpenseType'
+import { ExpenseSource } from 'response/form/models/statement-of-means/expenseSource'
+import { ValidateIf, ValidateNested } from '@hmcts/class-validator'
 
-export const MAX_NUMBER_OF_ROWS: number = 10
-export const INIT_ROW_COUNT: number = 0
+export class MonthlyExpenses {
 
-export class ValidationErrors {
-  static readonly AMOUNT_REQUIRED_MORTGAGE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Mortgage (Include all mortgages)`
-  static readonly AMOUNT_INVALID_DECIMALS_MORTGAGE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Mortgage (Include all mortgages)`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MORTGAGE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Mortgage (Include all mortgages)`
+  mortgageDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.mortgageDeclared || (o.mortgage && o.mortgage.populated))
+  @ValidateNested()
+  mortgage?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_RENT: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Rent`
-  static readonly AMOUNT_INVALID_DECIMALS_RENT: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Rent`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_RENT: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Rent`
+  rentDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.rentDeclared || (o.rent && o.rent.populated))
+  @ValidateNested()
+  rent?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_COUNCIL: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Council Tax`
-  static readonly AMOUNT_INVALID_DECIMALS_COUNCIL: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Council Tax`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Council Tax`
+  councilTaxDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.councilTaxDeclared || (o.councilTax && o.councilTax.populated))
+  @ValidateNested()
+  councilTax?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_GAS: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Gas`
-  static readonly AMOUNT_INVALID_DECIMALS_GAS: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Gas`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_GAS: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Gas`
+  gasDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.gasDeclared || (o.gas && o.gas.populated))
+  @ValidateNested()
+  gas?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_ELECTRICITY: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Electricity`
-  static readonly AMOUNT_INVALID_DECIMALS_ELECTRICITY: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Electricity`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_ELECTRICITY: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Electricity`
+  electricityDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.electricityDeclared || (o.electricity && o.electricity.populated))
+  @ValidateNested()
+  electricity?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_WATER: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Water`
-  static readonly AMOUNT_INVALID_DECIMALS_WATER: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Water`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_WATER: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Water`
+  waterDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.waterDeclared || (o.water && o.water.populated))
+  @ValidateNested()
+  water?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_TRAVEL: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Travel (school or work)`
-  static readonly AMOUNT_INVALID_DECIMALS_TRAVEL: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Water (school or work)`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_TRAVEL: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Water (school or work)`
+  travelDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.travelDeclared || (o.travel && o.travel.populated))
+  @ValidateNested()
+  travel?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_SCHOOL: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for School Costs (include clothing)`
-  static readonly AMOUNT_INVALID_DECIMALS_SCHOOL: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for School Costs (include clothing)`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_SCHOOL: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for School Costs (include clothing)`
+  schoolCostsDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.schoolCostsDeclared || (o.schoolCosts && o.schoolCosts.populated))
+  @ValidateNested()
+  schoolCosts?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_FOOD: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Food and Housekeeping`
-  static readonly AMOUNT_INVALID_DECIMALS_FOOD: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Food and Housekeeping`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_FOOD: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Food and Housekeeping`
+  foodAndHousekeepingDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.foodAndHousekeepingDeclared ||
+    (o.foodAndHousekeeping && o.foodAndHousekeeping.populated))
+  @ValidateNested()
+  foodAndHousekeeping?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_TV: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for TV and Broadband`
-  static readonly AMOUNT_INVALID_DECIMALS_TV: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for TV and Broadband`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_TV: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for TV and Broadband`
+  tvAndBroadbandDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.tvAndBroadbandDeclared || (o.tvAndBroadband && o.tvAndBroadband.populated))
+  @ValidateNested()
+  tvAndBroadband?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_MOBILE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Mobile Phone`
-  static readonly AMOUNT_INVALID_DECIMALS_MOBILE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Mobile Phone`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MOBILE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Mobile Phone`
+  hirePurchaseDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.hirePurchaseDeclared || (o.hirePurchase && o.hirePurchase.populated))
+  @ValidateNested()
+  hirePurchase?: ExpenseSource
 
-  static readonly AMOUNT_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_REQUIRED} for Maintenance payments`
-  static readonly AMOUNT_INVALID_DECIMALS_MAINTENANCE: string = `${GlobalValidationErrors.AMOUNT_INVALID_DECIMALS} for Maintenance payments`
-  static readonly NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE: string = `${GlobalValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED} for Maintenance payments`
-}
+  mobilePhoneDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.mobilePhoneDeclared || (o.mobilePhone && o.mobilePhone.populated))
+  @ValidateNested()
+  mobilePhone?: ExpenseSource
 
-export class MonthlyExpenses extends MultiRowForm<AmountDescriptionRow> {
+  maintenanceDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.maintenanceDeclared || (o.maintenance && o.maintenance.populated))
+  @ValidateNested()
+  maintenance?: ExpenseSource
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_MORTGAGE })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_MORTGAGE })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MORTGAGE })
-  mortgage?: number
+  otherDeclared?: boolean
+  @ValidateIf((o: MonthlyExpenses) => o.otherDeclared || o.anyOtherPopulated)
+  @ValidateNested()
+  other?: ExpenseSource[]
 
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_RENT })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_RENT })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_RENT })
-  rent?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_COUNCIL })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_COUNCIL })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL })
-  councilTax?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_GAS })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_GAS })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_GAS })
-  gas?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_ELECTRICITY })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_ELECTRICITY })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_ELECTRICITY })
-  electricity?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_WATER })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_WATER })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_WATER })
-  water?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_TRAVEL })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_TRAVEL })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TRAVEL })
-  travel?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_SCHOOL })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_SCHOOL })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SCHOOL })
-  schoolCosts?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_FOOD })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_FOOD })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_FOOD })
-  foodAndHousekeeping?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_TV })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_TV })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TV })
-  tvAndBroadband?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_MOBILE })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_MOBILE })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MOBILE })
-  mobilePhone?: number
-
-  @IsDefined({ message: ValidationErrors.AMOUNT_REQUIRED_MAINTENANCE })
-  @Min(0, { message: ValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE })
-  @Fractions(0, 2, { message: ValidationErrors.AMOUNT_INVALID_DECIMALS_MAINTENANCE })
-  maintenance?: number
-
-  constructor (mortgage?: number,
-               rent?: number,
-               councilTax?: number,
-               gas?: number,
-               electricity?: number,
-               water?: number,
-               travel?: number,
-               schoolCosts?: number,
-               foodAndHousekeeping?: number,
-               tvAndBroadband?: number,
-               mobilePhone?: number,
-               maintenance?: number,
-               rows?: AmountDescriptionRow[]) {
-    super(rows)
+  constructor (
+    mortgageDeclared?: boolean, mortgage?: ExpenseSource,
+    rentDeclared?: boolean, rent?: ExpenseSource,
+    councilTaxDeclared?: boolean, councilTax?: ExpenseSource,
+    gasDeclared?: boolean, gas?: ExpenseSource,
+    electricityDeclared?: boolean, electricity?: ExpenseSource,
+    waterDeclared?: boolean, water?: ExpenseSource,
+    travelDeclared?: boolean, travel?: ExpenseSource,
+    schoolCostsDeclared?: boolean, schoolCosts?: ExpenseSource,
+    foodAndHousekeepingDeclared?: boolean, foodAndHousekeeping?: ExpenseSource,
+    tvAndBroadbandDeclared?: boolean, tvAndBroadband?: ExpenseSource,
+    hirePurchaseDeclared?: boolean, hirePurchase?: ExpenseSource,
+    mobilePhoneDeclared?: boolean, mobilePhone?: ExpenseSource,
+    maintenanceDeclared?: boolean, maintenance?: ExpenseSource,
+    otherDeclared?: boolean, other: ExpenseSource[] = [new ExpenseSource()]
+  ) {
+    this.mortgageDeclared = mortgageDeclared
     this.mortgage = mortgage
+    this.rentDeclared = rentDeclared
     this.rent = rent
+    this.councilTaxDeclared = councilTaxDeclared
     this.councilTax = councilTax
+    this.gasDeclared = gasDeclared
     this.gas = gas
+    this.electricityDeclared = electricityDeclared
     this.electricity = electricity
+    this.waterDeclared = waterDeclared
     this.water = water
+    this.travelDeclared = travelDeclared
     this.travel = travel
+    this.schoolCostsDeclared = schoolCostsDeclared
     this.schoolCosts = schoolCosts
+    this.foodAndHousekeepingDeclared = foodAndHousekeepingDeclared
     this.foodAndHousekeeping = foodAndHousekeeping
+    this.tvAndBroadbandDeclared = tvAndBroadbandDeclared
     this.tvAndBroadband = tvAndBroadband
+    this.hirePurchaseDeclared = hirePurchaseDeclared
+    this.hirePurchase = hirePurchase
+    this.mobilePhoneDeclared = mobilePhoneDeclared
     this.mobilePhone = mobilePhone
+    this.maintenanceDeclared = maintenanceDeclared
     this.maintenance = maintenance
+    this.otherDeclared = otherDeclared
+    this.other = other
+  }
+
+  get anyOtherPopulated (): boolean {
+    return !!this.other && this.other.some(source => source.populated)
   }
 
   static fromObject (value?: any): MonthlyExpenses {
     if (!value) {
       return value
     }
-
     return new MonthlyExpenses(
-      toNumberOrUndefined(value.mortgage),
-      toNumberOrUndefined(value.rent),
-      toNumberOrUndefined(value.councilTax),
-      toNumberOrUndefined(value.gas),
-      toNumberOrUndefined(value.electricity),
-      toNumberOrUndefined(value.water),
-      toNumberOrUndefined(value.travel),
-      toNumberOrUndefined(value.schoolCosts),
-      toNumberOrUndefined(value.foodAndHousekeeping),
-      toNumberOrUndefined(value.tvAndBroadband),
-      toNumberOrUndefined(value.mobilePhone),
-      toNumberOrUndefined(value.maintenance),
-      value.rows ? value.rows.map(AmountDescriptionRow.fromObject) : []
+      value.mortgageDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MORTGAGE.displayValue, value.mortgage),
+      value.rentDeclared, ExpenseSource.fromObject(MonthlyExpenseType.RENT.displayValue, value.rent),
+      value.councilTaxDeclared, ExpenseSource.fromObject(MonthlyExpenseType.COUNCIL_TAX.displayValue, value.councilTax),
+      value.gasDeclared, ExpenseSource.fromObject(MonthlyExpenseType.GAS.displayValue, value.gas),
+      value.electricityDeclared, ExpenseSource.fromObject(MonthlyExpenseType.ELECTRICITY.displayValue, value.electricity),
+      value.waterDeclared, ExpenseSource.fromObject(MonthlyExpenseType.WATER.displayValue, value.water),
+      value.travelDeclared, ExpenseSource.fromObject(MonthlyExpenseType.TRAVEL.displayValue, value.travel),
+      value.schoolCostsDeclared, ExpenseSource.fromObject(MonthlyExpenseType.SCHOOL_COSTS.displayValue, value.schoolCosts),
+      value.foodAndHousekeepingDeclared, ExpenseSource.fromObject(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, value.foodAndHousekeeping),
+      value.tvAndBroadbandDeclared, ExpenseSource.fromObject(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, value.tvAndBroadband),
+      value.hirePurchaseDeclared, ExpenseSource.fromObject(MonthlyExpenseType.HIRE_PURCHASES.displayValue, value.hirePurchase),
+      value.mobilePhoneDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MOBILE_PHONE.displayValue, value.mobilePhone),
+      value.maintenanceDeclared, ExpenseSource.fromObject(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, value.maintenance),
+      value.otherDeclared, value.other && value.other
+      .map(source => ExpenseSource.fromObject(source.name, source))
+      .filter(source => source !== undefined)
     )
-  }
-
-  createEmptyRow (): AmountDescriptionRow {
-    return new AmountDescriptionRow(undefined)
   }
 
   deserialize (input?: any): MonthlyExpenses {
     if (input) {
-      this.mortgage = input.mortgage
-      this.rent = input.rent
-      this.councilTax = input.councilTax
-      this.gas = input.gas
-      this.electricity = input.electricity
-      this.water = input.water
-      this.travel = input.travel
-      this.schoolCosts = input.schoolCosts
-      this.foodAndHousekeeping = input.foodAndHousekeeping
-      this.tvAndBroadband = input.tvAndBroadband
-      this.mobilePhone = input.mobilePhone
-      this.maintenance = input.maintenance
-
-      this.rows = this.deserializeRows(input.rows)
+      this.mortgageDeclared = input.mortgageDeclared
+      this.mortgage = new ExpenseSource().deserialize(input.mortgage)
+      this.rentDeclared = input.rentDeclared
+      this.rent = new ExpenseSource().deserialize(input.rent)
+      this.councilTaxDeclared = input.councilTaxDeclared
+      this.councilTax = new ExpenseSource().deserialize(input.councilTax)
+      this.gasDeclared = input.gasDeclared
+      this.gas = new ExpenseSource().deserialize(input.gas)
+      this.electricityDeclared = input.electricityDeclared
+      this.electricity = new ExpenseSource().deserialize(input.electricity)
+      this.waterDeclared = input.waterDeclared
+      this.water = new ExpenseSource().deserialize(input.water)
+      this.travelDeclared = input.travelDeclared
+      this.travel = new ExpenseSource().deserialize(input.travel)
+      this.schoolCostsDeclared = input.schoolCostsDeclared
+      this.schoolCosts = new ExpenseSource().deserialize(input.schoolCosts)
+      this.foodAndHousekeepingDeclared = input.foodAndHousekeepingDeclared
+      this.foodAndHousekeeping = new ExpenseSource().deserialize(input.foodAndHousekeeping)
+      this.tvAndBroadbandDeclared = input.tvAndBroadbandDeclared
+      this.tvAndBroadband = new ExpenseSource().deserialize(input.tvAndBroadband)
+      this.hirePurchaseDeclared = input.hirePurchaseDeclared
+      this.hirePurchase = new ExpenseSource().deserialize(input.hirePurchase)
+      this.mobilePhoneDeclared = input.mobilePhoneDeclared
+      this.mobilePhone = new ExpenseSource().deserialize(input.mobilePhone)
+      this.maintenanceDeclared = input.maintenanceDeclared
+      this.maintenance = new ExpenseSource().deserialize(input.maintenance)
+      this.otherDeclared = input.otherDeclared
+      this.other = input.other && input.other.map(source => new ExpenseSource().deserialize(source))
     }
 
     return this
   }
 
-  getInitialNumberOfRows (): number {
-    return INIT_ROW_COUNT
+  addEmptyOtherExpense (): void {
+    this.other.push(new ExpenseSource())
   }
 
-  getMaxNumberOfRows (): number {
-    return MAX_NUMBER_OF_ROWS
+  removeOtherExpense (source: ExpenseSource): void {
+    this.other.splice(this.other.findIndex(element => element === source), 1)
   }
+
+  resetExpense (propertyName: string, source: ExpenseSource): void {
+    this[`${propertyName.split('.')[0]}Declared`] = false
+    source.reset()
+  }
+
 }

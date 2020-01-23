@@ -1,0 +1,49 @@
+{% extends "layout.njk" %}
+{% from "internalLink.njk" import internalLink %}
+{% from "paymentPlanTable.njk" import paymentPlanTable %}
+
+{% if requestedBy === MadeBy.DEFENDANT.value %}
+  {% if claim.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT %}
+    {% set heading = 'The court’s repayment plan' %}
+    {% set topMessage = 'The court has suggested this repayment plan based on the financial details you gave:' %}
+  {% else %}
+    {% set heading = 'The claimant’s repayment plan' %}
+    {% set topMessage = 'They’ve suggested this repayment plan based on the financial details you gave:' %}
+    {% set bottomMessage = 'If you think you can’t afford the repayment plan, you can ' %}
+  {% endif %}
+{% else %}
+  {% set heading = 'The repayment plan' %}
+  {% set bottomMessage = 'If you think the defendant can repay you sooner, you can ' %}
+{% endif %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    {% if paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+      <p>{{ t(topMessage)}}</p>
+      {{ paymentPlanTable(
+        id = 'payment-table',
+        instalmentAmount = paymentIntention.repaymentPlan.instalmentAmount,
+        paymentSchedule = paymentIntention.repaymentPlan.paymentSchedule,
+        firstPaymentDate = paymentIntention.repaymentPlan.firstPaymentDate,
+        completionDate = paymentIntention.repaymentPlan.completionDate,
+        paymentLength = paymentIntention.repaymentPlan.paymentLength
+        )
+      }}
+    {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY   %}
+      <p>{{ t('The defendant will pay {{ amount }} by {{ date }}.', { amount: remainingAmountToPay | numeral, date: payByDate | date}) }}<p>
+    {% endif %}
+
+    {% if claim.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT %}
+      <p>{{ t('The claimant has agreed to the court’s plan and signed a settlement agreement based on the plan. You can choose to sign the agreement or not.') }}</p>
+      <div class="form-group">
+        {{ internalLink('Respond to the settlement agreement ', OfferPaths.declarationPage.evaluateUri({ externalId: claim.externalId }), 'button primary-button') }}
+      </div>
+      <p>{{ t('If you do not respond, the claimant can request a County Court Judgment against you.') }}</p>
+    {% endif %}
+    {% if claim.isEligibleForReDetermination() %}
+      <p>{{ t(bottomMessage) }}{{ internalLink('ask a judge to make a new repayment plan.', CCJPaths.redeterminationPage.evaluateUri({ externalId: claim.externalId, madeBy: requestedBy })) }}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

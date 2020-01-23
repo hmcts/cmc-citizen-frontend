@@ -1,6 +1,6 @@
-import { IsDefined, IsIn, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, ValidateIf } from '@hmcts/class-validator'
 
-import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { MaxLength } from '@hmcts/cmc-validators'
 
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'

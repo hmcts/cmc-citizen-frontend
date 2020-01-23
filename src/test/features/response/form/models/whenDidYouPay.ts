@@ -3,8 +3,8 @@
 
 import { expect } from 'chai'
 import * as randomstring from 'randomstring'
-import { Validator } from 'class-validator'
-import { expectNumberOfValidationErrors, expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectNumberOfValidationErrors, expectValidationError } from 'test/app/forms/models/validationUtils'
 import { WhenDidYouPay, ValidationErrors } from 'response/form/models/whenDidYouPay'
 import * as moment from 'moment'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
@@ -100,7 +100,7 @@ describe('WhenDidYouPay', () => {
         const errors = validator.validateSync(new WhenDidYouPay(new LocalDate(20, 2, 29), 'Paid by cheque'))
 
         expectNumberOfValidationErrors(errors, 1)
-        expectValidationError(errors, CommonValidationErrors.DATE_INVALID_YEAR)
+        expectValidationError(errors, LocalDateValidationErrors.YEAR_FORMAT_NOT_VALID)
       })
 
       it('should reject a future date', () => {

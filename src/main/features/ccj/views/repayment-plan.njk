@@ -26,7 +26,8 @@
         <div class="form-group">
           <fieldset>
             <legend class="visually-hidden">{{ t('Date for first payment') }}</legend>
-            {{ dateInput('firstPaymentDate', form, hint = 'For example, 12 03 2017',
+            {{ dateInput('firstPaymentDate', form,
+            hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | monthIncrement | inputDate }),
             label = 'Date for first payment') }}
           </fieldset>
         </div>

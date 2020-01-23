@@ -1,6 +1,5 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, radioOption, numericInput, saveAndContinueButton, errorSummary %}
-{% from "date.njk" import dateInput %}
 
 {% set heading = 'Do any children live with you?' %}
 
@@ -10,41 +9,41 @@
       <form method="post" novalidate
         class="analytics-submit-event-trigger"
         data-event-action="SoM: Do any children live with you?"
-        data-event-label-from="hasAnyChildren">
+        data-event-label-from="declared">
 
         {{ csrfProtection(csrf) }}
 
-        {% set error = form.errorFor('hasAnyChildren') %}
-        <fieldset id="hasAnyChildren[label]" class="form-group {% if error %} form-group-error {% endif %}">
+        {% set error = form.errorFor('declared') %}
+        <fieldset id="declared[label]" class="form-group {% if error %} form-group-error {% endif %}">
           <legend class="visually-hidden">{{ t('Do any children live with you?') }}</legend>
 
           {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'hasAnyChildren', value = 'true', checked = form.valueFor('hasAnyChildren') === true)
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
           }}
 
           {% set atLeastOfNumberShouldBeEnteredError = form.errorFor('numberOfChildren') %}
 
           <div class="form-group panel panel-border-narrow js-hidden {% if atLeastOfNumberShouldBeEnteredError %} form-group-error {% endif %}"
-               id="hasAnyChildren-true" aria-hidden="false">
+               id="declared-true" aria-hidden="false">
 
           {% if atLeastOfNumberShouldBeEnteredError %}
             <p id="numberOfChildren[label]" class="error-message">
               {{ t(atLeastOfNumberShouldBeEnteredError) }}
             </p>
           {% else %}
-            <p>{{ t('Enter number for each age group.') }}</p>
+            <p>{{ t('Enter how many for each age group.') }}</p>
           {% endif %}
 
-            {{ numericInput('Under 11', 'numberOfChildren[under11]', form) }}
-            {{ numericInput('11 to 15', 'numberOfChildren[between11and15]', form) }}
-            {{ numericInput('16 to 19', 'numberOfChildren[between16and19]', form) }}
+            {{ numericInput('Under 11', 'numberOfChildren[under11]', form, inputClass = 'form-control-1-8') }}
+            {{ numericInput('11 to 15', 'numberOfChildren[between11and15]', form, inputClass = 'form-control-1-8') }}
+            {{ numericInput('16 to 19', 'numberOfChildren[between16and19]', form, inputClass = 'form-control-1-8') }}
 
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'hasAnyChildren', value = 'false', checked = form.valueFor('hasAnyChildren') === false)
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
           }}
 
         </fieldset>

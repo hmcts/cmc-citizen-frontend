@@ -10,16 +10,16 @@ class Link {
 
 class Links {
   @Type(() => Link)
-  readonly self: Link
+  readonly self?: Link
   @Type(() => Link)
   readonly next_url: Link
 }
 
 export class Payment {
   reference: string
-  amount: number
+  amount?: number
   status: string // only in V2
-  date_created: number | string // V1 uses number, V2 uses ISO string
+  date_created?: number | string // V1 uses number, V2 uses ISO string, Payment response extends this which doesn't have a date_created
   @Type(() => Links)
   _links?: Links
 

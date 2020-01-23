@@ -1,24 +1,24 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import '../../../../routes/expectations'
-import { Paths, StatementOfMeansPaths } from 'response/paths'
-import * as idamServiceMock from '../../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
-import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import { checkAuthorizationGuards } from '../checks/authorization-check'
-import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
-import { app } from '../../../../../main/app'
-import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
+import 'test/routes/expectations'
+import { StatementOfMeansPaths } from 'response/paths'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { app } from 'main/app'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.courtOrdersPage.evaluateUri(
   { externalId: claimStoreServiceMock.sampleClaimObj.externalId }
 )
 
-describe('Defendant response: Statement of means: debts', () => {
+describe('Defendant response: Statement of means: court orders', () => {
 
   attachDefaultHooks(app)
 
@@ -60,12 +60,13 @@ describe('Defendant response: Statement of means: debts', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
     })
@@ -112,17 +113,18 @@ describe('Defendant response: Statement of means: debts', () => {
 
         context('should update draft store and redirect', () => {
 
-          it('when valid debt provided', async () => {
+          it('when valid court order provided', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyCourtOrders: 'true', rows: [{ details: 'my debt', amount: '100' }] })
+              .send({ declared: 'true', rows: [{ instalmentAmount: '100', amount: '100', claimNumber: '12345' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -130,15 +132,16 @@ describe('Defendant response: Statement of means: debts', () => {
 
           it('when no selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyCourtOrders: 'false' })
+              .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(Paths.taskListPage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.priorityDebtsPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -150,13 +153,14 @@ describe('Defendant response: Statement of means: debts', () => {
 
         it('should add more rows', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)
             .send({ action: { addRow: 'Add row' } })
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you paying any other court orders?'))
+            .expect(res => expect(res).to.be.successful.withText('Are you paying money as a result of any court orders?'))
         })
       })
     })

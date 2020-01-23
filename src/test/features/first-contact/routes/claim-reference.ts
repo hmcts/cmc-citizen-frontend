@@ -2,13 +2,13 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
 
 import { Paths as DefendantFirstContactPaths } from 'first-contact/paths'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 describe('Defendant first contact: claim reference page', () => {
   attachDefaultHooks(app)
@@ -41,7 +41,7 @@ describe('Defendant first contact: claim reference page', () => {
     it('should redirect to mcol when CCBC prefix is used', async () => {
       await request(app)
         .post(DefendantFirstContactPaths.claimReferencePage.uri)
-        .send({ reference: 'AA1' })
+        .send({ reference: 'A1ED1123' })
         .expect(res => expect(res).to.be.redirect.toLocation(config.get<string>('mcol.url')))
     })
 

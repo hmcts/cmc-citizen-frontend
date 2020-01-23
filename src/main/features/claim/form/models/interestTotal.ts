@@ -1,8 +1,7 @@
-import { IsDefined, MaxLength, Min } from 'class-validator'
+import { IsDefined, MaxLength, Min } from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
-import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
-import { IsNotBlank } from '@hmcts/cmc-validators'
+import { IsNotBlank, Fractions } from '@hmcts/cmc-validators'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class ValidationErrors {
@@ -18,7 +17,7 @@ export class InterestTotal implements CompletableTask {
 
   @IsDefined({ message: ValidationErrors.REASON_REQUIRED })
   @IsNotBlank({ message: ValidationErrors.REASON_REQUIRED })
-  @MaxLength(250, { message: CommonValidationErrors.REASON_TOO_LONG })
+  @MaxLength(10000, { message: CommonValidationErrors.REASON_TOO_LONG })
   reason?: string
 
   constructor (amount?: number, reason?: string) {

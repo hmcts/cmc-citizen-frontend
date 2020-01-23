@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "./macro/caseHistory.njk" import caseHistoryForDefendantClaimDetails %}
+{% from "../../claim/views/macro/about-claim-widget.njk" import aboutClaimWidget %}
 
 {% set headingVisible = false %}
 {% set heading = 'Claim status' %}
@@ -7,38 +8,17 @@
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h1 class="heading-large">
-        <span class="heading-secondary">{{ t('Claim number:') }}</span>
-        {{ claim.claimNumber }}
-      </h1>
-      <h2 class="heading-medium">{{ t('Claim status') }}</h2>
-      {{ caseHistoryForDefendantClaimDetails(claim) }}
+      <div class="form-group-related no-bottom-margin">
+        <h2 class="heading-medium no-bottom-margin">{{ claim.claimData.claimant.name }} v {{ claim.claimData.defendant.name }}</h2>
+        <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
+      </div>
+      <div>
+        {{ caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) }}
+      </div>
     </div>
 
     <div class="column-one-third">
-      <div class="about-claim-widget">
-        <p class="heading-small">{{ t('About claim') }}</p>
-        <ul class="font-xsmall list">
-          <li>
-            <strong class="bold">{{ t('Claimant name:') }}</strong>
-            <div>{{ claim.claimData.claimant.name }}</div>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Claim amount:') }}</strong>
-            <div>{{ claim.totalAmountTillToday | numeral }}</div>
-          </li>
-          <li>
-            <strong class="bold">{{ t('Claim details:') }}</strong>
-            <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
-          </li>
-          {% if claim.response %}
-          <li>
-            <strong class="bold">{{ t('Your response:') }}</strong>
-            <a class="block" href="{{ ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download response') }}</a>
-          </li>
-          {% endif %}
-        </ul>
-      </div>
+      {{ aboutClaimWidget(claim = claim, otherParty = 'claimant') }}
     </div>
   </div>
 {% endblock %}

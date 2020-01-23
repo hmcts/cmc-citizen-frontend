@@ -1,17 +1,17 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import '../../../../routes/expectations'
+import 'test/routes/expectations'
 import { StatementOfMeansPaths } from 'response/paths'
-import * as idamServiceMock from '../../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
-import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import { checkAuthorizationGuards } from '../checks/authorization-check'
-import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
-import { app } from '../../../../../main/app'
-import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { app } from 'main/app'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.dependantsPage.evaluateUri(
@@ -60,7 +60,8 @@ describe('Defendant response: Statement of means: dependants', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -110,36 +111,38 @@ describe('Defendant response: Statement of means: dependants', () => {
 
       describe('should update draft store and redirect to ', () => {
 
-        it('maintenance page when no children', async () => {
+        it('other dependants page when no children', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
-            .send({ hasAnyChildren: 'false' })
+            .send({ declared: 'false' })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.otherDependantsPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
         })
 
-        it('maintenance page when 0 children between 16 and 19', async () => {
+        it('dependants disability page when some children but 0 between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
             .send({
-              hasAnyChildren: 'true',
+              declared: 'true',
               numberOfChildren: { under11: '1', between11and15: '2', between16and19: '0' }
             })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.maintenancePage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.dependantsDisabilityPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )
@@ -147,13 +150,14 @@ describe('Defendant response: Statement of means: dependants', () => {
 
         it('education page when > 0 children between 16 and 19', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
             .send({
-              hasAnyChildren: 'true',
+              declared: 'true',
               numberOfChildren: { under11: '0', between11and15: '0', between16and19: '3' }
             })
             .set('Cookie', `${cookieName}=ABC`)

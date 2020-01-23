@@ -1,4 +1,4 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Choose option'
@@ -7,7 +7,7 @@ export class ValidationErrors {
 export class PaymentType {
   static readonly IMMEDIATELY = new PaymentType('IMMEDIATELY', 'Immediately')
   static readonly INSTALMENTS = new PaymentType('INSTALMENTS', 'By instalments')
-  static readonly FULL_BY_SPECIFIED_DATE = new PaymentType('FULL_BY_SPECIFIED_DATE', 'By a set date')
+  static readonly BY_SPECIFIED_DATE = new PaymentType('BY_SPECIFIED_DATE', 'By a set date')
 
   readonly value: string
   readonly displayValue: string
@@ -21,7 +21,7 @@ export class PaymentType {
     return [
       PaymentType.IMMEDIATELY,
       PaymentType.INSTALMENTS,
-      PaymentType.FULL_BY_SPECIFIED_DATE
+      PaymentType.BY_SPECIFIED_DATE
     ]
   }
 

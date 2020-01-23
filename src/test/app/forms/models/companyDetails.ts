@@ -4,14 +4,11 @@ import { ValidationErrors as PartydDetailsValidationErrors } from 'forms/models/
 import { PartyType } from 'common/partyType'
 import { Address, ValidationErrors as AddressValidationErrors } from 'forms/models/address'
 import { ValidationErrors as CorrespondenceAddressValidationErrors } from 'forms/models/correspondenceAddress'
-import { ValidationError, Validator } from 'class-validator'
-import { expectValidationError } from './validationUtils'
+import { ValidationError, Validator } from '@hmcts/class-validator'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
+
 const validAddress = new Address('line1', 'line2', 'line3', 'city', 'bb127nq')
 
-const aVeryLongString = (): string => {
-  return 'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongString' +
-         'aVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringaVeryLongStringa'
-}
 describe('CompanyDetails', () => {
   let input
   let formInput
@@ -77,7 +74,7 @@ describe('CompanyDetails', () => {
     })
 
     it('should return error when company name got more than 255 character', () => {
-      companyDetails.name = aVeryLongString()
+      companyDetails.name = generateString(256)
       companyDetails.contactPerson = 'contactPerson'
       companyDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(companyDetails)
@@ -85,11 +82,11 @@ describe('CompanyDetails', () => {
     })
 
     it('should return error when contact person got more than 255 character', () => {
-      companyDetails.contactPerson = aVeryLongString()
+      companyDetails.contactPerson = generateString(256)
       companyDetails.name = 'companyName'
       companyDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(companyDetails)
-      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1','35'))
+      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1','30'))
     })
 
     describe('when "has correspondence address" flag is set to true', () => {

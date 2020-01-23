@@ -1,0 +1,42 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroupWithHintPanel, errorSummary %}
+
+{% set heading = 'Will you try free mediation?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Defendant: Will you try free mediation"
+            data-event-label-from="option"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{ radioGroupWithHintPanel(
+            form = form,
+            label = heading,
+            labelForScreenReadersOnly = true,
+            name = 'option',
+            isInline = inline,
+            options = [
+              {
+                label: 'Yes',
+                value: YesNoOption.YES.option,
+                checked: (form.valueFor('option') === YesNoOption.YES),
+                hint: hint
+              },
+              {
+                label: 'No',
+                value: YesNoOption.NO.option,
+                checked: (form.valueFor('option') === YesNoOption.NO)
+              }]
+          ) }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

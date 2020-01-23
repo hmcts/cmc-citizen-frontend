@@ -2,17 +2,16 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
 
 import { Paths as ResponsePaths } from 'response/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import { checkCountyCourtJudgmentRequestedGuard } from './checks/ccj-requested-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -30,17 +29,6 @@ describe('Defendant response: receipt', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-
-      it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
-        claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
-
-        await request(app)
-          .get(pagePath)
-          .set('Cookie', `${cookieName}=ABC`)
-          .expect(res => expect(res).to.be.serverError.withText('Error'))
-      })
-
       it('should return 500 and render error page when cannot retrieve claim by defendant id', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
@@ -51,7 +39,6 @@ describe('Defendant response: receipt', () => {
       })
 
       it('should return 500 and render error page when cannot generate PDF', async () => {
-        claimStoreServiceMock.resolveRetrieveClaimByExternalIdWithResponse()
         claimStoreServiceMock.rejectRetrieveDocument('HTTP Error')
 
         await request(app)

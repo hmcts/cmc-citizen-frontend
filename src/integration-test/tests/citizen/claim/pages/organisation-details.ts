@@ -6,6 +6,8 @@ const fields = {
   name: 'input[id=name]',
   contactPerson: 'input[id=contactPerson]',
   address: {
+    postcodeLookUp: 'input[id="address[postcodeLookup]"]',
+    addressList: 'select[id="address[addressList]"]',
     line1: 'input[id="address[line1]"]',
     line2: 'input[id="address[line2]"]',
     city: 'input[id="address[city]"]',
@@ -23,7 +25,8 @@ const fields = {
 }
 
 const buttons = {
-  submit: 'input[type=submit]'
+  submit: 'input[type=submit]',
+  lookupAddress: 'a[id="address[find-button]"]'
 }
 
 export class OrganisationDetailsPage {
@@ -40,12 +43,21 @@ export class OrganisationDetailsPage {
     I.fillField(fields.name, name)
   }
 
-  enterAddress (address: Address): void {
-    I.click(fields.address.enterManually)
+  lookupAddress (postcodeLookupQuery: PostcodeLookupQuery): void {
+    I.fillField(fields.address.postcodeLookUp, postcodeLookupQuery.postcode)
+    I.click(buttons.lookupAddress)
+    I.waitForVisible(fields.address.addressList)
+    I.selectOption(fields.address.addressList, postcodeLookupQuery.address)
+  }
+
+  enterAddress (address: Address, clickManualLink: boolean = true): void {
+    if (clickManualLink) {
+      I.click(fields.address.enterManually)
+    }
     I.fillField(fields.address.line1, address.line1)
     I.fillField(fields.address.line2, address.line2)
-    I.fillField(fields.address.postcode, address.postcode)
     I.fillField(fields.address.city, address.city)
+    I.fillField(fields.address.postcode, address.postcode)
   }
 
   enterAddresses (address: Address, correspondenceAddress: Address): void {

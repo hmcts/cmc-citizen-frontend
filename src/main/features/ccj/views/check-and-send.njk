@@ -35,27 +35,29 @@
       {{ row('Amount already paid', draft.paidAmount.amount | numeral, bottomBorder = false) }}
     {% endif %}
 
-    {{ row('Amount to be paid by defendant', amountToBePaid | numeral) }}
-
-    {% if draft.paymentOption.option.value === PaymentType.IMMEDIATELY %}
-      {{ row('When you want the defendant to pay',
-        draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = true) }}
-    {% else %}
-      {{ row('How you want the defendant to pay',
-        draft.paymentOption.option.displayValue, changeLink = paymentOptionUrl, bottomBorder = false) }}
-      {% if draft.paymentOption.option.value === PaymentType.FULL_BY_SPECIFIED_DATE %}
+    {{ row('Total to be paid by defendant', amountToBePaid | numeral) }}
+    {% if draft.paymentOption.option %}
+      {% if draft.paymentOption.option.value === PaymentType.IMMEDIATELY %}
         {{ row('When you want the defendant to pay',
+        draft.paymentOption.option.displayValue, bottomBorder = true) }}
+      {% else %}
+        {{ row('How you want the defendant to pay',
+        draft.paymentOption.option.displayValue, bottomBorder = false) }}
+        {% if draft.paymentOption.option === PaymentType.BY_SPECIFIED_DATE %}
+          {{ row('When you want the defendant to pay',
           draft.payBySetDate.date.toMoment() | date, bottomBorder = true) }}
-      {% endif %}
-      {% if draft.paymentOption.option.value === PaymentType.INSTALMENTS %}
-        {{ row('Instalments of',
+        {% endif %}
+        {% if draft.paymentOption.option === PaymentType.INSTALMENTS %}
+          {{ row('Instalments of',
           draft.repaymentPlan.instalmentAmount | numeral, bottomBorder = false) }}
-        {{ row('When you want them to make the first payment',
+         {{ row('When you want them to make the first payment',
           draft.repaymentPlan.firstPaymentDate.toMoment() | date, bottomBorder = false) }}
-        {{ row('How often you want them to make this payment',
-          draft.repaymentPlan.paymentSchedule.displayValue, bottomBorder = true) }}
+         {{ row('How often you want them to make this payment',
+         draft.repaymentPlan.paymentSchedule.displayValue, bottomBorder = true) }}
+        {% endif %}
       {% endif %}
     {% endif %}
+
 
     {{ tableEnd() }}
 

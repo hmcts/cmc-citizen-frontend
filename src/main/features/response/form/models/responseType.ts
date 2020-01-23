@@ -1,6 +1,6 @@
 export class ResponseType {
   static readonly FULL_ADMISSION = new ResponseType('FULL_ADMISSION', 'I admit all of the claim')
-  static readonly PART_ADMISSION = new ResponseType('PART_ADMISSION', 'I reject part of the claim')
+  static readonly PART_ADMISSION = new ResponseType('PART_ADMISSION', 'I admit part of the claim')
   static readonly DEFENCE = new ResponseType('DEFENCE', 'I reject all of the claim')
 
   readonly value: string

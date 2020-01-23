@@ -1,14 +1,11 @@
-import { IsDefined } from 'class-validator'
-import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
+import { IsDefined } from '@hmcts/class-validator'
+import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import * as toBoolean from 'to-boolean'
-
-export class ValidationErrors {
-  static readonly DECLARATION_REQUIRED: string = 'Please select I confirm I’ve read and accept the terms of the agreement.'
-}
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class Declaration {
-  @IsDefined({ message: ValidationErrors.DECLARATION_REQUIRED })
-  @IsBooleanTrue({ message: ValidationErrors.DECLARATION_REQUIRED })
+  @IsDefined({ message: GlobalValidationErrors.DECLARATION_REQUIRED })
+  @IsBooleanTrue({ message: GlobalValidationErrors.DECLARATION_REQUIRED })
   signed?: boolean
 
   constructor (signed?: boolean) {

@@ -1,29 +1,57 @@
 import * as express from 'express'
 
-import { Paths } from 'ccj/paths'
+import { AbstractPaidAmountSummaryPage } from 'shared/components/ccj/paid-amount-summary'
+import * as CCJHelper from 'main/common/helpers/ccjHelper'
+import { ccjPath, Paths } from 'features/ccj/paths'
 
-import { ErrorHandling } from 'shared/errorHandling'
-import { Claim } from 'claims/models/claim'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { Draft } from '@hmcts/draft-store-client'
-import { getInterestDetails } from 'shared/interestUtils'
-import { MomentFactory } from '../../../common/momentFactory'
+import { AbstractModelAccessor, DefaultModelAccessor } from 'shared/components/model-accessor'
+import { PaidAmount } from 'ccj/form/models/paidAmount'
+import { Claim } from 'claims/models/claim'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { CCJPaymentOption } from 'ccj/form/models/ccjPaymentOption'
+import { User } from 'idam/user'
+import { Draft as DraftWrapper } from '@hmcts/draft-store-client'
+import { DraftService } from 'services/draftService'
+import { retrievePaymentOptionsFromClaim } from 'claims/ccjModelConverter'
+
+class PaidAmountSummaryPage extends AbstractPaidAmountSummaryPage<DraftCCJ> {
+
+  paidAmount (): AbstractModelAccessor<DraftCCJ, PaidAmount> {
+    return new DefaultModelAccessor('paidAmount', () => new PaidAmount())
+  }
+
+  buildRedirectUri (req: express.Request, res: express.Response): string {
+    const { externalId } = req.params
+    const claim: Claim = res.locals.claim
+    const response = claim.response
+    if (response) {
+      const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
+      if ((paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) ||
+        (claim.isSettlementAgreementRejected && claim.isSettlementPaymentDateValid())) {
+        return Paths.checkAndSendPage.evaluateUri({ externalId: externalId })
+      } else {
+        return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+      }
+    } else {
+      return Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+    }
+  }
+
+  claimFeeInPennies (claim: Claim): number {
+    return CCJHelper.claimFeeInPennies(claim)
+  }
+
+  amountSettledFor (claim: Claim): number {
+    return CCJHelper.amountSettledFor(claim)
+  }
+
+  async saveDraft (locals: { user: User, draft: DraftWrapper<DraftCCJ> }): Promise<void> {
+    const user: User = locals.user
+    await new DraftService().save(locals.draft, user.bearerToken)
+  }
+}
 
 /* tslint:disable:no-default-export */
-export default express.Router()
-  .get(Paths.paidAmountSummaryPage.uri,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
-      const claim: Claim = res.locals.claim
-      const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-      const { externalId } = req.params
-
-      res.render(
-        Paths.paidAmountSummaryPage.associatedView, {
-          claim: claim,
-          alreadyPaid: draft.document.paidAmount.amount || 0,
-          interestDetails: await getInterestDetails(claim),
-          nextPageUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId }),
-          defaultJudgmentDate: MomentFactory.currentDate()
-        }
-      )
-    }))
+export default new PaidAmountSummaryPage()
+  .buildRouter(ccjPath)

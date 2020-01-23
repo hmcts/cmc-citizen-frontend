@@ -31,18 +31,20 @@
               bold: false,
               label: 'Yes',
               value: StatementType.ACCEPTATION.value,
-              checked: (form.valueFor('option').value === StatementType.ACCEPTATION)
+              checked: (form.valueFor('option').value === StatementType.ACCEPTATION),
+              hint: 'You can make a legal agreement between you and ' + claim.claimData.defendant.name + '.'
             },
             {
               bold: false,
               label: 'No',
               value: StatementType.REJECTION.value,
-              checked: (form.valueFor('option').value === StatementType.REJECTION)
+              checked: (form.valueFor('option').value === StatementType.REJECTION),
+              hint: 'If you reject the offer you can’t mention it in court.'
             }
           ]
         )
       }}
-      {{ submitButton('Continue') }}
+      {{ submitButton() }}
       </form>
     </div>
   </div>

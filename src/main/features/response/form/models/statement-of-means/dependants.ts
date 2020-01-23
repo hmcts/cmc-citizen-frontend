@@ -1,9 +1,9 @@
-import { IsDefined, ValidateIf, ValidateNested } from 'class-validator'
+import { IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
 
 import * as toBoolean from 'to-boolean'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { NumberOfChildren } from 'response/form/models/statement-of-means/numberOfChildren'
-import { AtLeastOneFieldIsPopulated } from 'forms/validation/validators/atLeastOneFieldIsPopulated'
+import { AtLeastOneFieldIsPopulated } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly ENTER_AT_LEAST_ONE: string = 'Enter a number for at least one field'
@@ -12,15 +12,15 @@ export class ValidationErrors {
 export class Dependants {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  hasAnyChildren: boolean
+  declared: boolean
 
-  @ValidateIf(o => o.hasAnyChildren === true)
+  @ValidateIf(o => o.declared === true)
   @ValidateNested()
   @AtLeastOneFieldIsPopulated({ message: ValidationErrors.ENTER_AT_LEAST_ONE })
   numberOfChildren: NumberOfChildren
 
-  constructor (hasAnyChildren?: boolean, numberOfChildren?: NumberOfChildren) {
-    this.hasAnyChildren = hasAnyChildren
+  constructor (declared?: boolean, numberOfChildren?: NumberOfChildren) {
+    this.declared = declared
     this.numberOfChildren = numberOfChildren
   }
 
@@ -29,18 +29,18 @@ export class Dependants {
       return value
     }
 
-    const hasAnyChildren: boolean = value.hasAnyChildren !== undefined ? toBoolean(value.hasAnyChildren) : undefined
+    const declared: boolean = value.declared !== undefined ? toBoolean(value.declared) : undefined
 
     return new Dependants(
-      hasAnyChildren,
-      hasAnyChildren ? NumberOfChildren.fromObject(value.numberOfChildren) : undefined
+      declared,
+      declared ? NumberOfChildren.fromObject(value.numberOfChildren) : undefined
     )
   }
 
   deserialize (input?: any): Dependants {
     if (input) {
-      this.hasAnyChildren = input.hasAnyChildren
-      if (this.hasAnyChildren) {
+      this.declared = input.declared
+      if (this.declared) {
         this.numberOfChildren = new NumberOfChildren().deserialize(input.numberOfChildren)
       }
     }

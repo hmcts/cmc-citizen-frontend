@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 import { ValidationErrors } from 'forms/validation/validationErrors'
-import { expectValidationError, generateString } from '../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 import { INIT_ROW_COUNT } from 'forms/models/timeline'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { DefendantEvidence } from 'response/form/models/defendantEvidence'

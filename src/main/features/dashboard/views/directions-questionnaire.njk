@@ -1,0 +1,51 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "externalLink.njk" import externalLink %}
+{% from "./macro/cmcCorrespondenceAddress.njk" import cmcCorrespondenceAddress %}
+
+{% set heading = 'Complete your directions questionnaire form' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <p class="panel panel-border-wide">
+      {{ t('We need to receive your response before <strong class="bold">4pm on {{ deadline }}</strong>.',
+          { deadline: deadline | date }) | safe }}
+    </p>
+
+    <h3 class="heading-medium">{{ t('Follow these steps') }}</h3>
+
+    <ul class="list list-number">
+      <li>
+        {{ t('Download the <strong class="bold">directions questionnaire form.</strong>') | safe }}
+      </li>
+      <li>{{ t('Print and complete the form.') }}</li>
+      <li>{{ t('Post the form to:') }}</li>
+    </ul>
+
+    {{ cmcCorrespondenceAddress() }}
+
+    <p>{{ t('You can also email the completed form to {{ email }}', { email: supportEmailAddress }) }}</p>
+
+    <h3 class="heading-medium">{{ t('Download and complete the form') }}</h3>
+
+    <ul class="list">
+      <li>{{ externalLink('Download directions questionnaire form', asset_paths['pdf'] + '/n180-eng.pdf') }} (PDF, 115 KB).
+      </li>
+    </ul>
+
+    <p>{{ t('Use these details when completing the form:') }}</p>
+
+    <ul class="list list-bullet">
+
+      <li>{{ t('In the: County Court Business Centre Online Court') }}</li>
+      <li>{{ t('Claim number: {{ claimNumber }}', { claimNumber: claimNumber }) }}</li>
+      <li>{{ t('To be completed by: {{ citizenName }}', { citizenName: citizenName }) }}</li>
+    </ul>
+
+    {{ supportWidget() }}
+
+  </div>
+</div>
+{% endblock %}
+{% block contactForHelp %}{% endblock %}

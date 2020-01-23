@@ -11,7 +11,7 @@ macro statementOfTruth(
 ) %}
   <p class="bold-medium">{{ t(title) }}</p>
 
-  {% if statementOfTruthType == 'claim' or statementOfTruthType == 'response' %}
+  {% if statementOfTruthType == SignatureType.CLAIM or statementOfTruthType == SignatureType.RESPONSE %}
     <p>{{ t('The information on this page forms your {{ type }}. You can see it on the {{ type }} form after you submit.', { type: statementOfTruthType }) }}</p>
     <p>{{ t('When you’re satisfied that your answers are accurate, you should tick to “sign” this statement of truth on the form.') }}</p>
   {% endif %}
@@ -32,26 +32,33 @@ macro statementOfTruth(
           <li>{{ t('chief executive') }} </li>
           <li>{{ t('manager or other officer of the company or corporation') }}</li>
         </ul>
-        <p>{{ t("If your company isn't registered, a senior position could also be the:") }}</p>
+        <p>{{ t("If your corporation isn't registered, a senior position could be:") }}</p>
         <ul class="list-bullet list">
-          <li>{{ t('chairman') }}</li>
-          <li>{{ t('president') }}</li>
-          <li>{{ t('town clerk or other similar officer of the corporation.') }}</li>
+          <li>{{ t('the chairperson or president') }}</li>
+          <li>{{ t('another officer of the corporation') }}</li>
         </ul>
       </div>
     </details>
 
     {{ textInput(t('Full name'), 'signerName', form, inputClass = 'form-control-1-2') }}
-    {{ textInput(t('Role'), 'signerRole', form, inputClass = 'form-control-1-2') }}
+    {{ textInput(t('Job title'), 'signerRole', form, inputClass = 'form-control-1-2') }}
   {% endif %}
 
-  {{
-  checkboxSingle(
-  label = label,
-  name = 'signed',
-  option = { label: label, value: true },
-  form = form,
-  legendHidden = true
-  )
-  }}
+  {{ checkboxSingle(
+    label = label,
+    name = 'signed',
+    option = { label: label, value: true },
+    form = form,
+    legendHidden = true
+  ) }}
+
+  {% if form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE or form.model.type == SignatureType.DIRECTION_QUESTIONNAIRE_QUALIFIED %}
+    {{ checkboxSingle(
+      label = 'The hearing requirement details on this page are true to the best of my knowledge.',
+      name = 'directionsQuestionnaireSigned',
+      option = { label: 'The hearing requirement details on this page are true to the best of my knowledge.', value: true },
+      form = form,
+      legendHidden = true
+    ) }}
+  {% endif %}
 {% endmacro %}

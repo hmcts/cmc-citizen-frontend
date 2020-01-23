@@ -1,0 +1,37 @@
+{% macro evidenceSummary(evidence) %}
+  <table class="mobile-table">
+    <thead>
+      <tr>
+        <th class="bold-small tcol-half-width">{{ t('Type') }}</th>
+        <th class="bold-small tcol-half-width">{{ t('Description') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for evidenceRow in evidence %}
+        <tr>
+          <td>{{ evidenceRow.type.displayValue }}</td>
+          <td>{{ evidenceRow.description | default('') }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}
+
+{% macro timelineSummary(timeline) %}
+  <table class="mobile-table">
+    <thead>
+      <tr>
+        <th class="bold-small tcol-half-width">{{ t('Date') }}</th>
+        <th class="bold-small tcol-half-width">{{ t('What happened') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for timelineRow in timeline %}
+        <tr>
+          <td>{{ timelineRow.date }}</td>
+          <td>{{ timelineRow.description }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endmacro %}

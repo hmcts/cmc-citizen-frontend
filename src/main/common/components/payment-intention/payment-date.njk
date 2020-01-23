@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
+{% from "date.njk" import dateInput %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post">
+        {{ csrfProtection(csrf) }}
+
+        {% if notice %}
+          <div class="panel">
+            <p>{{ t(notice) }}</p>
+          </div>
+        {% endif %}
+
+        {% if featureToggles.testingSupport and disposableIncome !== undefined %}
+          <p>For testing use only: Disposable Income value: {{ disposableIncome }}</p>
+        {% endif %}
+
+        {{ dateInput(form = form, name = 'date', hint = t('For example, {{ nextMonth }}', { nextMonth : 'now' | addDays(30) | inputDate })) }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

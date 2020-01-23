@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, emailInput, saveAndContinueButton, errorSummary, textArea %}
 
-{% set heading = t('Why you’re owed the money') %}
+{% set heading = t('Briefly explain your claim') %}
 
 {% block content %}
   <div class="grid-row">
@@ -14,8 +14,12 @@
         <div class="form-group {% if error %} form-group-error {% endif %}">
           <label for="{{ name }}" id="{{ name }}[label]">
             <p class="form-label">
-              {{ t('Briefly explain why you believe the defendant owes you money.') }}
+              {{ t('Tell us why you believe the defendant owes you money.') }}
             </p>
+
+            <p>{{ t('Don’t give us a detailed timeline - we’ll ask for that separately.') }}</p>
+
+            <p>{{ t('You’ll have to pay an extra fee if you want to change the details of the claim later.') }}</p>
 
             {% if error %}
               <span class="error-message">{{ t(error) }}</span>

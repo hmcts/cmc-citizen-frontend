@@ -2,9 +2,9 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { ClaimReference, ValidationErrors } from 'forms/models/claimReference'
 
@@ -56,8 +56,8 @@ describe('ClaimReference', () => {
       expect(errors.length).to.equal(0)
     })
 
-    it('should accept non-CMC claim reference', () => {
-      const errors = validator.validateSync(new ClaimReference('123LL33CC5'))
+    it('should accept CCBC claim reference', () => {
+      const errors = validator.validateSync(new ClaimReference('A1LL3CC5'))
 
       expect(errors.length).to.equal(0)
     })

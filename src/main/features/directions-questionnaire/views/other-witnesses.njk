@@ -1,0 +1,40 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, saveAndContinueButton, errorSummary, numericInput %}
+
+{% set heading = 'Do you want other people to give evidence?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" class="analytics-submit-event-trigger" data-event-action="DQ: Other Witnesses" data-event-label-from="otherWitnesses" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {% set error = form.errorFor('otherWitnesses') %}
+        <fieldset class="form-group {% if error %} form-group-error {% endif %}">
+          <legend>
+            <span class="visuallyhidden">
+              {{ t('Do you want other people to give evidence?') }}
+            </span>
+          </legend>
+
+          <p>{{ t('This could be anyone who can confirm your version of events.') }}</p>
+          {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+          {{
+          radioOption(form = form, label = 'Yes', name = 'otherWitnesses', value = YesNoOption.YES.option, checked = form.valueFor('otherWitnesses').option === YesNoOption.YES.option)
+          }}
+
+          <div class="form-group panel panel-border-narrow js-hidden " id="otherWitnesses-yes" aria-hidden="false">
+            {{ numericInput(label = t('How many?'), form = form, name = 'howMany', inputClass = 'form-control-1-8') }}
+          </div>
+
+          {{
+          radioOption(form = form, label = 'No', name = 'otherWitnesses', value = YesNoOption.NO.option, checked = form.valueFor('otherWitnesses').option === YesNoOption.NO.option)
+          }}
+
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

@@ -2,16 +2,16 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { InterestRateOption } from 'claim/form/models/interestRateOption'
 
 const cookieName: string = config.get<string>('session.cookieName')
@@ -56,9 +56,35 @@ describe('Claim issue: interest rate page', () => {
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
+      it('should render the page when a different rate is selected but no rate is entered', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: InterestRateOption.DIFFERENT,
+            reason: 'Special case'
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
+      it('should render the page when a different rate is selected but no reason is entered', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            type: InterestRateOption.DIFFERENT,
+            rate: '10'
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -69,7 +95,7 @@ describe('Claim issue: interest rate page', () => {
 
       it('should redirect to interest date page when form is valid, 8% is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)
@@ -80,7 +106,7 @@ describe('Claim issue: interest rate page', () => {
 
       it('should redirect to interest date page when form is valid, a different rate is selected and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

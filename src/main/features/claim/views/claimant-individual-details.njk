@@ -2,7 +2,7 @@
 {% from "form.njk" import csrfProtection, saveAndContinueButton, errorSummary %}
 {% from "party/details.njk" import partyDetailsFragment %}
 
-{% set heading = 'Your details' %}
+{% set heading = 'Enter your details' %}
 
 {% block additional_scripts %}
   {% include "postcode-lookup-client-scripts.njk" %}
@@ -13,6 +13,8 @@
     <div class="column-two-thirds">
       <form method="post" novalidate>
         {{ csrfProtection(csrf) }}
+
+        <p>{{ t('The defendant will see these details.') }}</p>
 
         {{
           partyDetailsFragment(

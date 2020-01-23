@@ -1,7 +1,7 @@
 export class BankAccountType {
 
   static readonly CURRENT_ACCOUNT = new BankAccountType('CURRENT_ACCOUNT', 'Current account')
-  static readonly SAVING_ACCOUNT = new BankAccountType('SAVING_ACCOUNT', 'Saving account')
+  static readonly SAVING_ACCOUNT = new BankAccountType('SAVINGS_ACCOUNT', 'Saving account')
   static readonly ISA = new BankAccountType('ISA', 'ISA')
   static readonly OTHER = new BankAccountType('OTHER', 'Other')
 

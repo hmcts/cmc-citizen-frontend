@@ -1,6 +1,5 @@
 $(document).ready(function () {
-  $('.multiline-row .form-control-select').on('change', function () {
-
+  $('.multiline-rows').on('change', '.multiline-row .form-control-select', function (event) {
     var $content = $(this).next()
 
     $content

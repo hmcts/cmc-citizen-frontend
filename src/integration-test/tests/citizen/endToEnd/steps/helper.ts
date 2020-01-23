@@ -1,41 +1,68 @@
 import I = CodeceptJS.I
-import { PartyType } from 'integration-test/data/party-type'
 import { DefenceSteps } from 'integration-test/tests/citizen/defence/steps/defence'
 import { DefenceType } from 'integration-test/data/defence-type'
-import { IdamClient } from 'integration-test/helpers/clients/idamClient'
+import { PaymentOption } from 'integration-test/data/payment-option'
+import { EndToEndTestData } from 'integration-test/tests/citizen/endToEnd/data/EndToEndTestData'
 
 const I: I = actor()
 const defenceSteps: DefenceSteps = new DefenceSteps()
-const claimDetailsHeading: string = 'Claim details'
 
 export class Helper {
 
   async enterPinNumber (claimRef: string, claimantEmail: string): Promise<void> {
     defenceSteps.enterClaimReference(claimRef)
-    I.waitForText('Please enter your security code to continue')
-    const authorisation = await IdamClient.authenticateUser(claimantEmail)
-    return defenceSteps.enterClaimPin(claimRef, authorisation)
+    return Promise.resolve()
   }
 
-  finishResponse (claimRef: string, defendantEmail: string, defendantType: PartyType, defenceType: DefenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE): Promise<void> {
-    I.waitForText(claimDetailsHeading)
-    defenceSteps.respondToClaim()
+  linkClaimToDefendant (defendantEmail: string): void {
     defenceSteps.loginAsDefendant(defendantEmail)
+  }
+
+  startResponseFromDashboard (claimRef: string): void {
     I.click(claimRef)
-    return defenceSteps.makeDefenceAndSubmit(defendantEmail, defendantType, defenceType)
+    I.click('Respond to claim')
+  }
+
+  finishResponse (
+    testData: EndToEndTestData,
+    isRequestMoreTimeToRespond: boolean = true,
+    expectPhonePage: boolean = false
+  ): void {
+    if (testData.defenceType === undefined) {
+      testData.defenceType = DefenceType.FULL_REJECTION_WITH_DISPUTE
+    }
+    defenceSteps.loginAsDefendant(testData.defendantEmail)
+    I.click(testData.claimRef)
+    I.click('Respond to claim')
+    defenceSteps.makeDefenceAndSubmit(
+      testData.defendant,
+      testData.defendantEmail,
+      testData.defendantPartyType,
+      testData.defenceType,
+      isRequestMoreTimeToRespond,
+      testData.defendantClaimsToHavePaidInFull,
+      expectPhonePage
+    )
+  }
+
+  // TODO: refactor with above ^^^
+  finishResponseWithFullAdmission (testData: EndToEndTestData): void {
+    if (testData.paymentOption === undefined) {
+      testData.paymentOption = PaymentOption.IMMEDIATELY
+    }
+    defenceSteps.loginAsDefendant(testData.defendantEmail)
+    I.click(testData.claimRef)
+    I.click('Respond to claim')
+    defenceSteps.makeFullAdmission(testData.defendant, testData.defendantPartyType, testData.paymentOption, testData.claimantName, false)
   }
 
   finishResponseWithHandOff (claimRef: string, defendant: Party, claimant: Party, defendantEmail: string, defenceType: DefenceType): void {
-    I.waitForText(claimDetailsHeading)
-    defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
     I.click(claimRef)
     defenceSteps.sendDefenceResponseHandOff(claimRef, defendant, claimant, defenceType)
   }
 
   defendantViewCaseTaskList (defendantEmail: string): void {
-    I.waitForText(claimDetailsHeading)
-    defenceSteps.respondToClaim()
     defenceSteps.loginAsDefendant(defendantEmail)
   }
 }

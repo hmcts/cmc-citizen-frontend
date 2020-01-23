@@ -1,5 +1,7 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
@@ -9,39 +11,54 @@
     <div class="column-two-thirds">
       <div class="govuk-box-highlight">
         <h1 class="bold-large">{{ t('You’ve submitted your response') }}</h1>
+        <p class="reference-number">
+          <span>{{ t('Claim number:') }}</span>
+          <span class="block bold-large">{{ claim.claimNumber }}</span>
+        </p>
         <p>
-          <span class="bold">{{ submittedOn | date }}</span>
+          <span class="bold">{{ claim.respondedAt | date }}</span>
         </p>
-        <p class="receipt-download-container ">
-          <a href="{{ paths.receiptReceiver.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Download your response as a PDF') }}</a>
-        </p>
+        {% if claim.response.directionsQuestionnaire %}
+          <p class="receipt-download-container">
+            {{ internalLink(t('Download your response and hearing requirements'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}
+          </p>
+        {% else %}
+          <p class="receipt-download-container">
+            {{ internalLink(t('Download your response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}
+          </p>
+        {% endif %}
       </div>
 
-      <h2 class="bold-large form-group">{{ t('Your response') }}</h2>
 
-      <p>{{ t('We’ve emailed {{ claimant }} your defence, explaining why you reject the claim.', { claimant: claim.claimData.claimant.name }) | safe}}</p>
-
-      <p>{{ t('View the <a href="{{ link }}">claim against you and your response.</a>', { link: '/dashboard' }) | safe }}</p>
-
-      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
-      <p>{{ t('If {{ claimant }} accepts your defence the claim will be cancelled.', { claimant: claim.claimData.claimant.name }) | safe }}</p>
-      <p>{{ t('If they reject your defence the case will be reviewed and might go to a hearing.') }}</p>
-
-      {% if featureToggles.offer %}
-        <h2 class="heading-medium">{{ t('Settle out of court') }}</h2>
-        <p>{{ t('You may still <a href="{{ link }}">settle the claim out of court</a>. For example you could offer to fix goods you sold the claimant or suggest a payment.',
-            { link: OfferPaths.settleOutOfCourtPage.evaluateUri({ externalId: claim.externalId }) }) | safe }}</p>
-        <p>{{ t('You can avoid getting a County Court Judgment if the claimant accepts your offer.') }}</p>
+      {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+        {% include "./confirmation/full-admission.njk" %}
+      {% endif %}
+      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+        {% include "./confirmation/full-defence.njk" %}
+      {% endif %}
+      {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+        {% include "./confirmation/part-admission.njk" %}
       {% endif %}
 
-      <h2 class="heading-medium">{{ t('Mediation') }}</h2>
-      <p>{{ t('You have chosen to use the free mediation service to resolve the dispute with {{ claimant }}. We’ll ask them if they want to mediate.', { claimant: claim.claimData.claimant.name  }) }}</p>
-      <p>{{ t('If they agree to mediation we’ll email you to arrange an appointment.') }}</p>
-      <p>{{ t('If you can reach an agreement with {{ claimant }} you won’t need to go to a hearing.', { claimant: claim.claimData.claimant.name  }) }}</p>
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+
+      {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+        {% include "./confirmation/full-admission-steps.njk" %}
+      {% endif %}
+      {% if claim.response.responseType === domain.ResponseType.FULL_DEFENCE %}
+        {% include "./confirmation/full-defence-steps.njk" %}
+      {% endif %}
+
+      {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+        {% include "./confirmation/part-admission-steps.njk" %}
+      {% endif %}
+
+      {% include "includes/service-survey-link-defendant.njk" %}
+
+      <p>{{ internalLink(t('Go to your account'), DashboardPaths.dashboardPage.uri, 'button') }}</p>
 
       {{ supportWidget() }}
-
-      {% include "includes/service_survey_link.njk" %}
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

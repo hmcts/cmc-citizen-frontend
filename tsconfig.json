@@ -10,13 +10,18 @@
       "es2017.object",
       "dom"
     ],
-    "target": "es6",
+    "target": "es2017",
     "module": "commonjs",
     "baseUrl": "src" ,
     "paths": {
-
+      "mock-clients/*": [
+        "main/app/mocks/*"
+      ],
       "payment-hub-client/*": [
         "main/app/pay/*"
+      ],
+      "court-finder-client/*": [
+        "main/app/court-finder/*"
       ],
       "client/*": [
         "main/app/client/*"
@@ -90,6 +95,12 @@
       "response/*": [
         "main/features/response/*"
       ],
+      "claimant-response/*": [
+        "main/features/claimant-response/*"
+      ],
+      "paid-in-full/*": [
+        "main/features/paid-in-full/*"
+      ],
       "offer/*": [
         "main/features/offer/*"
       ],
@@ -108,11 +119,20 @@
       "eligibility/*": [
         "main/features/eligibility/*"
       ],
+      "settlement-agreement/*": [
+        "main/features/settlement-agreement/*"
+      ],
       "services/*": [
         "main/services/*"
       ],
-      "integration-test/*": [
-        "integration-test/*"
+      "mediation/*": [
+        "main/features/mediation/*"
+      ],
+      "directions-questionnaire/*": [
+        "main/features/directions-questionnaire/*"
+      ],
+      "orders/*": [
+        "main/features/orders/*"
       ]
     },
     "typeRoots": [

@@ -1,38 +1,61 @@
 {% extends "layout.njk" %}
 {% from "task-list.njk" import task, taskListHeading, disabledTask %}
 {% from "timeRemaining.njk" import timeRemaining %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set heading = 'Respond to a money claim' %}
+{% set headingSize = 'xlarge' %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
       <div class="task-group">
-        {{ taskListHeading(beforeYouStartSection.position, t(beforeYouStartSection.name)) }}
+        {{ taskListHeading(beforeYouStartSection.name) }}
 
         {% for item in beforeYouStartSection.tasks %}
-          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+          {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
         {% endfor %}
       </div>
 
       <div class="task-group">
-        {{ taskListHeading(respondToClaimSection.position, t(respondToClaimSection.name)) }}
+        {{ taskListHeading(respondToClaimSection.name) }}
 
         {% for item in respondToClaimSection.tasks %}
-          {{ task(item.startPageUrl, t(item.name), item.completed) }}
+          {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
         {% endfor %}
       </div>
 
-      {% if submitSection %}
+      {% if resolvingClaimSection %}
         <div class="task-group">
-          {{ taskListHeading(submitSection.position, t(submitSection.name)) }}
+          {{ taskListHeading(resolvingClaimSection.name) }}
 
-          {% for item in submitSection.tasks %}
-            {{ task(item.startPageUrl, t(item.name), item.completed) }}
+          {% for item in resolvingClaimSection.tasks %}
+            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
           {% endfor %}
         </div>
       {% endif %}
+
+
+      {% if directionsQuestionnaireSection %}
+        <div class="task-group">
+          {{ taskListHeading(directionsQuestionnaireSection.name) }}
+
+          {% for item in directionsQuestionnaireSection.tasks %}
+            {{ task(item.startPageUrl, t(item.name), item.completed, true) }}
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if submitSection %}
+        <div class="task-group">
+          {{ taskListHeading(submitSection.name) }}
+          <div class="check-submit-response">
+            {{ internalLink(t('Check and submit your response'), ResponsePaths.checkAndSendPage.evaluateUri({ externalId: claim.externalId }), 'button button-primary') }}
+          </div>
+        </div>
+      {% endif %}
+
     </div>
 
     <div class="column-one-third">
@@ -55,7 +78,7 @@
           </li>
           <li>
             <strong class="bold">{{ t('Claim details:') }}</strong>
-            <a class="block" href="{{ ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('View claim') }}</a>
+            {{ internalLink(t('View claim'), ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId })) }}
           </li>
         </ul>
       </div>
@@ -63,3 +86,4 @@
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

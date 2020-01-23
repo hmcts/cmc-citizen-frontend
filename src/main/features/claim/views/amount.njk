@@ -10,12 +10,14 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
 
-        <p>{{ t('Your claim could be for a single amount or might be made up of multiple items.') }}</p>
-        <div class="panel panel-border-wide">
-          <p>{{ t('Don’t include interest - we’ll ask you about this next.') }}</p>
+        <p>{{ t('Your claim could be for a single amount or made up of multiple items.') }}</p>
 
-          <p>{{ t('Don’t include your claim fee - we’ll add this for you.') }}</p>
-        </div>
+          <p>{{ t('Don’t include:') }}</p>
+          <ul class="list-bullet form-group">
+            <li>{{ t('interest - we’ll ask you about this next') }}</li>
+            <li>{{ t('your claim fee - we’ll add this for you') }}</li>
+          </ul>
+
         <div class="claim-amounts">
           <div id="claim-amount">
             <div>
@@ -81,7 +83,10 @@
               {% if canAddMoreRows %}
                 {{ linkButton('Add another row', 'action[addRow]', 'button button-secondary') }}
               {% endif %}
-              {{ linkButton('Calculate total', 'action[calculate]', 'link-button calculate') }}
+              <noscript>
+                {{ linkButton('Calculate total', 'action[calculate]', 'link-button calculate') }}
+              </noscript>
+
             </div>
             <div class="bold-medium total">
               <span class="claim-amount-column-1"></span>

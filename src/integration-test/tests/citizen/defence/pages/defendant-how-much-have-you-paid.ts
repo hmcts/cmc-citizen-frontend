@@ -1,4 +1,5 @@
 import I = CodeceptJS.I
+import { DateParser } from 'integration-test/utils/date-parser'
 
 const I: I = actor()
 
@@ -16,12 +17,13 @@ const buttons = {
 
 export class DefendantHowMuchHaveYouPaidPage {
 
-  enterAmountPaidWithDateAndExplaination (amount: number, date, explaination: string): void {
+  enterAmountPaidWithDateAndExplanation (amount: number, date: string, explanation: string): void {
+    const [year, month, day] = DateParser.parse(date)
     I.fillField(fields.amount, amount.toString())
-    I.fillField(fields.day, date.day)
-    I.fillField(fields.month, date.month)
-    I.fillField(fields.year, date.year)
-    I.fillField(fields.text, explaination)
+    I.fillField(fields.day, day)
+    I.fillField(fields.month, month)
+    I.fillField(fields.year, year)
+    I.fillField(fields.text, explanation)
     I.click(buttons.submit)
   }
 

@@ -31,10 +31,14 @@ export class CountyCourtJudgementCheckAndSendPage {
   checkDefendantName (defendant: Party, defendantType: PartyType): void {
     switch (defendantType) {
       case PartyType.INDIVIDUAL:
-        I.see(defendant.name)
+        I.see(defendant.title)
+        I.see(defendant.firstName)
+        I.see(defendant.lastName)
         break
       case PartyType.SOLE_TRADER:
-        I.see(defendant.name)
+        I.see(defendant.title)
+        I.see(defendant.firstName)
+        I.see(defendant.lastName)
         break
       case PartyType.COMPANY:
         I.see(defendant.name)
@@ -54,7 +58,7 @@ export class CountyCourtJudgementCheckAndSendPage {
     I.see(address.line2)
     I.see(address.city)
     I.see(address.postcode)
-    I.see('Amount to be paid by defendant')
+    I.see('Total to be paid by defendant')
     const amountOutstanding: number = claimAmount.getTotal() - defendantPaidAmount
     I.see(AmountHelper.formatMoney(amountOutstanding))
     I.see('Amount already paid')

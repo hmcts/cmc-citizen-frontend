@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { Employment, ValidationErrors } from 'response/form/models/statement-of-means/employment'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Employment', () => {
@@ -12,35 +12,35 @@ describe('Employment', () => {
       const actual = new Employment().deserialize(undefined)
 
       expect(actual).to.be.instanceof(Employment)
-      expect(actual.isCurrentlyEmployed).to.be.eq(undefined)
+      expect(actual.declared).to.be.eq(undefined)
       expect(actual.selfEmployed).to.be.eq(undefined)
       expect(actual.employed).to.be.eq(undefined)
     })
 
     it('should return Employment with populated only isCurrentlyEmployed', () => {
-      const actual = new Employment().deserialize({ isCurrentlyEmployed: false })
+      const actual = new Employment().deserialize({ declared: false })
 
-      expect(actual.isCurrentlyEmployed).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.selfEmployed).to.be.eq(undefined)
       expect(actual.employed).to.be.eq(undefined)
     })
 
     it('should return fully populated Employment', () => {
       const actual = new Employment().deserialize(
-        { isCurrentlyEmployed: true, selfEmployed: false, employed: true }
+        { declared: true, selfEmployed: false, employed: true }
       )
 
-      expect(actual.isCurrentlyEmployed).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.selfEmployed).to.be.eq(false)
       expect(actual.employed).to.be.eq(true)
     })
 
-    it('should NOT populate selfEmployed and employed when isCurrentlyEmployed = false', () => {
+    it('should NOT populate selfEmployed and employed when declared = false', () => {
       const actual = new Employment().deserialize(
-        { isCurrentlyEmployed: false, selfEmployed: true, employed: true }
+        { declared: false, selfEmployed: true, employed: true }
       )
 
-      expect(actual.isCurrentlyEmployed).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.selfEmployed).to.be.eq(undefined)
       expect(actual.employed).to.be.eq(undefined)
     })
@@ -52,30 +52,30 @@ describe('Employment', () => {
       expect(Employment.fromObject(undefined)).to.be.eq(undefined)
     })
 
-    it('should return Employment with populated only isCurrentlyEmployed', () => {
-      const actual = Employment.fromObject({ isCurrentlyEmployed: false })
+    it('should return Employment with populated only declared', () => {
+      const actual = Employment.fromObject({ declared: false })
 
-      expect(actual.isCurrentlyEmployed).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.selfEmployed).to.be.eq(undefined)
       expect(actual.employed).to.be.eq(undefined)
     })
 
     it('should return fully populated Employment', () => {
       const actual = Employment.fromObject(
-        { isCurrentlyEmployed: true, selfEmployed: false, employed: true }
+        { declared: true, selfEmployed: false, employed: true }
       )
 
-      expect(actual.isCurrentlyEmployed).to.be.eq(true)
+      expect(actual.declared).to.be.eq(true)
       expect(actual.selfEmployed).to.be.eq(false)
       expect(actual.employed).to.be.eq(true)
     })
 
-    it('should NOT populate selfEmployed and employed when isCurrentlyEmployed = false', () => {
+    it('should NOT populate selfEmployed and employed when declared = false', () => {
       const actual = Employment.fromObject(
-        { isCurrentlyEmployed: false, selfEmployed: true, employed: true }
+        { declared: false, selfEmployed: true, employed: true }
       )
 
-      expect(actual.isCurrentlyEmployed).to.be.eq(false)
+      expect(actual.declared).to.be.eq(false)
       expect(actual.selfEmployed).to.be.eq(undefined)
       expect(actual.employed).to.be.eq(undefined)
     })
@@ -84,9 +84,9 @@ describe('Employment', () => {
   describe('validation', () => {
     const validator: Validator = new Validator()
 
-    describe('isCurrentlyEmployed', () => {
+    describe('declared', () => {
 
-      context('when isCurrentlyEmployed is undefined', () => {
+      context('when declared is undefined', () => {
 
         it('should reject', () => {
           const errors = validator.validateSync(new Employment())
@@ -97,7 +97,7 @@ describe('Employment', () => {
 
       })
 
-      context('when isCurrentlyEmployed is', () => {
+      context('when declared is', () => {
 
         context('true', () => {
 
@@ -112,7 +112,7 @@ describe('Employment', () => {
 
             it('both are false', () => {
               const errors = validator.validateSync(Employment.fromObject({
-                isCurrentlyEmployed: true, selfEmployed: false, employed: false
+                declared: true, selfEmployed: false, employed: false
               }))
 
               expect(errors.length).to.equal(1)
@@ -143,7 +143,7 @@ describe('Employment', () => {
           })
         })
 
-        context('isCurrentlyEmployed = false', () => {
+        context('declared = false', () => {
 
           it('should not validate other fields', () => {
             const errors = validator.validateSync(new Employment(false, false, true))

@@ -1,4 +1,4 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { ResponseType } from 'response/form/models/responseType'
 
 export class ValidationErrors {

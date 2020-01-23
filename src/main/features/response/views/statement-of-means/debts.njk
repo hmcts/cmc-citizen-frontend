@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, textInputInline, poundInputInline, radioOption, linkButton, saveAndContinueButton, errorSummary %}
 
-{% set heading = t('Do you have any debts?') %}
+{% set heading = t('Do you have loans or credit card debts?') %}
 
 {% macro debtRow(index, form) %}
 
@@ -26,7 +26,7 @@
     {% if totalOwedError %}<span id="{{ totalOwedKey }}[label]" class="error-message">{{ t(totalOwedError) }}</span>{% endif %}
     {% if monthlyPaymentsError %}<span id="{{ monthlyPaymentsKey }}[label]" class="error-message">{{ t(monthlyPaymentsError) }}</span>{% endif %}
 
-    <label class="form-label-bold mobile-show" for="{{ debtKey }}">{{ index + 1 }} {{ t('. List each debt') }}</label>
+    <label class="form-label-bold mobile-show" for="{{ debtKey }}">{{ index + 1 }} {{ t('. List each loan or credit card debt') }}</label>
     {{ textInputInline(name = debtKey, form = form, inputClass='column-1', ariaLabelledBy='debt-label') }}
     {{ poundInputInline(name = totalOwedKey, label = (index + 1) + '. Total owed', form = form,  inputClass = 'column-4', ariaLabelledBy='total-owed-label') }}
     {{ poundInputInline(name = monthlyPaymentsKey, label = (index + 1) + '. Monthly payments', form = form,  inputClass = 'column-3', ariaLabelledBy='monthly-payments-label') }}
@@ -38,34 +38,33 @@
 <div class="grid-row">
   <div class="column-two-thirds">
 
-    <p>{{ t('For example credit cards, loans or if you’re behind on rent or utility bills.') }}</p>
-
     <form method="post" novalidate
           class="analytics-submit-event-trigger"
           data-event-action="SoM: Do you have any debts?"
-          data-event-label-from="hasAnyDebts">
+          data-event-label-from="declared">
 
       {{ csrfProtection(csrf) }}
 
-      {% set errorHasAnyDebts = form.errorFor('hasAnyDebts') %}
+      {% set errorHasAnyDebts = form.errorFor('declared') %}
       <div class="statement-of-means-container">
-        <fieldset id="hasAnyDebts[label]" class="form-group {% if errorHasAnyDebts %} form-group-error {% endif %}">
-          <legend class="visually-hidden">{{ t('Do you have any debts?') }}</legend>
+        <fieldset id="declared[label]" class="form-group {% if errorHasAnyDebts %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Do you have loans or credit card debts?') }}</legend>
+          {% if errorHasAnyDebts %}<span class="error-message">{{ t(errorHasAnyDebts) }}</span>{% endif %}
 
           {{
-            radioOption(form = form, label = 'Yes', name = 'hasAnyDebts', value = 'true', checked = form.valueFor('hasAnyDebts') === true)
+            radioOption(form = form, label = 'Yes', name = 'declared', value = 'true', checked = form.valueFor('declared') === true)
           }}
 
           {% set noRowsError = form.errorFor('rows') %}
           <div class="form-group panel panel-border-narrow js-hidden {% if noRowsError %} form-group-error {% endif %}"
-               id="hasAnyDebts-true" aria-hidden="false">
+               id="declared-true" aria-hidden="false">
 
             {% if noRowsError %}<span class="error-message" id="rows[label]">{{ t(noRowsError) }}</span>{% endif %}
 
             <div class="multiline-rows">
               <div class="triple-column mobile-hide">
                 <div class="column-1 mobile-hide">
-                  <label id="debt-label" class="form-label-bold">{{ t('List each debt') }}</label>
+                  <label id="debt-label" class="form-label-bold">{{ t('List each loan or credit card debt') }}</label>
                 </div>
                 <div class="column-4 mobile-hide">
                   <label id="total-owed-label" class="form-label-bold">{{ t('Total owed') }}</label>
@@ -89,7 +88,7 @@
           </div>
 
           {{
-            radioOption(form = form, label = 'No', name = 'hasAnyDebts', value = 'false', checked = form.valueFor('hasAnyDebts') === false)
+            radioOption(form = form, label = 'No', name = 'declared', value = 'false', checked = form.valueFor('declared') === false)
           }}
         </fieldset>
       </div>

@@ -1,0 +1,45 @@
+{% from "form.njk" import textInput, poundInput, radioGroup %}
+
+{% macro incomeExpenseSource(form, name, sourceLabel, amountLabel, amountHint, scheduleLabel, nameEditable) %}
+  <div class="income-expense-source">
+    {% if nameEditable %}
+      {{ textInput(form = form, name = name + '[name]', label = sourceLabel) }}
+    {% endif %}
+    {{ poundInput(form = form, name = name + '[amount]', label = amountLabel, hint = amountHint) }}
+    {{ scheduleSource(form, name, label = scheduleLabel) }}
+  </div>
+{% endmacro %}
+
+{% macro scheduleSource(form, name, label) %}
+  {% set name = name + '[schedule]' %}
+  {% set error = form.errorFor(name) %}
+
+  {{ radioGroup(
+    form = form,
+    label = label,
+    name = name,
+    labelBold = false,
+    options = [
+      {
+        label: 'Week',
+        value: 'WEEK',
+        checked: form.valueFor(name).value === 'WEEK'
+      },
+      {
+        label: '2 weeks',
+        value: 'TWO_WEEKS',
+        checked: form.valueFor(name).value === 'TWO_WEEKS'
+      },
+      {
+        label: '4 weeks',
+        value: 'FOUR_WEEKS',
+        checked: form.valueFor(name).value === 'FOUR_WEEKS'
+      },
+      {
+        label: 'Month',
+        value: 'MONTH',
+        checked: form.valueFor(name).value === 'MONTH'
+      }
+    ]
+  ) }}
+{% endmacro %}

@@ -1,12 +1,15 @@
 {% extends "layout.njk" %}
-{% from "subheading.njk" import subheading %}
 {% from "form.njk" import csrfProtection, submitButton %}
 {% from "amountBreakdown.njk" import amountBreakdownTable %}
+{% from "summaryTable.njk" import timelineSummary, evidenceSummary %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set heading = 'Claim details' %}
 
 {% set responseDeadline = claim.responseDeadline.format('LL') %}
 {% set referenceNumber = claim.claimNumber %}
+{% set evidenceRows = claim.claimData.evidence.getPopulatedRowsOnly() if claim.claimData.evidence %}
+{% set timelineRows = claim.claimData.timeline.getPopulatedRowsOnly() if claim.claimData.timeline %}
 
 {% block content %}
   <div class="grid-row">
@@ -19,6 +22,20 @@
       <p class="bold form-group-related">{{ t('Reason for claim:') }}</p>
       <p>{{ claim.claimData.reason }}</p>
 
+      {% if timelineRows and timelineRows.length > 0 %}
+        <div class="form-group">
+          <p><span class="bold-small">{{ t('Timeline') }}</span></p>
+          {{ timelineSummary(claim.claimData.timeline.getPopulatedRowsOnly()) }}
+        </div>
+      {% endif %}
+
+      {% if evidenceRows and evidenceRows.length > 0 %}
+        <div class="form-group">
+          <p><span class="bold-small">{{ t('Evidence') }}</span></p>
+          {{ evidenceSummary(evidenceRows) }}
+        </div>
+      {% endif %}
+
       <form method="POST">
         {{ csrfProtection(csrf) }}
 
@@ -29,12 +46,13 @@
         <summary>{{ t('How we use and store your personal information') }}</summary>
         <div class="panel panel-border">
           <p>{{ t('This claim contains personal information about you that {{ claimant }} has provided, for example your name and address.', { claimant: claim.claimData.claimant.name  }) }}</p>
-          <p>{{ t('Find out about how we use and store your <a href="{{ link }}" target="_self">personal information</a>.', { link: AppPaths.privacyPolicyPage.uri }) | safe }}</p>
+          <p>{{ t('Find out about how we use and store your {{ personalInfo }}.', { personalInfo: internalLink(t('personal information'), AppPaths.privacyPolicyPage.uri) }) | safe }}</p>
         </div>
       </details>
 
       <p class="bold-small">{{ t('Download the claim') }}</p>
-      <p><a href="{{ FirstContactPaths.receiptReceiver.uri }}">{{ t('Download claim') }}</a> ({{ t('PDF') }})</p>
+      <p>{{ internalLink(t('Download claim'), FirstContactPaths.receiptReceiver.uri) }}
+        {{ t('(PDF)') }}.</p>
     </div>
   </div>
 {% endblock %}

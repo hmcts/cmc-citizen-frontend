@@ -9,7 +9,7 @@ export class DefendantTaskListPage {
   }
 
   selectTaskMoreTimeNeededToRespond (): void {
-    I.click('Do you want more time to respond?')
+    I.click('Decide if you need more time to respond')
   }
 
   selectChooseAResponse (): void {
@@ -20,12 +20,20 @@ export class DefendantTaskListPage {
     I.click('How much have you paid the claimant?')
   }
 
-  selectTaskHowMuchMoneyBelieveYouOwe (): void {
-    I.click('How much money do you believe you owe?')
+  selectTaskHowMuchHaveYouPaid (): void {
+    I.click('How much have you paid?')
   }
 
-  selectTaskWhenWillYouPay (): void {
-    I.click('When will you pay?')
+  selectTaskTellUsHowMuchYouHavePaid (): void {
+    I.click('Tell us how much you’ve paid')
+  }
+
+  selectTaskHowMuchMoneyBelieveYouOwe (): void {
+    I.click('How much money do you admit you owe?')
+  }
+
+  selectTaskDecideHowWillYouPay (): void {
+    I.click('Decide how you’ll pay')
   }
 
   selectTaskWhenDidYouPay (): void {
@@ -33,7 +41,23 @@ export class DefendantTaskListPage {
   }
 
   selectTaskWhyDoYouDisagreeWithTheClaim (): void {
-    I.click('Why do you disagree with the claim?')
+    I.click('Tell us why you disagree with the claim')
+  }
+
+  selectTaskWhyDoYouDisagreeWithTheAmountClaimed (): void {
+    I.click('Why do you disagree with the amount claimed?')
+  }
+
+  selectTaskWhenWillYouPay (): void {
+    I.click('When will you pay')
+  }
+
+  selectYourRepaymentPlanTask (): void {
+    I.click('Your repayment plan')
+  }
+
+  selectShareYourFinancialDetailsTask (): void {
+    I.click('Share your financial details')
   }
 
   selectTaskCheckAndSendYourResponse (): void {
@@ -41,7 +65,11 @@ export class DefendantTaskListPage {
   }
 
   selectTaskFreeMediation (): void {
-    I.click('Free mediation')
+    I.click('Free telephone mediation')
+  }
+
+  selectTaskHearingRequirements (): void {
+    I.click('Give us details in case there’s a hearing')
   }
 
 }

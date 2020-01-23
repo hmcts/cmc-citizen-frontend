@@ -1,7 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, errorSummary, radioOption, saveAndContinueButton, textInput %}
 
-{% set heading = 'Where are you living?' %}
+{% set heading = 'Where do you live?' %}
 
 {% block content %}
   <div class="grid-row">
@@ -9,7 +9,7 @@
       <form
         method="POST"
         class="analytics-submit-event-trigger"
-        data-event-action="SoM: Where are you living?"
+        data-event-action="SoM: Where do you live?"
         data-event-label-from="type"
         novalidate>
 
@@ -18,7 +18,7 @@
         {% set error = form.errorFor('type') %}
         <div class="form-group {% if error %} form-group-error {% endif %}">
           <fieldset id="type[label]">
-            <legend class="visually-hidden">{{ t('Where are you living?') }}</legend>
+            <legend class="visually-hidden">{{ t('Where do you live?') }}</legend>
             {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
 
             {% for type in ResidenceType.except(ResidenceType.OTHER) %}

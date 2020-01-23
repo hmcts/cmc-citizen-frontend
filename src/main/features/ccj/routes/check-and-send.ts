@@ -17,11 +17,33 @@ import { DraftService } from 'services/draftService'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
 import { Claim } from 'claims/models/claim'
+import {
+  CCJModelConverter, getRepaymentPlanForm,
+  retrievePaymentOptionsFromClaim
+} from 'claims/ccjModelConverter'
+import { DateOfBirth } from 'forms/models/dateOfBirth'
+import { CCJPaymentOption, PaymentType } from 'ccj/form/models/ccjPaymentOption'
+import { PaymentOption } from 'claims/models/paymentOption'
+import { PaymentDate } from 'shared/components/payment-intention/model/paymentDate'
+import { LocalDate } from 'forms/models/localDate'
+import * as CCJHelper from 'main/common/helpers/ccjHelper'
 
-function prepareUrls (externalId: string): object {
+function prepareUrls (externalId: string, claim: Claim, draft: Draft<DraftCCJ>): object {
+  if (claim.response && claim.isAdmissionsResponse()) {
+    if (draft.document.paymentOption.option !== PaymentType.INSTALMENTS) {
+      return {
+        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+        paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
+      }
+    } else {
+      return {
+        paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId })
+      }
+    }
+  }
   return {
-    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
     paidAmountUrl: Paths.paidAmountPage.evaluateUri({ externalId: externalId }),
+    dateOfBirthUrl: Paths.dateOfBirthPage.evaluateUri({ externalId: externalId }),
     paymentOptionUrl: Paths.paymentOptionsPage.evaluateUri({ externalId: externalId })
   }
 }
@@ -30,11 +52,23 @@ function convertToPartyDetails (party: Party): PartyDetails {
   return plainToClass(PartyDetails, party)
 }
 
+function retrieveAndSetDateOfBirthIntoDraft (claim: Claim, draft: Draft<DraftCCJ>): Draft<DraftCCJ> {
+  const dateOfBirthFromResponse: DateOfBirth = claim.retrieveDateOfBirthOfDefendant
+  if (dateOfBirthFromResponse) {
+    draft.document.defendantDateOfBirth = dateOfBirthFromResponse
+  }
+  return draft
+}
+
 function renderView (form: Form<Declaration>, req: express.Request, res: express.Response): void {
   const claim: Claim = res.locals.claim
-  const draft: Draft<DraftCCJ> = res.locals.ccjDraft
-
+  let draft: Draft<DraftCCJ> = res.locals.ccjDraft
   const defendant = convertToPartyDetails(claim.claimData.defendant)
+
+  draft = retrieveAndSetDateOfBirthIntoDraft(claim, draft)
+
+  draft = retrieveAndSetValuesInDraft(claim, draft)
+
   if (defendant.type === PartyType.INDIVIDUAL.value) {
     (defendant as IndividualDetails).dateOfBirth = draft.document.defendantDateOfBirth
   }
@@ -44,9 +78,30 @@ function renderView (form: Form<Declaration>, req: express.Request, res: express
     claim: claim,
     draft: draft.document,
     defendant: defendant,
-    amountToBePaid: claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0),
-    ...prepareUrls(req.params.externalId)
+    amountToBePaid: calculateAmountToBePaid(claim, draft),
+    ...prepareUrls(req.params.externalId, claim, draft)
   })
+}
+
+function calculateAmountToBePaid (claim: Claim, draft: Draft<DraftCCJ>): number {
+  if (CCJHelper.isPartAdmissionAcceptation(claim)) {
+    return CCJHelper.amountSettledFor(claim) - (draft.document.paidAmount.amount || 0) + CCJHelper.claimFeeInPennies(claim) / 100
+  }
+
+  return claim.totalAmountTillToday - (draft.document.paidAmount.amount || 0)
+}
+
+function retrieveAndSetValuesInDraft (claim: Claim, draft: Draft<DraftCCJ>): Draft<DraftCCJ> {
+  const paymentOption: CCJPaymentOption = retrievePaymentOptionsFromClaim(claim)
+  if (paymentOption) {
+    draft.document.paymentOption = paymentOption
+    if (paymentOption && paymentOption.option.value === PaymentOption.INSTALMENTS) {
+      draft.document.repaymentPlan = getRepaymentPlanForm(claim, draft)
+    } else if (paymentOption && paymentOption.option.value === PaymentOption.BY_SPECIFIED_DATE) {
+      draft.document.payBySetDate = new PaymentDate(LocalDate.fromMoment(claim.settlement.getLastOffer().paymentIntention.paymentDate))
+    }
+  }
+  return draft
 }
 
 function deserializerFunction (value: any): Declaration | QualifiedDeclaration {
@@ -60,7 +115,7 @@ function deserializerFunction (value: any): Declaration | QualifiedDeclaration {
   }
 }
 
-function getStatementOfTruthClassFor (claim: Claim): { new(): Declaration | QualifiedDeclaration } {
+function getStatementOfTruthClassFor (claim: Claim): { new (): Declaration | QualifiedDeclaration } {
   if (claim.claimData.claimant.isBusiness()) {
     return QualifiedDeclaration
   } else {
@@ -85,16 +140,21 @@ export default express.Router()
         renderView(form, req, res)
       } else {
         const claim: Claim = res.locals.claim
-        const draft: Draft<DraftCCJ> = res.locals.ccjDraft
+        let draft: Draft<DraftCCJ> = res.locals.ccjDraft
+
+        draft = retrieveAndSetValuesInDraft(claim, draft)
+
+        draft = retrieveAndSetDateOfBirthIntoDraft(claim, draft)
+
         const user: User = res.locals.user
 
         if (form.model.type === SignatureType.QUALIFIED) {
           draft.document.qualifiedDeclaration = form.model as QualifiedDeclaration
           await new DraftService().save(draft, user.bearerToken)
         }
-
-        await CCJClient.save(claim.externalId, draft, user)
+        const countyCourtJudgment = CCJModelConverter.convertForRequest(draft.document, claim)
+        await CCJClient.request(claim.externalId, countyCourtJudgment, user)
         await new DraftService().delete(draft.id, user.bearerToken)
-        res.redirect(Paths.confirmationPage.evaluateUri({ externalId: req.params.externalId }))
+        res.redirect(Paths.ccjConfirmationPage.evaluateUri({ externalId: req.params.externalId }))
       }
     }))

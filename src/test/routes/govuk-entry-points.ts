@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 
-import '../routes/expectations'
+import 'test/routes/expectations'
 
-import { app } from '../../main/app'
+import { app } from 'main/app'
 import { Paths } from 'paths'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'

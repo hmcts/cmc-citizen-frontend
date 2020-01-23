@@ -1,8 +1,8 @@
-import { IsDefined, IsIn, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, ValidateIf } from '@hmcts/class-validator'
 
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
-import { Fractions } from 'forms/validation/validators/fractions'
+import { Fractions } from '@hmcts/cmc-validators'
 import * as toBoolean from 'to-boolean'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { BankAccountType } from 'response/form/models/statement-of-means/bankAccountType'
@@ -20,17 +20,17 @@ export class BankAccountRow extends MultiRowFormItem {
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.SELECT_AN_OPTION })
-  isJoint?: boolean = undefined
+  joint?: boolean
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.NUMBER_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
   balance?: number
 
-  constructor (typeOfAccount?: BankAccountType, isJoint?: boolean, balance?: number) {
+  constructor (typeOfAccount?: BankAccountType, joint?: boolean, balance?: number) {
     super()
     this.typeOfAccount = typeOfAccount
-    this.isJoint = isJoint
+    this.joint = joint
     this.balance = balance
   }
 
@@ -44,16 +44,16 @@ export class BankAccountRow extends MultiRowFormItem {
     }
 
     const typeOfAccount: BankAccountType = BankAccountType.valueOf(value.typeOfAccount)
-    const isJoint: boolean = value.isJoint !== '' ? toBoolean(value.isJoint) : undefined
+    const joint: boolean = value.joint !== '' ? toBoolean(value.joint) : undefined
     const balance: number = toNumberOrUndefined(value.balance)
 
-    return new BankAccountRow(typeOfAccount, isJoint, balance)
+    return new BankAccountRow(typeOfAccount, joint, balance)
   }
 
   deserialize (input?: any): BankAccountRow {
     if (input) {
       this.typeOfAccount = BankAccountType.valueOf(input.typeOfAccount && input.typeOfAccount.value)
-      this.isJoint = input.isJoint
+      this.joint = input.joint
       this.balance = input.balance
     }
 

@@ -1,4 +1,4 @@
-import { Max, Min } from 'class-validator'
+import { Max, Min } from '@hmcts/class-validator'
 import * as _ from 'lodash'
 import * as moment from 'moment'
 
@@ -6,13 +6,21 @@ import { DATE_FORMAT } from 'utils/momentFormatter'
 
 export class ValidationErrors {
   static readonly YEAR_NOT_VALID: string = 'Enter a valid year'
+  static readonly YEAR_FORMAT_NOT_VALID: string = 'Enter a 4 digit year'
   static readonly MONTH_NOT_VALID: string = 'Enter a valid month'
   static readonly DAY_NOT_VALID: string = 'Enter a valid day'
 }
 
 export class LocalDate {
 
-  @Min(1, { message: ValidationErrors.YEAR_NOT_VALID })
+  @Min(1000, { message: (instance) => {
+    const { value } = instance
+
+    if (value && value > 0 && value.toString().length !== 4) {
+      return ValidationErrors.YEAR_FORMAT_NOT_VALID
+    }
+    return ValidationErrors.YEAR_NOT_VALID
+  }})
   @Max(9999, { message: ValidationErrors.YEAR_NOT_VALID })
   year: number
   @Min(1, { message: ValidationErrors.MONTH_NOT_VALID })
@@ -40,6 +48,10 @@ export class LocalDate {
       }
     })
     return instance
+  }
+
+  static fromMoment (date: moment.Moment): LocalDate {
+    return new LocalDate(date.year(), date.month() + 1, date.date())
   }
 
   deserialize (input?: any): LocalDate {

@@ -7,12 +7,12 @@ i18next.use(postProcessor).init()
 
 import { expect } from 'chai'
 import * as moment from 'moment'
-import { Validator } from 'class-validator'
+import { Validator } from '@hmcts/class-validator'
 
-import { expectValidationError } from './validationUtils'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { DateOfBirth, ValidationErrors } from 'forms/models/dateOfBirth'
-import { LocalDate } from 'forms/models/localDate'
+import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 
 import { MomentFormatter } from 'utils/momentFormatter'
 
@@ -101,7 +101,7 @@ describe('DateOfBirth', () => {
         const errors = validator.validateSync(dateOfBirth(90, 12, 31))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DATE_INVALID_YEAR)
+        expectValidationError(errors, LocalDateValidationErrors.YEAR_FORMAT_NOT_VALID)
       })
     })
 

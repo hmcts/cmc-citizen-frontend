@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 
-import '../routes/expectations'
+import 'test/routes/expectations'
 
-import { app } from '../../main/app'
+import { app } from 'main/app'
 import { Paths } from 'paths'
 
 const expectedTextOnPage: string = 'talk to the person or organisation you say owes you'

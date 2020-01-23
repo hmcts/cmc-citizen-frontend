@@ -1,3 +1,4 @@
+{% from "internalLink.njk" import internalLink %}
 {% block top_of_page %}{% endblock %}
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="{{ html_lang|default('en') }}"><![endif]-->
@@ -26,7 +27,7 @@
   <meta name="theme-color" content="#0b0c0c" />
 
   {% if development %}
-    <link href="{{ asset_paths['style_vendor'] }}/HTMLCSAuditor.css" rel="stylesheet" />
+    <link href="{{ asset_paths['style_vendor'] }}/HTMLCS.css" rel="stylesheet" />
   {% endif %}
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,7 +43,7 @@
 
   <div id="skiplink-container">
     <div>
-      <a href="#content" class="skiplink">{{ skip_link_message|default('Skip to main content') }}</a>
+      {{ internalLink(skip_link_message|default('Skip to main content'), '#content', 'skiplink') }}
     </div>
   </div>
 
@@ -72,6 +73,7 @@
     {% include "includes/phase_banner_beta.njk" %}
 
     {% if form %}
+      {% from "form.njk" import errorSummary %}
       {{ errorSummary(form) }}
     {% endif %}
 
@@ -89,8 +91,10 @@
     {% endif %}
 
     {% block content %}{% endblock %}
+    {% block contactForHelp %}
+       {% include "includes/contact-us-for-help.njk" %}
+    {% endblock %}
 
-    {% include "includes/report_problem_link.njk" %}
   </main>
 
   <footer class="group js-footer" id="footer" role="contentinfo">
@@ -111,7 +115,7 @@
         </div>
 
         <div class="copyright">
-          <a href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/">{{ crown_copyright_message|default('&copy; ' + t('Crown copyright'))|safe }}</a>
+          {{ internalLink(crown_copyright_message|default('&copy; ' + t('Crown copyright'))|safe, 'https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/') }}
         </div>
       </div>
     </div>

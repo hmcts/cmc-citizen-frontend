@@ -1,8 +1,8 @@
-import { IsDefined, ValidateIf, ValidateNested } from 'class-validator'
+import { IsDefined, ValidateIf, ValidateNested } from '@hmcts/class-validator'
 import * as i18next from 'i18next'
 import { Moment } from 'moment'
 
-import { IsValidLocalDate } from 'forms/validation/validators/isValidLocalDate'
+import { IsValidLocalDate } from '@hmcts/cmc-validators'
 import { MaximumAgeValidator } from 'forms/validation/validators/maximumAgeValidator'
 import { MinimumAgeValidator } from 'forms/validation/validators/minimumAgeValidator'
 
@@ -11,12 +11,10 @@ import { MomentFormatter } from 'utils/momentFormatter'
 
 import { LocalDate } from 'forms/models/localDate'
 import { CompletableTask } from 'models/task'
-import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
 import * as toBoolean from 'to-boolean'
 
 export class ValidationErrors {
   static readonly DATE_NOT_VALID: string = 'Please enter a valid date'
-  static readonly DATE_INVALID_YEAR: string = 'Enter a 4 digit year'
   static readonly DATE_UNDER_18: string = 'Please enter a date of birth before %s'
 }
 
@@ -27,7 +25,6 @@ export class DateOfBirth implements CompletableTask {
   @ValidateIf(o => o.known === true)
   @ValidateNested()
   @IsValidLocalDate({ message: ValidationErrors.DATE_NOT_VALID })
-  @IsValidYearFormat({ message: ValidationErrors.DATE_INVALID_YEAR })
   @MinimumAgeValidator(18, {
     message: () => {
       const limit: Moment = MomentFactory.currentDate().subtract(18, 'years').add(1, 'day')

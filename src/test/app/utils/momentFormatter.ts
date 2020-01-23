@@ -13,7 +13,7 @@ describe('MomentFormatter', () => {
 
   describe('formatInputDate', () => {
     it('format moment value to date string', () => {
-      expect(MomentFormatter.formatInputDate(moment('2017-01-01'))).to.eq('01 01 2017')
+      expect(MomentFormatter.formatInputDate(moment('2017-01-01'))).to.eq('1 1 2017')
     })
   })
 

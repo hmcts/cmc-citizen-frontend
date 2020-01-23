@@ -1,7 +1,6 @@
-import { IsDefined, ValidateIf } from 'class-validator'
+import { IsDefined, ValidateIf } from '@hmcts/class-validator'
 
-import { IsNotBlank } from '@hmcts/cmc-validators'
-import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { IsNotBlank, MaxLength } from '@hmcts/cmc-validators'
 import { ValidationConstraints as DefaultValidationConstraints } from 'forms/validation/validationConstraints'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'

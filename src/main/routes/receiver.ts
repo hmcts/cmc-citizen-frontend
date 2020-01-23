@@ -10,7 +10,6 @@ import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { Paths as FirstContactPaths } from 'first-contact/paths'
 import { ClaimStoreClient } from 'claims/claimStoreClient'
 import { ErrorHandling } from 'shared/errorHandling'
-import { Claim } from 'claims/models/claim'
 import * as Cookies from 'cookies'
 import { AuthToken } from 'idam/authToken'
 import * as config from 'config'
@@ -21,9 +20,9 @@ import { RoutablePath } from 'shared/router/routablePath'
 import { hasTokenExpired } from 'idam/authorizationMiddleware'
 import { Logger } from '@hmcts/nodejs-logging'
 import { OAuthHelper } from 'idam/oAuthHelper'
-import { FeatureToggles } from 'utils/featureToggles'
 import { User } from 'idam/user'
 import { DraftService } from 'services/draftService'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 const logger = Logger.getLogger('router/receiver')
 
@@ -37,13 +36,20 @@ const eligibilityStore = new CookieEligibilityStore()
 
 async function getOAuthAccessToken (req: express.Request, receiver: RoutablePath): Promise<string> {
   if (req.query.state !== OAuthHelper.getStateCookie(req)) {
-    throw new Error('Invalid state')
+    trackCustomEvent('State cookie mismatch (citizen)',
+      {
+        requestValue: req.query.state,
+        cookieValue: OAuthHelper.getStateCookie(req)
+      })
   }
   const authToken: AuthToken = await IdamClient.exchangeCode(
     req.query.code,
     buildURL(req, receiver.uri)
   )
-  return authToken.accessToken
+  if (authToken) {
+    return authToken.accessToken
+  }
+  return Promise.reject()
 }
 
 async function getAuthToken (req: express.Request,
@@ -69,11 +75,11 @@ function loginErrorHandler (req: express.Request,
                             err: Error,
                             receiver: RoutablePath = AppPaths.receiver) {
   if (hasTokenExpired(err)) {
-    cookies.set(sessionCookie, '', { sameSite: 'lax' })
+    cookies.set(sessionCookie)
     logger.debug(`Protected path - expired auth token - access to ${req.path} rejected`)
     return res.redirect(OAuthHelper.forLogin(req, res, receiver))
   }
-  cookies.set(stateCookieName, '', { sameSite: 'lax' })
+  cookies.set(stateCookieName, '')
   return next(err)
 }
 
@@ -97,22 +103,8 @@ async function retrieveRedirectForLandingPage (req: express.Request, res: expres
 }
 
 function setAuthCookie (cookies: Cookies, authenticationToken: string): void {
-  cookies.set(sessionCookie, authenticationToken, { sameSite: 'lax' })
-  cookies.set(stateCookieName, '', { sameSite: 'lax' })
-}
-
-async function linkDefendantWithClaimByLetterHolderId (letterHolderId, user): Promise<Claim | void> {
-  if (user.isInRoles(`letter-${letterHolderId}`)) {
-    const claim: Claim = await claimStoreClient.retrieveByLetterHolderId(letterHolderId, user.bearerToken)
-    logger.debug(`Linking user ${user.id} to claim ${claim.id}`)
-
-    if (!claim.defendantId) {
-      return claimStoreClient.linkDefendantV1(claim.externalId, user)
-    }
-    return Promise.resolve()
-  }
-
-  return Promise.reject(new Error('This claim cannot be linked'))
+  cookies.set(sessionCookie, authenticationToken)
+  cookies.set(stateCookieName, '')
 }
 
 /* tslint:disable:no-default-export */
@@ -139,27 +131,17 @@ export default express.Router()
       if (res.locals.isLoggedIn) {
         if (isDefendantFirstContactPinLogin(req)) {
           // re-set state cookie as it was cleared above, we need it in this case
-          cookies.set(stateCookieName, req.query.state, { sameSite: 'lax' })
+          cookies.set(stateCookieName, req.query.state)
           return res.redirect(FirstContactPaths.claimSummaryPage.uri)
         } else {
-          if (FeatureToggles.isEnabled('ccd')) {
-            await claimStoreClient.linkDefendant(user)
-            res.redirect(await retrieveRedirectForLandingPage(req, res))
-          } else {
-            try {
-              await Promise.all(user.getLetterHolderIdList().map(
-              (letterHolderId) => linkDefendantWithClaimByLetterHolderId(letterHolderId, user)
-                )
-              )
-            } catch (err) {
-              // ignore linking errors
-              logger.error(err)
-            }
-            res.redirect(await retrieveRedirectForLandingPage(req, res))
-          }
-
+          await claimStoreClient.linkDefendant(user)
+          res.redirect(await retrieveRedirectForLandingPage(req, res))
         }
       } else {
+        if (res.locals.code) {
+          trackCustomEvent('Authentication token undefined (jwt defined)',
+            { requestValue: req.query.state })
+        }
         res.redirect(OAuthHelper.forLogin(req, res))
       }
     }))

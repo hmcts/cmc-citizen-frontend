@@ -1,0 +1,26 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, linkButton %}
+{% from "components/free-mediation/howFreeMediationWorks.njk" import howMediationWorks %}
+
+{% set heading = 'How free mediation works' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      {{ howMediationWorks(mediationPilot) }}
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {% if mediationPilot %}
+            {{ linkButton('Continue with free mediation', 'mediationYes', 'link-button button block form-group') }}
+            {{ linkButton('I don’t want to try free mediation', 'mediationNo', 'link-button form-group no-padding') }}
+          {% else %}
+            {{ linkButton('Continue', 'mediationYes', 'link-button button block form-group') }}
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

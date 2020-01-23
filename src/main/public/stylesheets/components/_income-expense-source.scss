@@ -1,0 +1,30 @@
+.expandable-checkbox-option {
+  .other-income-expense-source {
+    &:not(:first-of-type) {
+      margin-top: 15px;
+    }
+
+    &:not(:last-of-type) {
+      border-bottom: 1px solid $grey-2;
+
+      .link-button {
+        margin-bottom: 15px;
+      }
+    }
+  }
+
+  .link-button,
+  .button-secondary {
+    margin-top: 15px;
+  }
+
+  .panel-border-narrow {
+    &:last-child {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+.calculation-outcome-container {
+  clear: left;
+}

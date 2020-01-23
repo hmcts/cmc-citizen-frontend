@@ -1,4 +1,4 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
 import { InterestDateType } from 'common/interestDateType'
 
 export class ValidationErrors {

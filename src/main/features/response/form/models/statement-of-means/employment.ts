@@ -1,7 +1,7 @@
-import { IsDefined, ValidateIf } from 'class-validator'
+import { IsDefined, ValidateIf } from '@hmcts/class-validator'
 
 import * as toBoolean from 'to-boolean'
-import { IsBooleanTrue } from 'forms/validation/validators/isBooleanTrue'
+import { IsBooleanTrue } from '@hmcts/cmc-validators'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 export class ValidationErrors {
@@ -10,17 +10,17 @@ export class ValidationErrors {
 
 export class Employment {
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  isCurrentlyEmployed: boolean
+  declared: boolean
 
-  @ValidateIf(o => o.isCurrentlyEmployed === true && !o.selfEmployed && !o.employed)
+  @ValidateIf(o => o.declared === true && !o.selfEmployed && !o.employed)
   @IsBooleanTrue({ message: ValidationErrors.SELECT_AT_LEAST_ONE_OPTION })
   employed: boolean
 
   selfEmployed: boolean
 
-  constructor (isCurrentlyEmployed?: boolean, employed?: boolean, selfEmployed?: boolean) {
-    this.isCurrentlyEmployed = isCurrentlyEmployed
-    if (this.isCurrentlyEmployed) {
+  constructor (declared?: boolean, employed?: boolean, selfEmployed?: boolean) {
+    this.declared = declared
+    if (this.declared) {
       this.employed = employed
       this.selfEmployed = selfEmployed
     }
@@ -31,23 +31,19 @@ export class Employment {
       return value
     }
 
-    const employment = new Employment(
-      value.isCurrentlyEmployed !== undefined ? toBoolean(value.isCurrentlyEmployed) === true : undefined,
-      value.employed !== undefined ? toBoolean(value.employed) === true : undefined,
-      value.selfEmployed !== undefined ? toBoolean(value.selfEmployed) === true : undefined
+    const declared: boolean = value.declared !== undefined ? toBoolean(value.declared) : undefined
+
+    return new Employment(
+      declared,
+      declared ? value.employed !== undefined ? toBoolean(value.employed) : undefined : undefined,
+      declared ? value.selfEmployed !== undefined ? toBoolean(value.selfEmployed) : undefined : undefined
     )
-
-    if (!employment.isCurrentlyEmployed) {
-      employment.employed = employment.selfEmployed = undefined
-    }
-
-    return employment
   }
 
   deserialize (input?: any): Employment {
     if (input) {
-      this.isCurrentlyEmployed = input.isCurrentlyEmployed
-      if (this.isCurrentlyEmployed) {
+      this.declared = input.declared
+      if (this.declared) {
         this.employed = input.employed
         this.selfEmployed = input.selfEmployed
       }

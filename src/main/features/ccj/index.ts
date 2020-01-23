@@ -8,8 +8,9 @@ import { CCJGuard } from 'ccj/guards/ccjGuard'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftCCJ } from 'ccj/draft/draftCCJ'
-import { IsClaimantInCaseGuard } from 'guards/isClaimantInCaseGuard'
+import { OnlyClaimantLinkedToClaimCanDoIt } from 'guards/onlyClaimantLinkedToClaimCanDoIt'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { Paths } from 'ccj/paths'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -23,15 +24,23 @@ function requestHandler (): express.RequestHandler {
 
 export class CCJFeature {
   enableFor (app: express.Express) {
+    if (app.settings.nunjucksEnv && app.settings.nunjucksEnv.globals) {
+      app.settings.nunjucksEnv.globals.CCJPaths = Paths
+    }
     const allCCJ = '/case/*/ccj/*'
     app.all(allCCJ, requestHandler())
     app.all(allCCJ, ClaimMiddleware.retrieveByExternalId)
-    app.all(allCCJ, IsClaimantInCaseGuard.check())
-    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/, CCJGuard.requestHandler)
-    app.all(/^\/case\/.+\/ccj\/(?!confirmation).*$/,
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation-redetermination|repayment-plan-summary|redetermination).*$/, OnlyClaimantLinkedToClaimCanDoIt.check())
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation|repayment-plan-summary|redetermination).*$/, CCJGuard.requestHandler)
+    app.all(/^\/case\/.+\/ccj\/(?!confirmation|repayment-plan-summary|redetermination).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'ccj', 100, (value: any): DraftCCJ => {
         return new DraftCCJ().deserialize(value)
-      }))
+      }),
+      (req: express.Request, res: express.Response, next: express.NextFunction) => {
+        res.locals.draft = res.locals.ccjDraft
+        next()
+      }
+    )
 
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

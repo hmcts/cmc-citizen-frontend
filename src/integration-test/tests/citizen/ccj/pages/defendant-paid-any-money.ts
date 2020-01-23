@@ -1,6 +1,4 @@
 import I = CodeceptJS.I
-import { claimAmount } from 'integration-test/data/test-data'
-import { AmountHelper } from 'integration-test/helpers/amountHelper'
 
 const I: I = actor()
 
@@ -33,7 +31,6 @@ export class DefendantPaidAnyMoneyPage {
 
   defendantPaid (amount: number): void {
     this.paidSome()
-    I.see('Total claim amount: ' + AmountHelper.formatMoney(claimAmount.getTotal()))
     I.fillField(fields.paidAmount, amount.toString())
     I.click(buttons.submit)
   }

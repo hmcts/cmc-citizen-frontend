@@ -1,14 +1,13 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import mcolSupportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
-{% set heading = t('Check you can use Money Claim Online (MCOL)') %}
+{% set heading = 'Check you can use Money Claim Online (MCOL)' %}
 
 {% block content %}
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <h2 class="heading-large">{{ t('Check you can use Money Claim Online (MCOL)') }}</h2>
-
       <p>{{ t('You can use the existing MCOL service to claim:') }}</p>
 
       <ul class="list list-bullet">
@@ -34,8 +33,9 @@
 
       {{ mcolSupportWidget() }}
 
-      <a href="{{ mcolUrl }}" class="button">{{ t('Continue to MCOL') }}</a>
+      {{ internalLink(t('Continue to MCOL'), mcolUrl, 'button') }}
     </div>
   </div>
 
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

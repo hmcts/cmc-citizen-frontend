@@ -3,8 +3,8 @@
 
 import { expect } from 'chai'
 import * as randomstring from 'randomstring'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { HowMuchOwed } from 'features/response/form/models/howMuchOwed'
 import { ValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'

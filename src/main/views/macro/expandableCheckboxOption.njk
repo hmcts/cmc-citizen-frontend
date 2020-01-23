@@ -1,0 +1,17 @@
+{% from "form.njk" import option %}
+
+{% macro expandableCheckboxOption(form, name, value, checked = false, label, hint = '', bold = false, additionalClasses = undefined, headerEnabled = true) %}
+  {% set expandablePanelId = name + '-' + value | replace(' ', '') %}
+  <div class="expandable-checkbox-option">
+    {% set className = "expandable" %}
+    {% if headerEnabled %}
+      {% set className = "expandable visually-hidden" %}
+      <h3 class="heading-medium expandable">{{ t(label) }}</h3>
+    {% endif %}
+    {{ option(form = form, name = name, value = value, type = 'checkbox', checked = checked, label = label, hint = hint, bold = bold, hidden = true, className = className, dataTarget = expandablePanelId) }}
+    <div class="panel panel-border-narrow expandable {{ ' ' + additionalClasses if additionalClasses }}"
+         id="{{ expandablePanelId }}">
+      {{ caller() }}
+    </div>
+  </div>
+{% endmacro %}

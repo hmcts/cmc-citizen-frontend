@@ -1,0 +1,41 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioGroup, submitButton %}
+
+{% set heading = 'Try new features' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('We’re continuously improving this service to reduce the need for paper forms.') }}</p>
+      <p>{{ t('You can choose to try new online features as we launch them. We’ll tell you when new features apply to your claim.') }}</p>
+      <form method="POST" novalidate class="analytics-submit-event-trigger" data-event-label-from="consentResponse" data-event-action="New features consent">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = 'Do you want to try new features as we add them?',
+          labelForScreenReadersOnly = true,
+          name = 'consentResponse',
+          form = form,
+          options = [
+          {
+            bold: false,
+            label: 'I’ll try new online features',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor('consentResponse') === YesNoOption.YES)
+          },
+          {
+            bold: false,
+            label: 'I’ll use older paper forms',
+            value: YesNoOption.NO.option,
+            checked: (form.valueFor('consentResponse').value === YesNoOption.NO)
+          }
+        ]
+        )
+        }}
+
+        {{ submitButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

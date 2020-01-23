@@ -44,5 +44,4 @@ export class ResponseGuard {
     }
     return GuardFactory.create(allowed, accessDeniedCallback)
   }
-
 }

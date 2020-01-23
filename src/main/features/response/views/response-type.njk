@@ -7,7 +7,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <details class="form-group">
+      <details class="form-group analytics-click-event-trigger" data-event-label="Response: Find out what each response means">
         <summary>{{ t('Find out what each response means') }}</summary>
 
         <div class="panel">
@@ -65,17 +65,17 @@
 
             {{ radioOption(form = form, name = 'type[value]', value = ResponseType.FULL_ADMISSION.value,
                 label = 'I admit all of the claim', bold = true,
-              hint = 'You can either pay the claim amount in full or by instalments.'
+              hint = 'You agree you owe the full amount claimed'
             )}}
 
             {{ radioOption(form = form, name = 'type[value]', value = ResponseType.PART_ADMISSION.value,
               label = 'I admit part of the claim', bold = true,
-              hint = 'You agree you owe some money but not the amount claimed'
+              hint = 'You agree you owe some money but not the full amount claimed'
             )}}
 
             {{ radioOption(form = form, name = 'type[value]', value = ResponseType.DEFENCE.value,
               label = 'I reject all of the claim', bold = true,
-              hint = 'You have either paid what you believe you owe or you reject the claim'
+              hint = 'You’ve either paid what you believe you owe or you reject the claim'
             )}}
 
           </fieldset>
@@ -86,4 +86,3 @@
     </div>
   </div>
 {% endblock %}
-

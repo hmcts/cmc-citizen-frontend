@@ -17,15 +17,9 @@
 
           <table class="table-form form-group">
             <caption class="visuallyhidden"></caption>
-            <thead>
-            <tr>
-              <th scope="col"></th>
-              <th class="numeric last" scope="col">{{ t('Amount') }}</th>
-            </tr>
-            </thead>
             <tfoot>
             <tr>
-              <th scope="col"></th>
+              <th scope="col"><span class="bold-small">{{ t('Total claim amount') }}</span></th>
               <td class="numeric last"><span class="bold-medium">{{ interestTotal.totalAmountTillToday | numeral }}</span></td>
             </tr>
             </tfoot>
@@ -56,6 +50,28 @@
             </tbody>
           </table>
 
+          <p>{{ t('If you settle out of court we won’t refund your claim fee. You can ask the defendant to pay back your claim fee as part of the settlement.') }}</p>
+
+          <table class="table-form form-group">
+            <caption class="visuallyhidden"></caption>
+            <thead>
+              <tr>
+                <th scope="col">{{ t('Other fees') }}</th>
+                <th class="numeric last" scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row">{{ t('Hearing fee') }}</th>
+              <td class="numeric last">
+                <span class="font-small">{{ hearingFee | numeral }}</span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+          <p>{{ t('You don’t have to pay a hearing fee unless the claim goes to a hearing.') }}</p>
+
           {{ feesTable('How these fees are calculated', feeTableContent , showHearingFee = true) }}
 
         </fieldset>
@@ -65,4 +81,3 @@
     </div>
   </div>
 {% endblock %}
-

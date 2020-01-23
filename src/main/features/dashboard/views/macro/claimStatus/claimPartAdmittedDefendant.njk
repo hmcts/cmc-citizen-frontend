@@ -1,0 +1,74 @@
+{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink, viewAndRespondOffer %}
+
+{% macro claimPartAdmittedAlreadyPaidForDefendantDashboard(claim) %}
+  {{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+    { claimantName: claim.claimData.claimant.name }) }}
+{% endmacro %}
+
+{% macro partAdmittedClaimantAcceptsDefendantDashboard(claim) %}
+  {{ t('{{ claimantName }} accepted your admission of {{ amount }}',
+    { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}
+{% endmacro %}
+
+{% macro claimPartAdmittedAlreadyPaidForDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+    <p>{{ t('We’ve emailed {{ claimantName }} telling them when and how you said you paid the claim.',
+        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('We’ll contact you to let you know how they respond. They can confirm you’ve paid and the claim is ' +
+        'settled, or they can proceed with it.') }}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro claimPartAdmittedToOweForDefendantDashboard() %}
+  {{ t('You’ve admitted part of the claim.') }}
+{% endmacro %}
+
+{% macro claimPartAdmittedToOweForDefendantClaimDetails(claim) %}
+  {% set claimant = claim.claimData.claimant %}
+  {% set paymentIntention = claim.response.paymentIntention %}
+  {% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('Your response to the claim') }}</h2>
+    <p>{% if paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+        {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} immediately.',
+          { amount: claim.response.amount | numeral, claimantName: claimant.name }) }}
+      {% elseif paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+        {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} by {{ paymentDate }}.',
+          { amount: claim.response.amount | numeral, claimantName: claimant.name,
+            paymentDate: paymentIntention.paymentDate | date }) }}
+      {% elseif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+        {% set repaymentPlan = claim.response.paymentIntention.repaymentPlan %}
+        {% set installmentAmount = repaymentPlan.instalmentAmount | numeral %}
+        {% set paymentSchedule = t(repaymentPlan.paymentSchedule | renderPaymentSchedule) %}
+        {{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} {{ installmentAmount }} {{ paymentSchedule }} starting {{ paymentDate }}.',
+          { amount: claim.response.amount | numeral, claimantName: claimant.name, installmentAmount: installmentAmount,
+            paymentSchedule: paymentSchedule | lower, paymentDate: repaymentPlan.firstPaymentDate | date }) }}
+      {% endif %}
+
+      {% if paymentIntention.paymentOption != domain.PaymentOption.IMMEDIATELY
+        and claim.claimData.defendant.isBusiness() %}
+        {{ t('You need to send them your company’s financial details if you haven’t already.') }}</p>
+        <p>{{ internalLink( t('Get {{ claimantName }}’s contact details.', { claimantName: claimant.name }),
+            claimantDetailsPageURI ) }}
+      {% endif %}
+    </p>
+    <p>{{ t('We’ll contact you when they respond.') }}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro partAdmittedAcceptedPayImmediatelyDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('{{ claimantName }} accepted your admission of {{ amount }}',
+        { amount: claim.response.amount | numeral, claimantName: claim.claimData.claimant.name }) }}</h2>
+    <p>{{ t('You must pay them by {{ paymentDate }}. Any cheques or transfers must be clear in their account by then.',
+        { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    <p>{{ t('If they don’t receive the money by then, they can request a County Court Judgment against you.') }}</p>
+    <p>{{ internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}{{ t( 'if you need their payment details. Make sure you get receipts for any payments.') }}</p>
+  </div>
+{% endmacro %}

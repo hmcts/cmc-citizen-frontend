@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { MoreTimeNeeded, MoreTimeNeededOption, ValidationErrors } from 'response/form/models/moreTimeNeeded'
 
 describe('MoreTimeNeeded', () => {

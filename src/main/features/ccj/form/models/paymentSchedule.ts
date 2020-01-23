@@ -1,3 +1,6 @@
+import { Frequency } from 'common/frequency/frequency'
+import { PaymentSchedule as PS } from 'claims/models/response/core/paymentSchedule'
+
 export class PaymentSchedule {
   static readonly EACH_WEEK = new PaymentSchedule('EACH_WEEK', 'Each week')
   static readonly EVERY_TWO_WEEKS = new PaymentSchedule('EVERY_TWO_WEEKS', 'Every two weeks')
@@ -24,5 +27,19 @@ export class PaymentSchedule {
     }
 
     throw new Error(`There is no PaymentSchedule: '${value}'`)
+  }
+
+  static toFrequency (value: PS): Frequency {
+    switch (value) {
+      case 'EACH_WEEK': {
+        return Frequency.WEEKLY
+      }
+      case 'EVERY_TWO_WEEKS': {
+        return Frequency.TWO_WEEKLY
+      }
+      case 'EVERY_MONTH': {
+        return Frequency.MONTHLY
+      }
+    }
   }
 }

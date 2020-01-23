@@ -23,7 +23,7 @@
     {% endif %}
 
     <label class="form-label-bold mobile-show" for="{{ dateKey }}">{{ index + 1 }}{{ t('. Date') }}</label>
-    <span class="form-hint mobile-show">{{ t('For example, 1 May 2017') }}</span>
+    <span class="form-hint mobile-show">{{ t('For example, {{ oneMonthAgo }}', { oneMonthAgo: 'now' | addDays(-30) | date }) }}</span>
     <input id="{{ dateKey }}" name="{{ dateKey }}" value="{{ dateValue if dateValue }}"
            class="form-control multiline-column-1 {% if dateError %}form-control-error{% endif %}" type="text">
 
@@ -45,7 +45,7 @@
     <div class="multiline-headings">
       <div class="multiline-column-1">
         <label class="form-label-bold">{{ t('Date') }}</label>
-        <span class="form-hint">{{ t('For example, 1 May 2017') }}</span>
+        <span class="form-hint">{{ t('For example, {{ sixMonthAgo }}', { sixMonthAgo: 'now' | addDays(-180) | date }) }}</span>
       </div>
       <div class="multiline-column-2">
         <label class="form-label-bold">{{ t('What happened') }}</label>

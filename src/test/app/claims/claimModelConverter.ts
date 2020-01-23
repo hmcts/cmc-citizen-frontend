@@ -1,19 +1,32 @@
+/* tslint:disable:no-unused-expression */
 import { expect } from 'chai'
 
 import { ClaimModelConverter } from 'claims/claimModelConverter'
 
 import { DraftClaim } from 'drafts/models/draftClaim'
-import { claimDraft as draftTemplate } from '../../data/draft/claimDraft'
+import { claimDraft as draftTemplate } from 'test/data/draft/claimDraft'
 import {
   companyDetails,
+  defendantIndividualDetails,
+  defendantSoleTraderDetails,
   individualDetails,
   organisationDetails,
   soleTraderDetails
-} from '../../data/draft/partyDetails'
+} from 'test/data/draft/partyDetails'
 
 import { ClaimData } from 'claims/models/claimData'
-import { claimData as entityTemplate } from '../../data/entity/claimData'
-import { company, individual, organisation, soleTrader } from '../../data/entity/party'
+import { claimData as entityTemplate } from 'test/data/entity/claimData'
+import {
+  company,
+  individual,
+  individualDefendant,
+  organisation,
+  soleTrader,
+  soleTraderDefendant
+} from 'test/data/entity/party'
+import { YesNoOption } from 'models/yesNoOption'
+import { Interest } from 'claim/form/models/interest'
+import { Individual } from 'claims/models/details/theirs/individual'
 
 function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails: object): DraftClaim {
   return new DraftClaim().deserialize({
@@ -29,8 +42,8 @@ function prepareClaimDraft (claimantPartyDetails: object, defendantPartyDetails:
 function prepareClaimData (claimantParty: object, defendantParty: object): ClaimData {
   return new ClaimData().deserialize({
     ...entityTemplate,
-    claimants: [{ ...claimantParty, email: undefined, mobilePhone: '07000000000' }],
-    defendants: [{ ...defendantParty, email: 'defendant@example.com', dateOfBirth: undefined }]
+    claimants: [{ ...claimantParty, email: undefined, phone: '07000000000' }],
+    defendants: [{ ...defendantParty, email: 'defendant@example.com', dateOfBirth: undefined, phone: '07284798778' }]
   })
 }
 
@@ -40,10 +53,10 @@ function convertObjectLiteralToJSON (value: object): object {
 
 describe('ClaimModelConverter', () => {
   [
-    [[individualDetails, individual], [soleTraderDetails, soleTrader]],
+    [[individualDetails, individual], [defendantSoleTraderDetails, soleTraderDefendant]],
     [[soleTraderDetails, soleTrader], [companyDetails, company]],
     [[companyDetails, company], [organisationDetails, organisation]],
-    [[organisationDetails, organisation], [individualDetails, individual]]
+    [[organisationDetails, organisation], [defendantIndividualDetails, individualDefendant]]
   ].forEach(entry => {
     const [[claimantPartyDetails, claimantParty], [defendantPartyDetails, defendantParty]] = entry
 
@@ -54,5 +67,19 @@ describe('ClaimModelConverter', () => {
       expect(convertObjectLiteralToJSON(ClaimModelConverter.convert(claimDraft)))
         .to.deep.equal(convertObjectLiteralToJSON(claimData))
     })
+  })
+
+  it('should not create interestDate if no interest is selected in the draft', () => {
+    const claimDraft = prepareClaimDraft(individualDetails, individual)
+    claimDraft.interest = new Interest(YesNoOption.NO)
+    const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
+    expect(converted.interest.interestDate).to.be.undefined
+  })
+
+  it('should not contain title if blank', () => {
+    const defendantWithoutTitle = { ...individualDefendant, title: ' ' }
+    const claimDraft = prepareClaimDraft(defendantIndividualDetails, defendantWithoutTitle)
+    const converted: ClaimData = ClaimModelConverter.convert(claimDraft)
+    expect((converted.defendant as Individual).title).to.be.undefined
   })
 })

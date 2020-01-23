@@ -12,6 +12,7 @@ import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { ClaimFeatureToggles } from 'utils/claimFeatureToggles'
 
 const page: RoutablePath = Paths.timelinePage
 
@@ -41,7 +42,16 @@ export default express.Router()
     page.uri,
     async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
-      renderView(new Form(draft.document.timeline), res)
+      const claim: Claim = res.locals.claim
+      let timeline
+
+      if (ClaimFeatureToggles.isFeatureEnabledOnClaim(claim) && draft.document.isResponsePartiallyAdmitted()) {
+        timeline = draft.document.partialAdmission.timeline
+      } else {
+        timeline = draft.document.timeline
+      }
+
+      renderView(new Form(timeline), res)
     })
   .post(
     page.uri,
@@ -58,7 +68,11 @@ export default express.Router()
         const user: User = res.locals.user
 
         form.model.removeExcessRows()
-        draft.document.timeline = form.model
+        if (draft.document.isResponseRejected()) {
+          draft.document.timeline = form.model
+        } else {
+          draft.document.partialAdmission.timeline = form.model
+        }
         await new DraftService().save(draft, user.bearerToken)
 
         res.redirect(Paths.evidencePage.evaluateUri({ externalId: claim.externalId }))

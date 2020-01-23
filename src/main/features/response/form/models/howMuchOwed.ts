@@ -1,7 +1,6 @@
-import { IsDefined, IsPositive, MaxLength } from 'class-validator'
-import { IsNotBlank } from '@hmcts/cmc-validators'
+import { IsDefined, IsPositive, MaxLength } from '@hmcts/class-validator'
+import { IsNotBlank, Fractions } from '@hmcts/cmc-validators'
 import { ValidationErrors } from 'forms/validation/validationErrors'
-import { Fractions } from 'forms/validation/validators/fractions'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 

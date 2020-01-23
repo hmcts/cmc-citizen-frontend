@@ -1,10 +1,10 @@
 {
   "idam": {
     "authentication-web": {
-      "url": "http://localhost:18000"
+      "url": "http://localhost:19002"
     },
     "api": {
-      "url": "http://localhost:18080"
+      "url": "http://localhost:15000"
     },
     "service-2-service-auth": {
       "url": "http://localhost:14552"
@@ -12,6 +12,9 @@
   },
   "claim-store": {
     "url": "http://localhost:14400"
+  },
+  "feature-toggles-api": {
+    "url": "http://localhost:18580"
   },
   "draft-store": {
     "url": "http://localhost:18800"
@@ -24,12 +27,13 @@
   },
   "featureToggles": {
     "testingSupport": true,
-    "countyCourtJudgment": true,
-    "fullAdmission": true,
-    "partialAdmission": true,
-    "offer": true,
-    "statementOfMeans": true,
-    "returnErrorToUser": true
+    "newFeaturesConsent": true,
+    "admissions": true,
+    "returnErrorToUser": true,
+    "mediation": true,
+    "mediationPilot": true,
+    "directionsQuestionnaire": true,
+    "newDashboardStatus": false
   },
   "appInsights": {
     "instrumentationKey": "dummy-app-insights-instrumentation-key"

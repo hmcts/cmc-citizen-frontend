@@ -8,17 +8,7 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <p>{{ t('You can claim interest on the money you’re owed. The court will decide if you’re entitled to it.') }} </p>
-
-      <details class="form-group">
-        <summary>
-          {{ t(' Help with interest rates') }}
-        </summary>
-        <div class="panel panel-border-narrow">
-          <p>{{ t('You can claim 8% interest on money owed to you. If you know that a different rate applies you can use that. For example if you have a contract with a specific rate.') }}</p>
-          <p>{{ t('The court will decide if you’re entitled to some or all of the interest claimed.') }}</p>
-        </div>
-      </details>
+      <p>{{ t('You can claim interest on the money you say you’re owed. The court will decide if you’re entitled to it.') }} </p>
 
       {% set name = 'option' %}
 
@@ -38,6 +28,16 @@
           labelForScreenReadersOnly = true
         )
         }}
+
+        <details class="form-group">
+          <summary>
+            {{ t(' Help with interest rates') }}
+          </summary>
+          <div class="panel panel-border-narrow">
+            <p>{{ t('You can claim 8% interest on money owed to you. This is the statutory rate. If you know that a different rate applies you can use that. For example if you have a contract with a specific rate.') }}</p>
+            <p>{{ t('The court will decide if you’re entitled to some or all of the interest claimed.') }}</p>
+          </div>
+        </details>
 
         <div class="form-group">
           {{ saveAndContinueButton() }}

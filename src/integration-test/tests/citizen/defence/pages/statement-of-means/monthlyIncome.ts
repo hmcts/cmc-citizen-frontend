@@ -3,17 +3,22 @@ import I = CodeceptJS.I
 const I: I = actor()
 
 const fields = {
-  salary: 'input[id="salary"]',
-  universalCredit: 'input[id="universalCredit"]',
-  jobSeekerAllowanceIncome: 'input[id="jobSeekerAllowanceIncome"]',
-  jobSeekerAllowanceContribution: 'input[id="jobSeekerAllowanceContribution"]',
-  incomeSupport: 'input[id="incomeSupport"]',
-  workingTaxCredit: 'input[id="workingTaxCredit"]',
-  childTaxCredit: 'input[id="childTaxCredit"]',
-  childBenefit: 'input[id="childBenefit"]',
-  councilTaxSupport: 'input[id="councilTaxSupport"]',
-  pension: 'input[id="pension"]',
-  maintenance: 'input[id="maintenance"]'
+  salary: {
+    radio: 'input[id="salarySourceDeclaredtrue"]',
+    input: 'input[id="salarySource[amount]"]',
+    everyWeek: 'input[id="salarySource[schedule]WEEK"]'
+  },
+  universalCredit: {
+    radio: 'input[id="universalCreditSourceDeclaredtrue"]',
+    input: 'input[id="universalCreditSource[amount]"]',
+    everyWeek: 'input[id="universalCreditSource[schedule]WEEK"]'
+  }
+}
+
+interface GenericMonthyIncomeField {
+  radio: string
+  input: string
+  everyWeek: string
 }
 
 const buttons = {
@@ -22,19 +27,18 @@ const buttons = {
 
 export class MonthlyIncomePage {
 
-  fillOutAllFieldsAndContinue (): void {
-    I.fillField(fields.salary, '10')
-    I.fillField(fields.universalCredit, '10')
-    I.fillField(fields.jobSeekerAllowanceIncome, '10')
-    I.fillField(fields.jobSeekerAllowanceContribution, '10')
-    I.fillField(fields.incomeSupport, '10')
-    I.fillField(fields.workingTaxCredit, '10')
-    I.fillField(fields.childTaxCredit, '10')
-    I.fillField(fields.childBenefit, '10')
-    I.fillField(fields.councilTaxSupport, '10')
-    I.fillField(fields.pension, '10')
-    I.fillField(fields.maintenance, '10')
+  fillOutSomeFields (amount: string = '10'): void {
+    this.fillGenericField(fields.salary, amount)
+    this.fillGenericField(fields.universalCredit, amount)
+  }
 
+  fillGenericField (field: GenericMonthyIncomeField, amount: string): void {
+    I.click(field.radio)
+    I.fillField(field.input, amount)
+    I.click(field.everyWeek)
+  }
+
+  clickContinue (): void {
     I.click(buttons.submit)
   }
 }

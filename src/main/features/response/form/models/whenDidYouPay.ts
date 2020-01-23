@@ -1,15 +1,14 @@
-import { IsDefined, MaxLength, ValidateNested } from 'class-validator'
+import { IsDefined, MaxLength, ValidateNested } from '@hmcts/class-validator'
 import { IsPastDate } from 'forms/validation/validators/datePastConstraint'
 import { LocalDate } from 'forms/models/localDate'
-import { IsNotBlank } from '@hmcts/cmc-validators'
-import { IsValidYearFormat } from 'forms/validation/validators/isValidYearFormat'
+import { IsNotBlank, IsValidLocalDate } from '@hmcts/cmc-validators'
 import { MomentFactory } from 'shared/momentFactory'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 import { MomentFormatter } from 'utils/momentFormatter'
 
 export class ValidationErrors {
-  static readonly EXPLANATION_REQUIRED: string = 'Explain how did you pay the amount claimed'
+  static readonly EXPLANATION_REQUIRED: string = 'Explain how you paid the amount claimed'
   static readonly DATE_OUTSIDE_RANGE = () => {
     const currentDate = MomentFormatter.formatLongDate(MomentFactory.currentDate())
     return `Enter date before ${currentDate}`
@@ -21,7 +20,7 @@ export class WhenDidYouPay {
   @ValidateNested()
   @IsDefined({ message: CommonValidationErrors.DATE_REQUIRED })
   @IsPastDate({ message: ValidationErrors.DATE_OUTSIDE_RANGE })
-  @IsValidYearFormat({ message: CommonValidationErrors.DATE_INVALID_YEAR })
+  @IsValidLocalDate({ message: CommonValidationErrors.DATE_NOT_VALID })
   date?: LocalDate
 
   @IsDefined({ message: ValidationErrors.EXPLANATION_REQUIRED })

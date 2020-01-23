@@ -1,282 +1,354 @@
 import { expect } from 'chai'
-import {
-  MonthlyExpenses, INIT_ROW_COUNT,
-  ValidationErrors as MonthlyExpensesValidationErrors
-} from 'response/form/models/statement-of-means/monthlyExpenses'
-import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
-import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
-import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { Validator } from '@hmcts/class-validator'
+
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { ExpenseSource, ValidationErrors as MonthlyExpensesSourceValidationErrors } from 'response/form/models/statement-of-means/expenseSource'
+import { MonthlyExpenses } from 'response/form/models/statement-of-means/monthlyExpenses'
+import { MonthlyExpenseType } from 'response/form/models/statement-of-means/monthlyExpenseType'
+
+function getSampleMonthlyExpensesObject (options?: object) {
+  const DEFAULT_SAMPLE_VALID_MONTHLY_EXPENSES = {
+    mortgage: {
+      amount: 100,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    rent: {
+      amount: 200,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    councilTax: {
+      amount: 300,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    gas: {
+      amount: 400,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    electricity: {
+      amount: 500,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    water: {
+      amount: 600,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    travel: {
+      amount: 700,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    schoolCosts: {
+      amount: 800,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    foodAndHousekeeping: {
+      amount: 900,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    tvAndBroadband: {
+      amount: 100,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    hirePurchase: {
+      amount: 100,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    mobilePhone: {
+      amount: 100,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    maintenance: {
+      amount: 100,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    }
+  }
+
+  const sampleData = Object.assign({}, DEFAULT_SAMPLE_VALID_MONTHLY_EXPENSES, options || {})
+
+  return {
+    sampleData,
+    forConstructor: forConstructor,
+    forFromObjectMethod: forFromObjectMethod,
+    forDeserialize: forDeserialize
+  }
+}
+
+function forConstructor () {
+  return new MonthlyExpenses(
+    undefined, new ExpenseSource(MonthlyExpenseType.MORTGAGE.displayValue, this.sampleData.mortgage.amount, this.sampleData.mortgage.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.RENT.displayValue, this.sampleData.rent.amount, this.sampleData.rent.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.COUNCIL_TAX.displayValue, this.sampleData.councilTax.amount, this.sampleData.councilTax.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.GAS.displayValue, this.sampleData.gas.amount, this.sampleData.gas.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.ELECTRICITY.displayValue, this.sampleData.electricity.amount, this.sampleData.electricity.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.WATER.displayValue, this.sampleData.water.amount, this.sampleData.water.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.TRAVEL.displayValue, this.sampleData.travel.amount, this.sampleData.travel.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.SCHOOL_COSTS.displayValue, this.sampleData.schoolCosts.amount, this.sampleData.schoolCosts.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, this.sampleData.foodAndHousekeeping.amount, this.sampleData.foodAndHousekeeping.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, this.sampleData.tvAndBroadband.amount, this.sampleData.tvAndBroadband.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.HIRE_PURCHASES.displayValue, this.sampleData.hirePurchase.amount, this.sampleData.hirePurchase.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.MOBILE_PHONE.displayValue, this.sampleData.mobilePhone.amount, this.sampleData.mobilePhone.schedule),
+    undefined, new ExpenseSource(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, this.sampleData.maintenance.amount, this.sampleData.maintenance.schedule)
+  )
+}
+
+function forFromObjectMethod () {
+  return {
+    mortgageDeclared: this.sampleData.mortgageDeclared,
+    mortgage: {
+      amount: this.sampleData.mortgage.amount,
+      schedule: this.sampleData.mortgage.schedule.value
+    },
+    rentDeclared: this.sampleData.rentDeclared,
+    rent: {
+      amount: this.sampleData.rent.amount,
+      schedule: this.sampleData.rent.schedule.value
+    },
+    councilTaxDeclared: this.sampleData.councilTaxDeclared,
+    councilTax: {
+      amount: this.sampleData.councilTax.amount,
+      schedule: this.sampleData.councilTax.schedule.value
+    },
+    gasDeclared: this.sampleData.gasDeclared,
+    gas: {
+      amount: this.sampleData.gas.amount,
+      schedule: this.sampleData.gas.schedule.value
+    },
+    electricityDeclared: this.sampleData.electricityDeclared,
+    electricity: {
+      amount: this.sampleData.electricity.amount,
+      schedule: this.sampleData.electricity.schedule.value
+    },
+    waterDeclared: this.sampleData.waterDeclared,
+    water: {
+      amount: this.sampleData.water.amount,
+      schedule: this.sampleData.water.schedule.value
+    },
+    travelDeclared: this.sampleData.travelDeclared,
+    travel: {
+      amount: this.sampleData.travel.amount,
+      schedule: this.sampleData.travel.schedule.value
+    },
+    schoolCostsDeclared: this.sampleData.schoolCostsDeclared,
+    schoolCosts: {
+      amount: this.sampleData.schoolCosts.amount,
+      schedule: this.sampleData.schoolCosts.schedule.value
+    },
+    foodAndHousekeepingDeclared: this.sampleData.foodAndHousekeepingDeclared,
+    foodAndHousekeeping: {
+      amount: this.sampleData.foodAndHousekeeping.amount,
+      schedule: this.sampleData.foodAndHousekeeping.schedule.value
+    },
+    tvAndBroadbandDeclared: this.sampleData.tvAndBroadbandDeclared,
+    tvAndBroadband: {
+      amount: this.sampleData.tvAndBroadband.amount,
+      schedule: this.sampleData.tvAndBroadband.schedule.value
+    },
+    hirePurchaseDeclared: this.sampleData.hirePurchaseDeclared,
+    hirePurchase: {
+      amount: this.sampleData.hirePurchase.amount,
+      schedule: this.sampleData.hirePurchase.schedule.value
+    },
+    mobilePhoneDeclared: this.sampleData.mobilePhoneDeclared,
+    mobilePhone: {
+      amount: this.sampleData.mobilePhone.amount,
+      schedule: this.sampleData.mobilePhone.schedule.value
+    },
+    maintenanceDeclared: this.sampleData.maintenanceDeclared,
+    maintenance: {
+      amount: this.sampleData.maintenance.amount,
+      schedule: this.sampleData.maintenance.schedule.value
+    }
+  }
+}
+
+function forDeserialize () {
+  return {
+    mortgageDeclared: this.sampleData.mortgageDeclared,
+    mortgage: {
+      name: MonthlyExpenseType.MORTGAGE.displayValue,
+      amount: this.sampleData.mortgage.amount,
+      schedule: this.sampleData.mortgage.schedule
+    },
+    rentDeclared: this.sampleData.rentDeclared,
+    rent: {
+      name: MonthlyExpenseType.RENT.displayValue,
+      amount: this.sampleData.rent.amount,
+      schedule: this.sampleData.rent.schedule
+    },
+    councilTaxDeclared: this.sampleData.councilTaxDeclared,
+    councilTax: {
+      name: MonthlyExpenseType.COUNCIL_TAX.displayValue,
+      amount: this.sampleData.councilTax.amount,
+      schedule: this.sampleData.councilTax.schedule
+    },
+    gasDeclared: this.sampleData.gasDeclared,
+    gas: {
+      name: MonthlyExpenseType.GAS.displayValue,
+      amount: this.sampleData.gas.amount,
+      schedule: this.sampleData.gas.schedule
+    },
+    electricityDeclared: this.sampleData.electricityDeclared,
+    electricity: {
+      name: MonthlyExpenseType.ELECTRICITY.displayValue,
+      amount: this.sampleData.electricity.amount,
+      schedule: this.sampleData.electricity.schedule
+    },
+    waterDeclared: this.sampleData.waterDeclared,
+    water: {
+      name: MonthlyExpenseType.WATER.displayValue,
+      amount: this.sampleData.water.amount,
+      schedule: this.sampleData.water.schedule
+    },
+    travelDeclared: this.sampleData.travelDeclared,
+    travel: {
+      name: MonthlyExpenseType.TRAVEL.displayValue,
+      amount: this.sampleData.travel.amount,
+      schedule: this.sampleData.travel.schedule
+    },
+    schoolCostsDeclared: this.sampleData.schoolCostsDeclared,
+    schoolCosts: {
+      name: MonthlyExpenseType.SCHOOL_COSTS.displayValue,
+      amount: this.sampleData.schoolCosts.amount,
+      schedule: this.sampleData.schoolCosts.schedule
+    },
+    foodAndHousekeepingDeclared: this.sampleData.foodAndHousekeepingDeclared,
+    foodAndHousekeeping: {
+      name: MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue,
+      amount: this.sampleData.foodAndHousekeeping.amount,
+      schedule: this.sampleData.foodAndHousekeeping.schedule
+    },
+    tvAndBroadbandDeclared: this.sampleData.tvAndBroadbandDeclared,
+    tvAndBroadband: {
+      name: MonthlyExpenseType.TV_AND_BROADBAND.displayValue,
+      amount: this.sampleData.tvAndBroadband.amount,
+      schedule: this.sampleData.tvAndBroadband.schedule
+    },
+    hirePurchaseDeclared: this.sampleData.hirePurchaseDeclared,
+    hirePurchase: {
+      name: MonthlyExpenseType.HIRE_PURCHASES.displayValue,
+      amount: this.sampleData.hirePurchase.amount,
+      schedule: this.sampleData.hirePurchase.schedule
+    },
+    mobilePhoneDeclared: this.sampleData.mobilePhoneDeclared,
+    mobilePhone: {
+      name: MonthlyExpenseType.MOBILE_PHONE.displayValue,
+      amount: this.sampleData.mobilePhone.amount,
+      schedule: this.sampleData.mobilePhone.schedule
+    },
+    maintenanceDeclared: this.sampleData.maintenanceDeclared,
+    maintenance: {
+      name: MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue,
+      amount: this.sampleData.maintenance.amount,
+      schedule: this.sampleData.maintenance.schedule
+    },
+    other: [{}]
+  }
+}
 
 describe('MonthlyExpenses', () => {
-
-  describe('on init', () => {
-
-    it(`should create array of ${INIT_ROW_COUNT} empty AmountDescriptionRows and all other fields are empty`, () => {
-
-      const actual: MonthlyExpenses = new MonthlyExpenses()
-
-      expectAllFieldsToBeEmpty(actual)
-      expectAllRowsToBeEmpty(actual.rows)
-      expect(actual.rows.length).to.equal(INIT_ROW_COUNT)
-    })
-  })
-
   describe('fromObject', () => {
-
-    it('should return undefined value when undefined provided', () => {
-      const actual: any = MonthlyExpenses.fromObject(undefined)
-
-      expect(actual).to.eql(undefined)
+    it('should return undefined when undefined provided as object parameter', () => {
+      expect(MonthlyExpenses.fromObject(undefined)).to.eql(undefined)
     })
 
-    it('should return MonthlyExpenses with list of empty AmountDescriptionRow[] when empty input given', () => {
-      const actual: MonthlyExpenses = MonthlyExpenses.fromObject([])
-
-      expectAllRowsToBeEmpty(actual.rows)
+    it('should return undefined when no object parameter provided', () => {
+      expect(MonthlyExpenses.fromObject()).to.deep.equal(undefined)
     })
 
-    it('should return MonthlyExpenses with first element on list populated', () => {
-      const actual: MonthlyExpenses = MonthlyExpenses.fromObject(prepareInput())
+    it('should return a new instance initialised with defaults when an empty object parameter is provided', () => {
+      expect(MonthlyExpenses.fromObject({})).to.deep.equal(
+        new MonthlyExpenses(
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined
+        )
+      )
+    })
 
-      expect(actual.mortgage).to.be.eq(1)
-      expect(actual.rent).to.be.eq(2)
-      expect(actual.councilTax).to.be.eq(3)
-      expect(actual.gas).to.be.eq(4)
-      expect(actual.electricity).to.be.eq(5)
-      expect(actual.water).to.be.eq(6)
-      expect(actual.travel).to.be.eq(7)
-      expect(actual.schoolCosts).to.be.eq(8)
-      expect(actual.foodAndHousekeeping).to.be.eq(9)
-      expect(actual.tvAndBroadband).to.be.eq(10)
-      expect(actual.mobilePhone).to.be.eq(11)
-      expect(actual.maintenance).to.be.eq(12)
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const sampleMonthlyExpensesData = getSampleMonthlyExpensesObject().forFromObjectMethod()
+      const expectedMonthlyExpensesObject = getSampleMonthlyExpensesObject().forConstructor()
 
-      const populatedItem: AmountDescriptionRow = actual.rows.pop()
-
-      expect(populatedItem.amount).to.eq(13)
-      expect(populatedItem.description).to.eq('bla')
-
-      expectAllRowsToBeEmpty(actual.rows)
+      expect(MonthlyExpenses.fromObject(sampleMonthlyExpensesData)).to.deep.equal(expectedMonthlyExpensesObject)
     })
   })
 
   describe('deserialize', () => {
-
-    it('should return empty object when undefined provided', () => {
-      const actual: MonthlyExpenses = new MonthlyExpenses().deserialize(undefined)
-
-      expectAllFieldsToBeEmpty(actual)
-      expectAllRowsToBeEmpty(actual.rows)
-      expect(actual.rows.length).to.equal(INIT_ROW_COUNT)
+    it('should return instance initialised with defaults when undefined provided', () => {
+      expect(new MonthlyExpenses().deserialize(undefined)).to.deep.equal(new MonthlyExpenses())
     })
 
-    it('should return MonthlyExpenses with list of empty AmountDescriptionRow[] when empty input given', () => {
-      const actual: MonthlyExpenses = new MonthlyExpenses().deserialize({ rows: [] })
-
-      expectAllFieldsToBeEmpty(actual)
-      expectAllRowsToBeEmpty(actual.rows)
-      expect(actual.rows.length).to.equal(INIT_ROW_COUNT)
-    })
-
-    it('should return MonthlyExpenses with all fiedls populated and one row', () => {
-      const actual: MonthlyExpenses = new MonthlyExpenses().deserialize({
-        mortgage: 1,
-        rent: 2,
-        councilTax: 3,
-        gas: 4,
-        electricity: 5,
-        water: 6,
-        travel: 7,
-        schoolCosts: 8,
-        foodAndHousekeeping: 9,
-        tvAndBroadband: 10,
-        mobilePhone: 11,
-        maintenance: 12,
-        rows: [{ amount: 13, description: 'bla bla' }]
-      })
-
-      expect(actual.mortgage).to.be.eq(1)
-      expect(actual.rent).to.be.eq(2)
-      expect(actual.councilTax).to.be.eq(3)
-      expect(actual.gas).to.be.eq(4)
-      expect(actual.electricity).to.be.eq(5)
-      expect(actual.water).to.be.eq(6)
-      expect(actual.travel).to.be.eq(7)
-      expect(actual.schoolCosts).to.be.eq(8)
-      expect(actual.foodAndHousekeeping).to.be.eq(9)
-      expect(actual.tvAndBroadband).to.be.eq(10)
-      expect(actual.mobilePhone).to.be.eq(11)
-      expect(actual.maintenance).to.be.eq(12)
-
-      const populatedItem: AmountDescriptionRow = actual.rows.pop()
-
-      expect(populatedItem.amount).to.eq(13)
-      expect(populatedItem.description).to.eq('bla bla')
-
-      expectAllRowsToBeEmpty(actual.rows)
+    it('should return instance initialised with set fields from object provided', () => {
+      expect(new MonthlyExpenses().deserialize(getSampleMonthlyExpensesObject().forDeserialize())).to.deep.equal(getSampleMonthlyExpensesObject().forConstructor())
     })
   })
 
   describe('validation', () => {
-
     const validator: Validator = new Validator()
 
-    context('should accept when', () => {
+    describe('when not successful', () => {
+      it('should return errors when `ExpenseSource` objects are invalid', () => {
+        const errors = validator.validateSync(
+          new MonthlyExpenses(
+            undefined, new ExpenseSource(MonthlyExpenseType.MORTGAGE.displayValue, -100, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(MonthlyExpenseType.RENT.displayValue, -200, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(MonthlyExpenseType.COUNCIL_TAX.displayValue, -300, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(MonthlyExpenseType.GAS.displayValue, -400, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(MonthlyExpenseType.ELECTRICITY.displayValue, -500, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(MonthlyExpenseType.WATER.displayValue, -600, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(MonthlyExpenseType.TRAVEL.displayValue, -700, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(MonthlyExpenseType.SCHOOL_COSTS.displayValue, -800, IncomeExpenseSchedule.MONTH),
+            undefined, new ExpenseSource(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue, -900, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(MonthlyExpenseType.TV_AND_BROADBAND.displayValue, -100, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(MonthlyExpenseType.HIRE_PURCHASES.displayValue, -100, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(MonthlyExpenseType.MOBILE_PHONE.displayValue, -100, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new ExpenseSource(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue, -100, IncomeExpenseSchedule.TWO_WEEKS)
+          )
+        )
 
-      it('all mandatory fields populated and valid input given for rows', () => {
-        const errors = validator.validateSync(MonthlyExpenses.fromObject(prepareInput()))
-
-        expect(errors.length).to.equal(0)
+        expect(errors.length).to.equal(13)
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.MORTGAGE.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.RENT.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.COUNCIL_TAX.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.GAS.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.ELECTRICITY.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.WATER.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.TRAVEL.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.SCHOOL_COSTS.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.FOOD_HOUSEKEEPING.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.TV_AND_BROADBAND.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.HIRE_PURCHASES.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.MOBILE_PHONE.displayValue))
+        expectValidationError(errors, MonthlyExpensesSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyExpenseType.MAINTENANCE_PAYMENTS.displayValue))
       })
 
-      it('all mandatory fields populated and empty rows', () => {
-        const errors = validator.validateSync(MonthlyExpenses.fromObject(prepareInput({ rows: [] })))
+      describe('when successful', () => {
+        it('should return no error when `hasSource` is true and `source` is invalid', () => {
+          const sampleMonthlyExpensesData = getSampleMonthlyExpensesObject().forFromObjectMethod()
 
-        expect(errors.length).to.equal(0)
-      })
-    })
-
-    context('should reject when', () => {
-
-      it('all fields empty', () => {
-        const errors = validator.validateSync(new MonthlyExpenses())
-
-        expect(errors.length).to.equal(12)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_COUNCIL)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MAINTENANCE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MOBILE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_MORTGAGE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_SCHOOL)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_TRAVEL)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_RENT)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_ELECTRICITY)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_FOOD)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_GAS)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_TV)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.AMOUNT_REQUIRED_WATER)
-      })
-
-      it('all fields negative', () => {
-        const errors = validator.validateSync(new MonthlyExpenses(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, []))
-
-        expect(errors.length).to.equal(12)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MOBILE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MORTGAGE)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SCHOOL)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TRAVEL)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_RENT)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_ELECTRICITY)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_FOOD)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_GAS)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_TV)
-        expectValidationError(errors, MonthlyExpensesValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_WATER)
-      })
-
-      context('all mandatory fields valid and invalid input for populated row', () => {
-
-        it('description not populated', () => {
-          const errors = validator.validateSync(
-            MonthlyExpenses.fromObject(prepareInput({ rows: [{ amount: '12', description: '' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.DESCRIPTION_REQUIRED)
-        })
-
-        it('description too long', () => {
-          const errors = validator.validateSync(
-            MonthlyExpenses.fromObject(prepareInput({
-              rows: [{
-                amount: '12',
-                description: generateString(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH + 1)
-              }]
-            }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
-        })
-
-        it('amount not populated', () => {
-          const errors = validator.validateSync(
-            MonthlyExpenses.fromObject(prepareInput({ rows: [{ amount: '', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED)
-        })
-
-        it('amount less than zero', () => {
-          const errors = validator.validateSync(
-            MonthlyExpenses.fromObject(prepareInput({ rows: [{ amount: '-10', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
-        })
-
-        it('amount = 0', () => {
-          const errors = validator.validateSync(
-            MonthlyExpenses.fromObject(prepareInput({ rows: [{ amount: '0', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
-        })
-
-        it('invalid format of amount', () => {
-          const errors = validator.validateSync(
-            MonthlyExpenses.fromObject(prepareInput({ rows: [{ amount: '12.1122', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
+          const errors = validator.validateSync(sampleMonthlyExpensesData)
+          expect(errors.length).to.equal(0)
         })
       })
     })
   })
 })
-
-function prepareInput (customData?: object): object {
-  return {
-    mortgage: '1',
-    rent: '2',
-    councilTax: '3',
-    gas: '4',
-    electricity: '5',
-    water: '6',
-    travel: '7',
-    schoolCosts: '8',
-    foodAndHousekeeping: '9',
-    tvAndBroadband: '10',
-    mobilePhone: '11',
-    maintenance: '12',
-    rows: [{ amount: '13', description: 'bla' }],
-    ...customData
-  }
-}
-
-function expectAllRowsToBeEmpty (rows: AmountDescriptionRow[]): void {
-  rows.forEach(item => {
-    expect(item).instanceof(AmountDescriptionRow)
-    expect(item.isEmpty()).to.eq(true)
-  })
-}
-
-function expectAllFieldsToBeEmpty (actual: MonthlyExpenses): void {
-  expect(actual.mortgage).to.be.eq(undefined)
-  expect(actual.rent).to.be.eq(undefined)
-  expect(actual.councilTax).to.be.eq(undefined)
-  expect(actual.gas).to.be.eq(undefined)
-  expect(actual.electricity).to.be.eq(undefined)
-  expect(actual.water).to.be.eq(undefined)
-  expect(actual.travel).to.be.eq(undefined)
-  expect(actual.schoolCosts).to.be.eq(undefined)
-  expect(actual.foodAndHousekeeping).to.be.eq(undefined)
-  expect(actual.tvAndBroadband).to.be.eq(undefined)
-  expect(actual.mobilePhone).to.be.eq(undefined)
-  expect(actual.maintenance).to.be.eq(undefined)
-}

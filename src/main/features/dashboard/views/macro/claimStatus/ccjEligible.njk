@@ -1,58 +1,45 @@
 {% from "form.njk" import csrfProtection, submitButton %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro ccjEligibleForClaimantDashboard() %}
   {{ t('The defendant has not responded to your claim. You can request a County Court Judgment against them.') }}
 {% endmacro %}
 
 {% macro ccjEligibleForClaimantClaimDetails(claim, csrf) %}
-  {% set defendantName = claim.claimData.defendant.name %}
-  <h2 class="heading-small">{{ t('You can request a County Court Judgment') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} has not responded to your claim by the deadline. '
-      + 'You can request a County Court Judgment (CCJ) against them.',
-      { defendantName : defendantName }) }}
-  </p>
-  <p>
-    {{ t('The court will make an order asking them to pay the money. It does not guarantee that they pay it.') }}
-  </p>
-  <p>
-    {{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.',
-      { defendantName : defendantName }) }}
-  </p>
-  <form novalidate method="post">
-    {{ csrfProtection(csrf) }}
-    {{ submitButton('Request a County Court Judgment') }}
-  </form>
+  <div class="status-block">
+    {% set defendantName = claim.claimData.defendant.name %}
+    <h2 class="heading-medium">{{ t('You can request a County Court Judgment') }}</h2>
+    <p>{{ t('{{ defendantName }} has not responded to your claim by the deadline. '
+        + 'You can request a County Court Judgment (CCJ) against them.',
+        { defendantName : defendantName }) }}</p>
+    <p>{{ t('The court will order them to pay the money. It doesn’t guarantee that they’ll pay it.') }}</p>
+    <p>{{ t('{{ defendantName }} can still respond to the claim until you request a CCJ.',
+        { defendantName : defendantName }) }}</p>
+    <form novalidate method="post">
+      {{ csrfProtection(csrf) }}
+      {{ submitButton('Request a CCJ') }}
+    </form>
+  </div>
 {% endmacro %}
 
 {% macro ccjEligibleForDefendantDashboard(claim) %}
-  <p>
-    {{ t('You haven’t responded to the claim.') }}
-  </p>
-  <p>
-    {{ t('{{ claimantName }} can now ask for a County Court Judgment (CCJ) against you.',
-      { claimantName: claim.claimData.claimant.name }) }}
-  </p>
+  <p>{{ t('You haven’t responded to the claim.') }}</p>
+  <p>{{ t('{{ claimantName }} can now ask for a County Court Judgment (CCJ) against you.',
+      { claimantName: claim.claimData.claimant.name }) }}</p>
   {{ t('You can still respond to this claim before they ask for a CCJ.') }}
 {% endmacro %}
 
 {% macro ccjEligibleForDefendantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('You haven’t responded to this claim') }}</h2>
-  <p>
-    {{ t('You haven’t responded to the claim. {{ claimantName }} can now ask for a County Court Judgment against you.',
-      { claimantName: claim.claimData.claimant.name }) }}
-  </p>
-  <p>
-    {{ t('A County Court Judgment can mean you find it difficult to get credit, like a mortgage or mobile phone contract. Bailiffs could also be sent to your home.') }}
-  </p>
-  <p>
-    {{ t('You can still respond to the claim before they ask for a judgment.') }}
-  </p>
-  <p>
-    {{ _respondToClaimLink(claim) }}
-  </p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
+    <p>{{ t('You haven’t responded to the claim. {{ claimantName }} can now ask for a County Court Judgment against you.',
+        { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('A County Court Judgment can mean you find it difficult to get credit, like a mortgage or mobile phone contract. Bailiffs could also be sent to your home.') }}</p>
+    <p>{{ t('You can still respond to the claim before they ask for a judgment.') }}</p>
+    <p>{{ _respondToClaimLink(claim) }}</p>
+  </div>
 {% endmacro %}
 
 {% macro _respondToClaimLink(claim) %}
-  <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
+  {{ internalLink(t('Respond to claim'), ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}

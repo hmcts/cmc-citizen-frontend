@@ -1,12 +1,12 @@
-import { ResponseCommon, ResponseType } from './responseCommon'
-import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
-import { DefendantTimeline } from 'response/form/models/defendantTimeline'
-import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import { ResponseCommon } from './responseCommon'
 
-export enum DefenceType {
-  DISPUTE = 'DISPUTE',
-  ALREADY_PAID = 'ALREADY_PAID'
-}
+import { ResponseType } from 'claims/models/response/responseType'
+import { DefenceType } from 'claims/models/response/defenceType'
+
+import { PaymentDeclaration } from 'claims/models/paymentDeclaration'
+import { DefendantEvidence } from 'response/form/models/defendantEvidence'
+import { DefendantTimeline } from 'response/form/models/defendantTimeline'
+import { DirectionsQuestionnaire } from 'claims/models/directions-questionnaire/directionsQuestionnaire'
 
 export interface FullDefenceResponse extends ResponseCommon {
   responseType: ResponseType.FULL_DEFENCE
@@ -14,16 +14,18 @@ export interface FullDefenceResponse extends ResponseCommon {
   paymentDeclaration?: PaymentDeclaration
   defence: string,
   timeline: DefendantTimeline
-  evidence: DefendantEvidence
+  evidence: DefendantEvidence,
+  directionsQuestionnaire?: DirectionsQuestionnaire
 }
 
 export namespace FullDefenceResponse {
   export function deserialize (input: any): FullDefenceResponse {
     return {
       ...ResponseCommon.deserialize(input),
-      defenceType: input.defenceType,
+      responseType: ResponseType.FULL_DEFENCE,
+      defenceType: input.defenceType as DefenceType,
       paymentDeclaration: input.paymentDeclaration ? new PaymentDeclaration().deserialize(input.paymentDeclaration) : undefined,
-      defence: input.defence,
+      defence: input.defence as string,
       timeline: {
         rows: input.timeline && input.timeline.rows || [],
         comment: input.timeline && input.timeline.comment || undefined
@@ -31,7 +33,9 @@ export namespace FullDefenceResponse {
       evidence: {
         rows: input.evidence && input.evidence.rows || [],
         comment: input.evidence && input.evidence.comment || undefined
-      } as DefendantEvidence
+      } as DefendantEvidence,
+      directionsQuestionnaire: input.directionsQuestionnaire &&
+        DirectionsQuestionnaire.fromObject(input.directionsQuestionnaire)
     }
   }
 }

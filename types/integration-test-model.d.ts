@@ -8,11 +8,12 @@ declare type ClaimData = {
   defendants: Party[]
   feeAmountInPennies: number
   amount: Amount
-  interest: Interest
-  interestDate?: InterestDate
+  interest: Interest,
   reason: string
   payment: Payment,
-  total: number
+  total: number,
+  externalId: string
+  moneyReceivedOn: moment
 }
 
 declare type Claim = {
@@ -25,10 +26,13 @@ declare type Claim = {
 declare type Party = {
   type: string
   name: string
+  title?: string
+  firstName?: string
+  lastName?: string
   contactPerson?: string
   address: Address
   correspondenceAddress?: Address
-  mobilePhone?: string
+  phone?: string
   email?: string
   dateOfBirth?: string
 }
@@ -56,7 +60,8 @@ declare type Interest = {
   type: string
   rate?: number
   interestBreakdown?: InterestBreakdown
-  specificDailyAmount?: number
+  specificDailyAmount?: number,
+  interestDate?: InterestDate
 }
 
 declare type InterestBreakdown = {
@@ -99,7 +104,7 @@ declare type PaidWhatIBeliveIOweDefence = {
 
 declare type ClaimAmountIsTooHighDefence = {
   howMuchIBelieveIOwe: number
-  explanation: stirng
+  explanation: string
 }
 
 declare type Timeline = {
@@ -114,7 +119,7 @@ declare type TimelineEvent = {
 declare type PaymentPlan = {
   equalInstalment: number,
   firstPaymentDate: string,
-  frequency: 'everyWeek'
+  frequency: string
 }
 
 declare type Offer = {
@@ -128,4 +133,9 @@ declare type CardDetails = {
   expiryYear: string
   name: string,
   verificationCode: string
+}
+
+declare type PostcodeLookupQuery = {
+  postcode: string,
+  address: string
 }

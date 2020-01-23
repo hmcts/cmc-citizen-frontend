@@ -1,8 +1,8 @@
-import { IsDefined, IsInt, Min } from 'class-validator'
+import { IsDefined, IsInt, Min } from '@hmcts/class-validator'
 
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { IsLessThanOrEqualTo } from 'forms/validation/validators/isLessThanOrEqualTo'
+import { IsLessThanOrEqualTo } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly INVALID_NUMBER_OF_CHILDREN: string = 'Number can’t be higher than on previous page'

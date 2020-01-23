@@ -30,10 +30,11 @@ export class Feature {
     }
 
     app.all('/claim/*', claimIssueRequestHandler())
-    app.all(/^\/claim\/(?!start|amount-exceeded|.+\/confirmation|.+\/receipt).*$/,
+    app.all(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/sealed-claim).*$/,
       DraftMiddleware.requestHandler(new DraftService(), 'claim', 100, (value: any): DraftClaim => {
         return new DraftClaim().deserialize(value)
-      }),
+      }))
+    app.all(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/sealed-claim|.+\/finish-payment).*$/,
       ClaimEligibilityGuard.requestHandler()
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))

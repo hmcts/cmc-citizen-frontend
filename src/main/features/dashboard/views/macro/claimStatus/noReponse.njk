@@ -1,15 +1,16 @@
 {% from "timeRemaining.njk" import timeRemaining %}
+{% from "internalLink.njk" import internalLink %}
 
 {% macro noResponseForClaimantDashboard() %}
-  {{ t('Your claim has been sent.') }}
+  {{ t('Wait for the defendant to respond') }}
 {% endmacro %}
 
 {% macro noResponseForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('Your claim has been sent') }}</h2>
-  <p>
-    {{ t('{{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
-      { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) }}
-  </p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('Wait for the defendant to respond') }}</h2>
+    <p>{{ t('{{ defendantName }} has until {{ responseDeadline }} to respond. They can request an extra 14 days if they need it.',
+        { defendantName: claim.claimData.defendant.name, responseDeadline: claim.responseDeadline | date }) }}</p>
+  </div>
 {% endmacro %}
 
 {% macro noResponseForDefendantDashboard(claim) %}
@@ -20,16 +21,14 @@
 {% endmacro %}
 
 {% macro noResponseForDefendantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('You haven’t responded to this claim') }}</h2>
-  <p>
-    {{ t('You need to respond before 4pm on {{ responseDeadline }} {{ remainingTime }}.',
-      { responseDeadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm()) }) | safe }}
-  </p>
-  <p>
-    {{ _respondToClaimLink(claim) }}
-  </p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('You haven’t responded to this claim') }}</h2>
+    <p>{{ t('You need to respond before 4pm on {{ responseDeadline }} {{ remainingTime }}.',
+        { responseDeadline: claim.responseDeadline | date, remainingTime: timeRemaining(claim.remainingDays, isAfter4pm()) | trim }) | safe }}</p>
+    <p>{{ _respondToClaimLink(claim) }}</p>
+  </div>
 {% endmacro %}
 
 {% macro _respondToClaimLink(claim) %}
-  <a href="{{ ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId }) }}">{{ t('Respond to claim') }}</a>
+  {{ internalLink(t('Respond to claim'), ResponsePaths.taskListPage.evaluateUri({ externalId: claim.externalId })) }}
 {% endmacro %}

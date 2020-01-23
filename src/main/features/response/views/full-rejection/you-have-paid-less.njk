@@ -1,0 +1,22 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import submitButton, csrfProtection %}
+
+{% set heading = 'You’ve paid less than the total claim amount' %}
+{% set claimantFullName = claim.claimData.claimant.name %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <p>{{ t('You need to explain why you believe you don’t owe the remaining amount.') }}</p>
+      <p>{{ t('If {{ claimantFullName }} rejects your explanation you might have to go to a hearing.',
+          { claimantFullName : claimantFullName }) }}</p>
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+        {{ submitButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

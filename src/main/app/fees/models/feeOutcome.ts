@@ -5,5 +5,5 @@ export class FeeOutcome {
   readonly description: string
   @Expose({ name: 'fee_amount' })
   readonly amount: number
-  readonly version: number
+  readonly version: number | string // fees use number, pay use string
 }

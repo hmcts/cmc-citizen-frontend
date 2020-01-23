@@ -1,0 +1,57 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, radioOption, numericInput, textInput, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'Are you unemployed or retired?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" novalidate
+        class="analytics-submit-event-trigger"
+        data-event-action="SoM: Are you unemployed or retired?"
+        data-event-label-from="option">
+
+        {{ csrfProtection(csrf) }}
+
+        {% set optionError = form.errorFor('option') %}
+        <fieldset id="option[label]" class="form-group {% if optionError %} form-group-error {% endif %}">
+          <legend class="visually-hidden">{{ t('Are you unemployed or retired?') }}</legend>
+
+          {% if optionError %}<span class="error-message">{{ t(optionError) }}</span>{% endif %}
+
+          {{
+            radioOption(form = form, label = UnemploymentType.UNEMPLOYED.displayValue, name = 'option', value = UnemploymentType.UNEMPLOYED.value, checked = form.valueFor('option') === UnemploymentType.UNEMPLOYED)
+          }}
+
+          {% set unemploymentDetailsError = form.errorFor('unemploymentDetails') %}
+          <div class="form-group panel panel-border-narrow js-hidden {% if unemploymentDetailsError %} form-group-error {% endif %}"
+               id="option-{{ UnemploymentType.UNEMPLOYED.value }}" aria-hidden="false">
+
+            <p>{{ t('How long have you been unemployed?') }}</p>
+            {{ numericInput(label = 'Years', name = 'unemploymentDetails[years]', form = form, inputClass = 'form-control-1-8') }}
+            {{ numericInput(label = 'Months', name = 'unemploymentDetails[months]', form = form, inputClass = 'form-control-1-8') }}
+          </div>
+
+          {{
+            radioOption(form = form, label = UnemploymentType.RETIRED.displayValue, name = 'option', value = UnemploymentType.RETIRED.value, checked = form.valueFor('option') === UnemploymentType.RETIRED)
+          }}
+
+          {{
+            radioOption(form = form, label = UnemploymentType.OTHER.displayValue, name = 'option', value = UnemploymentType.OTHER.value, checked = form.valueFor('option') === UnemploymentType.OTHER)
+          }}
+
+          {% set otherDetailsError = form.errorFor('otherDetails') %}
+          <div class="form-group panel panel-border-narrow js-hidden {% if otherDetailsError %} form-group-error {% endif %}"
+               id="option-{{ UnemploymentType.OTHER.value }}" aria-hidden="false">
+
+            {{ textInput(label = 'Give details', name = 'otherDetails[details]', form = form) }}
+          </div>
+
+        </fieldset>
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

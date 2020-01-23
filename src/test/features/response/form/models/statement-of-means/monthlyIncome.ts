@@ -1,272 +1,300 @@
 import { expect } from 'chai'
-import { MonthlyIncome, INIT_ROW_COUNT, ValidationErrors as MonthlyIncomeValidationErrors } from 'response/form/models/statement-of-means/monthlyIncome'
-import { AmountDescriptionRow, ValidationErrors } from 'response/form/models/statement-of-means/amountDescriptionRow'
-import { Validator } from 'class-validator'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
-import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { Validator } from '@hmcts/class-validator'
+
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
+import { IncomeExpenseSchedule } from 'response/form/models/statement-of-means/incomeExpenseSchedule'
+import { MonthlyIncome } from 'response/form/models/statement-of-means/monthlyIncome'
+import { MonthlyIncomeType } from 'response/form/models/statement-of-means/monthlyIncomeType'
+import { IncomeSource, ValidationErrors as MonthlyIncomeSourceValidationErrors } from 'response/form/models/statement-of-means/incomeSource'
+
+function getSampleMonthlyIncomeObject (options?: object) {
+  const DEFAULT_SAMPLE_VALID_MONTHLY_INCOME = {
+    salarySource: {
+      amount: 100,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    universalCreditSource: {
+      amount: 200,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    jobseekerAllowanceIncomeSource: {
+      amount: 300,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    jobseekerAllowanceContributionSource: {
+      amount: 400,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    incomeSupportSource: {
+      amount: 500,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    workingTaxCreditSource: {
+      amount: 600,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    childTaxCreditSource: {
+      amount: 700,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    childBenefitSource: {
+      amount: 800,
+      schedule: IncomeExpenseSchedule.MONTH
+    },
+    councilTaxSupportSource: {
+      amount: 900,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    },
+    pensionSource: {
+      amount: 100,
+      schedule: IncomeExpenseSchedule.TWO_WEEKS
+    }
+  }
+
+  const sampleData = Object.assign({}, DEFAULT_SAMPLE_VALID_MONTHLY_INCOME, options || {})
+
+  return {
+    sampleData,
+    forConstructor: forConstructor,
+    forFromObjectMethod: forFromObjectMethod,
+    forDeserialize: forDeserialize
+  }
+}
+
+function forConstructor () {
+  return new MonthlyIncome(
+    undefined, new IncomeSource(MonthlyIncomeType.JOB.displayValue, this.sampleData.salarySource.amount, this.sampleData.salarySource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue, this.sampleData.universalCreditSource.amount, this.sampleData.universalCreditSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue, this.sampleData.jobseekerAllowanceIncomeSource.amount, this.sampleData.jobseekerAllowanceIncomeSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue, this.sampleData.jobseekerAllowanceContributionSource.amount, this.sampleData.jobseekerAllowanceContributionSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.INCOME_SUPPORT.displayValue, this.sampleData.incomeSupportSource.amount, this.sampleData.incomeSupportSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue, this.sampleData.workingTaxCreditSource.amount, this.sampleData.workingTaxCreditSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue, this.sampleData.childTaxCreditSource.amount, this.sampleData.childTaxCreditSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.CHILD_BENEFIT.displayValue, this.sampleData.childBenefitSource.amount, this.sampleData.childBenefitSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue, this.sampleData.councilTaxSupportSource.amount, this.sampleData.councilTaxSupportSource.schedule),
+    undefined, new IncomeSource(MonthlyIncomeType.PENSION.displayValue, this.sampleData.pensionSource.amount, this.sampleData.pensionSource.schedule)
+  )
+}
+
+function forFromObjectMethod () {
+  return {
+    salarySourceDeclared: this.sampleData.salarySourceDeclared,
+    salarySource: {
+      amount: this.sampleData.salarySource.amount,
+      schedule: this.sampleData.salarySource.schedule.value
+    },
+    universalCreditSourceDeclared: this.sampleData.universalCreditSourceDeclared,
+    universalCreditSource: {
+      amount: this.sampleData.universalCreditSource.amount,
+      schedule: this.sampleData.universalCreditSource.schedule.value
+    },
+    jobseekerAllowanceIncomeSourceDeclared: this.sampleData.jobseekerAllowanceIncomeSourceDeclared,
+    jobseekerAllowanceIncomeSource: {
+      amount: this.sampleData.jobseekerAllowanceIncomeSource.amount,
+      schedule: this.sampleData.jobseekerAllowanceIncomeSource.schedule.value
+    },
+    jobseekerAllowanceContributionSourceDeclared: this.sampleData.jobseekerAllowanceContributionSourceDeclared,
+    jobseekerAllowanceContributionSource: {
+      amount: this.sampleData.jobseekerAllowanceContributionSource.amount,
+      schedule: this.sampleData.jobseekerAllowanceContributionSource.schedule.value
+    },
+    incomeSupportSourceDeclared: this.sampleData.incomeSupportSourceDeclared,
+    incomeSupportSource: {
+      amount: this.sampleData.incomeSupportSource.amount,
+      schedule: this.sampleData.incomeSupportSource.schedule.value
+    },
+    workingTaxCreditSourceDeclared: this.sampleData.workingTaxCreditSourceDeclared,
+    workingTaxCreditSource: {
+      amount: this.sampleData.workingTaxCreditSource.amount,
+      schedule: this.sampleData.workingTaxCreditSource.schedule.value
+    },
+    childTaxCreditSourceDeclared: this.sampleData.childTaxCreditSourceDeclared,
+    childTaxCreditSource: {
+      amount: this.sampleData.childTaxCreditSource.amount,
+      schedule: this.sampleData.childTaxCreditSource.schedule.value
+    },
+    childBenefitSourceDeclared: this.sampleData.childBenefitSourceDeclared,
+    childBenefitSource: {
+      amount: this.sampleData.childBenefitSource.amount,
+      schedule: this.sampleData.childBenefitSource.schedule.value
+    },
+    councilTaxSupportSourceDeclared: this.sampleData.councilTaxSupportSourceDeclared,
+    councilTaxSupportSource: {
+      amount: this.sampleData.councilTaxSupportSource.amount,
+      schedule: this.sampleData.councilTaxSupportSource.schedule.value
+    },
+    pensionSourceDeclared: this.sampleData.pensionSourceDeclared,
+    pensionSource: {
+      amount: this.sampleData.pensionSource.amount,
+      schedule: this.sampleData.pensionSource.schedule.value
+    }
+  }
+}
+
+function forDeserialize () {
+  return {
+    salarySourceDeclared: this.sampleData.salarySourceDeclared,
+    salarySource: {
+      name: MonthlyIncomeType.JOB.displayValue,
+      amount: this.sampleData.salarySource.amount,
+      schedule: this.sampleData.salarySource.schedule
+    },
+    universalCreditSourceDeclared: this.sampleData.universalCreditSourceDeclared,
+    universalCreditSource: {
+      name: MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue,
+      amount: this.sampleData.universalCreditSource.amount,
+      schedule: this.sampleData.universalCreditSource.schedule
+    },
+    jobseekerAllowanceIncomeSourceDeclared: this.sampleData.jobseekerAllowanceIncomeSourceDeclared,
+    jobseekerAllowanceIncomeSource: {
+      name: MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue,
+      amount: this.sampleData.jobseekerAllowanceIncomeSource.amount,
+      schedule: this.sampleData.jobseekerAllowanceIncomeSource.schedule
+    },
+    jobseekerAllowanceContributionSourceDeclared: this.sampleData.jobseekerAllowanceContributionSourceDeclared,
+    jobseekerAllowanceContributionSource: {
+      name: MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue,
+      amount: this.sampleData.jobseekerAllowanceContributionSource.amount,
+      schedule: this.sampleData.jobseekerAllowanceContributionSource.schedule
+    },
+    incomeSupportSourceDeclared: this.sampleData.incomeSupportSourceDeclared,
+    incomeSupportSource: {
+      name: MonthlyIncomeType.INCOME_SUPPORT.displayValue,
+      amount: this.sampleData.incomeSupportSource.amount,
+      schedule: this.sampleData.incomeSupportSource.schedule
+    },
+    workingTaxCreditSourceDeclared: this.sampleData.workingTaxCreditSourceDeclared,
+    workingTaxCreditSource: {
+      name: MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue,
+      amount: this.sampleData.workingTaxCreditSource.amount,
+      schedule: this.sampleData.workingTaxCreditSource.schedule
+    },
+    childTaxCreditSourceDeclared: this.sampleData.childTaxCreditSourceDeclared,
+    childTaxCreditSource: {
+      name: MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue,
+      amount: this.sampleData.childTaxCreditSource.amount,
+      schedule: this.sampleData.childTaxCreditSource.schedule
+    },
+    childBenefitSourceDeclared: this.sampleData.childBenefitSourceDeclared,
+    childBenefitSource: {
+      name: MonthlyIncomeType.CHILD_BENEFIT.displayValue,
+      amount: this.sampleData.childBenefitSource.amount,
+      schedule: this.sampleData.childBenefitSource.schedule
+    },
+    councilTaxSupportSourceDeclared: this.sampleData.councilTaxSupportSourceDeclared,
+    councilTaxSupportSource: {
+      name: MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue,
+      amount: this.sampleData.councilTaxSupportSource.amount,
+      schedule: this.sampleData.councilTaxSupportSource.schedule
+    },
+    pensionSourceDeclared: this.sampleData.pensionSourceDeclared,
+    pensionSource: {
+      name: MonthlyIncomeType.PENSION.displayValue,
+      amount: this.sampleData.pensionSource.amount,
+      schedule: this.sampleData.pensionSource.schedule
+    },
+    otherSources: [{}]
+  }
+}
 
 describe('MonthlyIncome', () => {
-
-  describe('on init', () => {
-
-    it(`should create array of ${INIT_ROW_COUNT} empty AmountDescriptionRows and all other fields are empty`, () => {
-
-      const actual: MonthlyIncome = new MonthlyIncome()
-
-      expectAllFieldsToBeEmpty(actual)
-      expectAllRowsToBeEmpty(actual.rows)
-      expect(actual.rows.length).to.equal(INIT_ROW_COUNT)
-    })
-  })
-
   describe('fromObject', () => {
-
-    it('should return undefined value when undefined provided', () => {
-      const actual: any = MonthlyIncome.fromObject(undefined)
-
-      expect(actual).to.eql(undefined)
+    it('should return undefined when undefined provided as object parameter', () => {
+      expect(MonthlyIncome.fromObject(undefined)).to.eql(undefined)
     })
 
-    it('should return MonthlyIncome with list of empty AmountDescriptionRow[] when empty input given', () => {
-      const actual: MonthlyIncome = MonthlyIncome.fromObject([])
-
-      expectAllRowsToBeEmpty(actual.rows)
+    it('should return undefined when no object parameter provided', () => {
+      expect(MonthlyIncome.fromObject()).to.deep.equal(undefined)
     })
 
-    it('should return MonthlyIncome with first element on list populated', () => {
-      const actual: MonthlyIncome = MonthlyIncome.fromObject(prepareInput())
+    it('should return a new instance initialised with defaults when an empty object parameter is provided', () => {
+      expect(MonthlyIncome.fromObject({})).to.deep.equal(
+        new MonthlyIncome(
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+            undefined
+        )
+      )
+    })
 
-      expect(actual.salary).to.be.eq(1)
-      expect(actual.universalCredit).to.be.eq(2)
-      expect(actual.jobSeekerAllowanceIncome).to.be.eq(3)
-      expect(actual.jobSeekerAllowanceContribution).to.be.eq(4)
-      expect(actual.incomeSupport).to.be.eq(5)
-      expect(actual.workingTaxCredit).to.be.eq(6)
-      expect(actual.childTaxCredit).to.be.eq(7)
-      expect(actual.childBenefit).to.be.eq(8)
-      expect(actual.councilTaxSupport).to.be.eq(9)
-      expect(actual.pension).to.be.eq(10)
-      expect(actual.maintenance).to.be.eq(11)
+    it('should return a new instance initialised with set fields from object parameter provided', () => {
+      const sampleMonthlyIncomeData = getSampleMonthlyIncomeObject().forFromObjectMethod()
+      const expectedMonthlyIncomeObject = getSampleMonthlyIncomeObject().forConstructor()
 
-      const populatedItem: AmountDescriptionRow = actual.rows.pop()
-
-      expect(populatedItem.amount).to.eq(12)
-      expect(populatedItem.description).to.eq('bla')
-
-      expectAllRowsToBeEmpty(actual.rows)
+      expect(MonthlyIncome.fromObject(sampleMonthlyIncomeData)).to.deep.equal(expectedMonthlyIncomeObject)
     })
   })
 
   describe('deserialize', () => {
-
-    it('should return empty object when undefined provided', () => {
-      const actual: MonthlyIncome = new MonthlyIncome().deserialize(undefined)
-
-      expectAllFieldsToBeEmpty(actual)
-      expectAllRowsToBeEmpty(actual.rows)
-      expect(actual.rows.length).to.equal(INIT_ROW_COUNT)
+    it('should return instance initialised with defaults when undefined provided', () => {
+      expect(new MonthlyIncome().deserialize(undefined)).to.deep.equal(new MonthlyIncome())
     })
 
-    it('should return MonthlyIncome with list of empty AmountDescriptionRow[] when empty input given', () => {
-      const actual: MonthlyIncome = new MonthlyIncome().deserialize({ rows: [] })
-
-      expectAllFieldsToBeEmpty(actual)
-      expectAllRowsToBeEmpty(actual.rows)
-      expect(actual.rows.length).to.equal(INIT_ROW_COUNT)
-    })
-
-    it('should return MonthlyIncome with all fiedls populated and one row', () => {
-      const actual: MonthlyIncome = new MonthlyIncome().deserialize({
-        salary: 1,
-        universalCredit: 2,
-        jobSeekerAllowanceIncome: 3,
-        jobSeekerAllowanceContribution: 4,
-        incomeSupport: 5,
-        workingTaxCredit: 6,
-        childTaxCredit: 7,
-        childBenefit: 8,
-        councilTaxSupport: 9,
-        pension: 10,
-        maintenance: 11,
-        rows: [{ amount: 12, description: 'bla bla' }]
-      })
-
-      expect(actual.salary).to.be.eq(1)
-      expect(actual.universalCredit).to.be.eq(2)
-      expect(actual.jobSeekerAllowanceIncome).to.be.eq(3)
-      expect(actual.jobSeekerAllowanceContribution).to.be.eq(4)
-      expect(actual.incomeSupport).to.be.eq(5)
-      expect(actual.workingTaxCredit).to.be.eq(6)
-      expect(actual.childTaxCredit).to.be.eq(7)
-      expect(actual.childBenefit).to.be.eq(8)
-      expect(actual.councilTaxSupport).to.be.eq(9)
-      expect(actual.pension).to.be.eq(10)
-      expect(actual.maintenance).to.be.eq(11)
-
-      const populatedItem: AmountDescriptionRow = actual.rows.pop()
-
-      expect(populatedItem.amount).to.eq(12)
-      expect(populatedItem.description).to.eq('bla bla')
-
-      expectAllRowsToBeEmpty(actual.rows)
+    it('should return instance initialised with set fields from object provided', () => {
+      expect(new MonthlyIncome().deserialize(getSampleMonthlyIncomeObject().forDeserialize())).to.deep.equal(getSampleMonthlyIncomeObject().forConstructor())
     })
   })
 
   describe('validation', () => {
-
     const validator: Validator = new Validator()
 
-    context('should accept when', () => {
+    describe('when not successful', () => {
+      it('should return errors when `IncomeSource` objects are invalid', () => {
+        const errors = validator.validateSync(
+          new MonthlyIncome(
+            undefined, new IncomeSource(MonthlyIncomeType.JOB.displayValue, -100, IncomeExpenseSchedule.MONTH),
+            undefined, new IncomeSource(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue, -200, IncomeExpenseSchedule.MONTH),
+            undefined, new IncomeSource(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue, -300, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new IncomeSource(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue, -400, IncomeExpenseSchedule.MONTH),
+            undefined, new IncomeSource(MonthlyIncomeType.INCOME_SUPPORT.displayValue, -500, IncomeExpenseSchedule.MONTH),
+            undefined, new IncomeSource(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue, -600, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new IncomeSource(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue, -700, IncomeExpenseSchedule.MONTH),
+            undefined, new IncomeSource(MonthlyIncomeType.CHILD_BENEFIT.displayValue, -800, IncomeExpenseSchedule.MONTH),
+            undefined, new IncomeSource(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue, -900, IncomeExpenseSchedule.TWO_WEEKS),
+            undefined, new IncomeSource(MonthlyIncomeType.PENSION.displayValue, -100, IncomeExpenseSchedule.TWO_WEEKS)
+          )
+        )
 
-      it('all mandatory fields populated and valid input given for rows', () => {
-        const errors = validator.validateSync(MonthlyIncome.fromObject(prepareInput()))
-
-        expect(errors.length).to.equal(0)
-      })
-
-      it('all mandatory fields populated and empty rows', () => {
-        const errors = validator.validateSync(MonthlyIncome.fromObject(prepareInput({ rows: [] })))
-
-        expect(errors.length).to.equal(0)
+        expect(errors.length).to.equal(10)
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.JOB.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.UNIVERSAL_CREDIT.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_INCOME_BASES.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.JOB_SEEKERS_ALLOWANCE_CONTRIBUTION_BASED.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.INCOME_SUPPORT.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.WORKING_TAX_CREDIT.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.CHILD_TAX_CREDIT.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.CHILD_BENEFIT.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.COUNCIL_TAX_SUPPORT.displayValue))
+        expectValidationError(errors, MonthlyIncomeSourceValidationErrors.AMOUNT_NON_NEGATIVE_NUMBER_REQUIRED(MonthlyIncomeType.PENSION.displayValue))
       })
     })
 
-    context('should reject when', () => {
+    describe('when successful', () => {
+      it('should return no error when `hasSource` is true and `source` is invalid', () => {
+        const sampleMonthlyIncomeData = getSampleMonthlyIncomeObject().forFromObjectMethod()
 
-      it('all fields empty', () => {
-        const errors = validator.validateSync(new MonthlyIncome())
-
-        expect(errors.length).to.equal(11)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_CHILD_BENEFIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_CONTRIBUTION)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_JOB_SEEK_INCOME)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_MAINTENANCE)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_CHILD_TAX_CREDIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_INCOME)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_SALARY)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_CREDIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_WORKING_TAX_CREDIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_COUNCIL_TAX_SUPPORT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.AMOUNT_REQUIRED_PENSION)
-      })
-
-      it('all fields negative', () => {
-        const errors = validator.validateSync(new MonthlyIncome(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, []))
-
-        expect(errors.length).to.equal(11)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_BENEFIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_CONTRIBUTION)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_JOB_SEEK_INCOME)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_MAINTENANCE)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CHILD_TAX_CREDIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_INCOME)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_SALARY)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_CREDIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_WORKING_TAX_CREDIT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_COUNCIL_TAX_SUPPORT)
-        expectValidationError(errors, MonthlyIncomeValidationErrors.NON_NEGATIVE_NUMBER_REQUIRED_PENSION)
-      })
-
-      context('all mandatory fields valid and invalid input for populated row', () => {
-
-        it('description not populated', () => {
-          const errors = validator.validateSync(
-            MonthlyIncome.fromObject(prepareInput({ rows: [{ amount: '12', description: '' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.DESCRIPTION_REQUIRED)
-        })
-
-        it('description too long', () => {
-          const errors = validator.validateSync(
-            MonthlyIncome.fromObject(prepareInput({
-              rows: [{
-                amount: '12',
-                description: generateString(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH + 1)
-              }]
-            }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.DESCRIPTION_TOO_LONG)
-        })
-
-        it('amount not populated', () => {
-          const errors = validator.validateSync(
-            MonthlyIncome.fromObject(prepareInput({ rows: [{ amount: '', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.AMOUNT_REQUIRED)
-        })
-
-        it('amount less than zero', () => {
-          const errors = validator.validateSync(
-            MonthlyIncome.fromObject(prepareInput({ rows: [{ amount: '-10', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
-        })
-
-        it('amount = 0', () => {
-          const errors = validator.validateSync(
-            MonthlyIncome.fromObject(prepareInput({ rows: [{ amount: '0', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.POSITIVE_NUMBER_REQUIRED)
-        })
-
-        it('invalid format of amount', () => {
-          const errors = validator.validateSync(
-            MonthlyIncome.fromObject(prepareInput({ rows: [{ amount: '12.1122', description: 'ble ble' }] }))
-          )
-
-          expect(errors.length).to.equal(1)
-          expectValidationError(errors, ValidationErrors.AMOUNT_INVALID_DECIMALS)
-        })
+        const errors = validator.validateSync(sampleMonthlyIncomeData)
+        expect(errors.length).to.equal(0)
       })
     })
   })
 })
-
-function prepareInput (customData?: object): object {
-  return {
-    salary: '1',
-    universalCredit: '2',
-    jobSeekerAllowanceIncome: '3',
-    jobSeekerAllowanceContribution: '4',
-    incomeSupport: '5',
-    workingTaxCredit: '6',
-    childTaxCredit: '7',
-    childBenefit: '8',
-    councilTaxSupport: '9',
-    pension: '10',
-    maintenance: '11',
-    rows: [{ amount: '12', description: 'bla' }],
-    ...customData
-  }
-}
-
-function expectAllRowsToBeEmpty (rows: AmountDescriptionRow[]): void {
-  rows.forEach(item => {
-    expect(item).instanceof(AmountDescriptionRow)
-    expect(item.isEmpty()).to.eq(true)
-  })
-}
-
-function expectAllFieldsToBeEmpty (actual: MonthlyIncome): void {
-  expect(actual.salary).to.be.eq(undefined)
-  expect(actual.universalCredit).to.be.eq(undefined)
-  expect(actual.jobSeekerAllowanceIncome).to.be.eq(undefined)
-  expect(actual.jobSeekerAllowanceContribution).to.be.eq(undefined)
-  expect(actual.incomeSupport).to.be.eq(undefined)
-  expect(actual.workingTaxCredit).to.be.eq(undefined)
-  expect(actual.childTaxCredit).to.be.eq(undefined)
-  expect(actual.childBenefit).to.be.eq(undefined)
-  expect(actual.councilTaxSupport).to.be.eq(undefined)
-  expect(actual.pension).to.be.eq(undefined)
-  expect(actual.maintenance).to.be.eq(undefined)
-}

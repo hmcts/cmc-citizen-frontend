@@ -1,0 +1,17 @@
+{% from "form.njk" import radioGroup %}
+
+{% macro yesNoRadio(label, name, form, checked = undefined, isInline = false, labelForScreenReadersOnly = true) %}
+  <p>yesNoRadio({{ label }}, {{ name }}, {{ form }}, {{ checked if checked else 'undefined' }}, {{ isInline if isInline else 'undefined' }}, {{ labelForScreenReadersOnly if labelForScreenReadersOnly else 'undefined' }})</p>
+  {{ radioGroup(
+    label,
+    name,
+    [
+      { label: 'Yes', value: 'yes', checked: checked | d(false) },
+      { label: 'No', value: 'no', checked: checked | d(false) }
+    ],
+    form,
+    isInline = isInline,
+    labelForScreenReadersOnly = labelForScreenReadersOnly
+  )
+  }}
+{% endmacro %}

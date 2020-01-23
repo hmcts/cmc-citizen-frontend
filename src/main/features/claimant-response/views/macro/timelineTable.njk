@@ -1,0 +1,22 @@
+{% macro timelineFragment(timeline) %}
+  <table>
+    <thead>
+    <tr>
+      <th scope="col">{{ t('Date') }}</th>
+      <th scope="col">{{ t('What happened') }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in timeline.rows %}
+      <tr>
+        <td>{{ event.date }}</td>
+        <td>{{ event.description }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% if timeline.comment %}
+    <h3 class="heading-small form-group-related">{{ t('Why they disagree with your timeline') }}</h3>
+    <p>{{ t('"{{ comment }}"', { comment: timeline.comment }) }}</p>
+  {% endif %}
+{% endmacro %}

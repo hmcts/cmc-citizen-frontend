@@ -1,0 +1,58 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
+{% set heading = 'How they want to pay' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Claimant: How they want to pay"
+            data-event-label-from="accept"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {% if paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+          <p>{{ t('{{ defendantFullName }} has offered to pay you in full by {{ paymentDate }}.', { defendantFullName: claim.claimData.defendant.name, paymentDate: paymentDate | date }) }}</p>
+        {% elseif paymentOption === domain.PaymentOption.INSTALMENTS %}
+          {{
+          repaymentPlanBlock(
+            heading = '',
+            repaymentPlan = claim.response.paymentIntention.repaymentPlan
+          )
+          }}
+        {% endif %}
+
+        {% if claim.claimData.defendant.isBusiness() %}
+          {% set hint = 'The defendant should have sent you their financial details. You’ll need to send them to us. We’ll issue a CCJ against them. The terms of the CCJ will depend on whether we believe they can afford your suggested repayment plan.' %}
+        {% endif %}
+        {{
+        radioGroupWithHintPanel(
+          form = form,
+          label = 'Do you accept the repayment plan?',
+          labelForScreenReadersOnly = false,
+          name = 'accept',
+          options = [
+          {
+            label: 'Yes',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor('accept') === YesNoOption.YES)
+          },
+          {
+            label: 'No - I’ll suggest my own',
+            value: YesNoOption.NO.option,
+            checked: (form.valueFor('accept') === YesNoOption.NO),
+            hint: hint
+          }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -19,11 +19,22 @@ export class ClaimStoreClient {
       return Promise.reject('Claim owner is required')
     }
 
-    return request.get(`${baseURL}/claims/${referenceNumber}`, {
+    const options = {
+      uri: `${baseURL}/claims/${referenceNumber}`,
       headers: {
         Authorization: `Bearer ${owner.bearerToken}`
       }
+    }
+    return request(options).then(function (response) {
+      return response
     })
+  }
+
+  static isOpen (referenceNumber: string): Promise<boolean> {
+    return request.get(`${baseURL}/claims/${referenceNumber}/metadata`, {})
+      .then(function (response) {
+        return response.state === 'OPEN'
+      })
   }
 
   /**
@@ -31,9 +42,10 @@ export class ClaimStoreClient {
    *
    * @param {ClaimData} claimData - claim data
    * @param {User} submitter - user that submits claim
+   * @param (features} string array of enabled features for user
    * @returns {Promise<Claim>}
    */
-  static create (claimData: ClaimData, submitter: User): Promise<Claim> {
+  static create (claimData: ClaimData, submitter: User, features: string[]): Promise<Claim> {
     if (!claimData) {
       return Promise.reject('Claim data is required')
     }
@@ -41,11 +53,16 @@ export class ClaimStoreClient {
       return Promise.reject('Submitter is required')
     }
 
+    const headers = {
+      Authorization: `Bearer ${submitter.bearerToken}`,
+      Features: features
+    }
+
     return request.post(`${baseURL}/claims/${submitter.id}`, {
       body: claimData,
-      headers: {
-        Authorization: `Bearer ${submitter.bearerToken}`
-      }
+      headers
+    }).then(function (response) {
+      return response
     })
   }
 
@@ -53,21 +70,23 @@ export class ClaimStoreClient {
    * Links defendant to claim in the claim store
    *
    * @param {string} defendant - defendant ID
-   * @param externalId the claims external id
    * @returns {Promise<Claim>}
    */
-  static linkDefendant (defendant: User, externalId: string): Promise<Claim> {
-    if (!externalId) {
-      return Promise.reject('External ID is required')
-    }
+  static linkDefendant (defendant: User): Promise<Claim> {
     if (!defendant) {
       return Promise.reject('Defendant is required')
     }
 
-    return request.put(`${baseURL}/claims/${externalId}/defendant/${defendant.id}`, {
+    const options = {
+      method: 'PUT',
+      uri: `${baseURL}/claims/defendant/link`,
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
   }
 
@@ -90,11 +109,33 @@ export class ClaimStoreClient {
       return Promise.reject('Defendant is required')
     }
 
-    return request.post(`${baseURL}/responses/claim/${externalId}/defendant/${defendant.id}`, {
+    const options = {
+      method: 'POST',
+      uri: `${baseURL}/responses/claim/${externalId}/defendant/${defendant.id}`,
       body: responseData,
       headers: {
         Authorization: `Bearer ${defendant.bearerToken}`
       }
+    }
+
+    return request(options).then(function (response) {
+      return response
     })
+  }
+
+  static addRoleToUser (bearerToken: string, role: string): Promise<void> {
+    if (!bearerToken) {
+      return Promise.reject(new Error('bearerToken is required'))
+    }
+
+    const options = {
+      method: 'POST',
+      uri: `${baseURL}/user/roles`,
+      body: { role: role },
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    }
+    return request(options).then()
   }
 }

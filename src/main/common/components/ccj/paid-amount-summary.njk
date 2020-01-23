@@ -1,0 +1,86 @@
+{% extends "layout.njk" %}
+{% set heading = 'Judgment amount' %}
+{% from "form.njk" import submitButton %}
+{% from "interestSnippet.njk" import interestSnippet %}
+{% from "internalLink.njk" import internalLink %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <div class="form-group">
+      {% set total = claim.totalAmountTillToday if amountSettledFor === undefined else amountSettledFor + (claimFee | pennies2pounds) %}
+      {% if interestDetails %}
+        <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee and any interest, as shown in this table:', { totalAmount: total | numeral }) }}</p>
+      {% else %}
+        <p>{{ t('The judgment will order the defendant to pay {{ totalAmount }}, including your claim fee, as shown in this table:', { totalAmount: total | numeral }) }}</p>
+      {% endif %}
+
+      <table class="table-form">
+        <caption class="visuallyhidden">{{ t('Amount payable by the defendant') }}</caption>
+        <thead>
+        <tr>
+          <th scope="col"></th>
+          <th class="numeric last" scope="col">{{ t('Amount') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if amountSettledFor === undefined %}
+          <tr>
+            <th scope="row">{{ t('Amount of claim included') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ claim.claimData.amount.totalAmount() | numeral }}</span>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <th scope="row">{{ t('Amount you’re settling for') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ amountSettledFor | numeral }}</span>
+            </td>
+          </tr>
+        {% endif %}
+        {% if amountSettledFor === undefined and interestDetails %}
+        <tr>
+          <th scope="row">
+            {{ interestSnippet(label = 'Interest to date', interestDetails.rate, interestDetails.numberOfDays,
+              interestDetails.interestFromDate, defaultJudgmentDate, interestDetails.specificDailyAmount) }}
+          </th>
+          <td class="numeric last">
+            <span class="font-small">{{ interestDetails.interest | numeral }}</span>
+          </td>
+        </tr>
+        {% endif %}
+        <tr>
+          <th scope="row">{{ t('Amount of claim fee included') }}</th>
+          <td class="numeric last">
+            <span class="font-small">{{ claimFee | pennies2pounds | numeral }}</span>
+          </td>
+        </tr>
+        {% if alreadyPaid %}
+          <tr>
+            <th scope="col" class="bold-small">{{ t('Subtotal') }}</th>
+            <td class="numeric last bold-small"><span id="sub-total">{{ total | numeral }}</span></td>
+          </tr>
+          <tr>
+            <th scope="row">{{ t('Minus amount already paid') }}</th>
+            <td class="numeric last">
+              <span class="font-small">{{ alreadyPaid | numeral }}</span>
+            </td>
+          </tr>
+        {% endif %}
+
+        <tr>
+          <th scope="col" class="bold-medium">{{ t('Total') }}</th>
+          <td class="numeric last bold-medium"><span id="total">{{ (total - alreadyPaid) | numeral }}</span></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-group">
+      {{ internalLink(t('Continue'), nextPageUrl, 'button') }}
+    </div>
+  </div>
+</div>
+{% endblock %}

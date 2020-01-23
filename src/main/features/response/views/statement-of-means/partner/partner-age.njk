@@ -1,0 +1,27 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, yesNoRadio, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'Is your partner aged 18 or over?' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate
+            class="analytics-submit-event-trigger"
+            data-event-action="SoM: Is your partner aged 18 or over?"
+            data-event-label-from="option">
+
+        {{ csrfProtection(csrf) }}
+
+        {{ yesNoRadio(t('Is your partner aged 18 or over?'), 'option', form) }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}

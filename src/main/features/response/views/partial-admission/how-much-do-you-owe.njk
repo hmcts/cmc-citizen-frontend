@@ -1,0 +1,28 @@
+{% extends "layout.njk" %}
+
+{% set heading = 'How much money do you admit you owe?' %}
+
+{% from "form.njk" import poundInput, textArea, saveAndContinueButton, csrfProtection, errorSummary %}
+{% from "date.njk" import dateInput %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate>
+
+        {{ csrfProtection(csrf) }}
+
+        <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.',
+          { totalAmount: totalAmount | numeral }) }}</p>
+
+        {{ poundInput(name = 'amount', form = form, bold = true) }}
+
+        <input type="hidden" name="totalAmount" value="{{ totalAmount }}">
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

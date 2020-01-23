@@ -1,0 +1,56 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioOption, errorSummary %}
+
+{% set heading = t('Do you want to settle the claim for the {{ settleAmount }} the defendant admitted?', { settleAmount: claim.response.amount | numeral }) %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Claimant response: Settle defendant admitted option"
+            data-event-label-from="admitted[value]"
+            novalidate>
+
+        {{ csrfProtection(csrf) }}
+
+        {% set error = form.errorFor('admitted') %}
+        <div class="form-group {% if error %} form-group-error {% endif %}">
+          <fieldset id="admitted[label]">
+            <legend
+              class="visually-hidden">{{ t('Do you want to settle the claim for the {{ settleAmount }} the defendant admitted?', { settleAmount: claim.response.amount | numeral }) }}</legend>
+            {% if error %}<span class="error-message">{{ t(error) }}</span>{% endif %}
+            {% if hasPaymentIntention %}
+              {% set hintText = 'You can agree to their repayment plan or suggest your own.' %}
+            {% endif %}
+
+            {{ radioOption(
+              form = form,
+              name = 'admitted',
+              value = YesNoOption.YES.option,
+              label = 'Yes',
+              bold = true,
+              hint = hintText,
+              checked = (form.valueFor('admitted') === YesNoOption.YES)
+            ) }}
+
+            {{ radioOption(
+              form = form,
+              name = 'admitted',
+              value = YesNoOption.NO.option,
+              label = 'No',
+              bold = true,
+              hint = t('The claim will continue for the total amount you claimed: {{ claimAmount }}.', { claimAmount: claim.totalAmountTillToday | numeral }),
+              checked = (form.valueFor('admitted') === YesNoOption.NO)
+            ) }}
+
+          </fieldset>
+        </div>
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

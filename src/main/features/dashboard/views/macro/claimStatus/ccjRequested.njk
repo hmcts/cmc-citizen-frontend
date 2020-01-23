@@ -1,42 +1,32 @@
 {% from "externalLink.njk" import externalLink %}
 
 {% macro ccjRequestedForClaimantDashboard(claim) %}
-  {{ t('You requested a County Court Judgment on {{ ccjRequestedAt }}.',
-    { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
+  {{ t('Wait for the judgment to be confirmed') }}
 {% endmacro %}
 
 {% macro ccjRequestedForClaimantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('You’ve requested a County Court Judgment (CCJ)') }}</h2>
-  <p>
-    {{ t('We’ll contact you within 5 days to tell you whether the judgment has been entered.') }}
-  </p>
-  <p>
-    {{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
-      { defendantName: claim.claimData.defendant.name }) }}
-  </p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('Wait for the judgment to be confirmed') }}</h2>
+    <p>{{ t('We’ll contact you within 10 working days to tell you whether the judgment has been entered.') }}</p>
+    <p>{{ t('{{ defendantName }} can no longer respond to your claim using this service - they may have responded by post.',
+        { defendantName: claim.claimData.defendant.name }) }}</p>
+    <p>{{ t('It’s possible we received a postal response before the deadline but hadn’t processed it when you requested judgment.') }}</p>
+    <p>{{ t('If we discover this has happened, we’ll reject your request.') }}</p>
+  </div>
 {% endmacro %}
 
 {% macro ccjRequestedForDefendantDashboard(claim) %}
-  {{ t('The claimant has requested a County Court Judgement (CCJ) against you on {{ ccjRequestedAt }}.',
+  {{ t('The claimant has requested a County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}.',
     { ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
 {% endmacro %}
 
 {% macro ccjRequestedForDefendantClaimDetails(claim) %}
-  <h2 class="heading-small">{{ t('The claimant has requested a CCJ against you') }}</h2>
-  <p>
-    {{ t('You didn’t respond to this claim by the deadline of {{ responseDeadline }}.',
-      { responseDeadline: claim.responseDeadline | date }) }}
-  </p>
-  <p>
-    {{ t('{{ claimantName }} requested a default County Court Judgment (CCJ) against you on {{ ccjRequestedAt }}. '
-      + 'We’ll contact you within 5 days to tell you whether the claimant’s request for judgment has been successful.',
-      { claimantName : claim.claimData.claimant.name,
-      ccjRequestedAt: claim.countyCourtJudgmentRequestedAt | date }) }}
-  </p>
-  <p>
-    {{ t('You can no longer respond to the claim.') }}
-  </p>
-  <p>
-    {{ externalLink(t('Find out more about County Court Judgments'), 'https://www.gov.uk/county-court-judgments-ccj-for-debt') }}
-  </p>
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('We’ll contact you') }}</h2>
+    <p>{{ t('{{ claimantName }} has requested a County Court Judgment (CCJ) against you because the deadline for your response has passed.',
+        { claimantName : claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('It’s possible we received your postal response before the deadline but hadn’t processed it when they requested judgment.') }}</p>
+    <p>{{ t('If we discover this has happened, we’ll reject their request.') }}</p>
+    <p>{{ t('Otherwise we’ll post a copy of the CCJ to you and to {{ claimantName }} and explain what to do next.', { claimantName : claim.claimData.claimant.name }) }}</p>
+  </div>
 {% endmacro %}

@@ -1,0 +1,53 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, linkButton, saveAndContinueButton, errorSummary, option, linkButton %}
+{% from "../macro/statement-of-means/incomeExpenseSource.njk" import incomeExpenseSource %}
+{% from "expandableCheckboxOption.njk" import expandableCheckboxOption %}
+
+{% block additional_scripts %}
+  {% include "income-expense-scripts.njk" %}
+{% endblock %}
+
+{% set heading = 'Debts you’re behind on' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Enter details of debts for which you’re:') }}</p>
+      <ul class="list list-bullet">
+        <li>'in arrears' (you’ve missed regular payments)</li>
+        <li>making regular repayments to clear the missed payments</li>
+      </ul>
+
+      <form method="post" novalidate class="income-expense-calculation">
+        {{ csrfProtection(csrf) }}
+
+        {{ priorityDebt(form, name = 'mortgage', label = PriorityDebtType.MORTGAGE.displayValue) }}
+        {{ priorityDebt(form, name = 'rent', label = PriorityDebtType.RENT.displayValue) }}
+        {{ priorityDebt(form, name = 'councilTax', label = PriorityDebtType.COUNCIL_TAX_COMMUNITY_CHARGE.displayValue) }}
+        {{ priorityDebt(form, name = 'gas', label = PriorityDebtType.GAS.displayValue) }}
+        {{ priorityDebt(form, name = 'electricity', label = PriorityDebtType.ELECTRICITY.displayValue) }}
+        {{ priorityDebt(form, name = 'water', label = PriorityDebtType.WATER.displayValue) }}
+        {{ priorityDebt(form, name = 'maintenance', label = PriorityDebtType.MAINTENANCE_PAYMENTS.displayValue) }}
+
+
+        {{ linkButton('Recalculate total monthly repayments', 'action[calculateMonthlyIncome]', 'button button-secondary calculate-monthly-income-expense') }}
+        <p class="heading-small calculation-outcome-container">
+          {{ t('Total monthly repayments:') }} £<span class="total-monthly-income-expense"> {{ totalMonthlyIncomeExpense | default('0.00') }} </span>
+        </p>
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% macro priorityDebt(form, name, label) %}
+  {% set checkboxName = name + 'Declared' %}
+
+  {% call expandableCheckboxOption(form = form, name = checkboxName, value = 'true', checked = (form.valueFor(checkboxName) or (form.valueFor(name) and form.valueFor(name).populated)), label = label) %}
+    {{ incomeExpenseSource(form = form, name = name, sourceLabel = 'Source of income', amountLabel = 'Repayment amount', amountHint = 'Only include the amount you’re paying to clear previously missed regular payments', scheduleLabel = 'Repaid every') }}
+    {{ linkButton(name = 'action[resetDebt][' + name + ']', label = 'Reset this debt', class = 'link-button js-hidden') }}
+  {% endcall %}
+{% endmacro %}

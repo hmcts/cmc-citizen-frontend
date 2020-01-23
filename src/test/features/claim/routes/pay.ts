@@ -4,22 +4,24 @@ import * as config from 'config'
 
 import { Paths as ClaimPaths, Paths } from 'claim/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as feesServiceMock from '../../../http-mocks/fees'
-import * as payServiceMock from '../../../http-mocks/pay'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as featureToggleApiMock from 'test/http-mocks/feature-toggle-store'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkEligibilityGuards } from './checks/eligibility-check'
+import * as feesServiceMock from 'test/http-mocks/fees'
+import * as payServiceMock from 'test/http-mocks/pay'
+
+import { attachDefaultHooks } from 'test/routes/hooks'
+import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
+import { checkEligibilityGuards } from 'test/features/claim/routes/checks/eligibility-check'
 import { Defendant } from 'drafts/models/defendant'
 import { Claimant } from 'drafts/models/claimant'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { IndividualDetails } from 'forms/models/individualDetails'
-import { MobilePhone } from 'forms/models/mobilePhone'
+import { Phone } from 'forms/models/phone'
 import { Payment } from 'payment-hub-client/payment'
 import { Address } from 'forms/models/address'
 import { DateOfBirth } from 'forms/models/dateOfBirth'
@@ -43,6 +45,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const event: string = config.get<string>('fees.issueFee.event')
 const channel: string = config.get<string>('fees.channel.online')
 const failureMessage: string = 'failure message'
+const externalId: string = draftStoreServiceMock.sampleClaimDraftObj.externalId
 
 let overrideClaimDraftObj
 
@@ -56,7 +59,7 @@ describe('Claim issue: initiate payment receiver', () => {
 
     beforeEach(() => {
       overrideClaimDraftObj = {
-        externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+        externalId: externalId,
         readResolveDispute: true,
         readCompletingClaim: true,
         claimant: {
@@ -78,9 +81,9 @@ describe('Claim issue: initiate payment receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,
@@ -193,7 +196,7 @@ describe('Claim issue: initiate payment receiver', () => {
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
-      draftStoreServiceMock.rejectSave()
+      draftStoreServiceMock.rejectUpdate()
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -211,7 +214,7 @@ describe('Claim issue: initiate payment receiver', () => {
       payServiceMock.resolveRetrieveToNotFound()
       feesServiceMock.resolveCalculateFee(event, channel)
       payServiceMock.resolveCreate()
-      draftStoreServiceMock.resolveSave()
+      draftStoreServiceMock.resolveUpdate()
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -225,7 +228,7 @@ describe('Claim issue: initiate payment receiver', () => {
       feesServiceMock.resolveCalculateFee(event, channel)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveCreate()
-      draftStoreServiceMock.resolveSave()
+      draftStoreServiceMock.resolveUpdate()
 
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
@@ -241,7 +244,7 @@ describe('Claim issue: initiate payment receiver', () => {
       await request(app)
         .get(Paths.startPaymentReceiver.uri)
         .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId })))
+        .expect(res => expect(res).to.be.redirect.toLocation(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId })))
     })
   })
 })
@@ -256,7 +259,7 @@ describe('Claim issue: post payment callback receiver', () => {
 
     beforeEach(() => {
       overrideClaimDraftObj = {
-        externalId: 'fe6e9413-e804-48d5-bbfd-645917fc46e5',
+        externalId: externalId,
         readResolveDispute: true,
         readCompletingClaim: true,
         claimant: {
@@ -278,9 +281,9 @@ describe('Claim issue: post payment callback receiver', () => {
               } as LocalDate
             } as DateOfBirth
           } as IndividualDetails,
-          mobilePhone: {
+          phone: {
             number: '07000000000'
-          } as MobilePhone,
+          } as Phone,
           payment: {
             reference: '123',
             date_created: 12345,
@@ -337,16 +340,6 @@ describe('Claim issue: post payment callback receiver', () => {
       idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     })
 
-    it('should return 500 and error page when cannot retrieve service token needed for payment service', async () => {
-      draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
-      idamServiceMock.rejectRetrieveServiceToken()
-
-      await request(app)
-        .get(Paths.finishPaymentReceiver.uri)
-        .set('Cookie', `${cookieName}=ABC`)
-        .expect(res => expect(res).to.be.serverError.withText('Error'))
-    })
-
     it('should return 500 and error page when cannot retrieve payment', async () => {
       draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
       idamServiceMock.resolveRetrieveServiceToken()
@@ -362,7 +355,7 @@ describe('Claim issue: post payment callback receiver', () => {
       draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
       idamServiceMock.resolveRetrieveServiceToken()
       payServiceMock.resolveRetrieve('Success')
-      draftStoreServiceMock.rejectSave()
+      draftStoreServiceMock.rejectUpdate()
 
       await request(app)
         .get(Paths.finishPaymentReceiver.uri)
@@ -378,7 +371,7 @@ describe('Claim issue: post payment callback receiver', () => {
           draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('Failed')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)
@@ -393,7 +386,7 @@ describe('Claim issue: post payment callback receiver', () => {
           draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('Cancelled')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)
@@ -404,27 +397,16 @@ describe('Claim issue: post payment callback receiver', () => {
 
       describe('succeeded', () => {
 
-        it('should return 500 and render error page when cannot retrieve claim', async () => {
-          draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
-          idamServiceMock.resolveRetrieveServiceToken()
-          payServiceMock.resolveRetrieve('Success')
-          draftStoreServiceMock.resolveSave()
-          claimStoreServiceMock.rejectRetrieveClaimByExternalId('Server is down')
-
-          await request(app)
-            .get(Paths.finishPaymentReceiver.uri)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.serverError.withText('Error'))
-        })
-
         describe('when claim already exists', () => {
 
           it('should return 500 and render error page when cannot delete draft', async () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            payServiceMock.resolveUpdate()
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.rejectDelete()
 
             await request(app)
@@ -437,23 +419,27 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed()
+            claimStoreServiceMock.rejectSaveClaimForUser('reason', 409)
+            claimStoreServiceMock.resolveRetrieveByExternalId()
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.resolveDelete()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${draftStoreServiceMock.sampleClaimDraftObj.externalId}/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
 
           it('should redirect to confirmation page when payment is missing', async () => {
             draftStoreServiceMock.resolveFind(draftType, { claimant: undefined })
 
             await request(app)
-              .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: draftStoreServiceMock.sampleClaimDraftObj.externalId }))
+              .get(Paths.finishPaymentReceiver.evaluateUri({ externalId: externalId }))
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${draftStoreServiceMock.sampleClaimDraftObj.externalId}/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
         })
 
@@ -463,8 +449,9 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('Claim not found by external id')
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.rejectSaveClaimForUser()
 
             await request(app)
@@ -477,10 +464,39 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('Claim not found by external id')
+            draftStoreServiceMock.resolveUpdate()
+            featureToggleApiMock.resolveIsAdmissionsAllowed()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.resolveSaveClaimForUser()
+            payServiceMock.resolveUpdate()
             draftStoreServiceMock.rejectDelete()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.serverError.withText('Error'))
+          })
+
+          it('should return 500 and render error page when feature toggle api fails', async () => {
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            featureToggleApiMock.rejectIsAdmissionsAllowed()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.serverError)
+          })
+
+          it('should return 500 and render error page when retrieve user roles fails', async () => {
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.rejectRetrieveUserRoles()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
@@ -492,15 +508,34 @@ describe('Claim issue: post payment callback receiver', () => {
             draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
-            draftStoreServiceMock.resolveSave()
-            claimStoreServiceMock.rejectRetrieveClaimByExternalId('Claim not found by external id')
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
+            payServiceMock.resolveUpdate()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
               .set('Cookie', `${cookieName}=ABC`)
-              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/400f4c57-9684-49c0-adb4-4cf46579d6dc/confirmation`))
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
+          })
+
+          it('should redirect to confirmation page when user have not given any consent', async () => {
+            draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
+            idamServiceMock.resolveRetrieveServiceToken()
+            payServiceMock.resolveRetrieve('Success')
+            draftStoreServiceMock.resolveUpdate()
+            claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-not-given')
+            featureToggleApiMock.resolveIsAdmissionsAllowed(false)
+            claimStoreServiceMock.resolveSaveClaimForUser()
+            draftStoreServiceMock.resolveDelete()
+            payServiceMock.resolveUpdate()
+
+            await request(app)
+              .get(Paths.finishPaymentReceiver.uri)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect.toLocation(`/claim/${externalId}/confirmation`))
           })
         })
       })
@@ -511,7 +546,7 @@ describe('Claim issue: post payment callback receiver', () => {
           draftStoreServiceMock.resolveFind(draftType, payServiceMock.paymentInitiateResponse)
           idamServiceMock.resolveRetrieveServiceToken()
           payServiceMock.resolveRetrieve('unknown')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .get(Paths.finishPaymentReceiver.uri)

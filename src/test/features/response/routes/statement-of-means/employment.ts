@@ -1,17 +1,17 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import '../../../../routes/expectations'
+import 'test/routes/expectations'
 import { StatementOfMeansPaths } from 'response/paths'
-import * as idamServiceMock from '../../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
-import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import { checkAuthorizationGuards } from '../checks/authorization-check'
-import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
-import { app } from '../../../../../main/app'
-import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { app } from 'main/app'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.employmentPage.evaluateUri(
@@ -60,12 +60,13 @@ describe('Defendant response: Statement of means: employment', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
             .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.successful.withText('Are you currently working?'))
+            .expect(res => expect(res).to.be.successful.withText('Do you have a job?'))
         })
       })
     })
@@ -112,12 +113,13 @@ describe('Defendant response: Statement of means: employment', () => {
 
         it('to unemployed page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
-            .send({ isCurrentlyEmployed: false })
+            .send({ declared: false })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.unemployedPage.evaluateUri(
@@ -128,12 +130,13 @@ describe('Defendant response: Statement of means: employment', () => {
 
         it('to employers page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
-            .send({ isCurrentlyEmployed: true, selfEmployed: true, employed: true })
+            .send({ declared: true, selfEmployed: true, employed: true })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
               .toLocation(StatementOfMeansPaths.employersPage.evaluateUri(
@@ -144,15 +147,16 @@ describe('Defendant response: Statement of means: employment', () => {
 
         it('to self-employment page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)
-            .send({ isCurrentlyEmployed: true, selfEmployed: true, employed: false })
+            .send({ declared: true, selfEmployed: true, employed: false })
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.redirect
-              .toLocation(StatementOfMeansPaths.selfEmployedPage.evaluateUri(
+              .toLocation(StatementOfMeansPaths.selfEmploymentPage.evaluateUri(
                 { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
               )
             )

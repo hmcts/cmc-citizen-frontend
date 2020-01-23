@@ -13,8 +13,9 @@ export class Paths {
   static readonly defendantSoleTraderOrSelfEmployedDetailsPage = new RoutablePath('/claim/defendant-sole-trader-details')
   static readonly defendantOrganisationDetailsPage = new RoutablePath('/claim/defendant-organisation-details')
   static readonly claimantDateOfBirthPage = new RoutablePath('/claim/claimant-dob')
-  static readonly claimantMobilePage = new RoutablePath('/claim/claimant-mobile')
+  static readonly claimantPhonePage = new RoutablePath('/claim/claimant-phone')
   static readonly defendantEmailPage = new RoutablePath('/claim/defendant-email')
+  static readonly defendantPhonePage = new RoutablePath('/claim/defendant-mobile')
   static readonly amountPage = new RoutablePath('/claim/amount')
   static readonly interestPage = new RoutablePath('/claim/interest')
   static readonly interestTypePage = new RoutablePath('/claim/interest-type')
@@ -37,8 +38,13 @@ export class Paths {
   static readonly claimantPartyTypeSelectionPage = new RoutablePath('/claim/claimant-party-type-selection')
   static readonly defendantPartyTypeSelectionPage = new RoutablePath('/claim/defendant-party-type-selection')
   static readonly incompleteSubmissionPage = new RoutablePath('/claim/incomplete-submission')
+  static readonly sealedClaimPdfReceiver = new RoutablePath('/claim/:externalId/sealed-claim')
+  static readonly newFeaturesConsentPage = new RoutablePath('/claim/new-features-consent')
+  static readonly initiatePaymentController = new RoutablePath('/claim/initiate-payment')
+  static readonly finishPaymentController = new RoutablePath('/claim/:externalId/finish-payment')
+
 }
 
 export class ErrorPaths {
-  static readonly amountExceededPage = new RoutablePath('/claim/amount-exceeded')
+  static readonly amountExceededPage = new RoutablePath('/eligibility/not-eligible?reason=claim-value-over-10000')
 }

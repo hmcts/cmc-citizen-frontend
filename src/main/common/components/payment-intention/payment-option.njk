@@ -1,0 +1,55 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, radioGroupWithHintPanel, errorSummary %}
+
+{% if amount %}
+  {% set heading = t('When do you want to pay the {{ amount }}?', { amount: amount | numeral }) %}
+{% else %}
+  {% set heading = 'When do you want to pay?' %}
+{% endif %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Defendant: Select payment option"
+            data-event-label-from="option"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroupWithHintPanel(
+          form = form,
+          label = heading,
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+            {
+              label: DefendantPaymentType.IMMEDIATELY.displayValue,
+              value: DefendantPaymentType.IMMEDIATELY.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.IMMEDIATELY),
+              hint: 'You must contact the claimant and pay the full amount within 5 days. Any cheques or transfers must be clear in their account.'
+            },
+            {
+              label: DefendantPaymentType.BY_SET_DATE.displayValue,
+              value: DefendantPaymentType.BY_SET_DATE.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE),
+              hint: 'The claimant can request a County Court Judgment (CCJ) against you if you don’t pay immediately.'
+            },
+            {
+              label: 'I’ll suggest a repayment plan',
+              value: DefendantPaymentType.INSTALMENTS.value,
+              checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS),
+              hint: 'The claimant can request a County Court Judgment (CCJ) against you if you don’t pay immediately.'
+            }
+          ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

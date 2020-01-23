@@ -1,0 +1,27 @@
+{% macro paymentPlanTable(id, instalmentAmount, paymentSchedule, firstPaymentDate, completionDate, paymentLength) %}
+  <fieldset id="{{ id }}" class="form-group">
+    <legend>
+      <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
+    </legend>
+    {{ row('Regular payments of', instalmentAmount | numeral) }}
+    {{ row('Frequency of payments', paymentSchedule | renderPaymentSchedule(adverbial=true)) }}
+    {{ row('Make the first payment on', firstPaymentDate | date) }}
+    {% if completionDate %}
+      {{ row('Last payment on', completionDate | date) }}
+    {% endif %}
+    {% if paymentLength %}
+      {{ row('Length of repayment plan', paymentLength) }}
+    {% endif %}
+  </fieldset>
+{% endmacro %}
+
+{% macro row(label, value) %}
+  <div class="bottom-border">
+    <div class="column-one-half  {% if not label %}if-empty{% endif %}">
+      <span> {{ t( label ) }}</span>
+    </div>
+    <div class="column-one-half {% if not value %}if-empty{% endif %}">
+      <span>{{ value }}</span>
+    </div>
+  </div>
+{% endmacro %}

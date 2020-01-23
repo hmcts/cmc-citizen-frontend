@@ -65,14 +65,12 @@ $(function () {
   }
 
   // Send a google analytics event when an element that has the 'analytics-click-event-trigger' class is clicked.
-  // Example: <a href="http://somelink" class="analytics-click-event-trigger" data-event-label="Your GA label">Some text</a>
   $('.analytics-click-event-trigger').on('click', function () {
     var label = $(this).data('eventLabel')
     sendEvent('Navigation', 'Click', label)
   })
 
   // Send a google analytics event when a form that has the 'analytics-click-event-trigger' class is submitted.
-  // Example <form method="post" class="analytics-submit-event-trigger" data-event-action="Your GA action" data-event-label-from="Form element to extract GA label from"></form>
   $('.analytics-submit-event-trigger').on('submit', function () {
     var form = $(this)
 

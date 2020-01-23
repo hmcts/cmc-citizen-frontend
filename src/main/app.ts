@@ -1,10 +1,13 @@
+import { Logger } from '@hmcts/nodejs-logging'
 import * as express from 'express'
 import * as config from 'config'
 import * as path from 'path'
 import * as favicon from 'serve-favicon'
 import * as cookieParser from 'cookie-parser'
+import * as cookieEncrypter from 'cookie-encrypter'
+
 import * as bodyParser from 'body-parser'
-import { ForbiddenError, NotFoundError } from './errors'
+import { ForbiddenError, NotFoundError } from 'errors'
 import { ErrorLogger } from 'logging/errorLogger'
 import { RouterFinder } from 'shared/router/routerFinder'
 import { Config as HelmetConfig, Helmet } from 'modules/helmet'
@@ -16,13 +19,19 @@ import { Feature as EligibilityFeature } from 'eligibility/index'
 import { Feature as ClaimIssueFeature } from 'claim/index'
 import { Feature as DefendantFirstContactFeature } from 'first-contact/index'
 import { Feature as DefendantResponseFeature } from 'response/index'
+import { Feature as SettlementAgreementFeature } from 'settlement-agreement/index'
 import { CsrfProtection } from 'modules/csrf'
 import { DashboardFeature } from 'dashboard/index'
 import { CCJFeature } from 'ccj/index'
 import { Feature as OfferFeature } from 'offer/index'
 import { TestingSupportFeature } from 'testing-support/index'
-import * as toBoolean from 'to-boolean'
 import { FeatureToggles } from 'utils/featureToggles'
+import { ClaimantResponseFeature } from 'claimant-response/index'
+import { PaidInFullFeature } from 'paid-in-full/index'
+import { MediationFeature } from 'mediation/index'
+import { DirectionsQuestionnaireFeature } from 'features/directions-questionnaire'
+import { OrdersFeature } from 'orders/index'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
 export const app: express.Express = express()
 
@@ -30,6 +39,8 @@ const env = process.env.NODE_ENV || 'development'
 app.locals.ENV = env
 
 const developmentMode = env === 'development'
+
+const logger = Logger.getLogger('applicationRunner')
 
 const i18next = I18Next.enableFor(app)
 
@@ -42,10 +53,18 @@ app.enable('trust proxy')
 app.use(favicon(path.join(__dirname, '/public/img/lib/favicon.ico')))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: true,
+  limit: '10mb'
 }))
 app.use(cookieParser())
+app.use(cookieEncrypter(config.get('secrets.cmc.encryptionKey'), {
+  options: {
+    algorithm: 'aes128'
+  }
+}))
 
+// Web Chat
+app.use('/webchat', express.static(path.join(__dirname, '/public/webchat')))
 app.use(express.static(path.join(__dirname, 'public')))
 
 if (env !== 'mocha') {
@@ -53,19 +72,32 @@ if (env !== 'mocha') {
 }
 
 new EligibilityFeature().enableFor(app)
+
 new DashboardFeature().enableFor(app)
 new ClaimIssueFeature().enableFor(app)
 new DefendantFirstContactFeature().enableFor(app)
 new DefendantResponseFeature().enableFor(app)
-if (toBoolean(config.get<boolean>('featureToggles.countyCourtJudgment'))) {
-  new CCJFeature().enableFor(app)
-}
-if (toBoolean(config.get<boolean>('featureToggles.offer'))) {
-  new OfferFeature().enableFor(app)
+new CCJFeature().enableFor(app)
+new OfferFeature().enableFor(app)
+new SettlementAgreementFeature().enableFor(app)
+new MediationFeature().enableFor(app)
+new PaidInFullFeature().enableFor(app)
+
+if (FeatureToggles.isEnabled('testingSupport')) {
+  logger.info('FeatureToggles.testingSupport enabled')
+  new TestingSupportFeature().enableFor(app)
 }
 
-if (toBoolean(config.get<boolean>('featureToggles.testingSupport'))) {
-  new TestingSupportFeature().enableFor(app)
+if (FeatureToggles.isEnabled('admissions')) {
+  logger.info('FeatureToggles.admissions enabled')
+  new ClaimantResponseFeature().enableFor(app)
+}
+
+if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
+  logger.info('FeatureToggles.directionsQuestionnaire enabled')
+  new DirectionsQuestionnaireFeature().enableFor(app)
+  new OrdersFeature().enableFor(app)
+
 }
 
 // Below method overrides the moment's toISOString method, which is used by RequestPromise
@@ -83,7 +115,8 @@ app.use((req, res, next) => {
 
 // error handlers
 const errorLogger = new ErrorLogger()
-app.use((err, req, res, next) => {
+// exported for testability
+export const errorHandler = (err, req, res, next) => {
   errorLogger.log(err)
   res.status(err.statusCode || 500)
   if (err.statusCode === 302 && err.associatedView) {
@@ -94,10 +127,14 @@ app.use((err, req, res, next) => {
     res.render(new ForbiddenError().associatedView)
   } else {
     const view = FeatureToggles.isEnabled('returnErrorToUser') ? 'error_dev' : 'error'
+    if (err.name === 'Template render error') {
+      trackCustomEvent('CMC Dashboard Failure', { error: err })
+    }
     res.render(view, {
       error: err,
       title: 'error'
     })
   }
   next()
-})
+}
+app.use(errorHandler)

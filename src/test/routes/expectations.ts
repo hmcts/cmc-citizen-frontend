@@ -52,6 +52,13 @@ Assertion.addProperty('redirect', statusCodeInRangeAssertion([
 ]))
 
 /**
+ * Checks whether response status code is bad request
+ */
+Assertion.addProperty('badRequest', statusCodeInRangeAssertion([
+  HttpStatus.BAD_REQUEST
+]))
+
+/**
  * Checks whether response status code is forbidden
  */
 Assertion.addProperty('forbidden', statusCodeInRangeAssertion([
@@ -98,7 +105,7 @@ Assertion.addMethod('toLocation', function (location: string | RegExp) {
 })
 
 /**
- * Checks whether response 'location' header matches specified location
+ * Checks whether response has text
  */
 Assertion.addMethod('withText', function (...texts: string[]) {
   const res = this._obj
@@ -106,6 +113,21 @@ Assertion.addMethod('withText', function (...texts: string[]) {
   this.assert(
     _.every(texts, (text) => res.text.includes(text))
     , errorMessageWithResponseExtract('expected response text to include #{exp} but got #{act}', res)
+    , errorMessageWithResponseExtract('expected response text to include #{act}', res)
+    , texts.join(', ') // expected
+    , res.text.replace(/\n+\s*/g, '') // actual
+  )
+})
+
+/**
+ * Checks whether response does not have text
+ */
+Assertion.addMethod('withoutText', function (...texts: string[]) {
+  const res = this._obj
+
+  this.assert(
+    _.every(texts, (text) => !res.text.includes(text))
+    , errorMessageWithResponseExtract('expected response text to not include #{exp} but got #{act}', res)
     , errorMessageWithResponseExtract('expected response text to not include #{act}', res)
     , texts.join(', ') // expected
     , res.text.replace(/\n+\s*/g, '') // actual
@@ -121,7 +143,7 @@ Assertion.addMethod('cookie', function (cookieName: string, cookieValue: string)
   const actualCookies: object[] = res.header['set-cookie'].map(_ => cookie.parse(_))
 
   // Lax due to https://github.com/aspnet/Security/issues/1231
-  const expectedCookie: object = { [cookieName]: cookieValue, path: '/', samesite: 'lax' }
+  const expectedCookie: object = { [cookieName]: cookieValue, path: '/' }
   if (cookieValue === '') {
     expectedCookie['expires'] = 'Thu, 01 Jan 1970 00:00:00 GMT'
   }

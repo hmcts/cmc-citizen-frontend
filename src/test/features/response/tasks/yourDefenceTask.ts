@@ -7,7 +7,7 @@ import { Defence } from 'response/form/models/defence'
 import { YourDefenceTask } from 'response/tasks/yourDefenceTask'
 import { DefendantTimeline } from 'response/form/models/defendantTimeline'
 import { TimelineRow } from 'forms/models/timelineRow'
-import { generateString } from '../../../app/forms/models/validationUtils'
+import { generateString } from 'test/app/forms/models/validationUtils'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 const VALID_DEFENCE_TEXT = 'this is valid defence'

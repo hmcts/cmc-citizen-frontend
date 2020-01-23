@@ -5,10 +5,15 @@
 String product = "cmc"
 String component = "citizen-frontend"
 
-List<LinkedHashMap<String, Object>> secrets = [
-  secret('AatTestUserUsername', 'SMOKE_TEST_CITIZEN_USERNAME'),
-  secret('AatTestUserPassword', 'SMOKE_TEST_USER_PASSWORD'),
-  secret('OAUTH2-CLIENT-SECRET', 'OAUTH2_CLIENT_SECRET')
+def yarnBuilder = new uk.gov.hmcts.contino.YarnBuilder(this)
+
+def secrets = [
+  'cmc-${env}':
+    [
+      secret('citizen-oauth-client-secret', 'OAUTH_CLIENT_SECRET'),
+      secret('smoke-test-citizen-username', 'SMOKE_TEST_CITIZEN_USERNAME'),
+      secret('smoke-test-user-password', 'SMOKE_TEST_USER_PASSWORD')
+    ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -20,11 +25,47 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
+// Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
+// THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
+// THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
+env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
+env.CLAIM_STORE_URL = 'http://cmc-claim-store-aat.service.core-compute-aat.internal'
+env.FEATURE_ADMISSIONS = 'true'
+env.FEATURE_MEDIATION = 'true'
+env.FEATURE_DIRECTIONS_QUESTIONNAIRE = 'true'
+env.FEATURE_TESTING_SUPPORT = 'true'
+// add any others needed to selective testing...
+
+String notificationsChannel = '#cmc-tech-notification'
+
 withPipeline("nodejs", product, component) {
+//  after('checkout') {
+//    onMaster {
+//      withCredentials([usernamePassword(credentialsId: 'jenkins-github-hmcts-api-token', passwordVariable: 'BEARER_TOKEN', usernameVariable: 'USERNAME')]) {
+//        try {
+//          def url = sh(returnStdout: true, script: 'git config remote.origin.url').replace('github.com', '${BEARER_TOKEN}@github.com')
+//          sh('git remote set-url origin ' + url)
+//          sh('git fetch origin demo:demo')
+//          sh('git push --force origin HEAD:demo')
+//        } catch (err) {
+//          notifyBuildEvent channel: notificationsChannel, color: 'warning', message: 'Failed to update demo branch'
+//        }
+//      }
+//    }
+//  }
+
   after('build') {
-    sh 'yarn setup'
+    yarnBuilder.yarn('setup')
+  }
+
+  after('test') {
+    onMaster {
+      yarnBuilder.yarn('tests:a11y')
+    }
   }
 
   loadVaultSecrets(secrets)
-  enableSlackNotifications('#cmc-tech-notification')
+  enableSlackNotifications(notificationsChannel)
+  enableDockerBuild()
+  installCharts()
 }

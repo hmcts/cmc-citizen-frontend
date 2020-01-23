@@ -2,7 +2,7 @@ import { expect } from 'chai'
 import { Address as FormAddress } from 'forms/models/address'
 import { Address } from 'claims/models/address'
 import { convertAddress } from 'claims/converters/address'
-import { generateString } from '../../forms/models/validationUtils'
+import { generateString } from 'test/app/forms/models/validationUtils'
 
 describe('Address converter', () => {
 

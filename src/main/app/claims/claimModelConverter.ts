@@ -36,6 +36,7 @@ import { getStandardInterestRate } from 'shared/interestUtils'
 import { InterestBreakdown } from 'claims/models/interestBreakdown'
 import { InterestTypeOption } from 'claim/form/models/interestType'
 import { InterestEndDateOption } from 'claim/form/models/interestEndDate'
+import { Phone } from 'forms/models/phone'
 
 export class ClaimModelConverter {
 
@@ -43,7 +44,6 @@ export class ClaimModelConverter {
     const claimData: ClaimData = new ClaimData()
     claimData.externalId = draftClaim.externalId
     claimData.interest = this.convertInterest(draftClaim)
-    claimData.interestDate = this.convertInterestDate(draftClaim)
     claimData.amount = new ClaimAmountBreakdown().deserialize(draftClaim.amount)
     claimData.claimants = [this.convertClaimantDetails(draftClaim)]
     claimData.defendants = [this.convertDefendantDetails(draftClaim)]
@@ -51,8 +51,9 @@ export class ClaimModelConverter {
     claimData.reason = draftClaim.reason.reason
     claimData.timeline = { rows: draftClaim.timeline.getPopulatedRowsOnly() } as ClaimantTimeline
     claimData.evidence = { rows: convertEvidence(draftClaim.evidence) as any } as Evidence
-    claimData.feeAmountInPennies = draftClaim.claimant.payment.amount
-    claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
+    if (draftClaim.claimant.payment) {
+      claimData.feeAmountInPennies = MoneyConverter.convertPoundsToPennies(draftClaim.claimant.payment.amount)
+    }
     if (draftClaim.qualifiedStatementOfTruth && draftClaim.qualifiedStatementOfTruth.signerName) {
       claimData.statementOfTruth = new StatementOfTruth(
         draftClaim.qualifiedStatementOfTruth.signerName,
@@ -71,7 +72,7 @@ export class ClaimModelConverter {
           individualDetails.name,
           this.convertAddress(individualDetails.address),
           individualDetails.hasCorrespondenceAddress ? this.convertAddress(individualDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           individualDetails.dateOfBirth.date.asString()
         )
@@ -83,7 +84,7 @@ export class ClaimModelConverter {
           soleTraderDetails.name,
           this.convertAddress(soleTraderDetails.address),
           soleTraderDetails.hasCorrespondenceAddress ? this.convertAddress(soleTraderDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           soleTraderDetails.businessName
         )
@@ -95,7 +96,7 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           companyDetails.hasCorrespondenceAddress ? this.convertAddress(companyDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           companyDetails.contactPerson
         )
@@ -107,7 +108,7 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           organisationDetails.hasCorrespondenceAddress ? this.convertAddress(organisationDetails.correspondenceAddress) : undefined,
-          draftClaim.claimant.mobilePhone.number,
+          draftClaim.claimant.phone.number,
           undefined,
           organisationDetails.contactPerson
         )
@@ -124,19 +125,25 @@ export class ClaimModelConverter {
         const individualDetails = defendantDetails as IndividualDetails
 
         return new DefendantAsIndividual(
-          individualDetails.name,
+          StringUtils.trimToUndefined(individualDetails.title),
+          individualDetails.firstName,
+          individualDetails.lastName,
           this.convertAddress(individualDetails.address),
-          StringUtils.trimToUndefined(draftClaim.defendant.email.address)
+          StringUtils.trimToUndefined(draftClaim.defendant.email.address),
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
 
       case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
         const soleTraderDetails: SoleTraderDetails = defendantDetails as SoleTraderDetails
 
         return new DefendantAsSoleTrader(
-          soleTraderDetails.name,
+          StringUtils.trimToUndefined(soleTraderDetails.title),
+          soleTraderDetails.firstName,
+          soleTraderDetails.lastName,
           this.convertAddress(soleTraderDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          soleTraderDetails.businessName
+          soleTraderDetails.businessName,
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
 
       case PartyType.COMPANY.value:
@@ -146,7 +153,8 @@ export class ClaimModelConverter {
           companyDetails.name,
           this.convertAddress(companyDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          companyDetails.contactPerson
+          companyDetails.contactPerson,
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
       case PartyType.ORGANISATION.value:
         const organisationDetails = defendantDetails as OrganisationDetails
@@ -155,7 +163,8 @@ export class ClaimModelConverter {
           organisationDetails.name,
           this.convertAddress(organisationDetails.address),
           StringUtils.trimToUndefined(draftClaim.defendant.email.address),
-          organisationDetails.contactPerson
+          organisationDetails.contactPerson,
+          this.convertPhoneNumber(draftClaim.defendant.phone)
         )
       default:
         throw Error('Something went wrong, No defendant type is set')
@@ -194,13 +203,17 @@ export class ClaimModelConverter {
         interestBreakdown.explanation = draftClaim.interestTotal.reason
         interest.interestBreakdown = interestBreakdown
         interest.type = ClaimInterestType.BREAKDOWN
-        if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) {
-          interest.rate = getStandardInterestRate()
-        } else {
-          interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
+        if (draftClaim.interestContinueClaiming.option === YesNoOption.YES) {
+          if (draftClaim.interestHowMuch.type === InterestRateOption.STANDARD) {
+            interest.rate = getStandardInterestRate()
+          } else {
+            interest.specificDailyAmount = draftClaim.interestHowMuch.dailyAmount
+          }
         }
       }
+      interest.interestDate = this.convertInterestDate(draftClaim)
     }
+
     return interest
   }
 
@@ -233,11 +246,18 @@ export class ClaimModelConverter {
    * @returns {Payment} - simplified payment object required by the backend API
    */
   private static makeShallowCopy (payment: Payment): Payment {
+    if (!payment || Object.keys(payment).length === 0) {
+      return undefined
+    }
     return {
       reference: payment.reference,
       amount: payment.amount,
       status: payment.status,
       date_created: payment.date_created
     }
+  }
+
+  private static convertPhoneNumber (phone: Phone): string {
+    return phone ? StringUtils.trimToUndefined(phone.number) : undefined
   }
 }

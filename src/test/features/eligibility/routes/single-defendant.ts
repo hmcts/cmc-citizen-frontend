@@ -1,19 +1,19 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationMiddleware } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationMiddleware } from 'test/features/eligibility/routes/checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { YesNoOption } from 'models/yesNoOption'
 
 const pagePath: string = Paths.singleDefendantPage.uri
-const pageRedirect: string = Paths.governmentDepartmentPage.uri
+const pageRedirect: string = Paths.defendantAddressPage.uri
 const expectedTextOnPage: string = 'Is this claim against more than one person or organisation?'
 
 describe('Claim eligibility: single defendant page', () => {

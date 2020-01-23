@@ -1,9 +1,9 @@
-/* tslint:disable:no-unused-expression */
+  /* tslint:disable:no-unused-expression */
 import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as spies from 'sinon-chai'
 import { mockReq as req, mockRes as res } from 'sinon-express-mock'
-import { IsDefined } from 'class-validator'
+import { IsDefined } from '@hmcts/class-validator'
 
 import { FormValidator } from 'forms/validation/formValidator'
 

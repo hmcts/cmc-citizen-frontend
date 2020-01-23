@@ -1,0 +1,39 @@
+{% from "internalLink.njk" import internalLink %}
+
+{% macro aboutClaimWidget(otherParty, claim, showResponse = true) %}
+
+{% if otherParty === 'defendant' %}
+  {% set otherPartyLabel = 'Defendant name:' %}
+  {% set otherPartyName = claim.claimData.defendant.name %}
+  {% set responseLabel = 'Defendant response:' %}
+{% elseif otherParty === 'claimant' %}
+  {% set otherPartyLabel = 'Claimant name:' %}
+  {% set otherPartyName = claim.claimData.claimant.name %}
+  {% set responseLabel = 'Your response:' %}
+{% endif %}
+
+<div class="about-claim-widget">
+  <p class="heading-small">{{ t('About claim') }}</p>
+  <ul class="font-xsmall list">
+    <li>
+      <strong class="bold">{{ t(otherPartyLabel) }}</strong>
+      <div class="block"> {{ internalLink(otherPartyName, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}</div>
+    </li>
+    <li>
+      <strong class="bold">{{ t('Claim amount:') }}</strong>
+      <div>{{ claim.totalAmountTillToday | numeral }}</div>
+    </li>
+    <li>
+      <strong class="bold">{{ t('Claim details:') }}</strong>
+      {{ internalLink(t('View claim'), ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claim.externalId }), 'block') }}
+    </li>
+    {% if showResponse and claim.response %}
+      <li>
+        <strong class="bold">{{ t(responseLabel) }}</strong>
+        {{ internalLink(t('Download response'), ResponsePaths.receiptReceiver.evaluateUri({ externalId: claim.externalId }), 'block') }}
+      </li>
+    {% endif %}
+  </ul>
+</div>
+
+{% endmacro %}

@@ -1,12 +1,11 @@
-import { IsDefined, MaxLength, ValidateIf, Validator } from 'class-validator'
+import { IsDefined, MaxLength, ValidateIf, Validator } from '@hmcts/class-validator'
 import { CompletableTask } from 'models/task'
 
 import { Address as ClaimAddress } from 'claims/models/address'
 import * as toBoolean from 'to-boolean'
-import { ExtraFormFieldsArePopulated } from 'forms/validation/validators/extraFormFieldsArePopulated'
 import { IsCountrySupported } from 'forms/validation/validators/isCountrySupported'
 import { Country } from 'common/country'
-import { IsNotBlank, IsValidPostcode } from '@hmcts/cmc-validators'
+import { IsNotBlank, IsValidPostcode, ExtraFormFieldsArePopulated } from '@hmcts/cmc-validators'
 
 const validator: Validator = new Validator()
 
@@ -29,7 +28,7 @@ export class ValidationErrors {
 }
 
 export class ValidationConstants {
-  static readonly ADDRESS_MAX_LENGTH: number = 100
+  static readonly ADDRESS_MAX_LENGTH: number = 35
 }
 
 export class Address implements CompletableTask {

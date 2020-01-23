@@ -1,0 +1,27 @@
+{% macro timeRemaining(noOfRemainingDays, isAfter4pm) %}
+  {% if noOfRemainingDays > 0 %}
+    {% if noOfRemainingDays == 1 %}
+      {{ t('(1 day remaining)') }}
+    {% else %}
+      {{ t('({{ noOfRemainingDays }} days remaining)', { noOfRemainingDays: noOfRemainingDays }) }}
+    {% endif %}
+  {% else %}
+    <span class="due-or-overdue">
+    {% if noOfRemainingDays == 0 %}
+      {% if isAfter4pm %}
+        {{ t('(Overdue)') }}
+      {% else %}
+        {{ t('(Due today)') }}
+      {% endif %}
+    {% else %}
+      {{ t('(%s', { postProcess: 'sprintf', sprintf: [ noOfRemainingDays | abs ]}) }}
+      {% if noOfRemainingDays < -1 %}
+        {{ t(' days ') }}
+      {% else %}
+        {{ t(' day ') }}
+      {% endif %}
+      {{ t('overdue)') }}
+    {% endif %}
+    </span>
+  {% endif %}
+{% endmacro %}

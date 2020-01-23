@@ -12,8 +12,8 @@ export class DraftService extends BaseDraftService {
 
     this.secrets =
       new Secrets(
-        config.get<string>('draft-store.secrets.primary'),
-        config.get<string>('draft-store.secrets.secondary')
+        config.get<string>('secrets.cmc.citizen-draft-store-primary'),
+        config.get<string>('secrets.cmc.citizen-draft-store-secondary')
       )
   }
 

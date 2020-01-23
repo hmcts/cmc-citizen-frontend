@@ -11,10 +11,17 @@
 !tsconfig.json
 
 !src/main/**
+!src/test/**
+!mocha.opts
 !config/**
 !types/**
 !src/integration-test/**
+!src/test/**
+!mocha.opts
 !default.conf.js
 !saucelabs.conf.js
-
 !server.js
+!acb.yaml
+!Dockerfile
+!integration-tests.Dockerfile
+!bin/**

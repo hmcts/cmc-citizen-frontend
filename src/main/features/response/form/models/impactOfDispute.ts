@@ -1,6 +1,6 @@
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 import { ValidationErrors } from 'forms/validation/validationErrors'
-import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { MaxLength } from '@hmcts/cmc-validators'
 
 export class ImpactOfDispute {
 

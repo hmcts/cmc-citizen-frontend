@@ -11,7 +11,7 @@
           {{ t('Interest calculated with daily interest amount of {{ specificDailyAmount }} for {{ numberOfDays}} days', {
             specificDailyAmount: specificDailyAmount | numeral, numberOfDays: numberOfDays }) }}
         {% endif %}
-        {{ t('({{ interestDate }} to {{ interestToDate }})', { interestDate: interestDate | date, interestToDate: interestToDate | date }) }}
+        <div class="font-xsmall">{{ t('({{ interestDate }} to {{ interestToDate }})', { interestDate: interestDate | date, interestToDate: interestToDate | date }) }}</div>
       </div>
     </details>
   {% else %}

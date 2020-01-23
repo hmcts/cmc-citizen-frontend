@@ -1,0 +1,52 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import submitButton, errorSummary %}
+{% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
+
+{% set headingVisible = false %}
+{% set heading = 'Confirmation' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <div class="govuk-box-highlight">
+        <h1 class="bold-large">
+          {{ t('You’ve asked for a judge to decide a repayment plan') }}
+        </h1>
+        <div class="reference-number">
+          <span>{{ t('Your claim number:') }}</span>
+          <h1 class="bold-large">{{ claim.claimNumber }}</h1>
+        </div>
+        <p>
+          <span class="bold">{{ reDeterminationRequestedAt | date }}</span>
+        </p>
+      </div>
+
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      {% if reDeterminationByClaimant %}
+        <p>{{ t('A judge will decide what the defendant can afford to pay based on their financial details.') }}</p>
+        {% set otherName = defendantName %}
+      {% else %}
+        <p>{{ t('A judge will review the case.') }}</p>
+        {% set otherName = claimantName %}
+      {% endif %}
+
+      <p>{{ t('We’ll contact both you and {{ otherName }} to tell you what to do next.', { otherName: otherName }) }}</p>
+
+
+      {% if reDeterminationByClaimant %}
+        {% include "includes/service-survey-link-claimant.njk" %}
+      {% else %}
+        {% include "includes/service-survey-link-defendant.njk" %}
+      {% endif %}
+
+      <p>{{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') | safe }}</p>
+
+      {{ supportWidget() }}
+    </div>
+  </div>
+
+{% endblock %}
+{% block contactForHelp %}{% endblock %}

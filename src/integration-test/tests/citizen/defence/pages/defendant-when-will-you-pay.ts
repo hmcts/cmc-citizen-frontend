@@ -4,8 +4,9 @@ const I: I = actor()
 
 const fields = {
   paymentOption: {
+    Immediately: 'input[id=optionIMMEDIATELY]',
     Instalments: 'input[id=optionINSTALMENTS]',
-    FullBySetDate: 'input[id=optionFULL_BY_SPECIFIED_DATE]'
+    BySetDate: 'input[id=optionBY_SPECIFIED_DATE]'
   }
 }
 
@@ -15,13 +16,18 @@ const buttons = {
 
 export class DefendantWhenWillYouPayPage {
 
+  chooseImmediately (): void {
+    I.checkOption(fields.paymentOption.Immediately)
+    I.click(buttons.submit)
+  }
+
   chooseInstalments (): void {
     I.checkOption(fields.paymentOption.Instalments)
     I.click(buttons.submit)
   }
 
   chooseFullBySetDate (): void {
-    I.checkOption(fields.paymentOption.FullBySetDate)
+    I.checkOption(fields.paymentOption.BySetDate)
     I.click(buttons.submit)
   }
 

@@ -1,0 +1,49 @@
+{% macro termsOfAgreement(id, claim, paymentIntention, totalAmount) %}
+  <fieldset id="{{ id }}" class="form-group">
+    <legend>
+      <span class="visually-hidden">{{ t( 'Payment plan' ) }}</span>
+    </legend>
+
+    {% if paymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+      {{ row('The agreement', t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
+      {{ claimantName }} will receive the money no later than {{ paymentDate }}.
+      Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
+        { defendantFullName: claim.response.defendant.name,
+          claimantName: claim.claimData.claimant.name,
+          paymentDate: paymentIntention.paymentDate | date,
+          totalAmount: totalAmount | numeral}
+      )) }}
+      {{ row('Completion date', paymentIntention.paymentDate | date) }}
+    {% elseif paymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+      {{ row('The agreement', t('{{ defendantFullName }} will pay the {{ totalAmount }} no later than {{ paymentDate }}.',
+        { defendantFullName: claim.response.defendant.name,
+          totalAmount: totalAmount | numeral,
+          paymentDate: paymentIntention.paymentDate | date
+          }
+      )) }}
+      {{ row('Completion date', paymentIntention.paymentDate | date) }}
+    {% elseif paymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+      {{ row('The agreement', t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+        { defendantFullName: claim.response.defendant.name,
+          totalAmount: totalAmount | numeral,
+          instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+          paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+          firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+        }
+      )) }}
+      {{ row('Completion date', paymentIntention.repaymentPlan.completionDate | date) }}
+    {% endif %}
+
+  </fieldset>
+{% endmacro %}
+
+{% macro row(label, value) %}
+  <div class="bottom-border">
+    <div class="column-one-third  {% if not label %}if-empty{% endif %}">
+      <span> {{ t( label ) }}</span>
+    </div>
+    <div class="column-two-thirds {% if not value %}if-empty{% endif %}">
+      <span>{{ value }}</span>
+    </div>
+  </div>
+{% endmacro %}

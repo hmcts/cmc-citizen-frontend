@@ -1,0 +1,82 @@
+{% from "internalLink.njk" import internalLink %}
+{% from "./utilityMacros.njk" import downloadResponseLink, signAgreementLink, downloadAgreementLink %}
+
+{% macro settlementAgreementSignedByClaimantDefendantDashboard(claim) %}
+  {{ t('{{ claimantName }} asked you to sign a settlement agreement.', { claimantName: claim.claimData.claimant.name }) }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByBothDefendantDashboard(claim) %}
+  {{ t('You’ve both signed a settlement agreement.') }}
+{% endmacro %}
+
+{% macro settlementAgreementRejectedForDefendantDashboard(claim) %}
+  {{ t('You rejected the settlement agreement.') }}
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('{{ claimantName }} asked you to sign a settlement agreement', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    <p>{{ t('They accepted your repayment plan and asked you to sign a settlement agreement to formalise it.') }}</p>
+    <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
+    <p>{{ t('If you don’t sign or respond by {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.claimantRespondedAt | addDays(7) | date) }}</p>
+    <p>{{ signAgreementLink(claim, 'View the repayment plan') }}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro settlementAgreementSignedByBothDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('You’ve both signed a settlement agreement') }}</h2>
+    {% if claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+      <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
+          { amount: amountToPay,
+            paymentDate: claim.settlement.getLastOffer().paymentIntention.paymentDate | date })
+        }}</p>
+    {% elif claim.settlement.getLastOffer().paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+      <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
+          {
+            instalmentAmount: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.instalmentAmount | numeral,
+            paymentSchedule: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+            firstPaymentDate: claim.settlement.getLastOffer().paymentIntention.repaymentPlan.firstPaymentDate | date
+          }) }}</p>
+    {% endif %}
+    <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms.') }}</p>
+    <p>{{ downloadAgreementLink(claim, 'Download the settlement agreement') }}</p>
+    <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) + ' if you need their payment details. Make sure you get receipts for any payments.') | safe }}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro settlementAgreementSignedByClaimantNewPaymentPlanDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('{{ claimantName }} rejected your repayment plan.', { claimantName: claim.claimData.claimant.name }) }}</h2>
+    {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+      <p>{{ t('{{ claimantName }} accepted your offer to pay {{ partAdmitAmount }} but rejected your repayment plan.',
+          { claimantName: claim.claimData.claimant.name, partAdmitAmount: claim.response.amount | numeral }) }}</p>
+    {% endif %}
+    {% if claim.claimantResponse.courtDetermination.decisionType !== DecisionType.CLAIMANT %}
+      <p>{{ t('They accepted a new repayment plan determined by the court, based on the financial details you provided.') }}</p>
+    {% else %}
+      <p>{{ t('They suggested a new repayment plan. The court believes you can afford the claimant’s plan, based on the financial details you provided.') }}</p>
+    {% endif %}
+
+    <p>{{ t('They asked you to sign a settlement agreement to formalise the plan.') }}</p>
+    <p>{{ t('If you sign the agreement, they can’t request a County Court Judgment against you unless you break the terms.') }}</p>
+    <p>{{ t('If you don’t sign or respond by {{ deadline }} they can request a County Court Judgment against you.', deadline = claim.claimantRespondedAt | addDays(7) | date) }}</p>
+    <p>{{ internalLink('View the repayment plan', SettlementAgreementPaths.repaymentPlanSummary.evaluateUri({ externalId: claim.externalId }), 'button button-secondary') }}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+
+{% macro settlementAgreementRejectedDefendantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('You rejected the settlement agreement') }}</h2>
+    <p>{{ t('{{ claimantName }} can request a County Court Judgment (CCJ) against you.', { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ t('A CCJ would order you to repay the money in line with the terms of the agreement.') }}</p>
+    <p>{{ t('The court has reviewed the repayment plan and believes you can afford it.') }}</p>
+    <p>{{ t('If {{ claimantName }} requests a CCJ, you can ask a judge to consider changing the plan, based on your financial details.', { claimantName: claim.claimData.claimant.name}) }}</p>
+    <p>{{ t('We’ll email you when {{ defendantName }} responds', { defendantName: claim.claimData.claimant.name } )}}</p>
+    <p>{{ downloadResponseLink(claim) }}</p>
+  </div>
+{% endmacro %}
+

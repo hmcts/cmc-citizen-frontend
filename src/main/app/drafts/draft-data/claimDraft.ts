@@ -2,7 +2,7 @@ import { YesNoOption } from 'models/yesNoOption'
 import * as uuid from 'uuid'
 import { PartyType } from 'common/partyType'
 
-export function prepareClaimDraft () {
+export function prepareClaimDraft (userEmailAddress: string) {
   return {
     externalId: uuid(),
     eligibility: true,
@@ -11,48 +11,53 @@ export function prepareClaimDraft () {
     claimant: {
       partyDetails: {
         type: PartyType.INDIVIDUAL.value,
-        name: 'Jack Davids',
+        name: 'Jan Clark',
         address: {
-          line1: 'Flat 1',
-          line2: 'Street 1',
-          line3: 'Cool house name',
+          line1: 'Street 1',
+          line2: 'Street 2',
+          line3: 'Street 3',
           city: 'London',
-          postcode: 'SW1A 2AA'
+          postcode: 'SW1H 9AJ'
         },
         dateOfBirth: {
           known: true,
           date: {
-            year: 1997,
-            month: 5,
-            day: 27
+            year: 2000,
+            month: 1,
+            day: 1
           }
         }
       },
-      mobilePhone: {
-        number: '07112358132'
+      phone: {
+        number: '(0)207 127 0000'
       }
     },
     defendant: {
       partyDetails: {
         type: PartyType.INDIVIDUAL.value,
-        name: 'Daniel Murphy',
+        title: 'Mrs.',
+        firstName: 'Mary',
+        lastName: 'Richards',
         address: {
-          line1: 'Flat 3',
+          line1: 'Flat 3A',
           line2: 'Street 1',
-          line3: 'Cooler house name',
+          line3: 'Middle Road',
           city: 'London',
-          postcode: 'SW1A 2AA'
+          postcode: 'SW1H 9AJ'
         }
       },
       email: {
-        address: ''
+        address: userEmailAddress
+      },
+      phone: {
+        number: ''
       }
     },
     amount: {
       rows: [
         {
-          reason: 'Bakery Cost',
-          amount: 3141.59
+          reason: 'Roof Fix & repairs to leak',
+          amount: 75
         }
       ]
     },
@@ -60,12 +65,13 @@ export function prepareClaimDraft () {
       option: YesNoOption.NO
     },
     reason: {
-      reason: 'A strong sense of entitlement.'
+      reason: 'A strong sense of entitlement that would explain my reasons of the claim, that the Roof work and leaks that followed were done below standards set by the council inspector'
     },
     timeline: {
       rows: [
-        { date: '27 May 1997', description: 'The day the first bill was issued' },
-        { date: '23 March 2018', description: 'A historic day with enormous importance' }
+        { date: '01 October 2017', description: 'The day the first bill was issued' },
+        { date: '26 March 2018', description: 'A historic day with enormous importance' },
+        { date: '14 June 2018', description: 'line to explain what happened and when' }
       ]
     }
   }

@@ -2,8 +2,8 @@ version: '2.1'
 
 services:
     citizen-integration-tests:
-      image: hmcts/cmc-citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
-      command: test:integration --grep @citizen-smoke-test
+      image: hmctspublic.azurecr.io/cmc/citizen-integration-tests:${CITIZEN_INTEGRATION_TESTS_VERSION:-latest}
+      command: test:integration --grep @smoke-test
       environment:
         - WEB_DRIVER_HOST=remote-webdriver
         - CITIZEN_APP_URL=${TEST_URL}
@@ -11,12 +11,17 @@ services:
         - https_proxy=http://proxyout.reform.hmcts.net:8080
         - no_proxy=remote-webdriver
         - IDAM_URL
-        - OAUTH2_CLIENT_SECRET
+        - OAUTH_CLIENT_SECRET
         - SMOKE_TEST_CITIZEN_USERNAME
         - SMOKE_TEST_USER_PASSWORD
+        - CLAIM_STORE_URL
         - HEALTHCHECK_CITIZEN=true
+        - CHUNKS=1
+        - FEATURE_ADMISSIONS
+        - FEATURE_MEDIATION
+        - FEATURE_DIRECTIONS_QUESTIONNAIRE
+        - FEATURE_TESTING_SUPPORT
       volumes:
         - ./smoke-output:/usr/src/app/output
     remote-webdriver:
       image: selenium/standalone-chrome:3.8.1
-

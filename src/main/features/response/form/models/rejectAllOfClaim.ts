@@ -1,4 +1,6 @@
-import { IsDefined, IsIn } from 'class-validator'
+import { IsDefined, IsIn } from '@hmcts/class-validator'
+import { HowMuchHaveYouPaid } from 'response/form/models/howMuchHaveYouPaid'
+import { WhyDoYouDisagree } from 'response/form/models/whyDoYouDisagree'
 
 export class ValidationErrors {
   static readonly OPTION_REQUIRED: string = 'Please select a response'
@@ -30,7 +32,28 @@ export class RejectAllOfClaim {
   @IsIn(RejectAllOfClaimOption.all(), { message: ValidationErrors.OPTION_REQUIRED })
   option?: string
 
-  constructor (option?: string) {
+  howMuchHaveYouPaid?: HowMuchHaveYouPaid
+
+  whyDoYouDisagree?: WhyDoYouDisagree
+
+  constructor (option?: string, howMuchHaveYouPaid?: HowMuchHaveYouPaid, whyDoYouDisagree?: WhyDoYouDisagree) {
     this.option = option
+    this.howMuchHaveYouPaid = howMuchHaveYouPaid
+    this.whyDoYouDisagree = whyDoYouDisagree
+  }
+
+  deserialize (input: any): RejectAllOfClaim {
+    if (input) {
+      if (input.option) {
+        this.option = input.option
+      }
+      if (input.howMuchHaveYouPaid) {
+        this.howMuchHaveYouPaid = new HowMuchHaveYouPaid().deserialize(input.howMuchHaveYouPaid)
+      }
+      if (input.whyDoYouDisagree) {
+        this.whyDoYouDisagree = new WhyDoYouDisagree().deserialize(input.whyDoYouDisagree)
+      }
+    }
+    return this
   }
 }

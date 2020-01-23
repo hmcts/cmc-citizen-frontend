@@ -7,15 +7,21 @@ import { FormValidator } from 'forms/validation/formValidator'
 import { Declaration } from 'offer/form/models/declaration'
 import { Claim } from 'claims/models/claim'
 import { OfferClient } from 'claims/offerClient'
+import { OfferAcceptedGuard } from 'offer/guards/offerAcceptedGuard'
+import { ClaimStatus } from 'claims/models/claimStatus'
 
 function renderView (form: Form<Declaration>, res: express.Response) {
   const claim: Claim = res.locals.claim
+
+  const user: User = res.locals.user
   res.render(
     Paths.declarationPage.associatedView,
     {
       claim: claim,
       form: form,
-      offer: claim.defendantOffer
+      offer: claim.status === ClaimStatus.CLAIMANT_ACCEPTED_COURT_PLAN_SETTLEMENT ? claim.settlement.getLastOffer() : claim.defendantOffer,
+      isThroughAdmissions: claim.settlement && claim.settlement.isThroughAdmissions(),
+      otherPartyName: user.id === claim.defendantId ? claim.claimData.claimant.name : claim.claimData.defendant.name
     }
   )
 }
@@ -23,7 +29,7 @@ function renderView (form: Form<Declaration>, res: express.Response) {
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(
-    Paths.declarationPage.uri,
+    Paths.declarationPage.uri, OfferAcceptedGuard.check(),
     ErrorHandling.apply(
       async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         renderView(Form.empty(), res)
@@ -31,7 +37,7 @@ export default express.Router()
     )
   )
   .post(
-    Paths.declarationPage.uri,
+    Paths.declarationPage.uri, OfferAcceptedGuard.check(),
     FormValidator.requestHandler(Declaration, Declaration.fromObject),
     ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
       const form: Form<Declaration> = req.body
@@ -42,7 +48,7 @@ export default express.Router()
         const claim: Claim = res.locals.claim
         const user: User = res.locals.user
 
-        if (user.id === claim.defendantId) {
+        if (user.id === claim.defendantId && claim.settlement.isOfferAccepted()) {
           await OfferClient.countersignOffer(claim.externalId, user)
 
           res.redirect(Paths.settledPage.evaluateUri({ externalId: claim.externalId }))

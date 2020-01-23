@@ -1,0 +1,69 @@
+{% from "table.njk" import tableStart, tableEnd, row %}
+
+{% macro whenWillYouPayRow(value, url) %}
+  {{
+    row(
+      label = 'When will you pay',
+      value = value,
+      changeLink = url,
+      bold = true
+    )
+  }}
+{% endmacro %}
+
+{% macro notImmediatePayment(type, paymentDate, paymentPlan, explanation, Paths = {}, externalId, statementOfMeansIsApplicable) %}
+  {{ tableStart('whenWillYouPay', 'When you’ll pay') }}
+  {% set whenWillYouPayLabel = t(type.option.displayValue) | capitalize %}
+
+  {% if type.isOfType(DefendantPaymentType.BY_SET_DATE) %}
+    {%
+      set whenWillYouPayLabel = t('{{ whenWillYouPayLabel }}: {{ date }}', {
+      whenWillYouPayLabel: whenWillYouPayLabel, date: paymentDate.date.toMoment() | date})
+    %}
+  {% endif %}
+
+  {{
+    whenWillYouPayRow(
+      value = whenWillYouPayLabel,
+      url = Paths.paymentOptionPage.evaluateUri({ externalId: externalId })
+    )
+  }}
+
+  {% if type.isOfType(DefendantPaymentType.INSTALMENTS) %}
+    {{
+      row(
+        label = 'Regular payments of',
+        value = paymentPlan.instalmentAmount | numeral,
+        changeLink = Paths.paymentPlanPage.evaluateUri({ externalId: externalId }),
+        bold = true, bottomBorder = false
+      )
+    }}
+    {{
+      row(
+        label = 'Frequency of payments',
+        value = t(paymentPlan.paymentSchedule.displayValue),
+        bold = true,
+        bottomBorder = false
+      )
+    }}
+    {{
+      row(
+        label = 'Make the first payment on',
+        value = paymentPlan.firstPaymentDate.toMoment() | date,
+        bold = true
+      )
+    }}
+  {% endif %}
+
+  {% if statementOfMeansIsApplicable %}
+    {{
+      row(
+        label = 'Briefly explain why you can’t pay immediately',
+        value = explanation,
+        changeLink = StatementOfMeansPaths.explanationPage.evaluateUri({ externalId: externalId }),
+        bold = true
+      )
+    }}
+  {% endif %}
+  {{ tableEnd() }}
+{% endmacro %}

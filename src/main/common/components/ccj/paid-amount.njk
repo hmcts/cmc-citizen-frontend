@@ -1,0 +1,36 @@
+{% extends "layout.njk" %}
+
+{% set heading = 'Has the defendant paid some of the amount owed?' %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, poundInput, radioOption, errorSummary %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+
+    <form method="post" class="analytics-submit-event-trigger" data-event-action="CCJ: Select whether defendant paid some of the amount owed" data-event-label-from="option" novalidate>
+
+      {{ csrfProtection(csrf) }}
+
+      {% set error = form.errorFor('option') %}
+      {% set selection = form.valueFor('option').value %}
+      <div class="form-group {% if error %} form-group-error {% endif %}">
+        <fieldset id="option[label]">
+          <legend class="visually-hidden">{{ t('Has the defendant paid some of the amount owed?') }}</legend>
+
+          {{ radioOption(label = 'Yes', name = 'option', form = form, value = 'yes', checked = (selection == 'yes')) }}
+
+          <div class="panel panel-border-narrow js-hidden" id="option-yes">
+            <input type="hidden" name="claimedAmount" value="{{ totalAmount }}" />
+            {{ poundInput(label = 'Amount already paid', name = 'amount', form = form) }}
+          </div>
+
+          {{ radioOption(label = 'No', name = 'option', form = form, value = 'no', checked = (selection == 'no')) }}
+        </fieldset>
+      </div>
+      {{ saveAndContinueButton() }}
+    </form>
+
+  </div>
+</div>
+{% endblock %}

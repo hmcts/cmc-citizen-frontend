@@ -1,5 +1,8 @@
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { ResponseType } from 'response/form/models/responseType'
+import { Validator } from '@hmcts/class-validator'
+
+const validator = new Validator()
 
 export class OweMoneyTask {
   static isCompleted (responseDraft: ResponseDraft): boolean {
@@ -9,12 +12,17 @@ export class OweMoneyTask {
 
     switch (responseDraft.response.type) {
       case ResponseType.FULL_ADMISSION:
-      case ResponseType.PART_ADMISSION:
         return true
+      case ResponseType.PART_ADMISSION:
+        return !!responseDraft.partialAdmission && this.isValid(responseDraft.partialAdmission.alreadyPaid)
       case ResponseType.DEFENCE:
-        return responseDraft.rejectAllOfClaim && responseDraft.rejectAllOfClaim.option !== undefined
+        return OweMoneyTask.isValid(responseDraft.rejectAllOfClaim)
       default:
         throw new Error(`Unknown response type: ${responseDraft.response.type}`)
     }
+  }
+
+  private static isValid (model): boolean {
+    return model !== undefined && validator.validateSync(model).length === 0
   }
 }

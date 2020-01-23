@@ -1,10 +1,9 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
-import { CourtOrderRow, ValidationErrors } from 'response/form/models/statement-of-means/courtOrderRow'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { CourtOrderRow } from 'response/form/models/statement-of-means/courtOrderRow'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
-import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 describe('CourtOrderRow', () => {
 
@@ -14,8 +13,9 @@ describe('CourtOrderRow', () => {
       const actual: CourtOrderRow = new CourtOrderRow().deserialize(undefined)
 
       expect(actual).instanceof(CourtOrderRow)
-      expect(actual.details).to.eq(undefined)
+      expect(actual.claimNumber).to.eq(undefined)
       expect(actual.amount).to.eq(undefined)
+      expect(actual.instalmentAmount).to.eq(undefined)
     })
 
     it('should return populated object', () => {
@@ -24,8 +24,9 @@ describe('CourtOrderRow', () => {
       })
 
       expect(actual).instanceof(CourtOrderRow)
-      expect(actual.details).to.eq(undefined)
+      expect(actual.instalmentAmount).to.eq(undefined)
       expect(actual.amount).to.eq(undefined)
+      expect(actual.claimNumber).to.eq(undefined)
     })
   })
 
@@ -43,8 +44,9 @@ describe('CourtOrderRow', () => {
       })
 
       expect(actual).instanceof(CourtOrderRow)
-      expect(actual.details).to.eq(undefined)
+      expect(actual.instalmentAmount).to.eq(undefined)
       expect(actual.amount).to.eq(undefined)
+      expect(actual.claimNumber).to.eq(undefined)
     })
   })
 
@@ -55,8 +57,9 @@ describe('CourtOrderRow', () => {
       const actual: CourtOrderRow = CourtOrderRow.empty()
 
       expect(actual).instanceof(CourtOrderRow)
-      expect(actual.details).to.eq(undefined)
+      expect(actual.instalmentAmount).to.eq(undefined)
       expect(actual.amount).to.eq(undefined)
+      expect(actual.claimNumber).to.eq(undefined)
     })
   })
 
@@ -65,25 +68,13 @@ describe('CourtOrderRow', () => {
     context('should return true', () => {
 
       it('when all populated (valid values)', () => {
-        const actual = new CourtOrderRow('offence', 1)
+        const actual = new CourtOrderRow(1, 1, 'abc')
 
         expect(actual.isAtLeastOneFieldPopulated()).to.be.eq(true)
       })
 
-      it('when all populated (invalid values)', () => {
-        const actual = new CourtOrderRow(generateString(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH + 1), -1)
-
-        expect(actual.isAtLeastOneFieldPopulated()).to.be.eq(true)
-      })
-
-      it('when details populated', () => {
-        const actual = new CourtOrderRow('abc', undefined)
-
-        expect(actual.isAtLeastOneFieldPopulated()).to.be.eq(true)
-      })
-
-      it('when amount populated', () => {
-        const actual = new CourtOrderRow(undefined, 1)
+      it('when amount populated and instalmentAmount', () => {
+        const actual = new CourtOrderRow(1, 1, undefined)
 
         expect(actual.isAtLeastOneFieldPopulated()).to.be.eq(true)
       })
@@ -97,13 +88,19 @@ describe('CourtOrderRow', () => {
     context('should accept', () => {
 
       it('when all fields undefined', () => {
-        const errors = validator.validateSync(new CourtOrderRow(undefined, undefined))
+        const errors = validator.validateSync(new CourtOrderRow(undefined, undefined, undefined))
 
         expect(errors.length).to.equal(0)
       })
 
       it('when all are valid', () => {
-        const errors = validator.validateSync(new CourtOrderRow('abc', 100))
+        const errors = validator.validateSync(new CourtOrderRow(100, 100, 'abc'))
+
+        expect(errors.length).to.equal(0)
+      })
+
+      it('when amount has minimal value of £1 pound', () => {
+        const errors = validator.validateSync(new CourtOrderRow(1.00, 0, 'abc'))
 
         expect(errors.length).to.equal(0)
       })
@@ -111,48 +108,39 @@ describe('CourtOrderRow', () => {
 
     context('should reject', () => {
 
-      it('when invalid amount', () => {
-        const errors = validator.validateSync(new CourtOrderRow('abc', 10.111))
+      it('when invalid amount and instalmentAmount', () => {
+        const errors = validator.validateSync(new CourtOrderRow(10.111, 10.111, 'abc'))
 
-        expect(errors.length).to.equal(1)
+        expect(errors.length).to.equal(2)
         expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_DECIMALS)
       })
 
-      it('when negative amount', () => {
-        const errors = validator.validateSync(new CourtOrderRow('abc', -10))
+      it('when negative amount and instalmentAmount', () => {
+        const errors = validator.validateSync(new CourtOrderRow(-10, -10, 'abc'))
 
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expect(errors.length).to.equal(2)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
       })
 
-      it('when amount = 0', () => {
-        const errors = validator.validateSync(new CourtOrderRow('abc', 0))
+      it('when amount equal £0', () => {
+        const errors = validator.validateSync(new CourtOrderRow(0, 0, 'abc'))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
       })
 
-      it('when empty amount', () => {
-        const errors = validator.validateSync(new CourtOrderRow('card', undefined))
+      it('when amount equal £0.99', () => {
+        const errors = validator.validateSync(new CourtOrderRow(0.99, 0, 'abc'))
 
         expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
       })
 
-      it('when empty details', () => {
-        const errors = validator.validateSync(new CourtOrderRow('', 10))
+      it('when empty amount and instalmentAmount', () => {
+        const errors = validator.validateSync(new CourtOrderRow(undefined, undefined, 'abc'))
 
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, ValidationErrors.DETAILS_REQUIRED)
-      })
-
-      it('when too long details', () => {
-        const errors = validator.validateSync(
-          new CourtOrderRow(generateString(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH + 1), 10)
-        )
-
-        expect(errors.length).to.equal(1)
-        expectValidationError(errors, GlobalValidationErrors.TEXT_TOO_LONG)
+        expect(errors.length).to.equal(2)
+        expectValidationError(errors, GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND)
       })
     })
   })

@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
@@ -13,13 +14,13 @@
 
       <h2 class="heading-medium">{{ t('What happens next') }}</h2>
       <p>
-        {{ t('You’ve rejected the defendant’s offer to settle out of court.') }}
+        {{ t('We’ll send your response to the defendant.') }}
       </p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-claimant.njk" %}
 
       <p>
-        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Finished') }}</a>
+        {{ internalLink(t('Finished'), DashboardPaths.dashboardPage.uri, 'button') }}
       </p>
 
       {{ supportWidget() }}
@@ -27,3 +28,4 @@
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

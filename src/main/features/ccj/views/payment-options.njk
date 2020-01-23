@@ -18,7 +18,7 @@
         'option',
         [
           {'label': 'Immediately', value: PaymentType.IMMEDIATELY.value, checked: (form.valueFor('option').value === PaymentType.IMMEDIATELY.value)},
-          {'label': 'By a set date', value: PaymentType.FULL_BY_SPECIFIED_DATE.value, checked: (form.valueFor('option').value === PaymentType.FULL_BY_SPECIFIED_DATE.value)},
+          {'label': 'By a set date', value: PaymentType.BY_SPECIFIED_DATE.value, checked: (form.valueFor('option').value === PaymentType.BY_SPECIFIED_DATE.value)},
           {'label': 'By instalments', value: PaymentType.INSTALMENTS.value, checked: (form.valueFor('option').value === PaymentType.INSTALMENTS.value)}
         ],
         form = form,

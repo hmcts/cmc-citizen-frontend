@@ -2,17 +2,19 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
 
 import { Paths } from 'ccj/paths'
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
-import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
+import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
+import * as moment from 'moment'
+import { MomentFactory } from 'shared/momentFactory'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 
@@ -66,7 +68,8 @@ describe('CCJ - Pay by set date', () => {
   })
 
   describe('on POST', () => {
-    const validFormData = { known: 'true', date: { day: '31', month: '12', year: '2018' } }
+    const today: moment.Moment = MomentFactory.currentDate().add(5, 'days')
+    const validFormData = { known: 'true', date: { day: today.date(), month: today.month() + 1, year: today.year() } }
 
     const method = 'post'
     checkAuthorizationGuards(app, method, pagePath)
@@ -102,7 +105,7 @@ describe('CCJ - Pay by set date', () => {
         it('should return 500 and render error page when cannot save ccj draft', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.rejectSave()
+          draftStoreServiceMock.rejectUpdate()
 
           await request(app)
             .post(pagePath)
@@ -114,7 +117,7 @@ describe('CCJ - Pay by set date', () => {
         it('should redirect to check and send page', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
           draftStoreServiceMock.resolveFind('ccj')
-          draftStoreServiceMock.resolveSave()
+          draftStoreServiceMock.resolveUpdate()
 
           await request(app)
             .post(pagePath)

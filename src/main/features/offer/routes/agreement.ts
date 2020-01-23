@@ -2,42 +2,18 @@ import * as express from 'express'
 import { Paths } from 'offer/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DocumentsClient } from 'documents/documentsClient'
-import * as http from 'http'
-import * as HttpStatus from 'http-status-codes'
 import { Claim } from 'claims/models/claim'
+import { DownloadUtils } from 'utils/downloadUtils'
 
 const documentsClient: DocumentsClient = new DocumentsClient()
 
 /* tslint:disable:no-default-export */
 export default express.Router()
   .get(Paths.agreementReceiver.uri,
-    ErrorHandling.apply(
-      async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      const { externalId } = req.params
+      const pdf: Buffer = await documentsClient.getSettlementAgreementPDF(externalId, res.locals.user.bearerToken)
 
-        const { externalId } = req.params
-
-        documentsClient.getSettlementAgreementPDF(externalId, res.locals.user.bearerToken)
-          .on('response', (response: http.IncomingMessage) => {
-            if (response.statusCode !== 200) {
-              return next(new Error('Unexpected error during document retrieval'))
-            }
-            const buffers: Buffer[] = []
-            response.on('data', (chunk: Buffer) => {
-              buffers.push(chunk)
-            })
-            response.on('end', () => {
-              const pdf = Buffer.concat(buffers)
-              const claim: Claim = res.locals.claim
-              res.writeHead(HttpStatus.OK, {
-                'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename=${claim.claimNumber}-settlement-agreement.pdf`,
-                'Content-Length': pdf.length
-              })
-
-              res.end(pdf)
-            })
-          })
-          .on('error', (err: Error) => {
-            next(err)
-          })
-      }))
+      const claim: Claim = res.locals.claim
+      DownloadUtils.downloadPDF(res, pdf, `${claim.claimNumber}-settlement-agreement`)
+    }))

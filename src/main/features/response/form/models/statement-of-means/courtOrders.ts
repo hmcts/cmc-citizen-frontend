@@ -1,5 +1,5 @@
 import { MultiRowForm } from 'forms/models/multiRowForm'
-import { IsDefined, ValidateIf } from 'class-validator'
+import { IsDefined, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import * as toBoolean from 'to-boolean'
 import { AtLeastOnePopulatedRow } from 'forms/validation/validators/atLeastOnePopulatedRow'
@@ -14,15 +14,15 @@ export const MAX_NUMBER_OF_ROWS: number = 10
 export class CourtOrders extends MultiRowForm<CourtOrderRow> {
 
   @IsDefined({ message: GlobalValidationErrors.YES_NO_REQUIRED })
-  hasAnyCourtOrders: boolean
+  declared: boolean
 
-  @ValidateIf(o => o.hasAnyCourtOrders === true)
+  @ValidateIf(o => o.declared === true)
   @AtLeastOnePopulatedRow({ message: ValidationErrors.ENTER_AT_LEAST_ONE_ROW })
   rows: CourtOrderRow[]
 
-  constructor (hasAnyCourtOrders?: boolean, rows?: CourtOrderRow[]) {
+  constructor (declared?: boolean, rows?: CourtOrderRow[]) {
     super(rows)
-    this.hasAnyCourtOrders = hasAnyCourtOrders
+    this.declared = declared
   }
 
   static fromObject (value?: any): CourtOrders {
@@ -30,13 +30,11 @@ export class CourtOrders extends MultiRowForm<CourtOrderRow> {
       return value
     }
 
-    const hasAnyCourtOrders: boolean = (value.hasAnyCourtOrders !== undefined)
-      ? toBoolean(value.hasAnyCourtOrders)
-      : undefined
+    const declared: boolean = (value.declared !== undefined) ? toBoolean(value.declared) : undefined
 
     return new CourtOrders(
-      hasAnyCourtOrders,
-      (hasAnyCourtOrders === true && value.rows) ? value.rows.map(CourtOrderRow.fromObject) : []
+      declared,
+      (declared === true && value.rows) ? value.rows.map(CourtOrderRow.fromObject) : []
     )
   }
 
@@ -46,7 +44,7 @@ export class CourtOrders extends MultiRowForm<CourtOrderRow> {
 
   deserialize (input?: any): CourtOrders {
     if (input) {
-      this.hasAnyCourtOrders = input.hasAnyCourtOrders
+      this.declared = input.declared
       this.rows = this.deserializeRows(input.rows)
     }
 

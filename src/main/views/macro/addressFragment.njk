@@ -1,0 +1,19 @@
+{% macro addressFragment(address, label, name = undefined) %}
+  <div class="form-group">
+    {% if label %}
+      <span class="block">{{ t(label) }}</span>
+    {% endif %}
+    {% if name %}
+    <span class="block">{{ name }}</span>
+    {% endif%}
+    <span class="block">{{ address.line1 }}</span>
+    {% if address.line2 %}
+      <span class="block">{{ address.line2 }}</span>
+    {% endif %}
+    {% if address.line3 %}
+      <span class="block">{{ address.line3 }}</span>
+    {% endif %}
+    <span class="block">{{ address.city }}</span>
+    <span class="block">{{ address.postcode }}</span>
+  </div>
+{% endmacro %}

@@ -1,25 +1,25 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationMiddleware } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationMiddleware } from 'test/features/eligibility/routes/checks/authorization-check'
 
 import { Paths } from 'eligibility/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
 import { NotEligibleReason } from 'eligibility/notEligibleReason'
 import { ClaimType } from 'eligibility/model/claimType'
 
 const pagePath: string = Paths.claimTypePage.uri
-const pageRedirect: string = Paths.singleDefendantPage.uri
+const pageRedirect: string = Paths.claimantAddressPage.uri
 const expectedTextOnPage: string = 'Who are you making the claim for?'
 
 describe('Claim eligibility: claim type page', () => {
   attachDefaultHooks(app)
 
-  describe('on GET', () => {
+  context('on GET', () => {
     checkAuthorizationMiddleware(app, 'get', pagePath)
 
     it('should render page when everything is fine', async () => {
@@ -30,7 +30,7 @@ describe('Claim eligibility: claim type page', () => {
     })
   })
 
-  describe('on POST', () => {
+  context('on POST', () => {
     checkAuthorizationMiddleware(app, 'post', pagePath)
 
     it('should render page when form is invalid and everything is fine', async () => {

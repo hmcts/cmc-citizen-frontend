@@ -46,10 +46,10 @@ export class OfferSteps {
   }
 
   countersignAgreement (): void {
-    I.click('Sign the agreement')
+    I.click('Sign the settlement agreement')
     I.click('Make an agreement')
     this.signAgreement()
-    I.see('You’ve settled out of court')
+    I.see('You’ve both signed a settlement agreement')
   }
 
   countersignOfferFromDashboard (claimRef: string): void {
@@ -59,7 +59,7 @@ export class OfferSteps {
 
   viewOfferFromDashboard (claimRef: string): void {
     this.viewClaimFromDashboard(claimRef)
-    I.click('View and respond to offer')
+    I.click('View and respond to the offer')
   }
 
   viewClaimFromDashboard (claimRef: string): void {

@@ -2,54 +2,51 @@
 {% from "form.njk" import csrfProtection, checkboxSingle, submitButton, errorSummary %}
 {% from "./macro/offerTable.njk" import offerTable %}
 
-{% set heading = 'Terms of the agreement' %}
+{% set heading = 'Sign a settlement agreement' %}
 
 {% block content %}
   <div class="grid-row">
     <div class="column-two-thirds">
-      <p>
-          {{
-            t('You need to sign the agreement.')
-          }}
-      </p>
-
       {{ offerTable(claim.claimData.defendant.name + ': ' + offer.content, offer.completionDate) }}
 
-      <p>
-        {{
-          t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.', {
+      {% if claim.response.responseType === domain.ResponseType.PART_ADMISSION %}
+        <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}, including the part that {{ defendantName }} admitted.', {
             claimantName: claim.claimData.claimant.name,
-            defendantName: claim.claimData.defendant.name
-          })
-        }}
-      </p>
+            defendantName: claim.claimData.defendant.name }) }}</p>
+      {% else %}
+        <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.', {
+            claimantName: claim.claimData.claimant.name,
+            defendantName: claim.claimData.defendant.name }) }}</p>
 
-      <p>{{t('This agreement puts the claim on hold. Neither party can make any further claims relating to this case, other than to enforce it.')}}</p>
+        <p>{{ t('Neither party can make any further claims relating to this case, other than to enforce it.') }}</p>
+      {% endif %}
 
-      <p>{{t('Either party can view and download this agreement from their Money Claims account. Both parties should keep a copy of this agreement.')}}</p>
-
+      <p>{{ t('Either party can view and download this agreement from their Money Claims account. Both parties should keep a copy of this agreement.') }}</p>
 
       <h3 class="heading-medium">{{ t('If the agreement is broken') }}</h3>
+      {% if claim.response.responseType === domain.ResponseType.FULL_ADMISSION %}
+        {{ t('The claimant can request a County Court Judgment (CCJ) for any money still owed from this agreement.') }}
+      {% else %}
+        {% if isThroughAdmissions %}
+          <p>{{ t('The claimant can apply to:') }}</p>
+        {% else %}
+          <p>{{ t('Either party can apply to:') }}</p>
+        {% endif %}
+        <ul class="list list-bullet">
+          <li>{{ t('request a judgment for any money still owed from this agreement') }}</li>
+          <li>{{ t('resume the original claim or counterclaim for the full amount of the claim') }}</li>
+          <li>{{ t('ask the court to enforce any of the steps to be taken') }}
+        </ul>
 
-      <p>{{ t('Either party can apply to:') }}</p>
-      <ul class="list list-bullet">
-        <li>{{ t('request a judgment for any money still owed from this agreement') }}</li>
-        <li>{{ t('resume the original claim or counterclaim for the full amount of the claim') }}</li>
-        <li>{{ t('ask the court to enforce any of the steps to be taken')}}
-      </ul>
-
-      <p>
-        {{
-          t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.', {
-            n244formUri: 'http://formfinder.hmctsformfinder.justice.gov.uk/n244-eng.pdf',
-            countyCourtBusinessCentreUri: 'https://courttribunalfinder.service.gov.uk/courts/county-court-business-centre-ccbc'
-          }) | safe
-        }}
-      </p>
+        {% if not isThroughAdmissions %}
+          <p>{{ t('To apply, download and complete form N244 and send it to the County Court Business Centre. You need to say on the form which of the 3 options you’re applying for.') }}</p>
+        {% endif %}
+      {% endif %}
 
       <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
 
-      <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ defendantName }} before signing. You won’t be able to change this later.') }}
+      <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ otherPartyName }} before signing. You won’t be able to change this later.',
+          { otherPartyName: otherPartyName }) }}
 
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
@@ -57,18 +54,16 @@
         <div class="form-group">
           {% set checkboxLabel = 'I confirm I’ve read and accept the terms of the agreement.' %}
 
-          {{
-            checkboxSingle(
-              name = 'signed',
-              option = {
-                label: checkboxLabel,
-                value: true
-              },
-              label = checkboxLabel,
-              form = form,
-              legendHidden = true
-            )
-          }}
+          {{ checkboxSingle(
+            name = 'signed',
+            option = {
+              label: checkboxLabel,
+              value: true
+            },
+            label = checkboxLabel,
+            form = form,
+            legendHidden = true
+          ) }}
 
           {{ submitButton('Sign and submit') }}
         </div>

@@ -11,7 +11,7 @@ import { isAfter4pm } from 'shared/dateUtils'
 import { InterestType as ClaimInterestType } from 'claims/models/interestType'
 import { YesNoOption } from 'models/yesNoOption'
 import { InterestTypeOption } from 'claim/form/models/interestType'
-import { calculateInterest } from 'common/calculateInterest'
+import { calculateInterest } from 'common/calculate-interest/calculateInterest'
 
 export async function getInterestDetails (claim: Claim): Promise<InterestData> {
   if (claim.claimData.interest.type === ClaimInterestType.NO_INTEREST || claim.claimData.interest.type === undefined) {
@@ -30,8 +30,8 @@ export async function getInterestDetails (claim: Claim): Promise<InterestData> {
 }
 
 function getInterestDateOrIssueDate (claim: Claim): moment.Moment {
-  if (claim.claimData.interestDate.type === InterestDateType.CUSTOM) {
-    return claim.claimData.interestDate.date
+  if (claim.claimData.interest.interestDate.type === InterestDateType.CUSTOM) {
+    return claim.claimData.interest.interestDate.date
   } else {
     return claim.issuedOn
   }

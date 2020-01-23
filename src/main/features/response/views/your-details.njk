@@ -16,38 +16,53 @@
       <form novalidate method="post">
         {{ csrfProtection(csrf) }}
         <input type="hidden" name="type" value="{{ form.model.type }}">
-
         {% if form.model.type == 'individual' %}
-          {%
-            set fields = [
+          {% if claim.claimData.defendant.firstName and claim.claimData.defendant.firstName !== 'undefined' %}
+            {% set fields = [
+              {  readOnly: true, label: 'Title', name: 'title', inputClass: 'title', value: claim.claimData.defendant.title },
+              {  readOnly: true, label: 'First name', name: 'firstName', value: claim.claimData.defendant.firstName },
+              {  readOnly: true, label: 'Last name', name: 'lastName', value: claim.claimData.defendant.lastName }
+            ] %}
+          {% else %}
+            {% set fields = [
               { readOnly: true, label: 'Full name', value: claim.claimData.defendant.name }
-            ]
-          %}
+            ] %}
+          {% endif %}
+
           {% set addressSectionHeading = 'Your address' %}
-        {% elif form.model.type == 'soleTrader' %}
-          {%
-            set fields = [
+          {% elif form.model.type == 'soleTrader' %}
+          {% if claim.claimData.defendant.firstName and claim.claimData.defendant.firstName !== 'undefined' %}
+            {% set fields = [
+              { readOnly: true, label: 'Title', name: 'title', inputClass: 'title', value: claim.claimData.defendant.title },
+              { readOnly: true, label: 'First name', name: 'firstName', value: claim.claimData.defendant.firstName },
+              { readOnly: true, label: 'Last name', name: 'lastName', value: claim.claimData.defendant.lastName },
+              { readOnly: true, label: 'Business name', value: claim.claimData.defendant.businessName }
+            ] %}
+          {% else %}
+            {% set fields = [
               { readOnly: true, label: 'Your full name', value: claim.claimData.defendant.name },
               { readOnly: true, label: 'Business name', value: claim.claimData.defendant.businessName }
-            ]
-          %}
+            ] %}
+          {% endif %}
           {% set addressSectionHeading = 'Your address' %}
-        {% elif form.model.type == 'company' %}
-          {%
-            set fields = [
-              { readOnly: true, label: 'Company name', value: claim.claimData.defendant.name },
-              { label: 'Contact person (optional)', name: 'contactPerson' }
-            ]
-          %}
+          {% elif form.model.type == 'company' %}
+          {% set fields = [
+            { readOnly: true, label: 'Company name', value: claim.claimData.defendant.name },
+            { label: 'Contact person (optional)', name: 'contactPerson' }
+          ] %}
           {% set addressSectionHeading = 'Company address' %}
-        {% elif form.model.type == 'organisation' %}
-          {%
-            set fields = [
-              { readOnly: true, label: 'Organisation name', value: claim.claimData.defendant.name },
-              { label: 'Contact person (optional)', name: 'contactPerson' }
-            ]
-          %}
+          {% elif form.model.type == 'organisation' %}
+          {% set fields = [
+            { readOnly: true, label: 'Organisation name', value: claim.claimData.defendant.name },
+            { label: 'Contact person (optional)', name: 'contactPerson' }
+          ] %}
           {% set addressSectionHeading = 'Organisation address' %}
+        {% endif %}
+
+        {% if claim.claimData.defendant.phone %}
+          {%   set defendantPhone =
+            { readOnly: false, name: 'phone', label: 'Phone number' }
+          %}
         {% endif %}
 
         {{
@@ -58,7 +73,8 @@
               heading: addressSectionHeading,
               name: 'address'
             },
-            showCorrespondenceAddressSection = true
+            showCorrespondenceAddressSection = true,
+            phone = defendantPhone
           )
         }}
 

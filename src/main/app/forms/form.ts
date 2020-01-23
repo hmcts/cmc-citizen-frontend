@@ -1,4 +1,4 @@
-import { ValidateNested, ValidationError } from 'class-validator'
+import { ValidateNested, ValidationError } from '@hmcts/class-validator'
 
 import * as _ from 'lodash'
 
@@ -33,7 +33,8 @@ export class FormValidationError extends ValidationError {
   message: string
 
   constructor (error: ValidationError, parentProperty?: string) {
-    super() && Object.assign(this, error)
+    super()
+    Object.assign(this, error)
 
     this.property = parentProperty ? `${parentProperty}.${this.property}` : this.property
     this.fieldName = Converter.asFieldName(this.property)
@@ -98,7 +99,7 @@ export class Form<Model> {
    *
    * @param fieldName - field name / model property
    */
-  valueFor (fieldName: string): string | undefined {
+  valueFor (fieldName: string): any | undefined {
     if (this.model) {
       return this.getValueFrom(this.model, fieldName)
     } else {

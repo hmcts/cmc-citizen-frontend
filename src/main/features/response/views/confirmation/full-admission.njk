@@ -1,0 +1,22 @@
+{% from "internalLink.njk" import internalLink %}
+{% from "../macro/confirmation/sendFinancialDetails.njk" import sendFinancialDetailsForBusiness %}
+
+{% set claimantName = claim.claimData.claimant.name %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+
+{% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+  <p>{{ t('We’ve emailed {{ claimantName }} to tell them you’ll pay immediately.', { claimantName: claimantName }) }}</p>
+
+{% elif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+  <p>{{ t('We’ve emailed {{ claimantName }} your offer to pay by {{ paymentDate }} and your explanation of why you can’t pay before then.',
+      { claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+  <p>{{ t('We’ll email you to tell you their response.') }}</p>
+  {% elif claim.claimData.defendant.isBusiness() %}
+    {{ sendFinancialDetailsForBusiness(claimantName, claimantDetailsPageURI) }}
+
+{% elif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+  <p>{{ t('We’ve emailed {{ claimantName }} to tell them you’ve suggested paying by instalments.', { claimantName: claimantName }) }}</p>
+  <p>{{ t('We’ll email you to tell you their response.') }}</p>
+  {% elif claim.claimData.defendant.isBusiness() %}
+    {{ sendFinancialDetailsForBusiness(claimantName, claimantDetailsPageURI) }}
+{% endif %}

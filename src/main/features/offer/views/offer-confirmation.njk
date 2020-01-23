@@ -1,5 +1,6 @@
 {% extends "layout.njk" %}
 {% from "support.njk" import supportWidget %}
+{% from "internalLink.njk" import internalLink %}
 
 {% set headingVisible = false %}
 {% set heading = 'Confirmation' %}
@@ -8,17 +9,17 @@
   <div class="grid-row">
     <div class="column-two-thirds">
         <div class="govuk-box-highlight">
-          <h1 class="bold-large">{{ t('Your offer has been sent to {{ claimantName }}', { claimantName: claim.claimData.claimant.name }) }}</h1>
+          <h1 class="bold-large">{{ t('We’ve sent your offer to {{ claimantName }}', { claimantName: claim.claimData.claimant.name }) }}</h1>
         </div>
         <h2 class="heading-medium">{{ t('What happens next') }}</h2>
         <p>
         {{ t('{{ claimantName }} can accept or reject. We’ll email you when they respond.', { claimantName: claim.claimData.claimant.name }) }}
       </p>
 
-      {% include "includes/service_survey_link.njk" %}
+      {% include "includes/service-survey-link-defendant.njk" %}
 
       <p>
-        <a href="{{ DashboardPaths.dashboardPage.uri }}" class="button">{{ t('Finished') }}</a>
+        {{ internalLink(t('Finished'), DashboardPaths.dashboardPage.uri, 'button') }}
       </p>
 
       {{ supportWidget() }}
@@ -26,3 +27,4 @@
     </div>
   </div>
 {% endblock %}
+{% block contactForHelp %}{% endblock %}

@@ -1,5 +1,4 @@
 {% extends "layout.njk" %}
-{% from "support.njk" import supportWidget %}
 {% from "externalLink.njk" import externalLink %}
 {% from "internalLink.njk" import internalLink %}
 {% set heading = 'Privacy policy' %}
@@ -22,7 +21,7 @@
       <h2 class="heading-medium">{{ t('Who manages this service') }}</h2>
 
       <p>
-        {{ t('This service is managed by Her Majesty’s Courts and Tribunals Service (HMCTS), '
+        {{ t('This service is managed by HM Courts and Tribunals Service (HMCTS), '
         + 'which is an executive agency of the Ministry of Justice (MoJ).') }}
       </p>
 
@@ -100,18 +99,27 @@
       <h2 class="heading-medium">{{ t('Sharing your data') }}</h2>
 
       <p>
-        {{ t('If another government department is involved in processing your claim or application, '
-        + 'we’ll share your data with them.') }}
+        {{ t('While processing your claim or application, another government department, agency or organisation might be involved and we may share your data with them.') }}
       </p>
 
-      <p>{{ t('If you contact us and ask for help with a service you are using, '
+      <p>{{ t('If you contact us and ask for help with the service you are using, '
         + 'your personal data may be shared with the Good Things Foundation. '
         + 'This is a company who we have partnered with to offer face to face support.') }}
       </p>
 
       <p>
-        {{ t('We use Google Analytics to collect our website statistics. This anonymous website usage data is shared with Google.'
+        {{ t('In some circumstances we may share your data for example, to prevent or detect crime, or to produce anonymised statistics.') }}
+      </p>
+
+      <p>
+        {{ t('We use Google Analytics to collect data about how a website is used. This anonymous data is shared with Google.'
         + 'Find out about this in our ' + internalLink('terms and conditions.', termsAndConditionsUri)) | safe }}
+      </p>
+
+      <h2 class="heading-medium">{{ t('Storing and sharing your data internationally') }}</h2>
+
+      <p>
+        {{ t('Sometimes we need to send your personal information outside of the UK. When we do this we comply with data protection law.') }}
       </p>
 
       <h2 class="heading-medium">{{ t('Your rights') }}</h2>
@@ -125,21 +133,47 @@
         <li>{{ t('that access to the personal data is restricted (for example, you can ask to have your data stored for longer and not automatically deleted)') }}</li>
       </ul>
 
-      <p>
-        {{ t('If you want to see the personal data that we hold on you, '
-        + externalLink('you can make a subject access request.', dataRequestUri)
-        +' This request goes to the MoJ as data controller.') | safe }}
-      </p>
+      <p>{{ t('If you want to see the personal data that we hold on you, you can:')}}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('complete a form to ' + externalLink('make a subject access request', dataRequestUri) + ' - your request goes to the MOJ as data controller') | safe }}</li>
+        <li>{{ t('write to us: Disclosure Team, Post point 10.38, 102 Petty France, London, SW1H 9AJ') }}</li>
+      </ul>
+
+      <p>{{ t('You can ask for more information about:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('agreements we have on sharing information with other organisations') }}</li>
+        <li>{{ t('when we are allowed to pass on personal information without telling you') }}</li>
+        <li>{{ t('our instructions to staff on how to collect, use or delete your personal information)') }}</li>
+        <li>{{ t('how we check that the information we hold is accurate and up-to-date') }}</li>
+      </ul>
+
+      <p>{{ t('You can contact the MoJ data protection officer by:') }}</p>
+
+      <ul class="list list-bullet">
+        <li>{{ t('writing to us: Post point 10.38, 102 Petty France, London, SW1H 9AJ') }}</li>
+        <li>{{ t('emailing: data.compliance@justice.gov.uk') }}</li>
+      </ul>
+
 
       <h2 class="heading-medium">{{ t('How to complain') }}</h2>
 
       <p>
-        {{ t('See our '+ internalLink('complaints procedure,', complaintsProcedureUri)
+        {{ t('See our ' + internalLink('complaints procedure,', complaintsProcedureUri)
         + ' if you want to complain about how we’ve handled your personal data.') | safe }}
       </p>
 
       <p>
-        {{ t('You can also complain to the ' + externalLink('Information Commissioner’s Office' , informationCommissionerOfficeUri)
+      {{ t('Write to: Post point 10.38, 102 Petty France, London, SW1H 9AJ')}}
+      </p>
+
+      <p>
+      {{ t('Email: data.compliance@justice.gov.uk')}}
+      </p>
+
+      <p>
+        {{ t('You can also complain to the ' + externalLink('Information Commissioner’s Office', informationCommissionerOfficeUri)
         + 'if you’re not satisfied with our response or believe we are not processing your personal data lawfully.') | safe }}
       </p>
 

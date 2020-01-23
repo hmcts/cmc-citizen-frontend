@@ -4,7 +4,7 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface
-} from 'class-validator'
+} from '@hmcts/class-validator'
 
 import { MomentFactory } from 'shared/momentFactory'
 import { LocalDate } from 'forms/models/localDate'
@@ -20,9 +20,11 @@ export class DateFutureConstraint implements ValidatorConstraintInterface {
       return false
     }
 
+    const [distanceInDays] = args.constraints
+
     const date = value.toMoment()
-    const now = MomentFactory.currentDate()
-    return date.isAfter(now)
+    const pointInTime = MomentFactory.currentDate().add(distanceInDays, 'day')
+    return date.isAfter(pointInTime)
   }
 }
 
@@ -32,7 +34,19 @@ export function IsFutureDate (validationOptions?: ValidationOptions) {
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      constraints: [],
+      constraints: [0],
+      validator: DateFutureConstraint
+    })
+  }
+}
+
+export function IsFutureDateByNumberOfDays (distanceInDays: number, validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [distanceInDays],
       validator: DateFutureConstraint
     })
   }

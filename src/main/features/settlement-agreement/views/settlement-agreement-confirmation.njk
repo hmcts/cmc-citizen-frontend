@@ -1,0 +1,57 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
+
+{% extends "layout.njk" %}
+
+{% set headingVisible = false %}
+{% set heading = 'Confirmation' %}
+
+{% block content %}
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <div class="govuk-box-highlight">
+      {% if claim.settlement.isOfferRejected() %}
+        <h1 class="bold-large">{{ t('You’ve rejected the settlement agreement') }}</h1>
+      {% elseif claim.settlement.isSettled() %}
+        <h1 class="bold-large">{{ t('You’ve both signed a settlement agreement') }}</h1>
+        <p class="receipt-download-container">
+          {{ internalLink(t('Download settlement agreement'), OfferPaths.agreementReceiver.evaluateUri({ externalId: claim.externalId })) }} (PDF)
+        </p>
+      {% endif %}
+    </div>
+    {% if claim.settlement.isOfferRejected() %}
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      <p>{{ t('The claimant can request a County Court Judgment (CCJ) against you. A CCJ would order you to repay the money in line with the terms of the agreement.') }}</p>
+      <p>{{ t('If they request a CCJ, you can ask a judge to consider changing the repayment plan, based on your financial details.') }}</p>
+      <p>{{ t('The court has reviewed the plan and believes you can afford it, so a judge may not change it.') }}</p>
+      <p>{{ t('We’ll email you when the claimant responds.') }}</p>
+    {% elseif claim.settlement.isSettled() %}
+      {% set paymentIntention = claim.settlement.getLastOffer().paymentIntention %}
+      {% if paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+        <p>{{ t('The agreement says you’ll repay {{ amount }} by {{ paymentDate }}.',
+            {
+              amount: amountToPay,
+              paymentDate: paymentIntention.paymentDate | date
+            }) }}</p>
+      {% elif paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+        <p>{{ t('The agreement says you’ll repay {{ instalmentAmount }} {{ paymentSchedule }} starting {{ firstPaymentDate }}.',
+            {
+              instalmentAmount: paymentIntention.repaymentPlan.instalmentAmount | numeral,
+              paymentSchedule: paymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+              firstPaymentDate: paymentIntention.repaymentPlan.firstPaymentDate | date
+            }) }}</p>
+      {% endif %}
+      <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms') }}</p>
+      <h2 class="heading-medium">{{ t('What happens next') }}</h2>
+      <p>{{ t(internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) +
+        ' if you need their payment details.') | safe }}</p>
+      <p>{{ t('Make sure you get receipts for any payments.') }}</p>
+    {% endif %}
+    {% include "includes/service-survey-link-defendant.njk" %}
+    {{ internalLink('Go to your account', DashboardPaths.dashboardPage.uri, 'button') }}
+    {{ supportWidget() }}
+</div>
+</div>
+{% endblock %} {% block contactForHelp %}{% endblock %}

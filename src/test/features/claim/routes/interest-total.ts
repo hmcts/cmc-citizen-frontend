@@ -2,16 +2,16 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
+import { checkAuthorizationGuards } from 'test/features/claim/routes/checks/authorization-check'
 
 import { Paths as ClaimPaths } from 'claim/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pageContent: string = 'What is the total interest for your claim?'
@@ -55,9 +55,33 @@ describe('Claim issue: interest total page', () => {
           .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
       })
 
+      it('should render page when no reason is sent', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            amount: 1000
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
+      it('should render page when no amount is sent', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+
+        await request(app)
+          .post(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .send({
+            reason: 'Some reason'
+          })
+          .expect(res => expect(res).to.be.successful.withText(pageContent, 'div class="error-summary"'))
+      })
+
       it('should return 500 and render error page when form is valid and cannot save draft', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.rejectSave()
+        draftStoreServiceMock.rejectUpdate()
 
         await request(app)
           .post(pagePath)
@@ -71,7 +95,7 @@ describe('Claim issue: interest total page', () => {
 
       it('should redirect to interest continue claiming page when form is valid, amount and reason are entered and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        draftStoreServiceMock.resolveSave()
+        draftStoreServiceMock.resolveUpdate()
 
         await request(app)
           .post(pagePath)

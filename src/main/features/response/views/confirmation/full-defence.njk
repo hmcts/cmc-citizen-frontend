@@ -1,0 +1,6 @@
+{% if claim.response.defenceType === DefenceType.ALREADY_PAID %}
+  <p>{{ t('You told us you’ve paid {{ amount }}. We’ve sent {{ claimant }} this response.',
+      { claimant: claim.claimData.claimant.name, amount: claim.response.paymentDeclaration.paidAmount | numeral }) }}</p>
+{% else %}
+  <p>{{ t('We’ve emailed {{ claimant }} your response, explaining why you reject the claim.', { claimant: claim.claimData.claimant.name }) }}</p>
+{% endif %}

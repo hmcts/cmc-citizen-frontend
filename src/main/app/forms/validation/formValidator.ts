@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { ValidationError, Validator } from 'class-validator'
+import { ValidationError, Validator } from '@hmcts/class-validator'
 
 import { Form } from 'forms/form'
 import * as _ from 'lodash'
@@ -51,7 +51,7 @@ function removeIllegalCharacters (value) {
   }
 
   if (typeof value === 'object') {
-    return (_.isArray(value) ? _.map : _.mapValues)(value, removeIllegalCharacters)
+    return ((_.isArray(value) ? _.map : _.mapValues) as any)(value, removeIllegalCharacters)
   }
 
   return value

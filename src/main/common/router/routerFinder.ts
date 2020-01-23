@@ -1,12 +1,16 @@
 import * as path from 'path'
 import { Router } from 'express'
 import * as requireDirectory from 'require-directory'
+import * as uuid from 'uuid'
 
 const fileExtension: string = path.extname(__filename).slice(1)
 
 const options: object = {
   extensions: [fileExtension],
   recurse: true,
+  rename: (name) => {
+    return `${name}-${uuid()}`
+  },
   visit: (obj: any) => {
     return (typeof obj === 'object' && obj.default !== undefined) ? obj.default : obj
   }
@@ -15,17 +19,25 @@ const options: object = {
 export class RouterFinder {
 
   static findAll (path: string): Router[] {
-    const allRoutes = requireDirectory(module, path, options)
+    const routes: object = requireDirectory(module, path, options)
 
-    const mappedRoutes: object = Object.keys(allRoutes).map(directory => {
-      const routesInFileOrADirectory = allRoutes[directory]
-      if (typeof routesInFileOrADirectory === 'object') {
-        return Object.keys(routesInFileOrADirectory).map(route => routesInFileOrADirectory[route])
-      }
-      return routesInFileOrADirectory
-    })
+    const map = (value: object): Router[] => {
+      return Object.values(value).reduce((routes: Router[], value: Router | object) => {
+        const type: string = typeof value
 
-    return Object.values(mappedRoutes)
+        switch (type) {
+          case 'function':
+            routes.push(value as Router)
+            break
+          case 'object':
+            routes.push(...map(value))
+            break
+        }
+        return routes
+      }, [])
+    }
+
+    return map(routes)
   }
 
 }

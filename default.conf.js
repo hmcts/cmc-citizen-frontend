@@ -1,18 +1,30 @@
+require('ts-node/register')
+require('tsconfig-paths/register')
+
 const ProxySettings = require('./src/integration-test/config/proxy-settings').ProxySettings
+const bootstrapFn = require('./src/integration-test/bootstrap/bootstrap').bootstrapAll
+const tearDownFn = require('./src/integration-test/bootstrap/teardown').teardownAll
 
 exports.config = {
   name: 'citizen-integration-tests',
-  bootstrap: './src/integration-test/bootstrap/bootstrap.ts',
+  bootstrapAll: bootstrapFn,
+  teardownAll: tearDownFn,
   tests: './src/integration-test/tests/**/*_test.*',
   output: './output',
   timeout: 10000,
+  multiple: {
+    parallel: {
+      chunks: parseInt(process.env.CHUNKS || '3')
+    }
+  },
   helpers: {
-    WebDriverIO: {
+    WebDriver: {
       host: process.env.WEB_DRIVER_HOST || 'localhost',
-      port: process.env.WEB_DRIVER_PORT || '4444',
+      port: process.env.WEB_DRIVER_PORT || 4444,
       browser: process.env.BROWSER || 'chrome',
       url: process.env.CITIZEN_APP_URL || 'https://localhost:3000',
       waitForTimeout: 15000,
+      restart: false,
       desiredCapabilities: {
         proxy: new ProxySettings()
       }

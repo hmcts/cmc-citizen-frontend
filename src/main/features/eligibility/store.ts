@@ -1,6 +1,5 @@
 import * as config from 'config'
 import * as express from 'express'
-import * as Cookies from 'cookies'
 import * as _ from 'lodash'
 
 import { Eligibility } from 'eligibility/model/eligibility'
@@ -12,8 +11,8 @@ export const cookieName = 'eligibility-check'
 
 export class CookieEligibilityStore {
   read (req: express.Request, res: express.Response): Eligibility {
-    const cookie: string = new Cookies(req, res).get(cookieName)
-    return new Eligibility().deserialize(cookie !== undefined ? JSON.parse(cookie) : undefined)
+    const cookie: string = req.cookies[cookieName]
+    return new Eligibility().deserialize(cookie !== undefined ? cookie : undefined)
   }
 
   write (eligibility: Eligibility, req: express.Request, res: express.Response): void {
@@ -25,11 +24,10 @@ export class CookieEligibilityStore {
       }
       return undefined
     }
-
-    new Cookies(req, res).set(cookieName, JSON.stringify(_.cloneDeepWith(eligibility, excludeDisplayValue)), { sameSite: 'lax', maxAge: cookieTimeToLiveInMinutes })
+    res.cookie(cookieName, _.cloneDeepWith(eligibility, excludeDisplayValue), { httpOnly: true, secure: true, maxAge: cookieTimeToLiveInMinutes })
   }
 
   clear (req: express.Request, res: express.Response): void {
-    new Cookies(req, res).set(cookieName, '', { sameSite: 'lax' })
+    res.clearCookie(cookieName)
   }
 }

@@ -1,0 +1,64 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, checkboxSingle, saveAndContinueButton, errorSummary %}
+{% from "./macro/termsOfAgreementTable.njk" import termsOfAgreement %}
+
+{% set heading = 'Terms of the agreement' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Claimant: Terms of the agreement"
+            data-event-label-from="signed"
+            novalidate>
+
+        {{ csrfProtection(csrf) }}
+
+        {{ termsOfAgreement (
+          id = 'termsOfAgreement',
+          claim = claim,
+          paymentIntention = paymentIntention,
+          totalAmount = totalAmount
+        ) }}
+
+        <p>{{ t('This agreement settles the claim made by {{ claimantName }} against {{ defendantName }}. This includes all money owed in the claim, for example court fees, expenses or interest.',
+            {
+              claimantName: claim.claimData.claimant.name,
+              defendantName: claim.claimData.defendant.name
+            }
+          ) }}</p>
+        <p>{{ t('Neither party can make any further claims relating to this case, other than to enforce it.') }}</p>
+        <p>{{ t('Either party can view and download this agreement from their Money Claims account. Both parties should keep a copy of this agreement.') }}</p>
+
+        <h2 class="heading-medium">{{ t('If the agreement is broken') }}</h2>
+        <p>{{ t('The claimant can request a County Court Judgment (CCJ) for any money still owed from this agreement.') }}</p>
+
+        <h2 class="heading-medium">{{ t('Sign the agreement') }}</h2>
+        <p>{{ t('Make sure this agreement includes everything you’ve agreed with {{ defendantName }} before signing. You won’t be able to change this later.',
+            {
+              defendantName: claim.claimData.defendant.name
+            }
+          ) }}
+        </p>
+
+        {% set checkboxLabel = 'I confirm I’ve read and accept the terms of the agreement.' %}
+
+        {{ checkboxSingle(
+          name = 'signed',
+          option = {
+            label: checkboxLabel,
+            value: true
+          },
+          label = checkboxLabel,
+          form = form,
+          legendHidden = true
+        ) }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+

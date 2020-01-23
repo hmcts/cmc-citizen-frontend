@@ -7,7 +7,7 @@ import { DefendantAgeOption } from 'eligibility/model/defendantAgeOption'
 
 class DefendantAgeEligibilityPage extends EligibilityPage<DefendantAgeOption> {
   constructor () {
-    super(Paths.defendantAgePage, Paths.claimTypePage, 'defendantAge')
+    super(Paths.defendantAgePage, Paths.over18Page, 'defendantAge')
   }
 
   checkEligibility (value: DefendantAgeOption): EligibilityCheck {

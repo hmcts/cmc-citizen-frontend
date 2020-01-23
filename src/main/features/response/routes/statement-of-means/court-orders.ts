@@ -1,13 +1,14 @@
 import * as express from 'express'
 
-import { Paths, StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
+
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { CourtOrders } from 'response/form/models/statement-of-means/courtOrders'
 import { Draft } from '@hmcts/draft-store-client'
 import { ResponseDraft } from 'response/draft/responseDraft'
@@ -36,17 +37,17 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    StatementOfMeansStateGuard.requestHandler(),
+    async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.courtOrders), res)
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(CourtOrders, CourtOrders.fromObject, undefined, ['addRow']),
     actionHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<CourtOrders> = req.body
 
       if (form.hasErrors()) {
@@ -60,7 +61,7 @@ export default express.Router()
         draft.document.statementOfMeans.courtOrders = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(Paths.taskListPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(StatementOfMeansPaths.priorityDebtsPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

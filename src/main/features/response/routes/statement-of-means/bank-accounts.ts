@@ -1,6 +1,8 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
+
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
@@ -8,7 +10,6 @@ import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
 import { BankAccounts } from 'response/form/models/statement-of-means/bankAccounts'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { Claim } from 'claims/models/claim'
@@ -34,17 +35,17 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    StatementOfMeansStateGuard.requestHandler(),
+    async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.bankAccounts), res)
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(BankAccounts, BankAccounts.fromObject, undefined, ['addRow']),
     actionHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<BankAccounts> = req.body
 
       if (form.hasErrors()) {
@@ -58,7 +59,7 @@ export default express.Router()
         draft.document.statementOfMeans.bankAccounts = form.model
         await new DraftService().save(draft, user.bearerToken)
 
-        res.redirect(StatementOfMeansPaths.debtsPage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(StatementOfMeansPaths.disabilityPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

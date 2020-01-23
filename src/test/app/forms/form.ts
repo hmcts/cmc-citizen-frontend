@@ -1,8 +1,8 @@
 import { expect } from 'chai'
-import { ValidationError } from 'class-validator'
+import { ValidationError } from '@hmcts/class-validator'
 import { Converter, Form, FormValidationError } from 'forms/form'
 
-import { expectPropertyValidationError } from './models/validationUtils'
+import { expectPropertyValidationError } from 'test/app/forms/models/validationUtils'
 
 function newValidationError (property: string, constraints: { [type: string]: string }, childern?: ValidationError[]): ValidationError {
   const instance: ValidationError = new ValidationError()

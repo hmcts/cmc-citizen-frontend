@@ -1,0 +1,48 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import saveAndContinueButton, csrfProtection, radioGroup, errorSummary %}
+
+{% set heading = 'How do you want the defendant to pay?' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post"
+            class="analytics-submit-event-trigger"
+            data-event-action="Claimant: Select alternate payment option"
+            data-event-label-from="option"
+            novalidate>
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          form = form,
+          label = heading,
+          labelForScreenReadersOnly = true,
+          name = 'option',
+          options = [
+          {
+            label: DefendantPaymentType.IMMEDIATELY.displayValue,
+            value: DefendantPaymentType.IMMEDIATELY.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.IMMEDIATELY)
+          },
+          {
+            label: DefendantPaymentType.BY_SET_DATE.displayValue,
+            value: DefendantPaymentType.BY_SET_DATE.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.BY_SET_DATE)
+          },
+          {
+            label: DefendantPaymentType.INSTALMENTS.displayValue,
+            value: DefendantPaymentType.INSTALMENTS.value,
+            checked: (form.valueFor('option') === DefendantPaymentType.INSTALMENTS)
+          }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

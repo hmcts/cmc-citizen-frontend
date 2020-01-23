@@ -30,8 +30,11 @@ function accessDeniedCallback (req: express.Request, res: express.Response): voi
 const guardRequestHandler: express.RequestHandler = GuardFactory.create(isRequestAllowed, accessDeniedCallback)
 
 function renderView (form: Form<RejectAllOfClaim>, res: express.Response) {
+  const claim: Claim = res.locals.claim
+
   res.render(Paths.defenceRejectAllOfClaimPage.associatedView, {
-    form: form
+    form: form,
+    claimantName: claim.claimData.claimant.name
   })
 }
 
@@ -67,8 +70,6 @@ export default express.Router()
             res.redirect(Paths.sendYourResponseByEmailPage.evaluateUri({ externalId: externalId }))
             break
           case RejectAllOfClaimOption.ALREADY_PAID:
-            res.redirect(Paths.defendantHowMuchPaidClaimant.evaluateUri({ externalId: externalId }))
-            break
           case RejectAllOfClaimOption.DISPUTE:
             res.redirect(Paths.taskListPage.evaluateUri({ externalId: externalId }))
             break

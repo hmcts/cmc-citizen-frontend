@@ -1,0 +1,30 @@
+{% from "../macro/confirmation/sendFinancialDetails.njk" import sendFinancialDetailsForBusiness %}
+
+{% set claimantName = claim.claimData.claimant.name %}
+{% set claimantDetailsPageURI = DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId }) %}
+{% set amount = claim.response.amount | numeral %}
+
+{% if claim.response.paymentDeclaration %}
+  <p> {{ t('You told us you’ve paid the {{ amount }} you believe you owe. We’ve sent {{ claimantName }} this response.', { claimantName: claimantName, amount: amount }) }}</p>
+  {% elif claim.response.paymentIntention %}
+  {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+    <p>{{ t('You’ve said you owe {{ amount }} and offered to pay {{ claimantName }} immediately.',
+        { claimantName: claimantName, amount: amount }) }}</p>
+  {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+    <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount by {{ paymentDate }}.',
+        { amount: amount, claimantName: claimantName, paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    <p>{{ t('We’ve also sent them your explanation of why you don’t believe you owe the amount claimed.') }}</p>
+  {% elseif  claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+    <p>{{ t('You believe you owe {{ amount }}. We’ve emailed {{ claimantName }} your offer to pay this amount by instalments.',
+        { amount: amount, claimantName: claimantName }) }}</p>
+    <p>{{ t('We’ve also sent them your explanation of why you don’t believe you owe the amount claimed.') }}</p>
+  {% endif %}
+
+  <p>{{ t('We’ll contact you when they respond.') }}</p>
+
+  {% if (claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE or
+    claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS) and
+    claim.claimData.defendant.isBusiness() %}
+    {{ sendFinancialDetailsForBusiness(claimantName, claimantDetailsPageURI) }}
+  {% endif  %}
+{% endif %}

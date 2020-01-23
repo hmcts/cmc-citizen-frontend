@@ -1,0 +1,216 @@
+{% from "singularOrPlural.njk" import singularOrPlural %}
+
+{% macro heading(label) %}
+  <h3 class="heading-small form-group-related">{{ t(label) }}</h3>
+{% endmacro %}
+
+{% macro row(label, value, bottomBorder = false) %}
+  <div class="{% if bottomBorder %}bottom-border{% else %}no-bottom-border{% endif %}">
+    <div class="column-one-half {% if not label %}if-empty{% endif %}">
+      <span>{{ t( label ) }}</span>
+    </div>
+    <div class="column-one-half {% if not value %}if-empty{% endif %}">
+      <span>{{ value }}</span>
+    </div>
+  </div>
+{% endmacro %}
+
+{% macro bankAccountsSection(bankAccounts) %}
+  {% for bankAccount in bankAccounts %}
+    {% if bankAccounts.length === 1 %}
+      {{ row(label = 'Type of account', value = bankAccount.type | renderBankAccountType) }}
+    {% else %}
+      {{ row(label = loop.index0 + 1 + '. Type of account', value = bankAccount.type | renderBankAccountType) }}
+    {% endif %}
+    {{ row(label = 'Balance', value = bankAccount.balance | numeral) }}
+    {{ row(label = 'Joint account', value = bankAccount.joint | renderYesNo, bottomBorder = loop.index0 === bankAccounts.length - 1) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro residenceSection(residence) %}
+  {% if residence.type === ResidenceType.OWN_HOME.value  %}
+    {{ row(label = 'Where are they living?', value = 'Home that they own', bottomBorder = true) }}
+  {% else %}
+    {{ row(label = 'Where are they living?', value = residence.type | renderResidenceType, bottomBorder = true) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro childrenSection(children) %}
+  {{ row(label = 'Do any children live with them?', value = (children !== undefined) | renderYesNo, bottomBorder = not children) }}
+  {% if children %}
+    {% for child in children %}
+      {{ row(label = 'How many are aged ' + (child.ageGroupType | renderAgeGroupType) + '?', value = child.numberOfChildren | default('0'), bottomBorder = loop.index0 === children.length - 1) }}
+      {% if child.ageGroupType === 'BETWEEN_16_AND_19' and child.numberOfChildren > 0 %}
+        {{ row(label = 'How many aged ' + (child.ageGroupType | renderAgeGroupType) + ' are in full-time education or training?', value = child.numberOfChildrenLivingWithYou | default('0'), bottomBorder = true) }}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro maintenanceSection(numberOfMaintainedChildren) %}
+  {{ row(label = 'Do they or their partner pay maintenance for any children?', value = (numberOfMaintainedChildren > 0) | renderYesNo, bottomBorder = not numberOfMaintainedChildren > 0) }}
+  {% if numberOfMaintainedChildren > 0 %}
+    {{ row(label = 'Number of children', value = numberOfMaintainedChildren, bottomBorder = true) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro otherDependantsSection(otherDependants) %}
+  {{ row(label = 'Do they support anyone else financially?', value = (otherDependants !== undefined) | renderYesNo, bottomBorder = not otherDependants) }}
+  {% if otherDependants %}
+    {{ row(label = 'Number of people', value = otherDependants.numberOfPeople) }}
+    {{ row(label = 'Give details', value = otherDependants.details, bottomBorder = true) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro employmentSection(employment) %}
+  {{ row(label = 'Do they have a job?', value = (employment.employers.length > 0 or employment.selfEmployment) | renderYesNo, bottomBorder = false) }}
+  {% if employment.unemployment %}
+    {% if employment.unemployment.unemployed %}
+      {% set years = employment.unemployment.unemployed.numberOfYears %}
+      {% set months = employment.unemployment.unemployed.numberOfMonths %}
+
+      {% set status = 'Unemployed' %}
+      {% if years or months %}
+        {% set status = status + ' for ' %}
+        {% if years %}
+          {% set status = status + singularOrPlural(years, 'year') %}
+        {% endif %}
+        {% if months %}
+          {% set status = status + singularOrPlural(months, 'month') %}
+        {% endif %}
+      {% endif %}
+    {% elseif employment.unemployment.retired %}
+      {% set status = 'Retired' %}
+    {% else %}
+      {% set status = employment.unemployment.other %}
+    {% endif %}
+  {% else %}
+    {% set status = 'Employed' if employment.employers %}
+    {% if employment.selfEmployment %}
+      {% if status %}
+        {% set status = status + ' and ' %}
+      {% endif %}
+      {% set status = status + ' Self-employed ' %}
+    {% endif %}
+  {% endif %}
+  {{ row(label = 'Type of job', value = status, bottomBorder = true) }}
+  {% if employment.employers.length > 0 %}
+    {% for employer in employment.employers %}
+      {{ row(label = 'Employer name', value = employer.name) }}
+      {{ row(label = 'Job title', value = employer.jobTitle, bottomBorder = loop.index0 === employment.employers.length - 1) }}
+    {% endfor %}
+  {% endif %}
+{% endmacro %}
+
+{% macro selfEmploymentSection(selfEmployment) %}
+  {{ row(label = 'Job title', value = selfEmployment.jobTitle) }}
+  {{ row(label = 'Annual turnover', value = selfEmployment.annualTurnover | numeral, bottomBorder = not selfEmployment.onTaxPayments) }}
+  {{ row(label = 'Are they behind on tax payments?', value = (selfEmployment.onTaxPayments !== undefined) | renderYesNo) }}
+  {{ row(label = 'Amount they owe?', value = selfEmployment.onTaxPayments.amountYouOwe | numeral) }}
+  {% if selfEmployment.onTaxPayments.reason %}
+  {{ row(label = 'Reason', value = selfEmployment.onTaxPayments.reason, bottomBorder = true) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro monthlyIncomesSection(incomes) %}
+  {% if incomes %}
+    {% for income in incomes %}
+      {{ row(label = income.type | renderIncomeType | capitalize, value = income | renderMonthlyAmount | numeral, bottomBorder = loop.index0 === incomes.length - 1) }}
+    {% endfor %}
+  {% else %}
+    {{ row(label = 'Do they receive any income?', value = 'No', bottomBorder = true) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro monthlyExpensesSection(expenses) %}
+  {% if expenses %}
+    {% for expense in expenses %}
+      {{ row(label = expense.type | renderExpenseType | capitalize, value = expense | renderMonthlyAmount | numeral, bottomBorder = loop.index0 === expenses.length - 1) }}
+    {% endfor %}
+  {% else %}
+    {{ row(label = 'Do they pay any expenses?', value = 'No', bottomBorder = true) }}
+  {% endif %}
+{% endmacro %}
+
+{% macro priorityDebtsSection(debts) %}
+   {{ row(label = 'Do they have any debts they are behind on?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
+  {% for debt in debts %}
+    {% if debts.length === 1 %}
+      {{ row(label = 'Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
+    {% else %}
+      {{ row(label = loop.index + '. Debt' , value = debt.type | renderPriorityDebtType | capitalize) }}
+    {% endif %}
+    {{ row(label = 'Payments', value = (debt.amount | numeral) + ' ' + (debt.frequency | renderPaymentFrequencyView | lower) , bottomBorder = loop.index === debts.length ) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro debtsSection(debts) %}
+  {{ row(label = 'Do they have loan or credit card debts?', value = (debts !== undefined) | renderYesNo, bottomBorder = not debts) }}
+  {% for debt in debts %}
+    {% if debts.length === 1 %}
+      {{ row(label = 'Debt' , value = debt.description) }}
+    {% else %}
+      {{ row(label = loop.index0 + 1 + '. Debt' , value = debt.description) }}
+    {% endif %}
+    {{ row(label = 'Total owed', value = debt.totalOwed | numeral) }}
+    {{ row(label = 'Monthly Payments', value = debt.monthlyPayments | numeral, bottomBorder = loop.index0 === debts.length - 1) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro courtOrdersSection(courtOrders) %}
+  {{ row(label = 'Has a court ordered them to pay anyone else?', value = (courtOrders !== undefined) | renderYesNo, bottomBorder = not courtOrders) }}
+  {% for courtOrder in courtOrders %}
+    {{ row(label = 'Claim number', value = courtOrder.claimNumber) }}
+    {{ row(label = 'Amount they owe', value = courtOrder.amountOwed | numeral, bottomBorder = loop.index0 === courtOrders.length - 1) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro financialDetailsTable(label, statementOfMeans, classes = undefined) %}
+  <details {% if classes %} class="{{ classes }}"{% endif %}>
+    <summary>{{ t(label) }}</summary>
+    <div class="panel">
+      {{ heading('Bank and savings accounts') }}
+      {{ bankAccountsSection(statementOfMeans.bankAccounts) }}
+      {{ residenceSection(statementOfMeans.residence) }}
+
+      {{ heading('Children') }}
+      {{ childrenSection(statementOfMeans.dependant.children) }}
+
+      {% if statementOfMeans.dependant.numberOfMaintainedChildren %}
+      {{ heading('Maintenance') }}
+      {{ maintenanceSection(statementOfMeans.dependant.numberOfMaintainedChildren) }}
+      {% endif %}
+
+      {{ heading('Financial support') }}
+      {{ otherDependantsSection(statementOfMeans.dependant.otherDependants) }}
+
+      {{ heading('Employment details') }}
+      {{ employmentSection(statementOfMeans.employment) }}
+
+      {% if statementOfMeans.employment.selfEmployment %}
+        {{ heading('Self-employment details') }}
+        {{ selfEmploymentSection(statementOfMeans.employment.selfEmployment) }}
+      {% endif %}
+
+      {{ heading('Monthly income') }}
+      {{ monthlyIncomesSection(statementOfMeans.incomes) }}
+
+      {{ heading('Monthly expenses') }}
+      {{ monthlyExpensesSection(statementOfMeans.expenses) }}
+
+      {{ heading('Court orders') }}
+      {{ courtOrdersSection(statementOfMeans.courtOrders) }}
+
+      {{ heading('Debts' ) }}
+      {{ priorityDebtsSection(statementOfMeans.priorityDebts) }}
+      {{ debtsSection(statementOfMeans.debts) }}
+
+    </div>
+  </details>
+{% endmacro %}
+
+{% macro financialDetailsBlock(claim, headingContent, labelContent, classes = undefined) %}
+  {% if not claim.claimData.defendant.isBusiness() %}
+    {{ financialDetailsTable(label = labelContent, statementOfMeans = claim.response.statementOfMeans, classes = classes) }}
+  {% endif %}
+{% endmacro %}

@@ -1,13 +1,14 @@
 import * as express from 'express'
 
 import { StatementOfMeansPaths } from 'response/paths'
+import { StatementOfMeansStateGuard } from 'response/guards/statementOfMeansStateGuard'
+
 import { Form } from 'forms/form'
 import { FormValidator } from 'forms/validation/formValidator'
 import { ErrorHandling } from 'shared/errorHandling'
 import { DraftService } from 'services/draftService'
 import { User } from 'idam/user'
 import { RoutablePath } from 'shared/router/routablePath'
-import { FeatureToggleGuard } from 'guards/featureToggleGuard'
 import { Debts } from 'response/form/models/statement-of-means/debts'
 import { ResponseDraft } from 'response/draft/responseDraft'
 import { Claim } from 'claims/models/claim'
@@ -36,17 +37,17 @@ function actionHandler (req: express.Request, res: express.Response, next: expre
 export default express.Router()
   .get(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
-    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    StatementOfMeansStateGuard.requestHandler(),
+    async (req: express.Request, res: express.Response) => {
       const draft: Draft<ResponseDraft> = res.locals.responseDraft
       renderView(new Form(draft.document.statementOfMeans.debts), res)
     })
   .post(
     page.uri,
-    FeatureToggleGuard.featureEnabledGuard('statementOfMeans'),
+    StatementOfMeansStateGuard.requestHandler(),
     FormValidator.requestHandler(Debts, Debts.fromObject, undefined, ['addRow']),
     actionHandler,
-    ErrorHandling.apply(async (req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> => {
+    ErrorHandling.apply(async (req: express.Request, res: express.Response): Promise<void> => {
       const form: Form<Debts> = req.body
 
       if (form.hasErrors()) {
@@ -60,7 +61,7 @@ export default express.Router()
         draft.document.statementOfMeans.debts = form.model
 
         await new DraftService().save(draft, user.bearerToken)
-        res.redirect(StatementOfMeansPaths.monthlyIncomePage.evaluateUri({ externalId: claim.externalId }))
+        res.redirect(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri({ externalId: claim.externalId }))
       }
     })
   )

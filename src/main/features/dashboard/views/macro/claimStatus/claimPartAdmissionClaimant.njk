@@ -1,0 +1,73 @@
+{% from "externalLink.njk" import externalLink %}
+{% from "internalLink.njk" import internalLink %}
+{% from "./utilityMacros.njk" import viewAndRespondOffer %}
+{% from "./paidInFullClaimant.njk" import paidInFullClaimantButtonClaimDetails %}
+
+{% macro claimPartAdmittedAlreadyPaidForClaimantDashboard(claim) %}
+  {{ t('The defendant believes that they’ve paid the claim in full.') }}
+{% endmacro %}
+
+{% macro partAdmittedClaimantAcceptsClaimantDashboard(claim) %}
+  {{ t('You’ve accepted the defendant’s part admission. They said they’d pay immediately.') }}
+{% endmacro %}
+
+{% macro claimPartAdmittedAlreadyPaidForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('Respond to the defendant') }}</h2>
+    <p>{{ t('{{ defendantName }} says they paid you {{ amount }} on {{ paymentDate }}.',
+        { defendantName: claim.claimData.defendant.name, amount: claim.response.amount | numeral, paymentDate: claim.response.paymentDeclaration.paidDate | date }) }}</p>
+    <p>{{ t('You can accept or reject this response.') }}</p>
+    {{ viewAndRespondOffer(claim, 'Respond') }}
+  </div>
+{% endmacro %}
+
+{% macro claimPartAdmittedToOweForClaimantDashboard(claim) %}
+  {{ t('Respond to the defendant.') }}
+{% endmacro %}
+
+
+{% macro claimPartAdmittedToOweForClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
+
+    {% if claim.response.paymentIntention.paymentOption === domain.PaymentOption.IMMEDIATELY %}
+      <p>{{ t('They said they don’t owe the full amount you claimed.') }}</p>
+      <p>{{ t('They’ve offered to pay the {{ amount }} immediately.', { amount: claim.response.amount | numeral }) }}</p>
+      <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
+        { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.BY_SPECIFIED_DATE %}
+      <p>{{ t('They’ve offered to pay by {{ paymentDate }}.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    {% elseif claim.response.paymentIntention.paymentOption === domain.PaymentOption.INSTALMENTS %}
+      <p>{{ t('They’ve offered to pay in instalments.') }}</p>
+    {% endif %}
+
+    {% if claim.claimData.defendant.isBusiness() %}
+      <p>{{ t('They’ll send you their financial details. You can use these to decide whether to accept or reject what they say they owe') }}</p>
+    {% endif %}
+
+    {% if not claim.claimData.defendant.isBusiness() %}
+      <p>{{ t('You can accept or reject their admission.') }}</p>
+    {% endif %}
+
+    {{ viewAndRespondOffer(claim, 'View and respond') }}
+  </div>
+{% endmacro %}
+
+{% macro partAdmittedPayImmediatelyClaimantClaimDetails(claim) %}
+  <div class="status-block">
+    <h2 class="heading-medium">{{ t('The defendant has admitted they owe {{ amount }} ', { amount: claim.response.amount | numeral }) }}</h2>
+    <p>{{ t('They said they’ll pay you immediately.') }}</p>
+    <p>{{ t('They must make sure you have the money by {{ paymentDate }}. Any cheques or transfers should be clear in your account.',
+        { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    <p>{{ t('You need to tell us if you’ve settled the claim, for example because the defendant has paid you.') }}</p>
+    {{ paidInFullClaimantButtonClaimDetails(claim) }}
+    {% if claim.admissionPayImmediatelyPastPaymentDate or claim.partAdmissionPayImmediatelyPastPaymentDate %}
+      <h2 class="heading-small">{{ t('If you haven’t been paid') }}</h2>
+      <p>{{ t('If the defendant has not paid you, you can '
+          + internalLink('request a County Court Judgment.', CCJPaths.paidAmountPage.evaluateUri({ externalId:claim.externalId }) )) | safe }}</p>
+    {% else %}
+      <h2 class="heading-small">{{ t('What to do if they don’t pay') }}</h2>
+      <p>{{ t('If the defendant has not paid you by {{ paymentDate }}, you can request a County Court Judgment.', { paymentDate: claim.response.paymentIntention.paymentDate | date }) }}</p>
+    {% endif %}
+  </div>
+{% endmacro %}

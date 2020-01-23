@@ -1,17 +1,17 @@
-import { expect } from 'chai'
+ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import '../../../../routes/expectations'
+import 'test/routes/expectations'
 import { StatementOfMeansPaths } from 'response/paths'
-import * as idamServiceMock from '../../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../../http-mocks/draft-store'
-import * as claimStoreServiceMock from '../../../../http-mocks/claim-store'
-import { attachDefaultHooks } from '../../../../routes/hooks'
-import { checkAuthorizationGuards } from '../checks/authorization-check'
-import { checkAlreadySubmittedGuard } from '../checks/already-submitted-check'
-import { checkCountyCourtJudgmentRequestedGuard } from '../checks/ccj-requested-check'
-import { app } from '../../../../../main/app'
-import { checkNotDefendantInCaseGuard } from '../checks/not-defendant-in-case-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import { checkAuthorizationGuards } from 'test/common/checks/authorization-check'
+import { checkAlreadySubmittedGuard } from 'test/common/checks/already-submitted-check'
+import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
+import { app } from 'main/app'
+import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri(
@@ -19,7 +19,6 @@ const pagePath: string = StatementOfMeansPaths.debtsPage.evaluateUri(
 )
 
 describe('Defendant response: Statement of means: debts', () => {
-
   attachDefaultHooks(app)
 
   describe('on GET', () => {
@@ -60,7 +59,8 @@ describe('Defendant response: Statement of means: debts', () => {
 
         it('should render page when everything is fine', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .get(pagePath)
@@ -114,15 +114,16 @@ describe('Defendant response: Statement of means: debts', () => {
 
           it('when valid debt provided', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyDebts: 'true', rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
+              .send({ declared: 'true', rows: [{ debt: 'my debt', totalOwed: '100', monthlyPayments: '10' }] })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -130,15 +131,16 @@ describe('Defendant response: Statement of means: debts', () => {
 
           it('when no selected', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-            draftStoreServiceMock.resolveFind('response')
-            draftStoreServiceMock.resolveSave()
+            draftStoreServiceMock.resolveFind('response:full-admission')
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveUpdate()
 
             await request(app)
               .post(pagePath)
-              .send({ hasAnyDebts: 'false' })
+              .send({ declared: 'false' })
               .set('Cookie', `${cookieName}=ABC`)
               .expect(res => expect(res).to.be.redirect
-                .toLocation(StatementOfMeansPaths.monthlyIncomePage.evaluateUri(
+                .toLocation(StatementOfMeansPaths.monthlyExpensesPage.evaluateUri(
                   { externalId: claimStoreServiceMock.sampleClaimObj.externalId })
                 )
               )
@@ -150,7 +152,8 @@ describe('Defendant response: Statement of means: debts', () => {
 
         it('should add one more row', async () => {
           claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('response')
+          draftStoreServiceMock.resolveFind('response:full-admission')
+          draftStoreServiceMock.resolveFind('mediation')
 
           await request(app)
             .post(pagePath)

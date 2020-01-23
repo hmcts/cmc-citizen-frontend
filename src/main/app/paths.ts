@@ -6,11 +6,16 @@ export class Paths {
   static readonly receiver = new RoutablePath('/receiver', false)
   static readonly linkDefendantReceiver = new RoutablePath('/receiver/link-defendant', false)
   static readonly logoutReceiver = new RoutablePath('/logout', false)
-  static readonly postcodeLookupProxy = new RoutablePath('/postcode-lookup', false)
   static readonly privacyPolicyPage = new RoutablePath('/privacy-policy', false)
   static readonly cookiesPage = new RoutablePath('/cookies', false)
   static readonly termsAndConditionsPage = new RoutablePath('/terms-and-conditions', false)
   static readonly contactUsPage = new RoutablePath('/contact-us', false)
+  static readonly accessibilityPage = new RoutablePath('/accessibility-statement', false)
+
+  // Ajax endpoints
+  static readonly postcodeLookupProxy = new RoutablePath('/postcode-lookup', false)
+  static readonly paymentPlanCalculation = new RoutablePath('/payment-plan-calculation', false)
+  static readonly totalIncomeOrExpensesCalculation = new RoutablePath('/total-income-expense-calculation',false)
 
   // gov.uk entrypoints - these can't change without updating gov.uk content as well
   static readonly makeClaimReceiver = new RoutablePath('/make-claim', false)

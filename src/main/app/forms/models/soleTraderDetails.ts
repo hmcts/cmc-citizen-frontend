@@ -1,12 +1,12 @@
-import { MaxLength } from 'class-validator'
-import { PartyDetails } from './partyDetails'
+import { MaxLength } from '@hmcts/class-validator'
 import { PartyType } from 'common/partyType'
+import { SplitNamedPartyDetails } from 'forms/models/splitNamedPartyDetails'
 
 export class ValidationErrors {
-  static readonly ORGANISATION_NAME_TOO_LONG: string = 'Enter organization name no longer than $constraint1 characters'
+  static readonly ORGANISATION_NAME_TOO_LONG: string = 'Enter trading as name no longer than $constraint1 characters'
 }
 
-export class SoleTraderDetails extends PartyDetails {
+export class SoleTraderDetails extends SplitNamedPartyDetails {
 
   @MaxLength(35, { message: ValidationErrors.ORGANISATION_NAME_TOO_LONG, groups: ['claimant', 'defendant'] })
   businessName?: string
@@ -21,10 +21,7 @@ export class SoleTraderDetails extends PartyDetails {
       return input
     }
     let deserialized = new SoleTraderDetails()
-    Object.assign(deserialized, PartyDetails.fromObject(input))
-    if (input.name) {
-      deserialized.name = input.name
-    }
+    Object.assign(deserialized, SplitNamedPartyDetails.fromObject(input))
     deserialized.businessName = input.businessName
     deserialized.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
     return deserialized
@@ -32,7 +29,7 @@ export class SoleTraderDetails extends PartyDetails {
 
   deserialize (input?: any): SoleTraderDetails {
     if (input) {
-      Object.assign(this, new PartyDetails().deserialize(input))
+      Object.assign(this, new SplitNamedPartyDetails().deserialize(input))
       this.businessName = input.businessName
       this.type = PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value
     }

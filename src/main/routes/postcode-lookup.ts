@@ -1,11 +1,12 @@
 import * as express from 'express'
-import { PostcodeInfoResponse } from '@hmcts/postcodeinfo-client'
+import { AddressInfoResponse } from '@hmcts/os-places-client'
 
 import { Paths as AppPaths } from 'paths'
 import { Logger } from '@hmcts/nodejs-logging'
 import { ClientFactory } from 'postcode-lookup/clientFactory'
+import { trackCustomEvent } from 'logging/customEventTracker'
 
-const postcodeClient = ClientFactory.createInstance()
+const osPlacesClient = ClientFactory.createOSPlacesClient()
 const logger = Logger.getLogger('postcode-lookup')
 
 /* tslint:disable:no-default-export */
@@ -19,9 +20,12 @@ export default express.Router()
         }
       })
     }
-    postcodeClient.lookupPostcode(req.query.postcode)
-      .then((postcodeInfoResponse: PostcodeInfoResponse) => res.json(postcodeInfoResponse))
+    osPlacesClient.lookupByPostcode(req.query.postcode)
+      .then((addressInfoResponse: AddressInfoResponse) => res.json(addressInfoResponse))
       .catch(err => {
+        if (err.message === 'Authentication failed') {
+          trackCustomEvent(`Ordnance Survey keys stopped working`, { error: err })
+        }
         logger.error(err.stack)
         res.status(500).json({
           error: {

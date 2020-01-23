@@ -1,5 +1,5 @@
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
-import { MaxLength, ValidateIf } from 'class-validator'
+import { MaxLength, ValidateIf } from '@hmcts/class-validator'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { Evidence } from 'forms/models/evidence'
 import { EvidenceRow } from 'forms/models/evidenceRow'

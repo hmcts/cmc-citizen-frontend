@@ -1,39 +1,42 @@
-import { IsDefined, Min, ValidateIf } from 'class-validator'
+import { IsDefined, Min, ValidateIf } from '@hmcts/class-validator'
 
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
-import { Fractions } from 'forms/validation/validators/fractions'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsNotBlank } from '@hmcts/cmc-validators'
-import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
-import { ValidationConstraints } from 'forms/validation/validationConstraints'
+import { Fractions, IsNotBlank } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
-  static readonly DETAILS_REQUIRED: string = 'Enter details'
+  static readonly CLAIM_NUMBER_REQUIRED: string = 'Enter a claim number'
 }
 
 export class CourtOrderRow extends MultiRowFormItem {
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
-  @IsDefined({ message: ValidationErrors.DETAILS_REQUIRED })
-  @IsNotBlank({ message: ValidationErrors.DETAILS_REQUIRED })
-  @MaxLength(ValidationConstraints.STANDARD_TEXT_INPUT_MAX_LENGTH, { message: GlobalValidationErrors.TEXT_TOO_LONG })
-  details?: string
+  @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
+  @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
+  @Min(0, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  instalmentAmount?: number
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: GlobalValidationErrors.AMOUNT_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(1.00, { message: GlobalValidationErrors.AMOUNT_INVALID_LESS_THAN_ONE_POUND })
   amount?: number
 
-  constructor (details?: string, amount?: number) {
+  @ValidateIf(o => o.isAtLeastOneFieldPopulated())
+  @IsDefined({ message: ValidationErrors.CLAIM_NUMBER_REQUIRED })
+  @IsNotBlank({ message: ValidationErrors.CLAIM_NUMBER_REQUIRED })
+  claimNumber?: string
+
+  constructor (amount?: number, instalmentAmount?: number, claimNumber?: string) {
     super()
-    this.details = details
+    this.instalmentAmount = instalmentAmount
     this.amount = amount
+    this.claimNumber = claimNumber
   }
 
   static empty (): CourtOrderRow {
-    return new CourtOrderRow(undefined, undefined)
+    return new CourtOrderRow(undefined, undefined, undefined)
   }
 
   static fromObject (value?: any): CourtOrderRow {
@@ -41,16 +44,18 @@ export class CourtOrderRow extends MultiRowFormItem {
       return value
     }
 
-    const details: string = value.details || undefined
+    const instalmentAmount: number = toNumberOrUndefined(value.instalmentAmount)
     const amount: number = toNumberOrUndefined(value.amount)
+    const claimNumber: string = value.claimNumber || undefined
 
-    return new CourtOrderRow(details, amount)
+    return new CourtOrderRow(amount, instalmentAmount, claimNumber)
   }
 
   deserialize (input?: any): CourtOrderRow {
     if (input) {
-      this.details = input.details
+      this.instalmentAmount = input.instalmentAmount
       this.amount = input.amount
+      this.claimNumber = input.claimNumber
     }
 
     return this

@@ -1,7 +1,6 @@
-import { IsDefined, IsIn, IsPositive, ValidateIf } from 'class-validator'
+import { IsDefined, IsIn, IsPositive, ValidateIf } from '@hmcts/class-validator'
 import { PaidAmountOption } from 'ccj/form/models/yesNoOption'
-import { Fractions } from 'forms/validation/validators/fractions'
-import { IsLessThan } from 'forms/validation/validators/isLessThan'
+import { Fractions, IsLessThan } from '@hmcts/cmc-validators'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
 
 export class ValidationErrors {
@@ -9,7 +8,7 @@ export class ValidationErrors {
   static readonly AMOUNT_REQUIRED: string = 'Enter an amount'
   static readonly AMOUNT_NOT_VALID: string = 'Invalid amount'
   static readonly AMOUNT_INVALID_DECIMALS: string = 'Enter valid amount, maximum two decimal places'
-  static readonly PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT: string = 'Paid amount cannot be greater than or equal to total amount'
+  static readonly PAID_AMOUNT_GREATER_THAN_TOTAL_AMOUNT: string = 'Paid amount cannot be greater than or equal to admitted amount'
 }
 
 export class PaidAmount {
@@ -47,9 +46,12 @@ export class PaidAmount {
   }
 
   deserialize (input?: any): PaidAmount {
-    if (input) {
-      this.option = input.option
+    if (input && input.option) {
+      this.option = PaidAmountOption.all()
+        .filter(option => option.value === input.option.value)
+        .pop()
       this.amount = (input.option && input.option.value === PaidAmountOption.YES.value) ? input.amount : undefined
+      this.claimedAmount = toNumberOrUndefined(input.claimedAmount)
     }
 
     return this

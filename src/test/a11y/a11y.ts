@@ -1,45 +1,62 @@
 /* Allow chai assertions which don't end in a function call, e.g. expect(thing).to.be.undefined */
 /* tslint:disable:no-unused-expression */
 /* tslint:disable:no-console */
+
 import * as config from 'config'
 import * as supertest from 'supertest'
 import * as pa11y from 'pa11y'
-import * as promisify from 'es6-promisify'
 import { expect } from 'chai'
 
 import { RoutablePath } from 'shared/router/routablePath'
 import { Paths as EligibilityPaths } from 'eligibility/paths'
 import { ErrorPaths as ClaimIssueErrorPaths, Paths as ClaimIssuePaths } from 'claim/paths'
 import { ErrorPaths as DefendantFirstContactErrorPaths, Paths as DefendantFirstContactPaths } from 'first-contact/paths'
-import { Paths as DefendantResponsePaths, StatementOfMeansPaths, PayBySetDatePaths } from 'response/paths'
+import { FullAdmissionPaths, Paths, Paths as DefendantResponsePaths, StatementOfMeansPaths } from 'response/paths'
+import { Paths as ClaimantResponsePaths } from 'claimant-response/paths'
 import { Paths as CCJPaths } from 'ccj/paths'
 import { Paths as OfferPaths } from 'offer/paths'
+import { Paths as PaidInFullPaths } from 'paid-in-full/paths'
+import { Paths as MediationPaths } from 'mediation/paths'
+import { Paths as DirectionQuestionnairePaths } from 'directions-questionnaire/paths'
+import { Paths as OrdersPaths } from 'orders/paths'
 
-import './mocks'
-import { app } from '../../main/app'
+import 'test/a11y/mocks'
+import { app } from 'main/app'
+import { MadeBy } from 'claims/models/madeBy'
 
 app.locals.csrf = 'dummy-token'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
-const agent = supertest.agent(app)
-const pa11yTest = pa11y({
-  page: {
+const agent = supertest(app)
+
+interface Issue {
+  type,
+  code
+}
+
+async function runPa11y (url: string): Promise<Issue[]> {
+  const result = await pa11y(url, {
     headers: {
       Cookie: `${cookieName}=ABC`
+    },
+    chromeLaunchConfig: {
+      args: ['--no-sandbox']
     }
-  }
-})
-const test = promisify(pa11yTest.run, pa11yTest)
+  })
+  return result.issues
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle2.Guideline2_4.2_4_1.H64.1')
+    .filter((issue: Issue) => issue.code !== 'WCAG2AA.Principle4.Guideline4_1.4_1_2.H91.A.NoContent')
+}
 
-function check (url: string): void {
-  describe(`Page ${url}`, () => {
-    it('should be accessible', async () => {
-      const text = await extractPageText(url)
+function check (uri: string): void {
+  describe(`Page ${uri}`, () => {
+    it('should have no accessibility errors', async () => {
+      const text = await extractPageText(uri)
       ensureHeadingIsIncludedInPageTitle(text)
 
-      const messages = await test(agent.get(url).url)
-      ensureNoAccessibilityErrors(messages)
+      const issues: Issue[] = await runPa11y(agent.get(uri).url)
+      ensureNoAccessibilityErrors(issues)
     })
   })
 }
@@ -71,19 +88,30 @@ function ensureHeadingIsIncludedInPageTitle (text: string): void {
   }
 }
 
-function ensureNoAccessibilityErrors (messages: any[]): void {
-  const errors = messages.filter((message) => message.type === 'error')
+function ensureNoAccessibilityErrors (issues: Issue[]): void {
+  const errors: Issue[] = issues.filter((issue: Issue) => issue.type === 'error')
   expect(errors, `\n${JSON.stringify(errors, null, 2)}\n`).to.be.empty
 }
 
-const excludedPaths: DefendantResponsePaths[] = [
+const excludedPaths: Paths[] = [
+  ClaimIssuePaths.finishPaymentController,
   ClaimIssuePaths.startPaymentReceiver,
   ClaimIssuePaths.finishPaymentReceiver,
+  ClaimIssuePaths.initiatePaymentController,
   ClaimIssuePaths.receiptReceiver,
+  ClaimIssuePaths.sealedClaimPdfReceiver,
   DefendantResponsePaths.receiptReceiver,
   DefendantResponsePaths.legacyDashboardRedirect,
   OfferPaths.agreementReceiver,
-  DefendantFirstContactPaths.receiptReceiver
+  DefendantFirstContactPaths.receiptReceiver,
+  ClaimantResponsePaths.receiptReceiver,
+  DirectionQuestionnairePaths.claimantHearingRequirementsReceiver,
+  ClaimantResponsePaths.courtOfferedSetDatePage,
+  DirectionQuestionnairePaths.hearingDatesDeleteReceiver,
+  DirectionQuestionnairePaths.hearingDatesReplaceReceiver,
+  DirectionQuestionnairePaths.hearingDatesPage,
+  OrdersPaths.reviewOrderReceiver,
+  OrdersPaths.directionsOrderDocument
 ]
 
 describe('Accessibility', () => {
@@ -91,7 +119,9 @@ describe('Accessibility', () => {
     Object.values(pathsRegistry).forEach((path: RoutablePath) => {
       const excluded = excludedPaths.some(_ => _ === path)
       if (!excluded) {
-        if (path.uri.includes(':externalId')) {
+        if (path.uri.includes(':madeBy')) {
+          check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6', madeBy: MadeBy.CLAIMANT.value }))
+        } else if (path.uri.includes(':externalId')) {
           check(path.evaluateUri({ externalId: '91e1c70f-7d2c-4c1e-a88f-cbb02c0e64d6' }))
         } else {
           check(path.uri)
@@ -109,5 +139,10 @@ describe('Accessibility', () => {
   checkPaths(CCJPaths)
   checkPaths(OfferPaths)
   checkPaths(StatementOfMeansPaths)
-  checkPaths(PayBySetDatePaths)
+  checkPaths(FullAdmissionPaths)
+  checkPaths(ClaimantResponsePaths)
+  checkPaths(PaidInFullPaths)
+  checkPaths(MediationPaths)
+  checkPaths(DirectionQuestionnairePaths)
+  checkPaths(OrdersPaths)
 })

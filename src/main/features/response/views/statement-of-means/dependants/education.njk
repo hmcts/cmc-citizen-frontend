@@ -1,0 +1,28 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, numericInput, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'Children aged 16 to 19 living with you' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form method="post" novalidate>
+
+        {{ csrfProtection(csrf) }}
+
+        <p>{{ t('How many are both:') }}</p>
+
+        <ul class="list list-bullet">
+          <li>{{ t('in full-time education or training') }}</li>
+          <li>{{ t('single (unmarried and not in a civil partnership)') }}</li>
+        </ul>
+
+        <input type="hidden" name="maxValue" value="{{ numberOfChildrenBetween16and19 | default(0) }}">
+        {{ numericInput('Enter number', 'value', form, inputClass = 'form-control-1-8') }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+    </div>
+  </div>
+{% endblock %}

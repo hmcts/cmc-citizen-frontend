@@ -1,11 +1,9 @@
-import { IsDefined, Min, ValidateIf } from 'class-validator'
+import { IsDefined, Min, ValidateIf } from '@hmcts/class-validator'
 
 import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'
-import { Fractions } from 'forms/validation/validators/fractions'
 import { toNumberOrUndefined } from 'shared/utils/numericUtils'
-import { IsNotBlank } from '@hmcts/cmc-validators'
-import { MaxLength } from 'forms/validation/validators/maxLengthValidator'
+import { IsNotBlank, Fractions, MaxLength } from '@hmcts/cmc-validators'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 
 export class ValidationErrors {
@@ -25,7 +23,7 @@ export class DebtRow extends MultiRowFormItem {
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
   @IsDefined({ message: ValidationErrors.TOTAL_OWED_REQUIRED })
   @Fractions(0, 2, { message: GlobalValidationErrors.AMOUNT_INVALID_DECIMALS })
-  @Min(1, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
+  @Min(0.01, { message: GlobalValidationErrors.POSITIVE_NUMBER_REQUIRED })
   totalOwed?: number
 
   @ValidateIf(o => o.isAtLeastOneFieldPopulated())
@@ -63,7 +61,6 @@ export class DebtRow extends MultiRowFormItem {
       this.totalOwed = input.totalOwed
       this.monthlyPayments = input.monthlyPayments
     }
-
     return this
   }
 }

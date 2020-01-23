@@ -1,0 +1,47 @@
+{% extends "layout.njk" %}
+
+{% from "form.njk" import csrfProtection, errorSummary, radioGroup, saveAndContinueButton %}
+
+{% set heading = 'The defendant can’t pay by your proposed date' %}
+{% set date = paymentDate | date %}
+{% set dateQuery = t('Do you accept a repayment date of {{ paymentDate }}?', { paymentDate: date }) %}
+
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <p>{{ t('Based on financial details the defendant gave us, we don’t believe they can pay by your proposed date.') }}</p>
+      <p>{{ t('The court’s calculator has determined {{ paymentDate }} as the date when they can pay you in full.', { paymentDate: date }) }}</p>
+
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        {{
+        radioGroup(
+          label = dateQuery,
+          labelForScreenReadersOnly = false,
+          form = form,
+          name = 'accept',
+          options = [
+          {
+            label: 'Yes',
+            value: YesNoOption.YES.option,
+            checked: (form.valueFor('accept') === YesNoOption.YES),
+            bold: false
+          },
+          {
+            label: 'No - I want a judge to make a new repayment plan',
+            value:  YesNoOption.NO.option,
+            checked: (form.valueFor('accept') === YesNoOption.NO),
+            bold: false
+          }
+        ]
+        )
+        }}
+
+        {{ saveAndContinueButton() }}
+      </form>
+
+    </div>
+  </div>
+{% endblock %}

@@ -1,13 +1,14 @@
+declare const Scenario: (string: string, { retries: number }, callback: ICodeceptCallback) => void;
+
 declare namespace CodeceptJS {
   export interface I {
-    createCitizenUser: () => string
-    createSolicitorUser: () => string
-    createClaim: (claimData: ClaimData, submitterEmail: string) => string
-    linkDefendantToClaim: (claimRef: string, claimantEmail: string, defendantEmail: string) => void
+    createCitizenUser: () => Promise[string]
+    createSolicitorUser: () => Promise[string]
+    createClaim: (claimData: ClaimData, submitterEmail: string, linkDefendant?: boolean, features?: string[], role?: string) => Promise[string]
+    waitForOpenClaim: (referenceNumber: string) => Promise[boolean]
     respondToClaim: (referenceNumber: string, ownerEmail: string, responseData: ResponseData, defendantEmail: string) => void
     retrievePin (letterHolderId: string): () => string
     amOnCitizenAppPage: (path: string) => void
-
     fillField: (locator: string, value: string) => any
     selectOption: (select: string, option: string) => any
   }

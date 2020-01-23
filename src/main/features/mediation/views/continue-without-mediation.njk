@@ -1,0 +1,32 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, linkButton %}
+{% from "internalLink.njk" import internalLink %}
+{% from "components/free-mediation/howFreeMediationWorks.njk" import howMediationWorks %}
+
+{% set heading = 'You can’t use free mediation' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <p>{{ t('You can only use free mediation if you:') }}</p>
+      <ul class="list list-bullet">
+        <li>{{ t('are willing to negotiate and listen to {{ otherParty }}’s position', { otherParty: otherParty }) }}</li>
+        <li>{{ t('have enough information about the claim to discuss it in detail') }}</li>
+        <li>{{ t('can make time for a one-hour call between 8am and 5pm on a weekday') }}</li>
+      </ul>
+      <p>{{ t('{{ previousPage }} if you agree to these conditions.',
+          { previousPage: internalLink(t('Go back and change your answers'),
+            MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId })) }) | safe }}
+      </p>
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{ submitButton('Continue without free mediation') }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

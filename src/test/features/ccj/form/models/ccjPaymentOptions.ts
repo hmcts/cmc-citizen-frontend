@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 import { CCJPaymentOption, PaymentType, ValidationErrors } from 'ccj/form/models/ccjPaymentOption'
 
 describe('CCJPaymentOption', () => {

@@ -4,7 +4,7 @@ import {
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface
-} from 'class-validator'
+} from '@hmcts/class-validator'
 
 import { MultiRowForm } from 'forms/models/multiRowForm'
 import { MultiRowFormItem } from 'forms/models/multiRowFormItem'

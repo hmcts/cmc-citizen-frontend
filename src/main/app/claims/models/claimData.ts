@@ -27,7 +27,6 @@ export class ClaimData {
   timeline: ClaimantTimeline
   evidence: Evidence
   interest: Interest
-  interestDate: InterestDate
   payment: Payment = new Payment()
   statementOfTruth?: StatementOfTruth
 
@@ -65,8 +64,15 @@ export class ClaimData {
       this.evidence = Evidence.fromObject(input.evidence)
       this.externalId = input.externalId
       this.interest = new Interest().deserialize(input.interest)
+
+      //
+      // NOTE: To be removed once data model migration is completed.
+      //
+      // `interestDate` prior migration completion can be provided in `claimData`
+      // in which case we still handle it for backward compatibility reasons.
+      //
       if (input.interestDate) {
-        this.interestDate = new InterestDate().deserialize(input.interestDate)
+        this.interest.interestDate = new InterestDate().deserialize(input.interestDate)
       }
 
       if (input.statementOfTruth) {

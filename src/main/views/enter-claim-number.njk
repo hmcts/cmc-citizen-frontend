@@ -1,5 +1,7 @@
 {% extends "layout.njk" %}
 {% from "form.njk" import csrfProtection, submitButton, errorSummary %}
+{% from "internalLink.njk" import internalLink %}
+{% from "claimReference.njk" import claimReferenceInput %}
 
 {% set heading = 'Enter your claim number' %}
 
@@ -10,27 +12,11 @@
       <form method="post">
         {{ csrfProtection(csrf) }}
 
-        {% set name = 'reference' %}
-        {% set label = 'Claim number' %}
-        {% set error = form.errorFor(name) %}
-        <div class="form-group {% if error %}form-group-error{% endif %}">
-          <label for="{{ name }}" id="{{ name }}[label]" class="form-label">
-            {{ t(label) }}
-          </label>
-          {% if error %}
-            <span class="error-message">{{ t(error) }}</span>
-          {% endif %}
-
-          <input maxlength="8" id="{{ name }}" name="{{ name }}" type="text"
-                 class="form-control {% if error %}form-control-error{% endif %}"
-                 value="{{ (form.rawDataFor(name) if error else form.valueFor(name)) | default('') }}">
-        </div>
-
-
-        {{ submitButton('Continue') }}
+        {{ claimReferenceInput('Claim number', 'reference', form) }}
+        {{ submitButton() }}
 
         <p>
-          <a href="{{ AppPaths.noClaimNumberPage.uri }}">{{ t('Don’t have a claim number?') }}</a>
+          {{ internalLink(t('Don’t have a claim number?'), AppPaths.noClaimNumberPage.uri) }}
         </p>
       </form>
     </div>

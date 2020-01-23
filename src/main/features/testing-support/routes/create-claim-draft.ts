@@ -10,6 +10,9 @@ import { DraftClaim } from 'drafts/models/draftClaim'
 import { prepareClaimDraft } from 'drafts/draft-data/claimDraft'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
+import { ClaimStoreClient } from 'claims/claimStoreClient'
+
+const claimStoreClient: ClaimStoreClient = new ClaimStoreClient()
 
 /* tslint:disable:no-default-export */
 export default express.Router()
@@ -26,8 +29,14 @@ export default express.Router()
       const draft: Draft<DraftClaim> = res.locals.claimDraft
       const user: User = res.locals.user
 
-      draft.document = new DraftClaim().deserialize(prepareClaimDraft())
+      draft.document = new DraftClaim().deserialize(prepareClaimDraft(user.email))
       await new DraftService().save(draft, user.bearerToken)
+
+      const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
+
+      if (roles && !roles.some(role => role.includes('cmc-new-features-consent'))) {
+        await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
+      }
 
       res.redirect(ClaimPaths.checkAndSendPage.uri)
     })

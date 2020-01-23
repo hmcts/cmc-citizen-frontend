@@ -1,12 +1,13 @@
 import { expect } from 'chai'
 
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { Response, ValidationErrors } from 'response/form/models/response'
 import { ResponseType } from 'response/form/models/responseType'
 
 describe('Response', () => {
+
   describe('validation', () => {
     const validator: Validator = new Validator()
 

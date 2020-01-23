@@ -1,0 +1,60 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import linkButton, saveAndContinueButton, errorSummary, csrfProtection, radioGroup, poundInput, textArea %}
+{% from "date.njk" import dateInput %}
+
+{% block additional_scripts %}
+  {% include "payment-plan-calculation-scripts.njk" %}
+{% endblock %}
+
+{% block content %}
+  <div class="column-two-thirds">
+
+    {% if partAdmit %}
+      <p>{{ t('You admit you owe {{ totalAmount }}.', { totalAmount: totalAmount | numeral }) }}</p>
+    {% else %}
+      <p>{{ t('The total amount claimed is {{ totalAmount }}. This includes the claim fee and any interest.', { totalAmount: totalAmount | numeral }) }} </p>
+    {% endif %}
+
+    <form method="post" novalidate class="payment-plan-calculation">
+      {{ csrfProtection(csrf) }}
+
+      <input type="hidden" name="totalAmount" value="{{ totalAmount }}"/>
+
+      {{ poundInput('Regular payments of:', 'instalmentAmount', form, 'For example, £200', bold = true) }}
+
+      <div class="form-group">
+        {{ radioGroup(
+        form = form,
+        label = 'How often you’ll make payments',
+        name = 'paymentSchedule',
+        options = [
+        {
+          label: PaymentSchedule.EACH_WEEK.displayValue,
+          value: PaymentSchedule.EACH_WEEK.value,
+          checked: form.valueFor('paymentSchedule') === PaymentSchedule.EACH_WEEK
+        },
+        {
+          label: PaymentSchedule.EVERY_TWO_WEEKS.displayValue,
+          value: PaymentSchedule.EVERY_TWO_WEEKS.value,
+          checked: form.valueFor('paymentSchedule') === PaymentSchedule.EVERY_TWO_WEEKS
+        },
+        {
+          label: PaymentSchedule.EVERY_MONTH.displayValue,
+          value: PaymentSchedule.EVERY_MONTH.value,
+          checked: form.valueFor('paymentSchedule') === PaymentSchedule.EVERY_MONTH
+        }
+        ]
+        ) }}
+      </div>
+
+      {{ linkButton('Calculate length of repayment plan', 'action[calculatePaymentPlan]', 'button button-secondary calculateLengthOfRepayment') }}
+
+      <h2 class="heading-small">Length of repayment plan</h2>
+      <p id="lengthOfRepayment" class="lengthOfRepayment">{{ paymentLength | default('-') }}</p>
+
+      {{ dateInput('firstPaymentDate', form, hint = t('For example, {{ nextMonth }}', { nextMonth: 'now' | monthIncrement | inputDate }), label = 'When will you make the first payment?') }}
+
+      {{ saveAndContinueButton() }}
+    </form>
+  </div>
+{% endblock %}

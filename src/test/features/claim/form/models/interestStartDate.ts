@@ -2,11 +2,11 @@
 
 import { expect } from 'chai'
 import * as _ from 'lodash'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
 
 import { InterestStartDate, ValidationErrors } from 'claim/form/models/interestStartDate'
-import { LocalDate } from 'forms/models/localDate'
+import { LocalDate, ValidationErrors as LocalDateValidationErrors } from 'forms/models/localDate'
 import { InterestDateType } from 'common/interestDateType'
 import { ValidationErrors as CommonValidationErrors } from 'forms/validation/validationErrors'
 
@@ -96,14 +96,14 @@ describe('InterestStartDate', () => {
       const errors = validator.validateSync(new InterestStartDate(new LocalDate(80, 12, 30), 'Privileged'))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, CommonValidationErrors.DATE_INVALID_YEAR)
+      expectValidationError(errors, LocalDateValidationErrors.YEAR_FORMAT_NOT_VALID)
     })
 
     it('should reject custom InterestStartDate date with reason longer then upper limit', () => {
-      const errors = validator.validateSync(new InterestStartDate(new LocalDate(2016, 12, 24), _.repeat('*', 251)))
+      const errors = validator.validateSync(new InterestStartDate(new LocalDate(2016, 12, 24), _.repeat('*', 10001)))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, CommonValidationErrors.REASON_TOO_LONG.replace('$constraint1', '250'))
+      expectValidationError(errors, CommonValidationErrors.REASON_TOO_LONG.replace('$constraint1', '10000'))
     })
 
     it('should accept valid custom interest date', () => {

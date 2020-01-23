@@ -1,0 +1,31 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton %}
+{% from "./macro/repaymentPlanBlock.njk" import repaymentPlanBlock %}
+
+{% set heading = 'Repayment plan accepted' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <form novalidate method="post">
+        {{ csrfProtection(csrf) }}
+
+        <p> {{ t('The court has accepted your repayment plan.') }} </p>
+        {% if isCourtOrderPaymentPlanConvertedByDefendantFrequency %}
+          <p> {{ t('The defendant asked to pay {{ courtOrderFrequency }} and the court accepted this.
+              Here is the revised repayment plan:', {
+              courtOrderFrequency: courtOrderPaymentPlan.paymentSchedule | renderPaymentSchedule | lower
+            }) }} </p>
+          {{
+          repaymentPlanBlock(
+            heading = '',
+            repaymentPlan = courtOrderPaymentPlan
+          )
+          }}
+        {% endif %}
+        
+        {{ submitButton() }}
+      </form>
+    </div>
+  </div>
+{% endblock %}

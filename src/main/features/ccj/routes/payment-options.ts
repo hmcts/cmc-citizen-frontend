@@ -33,7 +33,8 @@ export default express.Router()
 
           draft.document.paymentOption = form.model
           if (form.model.option === PaymentType.IMMEDIATELY) {
-            draft.document.repaymentPlan = draft.document.payBySetDate = undefined
+            draft.document.repaymentPlan = undefined
+            draft.document.payBySetDate = undefined
           }
           await new DraftService().save(draft, user.bearerToken)
 
@@ -43,7 +44,7 @@ export default express.Router()
             case PaymentType.IMMEDIATELY:
               res.redirect(Paths.checkAndSendPage.evaluateUri({ externalId: externalId }))
               break
-            case PaymentType.FULL_BY_SPECIFIED_DATE:
+            case PaymentType.BY_SPECIFIED_DATE:
               res.redirect(Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
               break
             case PaymentType.INSTALMENTS:

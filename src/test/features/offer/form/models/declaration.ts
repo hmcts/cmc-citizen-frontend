@@ -2,9 +2,10 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { Validator } from 'class-validator'
-import { expectValidationError } from '../../../../app/forms/models/validationUtils'
-import { Declaration, ValidationErrors } from 'offer/form/models/declaration'
+import { Validator } from '@hmcts/class-validator'
+import { expectValidationError } from 'test/app/forms/models/validationUtils'
+import { Declaration } from 'offer/form/models/declaration'
+import { ValidationErrors as GlobalValidationErrors } from 'forms/validation/validationErrors'
 
 describe('Declaration', () => {
   describe('validation', () => {
@@ -14,14 +15,14 @@ describe('Declaration', () => {
       const errors = validator.validateSync(new Declaration())
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DECLARATION_REQUIRED)
+      expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)
     })
 
     it('should reject unsigned declaration', () => {
       const errors = validator.validateSync(new Declaration(false))
 
       expect(errors.length).to.equal(1)
-      expectValidationError(errors, ValidationErrors.DECLARATION_REQUIRED)
+      expectValidationError(errors, GlobalValidationErrors.DECLARATION_REQUIRED)
     })
 
     it('should accept a signed declaration', () => {

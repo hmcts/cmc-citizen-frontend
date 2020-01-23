@@ -1,6 +1,5 @@
 import * as config from 'config'
-import { requestNonPromise } from 'client/request'
-import { Request } from 'request'
+import { request } from 'client/request'
 import { StringUtils } from 'utils/stringUtils'
 
 const claimStoreBaseUrl = config.get<string>('claim-store.url')
@@ -10,19 +9,35 @@ export class DocumentsClient {
   constructor (public documentsUrl: string = `${claimStoreBaseUrl}/documents`) {
   }
 
-  getClaimIssueReceiptPDF (claimExternalId: string, bearerToken: string): Request {
+  getSealedClaimPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'sealedClaim', bearerToken)
+  }
+
+  getClaimIssueReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'claimIssueReceipt', bearerToken)
   }
 
-  getDefendantResponseReceiptPDF (claimExternalId: string, bearerToken: string): Request {
+  getDefendantResponseReceiptPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'defendantResponseReceipt', bearerToken)
   }
 
-  getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Request {
+  getClaimantHearingRequirementPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'claimantHearingRequirement', bearerToken)
+  }
+
+  getSettlementAgreementPDF (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'settlementAgreement', bearerToken)
   }
 
-  private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Request {
+  getDirectionsOrder (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'ORDER_DIRECTIONS', bearerToken)
+  }
+
+  getReviewOrderPdf (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'REVIEW_ORDER', bearerToken)
+  }
+
+  private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
       throw new Error('Claim external ID cannot be blank')
     }
@@ -32,13 +47,18 @@ export class DocumentsClient {
     if (StringUtils.isBlank(bearerToken)) {
       throw new Error('User authorisation cannot be blank')
     }
-    return requestNonPromise.get(
-      `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${bearerToken}`
-        }
-      }
-    )
+
+    const options = {
+      uri: `${this.documentsUrl}/${documentTemplate}/${claimExternalId}`,
+      headers: {
+        Authorization: `Bearer ${bearerToken}`,
+        Accept: 'application/pdf'
+      },
+      encoding: null
+    }
+
+    return request(options).then(function (response) {
+      return response
+    })
   }
 }

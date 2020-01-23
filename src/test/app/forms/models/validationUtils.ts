@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import * as _ from 'lodash'
 
-import { ValidationError } from 'class-validator'
+import { ValidationError } from '@hmcts/class-validator'
 import * as randomstring from 'randomstring'
 
 class Violation {
@@ -16,6 +16,11 @@ export function expectNumberOfValidationErrors (errors: ValidationError[], expec
 export function expectValidationError (errors: ValidationError[], message: string) {
   const violations: Violation[] = extractViolationsFrom(errors)
   expect(violations.map(violation => violation.message)).to.include(message, `Error '${message}' has not been found. ${stringifyViolations(violations)}`)
+}
+
+export function expectValidationErrorNotPresent (errors: ValidationError[], message: string) {
+  const violations: Violation[] = extractViolationsFrom(errors)
+  expect(violations.map(violation => violation.message)).to.not.include(message, `Error '${message}' has been found. ${stringifyViolations(violations)}`)
 }
 
 export function expectPropertyValidationError (errors: ValidationError[], property: string, message: string) {

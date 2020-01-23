@@ -2,11 +2,11 @@
 /* tslint:disable:no-unused-expression */
 
 import { expect } from 'chai'
-import { expectValidationError, generateString } from '../../../../../app/forms/models/validationUtils'
+import { expectValidationError, generateString } from 'test/app/forms/models/validationUtils'
 
 import { Residence, ValidationErrors } from 'response/form/models/statement-of-means/residence'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
-import { ValidationError, Validator } from 'class-validator'
+import { ValidationError, Validator } from '@hmcts/class-validator'
 import { ValidationErrors as DefaultValidationErrors } from 'forms/validation/validationErrors'
 import { ValidationConstraints } from 'forms/validation/validationConstraints'
 

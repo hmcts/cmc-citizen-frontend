@@ -4,22 +4,22 @@ import * as chai from 'chai'
 import * as sinon from 'sinon'
 import * as spies from 'sinon-chai'
 import { mockReq as req, mockRes as res } from 'sinon-express-mock'
-import moment = require('moment')
+import * as moment from 'moment'
 
 import { Paths } from 'eligibility/paths'
 
 import { ClaimEligibilityGuard } from 'claim/guards/claimEligibilityGuard'
 import { cookieName as eligibilityCookieName } from 'eligibility/store'
-import { eligibleCookie } from '../../../data/cookie/eligibility'
+import { eligibleCookie } from 'test/data/cookie/eligibility'
 
 import { User } from 'idam/user'
 import { Draft } from '@hmcts/draft-store-client'
 import { DraftClaim } from 'drafts/models/draftClaim'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 
-import { attachDefaultHooks } from '../../../../test/hooks'
+import { attachDefaultHooks } from 'test/hooks'
 
 chai.use(spies)
 
@@ -47,7 +47,7 @@ describe('Claim eligibility guard', () => {
   context('when draft is marked as eligible', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = true
-      req.headers = {}
+      req.cookies = {}
     })
 
     it('should pass request through', async () => {
@@ -61,14 +61,11 @@ describe('Claim eligibility guard', () => {
   context('when draft is not marked as eligible but eligibility cookie exists', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
-      req.protocol = 'https'
-      req.headers = {
-        cookie: `${eligibilityCookieName}=${JSON.stringify(eligibleCookie)}`
+      req.cookies = {
+        [eligibilityCookieName]: eligibleCookie
       }
-      res.getHeader = () => { return void 0 }
-      res.setHeader = () => { return void 0 }
       idamServiceMock.resolveRetrieveServiceToken()
-      draftStoreServiceMock.resolveSave()
+      draftStoreServiceMock.resolveUpdate()
     })
 
     it('should mark draft as eligible', async () => {
@@ -88,7 +85,7 @@ describe('Claim eligibility guard', () => {
   context('when draft is not marked as eligible and eligibility cookie does not exist', () => {
     beforeEach(() => {
       claimDraft.document.eligibility = false
-      req.headers = {}
+      req.cookies = {}
     })
 
     it('should redirect to eligibility page', async () => {

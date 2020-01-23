@@ -4,13 +4,18 @@ import { BankAccountRow } from 'response/form/models/statement-of-means/bankAcco
 export const MAX_NUMBER_OF_ROWS: number = 10
 export const INIT_ROW_COUNT: number = 2
 
+export class ValidationErrors {
+  static readonly AT_LEAST_ONE_ROW_REQUIRED: string = 'Enter at least one account'
+}
+
 export class BankAccounts extends MultiRowForm<BankAccountRow> {
+
+  rows: BankAccountRow[]
 
   static fromObject (value?: any): BankAccounts {
     if (!value) {
       return value
     }
-
     return new BankAccounts(value.rows ? value.rows.map(BankAccountRow.fromObject) : [])
   }
 

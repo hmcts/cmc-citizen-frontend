@@ -2,19 +2,19 @@ import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
 
-import { attachDefaultHooks } from '../../../routes/hooks'
-import '../../../routes/expectations'
+import { attachDefaultHooks } from 'test/routes/hooks'
+import 'test/routes/expectations'
 
 import { Paths } from 'ccj/paths'
 
-import { app } from '../../../../main/app'
+import { app } from 'main/app'
 
-import * as idamServiceMock from '../../../http-mocks/idam'
-import * as claimStoreServiceMock from '../../../http-mocks/claim-store'
-import * as draftStoreServiceMock from '../../../http-mocks/draft-store'
-import { checkAuthorizationGuards } from './checks/authorization-check'
+import * as idamServiceMock from 'test/http-mocks/idam'
+import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
+import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import { checkAuthorizationGuards } from 'test/features/ccj/routes/checks/authorization-check'
 import { PaymentType } from 'ccj/form/models/ccjPaymentOption'
-import { checkNotClaimantInCaseGuard } from './checks/not-claimant-in-case-check'
+import { checkNotClaimantInCaseGuard } from 'test/features/ccj/routes/checks/not-claimant-in-case-check'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -107,7 +107,7 @@ describe('CCJ - payment options', () => {
           it('should return 500 when cannot save CCJ draft', async () => {
             claimStoreServiceMock.resolveRetrieveClaimByExternalId()
             draftStoreServiceMock.resolveFind('ccj')
-            draftStoreServiceMock.rejectSave()
+            draftStoreServiceMock.rejectUpdate()
 
             await request(app)
               .post(pagePath)
@@ -125,7 +125,7 @@ describe('CCJ - payment options', () => {
 
           context('when form is valid', async () => {
             beforeEach(() => {
-              draftStoreServiceMock.resolveSave()
+              draftStoreServiceMock.resolveUpdate()
             })
 
             async function checkThatSelectedPaymentOptionRedirectsToPage (data: object, expectedToRedirect: string) {
@@ -144,8 +144,8 @@ describe('CCJ - payment options', () => {
               await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.INSTALMENTS.value }, Paths.repaymentPlanPage.evaluateUri({ externalId: externalId }))
             })
 
-            it('should redirect to pay by set date page for "FULL_BY_SPECIFIED_DATE" option selected', async () => {
-              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.FULL_BY_SPECIFIED_DATE.value }, Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
+            it('should redirect to pay by set date page for "BY_SPECIFIED_DATE" option selected', async () => {
+              await checkThatSelectedPaymentOptionRedirectsToPage({ option: PaymentType.BY_SPECIFIED_DATE.value }, Paths.payBySetDatePage.evaluateUri({ externalId: externalId }))
             })
           })
 

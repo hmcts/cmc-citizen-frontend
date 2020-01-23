@@ -1,0 +1,28 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, submitButton, linkButton %}
+
+{% set heading = 'You can only use free mediation if you:' %}
+
+{% block content %}
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <ul class="list list-bullet">
+        <li>{{ t('are willing to work with a mediator to resolve the claim') }}</li>
+        <li>{{ t('have enough information about the claim to discuss it in detail') }}</li>
+        <li>{{ t('can make time for a one-hour call between 8am and 5pm on a weekday') }}</li>
+      </ul>
+
+      <form method="post" novalidate>
+        {{ csrfProtection(csrf) }}
+
+        <div class="form-group">
+          {{ linkButton('I agree', 'accept', 'link-button button') }}
+        </div>
+        <div class="form-group-related">
+          {{ linkButton('I don’t agree', 'reject', 'link-button no-padding') }}
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+

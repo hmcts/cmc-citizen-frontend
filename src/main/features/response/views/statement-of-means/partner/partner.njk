@@ -1,0 +1,28 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import csrfProtection, yesNoRadio, saveAndContinueButton, errorSummary %}
+
+{% set heading = 'Do you live with a partner?' %}
+
+{% block content %}
+
+  <div class="grid-row">
+    <div class="column-two-thirds">
+
+      <form method="post" novalidate
+            class="analytics-submit-event-trigger"
+            data-event-action="SoM: Do you live with a partner"
+            data-event-label-from="option">
+
+        {{ csrfProtection(csrf) }}
+
+        <p>{{ t('For example, a boyfriend, girlfriend, husband, wife or civil partner.') }}</p>
+        {{ yesNoRadio(t('Do you live with a partner'), 'option', form) }}
+
+        {{ saveAndContinueButton() }}
+
+      </form>
+
+    </div>
+  </div>
+
+{% endblock %}
