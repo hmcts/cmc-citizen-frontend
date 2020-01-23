@@ -22,6 +22,7 @@ export default express.Router()
       const reconsiderationDeadline: Moment = claim ? await claim.respondToReconsiderationDeadline() : undefined
       const isReviewOrderEligible: boolean = DirectionOrder.isReviewOrderEligible(reconsiderationDeadline)
       const respondToReviewOrderDeadline: Moment = claim ? await claim.respondToReviewOrderDeadline() : undefined
+      const judgePilot: boolean = claim ? claim.features !== undefined && claim.features.includes('judgePilotEligible') : false
 
       if (claim && claim.defendantId !== user.id) {
         throw new ForbiddenError()
@@ -31,6 +32,7 @@ export default express.Router()
         claim: claim,
         reconsiderationDeadline: reconsiderationDeadline,
         isReviewOrderEligible: isReviewOrderEligible,
-        respondToReviewOrderDeadline: respondToReviewOrderDeadline
+        respondToReviewOrderDeadline: respondToReviewOrderDeadline,
+        judgePilot: judgePilot
       })
     }))

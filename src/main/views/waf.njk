@@ -1,0 +1,9 @@
+{% extends "layout.njk" %}
+{% from "support.njk" import supportWidget %}
+
+{% set heading = 'There was a security error in the service' %}
+
+{% block content %}
+  <p>{{ t('This could be because of something you uploaded or submitted.') }}</p>
+  {{ supportWidget('Contact us for help') }}
+{% endblock %}

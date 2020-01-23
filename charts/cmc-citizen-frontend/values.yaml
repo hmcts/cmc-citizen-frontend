@@ -1,3 +1,9 @@
+tags:
+  cmc-frontend-postgresql-pod: false
+  cmc-citizen-frontend-pod: false
+  cmc-claim-store-postgresql-pod: false
+  cmc-ccd-stack: false
+
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
@@ -25,7 +31,7 @@ nodejs:
     FEATURE_DIRECTIONS_QUESTIONNAIRE: true
     FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
-    FEATURE_INVERSION_OF_CONTROL: false
+    FEATURE_INVERSION_OF_CONTROL: true
   keyVaults:
     cmc:
       resourceGroup: cmc
@@ -43,3 +49,9 @@ nodejs:
       - cmc-webchat-button-no-agents
       - cmc-webchat-button-agents-busy
       - cmc-webchat-button-service-closed
+
+# sub-charts conditions
+cmc-claim-store:
+  ccd:
+   enabled: false
+   ingressHost: ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal

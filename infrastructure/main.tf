@@ -113,6 +113,7 @@ module "citizen-frontend" {
     // Node specific vars
     NODE_DEBUG="${var.node_debug}"
     NODE_ENV = "${var.node_env}"
+    WEBSITE_NODE_DEFAULT_VERSION = "${var.node_version}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"
     TS_BASE_URL = "./src"
@@ -177,7 +178,6 @@ module "citizen-frontend" {
     WEBCHAT_BUTTON_NO_AGENTS = "${data.azurerm_key_vault_secret.cmc_webchat_button_no_agents.value}"
     WEBCHAT_BUTTON_AGENTS_BUSY = "${data.azurerm_key_vault_secret.cmc_webchat_button_busy.value}"
     WEBCHAT_BUTTON_SERVICE_CLOSED = "${data.azurerm_key_vault_secret.cmc_webchat_button_service_closed.value}"
-
   }
 }
 

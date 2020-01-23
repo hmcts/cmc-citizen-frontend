@@ -10,7 +10,8 @@ const featureTogglesClient: FeatureTogglesClient = new FeatureTogglesClient()
 
 export class FeaturesBuilder {
   static readonly MEDIATION_PILOT_AMOUNT = 500
-  static readonly PILOT_AMOUNT = 300
+  static readonly LA_PILOT_THRESHOLD = 300
+  static readonly JUDGE_PILOT_THRESHOLD = 1000
   static readonly ONLINE_DQ_THRESHOLD = 1000
 
   static async features (draft: Draft<DraftClaim>, user: User): Promise<string> {
@@ -27,9 +28,13 @@ export class FeaturesBuilder {
       }
     }
 
-    if (draft.document.amount.totalAmount() <= this.PILOT_AMOUNT) {
+    if (draft.document.amount.totalAmount() <= this.LA_PILOT_THRESHOLD) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_legal_advisor')) {
         features += features === '' ? 'LAPilotEligible' : ', LAPilotEligible'
+      }
+    } else if (draft.document.amount.totalAmount() <= this.JUDGE_PILOT_THRESHOLD) {
+      if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_judge_pilot')) {
+        features += features === '' ? 'judgePilotEligible' : ', judgePilotEligible'
       }
     }
 

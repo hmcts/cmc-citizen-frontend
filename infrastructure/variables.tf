@@ -146,3 +146,7 @@ variable "log_level" {
 variable "node_debug" {
   default = ""
 }
+
+variable "node_version" {
+  default = "10.15.2"
+}
