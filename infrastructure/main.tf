@@ -178,7 +178,6 @@ module "citizen-frontend" {
     WEBCHAT_BUTTON_NO_AGENTS = "${data.azurerm_key_vault_secret.cmc_webchat_button_no_agents.value}"
     WEBCHAT_BUTTON_AGENTS_BUSY = "${data.azurerm_key_vault_secret.cmc_webchat_button_busy.value}"
     WEBCHAT_BUTTON_SERVICE_CLOSED = "${data.azurerm_key_vault_secret.cmc_webchat_button_service_closed.value}"
-
   }
 }
 
