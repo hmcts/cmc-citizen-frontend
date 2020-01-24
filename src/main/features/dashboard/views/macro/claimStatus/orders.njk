@@ -75,7 +75,7 @@
   {% endif %}
 {% endmacro %}
 
-{% macro directionsOrderIssued(claim, party, reconsiderationDeadline, isReviewOrderEligible) %}
+{% macro directionsOrderIssued(claim, party, reconsiderationDeadline, isReviewOrderEligible, judgePilot) %}
   <div class="status-block">
     <h2 class="heading-medium">{{ t('Send us more details before the hearing') }}</h2>
     <p>{{ t('The court has ordered you to send us more details.') }}</p>
@@ -105,7 +105,7 @@
       <p>{{ t('The court may cancel your claim.') }}</p>
     {% endif %}
 
-    {% if (isReviewOrderEligible and claim.reviewOrder === undefined) %}
+    {% if (isReviewOrderEligible and not judgePilot and claim.reviewOrder === undefined) %}
       <h2 class="heading-small">{{ t('If you have a problem with the order') }}</h2>
       <p>{{ t('You can ') }}{{ internalLink(t('ask the court to review it.'), OrdersPaths.disagreeReasonPage.evaluateUri({ externalId: claim.externalId })) }}
         {{ t('You need to do this before 4pm on {{ reviewLastDay }}', { reviewLastDay : reconsiderationDeadline | date }) }}

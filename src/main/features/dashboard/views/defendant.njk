@@ -13,10 +13,9 @@
         <span class="font-xsmall">{{ t('Claim number:') }} {{ claim.claimNumber if claim else 'Draft' }}</span>
       </div>
       <div>
-        {{ caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline) }}
+        {{ caseHistoryForDefendantClaimDetails(claim, reconsiderationDeadline, isReviewOrderEligible, respondToReviewOrderDeadline, judgePilot) }}
       </div>
     </div>
-
     <div class="column-one-third">
       {{ aboutClaimWidget(claim = claim, otherParty = 'claimant') }}
     </div>
