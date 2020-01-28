@@ -9,14 +9,15 @@
   <div class="grid-row">
     <div class="column-two-thirds">
 
-      <p>{{ t('You can only use free mediation if:') }}</p>
+      <p>{{ t('You can only use free mediation if you:') }}</p>
       <ul class="list list-bullet">
-        <li>{{ t('you’re willing to negotiate and listen to {{ otherParty }}’s position', { otherParty: otherParty }) }}</li>
-        <li>{{ t('you have enough information about the claim to discuss it in detail') }}</li>
-        <li>{{ t('you can make time for a one-hour call between 8am and 5pm on a weekday') }}</li>
+        <li>{{ t('are willing to negotiate and listen to {{ otherParty }}’s position', { otherParty: otherParty }) }}</li>
+        <li>{{ t('have enough information about the claim to discuss it in detail') }}</li>
+        <li>{{ t('can make time for a one-hour call between 8am and 5pm on a weekday') }}</li>
       </ul>
-      <p>{{ t('If you can agree to all of these, {{ previousPage }}.',
-          { previousPage: internalLink(t('go back and change your answers'), MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId })) }) | safe }}
+      <p>{{ t('{{ previousPage }} if you agree to these conditions.',
+          { previousPage: internalLink(t('Go back and change your answers'),
+            MediationPaths.mediationAgreementPage.evaluateUri({ externalId: claim.externalId })) }) | safe }}
       </p>
 
       <form method="post" novalidate>
