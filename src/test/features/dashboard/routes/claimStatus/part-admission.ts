@@ -885,11 +885,16 @@ const mediationDQEnabledClaimDetails = [
       mediationOutcome: MediationOutcome.SUCCEEDED
     },
     claimantAssertions: [
-      'You both agreed a settlement through mediation'
+      'You settled the claim through mediation',
+      'You made an agreement which means the claim is now ended and sets out the terms of how ' + partAdmissionClaim.claim.defendants[0].name + ' must repay you.',
+      'Download the agreement',
+      '(PDF)'
     ],
     defendantAssertions: [
-      'You both agreed a settlement through mediation',
-      'The claimant can’t request a County Court Judgment against you unless you break the terms',
+      'You settled the claim through mediation',
+      'You made an agreement which means the claim is now ended and sets out the terms of how you must repay ' + partAdmissionClaim.claim.claimants[0].name + '.',
+      'Download the agreement',
+      '(PDF)',
       'Contact ' + partAdmissionClaim.claim.claimants[0].name,
       'if you need their payment details. Make sure you get receipts for any payments.'
     ]
