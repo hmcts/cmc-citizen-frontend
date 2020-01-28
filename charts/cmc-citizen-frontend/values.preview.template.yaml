@@ -26,7 +26,7 @@ nodejs:
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
     FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://${SERVICE_FQDN}
+    CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
     FEATURE_INVERSION_OF_CONTROL: true
 
