@@ -334,16 +334,20 @@
 
 {% macro mediationSuccessForDefendantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You both agreed a settlement through mediation') }}</h2>
-    <p>{{ t('The claimant can’t request a County Court Judgment against you unless you break the terms') }}</p>
+    <h2 class="heading-small">{{ t('You settled the claim through mediation') }}</h2>
+    <p>{{ t('You made an agreement which means the claim is now ended and sets out the terms of how you must repay {{ claimantName }}.', { claimantName: claim.claimData.claimant.name }) }}</p>
+    <p>{{ internalLink(t('Download the agreement'), MediationPaths.mediationAgreementDocument.evaluateUri({ externalId: claim.externalId })) }}{{ t(' (PDF)') }}</p>
     <p>{{ internalLink('Contact ' + claim.claimData.claimant.name, DashboardPaths.contactThemPage.evaluateUri({ externalId: claim.externalId })) }}
-      {{ t('if you need their payment details. Make sure you get receipts for any payments.') }}</p>
+      {{ t(' if you need their payment details. Make sure you get receipts for any payments.') }}</p>
   </div>
 {% endmacro %}
 
 {% macro mediationSuccessForClaimantClaimDetails(claim) %}
   <div class="status-block">
-    <h2 class="heading-small">{{ t('You both agreed a settlement through mediation') }}</h2>
+    <h2 class="heading-small">{{ t('You settled the claim through mediation') }}</h2>
+    <p>{{ t('You made an agreement which means the claim is now ended and sets out the terms of how {{ defendantName }} must repay you.',
+        { defendantName: claim.claimData.defendant.name })}}</p>
+    <p>{{ internalLink(t('Download the agreement'), MediationPaths.mediationAgreementDocument.evaluateUri({ externalId: claim.externalId })) }}{{ t('(PDF)') }}</p>
   </div>
 {% endmacro %}
 
