@@ -89,7 +89,7 @@
     "directionsQuestionnaire": false,
     "newDashboardStatus": false,
     "webChat": true,
-    "inversionOfControl": false
+    "inversionOfControl": true
   },
   "oauth": {
     "clientId": "cmc_citizen"
