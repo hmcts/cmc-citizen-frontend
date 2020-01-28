@@ -9,6 +9,6 @@ export class ContinueWithoutMediationPage {
   }
 
   chooseGoBack (): void {
-    I.click('go back and change your answers')
+    I.click('Go back and change your answers')
   }
 }
