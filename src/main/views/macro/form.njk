@@ -17,8 +17,8 @@
   </div>
 {% endmacro %}
 
-{% macro textInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on', maxLength) %}
-  {{ input(label, name, form, hint, 'text', inputClass, compound, autocomplete, maxLength=maxLength) }}
+{% macro textInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on', maxLength, labelClass='') %}
+  {{ input(label, name, form, hint, 'text', inputClass, compound, autocomplete, maxLength=maxLength, labelClass) }}
 {% endmacro %}
 
 {% macro numericInput(label, name, form, hint, inputClass='', compound=false, autocomplete='on') %}
@@ -159,7 +159,7 @@
   {{ option(label, name, form, value, 'checkbox', hint, checked, bold) }}
 {% endmacro %}
 
-{% macro option(label, name, form, value, type, hint = '', checked = false, bold = false, hidden, className, dataTarget, greyHint = true) %}
+{% macro option(label, name, form, value, type, hint = '', checked, bold = false, hidden, className, dataTarget, greyHint = true) %}
   <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
     {% set idValue = name + value | replace(' ', '') %}
     <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}"

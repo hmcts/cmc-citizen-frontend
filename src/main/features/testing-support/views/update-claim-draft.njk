@@ -1,0 +1,125 @@
+{% extends "layout.njk" %}
+{% from "form.njk" import linkButton, csrfProtection, errorSummary, textInput %}
+{% from "date.njk" import dateInput %}
+
+{% set heading = 'Create Claim Draft' %}
+
+{% macro option(label, name, form, value, type , hint = '', checked, disabled, bold = true, hidden, className, dataTarget, greyHint = true) %}
+  <div class="multiple-choice {{ className | default('') }}" data-target="{{ dataTarget | default(name + '-' + value ) }}">
+    {% set idValue = name + value | replace(' ', '') %}
+    <input id="{{ idValue }}" type="{{ type }}" name="{{ name }}" value="{{ value }}"
+           {% if checked %}checked{% endif %} {% if disabled %}disabled{% endif %}>
+    <label for="{{ idValue }}">
+      {% if hint == '' %}
+        {{ t(label) }}
+      {% else %}
+        {% if bold %}
+          <strong class="bold-small">{{ t(label) }}</strong>
+        {% else %}
+          {{ t(label) }}
+        {% endif %}
+        <br>
+        <span {% if greyHint != false %}class="form-hint"{% endif %}>{{ t(hint) }}</span>
+      {% endif %}
+    </label>
+  </div>
+{% endmacro %}
+
+{% block content %}
+  <div class="statement-of-means-container">
+    <form method="post" novalidate>
+      <div class="multiline-rows">
+        <div class="triple-column">
+
+          {{ csrfProtection(csrf) }}
+          <div class="column-1" style="width: 45%;">
+            <label class="form-label-bold" for="ClaimantType">{{ t('Claimant') }}</label>
+            <select name="claimantType" id="ClaimantType" class="form-control">
+              <option value="{{ t('individual') }}" {% if form.model.claimant.partyDetails.type === 'individual' %}selected{% endif %}>{{ t('Individual') }} </option>
+              <option value="{{ t('soleTrader') }}" {% if form.model.claimant.partyDetails.type === 'soleTrader' %}selected{% endif %}>{{ t('Sole Trader') }} </option>
+              <option value="{{ t('company') }}" {% if form.model.claimant.partyDetails.type === 'company' %}selected{% endif %}>{{ t('Company') }} </option>
+              <option value="{{ t('organisation') }}" {% if form.model.claimant.partyDetails.type === 'organisation' %}selected{% endif %}>{{ t('Organization') }} </option>
+            </select>
+          </div>
+          <div class="column-1" style="width: 45%;margin-bottom: 0">
+            <label class="form-label-bold" for="DefendantType">{{ t('Defendant') }}</label>
+            <select name="defendantType" id="defendantType" class="form-control">
+              <option value="{{ t('individual') }}" {% if form.model.defendant.partyDetails.type === 'individual' %}selected{% endif %}>{{ t('Individual') }} </option>
+              <option value="{{ t('soleTrader') }}" {% if form.model.defendant.partyDetails.type === 'soleTrader' %}selected{% endif %}>{{ t('Sole Trader') }} </option>
+              <option value="{{ t('company') }}" {% if form.model.defendant.partyDetails.type === 'company' %}selected{% endif %}>{{ t('Company') }} </option>
+              <option value="{{ t('organisation') }}" {% if form.model.defendant.partyDetails.type === 'organisation' %}selected{% endif %}>{{ t('Organization') }} </option>
+            </select>
+          </div>
+
+        </div>
+        <div class="triple-column">
+          <div class="column-1" style="width: 45%;">
+            {{ textInput(form = form, inputClass = 'full-width', label = 'Defendant Email', name = 'defendant.email.address', labelClass='form-label-bold') }}
+          </div>
+          <div class="column-1" style="width: 45%;margin-bottom: 0">
+            <label class="form-label-bold" for="claimAmount">{{ t('Claim Amount') }}</label>
+            <select name="claimAmount" id="claimAmount" class="form-control">
+              <option value="">{{ t('Other Amount') }} </option>
+              <option value="75" {% if form.model.amount.rows[0].amount === 75 %}selected{% endif %}>{{ t('75 (Fee: £25)') }} </option>
+              <option value="350" {% if form.model.amount.rows[0].amount === 350 %}selected{% endif %}>{{ t('350 (Fee: £35)') }} </option>
+              <option value="550" {% if form.model.amount.rows[0].amount === 550 %}selected{% endif %}>{{ t('550 (Fee: £60)') }} </option>
+              <option value="1250" {% if form.model.amount.rows[0].amount === 1250 %}selected{% endif %}>{{ t('1250 (Fee: £70)') }} </option>
+              <option value="2250" {% if form.model.amount.rows[0].amount === 2250 %}selected{% endif %}>{{ t('2250 (Fee: £105)') }} </option>
+              <option value="4000" {% if form.model.amount.rows[0].amount === 4000 %}selected{% endif %}>{{ t('4000 (Fee: £185)') }} </option>
+              <option value="7500" {% if form.model.amount.rows[0].amount === 7500 %}selected{% endif %}>{{ t('7500 (Fee: £410)') }} </option>
+            </select>
+          </div>
+        </div>
+        <div class="triple-column">
+          <div class="column-1" style="width: 100%;margin-bottom: 0">
+            <label class="form-label-bold" for="description"
+                   class="form-label">{{ t('Description') }}</label>
+            <textarea
+              id="description" name="description"
+              class="form-control multiline-column-text {% if errorDescription %}form-control-error{% endif %}"
+              rows="3">{{ form.model.reason.reason }}</textarea>
+          </div>
+        </div>
+      </div>
+      <div class="notice">
+        <div style="display: inline-block;width: 33%">
+          {{ option(
+            label = 'Interest',
+            name = 'interest',
+            form = form,
+            value = true,
+            type='checkbox',
+            checked = false,
+            disabled = false
+          ) }}
+        </div>
+        <div style="display: inline-block;width: 33%">
+          {{ option(
+            label = 'Evidence',
+            name = 'evidence',
+            form=orm,
+            value = true,
+            type='checkbox',
+            checked = false,
+            disabled = false
+          ) }}
+        </div>
+        <div style="display: inline-block;width: 33%">
+          {{ option(
+            label = 'Timeline',
+            name = 'timelineFlag',
+            form=form,
+            value = true,
+            type='checkbox',
+            checked = timelineFlag,
+            disabled = true
+          ) }}
+        </div>
+      </div>.
+      <div class="notice">
+
+        {{ linkButton('Create Claim Draft', 'claim', 'button button-secondary') }}
+      </div>
+    </form>
+  </div>
+{% endblock %}

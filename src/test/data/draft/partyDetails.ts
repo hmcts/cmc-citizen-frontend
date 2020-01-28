@@ -1,4 +1,6 @@
 import { PartyType } from 'common/partyType'
+import { EvidenceRow } from 'forms/models/evidenceRow'
+import { EvidenceType } from 'forms/models/evidenceType'
 
 export const addressCorrespondenceAddress = {
   address: {
@@ -83,6 +85,15 @@ export const organisationDetails = {
   name: 'Organisation.',
   contactPerson: 'Organisation Smith',
   ...addressCorrespondenceAddress
+}
+
+export const evidenceDetails = {
+  'rows': [
+    new EvidenceRow(new EvidenceType('CONTRACTS_AND_AGREEMENTS', 'Contracts and agreements'), 'Signed Contract'),
+    new EvidenceRow(new EvidenceType('EXPERT_WITNESS', 'Expert witness'), 'Surveyor\'s report'),
+    new EvidenceRow(new EvidenceType('CORRESPONDENCE', 'Letters, emails and other correspondence'), 'Letter from the other party'),
+    new EvidenceRow(new EvidenceType('STATEMENT_OF_ACCOUNT', 'Statements of account'), 'Bank Statements')
+  ]
 }
 
 export function partyDetails (partyType: string) {

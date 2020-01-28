@@ -1,7 +1,6 @@
 import * as express from 'express'
 
 import { Paths } from 'testing-support/paths'
-import { Paths as ClaimPaths } from 'claim/paths'
 import { ErrorHandling } from 'shared/errorHandling'
 
 import { DraftService } from 'services/draftService'
@@ -38,6 +37,6 @@ export default express.Router()
         await claimStoreClient.addRoleToUser(user, 'cmc-new-features-consent-given')
       }
 
-      res.redirect(ClaimPaths.checkAndSendPage.uri)
+      res.redirect(Paths.updateClaimDraftPage.uri)
     })
   )
