@@ -1,3 +1,5 @@
+tags:
+  cmc-ccd-stack: false
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
