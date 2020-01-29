@@ -1,5 +1,6 @@
 tags:
   cmc-ccd-stack: false
+  cmc-citizen-frontend-pod: false
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
