@@ -44,7 +44,7 @@ function convertPayBySetDate (draftCcj: DraftCCJ): Moment {
 export function retrievePaymentOptionsFromClaim (claim: Claim): CCJPaymentOption {
   if (!claim.response || !claim.isAdmissionsResponse()) {
     return undefined
-  } else if (claim.isSettlementRejectedOrBreached() && claim.isSettlementPaymentDateValid()) {
+  } else if (claim.isSettlementRejectedOrBreached()) {
     const lastOffer: Offer = claim.settlement.getLastOffer()
     if (lastOffer && lastOffer.paymentIntention) {
       const paymentOptionFromOffer: PaymentOption = lastOffer.paymentIntention.paymentOption

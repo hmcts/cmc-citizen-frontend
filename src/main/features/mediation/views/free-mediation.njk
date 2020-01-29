@@ -7,10 +7,10 @@
   <div class="grid-row">
     <div class="column-two-thirds">
       {% if mediationPilot %}
-
-        <p>{{ t('We’re automatically registering some claims worth £300 or less for free telephone mediation. Your claim has been selected for this.') }}</p>
+        <p>{{ t('We’re automatically registering some claims worth {{ pilotValue }} or less for free telephone mediation. Your claim has been selected for this.', { pilotValue: FeaturesBuilder.MEDIATION_PILOT_AMOUNT | numeral }) }}</p>
+        <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>
+        {% set footnote = true %}
         <p>{{ t('We’ll tell you how mediation works - you can decide to take part or not.') }}</p>
-
       {% else %}
 
         <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>

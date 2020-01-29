@@ -33,7 +33,6 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   // check status
   I.click(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see('Your response to the claim')
   I.see('You have rejected the claim')
   defendantDetails.clickViewClaim()
@@ -44,7 +43,6 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see('Decide whether to proceed')
   I.see('Mrs. Rose Smith has rejected your claim.')
   I.click('View and respond')
@@ -66,7 +64,6 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   // check status
   I.click(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see('Your response to the claim')
   I.see('You have rejected the claim')
   defendantDetails.clickViewClaim()
@@ -77,7 +74,6 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see('Decide whether to proceed')
   I.see('Mrs. Rose Smith has rejected your claim.')
   I.click('View and respond')
@@ -98,7 +94,6 @@ Scenario('I can as an Individual make a claim against an Individual who then ful
   userSteps.login(testData.claimantEmail)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see('Decide whether to proceed')
   I.see('Mrs. Rose Smith has rejected your claim.')
   I.click('View and respond')
@@ -124,7 +119,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   // check status
   I.click(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
   I.click('Sign out')
   // as claimant
@@ -136,7 +130,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.see('Decide whether to proceed')
   I.click(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see(`${testData.defendantName} has rejected your claim.`)
   I.click('View and respond')
   claimantResponseSteps.acceptFullDefencePaidFullAmount(testData)
@@ -161,7 +154,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   // check status
   I.click(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
   I.click('Sign out')
   // as claimant
@@ -169,7 +161,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.see(`Respond to the defendant.`)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see('Respond to the defendant')
   I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
   I.click('Respond')
@@ -195,7 +186,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   // check status
   I.click(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see(`We’ve emailed ${testData.claimantName} telling them when and how you said you paid the claim.`)
   I.click('Sign out')
   // as claimant
@@ -203,7 +193,6 @@ Scenario('I can as an Individual make a claim against an Individual who then rej
   I.see(`Respond to the defendant.`)
   claimantResponseSteps.viewClaimFromDashboard(testData.claimRef)
   I.see(testData.claimRef)
-  I.see('Claim status')
   I.see('Respond to the defendant')
   I.see(`${testData.defendantName} says they paid you £50 on 1 January 2018.`)
   I.click('Respond')

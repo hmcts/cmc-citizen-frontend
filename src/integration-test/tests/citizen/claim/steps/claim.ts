@@ -49,12 +49,12 @@ const claimantEvidencePage: ClaimantEvidencePage = new ClaimantEvidencePage()
 const claimantCheckAndSendPage: ClaimantCheckAndSendPage = new ClaimantCheckAndSendPage()
 const claimantClaimConfirmedPage: ClaimantClaimConfirmedPage = new ClaimantClaimConfirmedPage()
 const newFeaturesPage: NewFeaturesPage = new NewFeaturesPage()
+const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 const userSteps: UserSteps = new UserSteps()
 const interestSteps: InterestSteps = new InterestSteps()
 const eligibilitySteps: EligibilitySteps = new EligibilitySteps()
 const paymentSteps: PaymentSteps = new PaymentSteps()
-const testingSupport: TestingSupportSteps = new TestingSupportSteps()
 
 export class ClaimSteps {
 
@@ -198,8 +198,10 @@ export class ClaimSteps {
 
   makeAClaimAndSubmitStatementOfTruth (email: string, claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.login(email)
+    if (process.env.FEATURE_TESTING_SUPPORT === 'true') {
+      testingSupport.deleteClaimDraft()
+    }
     this.completeEligibility()
-    this.optIntoNewFeatures()
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
@@ -245,6 +247,7 @@ export class ClaimSteps {
       testingSupport.deleteClaimDraft()
     }
     this.completeEligibility()
+
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
@@ -296,10 +299,7 @@ export class ClaimSteps {
     }
   }
 
-  completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true, fillInNewFeaturesPage = true) {
-    if (fillInNewFeaturesPage) {
-      this.optIntoNewFeatures()
-    }
+  completeStartOfClaimJourney (claimantType: PartyType, defendantType: PartyType, enterDefendantEmail: boolean = true) {
     userSteps.selectResolvingThisDispute()
     this.resolveDispute()
     userSteps.selectCompletingYourClaim()
@@ -322,4 +322,5 @@ export class ClaimSteps {
     this.enterClaimTimeline()
     this.enterClaimEvidence()
   }
+
 }
