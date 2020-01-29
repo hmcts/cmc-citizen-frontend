@@ -2,6 +2,7 @@ tags:
   cmc-ccd-stack: false
   cmc-citizen-frontend-pod: false
   cmc-claim-store-postgresql-pod: false
+  postgresql-pod: false
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
