@@ -4,31 +4,26 @@ dependencies:
     repository: '@hmctspublic'
 
   - name: idam-pr
-    version: ~2.1.0
+    version: ~2.2.3
     repository: '@hmctspublic'
-    tags:
-      - idam-pr
+    condition: idam-pr.enabled
 
   - name: rpe-feature-toggle-api
     version: ~3.1.0
     repository: '@hmctspublic'
-    tags:
-      - rpe-feature-toggle-api-pod
+    condition: rpe-feature-toggle-api.enabled
 
   - name: cmc-claim-store
-    version: ~2.0.0
+    version: ~3.0.0
     repository: '@hmctspublic'
-    tags:
-      - cmc-claim-store-pod
+    condition: cmc-claim-store.enabled
 
   - name: postgresql
     version: ~2.6.5
     repository: '@stable'
-    tags:
-      - cmc-frontend-postgresql-pod
+    condition: postgresql.enabled
 
   - name: ccd
     version: ~3.3.1
     repository: '@hmctspublic'
-    tags:
-      - frontend-ccd-stack
+    condition: ccd.enabled
