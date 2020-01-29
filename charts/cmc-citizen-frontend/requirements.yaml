@@ -16,7 +16,7 @@ dependencies:
       - rpe-feature-toggle-api-pod
 
   - name: cmc-claim-store
-    version: ~2.0.0
+    version: ~3.0.0
     repository: '@hmctspublic'
     tags:
       - cmc-claim-store-pod
