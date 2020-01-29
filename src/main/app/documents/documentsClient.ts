@@ -36,6 +36,9 @@ export class DocumentsClient {
   getReviewOrderPdf (claimExternalId: string, bearerToken: string): Promise<Buffer> {
     return this.getPDF(claimExternalId, 'REVIEW_ORDER', bearerToken)
   }
+  getMediationAgreementPdf (claimExternalId: string, bearerToken: string): Promise<Buffer> {
+    return this.getPDF(claimExternalId, 'MEDIATION_AGREEMENT', bearerToken)
+  }
 
   private getPDF (claimExternalId: string, documentTemplate: string, bearerToken: string): Promise<Buffer> {
     if (StringUtils.isBlank(claimExternalId)) {
