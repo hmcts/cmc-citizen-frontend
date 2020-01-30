@@ -291,64 +291,62 @@
 
       {{ tableEnd() }}
 
-    {% if draft.acceptPaymentMethod.accept === YesNoOption.NO %}
-      {% set courtDetermination = draft.courtDetermination %}
-      {% set courtDecisionPaymentIntention = courtDetermination.courtDecision %}
-      {% set courtDecisionType = courtDetermination.decisionType %}
+    {% set courtDetermination = draft.courtDetermination %}
+    {% set courtDecisionPaymentIntention = courtDetermination.courtDecision %}
+    {% set courtDecisionType = courtDetermination.decisionType %}
 
-      {% if courtDetermination and courtDecisionPaymentIntention and
-        ( courtDecisionType !== DecisionType.CLAIMANT and courtDecisionType !== DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT ) %}
-        {{ tableStart('courtDecision', 'Court decision') }}
-          {{ row(
-          label = 'Court decision',
+    {% if courtDetermination and courtDecisionPaymentIntention and
+      ( courtDecisionType !== DecisionType.CLAIMANT and courtDecisionType !== DecisionType.CLAIMANT_IN_FAVOUR_OF_DEFENDANT ) %}
+      {{ tableStart('courtDecision', 'Court decision') }}
+        {{ row(
+        label = 'Court decision',
+        bold = true,
+        value = 'The court rejected your repayment plan and calculated a more affordable one.',
+        bottomBorder = false
+        ) }}
+        {% if courtDecisionPaymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
+          {{ row(label = 'Court repayment plan',
+          value = t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
+          {{ claimantName }} will receive the money no later than {{ paymentDate }}.
+          Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
+          { defendantFullName: claim.response.defendant.name,
+          claimantName: claim.claimData.claimant.name,
+          paymentDate: courtPaymentIntention.paymentDate | date ,
+          totalAmount: totalAmount | numeral}),
+          bottomBorder = false, bold = true
+          ) }}
+          {{ row(label = 'Completion date',
+          value = courtDecisionPaymentIntention.paymentDate | date,
+          bottomBorder = true, bold = true) }}
+        {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
+          {{ row(label = 'Court repayment plan',
+          value = t('Repayment in full by {{ paymentDate }}',
+          { paymentDate: courtDecisionPaymentIntention.paymentDate | date }),
+          bottomBorder = true,
           bold = true,
-          value = 'The court rejected your repayment plan and calculated a more affordable one.',
           bottomBorder = false
           ) }}
-          {% if courtDecisionPaymentIntention.paymentOption === PaymentType.IMMEDIATELY.value %}
-            {{ row(label = 'Court repayment plan',
-            value = t('{{ defendantFullName }} will pay {{ totalAmount }} immediately.
-            {{ claimantName }} will receive the money no later than {{ paymentDate }}.
-            Any cheques or transfers will be clear in {{ defendantFullName }}’s account by this date.',
-            { defendantFullName: claim.response.defendant.name,
-            claimantName: claim.claimData.claimant.name,
-            paymentDate: courtPaymentIntention.paymentDate | date ,
-            totalAmount: totalAmount | numeral}),
-            bottomBorder = false, bold = true
-            ) }}
-            {{ row(label = 'Completion date',
-            value = courtDecisionPaymentIntention.paymentDate | date,
-            bottomBorder = true, bold = true) }}
-          {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.BY_SPECIFIED_DATE.value %}
-            {{ row(label = 'Court repayment plan',
-            value = t('Repayment in full by {{ paymentDate }}',
-            { paymentDate: courtDecisionPaymentIntention.paymentDate | date }),
-            bottomBorder = true,
-            bold = true,
-            bottomBorder = false
-            ) }}
-            {{ row(label = 'Completion date',
-            value = courtDecisionPaymentIntention.paymentDate | date,
-            bottomBorder = true, bold = true
-            ) }}
-          {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
-            {{ row(label = 'Court repayment plan',
-            value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
-            { defendantFullName: claim.response.defendant.name,
-            totalAmount: totalAmount | numeral,
-            instalmentAmount: courtDecisionPaymentIntention.repaymentPlan.instalmentAmount | numeral,
-            paymentSchedule: courtDecisionPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
-            firstPaymentDate: courtDecisionPaymentIntention.repaymentPlan.firstPaymentDate | date
-            }),
-            bottomBorder = false, bold = true
-            ) }}
-            {{ row(label = 'Completion date',
-            value = courtDecisionPaymentIntention.repaymentPlan.completionDate | date,
-            bottomBorder = true, bold = true
-            ) }}
-          {% endif %}
-        {{ tableEnd() }}
-      {% endif %}
+          {{ row(label = 'Completion date',
+          value = courtDecisionPaymentIntention.paymentDate | date,
+          bottomBorder = true, bold = true
+          ) }}
+        {% elseif courtDecisionPaymentIntention.paymentOption === PaymentType.INSTALMENTS.value %}
+          {{ row(label = 'Court repayment plan',
+          value = t('{{ defendantFullName }} will repay {{ totalAmount }} in instalments of {{ instalmentAmount }} {{ paymentSchedule }}. The first instalment will be paid by {{ firstPaymentDate }}.',
+          { defendantFullName: claim.response.defendant.name,
+          totalAmount: totalAmount | numeral,
+          instalmentAmount: courtDecisionPaymentIntention.repaymentPlan.instalmentAmount | numeral,
+          paymentSchedule: courtDecisionPaymentIntention.repaymentPlan.paymentSchedule | renderPaymentSchedule | lower,
+          firstPaymentDate: courtDecisionPaymentIntention.repaymentPlan.firstPaymentDate | date
+          }),
+          bottomBorder = false, bold = true
+          ) }}
+          {{ row(label = 'Completion date',
+          value = courtDecisionPaymentIntention.repaymentPlan.completionDate | date,
+          bottomBorder = true, bold = true
+          ) }}
+        {% endif %}
+      {{ tableEnd() }}
     {% endif %}
 
       {% if draft.formaliseRepaymentPlan %}
