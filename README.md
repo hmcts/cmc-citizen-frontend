@@ -21,7 +21,7 @@ Service delegates most of the non UI responsibilities to underlying services e.g
 
 ### Running the application
 
-Install dependencies by executing the following command:
+Install dependencies by executing the following command :
 
  ```bash
 $ yarn install
