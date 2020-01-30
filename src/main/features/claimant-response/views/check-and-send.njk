@@ -291,6 +291,7 @@
 
       {{ tableEnd() }}
 
+    {% if draft.acceptPaymentMethod.accept === YesNoOption.NO %}
       {% set courtDetermination = draft.courtDetermination %}
       {% set courtDecisionPaymentIntention = courtDetermination.courtDecision %}
       {% set courtDecisionType = courtDetermination.decisionType %}
@@ -348,6 +349,7 @@
           {% endif %}
         {{ tableEnd() }}
       {% endif %}
+    {% endif %}
 
       {% if draft.formaliseRepaymentPlan %}
         {{ tableStart('howYouWantToProceed', 'How you wish to proceed') }}
