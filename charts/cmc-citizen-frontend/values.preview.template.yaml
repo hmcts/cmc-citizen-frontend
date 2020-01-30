@@ -1,12 +1,8 @@
 tags:
-  cmc-frontend-postgresql-pod: true
-  rpe-feature-toggle-api-pod: true
-  cmc-claim-store-pod: true
-  frontend-ccd-stack: true
-  ccd-idam-pr: true
+  cmc-ccd-stack: false
+  cmc-citizen-frontend-pod: false
+  cmc-claim-store-postgresql-pod: false
   postgresql-pod: false
-  idam-pr: true
-
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
@@ -33,6 +29,7 @@ nodejs:
 # sub-charts configuration
 
 rpe-feature-toggle-api:
+  enabled: true
   java:
     releaseNameOverride: ${SERVICE_NAME}-ftr-tgl
     environment:
@@ -59,11 +56,13 @@ rpe-feature-toggle-api:
       permissions: cmc-new-features-consent-given
 
 idam-pr:
+  enabled: true
   redirect_uris:
     Money Claims - Citizen:
       - https://www-${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
+  enabled: true
   java:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
@@ -89,6 +88,7 @@ cmc-claim-store:
       LIVE_SUPPORT_SENDER: noreply@reform.hmcts.net
 
 ccd:
+  enabled: true
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
@@ -152,6 +152,7 @@ ccd:
         - caseworker-cmc-legaladvisor
 
 postgresql:
+  enabled: true
   image:
     tag: '11.3.0'
   resources:
