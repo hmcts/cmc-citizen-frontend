@@ -59,6 +59,30 @@
   }
 }
 
+.testing-support-update-claim {
+  .triple-column {
+    .column-1 {
+      display: inline-block;
+      margin-right: 10px;
+      width: 45%;
+    }
+
+    .column-2 {
+      width: 45%;
+      margin-bottom: 0;
+    }
+
+    .full-width {
+      width: 99%
+    }
+  }
+
+  .triple-checkbox {
+    display: inline-block;
+    width: 33%
+  }
+}
+
 select {
   .form-control {
     float: left;

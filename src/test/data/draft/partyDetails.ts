@@ -1,6 +1,10 @@
 import { PartyType } from 'common/partyType'
 import { EvidenceRow } from 'forms/models/evidenceRow'
 import { EvidenceType } from 'forms/models/evidenceType'
+import { IndividualDetails } from 'forms/models/individualDetails'
+import { SoleTraderDetails } from 'forms/models/soleTraderDetails'
+import { CompanyDetails } from 'forms/models/companyDetails'
+import { OrganisationDetails } from 'forms/models/organisationDetails'
 
 export const addressCorrespondenceAddress = {
   address: {
@@ -106,6 +110,36 @@ export function partyDetails (partyType: string) {
       return companyDetails
     case PartyType.ORGANISATION.value:
       return organisationDetails
+    default:
+      throw new Error(`Unknown party type: ${partyType}`)
+  }
+}
+
+export function claimantPartyDetails (partyType: string) {
+  switch (partyType) {
+    case PartyType.INDIVIDUAL.value:
+      return new IndividualDetails().deserialize(individualDetails)
+    case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+      return new SoleTraderDetails().deserialize(soleTraderDetails)
+    case PartyType.COMPANY.value:
+      return new CompanyDetails().deserialize(companyDetails)
+    case PartyType.ORGANISATION.value:
+      return new OrganisationDetails().deserialize(organisationDetails)
+    default:
+      throw new Error(`Unknown party type: ${partyType}`)
+  }
+}
+
+export function defendantPartyDetails (partyType: string) {
+  switch (partyType) {
+    case PartyType.INDIVIDUAL.value:
+      return new IndividualDetails().deserialize(defendantIndividualDetails)
+    case PartyType.SOLE_TRADER_OR_SELF_EMPLOYED.value:
+      return new SoleTraderDetails().deserialize(defendantSoleTraderDetails)
+    case PartyType.COMPANY.value:
+      return new CompanyDetails().deserialize(companyDetails)
+    case PartyType.ORGANISATION.value:
+      return new OrganisationDetails().deserialize(organisationDetails)
     default:
       throw new Error(`Unknown party type: ${partyType}`)
   }
