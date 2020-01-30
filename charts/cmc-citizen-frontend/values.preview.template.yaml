@@ -26,7 +26,7 @@ nodejs:
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
     FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://${SERVICE_FQDN}
+    CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
     FEATURE_INVERSION_OF_CONTROL: true
 
@@ -52,6 +52,8 @@ rpe-feature-toggle-api:
       command: /scripts/add-weighted-toggle.sh cmc_admissions 'CMC admissions' '1.0' &&
         /scripts/add-weighted-toggle.sh cmc_directions_questionnaire 'CMC Directions Questionnaire' '1.0' &&
         /scripts/add-weighted-toggle.sh cmc_mediation_pilot 'CMC Mediation Pilot' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_legal_advisor 'CMC LEGAL ADVISOR' '1.0' &&
+        /scripts/add-weighted-toggle.sh cmc_judge_pilot 'CMC Judge Pilot' '1.0' &&
         /scripts/add-toggle.sh cmc_defence_reminders 'CMC defence reminders' false
       enabled: true
       permissions: cmc-new-features-consent-given
@@ -79,13 +81,12 @@ cmc-claim-store:
       DOC_ASSEMBLY_URL: false
       FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
-      CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
-      CLAIM_STORE_DB_USERNAME: hmcts
-      CLAIM_STORE_DB_PASSWORD: hmcts
       CMC_DB_HOST: ${SERVICE_NAME}-postgres
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-data-store-api
+      LIVE_SUPPORT_RECIPIENT: civilmoneyclaims+live-support-int-tests@gmail.com
+      LIVE_SUPPORT_SENDER: noreply@reform.hmcts.net
 
 ccd:
   ingressHost: ${SERVICE_FQDN}
@@ -132,7 +133,7 @@ ccd:
       userProfileDatabaseName: user-profile
     definition:
       enabled: true
-      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.3
+      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.7
       environment:
         CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
       kvSecretRef: kvcreds
@@ -158,7 +159,6 @@ postgresql:
       cpu: 25m
   initdbScripts:
     init.sql: |-
-      CREATE DATABASE claimstore WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE features WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
