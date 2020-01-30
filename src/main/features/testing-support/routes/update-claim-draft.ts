@@ -33,9 +33,8 @@ export default express.Router()
     ErrorHandling.apply(async (req: express.Request, res: express.Response) => {
       const user: User = res.locals.user
       const drafts = await draftService.find('claim', '100', user.bearerToken, (value) => value)
-      const draft = drafts[0]
 
-      renderView(new Form(UpdateClaimDetails.fromObject(draft.document)), res)
+      renderView(new Form(UpdateClaimDetails.fromObject(drafts[0].document)), res)
     })
   )
 
