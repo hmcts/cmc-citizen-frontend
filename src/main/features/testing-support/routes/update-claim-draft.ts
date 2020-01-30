@@ -65,8 +65,6 @@ export default express.Router()
 
         if (form.model.evidence) {
           draft.document.evidence = new Evidence().deserialize(evidenceDetails) as Evidence
-        } else {
-          draft.document.evidence = new Evidence() as Evidence
         }
 
         await new DraftService().save(draft, user.bearerToken)
