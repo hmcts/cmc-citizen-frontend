@@ -1,6 +1,7 @@
 import { expect } from 'chai'
 
 import { FeeRange, FeesTableViewHelper, FeeRangeMerge } from 'claim/helpers/feesTableViewHelper'
+import * as feesServiceMock from 'test/http-mocks/fees'
 
 describe('FeesTableViewHelper', () => {
   it('should throw an error when issue fees array is undefined', () => {
@@ -154,5 +155,13 @@ describe('FeesTableViewHelper', () => {
       new FeeRangeMerge(3000.01, 5000, { 1: 185, 2: 335 }),
       new FeeRangeMerge(5000.01, 10000, { 1: 410, 2: 335 })
     ])
+  })
+
+  it('should filter when min or max range is above 10000', async () => {
+    feesServiceMock.resolveGetIssueFeeRangeGroup()
+    feesServiceMock.resolveGetHearingFeeRangeGroup()
+
+    const result: FeeRangeMerge[] = await FeesTableViewHelper.feesTableContent()
+    expect(result).to.have.lengthOf(1)
   })
 })
