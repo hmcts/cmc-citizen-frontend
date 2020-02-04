@@ -19,6 +19,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = Paths.createClaimDraftPage.uri
 const pageText: string = 'Create Claim Draft'
 const draftSuccessful: string = ClaimPaths.checkAndSendPage.uri
+const claimUpdatePath: string = Paths.updateClaimDraftPage.uri
 
 describe('Testing Support: Create Claim Draft', () => {
   attachDefaultHooks(app)
@@ -79,7 +80,7 @@ describe('Testing Support: Create Claim Draft', () => {
           .expect(res => expect(res).to.be.serverError.withText('Error'))
       })
 
-      it('should redirect to check and send page and new user role is added when everything else is fine', async () => {
+      it('should redirect to update claim page and new user role is added when everything else is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveRetrieveUserRoles()
@@ -89,10 +90,10 @@ describe('Testing Support: Create Claim Draft', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.redirect
-            .toLocation(draftSuccessful))
+            .toLocation(claimUpdatePath))
       })
 
-      it('should redirect to check and send page when user role is already added and everything else is fine', async () => {
+      it('should redirect to update claim page when user role is already added and everything else is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
@@ -101,10 +102,10 @@ describe('Testing Support: Create Claim Draft', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.redirect
-            .toLocation(draftSuccessful))
+            .toLocation(claimUpdatePath))
       })
 
-      it('should redirect to check and send page and add new user role when required role is missing from list and everything else is fine', async () => {
+      it('should redirect to update claim page and add new user role when required role is missing from list and everything else is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
         claimStoreServiceMock.resolveRetrieveUserRoles('not-a-consent-role')
@@ -113,8 +114,21 @@ describe('Testing Support: Create Claim Draft', () => {
           .post(pagePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.redirect
+            .toLocation(claimUpdatePath))
+      })
+
+      it('should redirect to check and send page when everything else is fine', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(claimUpdatePath)
+          .send({ claimantType: 'individual', defendantType: 'individual', email: 'test@testing.com', claimAmount: 75, description: 'Testing support test case', interest: false, evidence: false, timeline: true, updateClaim: 'update' })
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.redirect
             .toLocation(draftSuccessful))
       })
+
     })
   })
 })
