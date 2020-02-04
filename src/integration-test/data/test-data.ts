@@ -220,8 +220,8 @@ export class UserEmails {
       .replace('http://', '')
       .split('/')[0]
       .split('.')[0]
-
-    return `civilmoneyclaims+${type}-${subdomain}@gmail.com`
+    const postfix = moment().format('YYYY-MM-DD')
+    return `civilmoneyclaims+${type}-${subdomain}-${postfix}@gmail.com`
   }
 
   getClaimant (): string {
