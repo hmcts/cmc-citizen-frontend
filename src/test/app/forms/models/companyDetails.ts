@@ -94,7 +94,7 @@ describe('CompanyDetails', () => {
       companyDetails.name = 'companyName'
       companyDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(companyDetails)
-      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAM_HAS_EMAIL)
+      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAME_HAS_EMAIL)
     })
 
     describe('when "has correspondence address" flag is set to true', () => {
