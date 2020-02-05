@@ -5,7 +5,7 @@ import { IsNotEmail } from '@hmcts/cmc-validators/dist/isNotEmail'
 
 export class ValidationErrors {
   static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name must be no longer than $constraint1 characters'
-  static readonly CONTACT_PERSON_NAME: string = 'Enter a name, not an email address'
+  static readonly CONTACT_PERSON_NAM_HAS_EMAIL: string = 'Enter a name, not an email address'
 }
 
 export class ValidationConstraints {
@@ -19,7 +19,7 @@ export class CompanyDetails extends PartyDetails {
     groups: ['claimant', 'defendant', 'response']
   })
   @IsNotEmail({
-    message: ValidationErrors.CONTACT_PERSON_NAME,
+    message: ValidationErrors.CONTACT_PERSON_NAM_HAS_EMAIL,
     groups: ['claimant', 'defendant', 'response']
   })
   contactPerson?: string

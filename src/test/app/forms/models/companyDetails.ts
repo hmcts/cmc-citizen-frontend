@@ -89,6 +89,14 @@ describe('CompanyDetails', () => {
       expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1','30'))
     })
 
+    it('should return error when contact person has email address', () => {
+      companyDetails.contactPerson = 'test@domain.com'
+      companyDetails.name = 'companyName'
+      companyDetails.address = validAddress
+      let errors: ValidationError[] = validator.validateSync(companyDetails)
+      expectValidationError(errors, CompanyDetailsValidationErrors.CONTACT_PERSON_NAM_HAS_EMAIL)
+    })
+
     describe('when "has correspondence address" flag is set to true', () => {
       beforeEach(() => {
         companyDetails.address = validAddress

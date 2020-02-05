@@ -94,6 +94,13 @@ describe('OrganisationDetails', () => {
       expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_TOO_LONG.replace('$constraint1', '30'))
     })
 
+    it('should return error when contact person has email address', () => {
+      organisationDetails.contactPerson = 'test@domian.com'
+      organisationDetails.name = 'claimantPerson'
+      organisationDetails.address = validAddress
+      let errors: ValidationError[] = validator.validateSync(organisationDetails)
+      expectValidationError(errors, OrganisationDetailsValidationErrors.CONTACT_PERSON_NAME_HAS_EMAIL)
+    })
     describe('when "has correspondence address" flag is set to true', () => {
       beforeEach(() => {
         organisationDetails.address = validAddress
