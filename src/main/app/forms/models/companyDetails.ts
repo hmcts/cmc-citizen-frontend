@@ -1,9 +1,11 @@
 import { PartyDetails } from './partyDetails'
 import { PartyType } from 'common/partyType'
 import { MaxLength } from '@hmcts/cmc-validators'
+import { IsNotEmail } from '@hmcts/cmc-validators/dist/isNotEmail'
 
 export class ValidationErrors {
   static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name must be no longer than $constraint1 characters'
+  static readonly CONTACT_PERSON_NAME: string = 'Enter a name, not an email address'
 }
 
 export class ValidationConstraints {
@@ -14,6 +16,10 @@ export class CompanyDetails extends PartyDetails {
 
   @MaxLength(ValidationConstraints.CONTACT_PERSON_MAX_LENGTH, {
     message: ValidationErrors.CONTACT_PERSON_NAME_TOO_LONG,
+    groups: ['claimant', 'defendant', 'response']
+  })
+  @IsNotEmail({
+    message: ValidationErrors.CONTACT_PERSON_NAME,
     groups: ['claimant', 'defendant', 'response']
   })
   contactPerson?: string
