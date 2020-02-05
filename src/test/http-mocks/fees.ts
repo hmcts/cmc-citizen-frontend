@@ -66,54 +66,6 @@ export const feeRange = [
     max_range: 300,
     range_unit: 'GBP',
     unspecified_claim_amount: false
-  },
-  {
-    code: 'FEE0225',
-    fee_type: 'ranged',
-    channel_type: {
-      name: 'default'
-    },
-    direction_type: {
-      name: 'enhanced'
-    },
-    event_type: {
-      name: 'hearing'
-    },
-    jurisdiction1: {
-      name: 'civil'
-    },
-    jurisdiction2: {
-      name: 'county court'
-    },
-    service_type: {
-      name: 'civil money claims'
-    },
-    fee_versions: [
-      {
-        version: 1,
-        description: 'Civil Court fees - Money Claims Online - Claim Amount - 0.01 upto 300 GBP',
-        status: 'approved',
-        flat_amount: {
-          amount: 25
-        },
-        author: 'LOADER',
-        approvedBy: 'LOADER'
-      }
-    ],
-    current_version: {
-      version: 1,
-      description: 'Civil Court fees - Money Claims Online - Claim Amount - 0.01 upto 300 GBP',
-      status: 'approved',
-      flat_amount: {
-        amount: 25
-      },
-      author: 'LOADER',
-      approvedBy: 'LOADER'
-    },
-    min_range: 0,
-    max_range: 20000,
-    range_unit: 'GBP',
-    unspecified_claim_amount: false
   }
 ]
 
