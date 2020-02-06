@@ -15,7 +15,7 @@ import {
   evidenceDetails,
   claimantPartyDetails,
   defendantPartyDetails
-} from '../../../../test/data/draft/partyDetails'
+} from 'drafts/draft-data/partyDetails'
 import { MomentFactory } from 'shared/momentFactory'
 import { Evidence } from 'forms/models/evidence'
 import { FormValidator } from 'forms/validation/formValidator'
