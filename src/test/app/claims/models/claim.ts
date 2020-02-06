@@ -43,6 +43,7 @@ import * as data from 'test/data/entity/settlement'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MediationOutcome } from 'claims/models/mediationOutcome'
 import { defenceClaimData } from 'test/data/entity/claimData'
+import { YesNoOption } from 'models/yesNoOption'
 
 describe('Claim', () => {
   describe('eligibleForCCJ', () => {
@@ -169,6 +170,12 @@ describe('Claim', () => {
       claim.moreTimeRequested = true
 
       expect(claim.status).to.be.equal(ClaimStatus.MORE_TIME_REQUESTED)
+    })
+
+    it('should return DEFENDANT_PAPER_RESPONSE when a paper response received', () => {
+      claim.paperResponse = YesNoOption.YES
+
+      expect(claim.status).to.be.equal(ClaimStatus.DEFENDANT_PAPER_RESPONSE)
     });
 
     [true, false].forEach(isMoreTimeRequested => {

@@ -10,8 +10,6 @@
       <p>{{ t('The claim will continue and you might have to go to a hearing.') }}</p>
       <p class="heading-medium">{{ t('Advantages of free mediation') }}</p>
 
-      <p>{{ t('More than 60% of people who use our free mediation service settle on the day.*') }}</p>
-
       {% if defendant %}
         <p>{{ t('Opting out can mean:') }}</p>
         <ul class="list list-bullet">
@@ -60,7 +58,6 @@
         {{ saveAndContinueButton() }}
       </form>
 
-      <p class="font-xsmall">{{ t('*Source: Small Claims Mediation Service statistics, November 2017 to October 2018.') }}</p>
     </div>
   </div>
 {% endblock %}

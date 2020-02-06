@@ -1,3 +1,13 @@
+idam-pr:
+  enabled: false
+rpe-feature-toggle-api:
+  enabled: false
+postgresql:
+  enabled: false
+ccd:
+  enabled: false
+
+
 nodejs:
   image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
   applicationPort: 3000
@@ -43,3 +53,10 @@ nodejs:
       - cmc-webchat-button-no-agents
       - cmc-webchat-button-agents-busy
       - cmc-webchat-button-service-closed
+
+# sub-charts conditions
+cmc-claim-store:
+  enabled: false
+  ccd:
+   enabled: false
+   ingressHost: ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal

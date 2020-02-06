@@ -715,7 +715,8 @@ const legacyClaimDetails = [
       'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
       'You need to',
       'to tell us more about the claim.',
-      'Your defence won’t proceed if you don’t complete and return the form before',
+      'Your defence won’t proceed if you don’t complete and return the form before 4pm on',
+      'You also need to send a copy of the form to ' + partAdmissionClaim.claim.claimants[0].name,
       'Download your response'
     ]
   },
@@ -762,14 +763,20 @@ const mediationDQEnabledClaimDetails = [
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
-        freeMediation: FreeMediationOption.NO
+        freeMediation: FreeMediationOption.NO,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       claimantResponse: {
         settleForAmount: 'no',
         type: 'REJECTION'
       },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
+      claimantRespondedAt: MomentFactory.currentDate()
     },
     claimantAssertions: [
       'Wait for the court to review the case',
@@ -779,7 +786,9 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
-      'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.'
+      'You might have to go to a hearing. We’ll contact you if we set a hearing date to tell you how to prepare.',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements'
     ]
   },
   {
@@ -790,15 +799,21 @@ const mediationDQEnabledClaimDetails = [
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
-        freeMediation: FreeMediationOption.YES
+        freeMediation: FreeMediationOption.YES,
+        directionsQuestionnaire: {
+          hearingLoop: 'NO',
+          selfWitness: 'NO',
+          disabledAccess: 'NO',
+          hearingLocation: 'Central London County Court',
+          hearingLocationOption: 'SUGGESTED_COURT'
+        }
       },
       claimantResponse: {
         settleForAmount: 'no',
         freeMediation: FreeMediationOption.YES,
         type: 'REJECTION'
       },
-      claimantRespondedAt: MomentFactory.currentDate(),
-      ...directionsQuestionnaireDeadline
+      claimantRespondedAt: MomentFactory.currentDate()
     },
     claimantAssertions: [
       'We’ll contact you to try to arrange a mediation appointment',
@@ -809,7 +824,9 @@ const mediationDQEnabledClaimDetails = [
     defendantAssertions: [
       partAdmissionClaim.claim.claimants[0].name + ' has rejected your admission of',
       'They believe you owe them the full ',
-      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.'
+      'They have agreed to try mediation. We’ll contact you to try to arrange an appointment.',
+      'They’ve also sent us their hearing requirements.',
+      'Download their hearing requirements'
     ]
   },
   {
@@ -840,13 +857,11 @@ const mediationDQEnabledClaimDetails = [
     },
     claimantAssertions: [
       'Mediation was unsuccessful',
-      'You weren’t able to resolve your claim against ' + partAdmissionClaim.claim.defendants[0].name + ' using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.'
+      'You weren’t able to resolve your claim against ' + partAdmissionClaim.claim.defendants[0].name + ' using mediation.'
     ],
     defendantAssertions: [
       'Mediation was unsuccessful',
       'You weren’t able to resolve ' + partAdmissionClaim.claim.claimants[0].name + '’s claim against you using mediation.',
-      'You’ll have to go to a hearing. We’ll contact you with the details.',
       'Download ' + partAdmissionClaim.claim.claimants[0].name + '’s hearing requirements'
     ]
   },
@@ -870,11 +885,16 @@ const mediationDQEnabledClaimDetails = [
       mediationOutcome: MediationOutcome.SUCCEEDED
     },
     claimantAssertions: [
-      'You both agreed a settlement through mediation'
+      'You settled the claim through mediation',
+      'You made an agreement which means the claim is now ended and sets out the terms of how ' + partAdmissionClaim.claim.defendants[0].name + ' must repay you.',
+      'Download the agreement',
+      '(PDF)'
     ],
     defendantAssertions: [
-      'You both agreed a settlement through mediation',
-      'The claimant can’t request a County Court Judgment against you unless you break the terms',
+      'You settled the claim through mediation',
+      'You made an agreement which means the claim is now ended and sets out the terms of how you must repay ' + partAdmissionClaim.claim.claimants[0].name + '.',
+      'Download the agreement',
+      '(PDF)',
       'Contact ' + partAdmissionClaim.claim.claimants[0].name,
       'if you need their payment details. Make sure you get receipts for any payments.'
     ]

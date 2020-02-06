@@ -22,9 +22,68 @@ function mockFeatureFlag (feature: string, enabled: boolean): mock.Scope {
 }
 
 const user = new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
-const elegibleDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
+const eligibleDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 const pilotLimit = 300
 const limitDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: pilotLimit
+      }
+    ]
+  },
+  interest: {
+    option: YesNoOption.NO
+  }
+}), moment(), moment())
+
+const judgePilotLimit = 1000
+
+const draftWithJudgePilotLimit = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: judgePilotLimit
+      }
+    ]
+  },
+  interest: {
+    option: YesNoOption.NO
+  }
+}), moment(), moment())
+
+const draftWithJudgePilotLimitPlusInterest = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: judgePilotLimit
+      }
+    ]
+  }
+}), moment(), moment())
+
+const draftWithJudgePilotOverLimit = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
+  ...claimDraftData,
+  amount: {
+    rows: [
+      {
+        reason: 'Valid reason',
+        amount: judgePilotLimit + 1
+      }
+    ]
+  },
+  interest: {
+    option: YesNoOption.NO
+  }
+}), moment(), moment())
+
+const legalAdvisorEligibleLimit = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
   ...claimDraftData,
   amount: {
     rows: [
@@ -76,28 +135,26 @@ describe('FeaturesBuilder', () => {
   describe('Admissions Feature', () => {
     it('should add admissions to features if flag is set', async () => {
       mockFeatureFlag('cmc_admissions', true)
-      mockFeatureFlag('cmc_directions_questionnaire', false)
-      const features = await FeaturesBuilder.features(elegibleDraft, user)
+      const features = await FeaturesBuilder.features(eligibleDraft, user)
       expect(features).to.equal('admissions')
     })
   })
 
   describe('Directions Questionnaire Feature', () => {
-    it('should add dq to features if flag is set and draft is <= 300', async () => {
+    it('should add dq to features if flag is set and draft is <= 1000', async () => {
       mockFeatureFlag('cmc_directions_questionnaire', true)
-      const features = await FeaturesBuilder.features(limitDraft, user)
+      const features = await FeaturesBuilder.features(draftWithJudgePilotLimit, user)
       expect(features).to.equal('directionsQuestionnaire')
     })
 
-    it('should add dq to features if principal amount <= 300 but with interest is > 300 and flag is set', async () => {
+    it('should add dq to features if principal amount <= 1000 but with interest is > 1000 and flag is set', async () => {
       mockFeatureFlag('cmc_directions_questionnaire', true)
-      mockFeatureFlag('cmc_mediation_pilot', false)
-      const features = await FeaturesBuilder.features(limitPlusInterestDraft, user)
+      const features = await FeaturesBuilder.features(draftWithJudgePilotLimitPlusInterest, user)
       expect(features).to.equal('directionsQuestionnaire')
     })
 
-    it('should not dd dq to features if principal amount is > 300', async () => {
-      const features = await FeaturesBuilder.features(overLimitDraft, user)
+    it('should not dd dq to features if principal amount is > 1000', async () => {
+      const features = await FeaturesBuilder.features(draftWithJudgePilotOverLimit, user)
       expect(features).to.be.undefined
     })
 
@@ -105,14 +162,12 @@ describe('FeaturesBuilder', () => {
 
   describe('Mediation Pilot Feature', () => {
     it('should add mediation pilot to features if principal amount <= 300 and flag is set', async () => {
-      mockFeatureFlag('cmc_directions_questionnaire', false)
       mockFeatureFlag('cmc_mediation_pilot', true)
       const features = await FeaturesBuilder.features(limitDraft, user)
       expect(features).to.equal('mediationPilot')
     })
 
     it('should add mediation pilot to features if principal amount <= 300 but with interest is > 300 and flag is set', async () => {
-      mockFeatureFlag('cmc_directions_questionnaire', false)
       mockFeatureFlag('cmc_mediation_pilot', true)
       const features = await FeaturesBuilder.features(limitPlusInterestDraft, user)
       expect(features).to.equal('mediationPilot')
@@ -124,19 +179,49 @@ describe('FeaturesBuilder', () => {
     })
   })
 
-  it('should add dq and mediation pilot to features if principal amount <= 300 and flag is set', async () => {
+  describe('Legal advisor Pilot Feature', () => {
+    it('should add legal advisor eligible to features if principal amount <= 300 and flag is set', async () => {
+      mockFeatureFlag('cmc_legal_advisor', true)
+      const features = await FeaturesBuilder.features(legalAdvisorEligibleLimit, user)
+      expect(features).to.equal('LAPilotEligible')
+    })
+
+    it('should add legal advisor eligible to features if principal amount <= 300 but with interest is > 300 and flag is set', async () => {
+      mockFeatureFlag('cmc_legal_advisor', true)
+      const features = await FeaturesBuilder.features(limitPlusInterestDraft, user)
+      expect(features).to.equal('LAPilotEligible')
+    })
+
+    it('should not add legal advisor eligible to features if principal amount is > 300', async () => {
+      const features = await FeaturesBuilder.features(overLimitDraft, user)
+      expect(features).to.be.undefined
+    })
+  })
+
+  describe('Judge Pilot Feature', () => {
+    it('should add judge pilot eligible to features if principal amount <= 1000 and flag is set', async () => {
+      mockFeatureFlag('cmc_judge_pilot', true)
+      const features = await FeaturesBuilder.features(draftWithJudgePilotLimit, user)
+      expect(features).to.equal('judgePilotEligible')
+    })
+
+    it('should add judge pilot eligible to features if principal amount <= 1000 but with interest is > 1000 and flag is set', async () => {
+      mockFeatureFlag('cmc_judge_pilot', true)
+      const features = await FeaturesBuilder.features(draftWithJudgePilotLimitPlusInterest, user)
+      expect(features).to.equal('judgePilotEligible')
+    })
+
+    it('should not add judge pilot eligible to features if principal amount is > 1000', async () => {
+      const features = await FeaturesBuilder.features(draftWithJudgePilotOverLimit, user)
+      expect(features).to.be.undefined
+    })
+  })
+
+  it('should add legal advisor, dqOnline and mediation pilot to features if principal amount <= 300 and flag is set', async () => {
     mockFeatureFlag('cmc_directions_questionnaire', true)
+    mockFeatureFlag('cmc_legal_advisor', true)
     mockFeatureFlag('cmc_mediation_pilot', true)
     const features = await FeaturesBuilder.features(limitDraft, user)
-    expect(features).to.equal('directionsQuestionnaire, mediationPilot')
+    expect(features).to.equal('mediationPilot, LAPilotEligible, directionsQuestionnaire')
   })
-
-  it('should add all flags', async () => {
-    mockFeatureFlag('cmc_admissions', true)
-    mockFeatureFlag('cmc_directions_questionnaire', true)
-    mockFeatureFlag('cmc_mediation_pilot', true)
-    const features = await FeaturesBuilder.features(elegibleDraft, user)
-    expect(features).to.equal('admissions, directionsQuestionnaire, mediationPilot')
-  })
-
 })

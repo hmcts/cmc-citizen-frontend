@@ -95,7 +95,7 @@ const repaymentPlanPaymentIntention = {
     paymentOption: PaymentOption.INSTALMENTS,
     repaymentPlan: {
       instalmentAmount: 100,
-      firstPaymentDate: MomentFactory.currentDate().add(1,'day'),
+      firstPaymentDate: MomentFactory.currentDate().subtract(10,'day'),
       paymentSchedule: PaymentSchedule.EACH_WEEK,
       completionDate: '2051-12-31',
       paymentLength: '1'

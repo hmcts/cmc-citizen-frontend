@@ -104,14 +104,17 @@ const testData = [
       responseDeadline: MomentFactory.currentDate().subtract(16, 'days')
     },
     claimantAssertions: ['000MC000',
-      'You’ve requested a County Court Judgment (CCJ)',
-      'We’ll contact you within 14 days to tell you whether the judgment has been entered.',
-      'John Doe can no longer respond to your claim using this service - they may have responded by post.'
+      'Wait for the judgment to be confirmed',
+      'We’ll contact you within 10 working days to tell you whether the judgment has been entered.',
+      'John Doe can no longer respond to your claim using this service - they may have responded by post.',
+      'It’s possible we received a postal response before the deadline but hadn’t processed it when you requested judgment.',
+      'If we discover this has happened, we’ll reject your request.'
     ],
     defendantAssertions: ['000MC000',
       'We’ll contact you',
       'John Smith has requested a County Court Judgment (CCJ) against you because the deadline for your response has passed.',
-      'If you’ve responded by post before the deadline, we may still be processing your response. If we receive your postal response, we’ll reject the request for a CCJ.',
+      'It’s possible we received your postal response before the deadline but hadn’t processed it when they requested judgment.',
+      'If we discover this has happened, we’ll reject their request.',
       'Otherwise we’ll post a copy of the CCJ to you and to John Smith and explain what to do next.'
     ]
   },
