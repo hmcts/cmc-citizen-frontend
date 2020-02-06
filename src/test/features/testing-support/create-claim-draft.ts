@@ -20,6 +20,7 @@ const pagePath: string = Paths.createClaimDraftPage.uri
 const pageText: string = 'Create Claim Draft'
 const draftSuccessful: string = ClaimPaths.checkAndSendPage.uri
 const claimUpdatePath: string = Paths.updateClaimDraftPage.uri
+const interestPath: string = ClaimPaths.interestPage.uri
 
 describe('Testing Support: Create Claim Draft', () => {
   attachDefaultHooks(app)
@@ -35,6 +36,14 @@ describe('Testing Support: Create Claim Draft', () => {
       it('should render page when everything is fine', async () => {
         await request(app)
           .get(pagePath)
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.be.successful.withText(pageText))
+      })
+
+      it('should render page when everything is fine with update Claim', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        await request(app)
+          .get(claimUpdatePath)
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.be.successful.withText(pageText))
       })
@@ -117,7 +126,7 @@ describe('Testing Support: Create Claim Draft', () => {
             .toLocation(claimUpdatePath))
       })
 
-      it('should redirect to check and send page when everything else is fine', async () => {
+      it('should redirect to check and send page when everything else is fine without interest and evidence', async () => {
         draftStoreServiceMock.resolveFind('claim')
         draftStoreServiceMock.resolveUpdate()
 
@@ -127,6 +136,18 @@ describe('Testing Support: Create Claim Draft', () => {
           .set('Cookie', `${cookieName}=ABC`)
           .expect(res => expect(res).to.redirect
             .toLocation(draftSuccessful))
+      })
+
+      it('should redirect to check and send page when everything else is fine with interest and evidence', async () => {
+        draftStoreServiceMock.resolveFind('claim')
+        draftStoreServiceMock.resolveUpdate()
+
+        await request(app)
+          .post(claimUpdatePath)
+          .send({ claimantType: 'individual', defendantType: 'individual', email: 'test@testing.com', claimAmount: 75, description: 'Testing support test case', interest: true, evidence: true, timeline: true, updateClaim: 'update' })
+          .set('Cookie', `${cookieName}=ABC`)
+          .expect(res => expect(res).to.redirect
+            .toLocation(interestPath))
       })
 
     })
