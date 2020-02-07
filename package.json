@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
-    "@types/chai": "^4.2.7",
+    "@types/chai": "^4.2.8",
     "@types/chai-as-promised": "^7.1.2",
     "@types/chai-spies": "^1.0.1",
     "@types/jsonwebtoken": "^8.3.7",
@@ -141,7 +141,7 @@
     "tslint": "^5.20.1",
     "tslint-config-standard": "^9.0.0",
     "urlencode": "^1.1.0",
-    "webdriverio": "^5.18.5"
+    "webdriverio": "^5.18.6"
   },
   "nyc": {
     "extension": [
