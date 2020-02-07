@@ -53,6 +53,7 @@ nodejs:
       - cmc-webchat-button-no-agents
       - cmc-webchat-button-agents-busy
       - cmc-webchat-button-service-closed
+      - postcode-lookup-api-key
 
 # sub-charts conditions
 cmc-claim-store:
