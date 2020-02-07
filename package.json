@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
-    "@types/chai": "^4.2.7",
+    "@types/chai": "^4.2.8",
     "@types/chai-as-promised": "^7.1.2",
     "@types/chai-spies": "^1.0.1",
     "@types/jsonwebtoken": "^8.3.6",
