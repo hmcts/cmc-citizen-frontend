@@ -95,7 +95,7 @@ describe('OrganisationDetails', () => {
     })
 
     it('should return error when contact person has email address', () => {
-      organisationDetails.contactPerson = 'test@domian.com'
+      organisationDetails.contactPerson = 'test@domain.com'
       organisationDetails.name = 'claimantPerson'
       organisationDetails.address = validAddress
       let errors: ValidationError[] = validator.validateSync(organisationDetails)
