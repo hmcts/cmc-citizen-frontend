@@ -13,6 +13,10 @@ import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-r
 import { app } from 'main/app'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { UnemploymentType } from 'response/form/models/statement-of-means/unemploymentType'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId: string = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -37,6 +41,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response and CCJ not submitted', () => {
 
@@ -87,6 +92,7 @@ describe('Defendant response: Statement of means: unemployment page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       describe('errors are handled properly', () => {
 

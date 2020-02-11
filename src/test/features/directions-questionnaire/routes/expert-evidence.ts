@@ -12,6 +12,10 @@ import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { YesNoOption } from 'models/yesNoOption'
 import { FeatureToggles } from 'utils/featureToggles'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.expertEvidencePage.evaluateUri({ externalId: externalId })
@@ -24,7 +28,6 @@ const claimWithDQ = {
 }
 
 function checkAccessGuard (app: any, method: string) {
-
   it(`should redirect to dashboard page when DQ is not enabled for claim`, async () => {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -33,14 +36,23 @@ function checkAccessGuard (app: any, method: string) {
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
-if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-  describe('Directions questionnaire - expert evidence', () => {
+
+describe('Directions questionnaire - expert evidence', () => {
+  if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 
     describe('on Get', () => {
       const method = 'get'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuard(app, method)
+
+      context('when defendant authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      })
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -86,6 +98,14 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
       const method = 'post'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuard(app, method)
+
+      context('when defendant authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        })
+
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      })
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -169,5 +189,5 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
         })
       })
     })
-  })
-}
+  }
+})

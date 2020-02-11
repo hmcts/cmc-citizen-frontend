@@ -17,6 +17,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { FreeMediationOption } from 'forms/models/freeMediation'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.canWeUsePage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -33,6 +37,7 @@ describe('Free mediation: can we use phone number page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('should return 500 and render error page when cannot retrieve claim', async () => {
         claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
@@ -75,6 +80,7 @@ describe('Free mediation: can we use phone number page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {

@@ -11,6 +11,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { Paths as DashboardPaths } from 'dashboard/paths'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { FeatureToggles } from 'utils/featureToggles'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const pagePath = Paths.whyExpertIsNeededPage.evaluateUri({ externalId: externalId })
@@ -22,7 +26,6 @@ const claimWithDQ = {
 }
 
 function checkAccessGuard (app: any, method: string) {
-
   it(`should redirect to dashboard page when DQ is not enabled for claim`, async () => {
     idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
     claimStoreServiceMock.resolveRetrieveClaimByExternalId()
@@ -31,14 +34,23 @@ function checkAccessGuard (app: any, method: string) {
       .expect(res => expect(res).to.be.redirect.toLocation(DashboardPaths.dashboardPage.uri))
   })
 }
-if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-  describe('Directions questionnaire - why expert is needed', () => {
+
+describe('Directions questionnaire - why expert is needed', () => {
+  if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 
-    describe('on Get', () => {
+    describe('on GET', () => {
       const method = 'get'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuard(app, method)
+
+      context('when defendant authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      })
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -77,13 +89,21 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
       })
     })
 
-    describe('on Post', () => {
+    describe('on POST', () => {
       const validFormData = { explanation: 'example content' }
       const invalidFormData = { explanation: undefined }
 
       const method = 'post'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuard(app, method)
+
+      context('when defendant authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        })
+
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      })
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -154,5 +174,5 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
         })
       })
     })
-  })
-}
+  }
+})
