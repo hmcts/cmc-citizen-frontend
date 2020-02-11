@@ -186,10 +186,10 @@
   resolved "https://registry.yarnpkg.com/@hmcts/cmc-supported-browsers/-/cmc-supported-browsers-1.0.1.tgz#201d415b7efdf858c77ddccb66bbe9af258c03bc"
   integrity sha512-JNYi130unba+vtgFtkvs0SPGATuTKSCWkdw2QHbKVRq7yGlmvj5nPA74H4DSpkmxeaXb8P6KbRJ5tyiqxOU+4A==
 
-"@hmcts/cmc-validators@^0.2.4":
-  version "0.2.4"
-  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.4.tgz#d357864117ab492cd09efba4444e9a0b376fc4e1"
-  integrity sha512-5kvCrXwS28cb+JHVifySW3XlvS1qgXDH3l8tqR2pI1hXZ5tsBQlESynuHQu/BSIqJtJna4qxW2uaHwbGk5h14g==
+"@hmcts/cmc-validators@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@hmcts/cmc-validators/-/cmc-validators-0.2.6.tgz#5e49b3d5f4ac3188234a98e05cb5272b8592e270"
+  integrity sha512-kEHEKdifF3qYRAGTSJ/qmYZf/CPS0WNYEzzYATJUVKwaXhJ22Wf6Q2d2U3Sb/WsI7HUqlHjpP1J3dPY2kssVhA==
   dependencies:
     "@hmcts/class-validator" "^0.9.1-e"
 
