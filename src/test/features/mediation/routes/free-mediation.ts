@@ -16,6 +16,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkCountyCourtJudgmentRequestedGuard } from 'test/common/checks/ccj-requested-check'
 import { Claim } from 'claims/models/claim'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath = MediationPaths.freeMediationPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -33,6 +37,7 @@ describe('Mediation: Free mediation page', () => {
       })
 
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
@@ -45,7 +50,10 @@ describe('Mediation: Free mediation page', () => {
         })
 
         it('should render page with the claimants name when everything is fine and not auto-registered', async () => {
-          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj, totalAmountTillDateOfIssue: 400 })
+          const claim: Claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimIssueObj,
+            totalAmountTillDateOfIssue: 400
+          })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
@@ -100,7 +108,10 @@ describe('Mediation: Free mediation page', () => {
         })
 
         it('should render page with the defendants name when everything is fine and not auto-registered', async () => {
-          const claim: Claim = new Claim().deserialize({ ...claimStoreServiceMock.sampleClaimIssueObj, totalAmountTillDateOfIssue: 400 })
+          const claim: Claim = new Claim().deserialize({
+            ...claimStoreServiceMock.sampleClaimIssueObj,
+            totalAmountTillDateOfIssue: 400
+          })
           claimStoreServiceMock.resolveRetrieveClaimByExternalId(claim)
           draftStoreServiceMock.resolveFind('mediation')
           draftStoreServiceMock.resolveFind('response')
@@ -144,18 +155,25 @@ describe('Mediation: Free mediation page', () => {
 
     context('when user authorised', () => {
       context('when form is valid', () => {
-        it('should redirect to how mediation works page when everything is fine for defendant', async () => {
-          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
-          checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
-          claimStoreServiceMock.resolveRetrieveClaimByExternalId()
-          draftStoreServiceMock.resolveFind('mediation')
-          draftStoreServiceMock.resolveFind('response')
+        context('as defendant', () => {
+          beforeEach(() => {
+            idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+          })
 
-          await request(app)
-            .post(pagePath)
-            .set('Cookie', `${cookieName}=ABC`)
-            .expect(res => expect(res).to.be.redirect
-              .toLocation(MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+
+          it('should redirect to how mediation works page when everything is fine for defendant', async () => {
+            checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+            claimStoreServiceMock.resolveRetrieveClaimByExternalId()
+            draftStoreServiceMock.resolveFind('mediation')
+            draftStoreServiceMock.resolveFind('response')
+
+            await request(app)
+              .post(pagePath)
+              .set('Cookie', `${cookieName}=ABC`)
+              .expect(res => expect(res).to.be.redirect
+                .toLocation(MediationPaths.howMediationWorksPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })))
+          })
         })
 
         it('should redirect to how mediation works page when everything is fine for claimant', async () => {
