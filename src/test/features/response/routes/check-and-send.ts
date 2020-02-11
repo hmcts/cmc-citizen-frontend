@@ -28,6 +28,10 @@ import { Interest } from 'claims/models/interest'
 import { fullAdmissionWithPaymentByInstalmentsDataCompany } from 'test/data/entity/responseData'
 import { FeatureToggles } from 'utils/featureToggles'
 import { MomentFactory } from 'shared/momentFactory'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -53,6 +57,7 @@ describe('Defendant response: check and send page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {
@@ -324,6 +329,7 @@ describe('Defendant response: check and send page', () => {
 
       checkAlreadySubmittedGuard(app, method, pagePath)
       checkCountyCourtJudgmentRequestedGuard(app, method, pagePath)
+      verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
       context('when response not submitted', () => {
         it('should redirect to incomplete submission when not all tasks are completed', async () => {

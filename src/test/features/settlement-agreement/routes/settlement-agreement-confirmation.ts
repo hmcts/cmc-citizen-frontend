@@ -12,6 +12,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as settlementAgreementServiceMock from 'test/http-mocks/settlement-agreement'
 import { Paths } from 'settlement-agreement/paths'
 import { app } from 'main/app'
+import { verifyRedirectForGetWhenAlreadyPaidInFull } from '../../../app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -52,6 +53,16 @@ describe('Claimant response: confirmation page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res)
               .to.be.successful.withText('You’ve rejected the settlement agreement'))
+        })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, {
+          settlement: {
+            ...settlementAgreementServiceMock.sampleSettlementAgreementOffer
+          },
+          claimantResponse: {
+            type: 'ACCEPTATION',
+            formaliseOption: 'SETTLEMENT'
+          }
         })
       })
     })
