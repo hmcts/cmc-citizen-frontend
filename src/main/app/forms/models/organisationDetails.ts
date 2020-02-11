@@ -1,7 +1,6 @@
 import { PartyDetails } from './partyDetails'
 import { PartyType } from 'common/partyType'
-import { MaxLength } from '@hmcts/cmc-validators'
-import { IsNotEmail } from '@hmcts/cmc-validators/dist/isNotEmail'
+import { MaxLength, IsNotEmail } from '@hmcts/cmc-validators'
 
 export class ValidationErrors {
   static readonly CONTACT_PERSON_NAME_TOO_LONG: string = 'Contact Person name must be no longer than $constraint1 characters'
