@@ -10,6 +10,7 @@ import { OAuthHelper } from 'idam/oAuthHelper'
 import { MediationDraft } from 'mediation/draft/mediationDraft'
 import { CountyCourtJudgmentRequestedGuard } from 'response/guards/countyCourtJudgmentRequestedGuard'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { AlreadyPaidInFullGuard } from 'guards/alreadyPaidInFullGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -27,6 +28,7 @@ export class MediationFeature {
     const allMediation = '/case/*/mediation/*'
     app.all(allMediation, requestHandler())
     app.all(allMediation, ClaimMiddleware.retrieveByExternalId)
+    app.all(allMediation, AlreadyPaidInFullGuard.requestHandler)
     app.all(allMediation, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(allMediation,
       DraftMiddleware.requestHandler(new DraftService(), 'mediation', 100, (value: any): MediationDraft => {

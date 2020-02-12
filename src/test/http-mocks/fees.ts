@@ -66,6 +66,228 @@ export const feeRange = [
     max_range: 300,
     range_unit: 'GBP',
     unspecified_claim_amount: false
+  },
+  {
+    'code': 'FEE0212',
+    'fee_type': 'ranged',
+    'channel_type': {
+      'name': 'online'
+    },
+    'event_type': {
+      'name': 'issue'
+    },
+    'jurisdiction1': {
+      'name': 'civil'
+    },
+    'jurisdiction2': {
+      'name': 'county court'
+    },
+    'service_type': {
+      'name': 'civil money claims'
+    },
+    'applicant_type': {
+      'name': 'all'
+    },
+    'fee_versions': [
+      {
+        'description': 'Civil Court fees - Money Claims Online - Claim Amount - 300.01 upto 500 GBP',
+        'status': 'approved',
+        'version': 3,
+        'valid_from': '2014-04-22T00:00:00.000+0000',
+        'valid_to': '2014-04-22T00:00:00.000+0000',
+        'flat_amount': {
+          'amount': 35.00
+        },
+        'memo_line': 'GOV.UK Pay online claims - Money Claim £300-500',
+        'natural_account_code': '4481102133',
+        'direction': 'enhanced'
+      },
+      {
+        'description': 'Money Claims Online - Claim Amount - 300.01 upto 500 GBP',
+        'status': 'approved',
+        'author': '124756',
+        'approvedBy': '39907',
+        'version': 4,
+        'valid_from': '2014-04-22T00:00:00.000+0000',
+        'valid_to': '2014-04-22T00:00:00.000+0000',
+        'flat_amount': {
+          'amount': 35.00
+        },
+        'memo_line': 'RECEIPT OF FEES - Civil issue money',
+        'statutory_instrument': '2015 No 576',
+        'si_ref_id': '1.2b',
+        'natural_account_code': '4481102133',
+        'fee_order_name': 'Civil Proceedings',
+        'direction': 'enhanced'
+      },
+      {
+        'description': 'Money Claims Discounted - Claim Amount - 300.01 up to 500 GBP',
+        'status': 'approved',
+        'author': '124756',
+        'approvedBy': '39907',
+        'version': 5,
+        'valid_from': '2014-04-22T00:00:00.000+0000',
+        'flat_amount': {
+          'amount': 35.00
+        },
+        'memo_line': 'RECEIPT OF FEES - Civil issue money',
+        'statutory_instrument': '2015 No 576',
+        'si_ref_id': '1.2b',
+        'natural_account_code': '4481102133',
+        'fee_order_name': 'Civil Proceedings',
+        'direction': 'enhanced'
+      }
+    ],
+    'current_version': {
+      'description': 'Money Claims Online - Claim Amount - 300.01 upto 500 GBP',
+      'status': 'approved',
+      'author': '124756',
+      'approvedBy': '39907',
+      'version': 4,
+      'valid_from': '2014-04-22T00:00:00.000+0000',
+      'valid_to': '2014-04-22T00:00:00.000+0000',
+      'flat_amount': {
+        'amount': 35.00
+      },
+      'memo_line': 'RECEIPT OF FEES - Civil issue money',
+      'statutory_instrument': '2015 No 576',
+      'si_ref_id': '1.2b',
+      'natural_account_code': '4481102133',
+      'fee_order_name': 'Civil Proceedings',
+      'direction': 'enhanced'
+    },
+    'min_range': 300.01,
+    'max_range': 500.00,
+    'range_unit': 'GBP',
+    'unspecified_claim_amount': false,
+    'matching_version': {
+      'description': 'Money Claims Online - Claim Amount - 300.01 upto 500 GBP',
+      'status': 'approved',
+      'author': '124756',
+      'approvedBy': '39907',
+      'version': 4,
+      'valid_from': '2014-04-22T00:00:00.000+0000',
+      'valid_to': '2014-04-22T00:00:00.000+0000',
+      'flat_amount': {
+        'amount': 35.00
+      },
+      'memo_line': 'RECEIPT OF FEES - Civil issue money',
+      'statutory_instrument': '2015 No 576',
+      'si_ref_id': '1.2b',
+      'natural_account_code': '4481102133',
+      'fee_order_name': 'Civil Proceedings',
+      'direction': 'enhanced'
+    }
+  },
+  {
+    'code': 'FEE0212',
+    'fee_type': 'ranged',
+    'channel_type': {
+      'name': 'online'
+    },
+    'event_type': {
+      'name': 'issue'
+    },
+    'jurisdiction1': {
+      'name': 'civil'
+    },
+    'jurisdiction2': {
+      'name': 'county court'
+    },
+    'service_type': {
+      'name': 'civil money claims'
+    },
+    'applicant_type': {
+      'name': 'all'
+    },
+    'fee_versions': [
+      {
+        'description': 'Civil Court fees - Money Claims Online - Claim Amount - 300.01 upto 500 GBP',
+        'status': 'approved',
+        'version': 3,
+        'valid_from': '2014-04-22T00:00:00.000+0000',
+        'valid_to': '2014-04-22T00:00:00.000+0000',
+        'flat_amount': {
+          'amount': 35.00
+        },
+        'memo_line': 'GOV.UK Pay online claims - Money Claim £300-500',
+        'natural_account_code': '4481102133',
+        'direction': 'enhanced'
+      },
+      {
+        'description': 'Money Claims Online - Claim Amount - 300.01 upto 500 GBP',
+        'status': 'approved',
+        'author': '124756',
+        'approvedBy': '39907',
+        'version': 4,
+        'valid_from': '2014-04-22T00:00:00.000+0000',
+        'valid_to': '2014-04-22T00:00:00.000+0000',
+        'flat_amount': {
+          'amount': 35.00
+        },
+        'memo_line': 'RECEIPT OF FEES - Civil issue money',
+        'statutory_instrument': '2015 No 576',
+        'si_ref_id': '1.2b',
+        'natural_account_code': '4481102133',
+        'fee_order_name': 'Civil Proceedings',
+        'direction': 'enhanced'
+      },
+      {
+        'description': 'Money Claims Discounted - Claim Amount - 300.01 up to 500 GBP',
+        'status': 'approved',
+        'author': '124756',
+        'approvedBy': '39907',
+        'version': 5,
+        'valid_from': '2014-04-22T00:00:00.000+0000',
+        'flat_amount': {
+          'amount': 35.00
+        },
+        'memo_line': 'RECEIPT OF FEES - Civil issue money',
+        'statutory_instrument': '2015 No 576',
+        'si_ref_id': '1.2b',
+        'natural_account_code': '4481102133',
+        'fee_order_name': 'Civil Proceedings',
+        'direction': 'enhanced'
+      }
+    ],
+    'current_version': {
+      'description': 'Money Claims Discounted - Claim Amount - 300.01 up to 500 GBP',
+      'status': 'approved',
+      'author': '124756',
+      'approvedBy': '39907',
+      'version': 5,
+      'valid_from': '2014-04-22T00:00:00.000+0000',
+      'flat_amount': {
+        'amount': 35.00
+      },
+      'memo_line': 'RECEIPT OF FEES - Civil issue money',
+      'statutory_instrument': '2015 No 576',
+      'si_ref_id': '1.2b',
+      'natural_account_code': '4481102133',
+      'fee_order_name': 'Civil Proceedings',
+      'direction': 'enhanced'
+    },
+    'min_range': 300.01,
+    'max_range': 500.00,
+    'range_unit': 'GBP',
+    'unspecified_claim_amount': false,
+    'matching_version': {
+      'description': 'Money Claims Discounted - Claim Amount - 300.01 up to 500 GBP',
+      'status': 'approved',
+      'author': '124756',
+      'approvedBy': '39907',
+      'version': 5,
+      'valid_from': '2014-04-22T00:00:00.000+0000',
+      'flat_amount': {
+        'amount': 35.00
+      },
+      'memo_line': 'RECEIPT OF FEES - Civil issue money',
+      'statutory_instrument': '2015 No 576',
+      'si_ref_id': '1.2b',
+      'natural_account_code': '4481102133',
+      'fee_order_name': 'Civil Proceedings',
+      'direction': 'enhanced'
+    }
   }
 ]
 
