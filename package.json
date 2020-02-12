@@ -99,7 +99,7 @@
   },
   "devDependencies": {
     "@hmcts/cmc-supported-browsers": "^1.0.1",
-    "@types/chai": "^4.2.8",
+    "@types/chai": "^4.2.9",
     "@types/chai-as-promised": "^7.1.2",
     "@types/chai-spies": "^1.0.1",
     "@types/jsonwebtoken": "^8.3.7",
@@ -119,7 +119,7 @@
     "gulp-replace": "^1.0.0",
     "gulp-sass": "^4.0.2",
     "html_codesniffer": "2.4.1",
-    "husky": "^4.0.09",
+    "husky": "^4.2.2",
     "jsonwebtoken": "^8.5.1",
     "mocha": "^6.2.2",
     "mocha-junit-reporter": "^1.23.3",
