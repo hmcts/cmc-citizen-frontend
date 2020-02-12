@@ -127,7 +127,7 @@
     "mocha-parallel-tests": "^2.2.2",
     "mochawesome": "^4.1.0",
     "mock-require": "^3.0.3",
-    "nock": "^11.7.2",
+    "nock": "^11.8.2",
     "nsp": "^3.2.1",
     "nyc": "^15.0.0",
     "pa11y": "^5.2.0",
