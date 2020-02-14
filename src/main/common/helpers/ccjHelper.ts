@@ -7,6 +7,8 @@ export function amountSettledFor (claim: Claim): number {
   if (isPartAdmissionAcceptation(claim)) {
     const response: PartialAdmissionResponse = claim.response as PartialAdmissionResponse
     return Math.max(response.amount - claim.claimData.feeAmountInPennies / 100, 0)
+  } else if (isFullAdmissionAcceptation(claim)) {
+    return Math.max(claim.totalAmountTillToday - claim.claimData.feeAmountInPennies / 100, 0)
   }
   return undefined
 }
@@ -23,6 +25,11 @@ export function claimFeeInPennies (claim: Claim): number {
 
 export function isPartAdmissionAcceptation (claim: Claim): boolean {
   return claim.response && claim.response.responseType === ResponseType.PART_ADMISSION
+    && claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION
+}
+
+export function isFullAdmissionAcceptation (claim: Claim): boolean {
+  return claim.response && claim.response.responseType === ResponseType.FULL_ADMISSION
     && claim.claimantResponse && claim.claimantResponse.type === ClaimantResponseType.ACCEPTATION
 }
 
