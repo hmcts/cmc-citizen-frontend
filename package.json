@@ -129,7 +129,6 @@
     "mochawesome": "^4.1.0",
     "mock-require": "^3.0.3",
     "nock": "^11.7.2",
-    "nsp": "^3.2.1",
     "nyc": "^15.0.0",
     "pa11y": "^5.2.0",
     "randomstring": "^1.1.5",
@@ -167,5 +166,8 @@
       "pre-commit": "yarn lint",
       "pre-push": "yarn tests && yarn test:routes"
     }
+  },
+  "resolutions": {
+    "node-sass": "4.13.1"
   }
 }
