@@ -12,6 +12,10 @@ import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { StatementOfMeansPaths as Paths } from 'response/paths'
 import { app } from 'main/app'
 import { SevereDisabilityOption, ValidationErrors } from 'response/form/models/statement-of-means/severeDisability'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -30,6 +34,8 @@ describe('Statement of means', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(severeDisabilityPage)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -74,6 +80,8 @@ describe('Statement of means', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForPostWhenAlreadyPaidInFull(severeDisabilityPage)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
