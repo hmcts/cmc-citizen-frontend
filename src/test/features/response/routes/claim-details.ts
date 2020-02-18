@@ -15,6 +15,7 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import { EvidenceType } from 'forms/models/evidenceType'
+import { verifyRedirectForGetWhenAlreadyPaidInFull } from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const pagePath: string = ResponsePaths.claimDetailsPage.evaluateUri({ externalId: claimStoreServiceMock.sampleClaimObj.externalId })
@@ -31,6 +32,8 @@ describe('Defendant response: claim details page', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
+
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       it('should render page when everything is fine', async () => {
         claimStoreServiceMock.resolveRetrieveClaimByExternalId()

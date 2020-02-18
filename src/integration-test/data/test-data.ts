@@ -218,10 +218,11 @@ export class UserEmails {
     let subdomain = process.env.CITIZEN_APP_URL
       .replace('https://', '')
       .replace('http://', '')
+      .replace('cmc-citizen-', '')
       .split('/')[0]
       .split('.')[0]
-
-    return `civilmoneyclaims+${type}-${subdomain}@gmail.com`
+    const postfix = moment().format('YYMMDD')
+    return `civilmoneyclaims+${type}-${subdomain}-${postfix}@gmail.com`
   }
 
   getClaimant (): string {

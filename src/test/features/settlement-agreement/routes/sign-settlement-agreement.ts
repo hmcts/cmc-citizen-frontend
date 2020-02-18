@@ -14,6 +14,10 @@ import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
 import * as settlementAgreementServiceMock from 'test/http-mocks/settlement-agreement'
 
 import { Paths } from 'settlement-agreement/paths'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -42,7 +46,7 @@ describe('Settlement agreement: sign settlement agreement page', () => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
 
-      context('when response not submitted', () => {
+      context('when settlement not countersigned', () => {
         it('should return 500 and render error page when cannot retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('HTTP error')
 
@@ -60,6 +64,8 @@ describe('Settlement agreement: sign settlement agreement page', () => {
             .set('Cookie', `${cookieName}=ABC`)
             .expect(res => expect(res).to.be.successful.withText('Respond to the settlement agreement'))
         })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath, claim)
       })
     })
   })
@@ -132,6 +138,8 @@ describe('Settlement agreement: sign settlement agreement page', () => {
                 .toLocation(Paths.settlementAgreementConfirmation
                   .evaluateUri({ externalId: externalId })))
           })
+
+          verifyRedirectForPostWhenAlreadyPaidInFull(pagePath, claim, { option: 'yes' })
         })
       })
     })

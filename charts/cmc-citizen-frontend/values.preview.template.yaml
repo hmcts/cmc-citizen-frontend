@@ -1,12 +1,9 @@
 tags:
-  cmc-frontend-postgresql-pod: true
-  rpe-feature-toggle-api-pod: true
-  cmc-claim-store-pod: true
-  frontend-ccd-stack: true
-  ccd-idam-pr: true
+  cmc-ccd-stack: false
+  cmc-citizen-frontend-pod: false
+  cmc-claim-store-postgresql-pod: false
   postgresql-pod: false
-  idam-pr: true
-
+  ccd-idam-pr: true
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
@@ -26,13 +23,14 @@ nodejs:
     IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
     PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
     FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
-    CLAIM_STORE_URL: http://${SERVICE_FQDN}
+    CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
     DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
     FEATURE_INVERSION_OF_CONTROL: true
 
 # sub-charts configuration
 
 rpe-feature-toggle-api:
+  enabled: true
   java:
     releaseNameOverride: ${SERVICE_NAME}-ftr-tgl
     environment:
@@ -59,11 +57,13 @@ rpe-feature-toggle-api:
       permissions: cmc-new-features-consent-given
 
 idam-pr:
+  enabled: true
   redirect_uris:
     Money Claims - Citizen:
       - https://www-${SERVICE_FQDN}/receiver
 
 cmc-claim-store:
+  enabled: true
   java:
     releaseNameOverride: ${SERVICE_NAME}-claim-store
     ingressHost: ${SERVICE_FQDN}
@@ -81,15 +81,20 @@ cmc-claim-store:
       DOC_ASSEMBLY_URL: false
       FRONTEND_BASE_URL: https://www-${SERVICE_FQDN}
       RESPOND_TO_CLAIM_URL: https://${SERVICE_FQDN}/first-contact/start
-      CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
-      CLAIM_STORE_DB_USERNAME: hmcts
-      CLAIM_STORE_DB_PASSWORD: hmcts
       CMC_DB_HOST: ${SERVICE_NAME}-postgres
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
+      CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
+      CLAIM_STORE_DB_USERNAME: hmcts
+      CLAIM_STORE_DB_PASSWORD: hmcts
+      CLAIM_STORE_DB_NAME: claimstore
+      CLAIM_STORE_DB_PORT: 5432
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-data-store-api
+      LIVE_SUPPORT_RECIPIENT: civilmoneyclaims+live-support-int-tests@gmail.com
+      LIVE_SUPPORT_SENDER: noreply@reform.hmcts.net
 
 ccd:
+  enabled: true
   ingressHost: ${SERVICE_FQDN}
   ingressIP: ${INGRESS_IP}
   consulIP: ${CONSUL_LB_IP}
@@ -134,7 +139,7 @@ ccd:
       userProfileDatabaseName: user-profile
     definition:
       enabled: true
-      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.3
+      image: hmctspublic.azurecr.io/cmc/ccd-definition-importer:1.5.7
       environment:
         CCD_DEF_CLAIM_STORE_BASE_URL: http://${SERVICE_NAME}-claim-store
       kvSecretRef: kvcreds
@@ -153,6 +158,7 @@ ccd:
         - caseworker-cmc-legaladvisor
 
 postgresql:
+  enabled: true
   image:
     tag: '11.3.0'
   resources:
@@ -160,8 +166,8 @@ postgresql:
       cpu: 25m
   initdbScripts:
     init.sql: |-
-      CREATE DATABASE claimstore WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE features WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;

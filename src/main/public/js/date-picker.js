@@ -86,23 +86,27 @@ const datePicker = {
     const csrf = $("input[name=\"_csrf\"]").val();
 
     let dates = event.dates.map(function(eventDate) { return datePickerUtils.formatDateForData(eventDate)});
-    $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
-      _csrf: csrf,
-      hasUnavailableDates: $("input[name=hasUnavailableDates]:checked").val(),
-      unavailableDates: dates
-    }, function(result) {
-      $("#date-selection-wrapper").empty().append(result);
-      $("#date-selection-wrapper .add-another-delete-link").click(function (e) {
-        e.preventDefault();
-        let dateIndex = /\d+$/.exec(e.currentTarget.id)[0];
-        const d = dates
-          .map(function(localDate) { return moment({ year: localDate.year, month: localDate.month - 1, day: localDate.day })})
-          .map(function(mDate) { return mDate.toDate()})
-          .sort(function(date1, date2) { date1.getTime() - date2.getTime()})
-          .filter(function(localDate, index) { return index !== Number(dateIndex)});
-        datePicker.selector().datepicker("setDates", d);
+    let hasUnavailableDates = $("input[name=hasUnavailableDates]:checked").val();
+
+    if (hasUnavailableDates === "true") {
+      $.post("/case/" + uuid + "/directions-questionnaire/hearing-dates/date-picker/replace", {
+        _csrf: csrf,
+        hasUnavailableDates: hasUnavailableDates,
+        unavailableDates: dates
+      }, function(result) {
+        $("#date-selection-wrapper").empty().append(result);
+        $("#date-selection-wrapper .add-another-delete-link").click(function (e) {
+          e.preventDefault();
+          let dateIndex = /\d+$/.exec(e.currentTarget.id)[0];
+          const d = dates
+            .map(function(localDate) { return moment({ year: localDate.year, month: localDate.month - 1, day: localDate.day })})
+            .map(function(mDate) { return mDate.toDate()})
+            .sort(function(date1, date2) { date1.getTime() - date2.getTime()})
+            .filter(function(localDate, index) { return index !== Number(dateIndex)});
+          datePicker.selector().datepicker("setDates", d);
+        });
       });
-    });
+    }
   },
 
   getData: function() {
