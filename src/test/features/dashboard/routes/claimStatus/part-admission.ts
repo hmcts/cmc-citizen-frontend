@@ -693,7 +693,7 @@ const legacyClaimDetails = [
     status: 'Part admission - defendant part admits and rejects mediation DQs not enabled - claimant rejects part admission',
     claim: partAdmissionClaim,
     claimOverride: {
-      features: ['admissions'],
+      features: [],
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
@@ -724,7 +724,7 @@ const legacyClaimDetails = [
     status: 'Part admission - defendant part admits and accepts mediation DQs not enabled - claimant rejects part admission with mediation',
     claim: partAdmissionClaim,
     claimOverride: {
-      features: ['admissions'],
+      features: [],
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
@@ -759,7 +759,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Part admission - defendant part admits and rejects mediation DQs enabled - claimant rejects part admission',
     claim: partAdmissionClaim,
     claimOverride: {
-      features: ['admissions', 'directionsQuestionnaire'],
+      features: ['directionsQuestionnaire'],
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
@@ -795,7 +795,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation',
     claim: partAdmissionClaim,
     claimOverride: {
-      features: ['admissions', 'directionsQuestionnaire'],
+      features: ['directionsQuestionnaire'],
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
@@ -833,7 +833,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation failed',
     claim: partAdmissionClaim,
     claimOverride: {
-      features: ['admissions', 'directionsQuestionnaire'],
+      features: ['directionsQuestionnaire'],
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,
@@ -869,7 +869,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Part admission - defendant part admits and accepts mediation DQs enabled - claimant rejects part admission with mediation - mediation success',
     claim: partAdmissionClaim,
     claimOverride: {
-      features: ['admissions', 'directionsQuestionnaire'],
+      features: ['directionsQuestionnaire'],
       response: {
         ...baseResponseData,
         ...basePartialAdmissionData,

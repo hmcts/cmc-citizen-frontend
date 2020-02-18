@@ -22,7 +22,6 @@ function mockFeatureFlag (feature: string, enabled: boolean): mock.Scope {
 }
 
 const user = new User('1', 'user@example.com', 'John', 'Smith', [], 'citizen', '')
-const eligibleDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize(claimDraftData), moment(), moment())
 const pilotLimit = 300
 const limitDraft = new Draft<DraftClaim>(123, 'claim', new DraftClaim().deserialize({
   ...claimDraftData,
@@ -130,14 +129,6 @@ describe('FeaturesBuilder', () => {
 
   beforeEach(() => {
     claimStoreServiceMock.resolveRetrieveUserRoles()
-  })
-
-  describe('Admissions Feature', () => {
-    it('should add admissions to features if flag is set', async () => {
-      mockFeatureFlag('cmc_admissions', true)
-      const features = await FeaturesBuilder.features(eligibleDraft, user)
-      expect(features).to.equal('admissions')
-    })
   })
 
   describe('Directions Questionnaire Feature', () => {

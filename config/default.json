@@ -81,7 +81,6 @@
     "clusterMode": false,
     "testingSupport": false,
     "newFeaturesConsent": false,
-    "admissions": false,
     "returnErrorToUser": false,
     "mockPay": false,
     "mediation": false,

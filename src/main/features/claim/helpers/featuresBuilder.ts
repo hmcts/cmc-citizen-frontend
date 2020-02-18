@@ -18,9 +18,6 @@ export class FeaturesBuilder {
     const roles: string[] = await claimStoreClient.retrieveUserRoles(user)
 
     let features = ''
-    if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_admissions')) {
-      features = 'admissions'
-    }
 
     if (draft.document.amount.totalAmount() <= this.MEDIATION_PILOT_AMOUNT) {
       if (await featureTogglesClient.isFeatureToggleEnabled(user, roles, 'cmc_mediation_pilot')) {

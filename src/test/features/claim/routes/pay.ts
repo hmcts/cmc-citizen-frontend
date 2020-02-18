@@ -9,7 +9,6 @@ import { app } from 'main/app'
 import * as idamServiceMock from 'test/http-mocks/idam'
 import * as draftStoreServiceMock from 'test/http-mocks/draft-store'
 import * as claimStoreServiceMock from 'test/http-mocks/claim-store'
-import * as featureToggleApiMock from 'test/http-mocks/feature-toggle-store'
 
 import * as feesServiceMock from 'test/http-mocks/fees'
 import * as payServiceMock from 'test/http-mocks/pay'
@@ -421,7 +420,6 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.rejectSaveClaimForUser('reason', 409)
             claimStoreServiceMock.resolveRetrieveByExternalId()
             payServiceMock.resolveUpdate()
@@ -451,7 +449,6 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.rejectSaveClaimForUser()
 
             await request(app)
@@ -465,7 +462,6 @@ describe('Claim issue: post payment callback receiver', () => {
             idamServiceMock.resolveRetrieveServiceToken()
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
             claimStoreServiceMock.resolveSaveClaimForUser()
             payServiceMock.resolveUpdate()
@@ -483,7 +479,6 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.rejectIsAdmissionsAllowed()
 
             await request(app)
               .get(Paths.finishPaymentReceiver.uri)
@@ -510,7 +505,6 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed()
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
             payServiceMock.resolveUpdate()
@@ -527,7 +521,6 @@ describe('Claim issue: post payment callback receiver', () => {
             payServiceMock.resolveRetrieve('Success')
             draftStoreServiceMock.resolveUpdate()
             claimStoreServiceMock.resolveRetrieveUserRoles('cmc-new-features-consent-not-given')
-            featureToggleApiMock.resolveIsAdmissionsAllowed(false)
             claimStoreServiceMock.resolveSaveClaimForUser()
             draftStoreServiceMock.resolveDelete()
             payServiceMock.resolveUpdate()

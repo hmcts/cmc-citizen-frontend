@@ -415,7 +415,7 @@ describe('Claim', () => {
       claim.response = {
         responseType: ResponseType.PART_ADMISSION
       }
-      claim.features = ['admissions', 'directionsQuestionnaire']
+      claim.features = ['directionsQuestionnaire']
       expect(claim.status).to.be.equal(ClaimStatus.CLAIMANT_REJECTED_PART_ADMISSION_DQ)
     })
 
@@ -593,7 +593,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
       it('should contain the claim status DEFENDANT_REJECTS_WITH_DQS only when defendant reject with DQs', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -606,7 +606,7 @@ describe('Claim', () => {
 
       it('should contain the claim status ORDER_DRAWN only when the legal advisor has drawn the order', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           paymentIntention: null,
           responseType: 'FULL_DEFENCE',
@@ -977,7 +977,7 @@ describe('Claim', () => {
     if (FeatureToggles.isEnabled('mediation')) {
       it('should contain CLAIMANT_REJECTED_DEFENDANT_DEFENCE status when claimant has reject defence and DQs is enabled', () => {
         claim.respondedAt = moment()
-        claim.features = ['admissions', 'directionsQuestionnaire']
+        claim.features = ['directionsQuestionnaire']
         claim.response = {
           responseType: ResponseType.FULL_DEFENCE,
           defenceType: DefenceType.DISPUTE

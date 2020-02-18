@@ -439,7 +439,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant paid what he believe - claimant rejected defendant response with mediation - mediation failed',
     claim: fullDefenceClaim,
     claimOverride: {
-      features: ['admissions','directionsQuestionnaire'],
+      features: ['directionsQuestionnaire'],
       response: {
         ...defenceWithAmountClaimedAlreadyPaidData,
         freeMediation: 'yes',
@@ -697,7 +697,7 @@ const mediationDQEnabledClaimDetails = [
     claim: fullDefenceClaim,
     claimOverride: {
       ...directionsQuestionnaireDeadline,
-      features: ['admissions', 'directionsQuestionnaire'],
+      features: ['directionsQuestionnaire'],
       response: {
         ...baseResponseData,
         ...baseDefenceData,
@@ -748,7 +748,7 @@ const mediationDQEnabledClaimDetails = [
     status: 'Full defence - defendant dispute all of the claim and accepts mediation with directions questionnaire enabled',
     claim: fullDefenceClaim,
     claimOverride: {
-      features: ['admissions', 'directionsQuestionnaire'],
+      features: ['directionsQuestionnaire'],
       response: {
         ...baseResponseData,
         ...baseDefenceData,

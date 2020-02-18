@@ -49,7 +49,7 @@
        )
     }}
 
-    {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
+    {% if draft.isResponsePartiallyAdmitted() %}
       {{ row(
         label = 'Have you paid the claimant the amount you admit you owe?',
         value = t(draft.partialAdmission.alreadyPaid.option.option) | capitalize,
@@ -76,7 +76,7 @@
 
     {% endif %}
 
-    {% if admissionsApplicable and draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
+    {% if draft.isResponseFullyAdmitted() and draft.fullAdmission.paymentIntention.paymentOption.isOfType(DefendantPaymentType.IMMEDIATELY) %}
       {{
       whenWillYouPayRow(
         value = t(draft.fullAdmission.paymentIntention.paymentOption.option.displayValue) | capitalize,
@@ -87,7 +87,7 @@
 
     {{ tableEnd() }}
 
-    {% if admissionsApplicable and draft.isResponsePartiallyAdmitted() %}
+    {% if draft.isResponsePartiallyAdmitted() %}
 
       {{ tableStart('responseDetails', 'Response details') }}
 

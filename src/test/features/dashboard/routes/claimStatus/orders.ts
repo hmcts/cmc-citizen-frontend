@@ -29,7 +29,7 @@ const cookieName: string = config.get<string>('session.cookieName')
 const ordersClaim = {
   ...claimStoreServiceMock.sampleClaimObj,
   responseDeadline: MomentFactory.currentDate().add(1, 'days'),
-  features: ['admissions', 'directionsQuestionnaire'],
+  features: ['directionsQuestionnaire'],
   response: {
     ...baseResponseData,
     ...defenceWithDisputeData

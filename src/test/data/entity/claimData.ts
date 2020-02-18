@@ -115,7 +115,6 @@ export const defenceClaimData = {
   },
   defendantEmail: 'sudheer.chakka@hmcts.net',
   features: [
-    'admissions',
     'directionsQuestionnaire'
   ],
   claimantRespondedAt: moment(),
