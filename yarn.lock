@@ -193,14 +193,10 @@
   dependencies:
     "@hmcts/class-validator" "^0.9.1-e"
 
-"@hmcts/ctsc-web-chat@^0.3.9":
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/@hmcts/ctsc-web-chat/-/ctsc-web-chat-0.3.9.tgz#035041bbaac45abefec98e9b1fe39df635290a57"
-  integrity sha512-72+DyrutM2CZArC/towDbVZWV/jiMXzMWLa/nuEaRBqftcBRNm5Of1T93PISc5+WoO34dVblU5fjaMmpI3mBsA==
-  dependencies:
-    "@hmcts/nodejs-logging" "^3.0.0"
-    govuk-frontend "^2.13.0"
-    node-sass "^4.12.0"
+"@hmcts/ctsc-web-chat@^0.3.10":
+  version "0.3.10"
+  resolved "https://registry.yarnpkg.com/@hmcts/ctsc-web-chat/-/ctsc-web-chat-0.3.10.tgz#e72c521c3aeeecb5ebf59142f419eae86425a88c"
+  integrity sha512-HjkHEGlDyckD5GBxa4dd8XtcuAn2GFR8NGicqTx/SnFTFcKgVvgd/xbs4uSbqM7csxE23fnnBdtl4e4H/hm2Jw==
 
 "@hmcts/draft-store-client@^1.2.1":
   version "1.2.1"
@@ -3716,11 +3712,6 @@ govuk-elements-sass@^3.1.3:
   dependencies:
     govuk_frontend_toolkit "^7.1.0"
 
-govuk-frontend@^2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/govuk-frontend/-/govuk-frontend-2.13.0.tgz#0273f7c92070abd6450c73a006ebb3ddc793463a"
-  integrity sha512-6XDtTt5plSrPQvPgLFN4LCtb9ULuqoXCgkHy5c7XE/70/sVm47RPbLR11tYGPcmV8cOApBhW0wL8y8ryspHfpw==
-
 govuk_frontend_toolkit@^7.1.0:
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/govuk_frontend_toolkit/-/govuk_frontend_toolkit-7.6.0.tgz#b09a60631afbba4bfac76a8b7c02e72419c29cf5"
@@ -5838,7 +5829,7 @@ node-preload@^0.2.0:
   dependencies:
     process-on-spawn "^1.0.0"
 
-node-sass@4.13.1, node-sass@^4.12.0, node-sass@^4.8.3:
+node-sass@^4.8.3:
   version "4.13.1"
   resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.13.1.tgz#9db5689696bb2eec2c32b98bfea4c7a2e992d0a3"
   integrity sha512-TTWFx+ZhyDx1Biiez2nB0L3YrCZ/8oHagaDalbuBSlqXgUPsdkUSzJsVxeDO9LtPB49+Fh3WQl3slABo6AotNw==
