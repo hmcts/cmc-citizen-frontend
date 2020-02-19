@@ -3,6 +3,7 @@ nodejs:
   applicationPort: 3000
   memoryRequests: 512Mi
   memoryLimits: 1024Mi
+  ingressHost: 'moneyclaims.{{ .Values.global.environment }}.platform.hmcts.net'
   cpuLimits: 1
   aadIdentityName: money-claims
   environment:
