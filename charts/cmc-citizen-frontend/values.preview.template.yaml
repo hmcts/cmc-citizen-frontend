@@ -7,6 +7,7 @@ tags:
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
+  ingressHost:
   consulIP: ${CONSUL_LB_IP}
   readinessDelay: 90  # claim-store will start much slower
   livenessDelay: 90  # claim-store will start much slower
