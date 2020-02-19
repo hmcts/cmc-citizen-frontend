@@ -5,7 +5,7 @@ import * as config from 'config'
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
 
-import { Paths, PartAdmissionPaths } from 'response/paths'
+import { PartAdmissionPaths, Paths } from 'response/paths'
 
 import { app } from 'main/app'
 
@@ -16,6 +16,10 @@ import { checkAuthorizationGuards } from 'test/common/checks/authorization-check
 import { ResponseType } from 'response/form/models/responseType'
 import { checkNotDefendantInCaseGuard } from 'test/common/checks/not-defendant-in-case-check'
 import { YesNoOption } from 'models/yesNoOption'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
@@ -36,6 +40,8 @@ describe('Defendant: partial admission - already paid?', () => {
       beforeEach(() => {
         idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
       })
+
+      verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
 
       context('when service is unhealthy', () => {
         it('should return 500 and render error page when cannot retrieve claim by external id', async () => {
@@ -85,6 +91,8 @@ describe('Defendant: partial admission - already paid?', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
 
         context('when service is unhealthy', () => {
           it('should return 500 and render error page when cannot retrieve claim by external id', async () => {

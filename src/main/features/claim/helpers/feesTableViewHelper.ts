@@ -100,12 +100,12 @@ export class FeesTableViewHelper {
     const hearingFeeRangeGroup: ViewFeeRange[] = await FeesClient.getHearingFeeRangeGroup()
 
     const supportedIssueFees: MergeableRange[] = issueFeeRangeGroup
-      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
+      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP && !range.currentVersion.validTo)
       .map((range: ViewFeeRange) => new MergeableRange(
         range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount)
       )
     const supportedHearingFees: MergeableRange[] = hearingFeeRangeGroup
-      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP)
+      .filter((range: ViewFeeRange) => range.minRange < supportedFeeLimitInGBP && !range.currentVersion.validTo)
       .map((range: ViewFeeRange) => new MergeableRange(
         range.minRange, Math.min(range.maxRange, supportedFeeLimitInGBP), range.currentVersion.flatAmount.amount)
       )

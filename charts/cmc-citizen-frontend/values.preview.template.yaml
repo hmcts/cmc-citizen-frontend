@@ -18,14 +18,15 @@ nodejs:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
     FEATURE_TOGGLES_API_URL: http://${SERVICE_NAME}-ftr-tgl
-    IDAM_API_URL: https://idam-api.aat.platform.hmcts.net
-    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.aat.platform.hmcts.net
-    IDAM_S2S_AUTH: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
-    PAY_URL: http://payment-api-aat.service.core-compute-aat.internal
-    FEES_URL: http://fees-register-api-aat.service.core-compute-aat.internal
     CLAIM_STORE_URL: http://${SERVICE_NAME}-claim-store
-    DRAFT_STORE_URL: http://draft-store-service-aat.service.core-compute-aat.internal
-    FEATURE_INVERSION_OF_CONTROL: true
+
+    # config to make non prod testing easier
+    FEATURE_TESTING_SUPPORT: true
+    FEATURE_RETURN_ERROR_TO_USER: true
+    # features
+    FEATURE_FINE_PRINT: true
+    FEATURE_NEW_DASHBOARD_STATUS: true
+    FEATURE_WEB_CHAT: true
 
 # sub-charts configuration
 
@@ -84,6 +85,11 @@ cmc-claim-store:
       CMC_DB_HOST: ${SERVICE_NAME}-postgres
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
+      CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
+      CLAIM_STORE_DB_USERNAME: hmcts
+      CLAIM_STORE_DB_PASSWORD: hmcts
+      CLAIM_STORE_DB_NAME: claimstore
+      CLAIM_STORE_DB_PORT: 5432
       CORE_CASE_DATA_API_URL: http://${SERVICE_NAME}-data-store-api
       LIVE_SUPPORT_RECIPIENT: civilmoneyclaims+live-support-int-tests@gmail.com
       LIVE_SUPPORT_SENDER: noreply@reform.hmcts.net
@@ -162,6 +168,7 @@ postgresql:
   initdbScripts:
     init.sql: |-
       CREATE DATABASE cmc WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
+      CREATE DATABASE "claimstore" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE features WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "data-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
       CREATE DATABASE "definition-store" WITH OWNER = hmcts ENCODING = 'UTF-8' CONNECTION LIMIT = -1;

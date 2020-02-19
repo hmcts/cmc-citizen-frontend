@@ -1,3 +1,65 @@
+nodejs:
+  image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
+  applicationPort: 3000
+  memoryRequests: 512Mi
+  memoryLimits: 1024Mi
+  cpuLimits: 1
+  aadIdentityName: money-claims
+  environment:
+    NODE_ENV: production
+    REFORM_TEAM: cmc
+    REFORM_SERVICE_NAME: citizen-frontend
+
+    IDAM_API_URL: https://idam-api.{{ .Values.global.environment }}.platform.hmcts.net
+    IDAM_AUTHENTICATION_WEB_URL: https://idam-web-public.{{ .Values.global.environment }}.platform.hmcts.net
+    FEATURE_TOGGLES_API_URL: http://rpe-feature-toggle-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    IDAM_S2S_AUTH: http://rpe-service-auth-provider-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    PAY_URL: http://payment-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    FEES_URL: http://fees-register-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    DRAFT_STORE_URL: http://draft-store-service-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+    CLAIM_STORE_URL: http://cmc-claim-store-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+
+    UV_THREADPOOL_SIZE: 64
+
+    GA_TRACKING_ID: UA-00000000-0
+    SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+    REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
+
+    # feature toggles should be removed when they are no longer needed
+    # add them here if they are to be enabled everywhere
+    # there should be no more than 2 or 3 at a time
+    FEATURE_NEW_FEATURES_CONSENT: true
+    FEATURE_ADMISSIONS: true
+    FEATURE_MEDIATION: true
+    FEATURE_MEDIATION_PILOT: true
+    FEATURE_DIRECTIONS_QUESTIONNAIRE: true
+    FEATURE_INVERSION_OF_CONTROL: true
+  keyVaults:
+    cmc:
+      secrets:
+        - os-postcode-lookup-api-key
+        - AppInsightsInstrumentationKey
+        - citizen-oauth-client-secret
+        - cmc-s2s-secret
+        - citizen-draft-store-primary
+        - citizen-draft-store-secondary
+        - citizen-cookie-encryption-key
+        - staff-email
+        - cmc-webchat-id
+        - cmc-webchat-tenant
+        - cmc-webchat-button-no-agents
+        - cmc-webchat-button-agents-busy
+        - cmc-webchat-button-service-closed
+        - postcode-lookup-api-key
+
+# sub-charts conditions
+cmc-claim-store:
+  enabled: false
+  ccd:
+   enabled: false
+   ingressHost: ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
+
 idam-pr:
   enabled: false
 rpe-feature-toggle-api:
@@ -6,57 +68,3 @@ postgresql:
   enabled: false
 ccd:
   enabled: false
-
-
-nodejs:
-  image: hmctspublic.azurecr.io/cmc/citizen-frontend:latest
-  applicationPort: 3000
-  memoryRequests: 512Mi
-  memoryLimits: 1024Mi
-  cpuLimits: 1
-  environment:
-    NODE_ENV: production
-    REFORM_TEAM: cmc
-    REFORM_SERVICE_NAME: citizen-frontend
-    REFORM_ENVIRONMENT: preview
-    UV_THREADPOOL_SIZE: 64
-    GA_TRACKING_ID: UA-00000000-0
-    SERVICE_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
-    FEEDBACK_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
-    REPORT_PROBLEM_SURVEY_URL: http://www.smartsurvey.co.uk/s/not-a-real-citizen-service-survey/
-    FEATURE_TESTING_SUPPORT: true
-    FEATURE_NEW_FEATURES_CONSENT: true
-    FEATURE_ADMISSIONS: true
-    FEATURE_FINE_PRINT: true
-    FEATURE_RETURN_ERROR_TO_USER: true
-    FEATURE_MOCK_PAY: false
-    FEATURE_MEDIATION: true
-    FEATURE_MEDIATION_PILOT: true
-    FEATURE_DIRECTIONS_QUESTIONNAIRE: true
-    FEATURE_NEW_DASHBOARD_STATUS: false
-    FEATURE_WEB_CHAT: true
-    FEATURE_INVERSION_OF_CONTROL: false
-  keyVaults:
-    cmc:
-      resourceGroup: cmc
-      secrets:
-      - os-postcode-lookup-api-key
-      - AppInsightsInstrumentationKey
-      - citizen-oauth-client-secret
-      - cmc-s2s-secret
-      - citizen-draft-store-primary
-      - citizen-draft-store-secondary
-      - citizen-cookie-encryption-key
-      - staff-email
-      - cmc-webchat-id
-      - cmc-webchat-tenant
-      - cmc-webchat-button-no-agents
-      - cmc-webchat-button-agents-busy
-      - cmc-webchat-button-service-closed
-
-# sub-charts conditions
-cmc-claim-store:
-  enabled: false
-  ccd:
-   enabled: false
-   ingressHost: ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal

@@ -13,6 +13,10 @@ import { StatementOfMeansPaths as Paths } from 'response/paths'
 import { app } from 'main/app'
 import { ResidenceType } from 'response/form/models/statement-of-means/residenceType'
 import { ValidationErrors } from 'forms/validation/validationErrors'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const cookieName: string = config.get<string>('session.cookieName')
 
@@ -31,6 +35,8 @@ describe('Statement of means', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(residencePage)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -75,6 +81,8 @@ describe('Statement of means', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
         })
+
+        verifyRedirectForPostWhenAlreadyPaidInFull(residencePage)
 
         it('should return error page when unable to retrieve claim', async () => {
           claimStoreServiceMock.rejectRetrieveClaimByExternalId('Error')
@@ -131,7 +139,7 @@ describe('Statement of means', () => {
           await request(app)
             .post(residencePage)
             .set('Cookie', `${cookieName}=ABC`)
-            .send({ })
+            .send({})
             .expect(res => expect(res).to.be.successful.withText(ValidationErrors.SELECT_AN_OPTION))
         })
       })
