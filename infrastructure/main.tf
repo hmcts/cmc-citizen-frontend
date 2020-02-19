@@ -112,6 +112,7 @@ module "citizen-frontend" {
   app_settings = {
     // Node specific vars
     NODE_DEBUG="${var.node_debug}"
+    WEBSITE_NODE_DEFAULT_VERSION = "12.13.0"
     NODE_ENV = "${var.node_env}"
     UV_THREADPOOL_SIZE = "64"
     NODE_CONFIG_DIR = "D:\\home\\site\\wwwroot\\config"

@@ -17,7 +17,7 @@ class TelemetryClientStub extends TelemetryClient {
 
 describe('Application Insights facade', () => {
   it('should start without errors', () => {
-    expect(() => new AppInsights('instrumentation key', new TelemetryClientStub()).enable())
+    expect(() => new AppInsights('instrumentation-key', new TelemetryClientStub()).enable())
       .to.not.throw()
   })
 

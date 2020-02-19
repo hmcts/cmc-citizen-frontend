@@ -37,7 +37,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
-// Vars needed for AKS testing - keep values in sync with: /src/kubernetes/deployment.template.yaml
+// Vars needed for AKS testing - keep values in sync with: charts/cmc-citizen-frontend/...
 // THESE WILL BE OVERWRITTEN IN ASE DEPLOYMENTS WITH TERRAFORM OUTPUTS.TF
 // THESE CAN BE PICKED UP IN INTEGRATION-TEST CODE DIRECTLY
 env.IDAM_URL = 'https://idam-api.aat.platform.hmcts.net'
