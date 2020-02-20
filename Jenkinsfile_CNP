@@ -49,9 +49,6 @@ env.FEATURE_TESTING_SUPPORT = 'true'
 env.FEATURE_INVERSION_OF_CONTROL = 'true'
 // add any others needed to selective testing...
 
-enableAksStagingDeployment()
-disableLegacyDeploymentOnAAT()
-
 String notificationsChannel = '#cmc-tech-notification'
 
 withPipeline("nodejs", product, component) {
@@ -83,4 +80,6 @@ withPipeline("nodejs", product, component) {
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   installCharts()
+  enableAksStagingDeployment()
+  disableLegacyDeploymentOnAAT()
 }
