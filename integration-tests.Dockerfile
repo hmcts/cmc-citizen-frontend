@@ -1,4 +1,4 @@
-FROM hmctspublic.azurecr.io/base/node/stretch-slim-lts-10:10-stretch-slim
+FROM hmctspublic.azurecr.io/base/node:12-alpine
 
 USER root
 WORKDIR /usr/src/app
