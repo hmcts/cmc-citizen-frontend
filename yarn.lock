@@ -193,6 +193,11 @@
   dependencies:
     "@hmcts/class-validator" "^0.9.1-e"
 
+"@hmcts/cookie-encrypter@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@hmcts/cookie-encrypter/-/cookie-encrypter-1.0.1.tgz#a4a25c6e305e0a81c9846ace439af32adec30fcb"
+  integrity sha512-VBSikwd93nMFgBFGvfBFY5i7Hhq3dx8oBp7gja2kgsujSl1YxX/GGVKye7ae3sE33Ufwf1fYN+iQyfmByC5PRw==
+
 "@hmcts/ctsc-web-chat@^0.3.10":
   version "0.3.10"
   resolved "https://registry.yarnpkg.com/@hmcts/ctsc-web-chat/-/ctsc-web-chat-0.3.10.tgz#e72c521c3aeeecb5ebf59142f419eae86425a88c"
@@ -1982,11 +1987,6 @@ convert-source-map@^1.5.0, convert-source-map@^1.7.0:
   integrity sha512-4FJkXzKXEDB1snCFZlLP4gpC3JILicCpGbzG9f9G7tGqGCzETQ2hWPrcinA9oU4wtf2biUaEH5065UnMeR33oA==
   dependencies:
     safe-buffer "~5.1.1"
-
-cookie-encrypter@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/cookie-encrypter/-/cookie-encrypter-1.0.1.tgz#4e4555a9c8ebb5662d1662a57f861381cc4cd3aa"
-  integrity sha512-T0EPLKs2vwyaJyRIs3oZ3B/52ny3e09KK+JiMf/6orthjFYCPPX+L8ahlYlipUjIf+ZfXvC0RqDCrxqRRFa05A==
 
 cookie-parser@^1.4.4:
   version "1.4.4"
