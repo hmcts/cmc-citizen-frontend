@@ -148,5 +148,5 @@ variable "node_debug" {
 }
 
 variable "node_version" {
-  default = "10.15.2"
+  default = "12.13.0"
 }
