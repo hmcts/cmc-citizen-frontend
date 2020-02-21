@@ -25,7 +25,7 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     # features
     FEATURE_FINE_PRINT: true
-    FEATURE_NEW_DASHBOARD_STATUS: false
+    FEATURE_NEW_DASHBOARD_STATUS: true
     FEATURE_WEB_CHAT: true
 
 # sub-charts configuration
