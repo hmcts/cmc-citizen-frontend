@@ -12,6 +12,23 @@ nodejs:
     enabled: true
     primaryIngressHost: ${SERVICE_FQDN}
     prefix: www
+  keyVaults:
+    cmc:
+      secrets:
+        - os-postcode-lookup-api-key
+        - AppInsightsInstrumentationKey
+        - citizen-oauth-client-secret
+        - cmc-s2s-secret
+        - citizen-draft-store-primary
+        - citizen-draft-store-secondary
+        - citizen-cookie-encryption-key
+        - staff-email
+        - cmc-webchat-id
+        - cmc-webchat-tenant
+        - cmc-webchat-button-no-agents
+        - cmc-webchat-button-agents-busy
+        - cmc-webchat-button-service-closed
+        - postcode-lookup-api-key
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
