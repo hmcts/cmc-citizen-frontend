@@ -10,6 +10,7 @@ import { DraftMiddleware } from '@hmcts/cmc-draft-store-middleware'
 import { DraftService } from 'services/draftService'
 import { DraftClaim } from 'drafts/models/draftClaim'
 import { OAuthHelper } from 'idam/oAuthHelper'
+import { PayMiddleware } from 'payment-hub-client/payMiddleware'
 
 function claimIssueRequestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -36,6 +37,9 @@ export class Feature {
       }))
     app.all(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/sealed-claim|.+\/finish-payment).*$/,
       ClaimEligibilityGuard.requestHandler()
+    )
+    app.post(/^\/claim\/(?!start|amount-exceeded|new-features-consent|.+\/confirmation|.+\/receipt|.+\/sealed-claim).*$/,
+      PayMiddleware.requestHandler()
     )
     app.use('/', RouterFinder.findAll(path.join(__dirname, 'routes')))
   }

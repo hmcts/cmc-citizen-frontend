@@ -22,7 +22,6 @@ export interface PayClient {
    * Creates a payment within Reform Payment Hub
    *
    * @param user - user who make a call
-   * @param caseReference - reference number of the case associated with the payment
    * @param externalId - externalId of claim
    * @param fees - fees array used to calculate total fee amount
    * @param returnURL - the url the user should be redirected to

@@ -11,6 +11,9 @@ import { Logger } from '@hmcts/nodejs-logging'
 import * as HttpStatus from 'http-status-codes'
 import { ErrorHandling } from 'shared/errorHandling'
 import { noRetryRequest } from 'client/request'
+import { Payment } from 'payment-hub-client/payment'
+import { DraftService } from 'services/draftService'
+import { PaymentDetails } from 'claims/paymentDetails'
 
 const logger = Logger.getLogger('router/initiate-payment')
 const claimStoreClient: ClaimStoreClient = new ClaimStoreClient(noRetryRequest)
@@ -29,9 +32,15 @@ export default express.Router()
       existingClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
     } catch (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
-        const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
-        logger.info('RETURN URL PAYMENT: ', nextUrl)
-        return res.redirect(nextUrl)
+        const paymentRef = draft.document.claimant.payment ? draft.document.claimant.payment.reference : undefined
+        logger.info(`payment for claim with external id ${externalId} is ${paymentRef}`)
+        const payment: any = await claimStoreClient.initiatePayment(draft, user)
+
+        draft.document.claimant.payment = Payment.deserialize(payment)
+        new DraftService().save(draft, user.bearerToken)
+
+        logger.info('RETURN URL PAYMENT: ', payment.nextUrl)
+        return res.redirect(payment.nextUrl)
       } else {
         logger.error(`error retrieving claim with external id ${externalId}`)
         throw err
@@ -39,8 +48,10 @@ export default express.Router()
     }
 
     if (ClaimState[existingClaim.state] === ClaimState.AWAITING_CITIZEN_PAYMENT) {
-      const nextUrl: string = await claimStoreClient.resumePayment(draft, user)
-      res.redirect(nextUrl)
+      const payment: PaymentDetails = await claimStoreClient.resumePayment(draft, user)
+      draft.document.claimant.payment = Payment.deserialize(payment)
+      await new DraftService().save(draft, user.bearerToken)
+      res.redirect(payment.nextUrl)
     } else {
       res.redirect(Paths.confirmationPage.evaluateUri({ externalId }))
     }

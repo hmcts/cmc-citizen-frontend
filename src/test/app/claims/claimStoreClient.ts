@@ -178,7 +178,7 @@ describe('ClaimStoreClient', () => {
 
       it('should return nextUrl on successful initiate payment call', async () => {
         resolveInitiatePayment()
-        const returnedUrl: string = await claimStoreClient.initiatePayment(claimDraft, claimant)
+        const returnedUrl: string = (await claimStoreClient.initiatePayment(claimDraft, claimant)).nextUrl
         expect(returnedUrl).to.deep.equal(paymentResponse.nextUrl)
       })
 
@@ -212,7 +212,7 @@ describe('ClaimStoreClient', () => {
 
       it('should return nextUrl on successful resume payment call', async () => {
         resolveInitiatePayment()
-        const returnedUrl: string = await claimStoreClient.resumePayment(claimDraft, claimant)
+        const returnedUrl: string = (await claimStoreClient.resumePayment(claimDraft, claimant)).nextUrl
         expect(returnedUrl).to.deep.equal(paymentResponse.nextUrl)
       })
 

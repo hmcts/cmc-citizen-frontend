@@ -18,6 +18,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { OrdersDraft } from 'orders/draft/ordersDraft'
 import { OrdersConverter } from 'claims/ordersConverter'
 import { ReviewOrder } from 'claims/models/reviewOrder'
+import { PaymentDetails } from 'claims/paymentDetails'
 
 export const claimApiBaseUrl: string = `${config.get<string>('claim-store.url')}`
 export const claimStoreApiUrl: string = `${claimApiBaseUrl}/claims`
@@ -99,7 +100,7 @@ export class ClaimStoreClient {
       })
   }
 
-  initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+  initiatePayment (draft: Draft<DraftClaim>, claimant: User): Promise<PaymentDetails> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
@@ -108,11 +109,11 @@ export class ClaimStoreClient {
         headers: buildCaseSubmissionHeaders(claimant, [])
       })
       .then(response => {
-        return response.nextUrl
+        return new PaymentDetails().deserialize(response)
       })
   }
 
-  resumePayment (draft: Draft<DraftClaim>, claimant: User): Promise<string> {
+  resumePayment (draft: Draft<DraftClaim>, claimant: User): Promise<PaymentDetails> {
     const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
 
     return this.request
@@ -121,7 +122,20 @@ export class ClaimStoreClient {
         headers: buildCaseSubmissionHeaders(claimant, [])
       })
       .then(response => {
-        return response.nextUrl
+        return new PaymentDetails().deserialize(response)
+      })
+  }
+
+  cancelPayment (draft: Draft<DraftClaim>, claimant: User): Promise<PaymentDetails> {
+    const convertedDraftClaim = ClaimModelConverter.convert(draft.document)
+
+    return this.request
+      .post(`${claimStoreApiUrl}/cancel-citizen-payment`, {
+        body: convertedDraftClaim,
+        headers: buildCaseSubmissionHeaders(claimant, [])
+      })
+      .then(response => {
+        return new PaymentDetails().deserialize(response)
       })
   }
 
