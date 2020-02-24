@@ -1,9 +1,7 @@
 tags:
-  cmc-ccd-stack: false
-  cmc-citizen-frontend-pod: false
-  cmc-claim-store-postgresql-pod: false
   postgresql-pod: false
   ccd-idam-pr: true
+
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
@@ -14,6 +12,23 @@ nodejs:
     enabled: true
     primaryIngressHost: ${SERVICE_FQDN}
     prefix: www
+  keyVaults:
+    cmc:
+      secrets:
+        - os-postcode-lookup-api-key
+        - AppInsightsInstrumentationKey
+        - citizen-oauth-client-secret
+        - cmc-s2s-secret
+        - citizen-draft-store-primary
+        - citizen-draft-store-secondary
+        - citizen-cookie-encryption-key
+        - staff-email
+        - cmc-webchat-id
+        - cmc-webchat-tenant
+        - cmc-webchat-button-no-agents
+        - cmc-webchat-button-agents-busy
+        - cmc-webchat-button-service-closed
+        - postcode-lookup-api-key
   environment:
     LOG_LEVEL: DEBUG
     HTTP_TIMEOUT: 60000
@@ -25,7 +40,7 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     # features
     FEATURE_FINE_PRINT: true
-    FEATURE_NEW_DASHBOARD_STATUS: true
+    FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
 
 # sub-charts configuration
@@ -70,6 +85,19 @@ cmc-claim-store:
     ingressHost: ${SERVICE_FQDN}
     readinessDelay: 90  # ccd-stack will start much slower
     livenessDelay:  90  # ccd-stack will start much slower
+    keyVaults:
+      cmc:
+        resourceGroup: cmc
+        secrets:
+          - AppInsightsInstrumentationKey
+          - citizen-oauth-client-secret
+          - claim-store-s2s-secret
+          - anonymous-caseworker-username
+          - anonymous-caseworker-password
+          - system-update-username
+          - system-update-password
+          - notify-api-key
+          - milo-recipient
     environment:
       LOG_LEVEL: DEBUG
       IDAM_S2S_AUTH_URL: http://rpe-service-auth-provider-aat.service.core-compute-aat.internal
@@ -85,6 +113,7 @@ cmc-claim-store:
       CMC_DB_HOST: ${SERVICE_NAME}-postgres
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
+      CMC_DB_CONNECTION_OPTIONS: '?sslmode=allow'
       CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
       CLAIM_STORE_DB_USERNAME: hmcts
       CLAIM_STORE_DB_PASSWORD: hmcts
