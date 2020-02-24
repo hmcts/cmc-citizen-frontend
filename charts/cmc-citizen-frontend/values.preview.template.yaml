@@ -1,9 +1,7 @@
 tags:
-  cmc-ccd-stack: false
-  cmc-citizen-frontend-pod: false
-  cmc-claim-store-postgresql-pod: false
   postgresql-pod: false
   ccd-idam-pr: true
+
 nodejs:
   image: ${IMAGE_NAME}
   ingressIP: ${INGRESS_IP}
@@ -25,7 +23,7 @@ nodejs:
     FEATURE_RETURN_ERROR_TO_USER: true
     # features
     FEATURE_FINE_PRINT: true
-    FEATURE_NEW_DASHBOARD_STATUS: true
+    FEATURE_NEW_DASHBOARD_STATUS: false
     FEATURE_WEB_CHAT: true
 
 # sub-charts configuration
@@ -85,6 +83,7 @@ cmc-claim-store:
       CMC_DB_HOST: ${SERVICE_NAME}-postgres
       CMC_DB_USERNAME: hmcts
       CMC_DB_PASSWORD: hmcts
+      CMC_DB_CONNECTION_OPTIONS: '?sslmode=allow'
       CLAIM_STORE_DB_HOST: ${SERVICE_NAME}-postgres
       CLAIM_STORE_DB_USERNAME: hmcts
       CLAIM_STORE_DB_PASSWORD: hmcts
