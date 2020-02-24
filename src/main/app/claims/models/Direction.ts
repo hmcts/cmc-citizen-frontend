@@ -24,7 +24,7 @@ export namespace Direction {
         directionParty: eachDirection.directionParty,
         directionType: eachDirection.directionType,
         directionHeaderType: eachDirection.directionHeaderType,
-        directionActionedDate: MomentFactory.parse(eachDirection.directionActionedDate),
+        directionActionedDate: eachDirection.directionActionedDate ? MomentFactory.parse(eachDirection.directionActionedDate) : null,
         directionComment: eachDirection.directionHeaderType,
         extraDocuments: eachDirection.directionHeaderType
       })
