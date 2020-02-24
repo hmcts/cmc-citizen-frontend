@@ -1,6 +1,4 @@
 import * as express from 'express'
-import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 
 import { Paths } from 'claim/paths'
 import { Form } from 'forms/form'
@@ -150,10 +148,6 @@ export default express.Router()
           draft.document.qualifiedStatementOfTruth = form.model as QualifiedStatementOfTruth
           await new DraftService().save(draft, user.bearerToken)
         }
-        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
-          res.redirect(Paths.initiatePaymentController.uri)
-        } else {
-          res.redirect(Paths.startPaymentReceiver.uri)
-        }
+        res.redirect(Paths.initiatePaymentController.uri)
       }
     })

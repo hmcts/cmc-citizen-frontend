@@ -78,8 +78,7 @@
     "mediationPilot": "FEATURE_MEDIATION_PILOT",
     "directionsQuestionnaire": "FEATURE_DIRECTIONS_QUESTIONNAIRE",
     "newDashboardStatus": "FEATURE_NEW_DASHBOARD_STATUS",
-    "webChat": "FEATURE_WEB_CHAT",
-    "inversionOfControl": "FEATURE_INVERSION_OF_CONTROL"
+    "webChat": "FEATURE_WEB_CHAT"
   },
 
   "oauth": {

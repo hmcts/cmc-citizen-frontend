@@ -1,7 +1,6 @@
 import { expect } from 'chai'
 import * as request from 'supertest'
 import * as config from 'config'
-import * as toBoolean from 'to-boolean'
 
 import { attachDefaultHooks } from 'test/routes/hooks'
 import 'test/routes/expectations'
@@ -469,10 +468,7 @@ describe('Claim issue: check and send page', () => {
 
       it('should redirect to payment page when form is valid and everything is fine', async () => {
         draftStoreServiceMock.resolveFind('claim')
-        let nextPage: string = ClaimPaths.startPaymentReceiver.uri
-        if (toBoolean(config.get('featureToggles.inversionOfControl'))) {
-          nextPage = ClaimPaths.initiatePaymentController.uri
-        }
+        let nextPage = ClaimPaths.initiatePaymentController.uri
         await request(app)
           .post(ClaimPaths.checkAndSendPage.uri)
           .send({ type: SignatureType.BASIC })

@@ -29,15 +29,9 @@ export default express.Router()
       existingClaim = await claimStoreClient.retrieveByExternalId(externalId, user)
     } catch (err) {
       if (err.statusCode === HttpStatus.NOT_FOUND) {
-        const paymentRef = draft.document.claimant.payment ? draft.document.claimant.payment.reference : undefined
-        logger.info(`payment for claim with external id ${externalId} is ${paymentRef}`)
-        if (paymentRef) {
-          return res.redirect(Paths.startPaymentReceiver.uri)
-        } else {
-          const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
-          logger.info('RETURN URL PAYMENT: ', nextUrl)
-          return res.redirect(nextUrl)
-        }
+        const nextUrl: string = await claimStoreClient.initiatePayment(draft, user)
+        logger.info('RETURN URL PAYMENT: ', nextUrl)
+        return res.redirect(nextUrl)
       } else {
         logger.error(`error retrieving claim with external id ${externalId}`)
         throw err
