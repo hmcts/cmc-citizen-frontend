@@ -14,7 +14,7 @@ dependencies:
     condition: rpe-feature-toggle-api.enabled
 
   - name: cmc-claim-store
-    version: ~3.2.2
+    version: ~3.2.4
     repository: '@hmctspublic'
     condition: cmc-claim-store.enabled
 
