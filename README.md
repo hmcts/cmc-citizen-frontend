@@ -39,7 +39,7 @@ It will be available at https://localhost:3000
 
 See the README.md in hmcts/cmc-integration-tests
 
-## Developing
+## Developing 
 
 ### Code style
 

@@ -53,13 +53,6 @@ nodejs:
         - cmc-webchat-button-service-closed
         - postcode-lookup-api-key
 
-# sub-charts conditions
-cmc-claim-store:
-  enabled: false
-  ccd:
-   enabled: false
-   ingressHost: ccd-data-store-api-{{ .Values.global.environment }}.service.core-compute-{{ .Values.global.environment }}.internal
-
 idam-pr:
   enabled: false
 rpe-feature-toggle-api:
@@ -67,4 +60,6 @@ rpe-feature-toggle-api:
 postgresql:
   enabled: false
 ccd:
+  enabled: false
+cmc-claim-store:
   enabled: false
