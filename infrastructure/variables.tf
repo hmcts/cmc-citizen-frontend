@@ -39,6 +39,10 @@ variable "idam_api_url" {
   default = "http://betaDevBccidamAppLB.reform.hmcts.net"
 }
 
+variable "s2s_url" {
+  default = "http://rpe-service-auth-provider-aat.service.core-compute-aat.internal"
+}
+
 variable "authentication_web_url" {
   default = "https://idam-test.dev.ccidam.reform.hmcts.net"
 }
