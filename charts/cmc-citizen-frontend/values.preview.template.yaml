@@ -68,6 +68,19 @@ cmc-claim-store:
     ingressHost: ${SERVICE_FQDN}
     readinessDelay: 90  # ccd-stack will start much slower
     livenessDelay:  90  # ccd-stack will start much slower
+    keyVaults:
+      cmc:
+        resourceGroup: cmc
+        secrets:
+          - AppInsightsInstrumentationKey
+          - citizen-oauth-client-secret
+          - claim-store-s2s-secret
+          - anonymous-caseworker-username
+          - anonymous-caseworker-password
+          - system-update-username
+          - system-update-password
+          - notify-api-key
+          - milo-recipient
     environment:
       LOG_LEVEL: DEBUG
       DOC_ASSEMBLY_URL: false
