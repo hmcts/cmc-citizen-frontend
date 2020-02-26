@@ -14,12 +14,12 @@ dependencies:
     condition: rpe-feature-toggle-api.enabled
 
   - name: cmc-claim-store
-    version: ~3.2.4
+    version: ~3.2.5
     repository: '@hmctspublic'
     condition: cmc-claim-store.enabled
 
   - name: postgresql
-    version: ~2.6.5
+    version: ~6.3.5
     repository: '@stable'
     condition: postgresql.enabled
 
