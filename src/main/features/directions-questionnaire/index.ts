@@ -10,6 +10,7 @@ import { DirectionsQuestionnaireDraft } from 'directions-questionnaire/draft/dir
 import { DirectionsQuestionnaireGuard } from 'directions-questionnaire/guard/directionsQuestionnaireGuard'
 import { RouterFinder } from 'shared/router/routerFinder'
 import { ResponseDraft } from 'response/draft/responseDraft'
+import { AlreadyPaidInFullGuard } from 'guards/alreadyPaidInFullGuard'
 
 function requestHandler (): express.RequestHandler {
   function accessDeniedCallback (req: express.Request, res: express.Response): void {
@@ -26,6 +27,7 @@ export class DirectionsQuestionnaireFeature {
     const allDQs = '/case/*/directions-questionnaire/*'
     app.all(allDQs, requestHandler())
     app.all(allDQs, ClaimMiddleware.retrieveByExternalId)
+    app.all(allDQs, AlreadyPaidInFullGuard.requestHandler)
     app.all(allDQs, CountyCourtJudgmentRequestedGuard.requestHandler)
     app.all(allDQs, DirectionsQuestionnaireGuard.requestHandler)
     app.all(allDQs,

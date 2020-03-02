@@ -23,7 +23,11 @@ import * as RouteHelper from './helper/dqRouteHelper'
 import { YesNoOption } from 'claims/models/response/core/yesNoOption'
 import { CourtLocationType } from 'claims/models/directions-questionnaire/hearingLocation'
 import { FeatureToggles } from 'utils/featureToggles'
-import * as courtFinderMock from '../../../http-mocks/court-finder-client'
+import * as courtFinderMock from 'test/http-mocks/court-finder-client'
+import {
+  verifyRedirectForGetWhenAlreadyPaidInFull,
+  verifyRedirectForPostWhenAlreadyPaidInFull
+} from 'test/app/guards/alreadyPaidInFullGuard'
 
 const externalId = claimStoreServiceMock.sampleClaimObj.externalId
 const cookieName: string = config.get<string>('session.cookieName')
@@ -220,14 +224,22 @@ function checkAccessGuards (app: any, method: string) {
   }
 }
 
-if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
-  describe('Directions Questionnaire - Hearing exceptional circumstances page', () => {
+describe('Directions Questionnaire - Hearing exceptional circumstances page', () => {
+  if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
     attachDefaultHooks(app)
 
     describe('on GET', () => {
       const method: string = 'get'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuards(app, method)
+
+      context('when defendant authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        })
+
+        verifyRedirectForGetWhenAlreadyPaidInFull(pagePath)
+      })
 
       context('when user authorised', () => {
         beforeEach(() => {
@@ -261,6 +273,15 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
       const method: string = 'post'
       checkAuthorizationGuards(app, method, pagePath)
       checkAccessGuards(app, method)
+
+      context('when defendant authorised', () => {
+        beforeEach(() => {
+          idamServiceMock.resolveRetrieveUserFor(claimStoreServiceMock.sampleClaimObj.defendantId, 'citizen')
+        })
+
+        verifyRedirectForPostWhenAlreadyPaidInFull(pagePath)
+      })
+
       context('When user authorised', () => {
         beforeEach(() => {
           idamServiceMock.resolveRetrieveUserFor('1', 'citizen')
@@ -313,5 +334,5 @@ if (FeatureToggles.isEnabled('directionsQuestionnaire')) {
         })
       })
     })
-  })
-}
+  }
+})
