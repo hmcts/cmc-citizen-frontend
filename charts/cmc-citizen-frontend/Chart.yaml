@@ -1,7 +1,7 @@
 description: Helm chart for the HMCTS CMC Citizen Frontend service
 name: cmc-citizen-frontend
 home: https://github.com/hmcts/cmc-citizen-frontend
-version: 0.0.6
+version: 0.1.0
 maintainers:
   - name: HMCTS CMC Dev Team
     email: cmc-developers@HMCTS.NET
