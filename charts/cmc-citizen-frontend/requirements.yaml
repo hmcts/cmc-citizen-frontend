@@ -1,6 +1,6 @@
 dependencies:
   - name: nodejs
-    version: ~1.8.0
+    version: ~1.9.0
     repository: '@hmctspublic'
 
   - name: idam-pr
