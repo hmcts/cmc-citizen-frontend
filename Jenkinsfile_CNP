@@ -77,6 +77,9 @@ withPipeline("nodejs", product, component) {
     }
   }
 
+  enableAksStagingDeployment()
+  disableLegacyDeploymentOnAAT()
+  
   loadVaultSecrets(secrets)
   enableSlackNotifications(notificationsChannel)
   installCharts()
